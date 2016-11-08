@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_main"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@drawable/login_app"
+    tools:context="com.example.zubcu.geatech.MainActivity">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
+
+
+        <RelativeLayout
+        android:background="#ffff"
+        android:orientation="vertical"
+        android:layout_height="50dp"
+        android:layout_marginTop="200dp"
+        android:layout_width="260dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/Email">
+
+            <ImageView
+
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="5dp"
+            app:srcCompat="@drawable/layer_61"
+            android:id="@+id/imageView1"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true" />
+
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:inputType="textEmailAddress"
+                android:ems="10"
+                android:id="@+id/editText"
+                android:hint="Email"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true" />
+
+        </RelativeLayout>
+
+
+        <RelativeLayout
+        android:background="#ffff"
+        android:layout_centerInParent="true"
+        android:layout_width="260dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="5dp"
+        android:layout_below="@+id/Email"
+        android:layout_alignLeft="@+id/Email"
+        android:layout_alignStart="@+id/Email"
+        android:id="@+id/passworldLiner">
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:inputType="textPassword"
+            android:ems="10"
+            android:id="@+id/editText4"
+            android:hint="Password"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                app:srcCompat="@drawable/layer_60"
+                android:id="@+id/imageView3"
+                android:layout_centerVertical="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+        android:layout_centerInParent="true"
+        android:layout_width="260dp"
+        android:layout_height="150dp"
+        android:layout_marginTop="3dp"
+        android:layout_below="@+id/passworldLiner"
+        android:layout_alignLeft="@+id/passworldLiner"
+        android:layout_alignStart="@+id/passworldLiner">
+
+
+        <CheckBox
+            android:text="RICARDAMI"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/checkBox"
+            android:fontFamily="sans-serif"
+            android:textSize="16sp"
+            android:textColor="#ffff"
+            android:textColorLink="@color/cardview_shadow_end_color" />
+
+        <Button
+            android:text="LOGIN"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="40dp"
+            android:id="@+id/btLogin"
+            android:textColor="@android:color/holo_green_dark"
+            android:minHeight="60dp"
+            android:minWidth="220dp"
+            style="@android:style/Widget.Button"
+            android:textSize="18sp" />
+
+        <Button
+            android:text="RECUPERA PASSWORLD"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/btPassword"
+            android:layout_alignRight="@+id/btLogin"
+            android:layout_below="@+id/btLogin"
+            android:textSize="9sp"
+            style="@android:style/Widget.Holo.Light.Button.Small" />
+
+        <Button
+            android:text="PRIMO ACCESO"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/btAces"
+            android:textSize="9sp"
+            style="@android:style/Widget.Holo.Light.Button.Small"
+            android:layout_below="@+id/btLogin"
+            android:layout_alignLeft="@+id/btLogin"
+            android:layout_alignStart="@+id/btLogin" />
+
+
+    </RelativeLayout>
+
+        <ImageView
+            android:layout_width="240dp"
+            android:layout_height="140dp"
+            app:srcCompat="@drawable/geatech_white"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp"
+            android:id="@+id/imageView2" />
+
+    </RelativeLayout>
+
+
+</RelativeLayout>
