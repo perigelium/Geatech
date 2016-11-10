@@ -1,0 +1,71 @@
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="80dp"
+    android:orientation="horizontal"
+    tools:context="com.example.zubcu.geatech.Fragments.CtrlBtnsFragment2"
+        android:background="#9e9e9e">
+
+        <TableRow
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:gravity="fill_horizontal">
+
+            <RadioGroup android:id="@+id/toggleGroup"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/report"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.2"
+                android:button="@null"
+                android:background="@drawable/toggle_btn_1selector"
+                android:textOff=""
+                android:textOn=""/>
+
+            <RadioButton
+                android:id="@+id/reportsFilteredByTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.2"
+                android:button="@null"
+                android:background="@drawable/toggle_btn_2selector"
+                android:textOff=""
+                android:textOn=""/>
+
+            <RadioButton
+                android:id="@+id/write"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.2"
+                android:button="@null"
+                android:background="@drawable/toggle_btn_3selector"
+                android:textOff=""
+                android:textOn=""/>
+            <RadioButton
+                android:id="@+id/cloud"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.2"
+                android:button="@null"
+                android:background="@drawable/toggle_btn_4selector"
+                android:textOff=""
+                android:textOn=""/>
+
+            <RadioButton
+                android:id="@+id/read"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.2"
+                android:button="@null"
+                android:background="@drawable/toggle_btn_5selector"
+                android:textOff=""
+                android:textOn=""/>
+
+            </RadioGroup>
+        </TableRow>
+
+    </TableLayout>
