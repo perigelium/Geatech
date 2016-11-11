@@ -39,8 +39,8 @@ public class CtrlBtnsFragment1 extends Fragment{
 
                     if(view.getId() == i)
                     {
-                        OnSelectedButtonListener listener = (OnSelectedButtonListener) getActivity();
-                        listener.onButtonSelected(i);
+                        OnClickListener listener = (OnClickListener) getActivity();
+                        listener.onCtrlButtonClicked(view);
                         break;
                     }
                 }
@@ -49,12 +49,13 @@ public class CtrlBtnsFragment1 extends Fragment{
 
         rGroup = ((RadioGroup) rootView.findViewById(R.id.toggleGroup));
         rGroup.setOnCheckedChangeListener(ToggleListener);
+        rGroup.check(R.id.visits);
 
         return rootView;
     }
 
-    public interface OnSelectedButtonListener
+    public interface OnClickListener
     {
-        void onButtonSelected(int buttonIndex);
+        void onCtrlButtonClicked(View view);
     }
 }

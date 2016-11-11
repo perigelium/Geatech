@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="80dp"
     android:orientation="horizontal"
+    android:id="@+id/ctrlBtnsFragment2"
     tools:context="com.example.zubcu.geatech.Fragments.CtrlBtnsFragment2"
         android:background="#9e9e9e">
 
@@ -17,7 +18,7 @@
                 android:orientation="horizontal">
 
             <RadioButton
-                android:id="@+id/report"
+                android:id="@+id/btnReturn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.2"
@@ -27,7 +28,7 @@
                 android:textOn=""/>
 
             <RadioButton
-                android:id="@+id/reportsFilteredByTime"
+                android:id="@+id/btnInfo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.2"
@@ -37,7 +38,7 @@
                 android:textOn=""/>
 
             <RadioButton
-                android:id="@+id/write"
+                android:id="@+id/btnCompose"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.2"
@@ -46,7 +47,7 @@
                 android:textOff=""
                 android:textOn=""/>
             <RadioButton
-                android:id="@+id/cloud"
+                android:id="@+id/addPhotos"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.2"
@@ -56,7 +57,7 @@
                 android:textOn=""/>
 
             <RadioButton
-                android:id="@+id/read"
+                android:id="@+id/btnGreenCloud"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.2"
