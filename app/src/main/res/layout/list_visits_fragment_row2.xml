@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal" >
+
+
+    <LinearLayout
+        android:id="@+id/detailsRows"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="6dp"
+            android:orientation="horizontal" >
+
+            <ImageView
+                android:id="@+id/imageViewPerson"
+                android:layout_width="wrap_content"
+                android:layout_gravity="start|center_vertical"
+                android:layout_marginLeft="6dp"
+                android:src="@drawable/question_mark"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/tvVisitsListName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Nome del cliente"
+                android:layout_gravity="start|center_vertical"
+                android:layout_marginLeft="6dp"/>
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginLeft="6dp">
+
+            <ImageView
+                android:id="@+id/ivVisitsListTOS"
+                android:layout_width="wrap_content"
+                android:layout_gravity="start|center_vertical"
+                android:src="@drawable/service_green"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="6dp"/>
+
+            <TextView
+                android:id="@+id/tvVisitsListTOS"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Tipo di servicio"
+                android:layout_gravity="start|center_vertical"
+                android:layout_marginLeft="6dp"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginLeft="6dp">
+
+        <ImageView
+            android:id="@+id/ivVisitsListAddress"
+            android:layout_width="wrap_content"
+            android:layout_gravity="start|center_vertical"
+            android:src="@drawable/location_green"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="6dp" />
+
+        <TextView
+            android:id="@+id/tvVisitsListAddress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Client indirizzo"
+            android:layout_gravity="start|center_vertical"
+            android:layout_marginLeft="6dp"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="6dp"
+        android:layout_gravity="end"
+        android:orientation="horizontal" >
+
+    <ImageView
+        android:id="@+id/ivVizitDate"
+        android:layout_width="wrap_content"
+        android:layout_gravity="center_vertical|end"
+        android:layout_height="wrap_content"
+        android:src="@drawable/calendario" />
+
+    <ImageView
+        android:id="@+id/ivArrow_right"
+        android:layout_width="wrap_content"
+        android:layout_gravity="center_vertical|end"
+        android:layout_height="wrap_content"
+        android:src="@drawable/arrow_right" />
+
+    </LinearLayout>
+
+</FrameLayout>

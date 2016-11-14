@@ -18,7 +18,7 @@
                 android:orientation="horizontal">
 
             <RadioButton
-                android:id="@+id/visits"
+                android:id="@+id/btnVisits"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.2"
@@ -28,7 +28,7 @@
                 android:textOn=""/>
 
             <RadioButton
-                android:id="@+id/visitsNotComposed"
+                android:id="@+id/btnVisitsNotComposed"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.2"
@@ -38,7 +38,7 @@
                 android:textOn=""/>
 
             <RadioButton
-                android:id="@+id/write"
+                android:id="@+id/btnWrite"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.2"
@@ -47,7 +47,7 @@
                 android:textOff=""
                 android:textOn=""/>
             <RadioButton
-                android:id="@+id/cloud"
+                android:id="@+id/btnBlueCloud"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.2"
@@ -57,7 +57,7 @@
                 android:textOn=""/>
 
             <RadioButton
-                android:id="@+id/read"
+                android:id="@+id/btnReports"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.2"

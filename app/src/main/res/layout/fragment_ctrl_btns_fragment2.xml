@@ -47,7 +47,7 @@
                 android:textOff=""
                 android:textOn=""/>
             <RadioButton
-                android:id="@+id/addPhotos"
+                android:id="@+id/btnAddPhotos"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.2"

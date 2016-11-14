@@ -10,11 +10,12 @@ import android.widget.Toast;
 import com.example.zubcu.geatech.Fragments.CtrlBtnsFragment1;
 import com.example.zubcu.geatech.Fragments.CtrlBtnsFragment2;
 import com.example.zubcu.geatech.Fragments.FragmentListVisits;
+import com.example.zubcu.geatech.Fragments.FragmentListVisits2;
 import com.example.zubcu.geatech.R;
 
 public class MainActivity extends Activity
-        implements CtrlBtnsFragment1.OnClickListener,
-        CtrlBtnsFragment2.OnClickListener, FragmentListVisits.OnClickListener
+        implements CtrlBtnsFragment1.OnClickedListener,
+        CtrlBtnsFragment2.OnClickedListener, FragmentListVisits.OnItemSelectedListener
 {
 
     private FragmentManager mFragmentManager;
@@ -23,6 +24,7 @@ public class MainActivity extends Activity
     CtrlBtnsFragment1 ctrlBtnsFragment1;
     CtrlBtnsFragment2 ctrlBtnsFragment2;
     FragmentListVisits listVisits;
+    FragmentListVisits2 listVisits2;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -37,47 +39,54 @@ public class MainActivity extends Activity
 
         mFragmentTransaction = mFragmentManager.beginTransaction();
 
-
-        mFragmentTransaction.add(R.id.CtrlBtnFragContainer, ctrlBtnsFragment2);
         mFragmentTransaction.add(R.id.CtrlBtnFragContainer, ctrlBtnsFragment1);
-        mFragmentTransaction.add(R.id.ListContainer, listVisits);
-        mFragmentTransaction.hide(ctrlBtnsFragment2);
-        //mFragmentTransaction.addToBackStack("frag");
-
+//        mFragmentTransaction.hide(ctrlBtnsFragment2);
+//        mFragmentTransaction.show(ctrlBtnsFragment1);
+        mFragmentTransaction.add(R.id.CtrlBtnFragContainer, listVisits);
+        mFragmentTransaction.addToBackStack(null);
         mFragmentTransaction.commit();
 	}
 
     @Override
     public void onCtrlButtonClicked(View view)
     {
-        mFragmentManager = getFragmentManager();
-
-        mFragmentTransaction = mFragmentManager.beginTransaction();
-
 
         if (view == findViewById(R.id.btnReturn))
         {
-            mFragmentTransaction.hide(ctrlBtnsFragment2);
-            mFragmentTransaction.show(ctrlBtnsFragment1);
+            mFragmentTransaction = mFragmentManager.beginTransaction();
+
+            mFragmentTransaction.replace(R.id.CtrlBtnFragContainer, ctrlBtnsFragment1);
+            ctrlBtnsFragment2.setCheckedBtnId(R.id.btnVisits);
+
+            if(!listVisits.isInLayout())
+            {
+                mFragmentTransaction.add(R.id.CtrlBtnFragContainer, listVisits);
+            }
+
+            mFragmentTransaction.commit();
         }
 
-        mFragmentTransaction.commit();
-
         //Toast.makeText(getApplicationContext(), Integer.toString(buttonIndex) ,Toast.LENGTH_SHORT).show();
-
     }
 
     @Override
     public void OnListItemSelected(int itemIndex)
     {
-        mFragmentManager = getFragmentManager();
-        //CtrlBtnsFragment1 ctrlF1 = (CtrlBtnsFragment1) mFragmentManager.findFragmentById(R.id.ctrlBtnsFragment1);
-
         mFragmentTransaction = mFragmentManager.beginTransaction();
 
-            mFragmentTransaction.hide(ctrlBtnsFragment1);
-            mFragmentTransaction.show(ctrlBtnsFragment2);
+        mFragmentTransaction.replace(R.id.CtrlBtnFragContainer, ctrlBtnsFragment2);
+        ctrlBtnsFragment2.setCheckedBtnId(R.id.btnInfo);
+
+        if(listVisits.isInLayout())
+        {
+            mFragmentTransaction.remove(listVisits);
+        }
 
         mFragmentTransaction.commit();
+
+/*        if(listVisits.isVisible())
+        {
+        int i = 0;
+        }*/
     }
 }

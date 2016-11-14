@@ -22,52 +22,66 @@ public class CtrlBtnsFragment2 extends Fragment{
 
     private RadioGroup rGroup;
 
-
+    int checkedBtnId = 0;
+    int previousCheckedId = 0;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
         View rootView = inflater.inflate(R.layout.fragment_ctrl_btns_fragment2, container, false);
+        rGroup = ((RadioGroup) rootView.findViewById(R.id.toggleGroup));
+        final OnClickedListener listener = (OnClickedListener) getActivity();
+        //rGroup.check(R.id.btnInfo);
+        //rGroup.clearCheck();
 
         final RadioGroup.OnCheckedChangeListener ToggleListener = new RadioGroup.OnCheckedChangeListener()
         {
             @Override
             public void onCheckedChanged(final RadioGroup radioGroup, final int i)
             {
+                //rGroup.check(checkedBtnId);
+
+                if(previousCheckedId == i) return;
+
+                previousCheckedId = i;
+
                 for (int j = 0; j < radioGroup.getChildCount(); j++)
                 {
                     final RadioButton view = (RadioButton) radioGroup.getChildAt(j);
 
                     if(view.getId() == i)
                     {
-                        OnClickListener listener = (OnClickListener) getActivity();
                         listener.onCtrlButtonClicked(view);
+
                         break;
                     }
                 }
             }
         };
 
-        rGroup = ((RadioGroup) rootView.findViewById(R.id.toggleGroup));
         rGroup.setOnCheckedChangeListener(ToggleListener);
-        rGroup.check(R.id.btnGreenCloud);
 
         return rootView;
     }
 
-    public interface OnClickListener
-    {
-        void onCtrlButtonClicked(View view);
-    }
-
-    @Override
+/*    @Override
     public void onHiddenChanged(boolean hidden)
     {
         super.onHiddenChanged(hidden);
 
-        if(!hidden)
+        //if(!hidden)
         {
             rGroup.check(R.id.btnInfo);
         }
+    }*/
+
+    public interface OnClickedListener
+    {
+        void onCtrlButtonClicked(View view);
+    }
+
+    public void setCheckedBtnId(int checkedBtnId)
+    {
+        this.checkedBtnId = checkedBtnId;
     }
 }

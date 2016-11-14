@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -17,11 +16,7 @@ import com.example.zubcu.geatech.R;
 
 import java.util.Random;
 
-import static android.R.attr.onClick;
-
-public class FragmentListVisits extends ListFragment
-{
-    OnItemSelectedListener listener;
+public class FragmentListVisits2 extends ListFragment {
 
     final String[] catNames = new String[]{"Рыжик", "Барсик", "Мурзик",
             "Мурка", "Васька", "Томасина", "Кристина", "Пушок", "Дымка",
@@ -43,40 +38,31 @@ public class FragmentListVisits extends ListFragment
         super.onActivityCreated(savedInstanceState);
 
         MyListAdapter myListAdapter = new MyListAdapter(getActivity(),
-                R.layout.list_visits_fragment_row, catNames);
+                R.layout.list_visits_fragment_row2, catNames);
         setListAdapter(myListAdapter);
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState)
-    {
-        super.onCreate(savedInstanceState);
-
-        rnd = new Random();
-
-        listener = (OnItemSelectedListener) getActivity();
-
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState)
     {
-        return inflater.inflate(R.layout.list_visits_fragment, container, false);
+        rnd = new Random();
+        return inflater.inflate(R.layout.list_visits_fragment2, null);
     }
 
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
         super.onListItemClick(l, v, position, id);
 
-        listener.OnListItemSelected(position);
-
 /*        Toast.makeText(getActivity(),
                 getListView().getItemAtPosition(position).toString(),
                 Toast.LENGTH_LONG).show();*/
+
+        OnClickListener listener = (OnClickListener) getActivity();
+        listener.OnListItemSelected(position);
     }
 
-    public interface OnItemSelectedListener
+    public interface OnClickListener
     {
         void OnListItemSelected(int itemIndex);
     }
@@ -96,13 +82,13 @@ public class FragmentListVisits extends ListFragment
             // return super.getView(position, convertView, parent);
 
             LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            View row = inflater.inflate(R.layout.list_visits_fragment_row, parent, false);
+            View row = inflater.inflate(R.layout.list_visits_fragment_row2, parent, false);
 
             TextView clientNameTextView = (TextView) row.findViewById(R.id.tvVisitsListName);
             clientNameTextView.setText(catNames[position]);
 
             int randomInteger = rnd.nextInt(2);
-
+/*
             if(randomInteger!=0)
             {
                 TextView serviceTypeTextView = (TextView) row.findViewById(R.id.tvVisitsListTOS);
@@ -119,7 +105,7 @@ public class FragmentListVisits extends ListFragment
                 ImageView vizitDateIcon = (ImageView) row.findViewById(R.id.ivVizitDate);
 
                 vizitDateIcon.setImageResource(R.drawable.transparent24px);
-            }
+            }*/
 
             return row;
         }

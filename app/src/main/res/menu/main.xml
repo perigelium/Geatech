@@ -18,7 +18,7 @@
         android:title="Soliciti" />
 
     <item
-        android:icon="@drawable/layer_11_copy"
+        android:icon="@drawable/notification1"
         android:id="@+id/fw"
         android:orderInCategory="1"
         android:showAsAction="always"
