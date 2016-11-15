@@ -22,6 +22,7 @@ import com.example.zubcu.geatech.R;
 public class CtrlBtnsFragment1 extends Fragment{
 
     private RadioGroup rGroup;
+    public static final String checkedBtnIdStr = "";
     int checkedBtnId = 0;
     int previousCheckedId = 0;
 
@@ -31,17 +32,15 @@ public class CtrlBtnsFragment1 extends Fragment{
 
         final View rootView = inflater.inflate(R.layout.fragment_ctrl_btns_fragment1, container, false);
         final OnClickedListener listener = (OnClickedListener) getActivity();
-        //final OnClickListener mlistener = (OnClickListener) getActivity();
         rGroup = ((RadioGroup) rootView.findViewById(R.id.toggleGroup));
         //rGroup.clearCheck();
 
-        final RadioGroup.OnCheckedChangeListener ToggleListener = new RadioGroup.OnCheckedChangeListener()
+        final RadioGroup.OnCheckedChangeListener ToggleListener =
+                new RadioGroup.OnCheckedChangeListener()
         {
             @Override
             public void onCheckedChanged(final RadioGroup radioGroup, final int i)
             {
-
-                //rGroup.check(checkedBtnId);
 
                 if(previousCheckedId == i) return;
 
@@ -64,6 +63,31 @@ public class CtrlBtnsFragment1 extends Fragment{
         rGroup.setOnCheckedChangeListener(ToggleListener);
 
         return rootView;
+    }
+
+    @Override
+    public void onHiddenChanged(boolean hidden)
+    {
+        super.onHiddenChanged(hidden);
+
+        if(rGroup!= null && !hidden)
+        {
+            rGroup.check(checkedBtnId);
+        }
+    }
+
+    @Override
+    public void onResume()
+    {
+        rGroup.check(checkedBtnId);
+        super.onResume();
+    }
+
+    @Override
+    public View getView()
+    {
+        rGroup.check(checkedBtnId);
+        return super.getView();
     }
 
     public interface OnClickedListener

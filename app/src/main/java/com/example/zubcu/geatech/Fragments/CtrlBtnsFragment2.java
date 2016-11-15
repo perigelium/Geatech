@@ -22,6 +22,7 @@ public class CtrlBtnsFragment2 extends Fragment{
 
     private RadioGroup rGroup;
 
+    public static final String checkedBtnIdStr = "";
     int checkedBtnId = 0;
     int previousCheckedId = 0;
 
@@ -31,8 +32,6 @@ public class CtrlBtnsFragment2 extends Fragment{
         View rootView = inflater.inflate(R.layout.fragment_ctrl_btns_fragment2, container, false);
         rGroup = ((RadioGroup) rootView.findViewById(R.id.toggleGroup));
         final OnClickedListener listener = (OnClickedListener) getActivity();
-        //rGroup.check(R.id.btnInfo);
-        //rGroup.clearCheck();
 
         final RadioGroup.OnCheckedChangeListener ToggleListener = new RadioGroup.OnCheckedChangeListener()
         {
@@ -64,16 +63,30 @@ public class CtrlBtnsFragment2 extends Fragment{
         return rootView;
     }
 
-/*    @Override
+    @Override
+    public View getView()
+    {
+        rGroup.check(checkedBtnId);
+        return super.getView();
+    }
+
+    @Override
     public void onHiddenChanged(boolean hidden)
     {
         super.onHiddenChanged(hidden);
 
-        //if(!hidden)
+        if(rGroup!= null && !hidden)
         {
-            rGroup.check(R.id.btnInfo);
+            rGroup.check(checkedBtnId);
         }
-    }*/
+    }
+
+    @Override
+    public void onResume()
+    {
+        rGroup.check(checkedBtnId);
+        super.onResume();
+    }
 
     public interface OnClickedListener
     {

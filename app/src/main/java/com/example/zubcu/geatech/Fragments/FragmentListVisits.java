@@ -113,7 +113,7 @@ public class FragmentListVisits extends ListFragment
 
                 ImageView clientIcon = (ImageView) row.findViewById(R.id.imageViewPerson);
 
-                clientIcon.setImageResource(R.drawable.user_page_green);
+                clientIcon.setImageResource(R.drawable.person_green);
 
 
                 ImageView vizitDateIcon = (ImageView) row.findViewById(R.id.ivVizitDate);

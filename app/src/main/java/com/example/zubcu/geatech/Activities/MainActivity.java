@@ -5,12 +5,11 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Toast;
 
 import com.example.zubcu.geatech.Fragments.CtrlBtnsFragment1;
 import com.example.zubcu.geatech.Fragments.CtrlBtnsFragment2;
+import com.example.zubcu.geatech.Fragments.DateTimeSetFragment;
 import com.example.zubcu.geatech.Fragments.FragmentListVisits;
-import com.example.zubcu.geatech.Fragments.FragmentListVisits2;
 import com.example.zubcu.geatech.R;
 
 public class MainActivity extends Activity
@@ -23,8 +22,8 @@ public class MainActivity extends Activity
 
     CtrlBtnsFragment1 ctrlBtnsFragment1;
     CtrlBtnsFragment2 ctrlBtnsFragment2;
+    DateTimeSetFragment dateTimeSetFragment;
     FragmentListVisits listVisits;
-    FragmentListVisits2 listVisits2;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -33,6 +32,7 @@ public class MainActivity extends Activity
 
         ctrlBtnsFragment1 = new CtrlBtnsFragment1();
         ctrlBtnsFragment2 = new CtrlBtnsFragment2();
+        dateTimeSetFragment = new DateTimeSetFragment();
         listVisits = new FragmentListVisits();
 
         mFragmentManager = getFragmentManager();
@@ -40,10 +40,14 @@ public class MainActivity extends Activity
         mFragmentTransaction = mFragmentManager.beginTransaction();
 
         mFragmentTransaction.add(R.id.CtrlBtnFragContainer, ctrlBtnsFragment1);
-//        mFragmentTransaction.hide(ctrlBtnsFragment2);
-//        mFragmentTransaction.show(ctrlBtnsFragment1);
+        mFragmentTransaction.add(R.id.CtrlBtnFragContainer, ctrlBtnsFragment2);
+
+
+        mFragmentTransaction.hide(ctrlBtnsFragment2);
+        mFragmentTransaction.show(ctrlBtnsFragment1);
+        ctrlBtnsFragment1.setCheckedBtnId(R.id.btnVisits);
         mFragmentTransaction.add(R.id.CtrlBtnFragContainer, listVisits);
-        mFragmentTransaction.addToBackStack(null);
+        //mFragmentTransaction.addToBackStack(null);
         mFragmentTransaction.commit();
 	}
 
@@ -53,14 +57,27 @@ public class MainActivity extends Activity
 
         if (view == findViewById(R.id.btnReturn))
         {
+/*            Bundle args = new Bundle();
+            args.putInt(ctrlBtnsFragment1.checkedBtnIdStr, R.id.btnVisits);
+            ctrlBtnsFragment1.setArguments(args);*/
+
             mFragmentTransaction = mFragmentManager.beginTransaction();
 
-            mFragmentTransaction.replace(R.id.CtrlBtnFragContainer, ctrlBtnsFragment1);
-            ctrlBtnsFragment2.setCheckedBtnId(R.id.btnVisits);
+            mFragmentTransaction.hide(ctrlBtnsFragment2);
+            ctrlBtnsFragment1.setCheckedBtnId(R.id.btnVisits);
+            mFragmentTransaction.show(ctrlBtnsFragment1);
 
-            if(!listVisits.isInLayout())
+            //mFragmentTransaction.replace(R.id.CtrlBtnFragContainer, ctrlBtnsFragment1);
+
+
+            if(!listVisits.isAdded())
             {
                 mFragmentTransaction.add(R.id.CtrlBtnFragContainer, listVisits);
+            }
+
+            if(dateTimeSetFragment.isAdded())
+            {
+                mFragmentTransaction.remove(dateTimeSetFragment);
             }
 
             mFragmentTransaction.commit();
@@ -72,14 +89,26 @@ public class MainActivity extends Activity
     @Override
     public void OnListItemSelected(int itemIndex)
     {
+/*        Bundle args = new Bundle();
+        args.putInt(ctrlBtnsFragment2.checkedBtnIdStr, R.id.btnInfo);
+        ctrlBtnsFragment2.setArguments(args);*/
+
         mFragmentTransaction = mFragmentManager.beginTransaction();
 
-        mFragmentTransaction.replace(R.id.CtrlBtnFragContainer, ctrlBtnsFragment2);
+        mFragmentTransaction.hide(ctrlBtnsFragment1);
         ctrlBtnsFragment2.setCheckedBtnId(R.id.btnInfo);
+        mFragmentTransaction.show(ctrlBtnsFragment2);
+        //mFragmentTransaction.replace(R.id.CtrlBtnFragContainer, ctrlBtnsFragment2);
 
-        if(listVisits.isInLayout())
+
+        if(listVisits.isAdded())
         {
             mFragmentTransaction.remove(listVisits);
+        }
+
+        if(!dateTimeSetFragment.isAdded())
+        {
+            mFragmentTransaction.add(R.id.CtrlBtnFragContainer, dateTimeSetFragment);
         }
 
         mFragmentTransaction.commit();
