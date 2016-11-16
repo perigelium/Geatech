@@ -7,6 +7,7 @@
 <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_margin="6dp"
     android:orientation="vertical" >
 
         <LinearLayout
@@ -143,82 +144,126 @@
 
     <View android:layout_height="1px" android:layout_gravity="bottom" android:layout_marginLeft="40dp" android:layout_width="match_parent" android:background="#000000"/>
 
-    <com.example.zubcu.geatech.Lists.ListSottoprodotti
+    <LinearLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="6dp"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/ivSottprodottiDateTime"
+            android:layout_width="wrap_content"
+            android:layout_gravity="start|center_vertical"
+            android:layout_marginLeft="6dp"
+            android:src="@drawable/sottoprodotti_green"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/tvSottprodottiDateTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Eventualli sottoprodotti"
+            android:layout_gravity="start|center_vertical"
+            android:layout_marginLeft="6dp" />
+
+    </LinearLayout>
+
+    <ListView
+        android:id="@+id/list"
+        android:layout="@layout/visits_day_time_list_cell"
+        android:layout_width="match_parent"
+        android:layout_height="88dp" > <!--hardcoded needs to be replaced-->
+    </ListView>
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="16dp"
+        android:layout_margin="6dp"
         android:orientation="vertical" >
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="16dp"
-            android:orientation="horizontal" >
-        <TextView
-            android:id="@+id/tvDataDateTime"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Data:"
-            android:layout_gravity="start|center_vertical"
-            android:layout_marginLeft="6dp"/>
-        <Spinner
-            android:layout_width="45dp"
-            android:layout_height="wrap_content"
-            android:id="@+id/spinDay" />
-        <Spinner
-            android:layout_width="45dp"
-            android:layout_height="wrap_content"
-            android:id="@+id/spinMonth" />
-        <Spinner
-            android:layout_width="45dp"
-            android:layout_height="wrap_content"
-            android:id="@+id/spinYear" />
-        </LinearLayout>
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="16dp"
-            android:orientation="horizontal" >
-        <TextView
-            android:id="@+id/tvOraDateTime"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Ora:"
-            android:layout_gravity="start|center_vertical"
-            android:layout_marginLeft="6dp"/>
-            <Spinner
-                android:layout_width="45dp"
+            android:layout_margin="6dp"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/spinHour" />
-            <Spinner
-                android:layout_width="45dp"
+                android:layout_margin="6dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start|center_vertical"
+                    android:layout_marginLeft="6dp"
+                    android:text="Data:" />
+
+                <TextView
+                    android:id="@+id/tvDateSet"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start|center_vertical"
+                    android:layout_marginLeft="6dp"
+                    android:text="" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/spinMinute" />
+                android:layout_margin="6dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start|center_vertical"
+                    android:layout_marginLeft="6dp"
+                    android:text="Ora:" />
+
+                <TextView
+                    android:id="@+id/tvTimeSet"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start|center_vertical"
+                    android:layout_marginLeft="6dp"
+                    android:text="" />
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/btnSetDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical|end"
+                android:onClick="onClick"
+                android:text="Cambia" />
+
         </LinearLayout>
     </LinearLayout>
 
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginLeft="6dp">
+        android:layout_marginLeft="6dp"
+        android:orientation="horizontal">
+
         <Button
-            android:id="@+id/btnFissoIlSopraluoghoDateTime"
+            android:id="@+id/btnSetDateTimeSubmit"
             android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_gravity="center_vertical|center"
-            android:layout_height="wrap_content"
             android:background="#00ff33"
-            android:text="Fisso il sopraluogho"/>
+            android:onClick="onClick"
+            android:text="Fisso il sopraluogho" />
+
         <Button
-            android:id="@+id/btnAnnullaDateTime"
+            android:id="@+id/btnAnnullaSetDateTime"
             android:layout_width="wrap_content"
-            android:layout_gravity="center_vertical|end"
             android:layout_height="wrap_content"
-            android:text="Annulla"/>
+            android:layout_gravity="center_vertical|end"
+            android:onClick="onClick"
+            android:text="Annulla" />
     </FrameLayout>
 
 </LinearLayout>

@@ -89,23 +89,23 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="6dp"
         android:layout_gravity="end"
-        android:orientation="horizontal" >
+        android:layout_marginLeft="6dp"
+        android:orientation="horizontal">
 
-    <ImageView
-        android:id="@+id/ivVizitDate"
-        android:layout_width="wrap_content"
-        android:layout_gravity="center_vertical|end"
-        android:layout_height="wrap_content"
-        android:src="@drawable/calendario" />
+        <ImageView
+            android:id="@+id/ivVizitDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical|end"
+            android:src="@drawable/calendario" />
 
-    <ImageView
-        android:id="@+id/ivArrow_right"
-        android:layout_width="wrap_content"
-        android:layout_gravity="center_vertical|end"
-        android:layout_height="wrap_content"
-        android:src="@drawable/arrow_right" />
+        <ImageView
+            android:id="@+id/ivArrow_right"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical|end"
+            android:src="@drawable/arrow_right" />
 
     </LinearLayout>
 

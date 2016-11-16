@@ -10,11 +10,12 @@ import com.example.zubcu.geatech.Fragments.CtrlBtnsFragment1;
 import com.example.zubcu.geatech.Fragments.CtrlBtnsFragment2;
 import com.example.zubcu.geatech.Fragments.DateTimeSetFragment;
 import com.example.zubcu.geatech.Fragments.FragmentListVisits;
+import com.example.zubcu.geatech.Interfaces.Communicator;
 import com.example.zubcu.geatech.R;
 
 public class MainActivity extends Activity
         implements CtrlBtnsFragment1.OnClickedListener,
-        CtrlBtnsFragment2.OnClickedListener, FragmentListVisits.OnItemSelectedListener
+        CtrlBtnsFragment2.OnClickedListener, FragmentListVisits.OnItemSelectedListener, Communicator
 {
 
     private FragmentManager mFragmentManager;
@@ -64,10 +65,9 @@ public class MainActivity extends Activity
             mFragmentTransaction = mFragmentManager.beginTransaction();
 
             mFragmentTransaction.hide(ctrlBtnsFragment2);
+
             ctrlBtnsFragment1.setCheckedBtnId(R.id.btnVisits);
             mFragmentTransaction.show(ctrlBtnsFragment1);
-
-            //mFragmentTransaction.replace(R.id.CtrlBtnFragContainer, ctrlBtnsFragment1);
 
 
             if(!listVisits.isAdded())
@@ -98,7 +98,6 @@ public class MainActivity extends Activity
         mFragmentTransaction.hide(ctrlBtnsFragment1);
         ctrlBtnsFragment2.setCheckedBtnId(R.id.btnInfo);
         mFragmentTransaction.show(ctrlBtnsFragment2);
-        //mFragmentTransaction.replace(R.id.CtrlBtnFragContainer, ctrlBtnsFragment2);
 
 
         if(listVisits.isAdded())
@@ -112,10 +111,11 @@ public class MainActivity extends Activity
         }
 
         mFragmentTransaction.commit();
+    }
 
-/*        if(listVisits.isVisible())
-        {
-        int i = 0;
-        }*/
+    @Override
+    public void count(Boolean mDatetimeAlreadySet)
+    {
+
     }
 }

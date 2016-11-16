@@ -1,34 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ListView xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout xmlns:tools="http://schemas.android.com/tools"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
+    android:orientation="vertical"
     android:id="@+id/listSottprodottiSDT">
-
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="6dp"
-        android:orientation="horizontal">
-
-        <ImageView
-            android:id="@+id/ivSottprodottiDateTime"
-            android:layout_width="wrap_content"
-            android:layout_gravity="start|center_vertical"
-            android:layout_marginLeft="6dp"
-            android:src="@drawable/sottoprodotti_orange"
-            android:layout_height="wrap_content" />
-
-        <TextView
-            android:id="@+id/tvSottprodottiDateTime"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Eventualli sottoprodotti"
-            android:layout_gravity="start|center_vertical"
-            android:layout_marginLeft="6dp" />
-
-    </LinearLayout>
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -98,4 +74,4 @@
             android:layout_gravity="start|center_vertical"
             android:layout_marginLeft="6dp" />
     </LinearLayout>
-</ListView>
+</LinearLayout>

@@ -1,14 +1,29 @@
 package com.example.zubcu.geatech.Fragments;
 
+import android.app.DatePickerDialog;
+import android.app.DialogFragment;
 import android.app.Fragment;
+import android.app.TimePickerDialog;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.DatePicker;
+import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.TimePicker;
 
+import com.example.zubcu.geatech.Adapters.SetVisitDateTimeListAdapter;
+import com.example.zubcu.geatech.Interfaces.Communicator;
+import com.example.zubcu.geatech.Models.DateTimeSetListCellModel;
 import com.example.zubcu.geatech.R;
+
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -18,17 +33,21 @@ import com.example.zubcu.geatech.R;
  * Use the {@link DateTimeSetFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class DateTimeSetFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+public class DateTimeSetFragment extends Fragment implements View.OnClickListener
+{
+    private TextView mDateSetTextView, mTimeSetTextView, mSetDateButton, mAnnullaSetDateTimeButton, mSetDateTimeSubmitButton;
+    private int mYear, mMonth, mDay, mHour, mMinute;
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    View rootView;
 
     private OnFragmentInteractionListener mListener;
+    private Communicator mCommunicator;
+
 
     public DateTimeSetFragment() {
         // Required empty public constructor
@@ -43,7 +62,8 @@ public class DateTimeSetFragment extends Fragment {
      * @return A new instance of fragment DateTimeSetFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static DateTimeSetFragment newInstance(String param1, String param2) {
+    public static DateTimeSetFragment newInstance(String param1, String param2)
+    {
         DateTimeSetFragment fragment = new DateTimeSetFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
@@ -61,11 +81,75 @@ public class DateTimeSetFragment extends Fragment {
         }
     }
 
+    private DatePickerDialog.OnDateSetListener datePickerListener = new DatePickerDialog.OnDateSetListener() {
+
+        // when dialog box is closed, below method will be called.
+        @Override
+        public void onDateSet(DatePicker view, int selectedYear, int selectedMonth, int selectedDay)
+        {
+            mYear = selectedYear;
+            mMonth = selectedMonth;
+            mDay = selectedDay;
+
+            updateDisplay();
+        }
+    };
+
+    private TimePickerDialog.OnTimeSetListener timePickerListener = new TimePickerDialog.OnTimeSetListener() {
+
+        @Override
+        public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
+
+            mHour = selectedHour;
+            mMinute = selectedMinute;
+
+            updateDisplay();
+        }
+    };
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+                             Bundle savedInstanceState)
+    {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_date_time_set, container, false);
+        rootView =  inflater.inflate(R.layout.fragment_date_time_set, container, false);
+
+        ArrayList<DateTimeSetListCellModel> list = new ArrayList<>();
+
+        // Construct the data source
+        list.add(new DateTimeSetListCellModel("1","2","3"));
+        list.add(new DateTimeSetListCellModel("4","5","6"));
+
+// Create the adapter to convert the array to views
+
+            SetVisitDateTimeListAdapter adapter = new SetVisitDateTimeListAdapter(getActivity(), list );
+
+        ListView listView =(ListView)rootView.findViewById(R.id.list);
+
+            listView.setAdapter(adapter);
+
+        mDateSetTextView = (TextView) rootView.findViewById(R.id.tvDateSet);
+        mTimeSetTextView = (TextView) rootView.findViewById(R.id.tvTimeSet);
+        mSetDateButton = (TextView) rootView.findViewById(R.id.btnSetDate);
+        mAnnullaSetDateTimeButton = (TextView) rootView.findViewById(R.id.btnAnnullaSetDateTime);
+        mSetDateTimeSubmitButton = (TextView) rootView.findViewById(R.id.btnSetDateTimeSubmit);
+
+        mSetDateButton.setOnClickListener(this);
+        mAnnullaSetDateTimeButton.setOnClickListener(this);
+        mSetDateTimeSubmitButton.setOnClickListener(this);
+
+        // получаем текущее время
+        final Calendar calendar = Calendar.getInstance();
+        mYear = calendar.get(Calendar.YEAR);
+        mMonth = calendar.get(Calendar.MONTH) + 1;
+        mDay = calendar.get(Calendar.DAY_OF_MONTH);
+        mHour = calendar.get(Calendar.HOUR_OF_DAY);
+        mMinute = calendar.get(Calendar.MINUTE);
+
+        // выводим текущее время
+        updateDisplay();
+
+        return  rootView;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -105,5 +189,47 @@ public class DateTimeSetFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }
+
+    public void onClick(View v) {
+/*        DialogFragment dateFragment = new DatePickerDialogFragment();
+        dateFragment.show(getFragmentManager(), "datePicker");*/
+
+        if(v.getId() == R.id.btnSetDate)
+        {
+            TimePickerDialog dialogTimePicker = new TimePickerDialog(getActivity(), timePickerListener,
+                    mHour, mMinute, DateFormat.is24HourFormat(getActivity()));
+            //dialog.getTimePicker().setMaxDate(new Date().getTime());
+            dialogTimePicker.show();
+
+            DatePickerDialog dialogDatePicker = new DatePickerDialog(getActivity(), datePickerListener,
+                    mYear, mMonth, mDay);
+            //dialog.getDatePicker().setMaxDate(new Date().getTime());
+            dialogDatePicker.show();
+        }
+
+        if(v.getId() == R.id.btnAnnullaSetDateTime)
+        {
+            getActivity().getFragmentManager().beginTransaction().remove(this).commit();
+        }
+
+        if(v.getId() == R.id.btnSetDateTimeSubmit)
+        {
+            getActivity().getFragmentManager().beginTransaction().remove(this).commit();
+        }
+    }
+
+    public void updateDisplay() {
+        mDateSetTextView.setText(new StringBuilder().append(mDay).append(".")
+                .append(mMonth).append(".").append(mYear));
+
+        mTimeSetTextView.setText(new StringBuilder().append(mHour).append(".")
+                .append(mMinute));
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        mCommunicator = (Communicator)getActivity();
     }
 }

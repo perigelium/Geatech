@@ -1,0 +1,153 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.zubcu.geatech.Fragments.DateTimeSetFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="6dp"
+            android:orientation="horizontal"
+            android:weightSum="4">
+
+            <!--    <GridLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:columnCount="6"
+                    android:orientation="horizontal"
+                    android:rowCount="1" >-->
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="6dp"
+                android:layout_weight="3"
+                android:orientation="vertical">
+
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="6dp"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:id="@+id/ivPersonDateTime"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="start|center_vertical"
+                        android:layout_marginLeft="6dp"
+                        android:src="@drawable/person_green" />
+
+                    <TextView
+                        android:id="@+id/tvPersonDateTime"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="start|center_vertical"
+                        android:layout_marginLeft="6dp"
+                        android:text="Nome del cliente" />
+
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_margin="9dp"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:id="@+id/ivPhoneDateTime"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="start|center_vertical"
+                        android:layout_marginLeft="6dp"
+                        android:src="@drawable/phone_green" />
+
+                    <TextView
+                        android:id="@+id/tvPhoneDateTime"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="start|center_vertical"
+                        android:layout_marginLeft="6dp"
+                        android:text="Client phone" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="6dp"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:id="@+id/ivAddressDateTime"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="start|center_vertical"
+                        android:layout_marginLeft="6dp"
+                        android:src="@drawable/location_green" />
+
+                    <TextView
+                        android:id="@+id/tvAddressDateTime"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="start|center_vertical"
+                        android:layout_marginLeft="6dp"
+                        android:text="Client indirizzo" />
+
+                </LinearLayout>
+            </LinearLayout>
+
+            <FrameLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical|end"
+                android:layout_marginLeft="6dp"
+                android:layoutWeight="1"
+                android:orientation="horizontal">
+
+                <View
+                    android:id="@+id/ivVizitDate"
+                    android:layout_width="99dp"
+                    android:layout_height="99dp"
+                    android:layout_gravity="center_vertical|end"
+                    android:background="#009922" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="C"
+                    android:textColor="#ffffff"
+                    android:textSize="66dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal|bottom"
+                    android:text="Cliente"
+                    android:textColor="#ffffff"
+                    android:textSize="20dp" />
+
+            </FrameLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_gravity="bottom"
+                android:layout_marginLeft="40dp"
+                android:background="#000000" />
+
+        </FrameLayout>
+        <!--</GridLayout>-->
+
+    </LinearLayout>
+</FrameLayout>
