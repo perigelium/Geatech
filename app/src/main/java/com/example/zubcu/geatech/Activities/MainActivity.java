@@ -9,6 +9,7 @@ import android.view.View;
 import com.example.zubcu.geatech.Fragments.CtrlBtnsFragment1;
 import com.example.zubcu.geatech.Fragments.CtrlBtnsFragment2;
 import com.example.zubcu.geatech.Fragments.DateTimeSetFragment;
+import com.example.zubcu.geatech.Fragments.FragmentCTLinfo;
 import com.example.zubcu.geatech.Fragments.FragmentListVisits;
 import com.example.zubcu.geatech.Interfaces.Communicator;
 import com.example.zubcu.geatech.R;
@@ -25,6 +26,7 @@ public class MainActivity extends Activity
     CtrlBtnsFragment2 ctrlBtnsFragment2;
     DateTimeSetFragment dateTimeSetFragment;
     FragmentListVisits listVisits;
+    FragmentCTLinfo ctlInfo;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -35,6 +37,7 @@ public class MainActivity extends Activity
         ctrlBtnsFragment2 = new CtrlBtnsFragment2();
         dateTimeSetFragment = new DateTimeSetFragment();
         listVisits = new FragmentListVisits();
+        ctlInfo = new FragmentCTLinfo();
 
         mFragmentManager = getFragmentManager();
 
@@ -80,6 +83,11 @@ public class MainActivity extends Activity
                 mFragmentTransaction.remove(dateTimeSetFragment);
             }
 
+            if(ctlInfo.isAdded())
+            {
+                mFragmentTransaction.remove(ctlInfo);
+            }
+
             mFragmentTransaction.commit();
         }
 
@@ -105,10 +113,15 @@ public class MainActivity extends Activity
             mFragmentTransaction.remove(listVisits);
         }
 
-        if(!dateTimeSetFragment.isAdded())
+        if(!ctlInfo.isAdded())
+        {
+            mFragmentTransaction.add(R.id.CtrlBtnFragContainer, ctlInfo);
+        }
+
+/*        if(!dateTimeSetFragment.isAdded())
         {
             mFragmentTransaction.add(R.id.CtrlBtnFragContainer, dateTimeSetFragment);
-        }
+        }*/
 
         mFragmentTransaction.commit();
     }

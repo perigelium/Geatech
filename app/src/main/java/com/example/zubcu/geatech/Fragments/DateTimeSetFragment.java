@@ -23,7 +23,6 @@ import com.example.zubcu.geatech.R;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 
 /**
  * A simple {@link Fragment} subclass.

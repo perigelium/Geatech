@@ -155,7 +155,7 @@
             android:layout_width="wrap_content"
             android:layout_gravity="start|center_vertical"
             android:layout_marginLeft="6dp"
-            android:src="@drawable/sottoprodotti_green"
+            android:src="@drawable/stack_green"
             android:layout_height="wrap_content" />
 
         <TextView
