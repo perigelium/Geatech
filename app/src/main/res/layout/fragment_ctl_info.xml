@@ -70,7 +70,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="start|center_vertical"
                         android:layout_marginLeft="6dp"
-                        android:text="Client phone" />
+                        android:text="telefono del cliente" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -94,7 +94,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="start|center_vertical"
                         android:layout_marginLeft="6dp"
-                        android:text="Client indirizzo" />
+                        android:text="Indirizzo del cliente" />
 
                 </LinearLayout>
             </LinearLayout>
