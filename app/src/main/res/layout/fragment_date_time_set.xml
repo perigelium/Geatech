@@ -170,7 +170,7 @@
 
     <ListView
         android:id="@+id/list"
-        android:layout="@layout/visits_day_time_list_cell"
+        android:layout="@layout/visits_day_time_set_list_cell"
         android:layout_width="match_parent"
         android:layout_height="88dp" > <!--hardcoded needs to be replaced-->
     </ListView>

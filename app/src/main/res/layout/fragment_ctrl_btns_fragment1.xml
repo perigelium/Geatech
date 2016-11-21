@@ -28,7 +28,7 @@
                 android:textOn=""/>
 
             <RadioButton
-                android:id="@+id/btnVisitsNotComposed"
+                android:id="@+id/btnComingVisits"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.2"
@@ -38,7 +38,7 @@
                 android:textOn=""/>
 
             <RadioButton
-                android:id="@+id/btnWrite"
+                android:id="@+id/btnInWorkVisits"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.2"
@@ -47,7 +47,7 @@
                 android:textOff=""
                 android:textOn=""/>
             <RadioButton
-                android:id="@+id/btnBlueCloud"
+                android:id="@+id/btnNotSentReports"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.2"

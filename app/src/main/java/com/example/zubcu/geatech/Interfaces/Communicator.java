@@ -5,6 +5,7 @@ package com.example.zubcu.geatech.Interfaces;
  */
 
 
-public interface Communicator {
-    public void count(Boolean DateTimeAlreadySet);
+public interface Communicator
+{
+    public void onDateTimeSetReturned(Boolean DateTimeAlreadySet);
 }

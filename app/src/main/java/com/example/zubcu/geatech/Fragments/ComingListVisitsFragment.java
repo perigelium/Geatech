@@ -7,18 +7,20 @@ import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.example.zubcu.geatech.Adapters.InWorkListVisitsAdapter;
 import com.example.zubcu.geatech.Adapters.MyListVisitsAdapter;
 import com.example.zubcu.geatech.Models.VisitsListRowModel;
 import com.example.zubcu.geatech.R;
 
 import java.util.ArrayList;
 
-public class FragmentListVisits extends ListFragment
+public class ComingListVisitsFragment extends ListFragment
 {
-    OnItemSelectedListener listener;
+    //OnItemSelectedListener listener;
 
     final String[] clientNames = new String[]{"Рыжик", "Барсик", "Мурзик",
             "Мурка", "Васька", "Томасина", "Пушок", "Дымка",
@@ -57,6 +59,7 @@ public class FragmentListVisits extends ListFragment
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+        Context context = getActivity();
         listVisitsArrayList = new ArrayList<>();
 
         for (int i = 0; i < clientNames.length; i++)
@@ -65,11 +68,10 @@ public class FragmentListVisits extends ListFragment
                     new VisitsListRowModel(clientNames[i], serviceNames[i], clientAddresses[i], visitsDate.get(i)));
         }
 
-        MyListVisitsAdapter myListAdapter =
-                new MyListVisitsAdapter(getActivity(), R.layout.list_visits_fragment_row, listVisitsArrayList);
+        InWorkListVisitsAdapter myListAdapter =
+                new InWorkListVisitsAdapter(getActivity(), R.layout.coming_list_visits_fragment_row, listVisitsArrayList);
         setListAdapter(myListAdapter);
 
-        Context context = getActivity();
     }
 
     @Override
@@ -77,7 +79,7 @@ public class FragmentListVisits extends ListFragment
     {
         super.onCreate(savedInstanceState);
 
-        listener = (OnItemSelectedListener) getActivity();
+        //listener = (OnItemSelectedListener) getActivity();
 
     }
 
@@ -88,22 +90,22 @@ public class FragmentListVisits extends ListFragment
         return inflater.inflate(R.layout.list_visits_fragment, container, false);
     }
 
-    @Override
+/*    @Override
     public void onListItemClick(ListView l, View v, int position, long id)
     {
         super.onListItemClick(l, v, position, id);
 
-        listener.OnListItemSelected(position, !listVisitsArrayList.get(position).getVISIT_DAY().isEmpty());
+        //listener.OnListItemSelected(position, !listVisitsArrayList.get(position).getVISIT_DAY().isEmpty());
 
-/*        Toast.makeText(getActivity(),
+*//*        Toast.makeText(getActivity(),
                 getListView().getItemAtPosition(position).toString(),
-                Toast.LENGTH_LONG).show();*/
-    }
+                Toast.LENGTH_LONG).show();*//*
+    }*/
 
-    public interface OnItemSelectedListener
+/*    public interface OnItemSelectedListener
     {
         void OnListItemSelected(int itemIndex, Boolean dateTimeHasSet);
-    }
+    }*/
 }
 
 /*            int optionId = randomInteger!=0 ? R.layout.list_visits_cell_datetime_set : R.layout.list_visits_cell_datetime_set;

@@ -52,14 +52,6 @@ public class DateTimeSetFragment extends Fragment implements View.OnClickListene
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment DateTimeSetFragment.
-     */
     // TODO: Rename and change types and number of parameters
     public static DateTimeSetFragment newInstance(String param1, String param2)
     {
@@ -137,15 +129,13 @@ public class DateTimeSetFragment extends Fragment implements View.OnClickListene
         mAnnullaSetDateTimeButton.setOnClickListener(this);
         mSetDateTimeSubmitButton.setOnClickListener(this);
 
-        // получаем текущее время
         final Calendar calendar = Calendar.getInstance();
         mYear = calendar.get(Calendar.YEAR);
-        mMonth = calendar.get(Calendar.MONTH) + 1;
+        mMonth = calendar.get(Calendar.MONTH);
         mDay = calendar.get(Calendar.DAY_OF_MONTH);
         mHour = calendar.get(Calendar.HOUR_OF_DAY);
         mMinute = calendar.get(Calendar.MINUTE);
 
-        // выводим текущее время
         updateDisplay();
 
         return  rootView;
@@ -190,10 +180,8 @@ public class DateTimeSetFragment extends Fragment implements View.OnClickListene
         void onFragmentInteraction(Uri uri);
     }
 
-    public void onClick(View v) {
-/*        DialogFragment dateFragment = new DatePickerDialogFragment();
-        dateFragment.show(getFragmentManager(), "datePicker");*/
-
+    public void onClick(View v)
+    {
         if(v.getId() == R.id.btnSetDate)
         {
             TimePickerDialog dialogTimePicker = new TimePickerDialog(getActivity(), timePickerListener,
@@ -209,12 +197,14 @@ public class DateTimeSetFragment extends Fragment implements View.OnClickListene
 
         if(v.getId() == R.id.btnAnnullaSetDateTime)
         {
-            getActivity().getFragmentManager().beginTransaction().remove(this).commit();
+            //getActivity().getFragmentManager().beginTransaction().remove(this).commit();
+            mCommunicator.onDateTimeSetReturned(false);
         }
 
         if(v.getId() == R.id.btnSetDateTimeSubmit)
         {
-            getActivity().getFragmentManager().beginTransaction().remove(this).commit();
+            //getActivity().getFragmentManager().beginTransaction().remove(this).commit();
+            mCommunicator.onDateTimeSetReturned(true);
         }
     }
 

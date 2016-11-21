@@ -7,17 +7,12 @@ package com.example.zubcu.geatech.Adapters;
 import java.util.ArrayList;
 
 import android.content.Context;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
-import android.widget.TextView;
 
 import com.example.zubcu.geatech.R;
-
-import static com.google.android.gms.internal.a.v;
 
 public class ListVisitsAdapter extends BaseAdapter
 {
@@ -26,12 +21,6 @@ public class ListVisitsAdapter extends BaseAdapter
 
     private ArrayList<String> data;
     private LayoutInflater mInflater;
-
- /*   @Override
-    public int getItemViewType(int position)
-    {
-        return (patternses.get(position).getContactType() == ListVisitsViewCellPatterns.LayoutTypes.DateTimeNotSet) ? 0 : 1;
-    }*/
 
     public ListVisitsAdapter(Context context, int list_visits_cell_datetime_set, ArrayList<String> items) {
         mInflater = LayoutInflater.from(context);
@@ -61,7 +50,7 @@ public class ListVisitsAdapter extends BaseAdapter
     //ViewHolder holder;
 
         if (convertView == null) {
-            convertView = mInflater.inflate(R.layout.list_visits_cell_datetime_set, parent, false);
+            convertView = mInflater.inflate(R.layout.list_visits_datetime_cell, parent, false);
 
             //holder = new RecyclerView.ViewHolder();
             //holder.textView = (TextView) convertView.findViewById(R.id.item_textView);
@@ -86,14 +75,4 @@ public class ListVisitsAdapter extends BaseAdapter
 
         return convertView;
     }
-
-/*    private View getInflatedLayoutForType(int type) {
-        if (type == ListVisitsViewCellPatterns.LayoutTypes.DateTimeNotSet.ordinal()) {
-            return LayoutInflater.from(getContext()).inflate(R.layout.list_visits_cell_datetime_not_set, null);
-        } else if (type == ListVisitsViewCellPatterns.LayoutTypes.DateTimeSet.ordinal()) {
-            return LayoutInflater.from(getContext()).inflate(R.layout.list_visits_cell_datetime_set, null);
-        }else {
-            return null;
-        }
-    }*/
 }

@@ -7,7 +7,6 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-import com.example.zubcu.geatech.Models.DateTimeSetListCellModel;
 import com.example.zubcu.geatech.R;
 
 import java.util.ArrayList;
@@ -37,7 +36,7 @@ public class SetVisitDateTimeListAdapter extends ArrayAdapter
 
         if (convertView == null) {
 
-            convertView = LayoutInflater.from(getContext()).inflate(R.layout.visits_day_time_list_cell, parent, false);
+            convertView = LayoutInflater.from(getContext()).inflate(R.layout.visits_day_time_set_list_cell, parent, false);
 
         }
 
