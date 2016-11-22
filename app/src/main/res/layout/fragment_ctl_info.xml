@@ -86,7 +86,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="start|center_vertical"
                         android:layout_marginLeft="6dp"
-                        android:src="@drawable/location_green" />
+                        android:src="@drawable/location_dark_green" />
 
                     <TextView
                         android:id="@+id/tvAddressDateTime"

@@ -33,6 +33,7 @@ public class CtrlBtnsFragment1 extends Fragment{
         final View rootView = inflater.inflate(R.layout.fragment_ctrl_btns_fragment1, container, false);
         final OnClickedListener listener = (OnClickedListener) getActivity();
         rGroup = ((RadioGroup) rootView.findViewById(R.id.toggleGroup));
+        //setCheckedBtnId(R.id.btnVisits);
         //rGroup.clearCheck();
 
         final RadioGroup.OnCheckedChangeListener ToggleListener =
@@ -70,29 +71,34 @@ public class CtrlBtnsFragment1 extends Fragment{
     {
         super.onHiddenChanged(hidden);
 
-        if(rGroup!= null && !hidden)
+/*        if(rGroup!= null && !hidden)
         {
             rGroup.check(checkedBtnId);
-        }
+        }*/
     }
 
     @Override
     public void onResume()
     {
-        rGroup.check(checkedBtnId);
+        //rGroup.check(checkedBtnId);
         super.onResume();
     }
 
     @Override
     public View getView()
     {
-        rGroup.check(checkedBtnId);
+        //rGroup.check(checkedBtnId);
         return super.getView();
     }
 
     public interface OnClickedListener
     {
         void onCtrlButtonClicked(View view);
+    }
+
+    public void clearCheck()
+    {
+        rGroup.clearCheck();
     }
 
     public void setCheckedBtnId(int checkedBtnId)

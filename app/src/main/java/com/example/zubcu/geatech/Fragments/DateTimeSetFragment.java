@@ -64,6 +64,12 @@ public class DateTimeSetFragment extends Fragment implements View.OnClickListene
     }
 
     @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        mCommunicator = (Communicator)getActivity();
+    }
+
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
@@ -214,11 +220,5 @@ public class DateTimeSetFragment extends Fragment implements View.OnClickListene
 
         mTimeSetTextView.setText(new StringBuilder().append(mHour).append(".")
                 .append(mMinute));
-    }
-
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        mCommunicator = (Communicator)getActivity();
     }
 }

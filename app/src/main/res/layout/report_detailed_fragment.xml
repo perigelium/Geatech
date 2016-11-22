@@ -1,0 +1,382 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:id="@+id/ctrlBtnsReportDetailed"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:orientation="vertical"
+              tools:context="com.example.zubcu.geatech.Fragments.ReportDetailedFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:background="#c0c0c0"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left|center_vertical"
+                android:layout_marginLeft="40dp"
+                android:layout_marginTop="4dp"
+                android:text="Sopralluogo:"
+                android:textSize="15dp"/>
+
+            <TextView
+                android:id="@+id/tvSopraluoghoDataOra"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left|center_vertical"
+                android:layout_marginLeft="40dp"
+                android:layout_marginTop="4dp"
+                android:text="dato e ora:"
+                android:textSize="15dp"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left|center_vertical"
+                android:layout_marginLeft="40dp"
+                android:layout_marginTop="4dp"
+                android:text="Rapporto commiato:"
+                android:textSize="15dp"/>
+
+            <TextView
+                android:id="@+id/tvRapportoComiatoDataOra"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left|center_vertical"
+                android:layout_marginLeft="40dp"
+                android:layout_marginTop="4dp"
+                android:text="dato e ora:"
+                android:textSize="15dp"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left|center_vertical"
+                android:layout_marginLeft="40dp"
+                android:layout_marginTop="4dp"
+                android:text="Rapporto inviato il:"
+                android:textSize="15dp"/>
+
+            <TextView
+                android:id="@+id/tvRapportoInviatoDataOra"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left|center_vertical"
+                android:layout_marginLeft="40dp"
+                android:layout_marginTop="4dp"
+                android:text="dato e ora:"
+                android:textSize="15dp"/>
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="6dp"
+        android:layout_weight="3"
+        android:orientation="vertical">
+
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="6dp"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/ivPersonDateTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start|center_vertical"
+                android:layout_marginLeft="6dp"
+                android:src="@drawable/person_green" />
+
+            <TextView
+                android:id="@+id/tvPersonDateTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start|center_vertical"
+                android:layout_marginLeft="6dp"
+                android:text="Nome del cliente" />
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_margin="9dp"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/ivPhoneDateTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start|center_vertical"
+                android:layout_marginLeft="6dp"
+                android:src="@drawable/phone_green" />
+
+            <TextView
+                android:id="@+id/tvPhoneDateTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start|center_vertical"
+                android:layout_marginLeft="6dp"
+                android:text="telefono del cliente" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="6dp"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/ivAddressDateTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start|center_vertical"
+                android:layout_marginLeft="6dp"
+                android:src="@drawable/location_dark_green" />
+
+            <TextView
+                android:id="@+id/tvAddressDateTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start|center_vertical"
+                android:layout_marginLeft="6dp"
+                android:text="Indirizzo del cliente" />
+
+        </LinearLayout>
+    </LinearLayout>
+    <View android:layout_height="1px" android:layout_gravity="bottom" android:layout_marginLeft="40dp" android:layout_width="match_parent" android:background="#999999"/>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="6dp"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="6dp"
+            android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/ivTecnico"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start|center_vertical"
+            android:layout_marginLeft="6dp"
+            android:src="@drawable/stack_green" />
+
+        <TextView
+            android:id="@+id/tvTecnico"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start|center_vertical"
+            android:layout_marginLeft="6dp"
+            android:text="Tecnico*" />
+
+            </LinearLayout>
+
+        <TextView
+            android:id="@+id/tvNormativo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="40dp"
+            android:layout_marginBottom="4dp"
+            android:text="Nome di Tecnico" />
+
+    </LinearLayout>
+
+    <View android:layout_height="1px" android:layout_gravity="bottom" android:layout_marginLeft="40dp" android:layout_width="match_parent" android:background="#999999"/>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="6dp"
+        android:layout_weight="3"
+        android:orientation="vertical">
+
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="6dp"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/ivLocalizzazione"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start|center_vertical"
+                android:layout_marginLeft="6dp"
+                android:src="@drawable/coords" />
+
+            <TextView
+                android:id="@+id/tvLocalizzazione"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start|center_vertical"
+                android:layout_marginLeft="6dp"
+                android:text="Coord.Nord*" />
+
+            <EditText
+                android:id="@+id/etCoordNord"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="6dp"
+                android:background="@android:color/transparent"
+                android:ems="10"
+                android:inputType="number"
+                android:maxLines="1"
+                android:text="41.125278" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="6dp"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start|center_vertical"
+                android:layout_marginLeft="6dp"
+                android:src="@drawable/transparent24px" />
+
+            <TextView
+                android:id="@+id/tvCoordEst"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start|center_vertical"
+                android:layout_marginLeft="6dp"
+                android:text="Coord.Est*" />
+
+            <EditText
+                android:id="@+id/etCoordEst"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="6dp"
+                android:background="@android:color/transparent"
+                android:ems="10"
+                android:inputType="number"
+                android:maxLines="1"
+                android:text="16.866667" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="6dp"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start|center_vertical"
+                android:layout_marginLeft="6dp"
+                android:src="@drawable/transparent24px" />
+
+            <TextView
+                android:id="@+id/tvAltitude"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start|center_vertical"
+                android:layout_marginLeft="6dp"
+                android:text="Altitudine*" />
+
+            <EditText
+                android:id="@+id/etAltitude"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="6dp"
+                android:background="@android:color/transparent"
+                android:ems="10"
+                android:inputType="number"
+                android:maxLines="1"
+                android:text="150" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="6dp"
+        android:orientation="horizontal">
+
+        <ImageView
+        android:id="@+id/ivTipoDiInstallazione"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="start|center_vertical"
+        android:layout_marginLeft="6dp"
+        android:src="@drawable/service_green" />
+
+        <TextView
+            android:id="@+id/tvTipoDiInstallazione"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start|center_vertical"
+            android:layout_marginLeft="6dp"
+            android:text="Tipo di installazione*" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="6dp"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/ivImpianto"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start|center_vertical"
+            android:layout_marginLeft="6dp"
+            android:src="@drawable/transparent24px" />
+
+        <TextView
+            android:id="@+id/tvImpianto"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start|center_vertical"
+            android:layout_marginLeft="6dp"
+            android:text="Impianto" />
+
+    </LinearLayout>
+
+</LinearLayout>

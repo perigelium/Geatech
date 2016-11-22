@@ -1,13 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical">
-
-    <FrameLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
 
     <LinearLayout
         android:id="@+id/detailsRows"
@@ -22,19 +17,19 @@
             android:orientation="horizontal">
 
             <ImageView
-                android:id="@+id/ivPersonBlue"
+                android:id="@+id/ivPersonOrange"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start|center_vertical"
-                android:layout_marginLeft="6dp"
-                android:src="@drawable/person_blue" />
+                android:layout_margin="5dp"
+                android:src="@drawable/person_dark_green" />
 
             <TextView
                 android:id="@+id/tvVisitsListName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start|center_vertical"
-                android:layout_marginLeft="6dp"
+                android:layout_margin="5dp"
                 android:text="Nome del cliente" />
 
         </LinearLayout>
@@ -51,15 +46,15 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start|center_vertical"
-                android:layout_marginLeft="6dp"
-                android:src="@drawable/service_blue" />
+                android:layout_margin="5dp"
+                android:src="@drawable/service_dark_green" />
 
             <TextView
                 android:id="@+id/tvVisitsListTOS"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start|center_vertical"
-                android:layout_marginLeft="6dp"
+                android:layout_margin="5dp"
                 android:text="Tipo di servicio" />
 
         </LinearLayout>
@@ -75,15 +70,15 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start|center_vertical"
-                android:layout_marginLeft="6dp"
-                android:src="@drawable/location_blue" />
+                android:layout_margin="5dp"
+                android:src="@drawable/location_dark_green" />
 
             <TextView
                 android:id="@+id/tvVisitsListAddress"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start|center_vertical"
-                android:layout_marginLeft="6dp"
+                android:layout_margin="5dp"
                 android:text="Client indirizzo" />
 
         </LinearLayout>
@@ -97,10 +92,11 @@
         android:layout_marginLeft="6dp"
         android:orientation="horizontal">
 
-        <FrameLayout
+        <LinearLayout
             android:id="@+id/flListVisitsCell"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:orientation="horizontal"
             android:layout_gravity="center_vertical|end">
 
             <FrameLayout
@@ -113,7 +109,19 @@
                     android:id="@+id/vListVisitsDateCell"
                     android:layout_width="99dp"
                     android:layout_height="99dp"
-                    android:background="#0066ff"
+                    android:background="#009922"
+                    android:layout_gravity="center_vertical|end"/>
+
+            <FrameLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="top|left"
+                android:orientation="horizontal">
+
+                <View
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:background="#006655"
                     android:layout_gravity="center_vertical|end"/>
 
                 <TextView
@@ -121,106 +129,40 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="top|center_horizontal"
-                    android:text="D"
+                    android:text="G"
                     android:textColor="#ffffff"
-                    android:textSize="70dp" />
+                    android:textSize="25dp" />
 
                 <TextView
                     android:id="@+id/tvListVisitsMonth"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal|bottom"
+                    android:layout_gravity="bottom|center_horizontal"
                     android:text="mese"
                     android:textColor="#ffffff"
-                    android:textSize="20dp" />
+                    android:textSize="12dp" />
+
+
+                </FrameLayout>
+
+
+                <ImageView
+                    android:id="@+id/calendario"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:src="@drawable/check_mark"/>
+
+
 
             </FrameLayout>
 
-
-        </FrameLayout>
-
-    </LinearLayout>
-
-    <View android:layout_height="1px" android:layout_gravity="bottom" android:layout_marginLeft="40dp" android:layout_width="match_parent" android:background="#999999"/>
-
-    </FrameLayout>
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:orientation="vertical">
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="6dp"
-            android:orientation="horizontal">
-
             <ImageView
-                android:id="@+id/ivPhotosPresent"
+                android:id="@+id/ivArrow_right"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="start|center_vertical"
-                android:layout_marginLeft="6dp"
-                android:src="@drawable/pen_orange" />
-
-            <TextView
-                android:id="@+id/tvPhotosPresent"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="start|center_vertical"
-                android:layout_marginLeft="6dp"
-                android:text="Dato di completamente al report" />
-
-        </LinearLayout>
-
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="6dp"
-            android:orientation="horizontal">
-
-            <ImageView
-                android:id="@+id/ivGeneralInfo"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="start|center_vertical"
-                android:layout_marginLeft="6dp"
-                android:src="@drawable/gray_block" />
-
-            <TextView
-                android:id="@+id/tvGeneralInfo"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="start|center_vertical"
-                android:layout_marginLeft="6dp"
-                android:text="cosa di falita di invia" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="6dp"
-            android:orientation="horizontal">
-
-            <ImageView
-                android:id="@+id/ivTecnicalReport"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="start|center_vertical"
-                android:layout_marginLeft="6dp"
-                android:src="@drawable/watch_orange" />
-
-            <TextView
-                android:id="@+id/tvTecnicalReport"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="start|center_vertical"
-                android:layout_marginLeft="6dp"
-                android:text="Prossimo tentativo ore" />
+                android:layout_gravity="center_vertical|end"
+                android:src="@drawable/arrow_right" />
 
         </LinearLayout>
 
@@ -235,4 +177,4 @@
 
     <View android:layout_height="2px" android:layout_gravity="bottom" android:layout_width="match_parent" android:background="#999999"/>
 
-</LinearLayout>
+</FrameLayout>

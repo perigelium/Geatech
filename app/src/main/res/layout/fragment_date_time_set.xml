@@ -52,7 +52,7 @@
                 android:id="@+id/ivAddressDateTime"
                 android:layout_width="wrap_content"
                 android:layout_gravity="start|center_vertical"
-                android:src="@drawable/location_green"
+                android:src="@drawable/location_dark_green"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="6dp"/>
 

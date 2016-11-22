@@ -66,7 +66,7 @@ public class CtrlBtnsFragment2 extends Fragment{
     @Override
     public View getView()
     {
-        rGroup.check(checkedBtnId);
+        //rGroup.check(checkedBtnId);
         return super.getView();
     }
 
@@ -75,16 +75,16 @@ public class CtrlBtnsFragment2 extends Fragment{
     {
         super.onHiddenChanged(hidden);
 
-        if(rGroup!= null && !hidden)
+/*        if(rGroup!= null && !hidden)
         {
             rGroup.check(checkedBtnId);
-        }
+        }*/
     }
 
     @Override
     public void onResume()
     {
-        rGroup.check(checkedBtnId);
+        //rGroup.check(checkedBtnId);
         super.onResume();
     }
 
@@ -96,5 +96,10 @@ public class CtrlBtnsFragment2 extends Fragment{
     public void setCheckedBtnId(int checkedBtnId)
     {
         this.checkedBtnId = checkedBtnId;
+    }
+
+    public void clearCheck()
+    {
+        rGroup.clearCheck();
     }
 }
