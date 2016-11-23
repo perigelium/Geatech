@@ -18,6 +18,7 @@ import com.example.zubcu.geatech.Fragments.InWorkListVisitsFragment;
 import com.example.zubcu.geatech.Fragments.NotSentListVisitsFragment;
 import com.example.zubcu.geatech.Fragments.ReportDetailedFragment;
 import com.example.zubcu.geatech.Fragments.ReportsListFragment;
+import com.example.zubcu.geatech.Fragments.SendReportFragment;
 import com.example.zubcu.geatech.Interfaces.Communicator;
 import com.example.zubcu.geatech.R;
 
@@ -40,6 +41,7 @@ public class MainActivity extends Activity
     FragmentCTLinfo ctlInfo;
     CtrlBtnReportDetailed ctrlBtnsReportDetailed;
     ReportDetailedFragment reportDetailedFragment;
+    SendReportFragment sendReportFragment;
 
     @Override
     public void onCreate(Bundle savedInstanceState)
@@ -58,6 +60,7 @@ public class MainActivity extends Activity
         ctlInfo = new FragmentCTLinfo();
         ctrlBtnsReportDetailed = new CtrlBtnReportDetailed();
         reportDetailedFragment = new ReportDetailedFragment();
+        sendReportFragment = new SendReportFragment();
 
         mFragmentManager = getFragmentManager();
 
@@ -67,6 +70,8 @@ public class MainActivity extends Activity
         mFragmentTransaction.add(R.id.CtrlBtnFragContainer, ctrlBtnsFragment2);
         mFragmentTransaction.add(R.id.CtrlBtnFragContainer, ctrlBtnsReportDetailed);
         mFragmentTransaction.add(R.id.CtrlBtnFragContainer, listVisits);
+        ctrlBtnsFragment1.setCheckedBtnId(R.id.btnVisits);
+        ctrlBtnsFragment2.setCheckedBtnId(R.id.btnInfo);
 
         mFragmentTransaction.hide(ctrlBtnsReportDetailed);
         mFragmentTransaction.hide(ctrlBtnsFragment2);
@@ -78,6 +83,11 @@ public class MainActivity extends Activity
     @Override
     public void onCtrlButtonClicked(View view)
     {
+        if(!view.isShown())
+        {
+            return;
+        }
+
         if (view == findViewById(R.id.btnReturn))
         {
             FragmentTransaction mFragmentTransaction = mFragmentManager.beginTransaction();
@@ -85,10 +95,8 @@ public class MainActivity extends Activity
             mFragmentTransaction.show(ctrlBtnsFragment1);
             mFragmentTransaction.commit();
 
-            //ctrlBtnsFragment2.clearCheck();
             removeAllLists();
             setVisitsListContent(listVisits);
-            ctrlBtnsFragment1.setCheckedBtnId(R.id.btnVisits);
         }
 
         if (view == findViewById(R.id.btnReportsReturn))
@@ -99,10 +107,20 @@ public class MainActivity extends Activity
             mFragmentTransaction.show(ctrlBtnsFragment1);
             mFragmentTransaction.commit();
 
-
             removeAllLists();
             setVisitsListContent(reportsList);
-            ctrlBtnsFragment1.setCheckedBtnId(R.id.btnReports);
+        }
+
+        if (view == findViewById(R.id.btnInfo))
+        {
+            removeAllLists();
+            setVisitsListContent(ctlInfo);
+        }
+
+        if (view == findViewById(R.id.btnGreenCloud))
+        {
+            removeAllLists();
+            setVisitsListContent(sendReportFragment);
         }
 
         if (view == findViewById(R.id.btnComingVisits))
@@ -141,6 +159,11 @@ public class MainActivity extends Activity
     private void removeAllLists()
     {
         FragmentTransaction mFragmentTransaction = mFragmentManager.beginTransaction();
+
+        if (sendReportFragment.isAdded())
+        {
+            mFragmentTransaction.remove(sendReportFragment);
+        }
 
         if (reportDetailedFragment.isAdded())
         {
@@ -213,12 +236,13 @@ public class MainActivity extends Activity
 
             setVisitsListContent(ctlInfo);
             ctrlBtnsFragment2.setCheckedBtnId(R.id.btnInfo);
-            //ctrlBtnsFragment1.clearCheck();
         }
         else
         {
             setVisitsListContent(dateTimeSetFragment);
         }
+
+        ctrlBtnsFragment1.setCheckedBtnId(R.id.btnVisits);
     }
 
     @Override
@@ -234,6 +258,12 @@ public class MainActivity extends Activity
     }
 
     @Override
+    public void onSendReportReturned()
+    {
+        onCtrlButtonClicked(findViewById(R.id.btnSendReport));
+    }
+
+    @Override
     public void OnListItemSelected(int itemIndex)
     {
         FragmentTransaction mFragmentTransaction = mFragmentManager.beginTransaction();
@@ -244,11 +274,8 @@ public class MainActivity extends Activity
 
         mFragmentTransaction.commit();
 
-        //ctrlBtnsFragment1.clearCheck();
-
         removeAllLists();
         setVisitsListContent(reportDetailedFragment);
-
-
+        ctrlBtnsFragment1.setCheckedBtnId(R.id.btnReports);
     }
 }

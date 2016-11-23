@@ -331,6 +331,8 @@
 
     </LinearLayout>
 
+    <View android:layout_height="1px" android:layout_gravity="bottom" android:layout_marginLeft="40dp" android:layout_width="match_parent" android:background="#999999"/>
+
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -354,6 +356,8 @@
             android:text="Tipo di installazione*" />
 
     </LinearLayout>
+
+    <View android:layout_height="1px" android:layout_gravity="bottom" android:layout_marginLeft="40dp" android:layout_width="match_parent" android:background="#999999"/>
 
     <LinearLayout
         android:layout_width="wrap_content"

@@ -1,17 +1,12 @@
 package com.example.zubcu.geatech.Fragments;
 
-import android.app.Activity;
 import android.app.Fragment;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.Toast;
-import android.widget.ToggleButton;
 
 import com.example.zubcu.geatech.R;
 
@@ -21,20 +16,17 @@ import com.example.zubcu.geatech.R;
 
 public class CtrlBtnsFragment1 extends Fragment{
 
-    private RadioGroup rGroup;
-    public static final String checkedBtnIdStr = "";
+    RadioGroup rGroup;
     int checkedBtnId = 0;
     int previousCheckedId = 0;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
-
-        final View rootView = inflater.inflate(R.layout.fragment_ctrl_btns_fragment1, container, false);
+        final View rootView = inflater.inflate(R.layout.ctrl_btns_fragment1, container, false);
         final OnClickedListener listener = (OnClickedListener) getActivity();
         rGroup = ((RadioGroup) rootView.findViewById(R.id.toggleGroup));
-        //setCheckedBtnId(R.id.btnVisits);
-        //rGroup.clearCheck();
+        rGroup.check(checkedBtnId);
 
         final RadioGroup.OnCheckedChangeListener ToggleListener =
                 new RadioGroup.OnCheckedChangeListener()
@@ -60,7 +52,6 @@ public class CtrlBtnsFragment1 extends Fragment{
             }
         };
 
-
         rGroup.setOnCheckedChangeListener(ToggleListener);
 
         return rootView;
@@ -71,34 +62,21 @@ public class CtrlBtnsFragment1 extends Fragment{
     {
         super.onHiddenChanged(hidden);
 
-/*        if(rGroup!= null && !hidden)
+        if(rGroup!= null && hidden)
         {
             rGroup.check(checkedBtnId);
-        }*/
+        }
     }
 
     @Override
     public void onResume()
     {
-        //rGroup.check(checkedBtnId);
         super.onResume();
-    }
-
-    @Override
-    public View getView()
-    {
-        //rGroup.check(checkedBtnId);
-        return super.getView();
     }
 
     public interface OnClickedListener
     {
         void onCtrlButtonClicked(View view);
-    }
-
-    public void clearCheck()
-    {
-        rGroup.clearCheck();
     }
 
     public void setCheckedBtnId(int checkedBtnId)

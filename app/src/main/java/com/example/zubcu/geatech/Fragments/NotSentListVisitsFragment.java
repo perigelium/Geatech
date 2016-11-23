@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import com.example.zubcu.geatech.Adapters.InWorkListVisitsAdapter;
 import com.example.zubcu.geatech.Adapters.MyListVisitsAdapter;
+import com.example.zubcu.geatech.Adapters.NotSentListVisitsAdapter;
 import com.example.zubcu.geatech.Models.VisitsListRowModel;
 import com.example.zubcu.geatech.R;
 
@@ -68,8 +69,8 @@ public class NotSentListVisitsFragment extends ListFragment
                     new VisitsListRowModel(clientNames[i], serviceNames[i], clientAddresses[i], visitsDate.get(i)));
         }
 
-        InWorkListVisitsAdapter myListAdapter =
-                new InWorkListVisitsAdapter(getActivity(), R.layout.not_sent_list_visits_fragment_row, listVisitsArrayList);
+        NotSentListVisitsAdapter myListAdapter =
+                new NotSentListVisitsAdapter(getActivity(), R.layout.not_sent_list_visits_fragment_row, listVisitsArrayList);
         setListAdapter(myListAdapter);
 
     }

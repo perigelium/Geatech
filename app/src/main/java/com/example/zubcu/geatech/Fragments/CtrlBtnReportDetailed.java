@@ -40,7 +40,6 @@ public class CtrlBtnReportDetailed extends Fragment implements View.OnClickListe
         View rootView = inflater.inflate(R.layout.ctrl_btn_report_detailed, container, false);
 
         btnReturn = (Button) rootView.findViewById(R.id.btnReportsReturn);
-        //btnReturn.getLayoutParams().width = btnReturn.getMeasuredHeight();
 
         btnReturn.setOnClickListener(this);
 

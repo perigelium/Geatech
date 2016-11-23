@@ -10,4 +10,6 @@ public interface Communicator
     public void onDateTimeSetReturned(Boolean DateTimeAlreadySet);
 
     public void onDetailedReportReturned();
+
+    public void onSendReportReturned();
 }

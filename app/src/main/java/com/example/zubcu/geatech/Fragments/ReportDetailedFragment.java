@@ -22,26 +22,16 @@ import com.example.zubcu.geatech.R;
 
 public class ReportDetailedFragment extends Fragment
 {
-
-    Button btnReturn;
-    private Communicator mCommunicator;
-
     @Override
     public void onActivityCreated(Bundle savedInstanceState)
     {
         super.onActivityCreated(savedInstanceState);
-
-        mCommunicator = (Communicator)getActivity();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
         View rootView = inflater.inflate(R.layout.report_detailed_fragment, container, false);
-
-/*        btnReturn = (Button) rootView.findViewById(R.id.btnReportsReturn);
-
-        btnReturn.setOnClickListener(this);*/
 
         return rootView;
     }
@@ -69,14 +59,4 @@ public class ReportDetailedFragment extends Fragment
     {
         super.onResume();
     }
-
-/*    @Override
-    public void onClick(View view)
-    {
-        if(view.getId() == R.id.btnReportsReturn)
-        {
-            //getActivity().getFragmentManager().beginTransaction().remove(this).commit();
-            mCommunicator.onDetailedReportReturned();
-        }
-    }*/
 }

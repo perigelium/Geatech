@@ -1,7 +1,6 @@
 package com.example.zubcu.geatech.Fragments;
 
 import android.app.DatePickerDialog;
-import android.app.DialogFragment;
 import android.app.Fragment;
 import android.app.TimePickerDialog;
 import android.content.Context;
@@ -109,7 +108,7 @@ public class DateTimeSetFragment extends Fragment implements View.OnClickListene
                              Bundle savedInstanceState)
     {
         // Inflate the layout for this fragment
-        rootView =  inflater.inflate(R.layout.fragment_date_time_set, container, false);
+        rootView =  inflater.inflate(R.layout.date_time_set_fragment, container, false);
 
         ArrayList<DateTimeSetListCellModel> list = new ArrayList<>();
 
