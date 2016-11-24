@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
@@ -16,6 +17,7 @@ import com.example.zubcu.geatech.Fragments.FragmentCTLinfo;
 import com.example.zubcu.geatech.Fragments.FragmentListVisits;
 import com.example.zubcu.geatech.Fragments.InWorkListVisitsFragment;
 import com.example.zubcu.geatech.Fragments.NotSentListVisitsFragment;
+import com.example.zubcu.geatech.Fragments.PhotoGalleryGridFragment;
 import com.example.zubcu.geatech.Fragments.ReportDetailedFragment;
 import com.example.zubcu.geatech.Fragments.ReportsListFragment;
 import com.example.zubcu.geatech.Fragments.SendReportFragment;
@@ -42,6 +44,7 @@ public class MainActivity extends Activity
     CtrlBtnReportDetailed ctrlBtnsReportDetailed;
     ReportDetailedFragment reportDetailedFragment;
     SendReportFragment sendReportFragment;
+    PhotoGalleryGridFragment photoGalleryGridFragment;
 
     @Override
     public void onCreate(Bundle savedInstanceState)
@@ -61,6 +64,7 @@ public class MainActivity extends Activity
         ctrlBtnsReportDetailed = new CtrlBtnReportDetailed();
         reportDetailedFragment = new ReportDetailedFragment();
         sendReportFragment = new SendReportFragment();
+        photoGalleryGridFragment = new PhotoGalleryGridFragment();
 
         mFragmentManager = getFragmentManager();
 
@@ -111,6 +115,12 @@ public class MainActivity extends Activity
             setVisitsListContent(reportsList);
         }
 
+        if (view == findViewById(R.id.btnAddPhotos))
+        {
+            removeAllLists();
+            setVisitsListContent(photoGalleryGridFragment);
+        }
+
         if (view == findViewById(R.id.btnInfo))
         {
             removeAllLists();
@@ -159,6 +169,11 @@ public class MainActivity extends Activity
     private void removeAllLists()
     {
         FragmentTransaction mFragmentTransaction = mFragmentManager.beginTransaction();
+
+        if (sendReportFragment.isAdded())
+        {
+            mFragmentTransaction.remove(photoGalleryGridFragment);
+        }
 
         if (sendReportFragment.isAdded())
         {
