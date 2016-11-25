@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.example.zubcu.geatech.Fragments.ComingListVisitsFragment;
+import com.example.zubcu.geatech.Fragments.ComposeReportTemplateFragment;
 import com.example.zubcu.geatech.Fragments.CtrlBtnReportDetailed;
 import com.example.zubcu.geatech.Fragments.CtrlBtnsFragment1;
 import com.example.zubcu.geatech.Fragments.CtrlBtnsFragment2;
@@ -45,6 +46,7 @@ public class MainActivity extends Activity
     ReportDetailedFragment reportDetailedFragment;
     SendReportFragment sendReportFragment;
     PhotoGalleryGridFragment photoGalleryGridFragment;
+    ComposeReportTemplateFragment composeReportTemplateFragment;
 
     @Override
     public void onCreate(Bundle savedInstanceState)
@@ -65,6 +67,7 @@ public class MainActivity extends Activity
         reportDetailedFragment = new ReportDetailedFragment();
         sendReportFragment = new SendReportFragment();
         photoGalleryGridFragment = new PhotoGalleryGridFragment();
+        composeReportTemplateFragment = new ComposeReportTemplateFragment();
 
         mFragmentManager = getFragmentManager();
 
@@ -113,6 +116,12 @@ public class MainActivity extends Activity
 
             removeAllLists();
             setVisitsListContent(reportsList);
+        }
+
+        if (view == findViewById(R.id.btnFillReport))
+        {
+            removeAllLists();
+            setVisitsListContent(composeReportTemplateFragment);
         }
 
         if (view == findViewById(R.id.btnAddPhotos))
@@ -170,7 +179,12 @@ public class MainActivity extends Activity
     {
         FragmentTransaction mFragmentTransaction = mFragmentManager.beginTransaction();
 
-        if (sendReportFragment.isAdded())
+        if (composeReportTemplateFragment.isAdded())
+        {
+            mFragmentTransaction.remove(composeReportTemplateFragment);
+        }
+
+        if (photoGalleryGridFragment.isAdded())
         {
             mFragmentTransaction.remove(photoGalleryGridFragment);
         }

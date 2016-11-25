@@ -106,6 +106,66 @@ public class PhotoGalleryGridFragment extends Fragment
     }
 
     @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState)
+    {
+        final View rootView = inflater.inflate(R.layout.photo_gallery_grid, container, false);
+
+        gridView = (GridView) rootView.findViewById(R.id.gvPhotoGallery);
+
+        Resources resources = getResources();
+        photoAddButton = BitmapFactory.decodeResource(resources, R.drawable.photo_add);
+        imageItems = new ArrayList<>();
+
+        imageItems = getImagesArray();
+
+        if(imageItems.size() == 0 || imageItems.get(imageItems.size() - 1) != photoAddButton)
+        {
+            imageItems.add(photoAddButton);
+        }
+
+        gridAdapter = new GridViewAdapter(context, R.layout.grid_item_layout, imageItems);
+        gridView.setAdapter(gridAdapter);
+
+        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
+
+                currentPicPos = position;
+
+                Intent pickIntent = new Intent();
+                pickIntent.setType("image/*");
+                pickIntent.setAction(Intent.ACTION_PICK);
+
+                //startActivityForResult(Intent.createChooser(pickIntent, "Select Picture"), PICKER);
+                startActivityForResult(pickIntent, PICKER);
+            }
+        });
+
+        // set long click listener for each gallery thumbnail item
+        gridView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener()
+        {
+            public boolean onItemLongClick(AdapterView<?> parent, View v, int position, long id)
+            {
+
+                currentPicPos = position;
+                imageItems.remove(currentPicPos);
+                imageItems.removeAll(Collections.singleton(null));
+
+                if(imageItems.get(imageItems.size() - 1) != photoAddButton)
+                {
+                    imageItems.add(photoAddButton);
+                }
+
+                gridView.setAdapter(gridAdapter);
+
+                return true;
+            }
+        });
+
+        return rootView;
+    }
+
+    @Override
     public void onActivityResult(int requestCode, int resultCode, Intent imageReturnedIntent)
     {
         super.onActivityResult(requestCode, resultCode, imageReturnedIntent);
@@ -179,66 +239,6 @@ public class PhotoGalleryGridFragment extends Fragment
         }
         // superclass method
         super.onActivityResult(requestCode, resultCode, imageReturnedIntent);
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState)
-    {
-        final View rootView = inflater.inflate(R.layout.photo_gallery_grid, container, false);
-
-        gridView = (GridView) rootView.findViewById(R.id.gvPhotoGallery);
-
-        Resources resources = getResources();
-        photoAddButton = BitmapFactory.decodeResource(resources, R.drawable.photo_add);
-        imageItems = new ArrayList<>();
-
-        imageItems = getImagesArray();
-
-        if(imageItems.size() == 0 || imageItems.get(imageItems.size() - 1) != photoAddButton)
-        {
-            imageItems.add(photoAddButton);
-        }
-
-        gridAdapter = new GridViewAdapter(context, R.layout.grid_item_layout, imageItems);
-        gridView.setAdapter(gridAdapter);
-
-        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-
-                currentPicPos = position;
-
-                Intent pickIntent = new Intent();
-                pickIntent.setType("image/*");
-                pickIntent.setAction(Intent.ACTION_PICK);
-
-                startActivityForResult(Intent.createChooser(pickIntent, "Select Picture"), PICKER);
-                startActivityForResult(pickIntent, PICKER);
-            }
-        });
-
-        // set long click listener for each gallery thumbnail item
-        gridView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener()
-        {
-            public boolean onItemLongClick(AdapterView<?> parent, View v, int position, long id)
-            {
-
-                currentPicPos = position;
-                imageItems.remove(currentPicPos);
-                imageItems.removeAll(Collections.singleton(null));
-
-                if(imageItems.get(imageItems.size() - 1) != photoAddButton)
-                {
-                    imageItems.add(photoAddButton);
-                }
-
-                gridView.setAdapter(gridAdapter);
-
-                return true;
-            }
-        });
-
-        return rootView;
     }
 
     public int calculateInSampleSize(
