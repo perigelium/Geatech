@@ -9,7 +9,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.zubcu.geatech.Models.VisitsListRowModel;
+import com.example.zubcu.geatech.Models.GeneralInfoModel;
 import com.example.zubcu.geatech.R;
 
 import java.util.ArrayList;
@@ -21,10 +21,10 @@ import java.util.ArrayList;
 public class NotSentListVisitsAdapter extends BaseAdapter
 {
     private Context mContext;
-    ArrayList<VisitsListRowModel> visitsList;
+    ArrayList<GeneralInfoModel> visitsList;
     int layout_id;
 
-    public NotSentListVisitsAdapter(Context context, int layout_id, ArrayList<VisitsListRowModel> objects)
+    public NotSentListVisitsAdapter(Context context, int layout_id, ArrayList<GeneralInfoModel> objects)
     {
         //super(context, textViewResourceId, objects);
         mContext = context;

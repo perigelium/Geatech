@@ -17,9 +17,9 @@ import java.util.ArrayList;
 
 public class SetVisitDateTimeListAdapter extends ArrayAdapter
 {
-
     public SetVisitDateTimeListAdapter
-            (Context context, ArrayList<com.example.zubcu.geatech.Models.DateTimeSetListCellModel> array) {
+            (Context context, ArrayList<com.example.zubcu.geatech.Models.DateTimeSetListCellModel> array)
+    {
 
         super(context, 0, array);
     }

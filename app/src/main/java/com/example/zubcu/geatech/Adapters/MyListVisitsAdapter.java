@@ -9,7 +9,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.zubcu.geatech.Models.VisitsListRowModel;
+import com.example.zubcu.geatech.Models.GeneralInfoModel;
 import com.example.zubcu.geatech.R;
 
 import java.util.ArrayList;
@@ -21,10 +21,10 @@ import java.util.ArrayList;
 public class MyListVisitsAdapter extends BaseAdapter
 {
     private Context mContext;
-    ArrayList<VisitsListRowModel> visitsList;
+    ArrayList<GeneralInfoModel> visitsList;
     int layout_id;
 
-    public MyListVisitsAdapter(Context context, int layout_id, ArrayList<VisitsListRowModel> objects)
+    public MyListVisitsAdapter(Context context, int layout_id, ArrayList<GeneralInfoModel> objects)
     {
         //super(context, textViewResourceId, objects);
         mContext = context;
@@ -65,15 +65,15 @@ public class MyListVisitsAdapter extends BaseAdapter
         ImageView ivPersonTimeUnset = (ImageView) row.findViewById(R.id.ivPersonTimeUnset);
 
         TextView clientNameTextView = (TextView) row.findViewById(R.id.tvVisitsListName);
-        clientNameTextView.setText(visitsList.get(position).getCLIENT_NAME());
+        clientNameTextView.setText(visitsList.get(position).getClientName());
 
         TextView serviceTypeTextView = (TextView) row.findViewById(R.id.tvVisitsListTOS);
-        serviceTypeTextView.setText(visitsList.get(position).getSERVICE_NAME());
+        serviceTypeTextView.setText(visitsList.get(position).getServiceName());
 
         TextView clientAddressTextView = (TextView) row.findViewById(R.id.tvVisitsListAddress);
-        clientAddressTextView.setText(visitsList.get(position).getCLIENT_ADDRESS());
+        clientAddressTextView.setText(visitsList.get(position).getClientAddress());
 
-        if(visitsList.get(position).getVISIT_DAY().length() != 0)
+        if(visitsList.get(position).getVisitDay().length() != 0)
         {
 
             vListVisitsDateView.setBackgroundColor(Color.parseColor("#009922"));
@@ -81,8 +81,8 @@ public class MyListVisitsAdapter extends BaseAdapter
             tvListVisitsMonth.setVisibility(View.VISIBLE);
             ivPersonTimeSet.setVisibility(View.VISIBLE);
 
-            tvListVisitsDay.setText(visitsList.get(position).getVISIT_DAY());
-            tvListVisitsMonth.setText(visitsList.get(position).getVISIT_MONTH());
+            tvListVisitsDay.setText(visitsList.get(position).getVisitDay());
+            tvListVisitsMonth.setText(visitsList.get(position).getVisitMonth());
         }
         else
         {
