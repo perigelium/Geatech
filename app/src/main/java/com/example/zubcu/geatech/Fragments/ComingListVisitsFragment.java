@@ -8,8 +8,11 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.zubcu.geatech.Adapters.ComingListVisitsAdapter;
+import com.example.zubcu.geatech.Models.GeneralInfoModel;
 import com.example.zubcu.geatech.R;
 import com.example.zubcu.geatech.Services.GeneralInfoReceiver;
+
+import java.util.ArrayList;
 
 public class ComingListVisitsFragment extends ListFragment
 {
@@ -21,9 +24,19 @@ public class ComingListVisitsFragment extends ListFragment
 
         GeneralInfoReceiver generalInfoReceiver = GeneralInfoReceiver.getInstance();
 
+        ArrayList<GeneralInfoModel> visitsSetArrayList = new ArrayList<>();
+
+        for (GeneralInfoModel item : generalInfoReceiver.listVisitsArrayList)
+        {
+            if(item.getVisitDay() != 0)
+            {
+                visitsSetArrayList.add(item);
+            }
+        }
+
         ComingListVisitsAdapter myListAdapter =
                 new ComingListVisitsAdapter(getActivity(), R.layout.coming_list_visits_fragment_row,
-                        generalInfoReceiver.getListVisitsArrayList());
+                        visitsSetArrayList);
 
         setListAdapter(myListAdapter);
     }

@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
@@ -13,7 +12,7 @@ import com.example.zubcu.geatech.Fragments.ComposeReportTemplateFragment;
 import com.example.zubcu.geatech.Fragments.CtrlBtnReportDetailed;
 import com.example.zubcu.geatech.Fragments.CtrlBtnsFragment1;
 import com.example.zubcu.geatech.Fragments.CtrlBtnsFragment2;
-import com.example.zubcu.geatech.Fragments.DateTimeSetFragment;
+import com.example.zubcu.geatech.Fragments.SetDateTimeFragment;
 import com.example.zubcu.geatech.Fragments.FragmentCTLinfo;
 import com.example.zubcu.geatech.Fragments.FragmentListVisits;
 import com.example.zubcu.geatech.Fragments.InWorkListVisitsFragment;
@@ -35,7 +34,7 @@ public class MainActivity extends Activity
 
     CtrlBtnsFragment1 ctrlBtnsFragment1;
     CtrlBtnsFragment2 ctrlBtnsFragment2;
-    DateTimeSetFragment dateTimeSetFragment;
+    SetDateTimeFragment dateTimeSetFragment;
     FragmentListVisits listVisits;
     InWorkListVisitsFragment inWorkListVisits;
     ComingListVisitsFragment comingListVisits;
@@ -56,7 +55,7 @@ public class MainActivity extends Activity
 
         ctrlBtnsFragment1 = new CtrlBtnsFragment1();
         ctrlBtnsFragment2 = new CtrlBtnsFragment2();
-        dateTimeSetFragment = new DateTimeSetFragment();
+        dateTimeSetFragment = new SetDateTimeFragment();
         listVisits = new FragmentListVisits();
         inWorkListVisits = new InWorkListVisitsFragment();
         comingListVisits = new ComingListVisitsFragment();
@@ -268,6 +267,10 @@ public class MainActivity extends Activity
         }
         else
         {
+            Bundle args = new Bundle();
+            args.putInt("selectedIndex", itemIndex);
+            dateTimeSetFragment.setArguments(args);
+
             setVisitsListContent(dateTimeSetFragment);
         }
 

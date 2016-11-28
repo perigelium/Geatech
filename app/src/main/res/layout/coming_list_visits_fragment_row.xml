@@ -25,7 +25,7 @@
                 android:src="@drawable/person_dark_orange" />
 
             <TextView
-                android:id="@+id/tvVisitsListName"
+                android:id="@+id/tvClientName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start|center_vertical"
@@ -42,7 +42,7 @@
             android:orientation="horizontal">
 
             <ImageView
-                android:id="@+id/ivVisitsListTOS"
+                android:id="@+id/ivTypeOfService"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start|center_vertical"
@@ -50,7 +50,7 @@
                 android:src="@drawable/service_dark_orange" />
 
             <TextView
-                android:id="@+id/tvVisitsListTOS"
+                android:id="@+id/tvTypeOfService"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start|center_vertical"
@@ -66,7 +66,7 @@
             android:orientation="horizontal">
 
             <ImageView
-                android:id="@+id/ivVisitsListAddress"
+                android:id="@+id/ivClientAddress"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start|center_vertical"
@@ -74,7 +74,7 @@
                 android:src="@drawable/location_dark_orange" />
 
             <TextView
-                android:id="@+id/tvVisitsListAddress"
+                android:id="@+id/tvClientAddress"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start|center_vertical"
@@ -112,7 +112,7 @@
                     android:layout_gravity="center_vertical|end"/>
 
                 <TextView
-                    android:id="@+id/tvListVisitsDay"
+                    android:id="@+id/tvVisitDay"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="top|center_horizontal"
@@ -121,7 +121,7 @@
                     android:textSize="70dp" />
 
                 <TextView
-                    android:id="@+id/tvListVisitsMonth"
+                    android:id="@+id/tvVisitMonth"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal|bottom"

@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.zubcu.geatech.Models.GeneralInfoModel;
+import com.example.zubcu.geatech.Models.ItalianMonths;
 import com.example.zubcu.geatech.R;
 
 import java.util.ArrayList;
@@ -73,16 +74,15 @@ public class MyListVisitsAdapter extends BaseAdapter
         TextView clientAddressTextView = (TextView) row.findViewById(R.id.tvVisitsListAddress);
         clientAddressTextView.setText(visitsList.get(position).getClientAddress());
 
-        if(visitsList.get(position).getVisitDay().length() != 0)
+        if(visitsList.get(position).getVisitDay() != 0)
         {
-
             vListVisitsDateView.setBackgroundColor(Color.parseColor("#009922"));
             tvListVisitsDay.setVisibility(View.VISIBLE);
             tvListVisitsMonth.setVisibility(View.VISIBLE);
             ivPersonTimeSet.setVisibility(View.VISIBLE);
 
-            tvListVisitsDay.setText(visitsList.get(position).getVisitDay());
-            tvListVisitsMonth.setText(visitsList.get(position).getVisitMonth());
+            tvListVisitsDay.setText(Integer.toString(visitsList.get(position).getVisitDay()));
+            tvListVisitsMonth.setText(ItalianMonths.numToString(visitsList.get(position).getVisitMonth()));
         }
         else
         {

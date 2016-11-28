@@ -19,7 +19,7 @@ public class GeneralInfoReceiver
         return ourInstance;
     }
 
-    static ArrayList<GeneralInfoModel> listVisitsArrayList;
+    public static ArrayList<GeneralInfoModel> listVisitsArrayList;
 
     final String[] technicianNames = new String[]{"Nome di tecnico 1","Nome di tecnico 2","Nome di tecnico 3",
             "Nome di tecnico 4","Nome di tecnico 5","Nome di tecnico 6","Nome di tecnico 7","Nome di tecnico 8",
@@ -74,8 +74,6 @@ public class GeneralInfoReceiver
                             latitudes[i], longitudes[i], altitudes[i],
                             technicianNames[i], serviceNames[i]));
         }
-
-        //this.listVisitsArrayList = listVisitsArrayList;
     }
 
     public static ArrayList<GeneralInfoModel> getListVisitsArrayList()

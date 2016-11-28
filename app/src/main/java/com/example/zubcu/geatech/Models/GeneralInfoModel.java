@@ -17,7 +17,7 @@ public class GeneralInfoModel
     public String longitude = "";
     public String altitude = "";
 
-    public Pair<String, String> visitDate;
+    public Pair<Integer, Integer> visitDate;
     public Pair<String, String> visitTime;
     public Pair<String, String> reportCompletionDate;
     public Pair<String, String> reportCompletionTime;
@@ -45,17 +45,17 @@ public class GeneralInfoModel
         this.serviceName = serviceName;
     }
 
-    public String getVisitDay()
+    public int getVisitDay()
     {
-        return this.visitDate != null ? this.visitDate.first : "";
+        return this.visitDate != null ? this.visitDate.first : 0;
     }
 
-    public String getVisitMonth()
+    public int getVisitMonth()
     {
-        return this.visitDate != null ? this.visitDate.second : "";
+        return this.visitDate != null ? this.visitDate.second : 0;
     }
 
-    public void setVisitDate(Pair<String, String> visitDate)
+    public void setVisitDate(Pair<Integer, Integer> visitDate)
     {
         this.visitDate = visitDate;
     }

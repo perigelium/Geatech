@@ -9,24 +9,36 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.example.zubcu.geatech.Adapters.InWorkListVisitsAdapter;
+import com.example.zubcu.geatech.Models.GeneralInfoModel;
 import com.example.zubcu.geatech.R;
 import com.example.zubcu.geatech.Services.GeneralInfoReceiver;
 
+import java.util.ArrayList;
 
 public class InWorkListVisitsFragment extends ListFragment
 {
     GeneralInfoReceiver generalInfoReceiver;
 
     @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
+    public void onActivityCreated(Bundle savedInstanceState)
+    {
         super.onActivityCreated(savedInstanceState);
 
         Context context = getActivity();
 
         generalInfoReceiver = GeneralInfoReceiver.getInstance();
+        ArrayList<GeneralInfoModel> visitsSetArrayList = new ArrayList<>();
+
+        for (GeneralInfoModel item : generalInfoReceiver.listVisitsArrayList)
+        {
+            if(item.getVisitDay() != 0)
+            {
+                visitsSetArrayList.add(item);
+            }
+        }
 
         InWorkListVisitsAdapter myListAdapter =
-                new InWorkListVisitsAdapter(getActivity(), R.layout.in_work_list_visits_fragment_row, generalInfoReceiver.getListVisitsArrayList());
+                new InWorkListVisitsAdapter(getActivity(), R.layout.in_work_list_visits_fragment_row, visitsSetArrayList);
         setListAdapter(myListAdapter);
 
     }

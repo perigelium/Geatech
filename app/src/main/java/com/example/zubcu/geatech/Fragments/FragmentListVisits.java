@@ -55,7 +55,7 @@ public class FragmentListVisits extends ListFragment
     {
         super.onListItemClick(l, v, position, id);
 
-        listener.OnListItemSelected(position, !generalInfoReceiver.getListVisitsArrayList().get(position).getVisitDay().isEmpty());
+        listener.OnListItemSelected(position, generalInfoReceiver.getListVisitsArrayList().get(position).getVisitDay() != 0);
 
 /*        Toast.makeText(getActivity(),
                 getListView().getItemAtPosition(position).toString(),

@@ -7,6 +7,7 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.format.DateFormat;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,7 +19,9 @@ import android.widget.TimePicker;
 import com.example.zubcu.geatech.Adapters.SetVisitDateTimeListAdapter;
 import com.example.zubcu.geatech.Interfaces.Communicator;
 import com.example.zubcu.geatech.Models.DateTimeSetListCellModel;
+import com.example.zubcu.geatech.Models.GeneralInfoModel;
 import com.example.zubcu.geatech.R;
+import com.example.zubcu.geatech.Services.GeneralInfoReceiver;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -26,20 +29,22 @@ import java.util.Calendar;
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link DateTimeSetFragment.OnFragmentInteractionListener} interface
+ * {@link SetDateTimeFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link DateTimeSetFragment#newInstance} factory method to
+ * Use the {@link SetDateTimeFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class DateTimeSetFragment extends Fragment implements View.OnClickListener
+public class SetDateTimeFragment extends Fragment implements View.OnClickListener
 {
+    Calendar calendarNow;
+    GeneralInfoReceiver generalInfoReceiver;
     private TextView mDateSetTextView, mTimeSetTextView, mSetDateButton, mAnnullaSetDateTimeButton, mSetDateTimeSubmitButton;
     private int mYear, mMonth, mDay, mHour, mMinute;
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
     // TODO: Rename and change types of parameters
-    private String mParam1;
+    private int selectedIndex;
     private String mParam2;
     View rootView;
 
@@ -47,14 +52,14 @@ public class DateTimeSetFragment extends Fragment implements View.OnClickListene
     private Communicator mCommunicator;
 
 
-    public DateTimeSetFragment() {
+    public SetDateTimeFragment() {
         // Required empty public constructor
     }
 
     // TODO: Rename and change types and number of parameters
-    public static DateTimeSetFragment newInstance(String param1, String param2)
+    public static SetDateTimeFragment newInstance(String param1, String param2)
     {
-        DateTimeSetFragment fragment = new DateTimeSetFragment();
+        SetDateTimeFragment fragment = new SetDateTimeFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -71,28 +76,29 @@ public class DateTimeSetFragment extends Fragment implements View.OnClickListene
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+        if (getArguments() != null)
+        {
+            selectedIndex = getArguments().getInt("selectedIndex");
         }
     }
 
-    private DatePickerDialog.OnDateSetListener datePickerListener = new DatePickerDialog.OnDateSetListener() {
-
+    private DatePickerDialog.OnDateSetListener datePickerListener = new DatePickerDialog.OnDateSetListener()
+    {
         // when dialog box is closed, below method will be called.
         @Override
         public void onDateSet(DatePicker view, int selectedYear, int selectedMonth, int selectedDay)
         {
             mYear = selectedYear;
-            mMonth = selectedMonth;
+            //calendarNow.
+            mMonth = selectedMonth + 1;
             mDay = selectedDay;
 
             updateDisplay();
         }
     };
 
-    private TimePickerDialog.OnTimeSetListener timePickerListener = new TimePickerDialog.OnTimeSetListener() {
-
+    private TimePickerDialog.OnTimeSetListener timePickerListener = new TimePickerDialog.OnTimeSetListener()
+    {
         @Override
         public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
 
@@ -134,12 +140,12 @@ public class DateTimeSetFragment extends Fragment implements View.OnClickListene
         mAnnullaSetDateTimeButton.setOnClickListener(this);
         mSetDateTimeSubmitButton.setOnClickListener(this);
 
-        final Calendar calendar = Calendar.getInstance();
-        mYear = calendar.get(Calendar.YEAR);
-        mMonth = calendar.get(Calendar.MONTH);
-        mDay = calendar.get(Calendar.DAY_OF_MONTH);
-        mHour = calendar.get(Calendar.HOUR_OF_DAY);
-        mMinute = calendar.get(Calendar.MINUTE);
+        final Calendar calendarNow = Calendar.getInstance();
+        mYear = calendarNow.get(Calendar.YEAR);
+        mMonth = calendarNow.get(Calendar.MONTH) + 1;
+        mDay = calendarNow.get(Calendar.DAY_OF_MONTH);
+        mHour = calendarNow.get(Calendar.HOUR_OF_DAY);
+        mMinute = calendarNow.get(Calendar.MINUTE);
 
         updateDisplay();
 
@@ -195,7 +201,7 @@ public class DateTimeSetFragment extends Fragment implements View.OnClickListene
             dialogTimePicker.show();
 
             DatePickerDialog dialogDatePicker = new DatePickerDialog(getActivity(), datePickerListener,
-                    mYear, mMonth, mDay);
+                    mYear, mMonth - 1, mDay);
             //dialog.getDatePicker().setMaxDate(new Date().getTime());
             dialogDatePicker.show();
         }
@@ -208,6 +214,12 @@ public class DateTimeSetFragment extends Fragment implements View.OnClickListene
 
         if(v.getId() == R.id.btnSetDateTimeSubmit)
         {
+            Pair date = new Pair(mDay, mMonth );
+            generalInfoReceiver.listVisitsArrayList.get(selectedIndex).setVisitDate(date);
+
+            Pair time = new Pair(mHour, mMinute);
+            generalInfoReceiver.listVisitsArrayList.get(selectedIndex).setVisitTime(time);
+
             //getActivity().getFragmentManager().beginTransaction().remove(this).commit();
             mCommunicator.onDateTimeSetReturned(true);
         }

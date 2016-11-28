@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.zubcu.geatech.Models.GeneralInfoModel;
+import com.example.zubcu.geatech.Models.ItalianMonths;
 import com.example.zubcu.geatech.R;
 
 import java.util.ArrayList;
@@ -51,44 +52,30 @@ public class ComingListVisitsAdapter extends BaseAdapter
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(int position, View convertView, ViewGroup parent)
+    {
         // return super.getView(position, convertView, parent);
 
         LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View row = inflater.inflate(layout_id, parent, false);
 
-/*        ImageView calendarioIcon = (ImageView) row.findViewById(R.id.calendario);
-        View vListVisitsDateView = row.findViewById(R.id.vListVisitsDateCell);
-        TextView tvListVisitsDay = (TextView)row.findViewById(R.id.tvListVisitsDay);
-        TextView tvListVisitsMonth = (TextView)row.findViewById(R.id.tvListVisitsMonth);
-        ImageView ivPersonTimeSet = (ImageView) row.findViewById(R.id.ivPersonTimeSet);
-        ImageView ivPersonTimeUnset = (ImageView) row.findViewById(R.id.ivPersonTimeUnset);
+        TextView tvVisitDay = (TextView)row.findViewById(R.id.tvVisitDay);
+        TextView tvVisitMonth = (TextView)row.findViewById(R.id.tvVisitMonth);
 
-        TextView clientNameTextView = (TextView) row.findViewById(R.id.tvVisitsListName);
-        clientNameTextView.setText(visitsList.get(position).getCLIENT_NAME());
+        TextView clientNameTextView = (TextView) row.findViewById(R.id.tvClientName);
+        clientNameTextView.setText(visitsList.get(position).getClientName());
 
-        TextView serviceTypeTextView = (TextView) row.findViewById(R.id.tvVisitsListTOS);
-        serviceTypeTextView.setText(visitsList.get(position).getSERVICE_NAME());
+        TextView serviceTypeTextView = (TextView) row.findViewById(R.id.tvTypeOfService);
+        serviceTypeTextView.setText(visitsList.get(position).getServiceName());
 
-        TextView clientAddressTextView = (TextView) row.findViewById(R.id.tvVisitsListAddress);
-        clientAddressTextView.setText(visitsList.get(position).getCLIENT_ADDRESS());
+        TextView clientAddressTextView = (TextView) row.findViewById(R.id.tvClientAddress);
+        clientAddressTextView.setText(visitsList.get(position).getClientAddress());
 
-        if(visitsList.get(position).getVISIT_DAY().length() != 0)
+        if(visitsList.get(position).getVisitDay() != 0)
         {
-
-            vListVisitsDateView.setBackgroundColor(Color.parseColor("#009922"));
-            tvListVisitsDay.setVisibility(View.VISIBLE);
-            tvListVisitsMonth.setVisibility(View.VISIBLE);
-            ivPersonTimeSet.setVisibility(View.VISIBLE);
-
-            tvListVisitsDay.setText(visitsList.get(position).getVISIT_DAY());
-            tvListVisitsMonth.setText(visitsList.get(position).getVISIT_MONTH());
+            tvVisitDay.setText(Integer.toString(visitsList.get(position).getVisitDay()));
+            tvVisitMonth.setText(ItalianMonths.numToString(visitsList.get(position).getVisitMonth()));
         }
-        else
-        {
-            calendarioIcon.setVisibility(View.VISIBLE);
-            ivPersonTimeUnset.setVisibility(View.VISIBLE);
-        }*/
 
         return row;
     }
