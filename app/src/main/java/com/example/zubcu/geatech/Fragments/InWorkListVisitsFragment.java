@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.example.zubcu.geatech.Adapters.InWorkListVisitsAdapter;
+import com.example.zubcu.geatech.Interfaces.Communicator;
 import com.example.zubcu.geatech.Models.GeneralInfoModel;
 import com.example.zubcu.geatech.R;
 import com.example.zubcu.geatech.Services.GeneralInfoReceiver;
@@ -18,6 +19,7 @@ import java.util.ArrayList;
 public class InWorkListVisitsFragment extends ListFragment
 {
     GeneralInfoReceiver generalInfoReceiver;
+    //private Communicator mCommunicator;
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState)
@@ -47,6 +49,8 @@ public class InWorkListVisitsFragment extends ListFragment
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
+
+        //mCommunicator = (Communicator)getActivity();
 
         //listener = (OnItemSelectedListener) getActivity();
 

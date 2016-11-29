@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
+import com.example.zubcu.geatech.Interfaces.Communicator;
 import com.example.zubcu.geatech.R;
 
 /**
@@ -16,6 +17,7 @@ import com.example.zubcu.geatech.R;
 
 public class CtrlBtnsFragment1 extends Fragment{
 
+    private Communicator mCommunicator;
     RadioGroup rGroup;
     int checkedBtnId = 0;
     int previousCheckedId = 0;
@@ -24,7 +26,11 @@ public class CtrlBtnsFragment1 extends Fragment{
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
         final View rootView = inflater.inflate(R.layout.ctrl_btns_fragment1, container, false);
-        final OnClickedListener listener = (OnClickedListener) getActivity();
+
+        //final OnClickedListener listener = (OnClickedListener) getActivity();
+
+        mCommunicator = (Communicator)getActivity();
+
         rGroup = ((RadioGroup) rootView.findViewById(R.id.toggleGroup));
         rGroup.check(checkedBtnId);
 
@@ -45,7 +51,7 @@ public class CtrlBtnsFragment1 extends Fragment{
 
                     if(view.getId() == i)
                     {
-                        listener.onCtrlButtonClicked(view);
+                        mCommunicator.onCtrlButtonClicked(view);
                         break;
                     }
                 }
@@ -74,10 +80,10 @@ public class CtrlBtnsFragment1 extends Fragment{
         super.onResume();
     }
 
-    public interface OnClickedListener
+/*    public interface OnClickedListener
     {
         void onCtrlButtonClicked(View view);
-    }
+    }*/
 
     public void setCheckedBtnId(int checkedBtnId)
     {

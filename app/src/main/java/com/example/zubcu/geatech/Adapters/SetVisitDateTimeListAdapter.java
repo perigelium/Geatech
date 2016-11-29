@@ -7,7 +7,9 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import com.example.zubcu.geatech.Models.GeneralInfoModel;
 import com.example.zubcu.geatech.R;
+import com.example.zubcu.geatech.Services.GeneralInfoReceiver;
 
 import java.util.ArrayList;
 
@@ -17,11 +19,18 @@ import java.util.ArrayList;
 
 public class SetVisitDateTimeListAdapter extends ArrayAdapter
 {
+    GeneralInfoReceiver generalInfoReceiver;
+    ArrayList<GeneralInfoModel> visitsList;
+
     public SetVisitDateTimeListAdapter
             (Context context, ArrayList<com.example.zubcu.geatech.Models.DateTimeSetListCellModel> array)
     {
 
         super(context, 0, array);
+
+
+        generalInfoReceiver = GeneralInfoReceiver.getInstance();
+        visitsList = generalInfoReceiver.getListVisitsArrayList();
     }
 
     @Override
@@ -39,6 +48,8 @@ public class SetVisitDateTimeListAdapter extends ArrayAdapter
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.visits_day_time_set_list_row, parent, false);
 
         }
+
+
 
         // Lookup view for data population
 

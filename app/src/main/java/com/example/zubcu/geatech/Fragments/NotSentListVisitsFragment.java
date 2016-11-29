@@ -14,6 +14,7 @@ import android.widget.Toast;
 import com.example.zubcu.geatech.Adapters.InWorkListVisitsAdapter;
 import com.example.zubcu.geatech.Adapters.MyListVisitsAdapter;
 import com.example.zubcu.geatech.Adapters.NotSentListVisitsAdapter;
+import com.example.zubcu.geatech.Interfaces.Communicator;
 import com.example.zubcu.geatech.Models.GeneralInfoModel;
 import com.example.zubcu.geatech.R;
 import com.example.zubcu.geatech.Services.GeneralInfoReceiver;
@@ -22,6 +23,8 @@ import java.util.ArrayList;
 
 public class NotSentListVisitsFragment extends ListFragment
 {
+
+    private Communicator mCommunicator;
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
@@ -43,6 +46,8 @@ public class NotSentListVisitsFragment extends ListFragment
         super.onCreate(savedInstanceState);
 
         //listener = (OnItemSelectedListener) getActivity();
+
+        mCommunicator = (Communicator)getActivity();
 
     }
 

@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.example.zubcu.geatech.Models.GeneralInfoModel;
 import com.example.zubcu.geatech.Models.ItalianMonths;
 import com.example.zubcu.geatech.R;
+import com.example.zubcu.geatech.Services.SwipeDetector;
 
 import java.util.ArrayList;
 
@@ -59,30 +60,40 @@ public class MyListVisitsAdapter extends BaseAdapter
         View row = inflater.inflate(layout_id, parent, false);
 
         ImageView calendarioIcon = (ImageView) row.findViewById(R.id.calendario);
-        View vListVisitsDateView = row.findViewById(R.id.vListVisitsDateCell);
-        TextView tvListVisitsDay = (TextView)row.findViewById(R.id.tvListVisitsDay);
-        TextView tvListVisitsMonth = (TextView)row.findViewById(R.id.tvListVisitsMonth);
+        View vVisitDateView = row.findViewById(R.id.vVisitDateCell);
+        TextView tvVisitDay = (TextView)row.findViewById(R.id.tvVisitDay);
+        TextView tvVisitMonth = (TextView)row.findViewById(R.id.tvVisitMonth);
+        TextView tvVisitTime = (TextView)row.findViewById(R.id.tvVisitTime);
         ImageView ivPersonTimeSet = (ImageView) row.findViewById(R.id.ivPersonTimeSet);
         ImageView ivPersonTimeUnset = (ImageView) row.findViewById(R.id.ivPersonTimeUnset);
 
-        TextView clientNameTextView = (TextView) row.findViewById(R.id.tvVisitsListName);
+        TextView clientNameTextView = (TextView) row.findViewById(R.id.tvClientName);
         clientNameTextView.setText(visitsList.get(position).getClientName());
 
-        TextView serviceTypeTextView = (TextView) row.findViewById(R.id.tvVisitsListTOS);
+        TextView serviceTypeTextView = (TextView) row.findViewById(R.id.tvVisitTOS);
         serviceTypeTextView.setText(visitsList.get(position).getServiceName());
 
-        TextView clientAddressTextView = (TextView) row.findViewById(R.id.tvVisitsListAddress);
+        TextView clientAddressTextView = (TextView) row.findViewById(R.id.tvClientAddress);
         clientAddressTextView.setText(visitsList.get(position).getClientAddress());
 
         if(visitsList.get(position).getVisitDay() != 0)
         {
-            vListVisitsDateView.setBackgroundColor(Color.parseColor("#009922"));
-            tvListVisitsDay.setVisibility(View.VISIBLE);
-            tvListVisitsMonth.setVisibility(View.VISIBLE);
+            vVisitDateView.setBackgroundColor(Color.parseColor("#009922"));
+            tvVisitDay.setVisibility(View.VISIBLE);
+            tvVisitMonth.setVisibility(View.VISIBLE);
             ivPersonTimeSet.setVisibility(View.VISIBLE);
 
-            tvListVisitsDay.setText(Integer.toString(visitsList.get(position).getVisitDay()));
-            tvListVisitsMonth.setText(ItalianMonths.numToString(visitsList.get(position).getVisitMonth()));
+            tvVisitDay.setText(Integer.toString(visitsList.get(position).getVisitDay()));
+            tvVisitMonth.setText(ItalianMonths.numToString(visitsList.get(position).getVisitMonth()));
+
+            String minuteStr = Integer.toString(visitsList.get(position).getVisitMinute());
+            if (minuteStr.length() == 1)
+            {
+                minuteStr = "0" + minuteStr;
+            }
+
+            tvVisitTime.setText(Integer.toString(visitsList.get(position).getVisitHour())
+                    + ":" + minuteStr);
         }
         else
         {

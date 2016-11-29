@@ -3,26 +3,20 @@ package com.example.zubcu.geatech.Fragments;
 import android.app.ListFragment;
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.Toast;
 
-import com.example.zubcu.geatech.Adapters.InWorkListVisitsAdapter;
-import com.example.zubcu.geatech.Adapters.MyListVisitsAdapter;
 import com.example.zubcu.geatech.Adapters.ReportsListAdapter;
+import com.example.zubcu.geatech.Interfaces.Communicator;
 import com.example.zubcu.geatech.R;
 import com.example.zubcu.geatech.Services.GeneralInfoReceiver;
 
-import java.util.ArrayList;
-
 public class ReportsListFragment extends ListFragment
 {
-    OnItemSelectedListener listener;
-
+    //OnItemSelectedListener listener;
+    private Communicator mCommunicator;
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
@@ -43,7 +37,9 @@ public class ReportsListFragment extends ListFragment
     {
         super.onCreate(savedInstanceState);
 
-        listener = (OnItemSelectedListener) getActivity();
+        //listener = (OnItemSelectedListener) getActivity();
+
+        mCommunicator = (Communicator)getActivity();
 
     }
 
@@ -59,17 +55,17 @@ public class ReportsListFragment extends ListFragment
     {
         super.onListItemClick(l, v, position, id);
 
-        listener.OnListItemSelected(position);
+        mCommunicator.OnListItemSelected(position);
 
 /*       Toast.makeText(getActivity(),
                 getListView().getItemAtPosition(position).toString(),
                 Toast.LENGTH_LONG).show();*/
     }
 
-    public interface OnItemSelectedListener
+/*    public interface OnItemSelectedListener
     {
-        void OnListItemSelected(int itemIndex);
-    }
+        void OnListItemSelected(int itemIndex, boolean b);
+    }*/
 }
 
 /*            int optionId = randomInteger!=0 ? R.layout.list_visits_cell_datetime_set : R.layout.list_visits_cell_datetime_set;

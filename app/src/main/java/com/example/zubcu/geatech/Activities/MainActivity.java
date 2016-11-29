@@ -5,6 +5,7 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
+import android.view.MotionEvent;
 import android.view.View;
 
 import com.example.zubcu.geatech.Fragments.ComingListVisitsFragment;
@@ -23,14 +24,14 @@ import com.example.zubcu.geatech.Fragments.ReportsListFragment;
 import com.example.zubcu.geatech.Fragments.SendReportFragment;
 import com.example.zubcu.geatech.Interfaces.Communicator;
 import com.example.zubcu.geatech.R;
+import com.example.zubcu.geatech.Services.SwipeDetector;
 
-public class MainActivity extends Activity
-        implements CtrlBtnsFragment1.OnClickedListener,
-        CtrlBtnsFragment2.OnClickedListener, FragmentListVisits.OnItemSelectedListener, Communicator, ReportsListFragment.OnItemSelectedListener
+public class MainActivity extends Activity implements Communicator
 {
 
     private FragmentManager mFragmentManager;
     //private FragmentTransaction mFragmentTransaction;
+    SwipeDetector swipeDetector;
 
     CtrlBtnsFragment1 ctrlBtnsFragment1;
     CtrlBtnsFragment2 ctrlBtnsFragment2;
@@ -52,6 +53,8 @@ public class MainActivity extends Activity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.work_window);
+
+        swipeDetector = new SwipeDetector();
 
         ctrlBtnsFragment1 = new CtrlBtnsFragment1();
         ctrlBtnsFragment2 = new CtrlBtnsFragment2();
@@ -251,16 +254,15 @@ public class MainActivity extends Activity
     @Override
     public void OnListItemSelected(int itemIndex, Boolean dateTimeHasSet)
     {
-        FragmentTransaction mFragmentTransaction = mFragmentManager.beginTransaction();
-
-        mFragmentTransaction.hide(ctrlBtnsFragment1);
-        mFragmentTransaction.show(ctrlBtnsFragment2);
-        mFragmentTransaction.commit();
-
         removeAllLists();
 
         if (dateTimeHasSet) // if visit day is empty, show set datetime fragment, otherwise show CTL info.
         {
+            FragmentTransaction mFragmentTransaction = mFragmentManager.beginTransaction();
+
+            mFragmentTransaction.hide(ctrlBtnsFragment1);
+            mFragmentTransaction.show(ctrlBtnsFragment2);
+            mFragmentTransaction.commit();
 
             setVisitsListContent(ctlInfo);
             ctrlBtnsFragment2.setCheckedBtnId(R.id.btnInfo);
@@ -280,7 +282,8 @@ public class MainActivity extends Activity
     @Override
     public void onDateTimeSetReturned(Boolean mDatetimeAlreadySet)
     {
-        onCtrlButtonClicked(findViewById(R.id.btnReturn));
+        removeAllLists();
+        setVisitsListContent(listVisits);
     }
 
     @Override
@@ -309,5 +312,18 @@ public class MainActivity extends Activity
         removeAllLists();
         setVisitsListContent(reportDetailedFragment);
         ctrlBtnsFragment1.setCheckedBtnId(R.id.btnReports);
+    }
+
+    @Override
+    public void OnListItemSwiped(int itemIndex, Boolean dateTimeHasSet)
+    {
+        if(!dateTimeHasSet)
+        {
+            OnListItemSelected(itemIndex, false);
+        }
+        else
+        {
+            OnListItemSelected(itemIndex, true);
+        }
     }
 }

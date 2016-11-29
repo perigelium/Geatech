@@ -18,7 +18,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.example.zubcu.geatech.Models.GeneralInfoModel;
 import com.example.zubcu.geatech.R;
+import com.example.zubcu.geatech.Services.GeneralInfoReceiver;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
@@ -31,6 +33,7 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 
 import static com.google.android.gms.location.LocationServices.FusedLocationApi;
 
@@ -55,6 +58,11 @@ public class FragmentCTLinfo extends Fragment implements View.OnClickListener,
 
     private Button mSetCurrentCoordsButton;
     private OnFragmentInteractionListener mListener;
+    private int selectedIndex;
+
+    GeneralInfoReceiver generalInfoReceiver;
+    ArrayList<GeneralInfoModel> visitsList;
+
     GoogleApiClient mGoogleApiClient = null;
     EditText etCoordNord, etCoordEst, etAltitude;
     Location mLastLocation;
@@ -119,11 +127,14 @@ public class FragmentCTLinfo extends Fragment implements View.OnClickListener,
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         if (getArguments() != null)
         {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            selectedIndex = getArguments().getInt("selectedIndex");
         }
+
+        generalInfoReceiver = GeneralInfoReceiver.getInstance();
+        visitsList = generalInfoReceiver.getListVisitsArrayList();
 
         locationRequest = new LocationRequest()
                 .setInterval(30000)
@@ -145,6 +156,19 @@ public class FragmentCTLinfo extends Fragment implements View.OnClickListener,
                              Bundle savedInstanceState) {
 
         View rootView = inflater.inflate(R.layout.ctl_info_fragment, container, false);
+
+
+        TextView clientNameTextView = (TextView) rootView.findViewById(R.id.tvClientName);
+        clientNameTextView.setText(visitsList.get(selectedIndex).getClientName());
+
+        TextView clientPhoneTextView = (TextView) rootView.findViewById(R.id.tvClientPhone);
+        clientPhoneTextView.setText(visitsList.get(selectedIndex).getClientPhone());
+
+        TextView clientAddressTextView = (TextView) rootView.findViewById(R.id.tvClientAddress);
+        clientAddressTextView.setText(visitsList.get(selectedIndex).getClientAddress());
+
+        TextView technicianNameTextView = (TextView) rootView.findViewById(R.id.etTechnicianName);
+        technicianNameTextView.setText(visitsList.get(selectedIndex).getTechnicianName());
 
         mSetCurrentCoordsButton = (Button) rootView.findViewById(R.id.btnSetCurrentCoords);
         etCoordNord = (EditText)rootView.findViewById(R.id.etCoordNord);

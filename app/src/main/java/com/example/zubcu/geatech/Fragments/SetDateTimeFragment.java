@@ -36,10 +36,14 @@ import java.util.Calendar;
  */
 public class SetDateTimeFragment extends Fragment implements View.OnClickListener
 {
-    Calendar calendarNow;
+    final Calendar calendarNow;
+    Calendar calendar;
+    long elapsedDays;
     GeneralInfoReceiver generalInfoReceiver;
+    ArrayList<GeneralInfoModel> visitsList;
     private TextView mDateSetTextView, mTimeSetTextView, mSetDateButton, mAnnullaSetDateTimeButton, mSetDateTimeSubmitButton;
     private int mYear, mMonth, mDay, mHour, mMinute;
+
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
@@ -52,8 +56,10 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
     private Communicator mCommunicator;
 
 
-    public SetDateTimeFragment() {
-        // Required empty public constructor
+    public SetDateTimeFragment()
+    {
+        calendarNow = Calendar.getInstance();
+        calendar = Calendar.getInstance();
     }
 
     // TODO: Rename and change types and number of parameters
@@ -80,6 +86,9 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
         {
             selectedIndex = getArguments().getInt("selectedIndex");
         }
+
+        generalInfoReceiver = GeneralInfoReceiver.getInstance();
+        visitsList = generalInfoReceiver.getListVisitsArrayList();
     }
 
     private DatePickerDialog.OnDateSetListener datePickerListener = new DatePickerDialog.OnDateSetListener()
@@ -89,9 +98,11 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
         public void onDateSet(DatePicker view, int selectedYear, int selectedMonth, int selectedDay)
         {
             mYear = selectedYear;
-            //calendarNow.
+            calendar.set(Calendar.YEAR, mYear);
             mMonth = selectedMonth + 1;
+            calendar.set(Calendar.MONTH, selectedMonth);
             mDay = selectedDay;
+            calendar.set(Calendar.DAY_OF_MONTH, mDay);
 
             updateDisplay();
         }
@@ -100,10 +111,27 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
     private TimePickerDialog.OnTimeSetListener timePickerListener = new TimePickerDialog.OnTimeSetListener()
     {
         @Override
-        public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
+        public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute)
+        {
 
             mHour = selectedHour;
+            calendar.set(Calendar.HOUR_OF_DAY, mHour);
             mMinute = selectedMinute;
+            calendar.set(Calendar.MINUTE, mMinute);
+
+            int millsDiff = calendar.compareTo(calendarNow);
+
+            if (millsDiff <= 0)
+            {
+                elapsedDays = 0;
+            }
+            else
+            {
+                long milliSeconds = calendar.getTimeInMillis();
+                long milliSecondsNow = calendarNow.getTimeInMillis();
+                long periodMilliSeconds = (milliSeconds - milliSecondsNow);
+                elapsedDays = periodMilliSeconds / 1000 / 60 / 60 / 24;
+            }
 
             updateDisplay();
         }
@@ -114,7 +142,7 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
                              Bundle savedInstanceState)
     {
         // Inflate the layout for this fragment
-        rootView =  inflater.inflate(R.layout.date_time_set_fragment, container, false);
+        rootView =  inflater.inflate(R.layout.set_date_time_fragment, container, false);
 
         ArrayList<DateTimeSetListCellModel> list = new ArrayList<>();
 
@@ -130,6 +158,18 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
 
             listView.setAdapter(adapter);
 
+        TextView clientNameTextView = (TextView) rootView.findViewById(R.id.tvClientName);
+        clientNameTextView.setText(visitsList.get(selectedIndex).getClientName());
+
+        TextView clientPhoneTextView = (TextView) rootView.findViewById(R.id.tvClientPhone);
+        clientPhoneTextView.setText(visitsList.get(selectedIndex).getClientPhone());
+
+        TextView serviceTypeTextView = (TextView) rootView.findViewById(R.id.tvVisitTOS);
+        serviceTypeTextView.setText(visitsList.get(selectedIndex).getServiceName());
+
+        TextView clientAddressTextView = (TextView) rootView.findViewById(R.id.tvClientAddress);
+        clientAddressTextView.setText(visitsList.get(selectedIndex).getClientAddress());
+
         mDateSetTextView = (TextView) rootView.findViewById(R.id.tvDateSet);
         mTimeSetTextView = (TextView) rootView.findViewById(R.id.tvTimeSet);
         mSetDateButton = (TextView) rootView.findViewById(R.id.btnSetDate);
@@ -140,12 +180,22 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
         mAnnullaSetDateTimeButton.setOnClickListener(this);
         mSetDateTimeSubmitButton.setOnClickListener(this);
 
-        final Calendar calendarNow = Calendar.getInstance();
-        mYear = calendarNow.get(Calendar.YEAR);
-        mMonth = calendarNow.get(Calendar.MONTH) + 1;
-        mDay = calendarNow.get(Calendar.DAY_OF_MONTH);
-        mHour = calendarNow.get(Calendar.HOUR_OF_DAY);
-        mMinute = calendarNow.get(Calendar.MINUTE);
+        if(visitsList.get(selectedIndex).getVisitDay() != 0)
+        {
+            mYear = visitsList.get(selectedIndex).getVisitYear();
+            mMonth =  visitsList.get(selectedIndex).getVisitMonth();
+            mDay =  visitsList.get(selectedIndex).getVisitDay();
+            mHour =  visitsList.get(selectedIndex).getVisitHour();
+            mMinute =  visitsList.get(selectedIndex).getVisitMinute();
+        }
+        else
+        {
+            mYear = calendarNow.get(Calendar.YEAR);
+            mMonth = calendarNow.get(Calendar.MONTH) + 1;
+            mDay = calendarNow.get(Calendar.DAY_OF_MONTH);
+            mHour = calendarNow.get(Calendar.HOUR_OF_DAY);
+            mMinute = calendarNow.get(Calendar.MINUTE);
+        }
 
         updateDisplay();
 
@@ -214,11 +264,13 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
 
         if(v.getId() == R.id.btnSetDateTimeSubmit)
         {
+            visitsList.get(selectedIndex).setVisitYear(mYear);
+
             Pair date = new Pair(mDay, mMonth );
-            generalInfoReceiver.listVisitsArrayList.get(selectedIndex).setVisitDate(date);
+            visitsList.get(selectedIndex).setVisitDate(date);
 
             Pair time = new Pair(mHour, mMinute);
-            generalInfoReceiver.listVisitsArrayList.get(selectedIndex).setVisitTime(time);
+            visitsList.get(selectedIndex).setVisitTime(time);
 
             //getActivity().getFragmentManager().beginTransaction().remove(this).commit();
             mCommunicator.onDateTimeSetReturned(true);
@@ -229,7 +281,13 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
         mDateSetTextView.setText(new StringBuilder().append(mDay).append(".")
                 .append(mMonth).append(".").append(mYear));
 
-        mTimeSetTextView.setText(new StringBuilder().append(mHour).append(".")
-                .append(mMinute));
+        String minuteStr = Integer.toString(mMinute);
+        if (minuteStr.length() == 1)
+        {
+            minuteStr = "0" + minuteStr;
+        }
+
+        mTimeSetTextView.setText(new StringBuilder().append(mHour).append(":")
+                .append(minuteStr));
     }
 }
