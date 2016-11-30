@@ -20,6 +20,7 @@ import android.widget.TextView;
 
 import com.example.zubcu.geatech.Models.GeneralInfoModel;
 import com.example.zubcu.geatech.R;
+import com.example.zubcu.geatech.Services.DownloadAsync;
 import com.example.zubcu.geatech.Services.GeneralInfoReceiver;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -230,7 +231,7 @@ public class FragmentCTLinfo extends Fragment implements View.OnClickListener,
                                 + "," + String.valueOf(mLastLocation.getLongitude())
                                 + "&sensor=true";
 
-                        new DownloadPageTask().execute(url);
+                        new DownloadAsync().execute(url); //needs to be replaced with async code
                     }
                 }
             }
@@ -330,7 +331,8 @@ public class FragmentCTLinfo extends Fragment implements View.OnClickListener,
         return result;
     }
 
-    private boolean isNetworkAvailable() {
+    private boolean isNetworkAvailable()
+    {
         ConnectivityManager connectivityManager
                 = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
