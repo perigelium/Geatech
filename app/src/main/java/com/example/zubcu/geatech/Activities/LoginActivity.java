@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -225,12 +226,56 @@ class ResponseInterceptor implements Interceptor
                                 }
 
                                 String visits_downloaded_data = response.body().string();
+
                                 Log.d("DEBUG", visits_downloaded_data);
 
                                 try
                                 {
                                     JSONObject jsonObject = new JSONObject(visits_downloaded_data);
-                                    Log.d("DEBUG", "json got");
+                                    JSONArray arr_caseArray = jsonObject.getJSONArray("arr_case");
+                                    JSONArray visits_array = arr_caseArray.getJSONArray(0);
+
+                                    for (int i = 0; i < visits_array.length(); i++)
+                                    {
+                                        JSONArray visit_array = visits_array.getJSONArray(i);
+
+                                        JSONObject visit_data = visit_array.getJSONObject(0);
+                                        JSONObject client_data = visit_array.getJSONObject(1);
+                                        JSONObject subproducts = visit_array.getJSONObject(2);
+
+                                        String visit_dataStringArray = visit_data.getString("visit_data");
+                                        JSONObject visit_dataJSONObject = new JSONObject(visit_dataStringArray);
+
+
+
+                                        Integer id_sopralluogo = visit_dataJSONObject.getInt("id_sopralluogo");
+                                        String data_ora_assegnazione = visit_dataJSONObject.getString("data_ora_assegnazione");
+                                        String data_ora_presa_appuntamento = visit_dataJSONObject.getString("data_ora_presa_appuntamento");
+                                        String data_ora_sopralluogo = visit_dataJSONObject.getString("data_ora_sopralluogo");
+                                        String note_sopralluogo = visit_dataJSONObject.getString("note_sopralluogo");
+
+
+
+
+
+                                        String tipo_gestione_sopralluogo = visit_dataJSONObject.getString("tipo_gestione_sopralluogo");
+
+                                        JSONArray client_dataArray = client_data.getJSONArray("client_data");
+                                        JSONObject client_dataJSONObject = client_dataArray.getJSONObject(0);
+                                        String name = client_dataJSONObject.getString("name");
+
+                                        JSONArray subproductsArray = subproducts.getJSONArray("sub_item");
+
+                                        for (int j = 0; j < subproductsArray.length(); j++)
+                                        {
+
+                                            JSONObject msg = subproductsArray.getJSONObject(j);
+                                            String subproduct = msg.getString("subproduct");
+                                            Log.d("DEBUG", subproduct);
+                                            String product_type = msg.getString("product_type");
+                                        }
+                                    }
+
                                 } catch (JSONException e)
                                 {
                                     e.printStackTrace();
