@@ -9,11 +9,21 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.example.zubcu.geatech.Models.ClientData;
+import com.example.zubcu.geatech.Models.ProductData;
+import com.example.zubcu.geatech.Models.SubItem;
+import com.example.zubcu.geatech.Models.VisitData;
+import com.example.zubcu.geatech.Models.VisitItem;
+import com.example.zubcu.geatech.Utils.ResponseParser;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -23,10 +33,19 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+import rx.Observable;
+import rx.Subscriber;
+import rx.Subscription;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Func1;
+import rx.schedulers.Schedulers;
 
 import static com.example.zubcu.geatech.Activities.LoginActivity.JSON;
 import static com.example.zubcu.geatech.Activities.LoginActivity.loginResponse;
+import static com.example.zubcu.geatech.Activities.LoginActivity.myObservable;
+import static com.example.zubcu.geatech.Activities.LoginActivity.visitItems;
 import static com.example.zubcu.geatech.R.*;
+import static com.example.zubcu.geatech.Utils.ResponseParser.getVisitTtemsList;
 
 
 public class LoginActivity extends Activity implements View.OnClickListener
@@ -37,9 +56,15 @@ public class LoginActivity extends Activity implements View.OnClickListener
     OkHttpClient okHttpClient;
     public static Context context;
     static String loginResponse;
+    static String visitDataResponse;
+    public static ArrayList<VisitItem> visitItems;
+
+    public static Observable<String> myObservable;
+
 
     public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
 
+    ResponseParser responseParser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,6 +95,7 @@ public class LoginActivity extends Activity implements View.OnClickListener
                 startActivity(PasswordRecover);
             }
         });*/
+
     }
 
     @Override
@@ -104,6 +130,7 @@ public class LoginActivity extends Activity implements View.OnClickListener
                 .url("http://www.bludelego.com/dev/geatech/api.php?case=login")
                 .post(body)
                 .build();
+
 
         okHttpClient.newCall(request).enqueue(new Callback()
         {
@@ -156,6 +183,8 @@ public class LoginActivity extends Activity implements View.OnClickListener
 
 class ResponseInterceptor implements Interceptor
 {
+    private Object url;
+
     @Override
     public Response intercept(Interceptor.Chain chain) throws IOException
     {
@@ -225,61 +254,24 @@ class ResponseInterceptor implements Interceptor
                                     throw new IOException("Unexpected code " + response);
                                 }
 
-                                String visits_downloaded_data = response.body().string();
+                                final String visits_downloaded_data = response.body().string();
 
                                 Log.d("DEBUG", visits_downloaded_data);
 
-                                try
-                                {
-                                    JSONObject jsonObject = new JSONObject(visits_downloaded_data);
-                                    JSONArray arr_caseArray = jsonObject.getJSONArray("arr_case");
-                                    JSONArray visits_array = arr_caseArray.getJSONArray(0);
-
-                                    for (int i = 0; i < visits_array.length(); i++)
-                                    {
-                                        JSONArray visit_array = visits_array.getJSONArray(i);
-
-                                        JSONObject visit_data = visit_array.getJSONObject(0);
-                                        JSONObject client_data = visit_array.getJSONObject(1);
-                                        JSONObject subproducts = visit_array.getJSONObject(2);
-
-                                        String visit_dataStringArray = visit_data.getString("visit_data");
-                                        JSONObject visit_dataJSONObject = new JSONObject(visit_dataStringArray);
+                                //
 
 
-
-                                        Integer id_sopralluogo = visit_dataJSONObject.getInt("id_sopralluogo");
-                                        String data_ora_assegnazione = visit_dataJSONObject.getString("data_ora_assegnazione");
-                                        String data_ora_presa_appuntamento = visit_dataJSONObject.getString("data_ora_presa_appuntamento");
-                                        String data_ora_sopralluogo = visit_dataJSONObject.getString("data_ora_sopralluogo");
-                                        String note_sopralluogo = visit_dataJSONObject.getString("note_sopralluogo");
-
-
-
-
-
-                                        String tipo_gestione_sopralluogo = visit_dataJSONObject.getString("tipo_gestione_sopralluogo");
-
-                                        JSONArray client_dataArray = client_data.getJSONArray("client_data");
-                                        JSONObject client_dataJSONObject = client_dataArray.getJSONObject(0);
-                                        String name = client_dataJSONObject.getString("name");
-
-                                        JSONArray subproductsArray = subproducts.getJSONArray("sub_item");
-
-                                        for (int j = 0; j < subproductsArray.length(); j++)
+                                myObservable = Observable.create(
+                                        new Observable.OnSubscribe<String>()
                                         {
-
-                                            JSONObject msg = subproductsArray.getJSONObject(j);
-                                            String subproduct = msg.getString("subproduct");
-                                            Log.d("DEBUG", subproduct);
-                                            String product_type = msg.getString("product_type");
+                                            @Override
+                                            public void call(Subscriber<? super String> sub)
+                                            {
+                                                sub.onNext(visits_downloaded_data);
+                                                sub.onCompleted();
+                                            }
                                         }
-                                    }
-
-                                } catch (JSONException e)
-                                {
-                                    e.printStackTrace();
-                                }
+                                );
 
                                 response.body().close();
                             }

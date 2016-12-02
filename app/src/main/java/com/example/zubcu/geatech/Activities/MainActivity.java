@@ -5,8 +5,10 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Toast;
 
 import com.example.zubcu.geatech.Fragments.ComingListVisitsFragment;
 import com.example.zubcu.geatech.Fragments.ComposeReportTemplateFragment;
@@ -25,6 +27,15 @@ import com.example.zubcu.geatech.Fragments.SendReportFragment;
 import com.example.zubcu.geatech.Interfaces.Communicator;
 import com.example.zubcu.geatech.R;
 import com.example.zubcu.geatech.Services.SwipeDetector;
+import com.example.zubcu.geatech.Utils.ResponseParser;
+
+import rx.Observable;
+import rx.Subscriber;
+import rx.functions.Action1;
+
+import static com.example.zubcu.geatech.Activities.LoginActivity.context;
+import static com.example.zubcu.geatech.Activities.LoginActivity.myObservable;
+import static com.example.zubcu.geatech.Activities.LoginActivity.visitItems;
 
 public class MainActivity extends Activity implements Communicator
 {
@@ -47,12 +58,38 @@ public class MainActivity extends Activity implements Communicator
     SendReportFragment sendReportFragment;
     PhotoGalleryGridFragment photoGalleryGridFragment;
     ComposeReportTemplateFragment composeReportTemplateFragment;
+    String visitsDownloadedData;
+
+
+    Subscriber<String> mySubscriber = new Subscriber<String>()
+    {
+        @Override
+        public void onNext(String s)
+        {
+            visitsDownloadedData = s;
+        }
+
+        @Override
+        public void onCompleted()
+        {
+        }
+
+        @Override
+        public void onError(Throwable e)
+        {
+        }
+    };
 
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.work_window);
+
+        myObservable.subscribe(mySubscriber);
+
+        visitItems = ResponseParser.getVisitTtemsList(visitsDownloadedData);
+        Log.d("DEBUG", String.valueOf(visitItems.size()));
 
         swipeDetector = new SwipeDetector();
 
