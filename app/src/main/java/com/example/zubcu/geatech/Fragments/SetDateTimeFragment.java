@@ -16,15 +16,25 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
+import com.example.zubcu.geatech.Activities.MainActivity;
 import com.example.zubcu.geatech.Adapters.SetVisitDateTimeListAdapter;
 import com.example.zubcu.geatech.Interfaces.Communicator;
+import com.example.zubcu.geatech.Models.ClientData;
 import com.example.zubcu.geatech.Models.DateTimeSetListCellModel;
 import com.example.zubcu.geatech.Models.GeneralInfoModel;
+import com.example.zubcu.geatech.Models.ProductData;
+import com.example.zubcu.geatech.Models.VisitData;
+import com.example.zubcu.geatech.Models.VisitItem;
 import com.example.zubcu.geatech.R;
-import com.example.zubcu.geatech.Services.GeneralInfoReceiver;
+import com.example.zubcu.geatech.Managers.GeneralInfoReceiver;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Locale;
+
+import static com.example.zubcu.geatech.Activities.MainActivity.visitItems;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -40,7 +50,9 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
     Calendar calendar;
     long elapsedDays;
     GeneralInfoReceiver generalInfoReceiver;
-    ArrayList<GeneralInfoModel> visitsList;
+    //ArrayList<VisitItem> visitItems = MainActivity.visitItems;
+    String strDateTime;
+
     private TextView mDateSetTextView, mTimeSetTextView, mSetDateButton, mAnnullaSetDateTimeButton, mSetDateTimeSubmitButton;
     private int mYear, mMonth, mDay, mHour, mMinute;
 
@@ -87,8 +99,8 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
             selectedIndex = getArguments().getInt("selectedIndex");
         }
 
-        generalInfoReceiver = GeneralInfoReceiver.getInstance();
-        visitsList = generalInfoReceiver.getListVisitsArrayList();
+        //generalInfoReceiver = GeneralInfoReceiver.getInstance();
+        //MainActivity.visitsList = generalInfoReceiver.getListVisitsArrayList();
     }
 
     private DatePickerDialog.OnDateSetListener datePickerListener = new DatePickerDialog.OnDateSetListener()
@@ -145,6 +157,10 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
         rootView =  inflater.inflate(R.layout.set_date_time_fragment, container, false);
 
         ArrayList<DateTimeSetListCellModel> list = new ArrayList<>();
+        VisitItem visitItem = visitItems.get(selectedIndex);
+        ClientData clientData = visitItem.getClientData();
+        ProductData productData = visitItem.getProductData();
+        VisitData visitData = visitItem.getVisitData();
 
         // Construct the data source
         list.add(new DateTimeSetListCellModel("1","2","3"));
@@ -158,17 +174,18 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
 
             listView.setAdapter(adapter);
 
+
         TextView clientNameTextView = (TextView) rootView.findViewById(R.id.tvClientName);
-        clientNameTextView.setText(visitsList.get(selectedIndex).getClientName());
+        clientNameTextView.setText(clientData.getName());
 
         TextView clientPhoneTextView = (TextView) rootView.findViewById(R.id.tvClientPhone);
-        clientPhoneTextView.setText(visitsList.get(selectedIndex).getClientPhone());
+        clientPhoneTextView.setText(clientData.getMobile());
 
         TextView serviceTypeTextView = (TextView) rootView.findViewById(R.id.tvVisitTOS);
-        serviceTypeTextView.setText(visitsList.get(selectedIndex).getServiceName());
+        serviceTypeTextView.setText(productData.getProductType());
 
         TextView clientAddressTextView = (TextView) rootView.findViewById(R.id.tvClientAddress);
-        clientAddressTextView.setText(visitsList.get(selectedIndex).getClientAddress());
+        clientAddressTextView.setText(clientData.getAddress());
 
         mDateSetTextView = (TextView) rootView.findViewById(R.id.tvDateSet);
         mTimeSetTextView = (TextView) rootView.findViewById(R.id.tvTimeSet);
@@ -180,22 +197,43 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
         mAnnullaSetDateTimeButton.setOnClickListener(this);
         mSetDateTimeSubmitButton.setOnClickListener(this);
 
-        if(visitsList.get(selectedIndex).getVisitDay() != 0)
+        String visitDateTime = visitData.getDataOraSopralluogo();
+        if(visitDateTime == null)
         {
-            mYear = visitsList.get(selectedIndex).getVisitYear();
-            mMonth =  visitsList.get(selectedIndex).getVisitMonth();
-            mDay =  visitsList.get(selectedIndex).getVisitDay();
-            mHour =  visitsList.get(selectedIndex).getVisitHour();
-            mMinute =  visitsList.get(selectedIndex).getVisitMinute();
+            visitDateTime = visitData.getDataSollecitoAppuntamento();
         }
-        else
+
+        Calendar calendar = Calendar.getInstance();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ITALIAN);
+
+        try
+        {
+            calendar.setTime(sdf.parse(visitDateTime));
+        } catch (ParseException e)
+        {
+            e.printStackTrace();
+        }
+
+        mYear = calendarNow.get(Calendar.YEAR);
+        mMonth = calendarNow.get(Calendar.MONTH) + 1;
+        mDay = calendarNow.get(Calendar.DAY_OF_MONTH);
+        mHour = calendarNow.get(Calendar.HOUR_OF_DAY);
+        mMinute = calendarNow.get(Calendar.MINUTE);
+
+/*        mYear = visitsList.get(selectedIndex).getVisitYear();
+        mMonth =  visitsList.get(selectedIndex).getVisitMonth();
+        mDay =  visitsList.get(selectedIndex).getVisitDay();
+        mHour =  visitsList.get(selectedIndex).getVisitHour();
+        mMinute =  visitsList.get(selectedIndex).getVisitMinute();*/
+
+/*        else
         {
             mYear = calendarNow.get(Calendar.YEAR);
             mMonth = calendarNow.get(Calendar.MONTH) + 1;
             mDay = calendarNow.get(Calendar.DAY_OF_MONTH);
             mHour = calendarNow.get(Calendar.HOUR_OF_DAY);
             mMinute = calendarNow.get(Calendar.MINUTE);
-        }
+        }*/
 
         updateDisplay();
 
@@ -264,24 +302,40 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
 
         if(v.getId() == R.id.btnSetDateTimeSubmit)
         {
-            visitsList.get(selectedIndex).setVisitYear(mYear);
+/*            visitsList.get(selectedIndex).setVisitYear(mYear);
 
             Pair date = new Pair(mDay, mMonth );
             visitsList.get(selectedIndex).setVisitDate(date);
 
             Pair time = new Pair(mHour, mMinute);
-            visitsList.get(selectedIndex).setVisitTime(time);
+            visitsList.get(selectedIndex).setVisitTime(time);*/
+
+
+            VisitItem visitItem = visitItems.get(selectedIndex);
+            VisitData visitData = visitItem.getVisitData();
+
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
+            strDateTime = sdf.format(calendar.getTime());
+            visitData.setDataOraSopralluogo(strDateTime);
 
             //getActivity().getFragmentManager().beginTransaction().remove(this).commit();
             mCommunicator.onDateTimeSetReturned(true);
         }
     }
 
-    public void updateDisplay() {
-        mDateSetTextView.setText(new StringBuilder().append(mDay).append(".")
-                .append(mMonth).append(".").append(mYear));
+    public void updateDisplay()
+    {
+/*        mDateSetTextView.setText(new StringBuilder().append(mDay).append(".")
+                .append(mMonth).append(".").append(mYear));*/
 
-        String minuteStr = Integer.toString(mMinute);
+        SimpleDateFormat sdfDate = new SimpleDateFormat("dd.MM", Locale.ITALIAN);
+        String shortDateStr = sdfDate.format(calendar.getTime());
+        mDateSetTextView.setText(shortDateStr);
+        SimpleDateFormat sdfTime = new SimpleDateFormat("HH:mm", Locale.ITALIAN);
+        String shortTimeStr = sdfTime.format(calendar.getTime());
+        mTimeSetTextView.setText(shortTimeStr);
+
+/*        String minuteStr = Integer.toString(mMinute);
         if (minuteStr.length() == 1)
         {
             minuteStr = "0" + minuteStr;
@@ -289,5 +343,7 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
 
         mTimeSetTextView.setText(new StringBuilder().append(mHour).append(":")
                 .append(minuteStr));
+    }*/
     }
+
 }

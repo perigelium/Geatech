@@ -10,13 +10,15 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.example.zubcu.geatech.Activities.MainActivity;
 import com.example.zubcu.geatech.Adapters.MyListVisitsAdapter;
 import com.example.zubcu.geatech.Interfaces.Communicator;
+import com.example.zubcu.geatech.Models.VisitItem;
 import com.example.zubcu.geatech.R;
-import com.example.zubcu.geatech.Services.GeneralInfoReceiver;
-import com.example.zubcu.geatech.Services.SwipeDetector;
+import com.example.zubcu.geatech.Managers.GeneralInfoReceiver;
+import com.example.zubcu.geatech.Utils.SwipeDetector;
 
-public class FragmentListVisits extends ListFragment
+public class ListVisitsFragment extends ListFragment
 {
     GeneralInfoReceiver generalInfoReceiver;
     private Communicator mCommunicator;
@@ -29,7 +31,7 @@ public class FragmentListVisits extends ListFragment
         generalInfoReceiver = GeneralInfoReceiver.getInstance();
 
         MyListVisitsAdapter myListAdapter =
-                new MyListVisitsAdapter(getActivity(), R.layout.list_visits_fragment_row, generalInfoReceiver.getListVisitsArrayList());
+                new MyListVisitsAdapter(getActivity(), R.layout.list_visits_fragment_row, MainActivity.visitItems);
         setListAdapter(myListAdapter);
 
         Context context = getActivity();

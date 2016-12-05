@@ -4,16 +4,16 @@ package com.example.zubcu.geatech.Models;
 
 
 
-public class SubItem {
+public class SubproductItem {
 
     private String subproduct;
     private String productType;
     private Integer piecesNr;
 
-    public SubItem() {
+    public SubproductItem() {
     }
 
-    public SubItem(String subproduct, String productType, Integer piecesNr) {
+    public SubproductItem(String subproduct, String productType, Integer piecesNr) {
         this.subproduct = subproduct;
         this.productType = productType;
         this.piecesNr = piecesNr;

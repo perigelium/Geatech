@@ -17,7 +17,7 @@ import com.example.zubcu.geatech.Adapters.NotSentListVisitsAdapter;
 import com.example.zubcu.geatech.Interfaces.Communicator;
 import com.example.zubcu.geatech.Models.GeneralInfoModel;
 import com.example.zubcu.geatech.R;
-import com.example.zubcu.geatech.Services.GeneralInfoReceiver;
+import com.example.zubcu.geatech.Managers.GeneralInfoReceiver;
 
 import java.util.ArrayList;
 

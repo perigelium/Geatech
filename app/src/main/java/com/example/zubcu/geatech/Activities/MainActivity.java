@@ -6,9 +6,7 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
-import android.widget.Toast;
 
 import com.example.zubcu.geatech.Fragments.ComingListVisitsFragment;
 import com.example.zubcu.geatech.Fragments.ComposeReportTemplateFragment;
@@ -17,7 +15,7 @@ import com.example.zubcu.geatech.Fragments.CtrlBtnsFragment1;
 import com.example.zubcu.geatech.Fragments.CtrlBtnsFragment2;
 import com.example.zubcu.geatech.Fragments.SetDateTimeFragment;
 import com.example.zubcu.geatech.Fragments.FragmentCTLinfo;
-import com.example.zubcu.geatech.Fragments.FragmentListVisits;
+import com.example.zubcu.geatech.Fragments.ListVisitsFragment;
 import com.example.zubcu.geatech.Fragments.InWorkListVisitsFragment;
 import com.example.zubcu.geatech.Fragments.NotSentListVisitsFragment;
 import com.example.zubcu.geatech.Fragments.PhotoGalleryGridFragment;
@@ -25,17 +23,12 @@ import com.example.zubcu.geatech.Fragments.ReportDetailedFragment;
 import com.example.zubcu.geatech.Fragments.ReportsListFragment;
 import com.example.zubcu.geatech.Fragments.SendReportFragment;
 import com.example.zubcu.geatech.Interfaces.Communicator;
+import com.example.zubcu.geatech.Models.VisitItem;
 import com.example.zubcu.geatech.R;
-import com.example.zubcu.geatech.Services.SwipeDetector;
-import com.example.zubcu.geatech.Utils.ResponseParser;
+import com.example.zubcu.geatech.Utils.SwipeDetector;
+import com.example.zubcu.geatech.Utils.JSON_to_model;
 
-import rx.Observable;
-import rx.Subscriber;
-import rx.functions.Action1;
-
-import static com.example.zubcu.geatech.Activities.LoginActivity.context;
-import static com.example.zubcu.geatech.Activities.LoginActivity.myObservable;
-import static com.example.zubcu.geatech.Activities.LoginActivity.visitItems;
+import java.util.ArrayList;
 
 public class MainActivity extends Activity implements Communicator
 {
@@ -47,7 +40,7 @@ public class MainActivity extends Activity implements Communicator
     CtrlBtnsFragment1 ctrlBtnsFragment1;
     CtrlBtnsFragment2 ctrlBtnsFragment2;
     SetDateTimeFragment dateTimeSetFragment;
-    FragmentListVisits listVisits;
+    ListVisitsFragment listVisits;
     InWorkListVisitsFragment inWorkListVisits;
     ComingListVisitsFragment comingListVisits;
     NotSentListVisitsFragment notSentListVisits;
@@ -58,27 +51,8 @@ public class MainActivity extends Activity implements Communicator
     SendReportFragment sendReportFragment;
     PhotoGalleryGridFragment photoGalleryGridFragment;
     ComposeReportTemplateFragment composeReportTemplateFragment;
-    String visitsDownloadedData;
-
-
-    Subscriber<String> mySubscriber = new Subscriber<String>()
-    {
-        @Override
-        public void onNext(String s)
-        {
-            visitsDownloadedData = s;
-        }
-
-        @Override
-        public void onCompleted()
-        {
-        }
-
-        @Override
-        public void onError(Throwable e)
-        {
-        }
-    };
+    //String visitsDownloadedData;
+    public static ArrayList<VisitItem> visitItems;
 
     @Override
     public void onCreate(Bundle savedInstanceState)
@@ -86,9 +60,8 @@ public class MainActivity extends Activity implements Communicator
         super.onCreate(savedInstanceState);
         setContentView(R.layout.work_window);
 
-        myObservable.subscribe(mySubscriber);
-
-        visitItems = ResponseParser.getVisitTtemsList(visitsDownloadedData);
+        String visitsJSONData = getIntent().getStringExtra("JSON");
+        visitItems = JSON_to_model.getVisitTtemsList(visitsJSONData);
         Log.d("DEBUG", String.valueOf(visitItems.size()));
 
         swipeDetector = new SwipeDetector();
@@ -96,7 +69,7 @@ public class MainActivity extends Activity implements Communicator
         ctrlBtnsFragment1 = new CtrlBtnsFragment1();
         ctrlBtnsFragment2 = new CtrlBtnsFragment2();
         dateTimeSetFragment = new SetDateTimeFragment();
-        listVisits = new FragmentListVisits();
+        listVisits = new ListVisitsFragment();
         inWorkListVisits = new InWorkListVisitsFragment();
         comingListVisits = new ComingListVisitsFragment();
         notSentListVisits = new NotSentListVisitsFragment();

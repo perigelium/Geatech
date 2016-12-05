@@ -9,12 +9,19 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.zubcu.geatech.Models.GeneralInfoModel;
+import com.example.zubcu.geatech.Activities.MainActivity;
+import com.example.zubcu.geatech.Models.ClientData;
 import com.example.zubcu.geatech.Models.ItalianMonths;
+import com.example.zubcu.geatech.Models.ProductData;
+import com.example.zubcu.geatech.Models.VisitData;
+import com.example.zubcu.geatech.Models.VisitItem;
 import com.example.zubcu.geatech.R;
-import com.example.zubcu.geatech.Services.SwipeDetector;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Locale;
 
 /**
  * Created by user on 11/21/2016.
@@ -23,21 +30,21 @@ import java.util.ArrayList;
 public class MyListVisitsAdapter extends BaseAdapter
 {
     private Context mContext;
-    ArrayList<GeneralInfoModel> visitsList;
+    ArrayList<VisitItem> visitItems = MainActivity.visitItems;
     int layout_id;
 
-    public MyListVisitsAdapter(Context context, int layout_id, ArrayList<GeneralInfoModel> objects)
+    public MyListVisitsAdapter(Context context, int layout_id, ArrayList<VisitItem> visitItems)
     {
         //super(context, textViewResourceId, objects);
         mContext = context;
-        visitsList = objects;
+        this.visitItems = visitItems;
         this.layout_id = layout_id;
     }
 
     @Override
     public int getCount()
     {
-        return visitsList.size();
+        return visitItems.size();
     }
 
     @Override
@@ -68,32 +75,58 @@ public class MyListVisitsAdapter extends BaseAdapter
         ImageView ivPersonTimeUnset = (ImageView) row.findViewById(R.id.ivPersonTimeUnset);
 
         TextView clientNameTextView = (TextView) row.findViewById(R.id.tvClientName);
-        clientNameTextView.setText(visitsList.get(position).getClientName());
-
         TextView serviceTypeTextView = (TextView) row.findViewById(R.id.tvVisitTOS);
-        serviceTypeTextView.setText(visitsList.get(position).getServiceName());
-
         TextView clientAddressTextView = (TextView) row.findViewById(R.id.tvClientAddress);
-        clientAddressTextView.setText(visitsList.get(position).getClientAddress());
 
-        if(visitsList.get(position).getVisitDay() != 0)
+        VisitItem visitItem = visitItems.get(position);
+        ClientData clientData = visitItem.getClientData();
+        ProductData productData = visitItem.getProductData();
+        VisitData visitData = visitItem.getVisitData();
+
+        String visitDateTime = visitData.getDataOraSopralluogo();
+        if(visitDateTime == null)
+        {
+            visitDateTime = visitData.getDataSollecitoAppuntamento();
+        }
+
+        Calendar calendar = Calendar.getInstance();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
+
+        try
+        {
+            calendar.setTime(sdf.parse(visitDateTime));
+
+            int mYear = calendar.get(Calendar.YEAR);
+            int mMonth = calendar.get(Calendar.MONTH) + 1;
+            int mDay = calendar.get(Calendar.DAY_OF_MONTH);
+            int mHour = calendar.get(Calendar.HOUR_OF_DAY);
+            int mMinute = calendar.get(Calendar.MINUTE);
+        } catch (ParseException e)
+        {
+            e.printStackTrace();
+        }
+
+        clientNameTextView.setText(clientData.getName());
+        serviceTypeTextView.setText(productData.getProductType());
+        clientAddressTextView.setText(clientData.getAddress());
+
+        if(calendar.DAY_OF_MONTH != 0)
         {
             vVisitDateView.setBackgroundColor(Color.parseColor("#009922"));
             tvVisitDay.setVisibility(View.VISIBLE);
             tvVisitMonth.setVisibility(View.VISIBLE);
             ivPersonTimeSet.setVisibility(View.VISIBLE);
 
-            tvVisitDay.setText(Integer.toString(visitsList.get(position).getVisitDay()));
-            tvVisitMonth.setText(ItalianMonths.numToString(visitsList.get(position).getVisitMonth()));
+            tvVisitDay.setText(Integer.toString(calendar.get(calendar.DAY_OF_MONTH)));
+            tvVisitMonth.setText(ItalianMonths.numToString(calendar.get(calendar.MONTH)+1));
 
-            String minuteStr = Integer.toString(visitsList.get(position).getVisitMinute());
+            String minuteStr = Integer.toString(calendar.get(calendar.MINUTE));
             if (minuteStr.length() == 1)
             {
                 minuteStr = "0" + minuteStr;
             }
 
-            tvVisitTime.setText(Integer.toString(visitsList.get(position).getVisitHour())
-                    + ":" + minuteStr);
+            tvVisitTime.setText(Integer.toString(calendar.get(calendar.HOUR_OF_DAY)) + ":" + minuteStr);
         }
         else
         {

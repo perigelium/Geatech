@@ -11,7 +11,7 @@ import android.widget.ListView;
 import com.example.zubcu.geatech.Adapters.ReportsListAdapter;
 import com.example.zubcu.geatech.Interfaces.Communicator;
 import com.example.zubcu.geatech.R;
-import com.example.zubcu.geatech.Services.GeneralInfoReceiver;
+import com.example.zubcu.geatech.Managers.GeneralInfoReceiver;
 
 public class ReportsListFragment extends ListFragment
 {

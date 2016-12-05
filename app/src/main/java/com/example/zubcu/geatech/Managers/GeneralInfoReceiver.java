@@ -1,4 +1,4 @@
-package com.example.zubcu.geatech.Services;
+package com.example.zubcu.geatech.Managers;
 
 import android.util.Pair;
 

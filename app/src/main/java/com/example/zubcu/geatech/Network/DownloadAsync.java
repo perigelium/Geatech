@@ -1,4 +1,4 @@
-package com.example.zubcu.geatech.Services;
+package com.example.zubcu.geatech.Network;
 
 import android.os.AsyncTask;
 import android.widget.TextView;

@@ -21,14 +21,14 @@ public class VisitData {
     public VisitData() {
     }
 
-    public VisitData(String dataOraSopralluogo) {
+    public VisitData(String dataSollecitoAppuntamento) {
 /*        this.idSopralluogo = idSopralluogo;
         this.idFornitore = idFornitore;
         this.idPractice = idPractice;
-        this.dataOraAssegnazione = dataOraAssegnazione;
+        this.dataOraAssegnazione = dataOraAssegnazione;*/
         this.dataSollecitoAppuntamento = dataSollecitoAppuntamento;
-        this.dataOraPresaAppuntamento = dataOraPresaAppuntamento;*/
-        this.dataOraSopralluogo = dataOraSopralluogo;
+//        this.dataOraPresaAppuntamento = dataOraPresaAppuntamento;
+        //this.dataOraSopralluogo = dataOraSopralluogo;
 /*        this.dataSollecitoRapporto = dataSollecitoRapporto;
         this.dataInizioRimodulazione = dataInizioRimodulazione;
         this.dataFineRimodulazione = dataFineRimodulazione;

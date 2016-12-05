@@ -20,8 +20,8 @@ import android.widget.TextView;
 
 import com.example.zubcu.geatech.Models.GeneralInfoModel;
 import com.example.zubcu.geatech.R;
-import com.example.zubcu.geatech.Services.DownloadAsync;
-import com.example.zubcu.geatech.Services.GeneralInfoReceiver;
+import com.example.zubcu.geatech.Network.DownloadAsync;
+import com.example.zubcu.geatech.Managers.GeneralInfoReceiver;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;

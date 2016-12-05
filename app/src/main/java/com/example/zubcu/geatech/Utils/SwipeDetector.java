@@ -1,4 +1,4 @@
-package com.example.zubcu.geatech.Services;
+package com.example.zubcu.geatech.Utils;
 
 import android.view.MotionEvent;
 import android.view.View;

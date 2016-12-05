@@ -4,7 +4,7 @@ import android.util.Log;
 
 import com.example.zubcu.geatech.Models.ClientData;
 import com.example.zubcu.geatech.Models.ProductData;
-import com.example.zubcu.geatech.Models.SubItem;
+import com.example.zubcu.geatech.Models.SubproductItem;
 import com.example.zubcu.geatech.Models.VisitData;
 import com.example.zubcu.geatech.Models.VisitItem;
 
@@ -19,7 +19,7 @@ import java.util.List;
  * Created by user on 12/2/2016.
  */
 
-public class ResponseParser
+public class JSON_to_model
 {
     public static ArrayList<VisitItem> getVisitTtemsList (String visits_downloaded_data)
     {
@@ -42,11 +42,12 @@ public class ResponseParser
                 Integer id_sopralluogo = visit_data.getInt("id_sopralluogo");
                 String data_ora_assegnazione = visit_data.getString("data_ora_assegnazione");
                 String data_ora_presa_appuntamento = visit_data.getString("data_ora_presa_appuntamento");
-                String data_ora_sopralluogo = visit_data.getString("data_ora_sopralluogo");
+                String data_sollecito_appuntamento = visit_data.getString("data_sollecito_appuntamento");
+                //String data_ora_sopralluogo = visit_data.getString("data_ora_sopralluogo");
                 String note_sopralluogo = visit_data.getString("note_sopralluogo");
                 String tipo_gestione_sopralluogo = visit_data.getString("tipo_gestione_sopralluogo");
 
-                VisitData visitData = new VisitData(data_ora_sopralluogo);
+                VisitData visitData = new VisitData(data_sollecito_appuntamento);
 
                 JSONObject client_dataJSONObject = client_data.getJSONObject(0);
 
@@ -61,7 +62,7 @@ public class ResponseParser
                 String product = client_dataJSONObject.getString("product");
 
 
-                List<SubItem> subproductsList = new ArrayList<SubItem>();
+                List<SubproductItem> subproductsList = new ArrayList<SubproductItem>();
 
                 for (int j = 0; j < subproducts.length(); j++)
                 {
@@ -72,7 +73,7 @@ public class ResponseParser
                     String subproduct_type = subproduct_dataJSONObject.getString("product_type");
                     Integer pieces_nr = subproduct_dataJSONObject.getInt("pieces_nr");
 
-                    SubItem item = new SubItem(subproduct, subproduct_type, pieces_nr);
+                    SubproductItem item = new SubproductItem(subproduct, subproduct_type, pieces_nr);
                     subproductsList.add(item);
                 }
 

@@ -11,13 +11,13 @@ public class ProductData
     private String productType;
     private String idProductType;
     private String product;
-    private List<SubItem> subItem = new ArrayList<SubItem>();
+    private List<SubproductItem> subItem = new ArrayList<SubproductItem>();
 
     public ProductData()
     {
     }
 
-    public ProductData(String productType, String product, List<SubItem> subItem)
+    public ProductData(String productType, String product, List<SubproductItem> subItem)
     {
         this.productType = productType;
         //this.idProductType = idProductType;
@@ -43,13 +43,13 @@ public class ProductData
     }
 
 
-    public List<SubItem> getSubItem()
+    public List<SubproductItem> getSubItem()
     {
         return subItem;
     }
 
 
-    public void setSubItem(List<SubItem> subItem)
+    public void setSubItem(List<SubproductItem> subItem)
     {
         this.subItem = subItem;
     }
