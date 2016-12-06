@@ -14,13 +14,14 @@ import com.example.zubcu.geatech.Activities.MainActivity;
 import com.example.zubcu.geatech.Adapters.MyListVisitsAdapter;
 import com.example.zubcu.geatech.Interfaces.Communicator;
 import com.example.zubcu.geatech.Models.VisitItem;
+import com.example.zubcu.geatech.Network.RESTdataReceiver;
 import com.example.zubcu.geatech.R;
 import com.example.zubcu.geatech.Managers.GeneralInfoReceiver;
 import com.example.zubcu.geatech.Utils.SwipeDetector;
 
 public class ListVisitsFragment extends ListFragment
 {
-    GeneralInfoReceiver generalInfoReceiver;
+    //GeneralInfoReceiver generalInfoReceiver;
     private Communicator mCommunicator;
     SwipeDetector swipeDetector;
 
@@ -28,10 +29,10 @@ public class ListVisitsFragment extends ListFragment
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        generalInfoReceiver = GeneralInfoReceiver.getInstance();
+        //generalInfoReceiver = GeneralInfoReceiver.getInstance();
 
         MyListVisitsAdapter myListAdapter =
-                new MyListVisitsAdapter(getActivity(), R.layout.list_visits_fragment_row, MainActivity.visitItems);
+                new MyListVisitsAdapter(getActivity(), R.layout.list_visits_fragment_row);
         setListAdapter(myListAdapter);
 
         Context context = getActivity();
@@ -72,11 +73,11 @@ public class ListVisitsFragment extends ListFragment
                 {
                     if(swipeDetector.getAction() == SwipeDetector.Action.LR)
                     {
-                        mCommunicator.OnListItemSwiped(position, generalInfoReceiver.getListVisitsArrayList().get(position).getVisitDay() != 0);
+                        mCommunicator.OnListItemSwiped(position, RESTdataReceiver.visitItems.get(position).getVisitData().getDataOraSopralluogo() != null);
                     }
                 } else
                 {
-                    mCommunicator.OnListItemSelected(position, generalInfoReceiver.getListVisitsArrayList().get(position).getVisitDay() != 0);
+                    mCommunicator.OnListItemSelected(position, RESTdataReceiver.visitItems.get(position).getVisitData().getDataOraSopralluogo() != null);
                 }
             }
         });
@@ -91,7 +92,7 @@ public class ListVisitsFragment extends ListFragment
                     // do the onSwipe action
                 } else
                 {
-                    if(generalInfoReceiver.getListVisitsArrayList().get(position).getVisitDay() != 0)
+                    if(RESTdataReceiver.visitItems.get(position).getVisitData().getDataOraSopralluogo() != null)
                     {
                         mCommunicator.OnListItemSelected(position, false);
                     }

@@ -11,14 +11,17 @@ import android.widget.Toast;
 import com.example.zubcu.geatech.Adapters.InWorkListVisitsAdapter;
 import com.example.zubcu.geatech.Interfaces.Communicator;
 import com.example.zubcu.geatech.Models.GeneralInfoModel;
+import com.example.zubcu.geatech.Models.VisitItem;
 import com.example.zubcu.geatech.R;
 import com.example.zubcu.geatech.Managers.GeneralInfoReceiver;
 
 import java.util.ArrayList;
 
+import static com.example.zubcu.geatech.Network.RESTdataReceiver.visitItems;
+
 public class InWorkListVisitsFragment extends ListFragment
 {
-    GeneralInfoReceiver generalInfoReceiver;
+    //GeneralInfoReceiver generalInfoReceiver;
     //private Communicator mCommunicator;
 
     @Override
@@ -28,19 +31,18 @@ public class InWorkListVisitsFragment extends ListFragment
 
         Context context = getActivity();
 
-        generalInfoReceiver = GeneralInfoReceiver.getInstance();
-        ArrayList<GeneralInfoModel> visitsSetArrayList = new ArrayList<>();
+        ArrayList<VisitItem> visitItemsDateTimeSet = new ArrayList<>();
 
-        for (GeneralInfoModel item : generalInfoReceiver.listVisitsArrayList)
+        for (VisitItem item : visitItems)
         {
-            if(item.getVisitDay() != 0)
+            if(item.getVisitData().getDataOraSopralluogo() != null)
             {
-                visitsSetArrayList.add(item);
+                visitItemsDateTimeSet.add(item);
             }
         }
 
         InWorkListVisitsAdapter myListAdapter =
-                new InWorkListVisitsAdapter(getActivity(), R.layout.in_work_list_visits_fragment_row, visitsSetArrayList);
+                new InWorkListVisitsAdapter(getActivity(), R.layout.in_work_list_visits_fragment_row, visitItemsDateTimeSet);
         setListAdapter(myListAdapter);
 
     }

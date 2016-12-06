@@ -16,12 +16,10 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
-import com.example.zubcu.geatech.Activities.MainActivity;
 import com.example.zubcu.geatech.Adapters.SetVisitDateTimeListAdapter;
 import com.example.zubcu.geatech.Interfaces.Communicator;
 import com.example.zubcu.geatech.Models.ClientData;
 import com.example.zubcu.geatech.Models.DateTimeSetListCellModel;
-import com.example.zubcu.geatech.Models.GeneralInfoModel;
 import com.example.zubcu.geatech.Models.ProductData;
 import com.example.zubcu.geatech.Models.VisitData;
 import com.example.zubcu.geatech.Models.VisitItem;
@@ -34,7 +32,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Locale;
 
-import static com.example.zubcu.geatech.Activities.MainActivity.visitItems;
+import static com.example.zubcu.geatech.Network.RESTdataReceiver.visitItems;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -49,8 +47,6 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
     final Calendar calendarNow;
     Calendar calendar;
     long elapsedDays;
-    GeneralInfoReceiver generalInfoReceiver;
-    //ArrayList<VisitItem> visitItems = MainActivity.visitItems;
     String strDateTime;
 
     private TextView mDateSetTextView, mTimeSetTextView, mSetDateButton, mAnnullaSetDateTimeButton, mSetDateTimeSubmitButton;
@@ -98,9 +94,6 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
         {
             selectedIndex = getArguments().getInt("selectedIndex");
         }
-
-        //generalInfoReceiver = GeneralInfoReceiver.getInstance();
-        //MainActivity.visitsList = generalInfoReceiver.getListVisitsArrayList();
     }
 
     private DatePickerDialog.OnDateSetListener datePickerListener = new DatePickerDialog.OnDateSetListener()

@@ -9,6 +9,8 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
+
+
     <LinearLayout
         android:id="@+id/detailsRows"
         android:layout_width="wrap_content"
@@ -22,29 +24,19 @@
             android:orientation="horizontal">
 
             <ImageView
-                android:id="@+id/ivPersonBlue"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start|center_vertical"
-                android:layout_marginLeft="6dp"
-                android:src="@drawable/person_blue" />
+                android:layout_margin="5dp"
+                android:src="@drawable/watch_blue" />
 
             <TextView
-                android:id="@+id/tvVisitsListName"
+                android:id="@+id/tvVisitTime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start|center_vertical"
-                android:layout_marginLeft="6dp"
-                android:text="Nome del cliente" />
-
-        </LinearLayout>
-
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="6dp"
-            android:orientation="horizontal">
+                android:layout_marginLeft="1dp"
+                android:text="Visit Time" />
 
             <ImageView
                 android:id="@+id/ivVisitsListTOS"
@@ -55,11 +47,11 @@
                 android:src="@drawable/service_blue" />
 
             <TextView
-                android:id="@+id/tvVisitsListTOS"
+                android:id="@+id/tvTypeOfService"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start|center_vertical"
-                android:layout_marginLeft="6dp"
+                android:layout_marginLeft="2dp"
                 android:text="Tipo di servicio" />
 
         </LinearLayout>
@@ -71,7 +63,29 @@
             android:orientation="horizontal">
 
             <ImageView
-                android:id="@+id/ivVisitsListAddress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start|center_vertical"
+                android:layout_marginLeft="6dp"
+                android:src="@drawable/person_blue" />
+
+            <TextView
+                android:id="@+id/tvClientName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start|center_vertical"
+                android:layout_marginLeft="6dp"
+                android:text="Nome del cliente" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="6dp"
+            android:orientation="horizontal">
+
+            <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start|center_vertical"
@@ -79,7 +93,7 @@
                 android:src="@drawable/location_blue" />
 
             <TextView
-                android:id="@+id/tvVisitsListAddress"
+                android:id="@+id/tvClientAddress"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start|center_vertical"
@@ -117,7 +131,7 @@
                     android:layout_gravity="center_vertical|end"/>
 
                 <TextView
-                    android:id="@+id/tvListVisitsDay"
+                    android:id="@+id/tvVisitDay"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="top|center_horizontal"
@@ -126,7 +140,7 @@
                     android:textSize="70dp" />
 
                 <TextView
-                    android:id="@+id/tvListVisitsMonth"
+                    android:id="@+id/tvVisitMonth"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal|bottom"
@@ -158,7 +172,6 @@
             android:orientation="horizontal">
 
             <ImageView
-                android:id="@+id/ivPhotosPresent"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start|center_vertical"
@@ -166,11 +179,17 @@
                 android:src="@drawable/pen_orange" />
 
             <TextView
-                android:id="@+id/tvPhotosPresent"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start|center_vertical"
                 android:layout_marginLeft="6dp"
+                android:text="Report completato il " />
+
+            <TextView
+                android:id="@+id/tvReportCompletionState"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start|center_vertical"
                 android:text="Dato di completamente al report" />
 
         </LinearLayout>
@@ -183,7 +202,6 @@
             android:orientation="horizontal">
 
             <ImageView
-                android:id="@+id/ivGeneralInfo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start|center_vertical"
@@ -191,7 +209,7 @@
                 android:src="@drawable/gray_block" />
 
             <TextView
-                android:id="@+id/tvGeneralInfo"
+                android:id="@+id/tvNotSentReason"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start|center_vertical"
@@ -207,7 +225,6 @@
             android:orientation="horizontal">
 
             <ImageView
-                android:id="@+id/ivTecnicalReport"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start|center_vertical"
@@ -215,7 +232,14 @@
                 android:src="@drawable/watch_orange" />
 
             <TextView
-                android:id="@+id/tvTecnicalReport"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start|center_vertical"
+                android:layout_marginLeft="6dp"
+                android:text="Prossimo tentativo: ore " />
+
+            <TextView
+                android:id="@+id/tvLastTimeTryToSendReport"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start|center_vertical"

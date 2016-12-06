@@ -52,7 +52,6 @@ public class MainActivity extends Activity implements Communicator
     PhotoGalleryGridFragment photoGalleryGridFragment;
     ComposeReportTemplateFragment composeReportTemplateFragment;
     //String visitsDownloadedData;
-    public static ArrayList<VisitItem> visitItems;
 
     @Override
     public void onCreate(Bundle savedInstanceState)
@@ -60,9 +59,7 @@ public class MainActivity extends Activity implements Communicator
         super.onCreate(savedInstanceState);
         setContentView(R.layout.work_window);
 
-        String visitsJSONData = getIntent().getStringExtra("JSON");
-        visitItems = JSON_to_model.getVisitTtemsList(visitsJSONData);
-        Log.d("DEBUG", String.valueOf(visitItems.size()));
+        //String visitsJSONData = getIntent().getStringExtra("JSON");
 
         swipeDetector = new SwipeDetector();
 

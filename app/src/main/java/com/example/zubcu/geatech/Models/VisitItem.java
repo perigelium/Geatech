@@ -9,14 +9,16 @@ public class VisitItem {
     private VisitData visitData;
     private ClientData clientData;
     private ProductData productData;
+    private ReportStatesModel reportStatesModel;
 
     public VisitItem() {
     }
 
-    public VisitItem(VisitData visitData, ClientData clientData, ProductData productData) {
+    public VisitItem(VisitData visitData, ClientData clientData, ProductData productData, ReportStatesModel reportStatesModel) {
         this.visitData = visitData;
         this.clientData = clientData;
         this.productData = productData;
+        this.reportStatesModel = reportStatesModel;
     }
 
     public VisitData getVisitData() {
@@ -43,4 +45,14 @@ public class VisitItem {
         this.productData = productData;
     }
 
+
+    public ReportStatesModel getReportStatesModel()
+    {
+        return reportStatesModel;
+    }
+
+    public void setReportStatesModel(ReportStatesModel reportStatesModel)
+    {
+        this.reportStatesModel = reportStatesModel;
+    }
 }

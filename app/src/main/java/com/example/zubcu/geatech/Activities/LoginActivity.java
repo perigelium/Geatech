@@ -1,211 +1,72 @@
 package com.example.zubcu.geatech.Activities;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.IOException;
-import java.util.ArrayList;
-
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.Interceptor;
-import okhttp3.MediaType;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
-import rx.Observable;
-import rx.Subscriber;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Func0;
-import rx.schedulers.Schedulers;
+import com.example.zubcu.geatech.Interfaces.RESTdataReceiverEventListener;
+import com.example.zubcu.geatech.Network.RESTdataReceiver;
 
 import static com.example.zubcu.geatech.R.*;
 
 
-public class LoginActivity extends Activity implements Callback, View.OnClickListener
+public class LoginActivity extends Activity implements RESTdataReceiverEventListener, View.OnClickListener
 {
+    RESTdataReceiver resTdataReceiver;
+
     Button btnLogin;
-    Button btAcces;
-    Button btPassword;
-    OkHttpClient okHttpClient;
-    public static Context context;
-    String loginResponse;
-    public String visitsJSONData;
-    Boolean tokenHasGot;
-    Call callToken, callJSON;
-
-    //public static Observable<Boolean> myTokenObservable;
-    //public static Observable<String> myJSONObservable;
-
-    public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
-
-    Subscriber<Boolean> myTokenSubscriber = new Subscriber<Boolean>()
-    {
-        @Override
-        public void onNext(Boolean s)
-        {
-            tokenHasGot = s;
-        }
-
-        @Override
-        public void onCompleted()
-        {
-        }
-
-        @Override
-        public void onError(Throwable e)
-        {
-        }
-    };
-
-    Subscriber<String> myJSONSubscriber = new Subscriber<String>()
-    {
-        @Override
-        public void onNext(String s)
-        {
-            visitsJSONData = s;
-        }
-
-        @Override
-        public void onCompleted()
-        {
-        }
-
-        @Override
-        public void onError(Throwable e)
-        {
-        }
-    };
-
-    public Observable<Boolean> myTokenObservable = Observable.defer(new Func0<Observable<Boolean>>()
-    {
-        @Override
-        public Observable<Boolean> call()
-        {
-            getLoginToken();
-
-            return Observable.just(tokenHasGot);
-        }
-});
-
-/*    public Observable<String> myJSONObservable = Observable.defer(new Func0<Observable<String>>()
-    {
-        @Override
-        public Observable<String> call()
-        {
-            getJSONfromServer();
-            return Observable.just(visitsJSONData);
-        }
-    });*/
+    Button btnFirstAccess;
+    Button btnPasswordRecover;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         setContentView(layout.login_activity);
-
-        context = getApplicationContext();
-        tokenHasGot = false;
-
 
         btnLogin = (Button) findViewById(id.btLogin);
         btnLogin.setOnClickListener(this);
 
+        resTdataReceiver = new RESTdataReceiver( this, this );
     }
 
     @Override
-    public void onFailure(Call call, IOException e)
+    public void onTokenReceiveCompleted()
     {
-
+        resTdataReceiver.getJSONfromServer();
     }
 
     @Override
-    public void onResponse(Call call, Response response) throws IOException
+    public void onJSONdataReceiveCompleted()
     {
+        Intent registerIntent = new Intent(LoginActivity.this, MainActivity.class);
+        startActivity(registerIntent);
+    }
 
-            if (!response.isSuccessful())
-            {
-                throw new IOException("Unexpected code " + response);
-            }
-
-        if(call == callToken)
-        {
-            loginResponse = response.body().string();
-
-            response.body().close();
-
-            if (loginResponse == null)
-            {
-                Toast.makeText(getApplicationContext(), "Receive token failed" ,Toast.LENGTH_SHORT).show();
-                return;
-            }
-
-            JSONObject jsonObject = null;
-
-            try
-            {
-                jsonObject = new JSONObject(loginResponse);
-            } catch (JSONException e)
-            {
-                e.printStackTrace();
-            }
-
-            if (jsonObject.has("token"))
-            {
-                getJSONfromServer(jsonObject);
-            }
-        }
-
-        if(call == callJSON)
-        {
-            visitsJSONData = response.body().string();
-
-            Log.d("DEBUG", visitsJSONData);
-
-            Intent registerIntent = new Intent(LoginActivity.this, MainActivity.class);
-            registerIntent.putExtra("JSON", visitsJSONData);
-            startActivity(registerIntent);
-        }
+    @Override
+    public void onEventFailed()
+    {
+        Toast.makeText(this, "Login failed", Toast.LENGTH_LONG).show();
     }
 
     @Override
     public void onClick(View view)
     {
-/*        myTokenObservable.subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread()).subscribe(myTokenSubscriber);*/
+        resTdataReceiver.getLoginToken();
+    }
+}
 
-        getLoginToken();
 
-        if(loginResponse == null)
-        {
 
-            return;
-        }
+
+
+
+
 
 /*
-        myJSONObservable.subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread()).subscribe(myJSONSubscriber);*/
-
-        if(visitsJSONData == null)
-        {
-            //Toast.makeText(getApplicationContext(), "Unable to download data" ,Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-/*        Intent registerIntent = new Intent(LoginActivity.this, MainActivity.class);
-        registerIntent.putExtra("JSON", visitsJSONData);
-        startActivity(registerIntent);*/
-    }
-
     private Boolean getLoginToken()
     {
         OkHttpClient.Builder defaultHttpClient = new OkHttpClient.Builder();
@@ -227,11 +88,13 @@ public class LoginActivity extends Activity implements Callback, View.OnClickLis
 
         RequestBody body = RequestBody.create(JSON, String.valueOf(jsonObject));
 
+*/
 /*                RequestBody formBody = new FormBody.Builder()
                         .add("login", "alexgheorghianu@yahoo.com")
                         .add("password", "BF8hWaAr")
                         .add("sender", "Alexandr")
-                        .build();*/
+                        .build();*//*
+
 
         Request request = new Request.Builder()
                 .url("http://www.bludelego.com/dev/geatech/api.php?case=login")
@@ -243,6 +106,7 @@ public class LoginActivity extends Activity implements Callback, View.OnClickLis
 
         //okHttpClient.newCall(request).enqueue(this);
 
+*/
 /*        {
 
             @Override
@@ -258,11 +122,15 @@ public class LoginActivity extends Activity implements Callback, View.OnClickLis
                 {
                     throw new IOException("Unexpected code " + response);
                 }
-*//*                        Headers responseHeaders = response.headers();
+*//*
+*/
+/*                        Headers responseHeaders = response.headers();
                         for (int i = 0; i < responseHeaders.size(); i++)
                         {
                             Log.d("DEBUG", responseHeaders.name(i) + ": " + responseHeaders.value(i));
                         }*//*
+*/
+/*
 
                 loginResponse = response.body().string();
 
@@ -286,15 +154,25 @@ public class LoginActivity extends Activity implements Callback, View.OnClickLis
                 if(jsonObject1.has("token"))
                 {
 
-*//*                    myTokenObservable = Observable.defer(new Func0<Observable<Boolean>>() {
+*//*
+*/
+/*                    myTokenObservable = Observable.defer(new Func0<Observable<Boolean>>() {
                         @Override public Observable<Boolean> call() {
 
                             return Observable.just(true);
                         }
-                    });*//**//*
+                    });*//*
+*/
+/**//*
+*/
+/*
 
 
- *//**//*                   myTokenObservable = Observable.create(
+ *//*
+*/
+/**//*
+*/
+/*                   myTokenObservable = Observable.create(
                             new Observable.OnSubscribe<Boolean>()
                             {
                                 @Override
@@ -305,17 +183,21 @@ public class LoginActivity extends Activity implements Callback, View.OnClickLis
                                 }
                             }
                     );*//*
+*/
+/*
 
                     tokenHasGot = true;
                 }
             }
-        });*/
+        });*//*
+
 
         return tokenHasGot;
     }
 
     void getJSONfromServer(JSONObject jsonObject)
     {
+*/
 /*        JSONObject jsonObject1 = null;
 
         try
@@ -327,7 +209,8 @@ public class LoginActivity extends Activity implements Callback, View.OnClickLis
         }
 
         if(jsonObject1.has("token"))
-        {*/
+        {*//*
+
             try
             {
                 String tokenStr = jsonObject.getString("token");
@@ -354,6 +237,7 @@ public class LoginActivity extends Activity implements Callback, View.OnClickLis
                 callJSON.enqueue(this);
 
 
+*/
 /*                {
                     @Override
                     public void onFailure(Call call, IOException e)
@@ -374,7 +258,9 @@ public class LoginActivity extends Activity implements Callback, View.OnClickLis
                         Log.d("DEBUG", visitsJSONData);
 
 
-*//*                                myObservable = Observable.create(
+*//*
+*/
+/*                                myObservable = Observable.create(
                                         new Observable.OnSubscribe<String>()
                                         {
                                             @Override
@@ -385,10 +271,13 @@ public class LoginActivity extends Activity implements Callback, View.OnClickLis
                                             }
                                         }
                                 );*//*
+*/
+/*
 
                         response.body().close();
                     }
-                });*/
+                });*//*
+
 
             } catch (JSONException e)
             {
@@ -399,6 +288,7 @@ public class LoginActivity extends Activity implements Callback, View.OnClickLis
     }
 }
 
+*/
 /*class ResponseInterceptor implements Interceptor
 {
     private Object url;
@@ -408,9 +298,13 @@ public class LoginActivity extends Activity implements Callback, View.OnClickLis
     {
         Request request0 = chain.request();
 
-*//*        long t1 = System.nanoTime();
+*//*
+*/
+/*        long t1 = System.nanoTime();
         Log.d("DEBUG", String.format("Sending request %s on %s%n%s",
                 request.url(), chain.connection(), request.headers()));*//*
+*/
+/*
 
         Response response0 = chain.proceed(request0);
 
@@ -418,9 +312,13 @@ public class LoginActivity extends Activity implements Callback, View.OnClickLis
 
         Log.d("DEBUG", loginResponse);
 
-*//*        long t2 = System.nanoTime();
+*//*
+*/
+/*        long t2 = System.nanoTime();
         Log.d("DEBUG", String.format("Received response for %s in %.1fms%n%s",
                 response.request().url(), (t2 - t1) / 1e6d, response.headers()));*//*
+*/
+/*
 
                 JSONObject jsonObject1 = null;
 
@@ -476,15 +374,21 @@ public class LoginActivity extends Activity implements Callback, View.OnClickLis
 
                                 Log.d("DEBUG", visits_downloaded_data);
 
-*//*                                myJSONObservable = Observable.defer(new Func0<Observable<String>>() {
+*//*
+*/
+/*                                myJSONObservable = Observable.defer(new Func0<Observable<String>>() {
                                     @Override public Observable<String> call() {
 
                                         return Observable.just(visits_downloaded_data);
                                     }
                                 });*//*
+*/
+/*
 
 
-*//*                                myObservable = Observable.create(
+*//*
+*/
+/*                                myObservable = Observable.create(
                                         new Observable.OnSubscribe<String>()
                                         {
                                             @Override
@@ -495,6 +399,8 @@ public class LoginActivity extends Activity implements Callback, View.OnClickLis
                                             }
                                         }
                                 );*//*
+*/
+/*
 
                                 response.body().close();
                             }
@@ -510,3 +416,4 @@ public class LoginActivity extends Activity implements Callback, View.OnClickLis
         return response0;
     }
 }*/
+

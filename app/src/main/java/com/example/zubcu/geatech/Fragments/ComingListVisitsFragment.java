@@ -9,10 +9,13 @@ import android.view.ViewGroup;
 
 import com.example.zubcu.geatech.Adapters.ComingListVisitsAdapter;
 import com.example.zubcu.geatech.Models.GeneralInfoModel;
+import com.example.zubcu.geatech.Models.VisitItem;
 import com.example.zubcu.geatech.R;
 import com.example.zubcu.geatech.Managers.GeneralInfoReceiver;
 
 import java.util.ArrayList;
+
+import static com.example.zubcu.geatech.Network.RESTdataReceiver.visitItems;
 
 public class ComingListVisitsFragment extends ListFragment
 {
@@ -22,21 +25,18 @@ public class ComingListVisitsFragment extends ListFragment
 
         Context context = getActivity();
 
-        GeneralInfoReceiver generalInfoReceiver = GeneralInfoReceiver.getInstance();
+        ArrayList<VisitItem> visitItemsDateTimeSet = new ArrayList<>();
 
-        ArrayList<GeneralInfoModel> visitsSetArrayList = new ArrayList<>();
-
-        for (GeneralInfoModel item : generalInfoReceiver.listVisitsArrayList)
+        for (VisitItem item : visitItems)
         {
-            if(item.getVisitDay() != 0)
+            if(item.getVisitData().getDataOraSopralluogo() != null)
             {
-                visitsSetArrayList.add(item);
+                visitItemsDateTimeSet.add(item);
             }
         }
 
         ComingListVisitsAdapter myListAdapter =
-                new ComingListVisitsAdapter(getActivity(), R.layout.coming_list_visits_fragment_row,
-                        visitsSetArrayList);
+                new ComingListVisitsAdapter(getActivity(), R.layout.coming_list_visits_fragment_row, visitItemsDateTimeSet);
 
         setListAdapter(myListAdapter);
     }

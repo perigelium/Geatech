@@ -3,23 +3,17 @@ package com.example.zubcu.geatech.Fragments;
 import android.app.ListFragment;
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
-import android.widget.Toast;
-
-import com.example.zubcu.geatech.Adapters.InWorkListVisitsAdapter;
-import com.example.zubcu.geatech.Adapters.MyListVisitsAdapter;
 import com.example.zubcu.geatech.Adapters.NotSentListVisitsAdapter;
 import com.example.zubcu.geatech.Interfaces.Communicator;
-import com.example.zubcu.geatech.Models.GeneralInfoModel;
+import com.example.zubcu.geatech.Models.VisitItem;
 import com.example.zubcu.geatech.R;
-import com.example.zubcu.geatech.Managers.GeneralInfoReceiver;
 
 import java.util.ArrayList;
+
+import static com.example.zubcu.geatech.Network.RESTdataReceiver.visitItems;
 
 public class NotSentListVisitsFragment extends ListFragment
 {
@@ -32,10 +26,19 @@ public class NotSentListVisitsFragment extends ListFragment
 
         Context context = getActivity();
 
-        GeneralInfoReceiver generalInfoReceiver = GeneralInfoReceiver.getInstance();
+        ArrayList<VisitItem> visitItemsDateTimeSet = new ArrayList<>();
+
+        for (VisitItem item : visitItems)
+        {
+            //if(item.getReportStatesModel().getReportCompletionState() == 2) // 2 = completed, 0 = not started
+            if(item.getVisitData().getDataOraSopralluogo() != null)
+            {
+                visitItemsDateTimeSet.add(item);
+            }
+        }
 
         NotSentListVisitsAdapter myListAdapter =
-                new NotSentListVisitsAdapter(getActivity(), R.layout.not_sent_list_visits_fragment_row, generalInfoReceiver.getListVisitsArrayList());
+                new NotSentListVisitsAdapter(getActivity(), R.layout.not_sent_list_visits_fragment_row, visitItemsDateTimeSet);
         setListAdapter(myListAdapter);
 
     }
@@ -44,8 +47,6 @@ public class NotSentListVisitsFragment extends ListFragment
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-
-        //listener = (OnItemSelectedListener) getActivity();
 
         mCommunicator = (Communicator)getActivity();
 
@@ -57,23 +58,6 @@ public class NotSentListVisitsFragment extends ListFragment
     {
         return inflater.inflate(R.layout.list_visits_fragment, container, false);
     }
-
-/*    @Override
-    public void onListItemClick(ListView l, View v, int position, long id)
-    {
-        super.onListItemClick(l, v, position, id);
-
-        //listener.OnListItemSelected(position, !listVisitsArrayList.get(position).getVISIT_DAY().isEmpty());
-
-*//*        Toast.makeText(getActivity(),
-                getListView().getItemAtPosition(position).toString(),
-                Toast.LENGTH_LONG).show();*//*
-    }*/
-
-/*    public interface OnItemSelectedListener
-    {
-        void OnListItemSelected(int itemIndex, Boolean dateTimeHasSet);
-    }*/
 }
 
 /*            int optionId = randomInteger!=0 ? R.layout.list_visits_cell_datetime_set : R.layout.list_visits_cell_datetime_set;

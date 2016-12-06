@@ -15,6 +15,7 @@ import com.example.zubcu.geatech.Models.ItalianMonths;
 import com.example.zubcu.geatech.Models.ProductData;
 import com.example.zubcu.geatech.Models.VisitData;
 import com.example.zubcu.geatech.Models.VisitItem;
+import com.example.zubcu.geatech.Network.RESTdataReceiver;
 import com.example.zubcu.geatech.R;
 
 import java.text.ParseException;
@@ -23,6 +24,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Locale;
 
+import static com.example.zubcu.geatech.Network.RESTdataReceiver.visitItems;
+
 /**
  * Created by user on 11/21/2016.
  */
@@ -30,14 +33,14 @@ import java.util.Locale;
 public class MyListVisitsAdapter extends BaseAdapter
 {
     private Context mContext;
-    ArrayList<VisitItem> visitItems = MainActivity.visitItems;
+    //ArrayList<VisitItem> visitItems = RESTdataReceiver.visitItems;
     int layout_id;
 
-    public MyListVisitsAdapter(Context context, int layout_id, ArrayList<VisitItem> visitItems)
+    public MyListVisitsAdapter(Context context, int layout_id)
     {
         //super(context, textViewResourceId, objects);
         mContext = context;
-        this.visitItems = visitItems;
+        //this.visitItems = visitItems;
         this.layout_id = layout_id;
     }
 
@@ -96,11 +99,6 @@ public class MyListVisitsAdapter extends BaseAdapter
         {
             calendar.setTime(sdf.parse(visitDateTime));
 
-            int mYear = calendar.get(Calendar.YEAR);
-            int mMonth = calendar.get(Calendar.MONTH) + 1;
-            int mDay = calendar.get(Calendar.DAY_OF_MONTH);
-            int mHour = calendar.get(Calendar.HOUR_OF_DAY);
-            int mMinute = calendar.get(Calendar.MINUTE);
         } catch (ParseException e)
         {
             e.printStackTrace();

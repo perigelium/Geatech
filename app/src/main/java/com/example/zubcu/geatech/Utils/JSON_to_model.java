@@ -4,6 +4,7 @@ import android.util.Log;
 
 import com.example.zubcu.geatech.Models.ClientData;
 import com.example.zubcu.geatech.Models.ProductData;
+import com.example.zubcu.geatech.Models.ReportStatesModel;
 import com.example.zubcu.geatech.Models.SubproductItem;
 import com.example.zubcu.geatech.Models.VisitData;
 import com.example.zubcu.geatech.Models.VisitItem;
@@ -78,7 +79,8 @@ public class JSON_to_model
                 }
 
                 ProductData productData = new ProductData( productType,  product, subproductsList);
-                VisitItem visitItem = new VisitItem(visitData, clientData, productData);
+                ReportStatesModel reportStatesModel = ReportStatesModel.getInstance();
+                VisitItem visitItem = new VisitItem(visitData, clientData, productData, reportStatesModel);
                 visitItems.add(visitItem);
             }
 

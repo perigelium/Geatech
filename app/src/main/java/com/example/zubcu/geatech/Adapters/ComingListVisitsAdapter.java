@@ -9,12 +9,21 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.zubcu.geatech.Models.ClientData;
 import com.example.zubcu.geatech.Models.GeneralInfoModel;
 import com.example.zubcu.geatech.Models.ItalianMonths;
+import com.example.zubcu.geatech.Models.ProductData;
+import com.example.zubcu.geatech.Models.VisitData;
+import com.example.zubcu.geatech.Models.VisitItem;
 import com.example.zubcu.geatech.R;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Locale;
+
+import static com.example.zubcu.geatech.Network.RESTdataReceiver.visitItems;
 
 /**
  * Created by user on 11/21/2016.
@@ -23,17 +32,17 @@ import java.util.Calendar;
 public class ComingListVisitsAdapter extends BaseAdapter
 {
     private Context mContext;
-    ArrayList<GeneralInfoModel> visitsList;
+    ArrayList<VisitItem> visitItemsDateTimeSet;
     int layout_id;
     final Calendar calendarNow;
     Calendar calendar;
     long elapsedDays;
 
-    public ComingListVisitsAdapter(Context context, int layout_id, ArrayList<GeneralInfoModel> objects)
+    public ComingListVisitsAdapter(Context context, int layout_id, ArrayList<VisitItem> visitItemsDateTimeSet)
     {
         //super(context, textViewResourceId, objects);
         mContext = context;
-        visitsList = objects;
+        this.visitItemsDateTimeSet = visitItemsDateTimeSet;
         this.layout_id = layout_id;
 
         calendarNow = Calendar.getInstance();
@@ -43,7 +52,7 @@ public class ComingListVisitsAdapter extends BaseAdapter
     @Override
     public int getCount()
     {
-        return visitsList.size();
+        return visitItemsDateTimeSet.size();
     }
 
     @Override
@@ -66,25 +75,45 @@ public class ComingListVisitsAdapter extends BaseAdapter
         LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View row = inflater.inflate(layout_id, parent, false);
 
+        VisitItem visitItem = visitItemsDateTimeSet.get(position);
+
+        ClientData clientData = visitItem.getClientData();
+        ProductData productData = visitItem.getProductData();
+        VisitData visitData = visitItem.getVisitData();
+
         TextView tvVisitDay = (TextView)row.findViewById(R.id.tvVisitDay);
         //TextView tvVisitMonth = (TextView)row.findViewById(R.id.tvVisitMonth);
 
         TextView clientNameTextView = (TextView) row.findViewById(R.id.tvClientName);
-        clientNameTextView.setText(visitsList.get(position).getClientName());
+        clientNameTextView.setText(clientData.getName());
 
         TextView serviceTypeTextView = (TextView) row.findViewById(R.id.tvTypeOfService);
-        serviceTypeTextView.setText(visitsList.get(position).getServiceName());
+        serviceTypeTextView.setText(productData.getProductType());
 
         TextView clientAddressTextView = (TextView) row.findViewById(R.id.tvClientAddress);
-        clientAddressTextView.setText(visitsList.get(position).getClientAddress());
+        clientAddressTextView.setText(clientData.getAddress());
 
-        if(visitsList.get(position).getVisitDay() != 0)
+        String visitDateTime = visitData.getDataOraSopralluogo();
+
+        if(visitDateTime != null)
         {
-            calendar.set(Calendar.YEAR, visitsList.get(position).getVisitYear());
+/*            calendar.set(Calendar.YEAR, visitsList.get(position).getVisitYear());
             calendar.set(Calendar.MONTH, visitsList.get(position).getVisitMonth() - 1);
             calendar.set(Calendar.DAY_OF_MONTH, visitsList.get(position).getVisitDay());
             calendar.set(Calendar.HOUR_OF_DAY, visitsList.get(position).getVisitHour());
-            calendar.set(Calendar.MINUTE, visitsList.get(position).getVisitMinute());
+            calendar.set(Calendar.MINUTE, visitsList.get(position).getVisitMinute());*/
+
+            Calendar calendar = Calendar.getInstance();
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
+
+            try
+            {
+                calendar.setTime(sdf.parse(visitDateTime));
+
+            } catch (ParseException e)
+            {
+                e.printStackTrace();
+            }
 
             int millsDiff = calendar.compareTo(calendarNow);
 
