@@ -271,6 +271,10 @@ public class MainActivity extends Activity implements Communicator
             mFragmentTransaction.show(ctrlBtnsFragment2);
             mFragmentTransaction.commit();
 
+            Bundle args = new Bundle();
+            args.putInt("selectedIndex", itemIndex);
+            ctlInfo.setArguments(args);
+
             setVisitsListContent(ctlInfo);
             ctrlBtnsFragment2.setCheckedBtnId(R.id.btnInfo);
         }

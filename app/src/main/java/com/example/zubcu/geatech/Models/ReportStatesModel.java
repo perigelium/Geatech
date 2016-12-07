@@ -9,6 +9,7 @@ public class ReportStatesModel
     public int sendingReportTriesState;
     public int photoAddedState;
 
+    private String dataOraProssimoTentativo;
     private String dataOraUltimoTentativo;
     private String dataOraRaportoCompletato;
 
@@ -30,7 +31,7 @@ public class ReportStatesModel
     {
         reportCompletionStatuses = new String[]{"Non iniziato", "Parziamente completato", "Completato"};
         generalInfoCompletionStatuses = new String[]{"Non iniziato", "Parziamente completato", "Completato"};
-        sendingReportFailedStatuses = new String[]{"Non c'erano tentativi", "Invio falito per mancanza connesione dati"};
+        sendingReportFailedStatuses = new String[]{"Invio falito per mancanza connesione dati"};
         photoAddedStatuses = new String[]{"Nessun fotografia", " foto inserite"};
         photoAddedQuant = 0;
         reportCompletionState = 0;

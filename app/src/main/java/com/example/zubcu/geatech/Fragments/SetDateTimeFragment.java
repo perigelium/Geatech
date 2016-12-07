@@ -34,14 +34,6 @@ import java.util.Locale;
 
 import static com.example.zubcu.geatech.Network.RESTdataReceiver.visitItems;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link SetDateTimeFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link SetDateTimeFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class SetDateTimeFragment extends Fragment implements View.OnClickListener
 {
     final Calendar calendarNow;

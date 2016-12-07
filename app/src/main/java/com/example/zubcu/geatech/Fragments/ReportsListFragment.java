@@ -10,12 +10,16 @@ import android.widget.ListView;
 
 import com.example.zubcu.geatech.Adapters.ReportsListAdapter;
 import com.example.zubcu.geatech.Interfaces.Communicator;
+import com.example.zubcu.geatech.Models.VisitItem;
 import com.example.zubcu.geatech.R;
 import com.example.zubcu.geatech.Managers.GeneralInfoReceiver;
 
+import java.util.ArrayList;
+
+import static com.example.zubcu.geatech.Network.RESTdataReceiver.visitItems;
+
 public class ReportsListFragment extends ListFragment
 {
-    //OnItemSelectedListener listener;
     private Communicator mCommunicator;
 
     @Override
@@ -24,10 +28,18 @@ public class ReportsListFragment extends ListFragment
 
         Context context = getActivity();
 
-        GeneralInfoReceiver generalInfoReceiver = GeneralInfoReceiver.getInstance();
+        ArrayList<VisitItem> visitItemsDateTimeSet = new ArrayList<>();
+
+        for (VisitItem item : visitItems)
+        {
+            if(item.getVisitData().getDataOraSopralluogo() != null)
+            {
+                visitItemsDateTimeSet.add(item);
+            }
+        }
 
         ReportsListAdapter myListAdapter =
-                new ReportsListAdapter(getActivity(), R.layout.reports_list_fragment_row, generalInfoReceiver.getListVisitsArrayList());
+                new ReportsListAdapter(getActivity(), R.layout.reports_list_fragment_row, visitItemsDateTimeSet);
         setListAdapter(myListAdapter);
 
     }
@@ -36,8 +48,6 @@ public class ReportsListFragment extends ListFragment
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-
-        //listener = (OnItemSelectedListener) getActivity();
 
         mCommunicator = (Communicator)getActivity();
 
@@ -56,16 +66,7 @@ public class ReportsListFragment extends ListFragment
         super.onListItemClick(l, v, position, id);
 
         mCommunicator.OnListItemSelected(position);
-
-/*       Toast.makeText(getActivity(),
-                getListView().getItemAtPosition(position).toString(),
-                Toast.LENGTH_LONG).show();*/
     }
-
-/*    public interface OnItemSelectedListener
-    {
-        void OnListItemSelected(int itemIndex, boolean b);
-    }*/
 }
 
 /*            int optionId = randomInteger!=0 ? R.layout.list_visits_cell_datetime_set : R.layout.list_visits_cell_datetime_set;

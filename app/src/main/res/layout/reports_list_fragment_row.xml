@@ -17,32 +17,21 @@
             android:orientation="horizontal">
 
             <ImageView
-                android:id="@+id/ivPersonOrange"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start|center_vertical"
                 android:layout_margin="5dp"
-                android:src="@drawable/person_dark_green" />
+                android:src="@drawable/watch_dark_green" />
 
             <TextView
-                android:id="@+id/tvVisitsListName"
+                android:id="@+id/tvVisitTime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start|center_vertical"
-                android:layout_margin="5dp"
-                android:text="Nome del cliente" />
-
-        </LinearLayout>
-
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="6dp"
-            android:orientation="horizontal">
+                android:layout_marginLeft="1dp"
+                android:text="Visit Time" />
 
             <ImageView
-                android:id="@+id/ivVisitsListTOS"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start|center_vertical"
@@ -50,11 +39,11 @@
                 android:src="@drawable/service_dark_green" />
 
             <TextView
-                android:id="@+id/tvVisitsListTOS"
+                android:id="@+id/tvTypeOfService"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start|center_vertical"
-                android:layout_margin="5dp"
+                android:layout_margin="2dp"
                 android:text="Tipo di servicio" />
 
         </LinearLayout>
@@ -66,7 +55,29 @@
             android:orientation="horizontal">
 
             <ImageView
-                android:id="@+id/ivVisitsListAddress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start|center_vertical"
+                android:layout_margin="5dp"
+                android:src="@drawable/person_dark_green" />
+
+            <TextView
+                android:id="@+id/tvClientName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start|center_vertical"
+                android:layout_margin="5dp"
+                android:text="Nome del cliente" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="6dp"
+            android:orientation="horizontal">
+
+            <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start|center_vertical"
@@ -74,7 +85,7 @@
                 android:src="@drawable/location_dark_green" />
 
             <TextView
-                android:id="@+id/tvVisitsListAddress"
+                android:id="@+id/tvClientAddress"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start|center_vertical"
@@ -125,7 +136,7 @@
                     android:layout_gravity="center_vertical|end"/>
 
                 <TextView
-                    android:id="@+id/tvListVisitsDay"
+                    android:id="@+id/tvVisitDay"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="top|center_horizontal"
@@ -134,7 +145,7 @@
                     android:textSize="25dp" />
 
                 <TextView
-                    android:id="@+id/tvListVisitsMonth"
+                    android:id="@+id/tvVisitMonth"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom|center_horizontal"
