@@ -3,7 +3,9 @@ package com.example.zubcu.geatech.Fragments;
 import android.app.DatePickerDialog;
 import android.app.Fragment;
 import android.app.TimePickerDialog;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.format.DateFormat;
@@ -15,12 +17,15 @@ import android.widget.DatePicker;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import com.example.zubcu.geatech.Adapters.SetVisitDateTimeListAdapter;
 import com.example.zubcu.geatech.Interfaces.Communicator;
 import com.example.zubcu.geatech.Models.ClientData;
 import com.example.zubcu.geatech.Models.DateTimeSetListCellModel;
 import com.example.zubcu.geatech.Models.ProductData;
+import com.example.zubcu.geatech.Models.ReportStatesModel;
+import com.example.zubcu.geatech.Models.SubproductItem;
 import com.example.zubcu.geatech.Models.VisitData;
 import com.example.zubcu.geatech.Models.VisitItem;
 import com.example.zubcu.geatech.R;
@@ -30,6 +35,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Locale;
 
 import static com.example.zubcu.geatech.Network.RESTdataReceiver.visitItems;
@@ -41,7 +47,9 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
     long elapsedDays;
     String strDateTime;
 
-    private TextView mDateSetTextView, mTimeSetTextView, mSetDateButton, mAnnullaSetDateTimeButton, mSetDateTimeSubmitButton;
+    private TextView mDateSetTextView, mTimeSetTextView, mSetDateButton, mAnnullaSetDateTimeButton, mSetDateTimeSubmitButton,
+            btnApriMappa, btnChiama;
+
     private int mYear, mMonth, mDay, mHour, mMinute;
 
     private static final String ARG_PARAM1 = "param1";
@@ -76,6 +84,7 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
         mCommunicator = (Communicator)getActivity();
     }
 
@@ -141,19 +150,26 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
         // Inflate the layout for this fragment
         rootView =  inflater.inflate(R.layout.set_date_time_fragment, container, false);
 
-        ArrayList<DateTimeSetListCellModel> list = new ArrayList<>();
+        mSetDateButton = (TextView) rootView.findViewById(R.id.btnSetDate);
+        mAnnullaSetDateTimeButton = (TextView) rootView.findViewById(R.id.btnAnnullaSetDateTime);
+        mSetDateTimeSubmitButton = (TextView) rootView.findViewById(R.id.btnSetDateTimeSubmit);
+        btnApriMappa = (TextView) rootView.findViewById(R.id.btnApriMappa);
+        btnChiama = (TextView) rootView.findViewById(R.id.btnChiama);
+
+        mSetDateButton.setOnClickListener(this);
+        mAnnullaSetDateTimeButton.setOnClickListener(this);
+        mSetDateTimeSubmitButton.setOnClickListener(this);
+        btnApriMappa.setOnClickListener(this);
+        btnChiama.setOnClickListener(this);
+
         VisitItem visitItem = visitItems.get(selectedIndex);
         ClientData clientData = visitItem.getClientData();
         ProductData productData = visitItem.getProductData();
         VisitData visitData = visitItem.getVisitData();
+        List<SubproductItem> list = productData.getSubItem();
 
-        // Construct the data source
-        list.add(new DateTimeSetListCellModel("1","2","3"));
-        list.add(new DateTimeSetListCellModel("4","5","6"));
 
-// Create the adapter to convert the array to views
-
-            SetVisitDateTimeListAdapter adapter = new SetVisitDateTimeListAdapter(getActivity(), list );
+            SetVisitDateTimeListAdapter adapter = new SetVisitDateTimeListAdapter(getActivity(),  list);
 
         ListView listView =(ListView)rootView.findViewById(R.id.list);
 
@@ -169,18 +185,14 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
         TextView serviceTypeTextView = (TextView) rootView.findViewById(R.id.tvVisitTOS);
         serviceTypeTextView.setText(productData.getProductType());
 
+        TextView tvProductModel = (TextView) rootView.findViewById(R.id.tvProductModel);
+        tvProductModel.setText(productData.getProduct());
+
         TextView clientAddressTextView = (TextView) rootView.findViewById(R.id.tvClientAddress);
         clientAddressTextView.setText(clientData.getAddress());
 
         mDateSetTextView = (TextView) rootView.findViewById(R.id.tvDateSet);
         mTimeSetTextView = (TextView) rootView.findViewById(R.id.tvTimeSet);
-        mSetDateButton = (TextView) rootView.findViewById(R.id.btnSetDate);
-        mAnnullaSetDateTimeButton = (TextView) rootView.findViewById(R.id.btnAnnullaSetDateTime);
-        mSetDateTimeSubmitButton = (TextView) rootView.findViewById(R.id.btnSetDateTimeSubmit);
-
-        mSetDateButton.setOnClickListener(this);
-        mAnnullaSetDateTimeButton.setOnClickListener(this);
-        mSetDateTimeSubmitButton.setOnClickListener(this);
 
         String visitDateTime = visitData.getDataOraSopralluogo();
         if(visitDateTime == null)
@@ -266,6 +278,41 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
 
     public void onClick(View v)
     {
+        if (v.getId() == R.id.btnApriMappa)
+        {
+            double latitude = visitItems.get(selectedIndex).getReportStatesModel().getCoordNord();
+            double longitude = visitItems.get(selectedIndex).getReportStatesModel().getCoordEst();
+
+            String uri = String.format(Locale.ENGLISH, "http://maps.google.com/maps?daddr=%f,%f (%s)", (float)latitude, (float)longitude, "Where the party is at");
+            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
+            intent.setClassName("com.google.android.apps.maps", "com.google.android.maps.MapsActivity");
+
+            try
+            {
+                startActivity(intent);
+            }
+            catch(ActivityNotFoundException ex)
+            {
+                try
+                {
+                    Intent unrestrictedIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
+                    startActivity(unrestrictedIntent);
+                }
+                catch(ActivityNotFoundException innerEx)
+                {
+                    Toast.makeText(getActivity(), "Please install a maps application", Toast.LENGTH_LONG).show();
+                }
+            }
+        }
+
+        if (v.getId() == R.id.btnChiama)
+        {
+            String phoneNumber = "tel:" + visitItems.get(selectedIndex).getClientData().getMobile();
+            Intent intent = new Intent(Intent.ACTION_DIAL);
+            intent.setData(Uri.parse(phoneNumber));
+            startActivity(intent);
+        }
+
         if(v.getId() == R.id.btnSetDate)
         {
             TimePickerDialog dialogTimePicker = new TimePickerDialog(getActivity(), timePickerListener,

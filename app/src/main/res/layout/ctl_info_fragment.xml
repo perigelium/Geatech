@@ -300,7 +300,7 @@
                         android:ems="10"
                         android:inputType="number"
                         android:maxLines="1"
-                        android:text="41.125278" />
+                        android:text="Sconosciuto" />
 
                 </LinearLayout>
 
@@ -334,7 +334,7 @@
                         android:ems="10"
                         android:inputType="number"
                         android:maxLines="1"
-                        android:text="16.866667" />
+                        android:text="Sconosciuto" />
 
                 </LinearLayout>
 
@@ -368,7 +368,7 @@
                         android:ems="10"
                         android:inputType="number"
                         android:maxLines="1"
-                        android:text="150" />
+                        android:text="Sconosciuto" />
 
                 </LinearLayout>
 

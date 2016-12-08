@@ -8,10 +8,12 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.example.zubcu.geatech.Models.GeneralInfoModel;
+import com.example.zubcu.geatech.Models.SubproductItem;
 import com.example.zubcu.geatech.R;
 import com.example.zubcu.geatech.Managers.GeneralInfoReceiver;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by user on 11/15/2016.
@@ -19,18 +21,15 @@ import java.util.ArrayList;
 
 public class SetVisitDateTimeListAdapter extends ArrayAdapter
 {
-    GeneralInfoReceiver generalInfoReceiver;
-    ArrayList<GeneralInfoModel> visitsList;
+    List<SubproductItem> subproductItems;
 
     public SetVisitDateTimeListAdapter
-            (Context context, ArrayList<com.example.zubcu.geatech.Models.DateTimeSetListCellModel> array)
+            (Context context, List<SubproductItem> subproductItems)
     {
 
-        super(context, 0, array);
+        super(context, 0, subproductItems);
 
-
-        generalInfoReceiver = GeneralInfoReceiver.getInstance();
-        visitsList = generalInfoReceiver.getListVisitsArrayList();
+        this.subproductItems = subproductItems;
     }
 
     @Override
@@ -39,7 +38,7 @@ public class SetVisitDateTimeListAdapter extends ArrayAdapter
 
         // Get the data item for this position
 
-        com.example.zubcu.geatech.Models.DateTimeSetListCellModel array = (com.example.zubcu.geatech.Models.DateTimeSetListCellModel)getItem(position);
+        //com.example.zubcu.geatech.Models.DateTimeSetListCellModel array = (com.example.zubcu.geatech.Models.DateTimeSetListCellModel)getItem(position);
 
         // Check if an existing view is being reused, otherwise inflate the view
 
@@ -61,11 +60,13 @@ public class SetVisitDateTimeListAdapter extends ArrayAdapter
 
         // Populate the data into the template view using the data object
 
-        tvProdottoDataSDT.setText(array.PRODOTTO_NOME);
+        tvProdottoDataSDT.setText(subproductItems.get(position).getSubproduct());
 
-        tvTipoDataSDT.setText(array.PRODOTTO_TIPO);
+        tvTipoDataSDT.setText(subproductItems.get(position).getProductType());
 
-        tvN_PezzoDataSDT.setText(array.PRODOTTO_N_PEZZI);
+        Integer piecesNr = subproductItems.get(position).getPiecesNr();
+
+        tvN_PezzoDataSDT.setText(String.valueOf(piecesNr));
 
         // Return the completed view to render on screen
 

@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.example.zubcu.geatech.Interfaces.Communicator;
 import com.example.zubcu.geatech.R;
@@ -116,7 +117,9 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
     {
         if(view.getId() == R.id.btnSendReport)
         {
-            //getActivity().getFragmentManager().beginTransaction().remove(this).commit();
+            getActivity().getFragmentManager().beginTransaction().remove(this).commit();
+            Toast.makeText(getActivity(),"Rapporto inviato", Toast.LENGTH_LONG).show();
+            
             mCommunicator.onSendReportReturned();
         }
     }

@@ -21,6 +21,7 @@ import static com.example.zubcu.geatech.Network.RESTdataReceiver.visitItems;
 public class ReportsListFragment extends ListFragment
 {
     private Communicator mCommunicator;
+    ArrayList<Integer> visitItemsPositions;
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
@@ -29,12 +30,14 @@ public class ReportsListFragment extends ListFragment
         Context context = getActivity();
 
         ArrayList<VisitItem> visitItemsDateTimeSet = new ArrayList<>();
+        visitItemsPositions = new ArrayList<>();
 
-        for (VisitItem item : visitItems)
+        for (int i = 0; i< visitItems.size(); i++)
         {
-            if(item.getVisitData().getDataOraSopralluogo() != null)
+            if(visitItems.get(i).getVisitData().getDataOraSopralluogo() != null)
             {
-                visitItemsDateTimeSet.add(item);
+                visitItemsDateTimeSet.add(visitItems.get(i));
+                visitItemsPositions.add(i);
             }
         }
 
@@ -65,7 +68,7 @@ public class ReportsListFragment extends ListFragment
     {
         super.onListItemClick(l, v, position, id);
 
-        mCommunicator.OnListItemSelected(position);
+        mCommunicator.OnListItemSelected(visitItemsPositions.get(position));
     }
 }
 

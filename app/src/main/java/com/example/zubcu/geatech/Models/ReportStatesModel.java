@@ -9,6 +9,11 @@ public class ReportStatesModel
     public int sendingReportTriesState;
     public int photoAddedState;
 
+    public double coordNord;
+    public double coordEst;
+
+    public int altitude;
+
     private String dataOraProssimoTentativo;
     private String dataOraUltimoTentativo;
     private String dataOraRaportoCompletato;
@@ -106,5 +111,35 @@ public class ReportStatesModel
     public void setDataOraUltimoTentativo(String dataOraUltimoTentativo)
     {
         this.dataOraUltimoTentativo = dataOraUltimoTentativo;
+    }
+
+    public double getCoordNord()
+    {
+        return coordNord;
+    }
+
+    public void setCoordNord(double coordNord)
+    {
+        this.coordNord = coordNord;
+    }
+
+    public double getCoordEst()
+    {
+        return coordEst;
+    }
+
+    public void setCoordEst(double coordEst)
+    {
+        this.coordEst = coordEst;
+    }
+
+    public double getAltitude()
+    {
+        return altitude;
+    }
+
+    public void setAltitude(int altitude)
+    {
+        this.altitude = altitude;
     }
 }

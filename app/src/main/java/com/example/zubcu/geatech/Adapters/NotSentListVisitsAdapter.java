@@ -1,11 +1,15 @@
 package com.example.zubcu.geatech.Adapters;
 
+import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.content.Context;
 import android.graphics.Color;
+import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -95,6 +99,8 @@ public class NotSentListVisitsAdapter extends BaseAdapter
 
         TextView tvLastTimeTryToSendReport = (TextView) row.findViewById(R.id.tvLastTimeTryToSendReport);
         tvLastTimeTryToSendReport.setText(reportStatesModel.getDataOraUltimoTentativo());
+
+        Button btnSendReportNow = (Button) row.findViewById(R.id.btnSendReportNow);
 
         String visitDateTime = visitData.getDataOraSopralluogo();
 

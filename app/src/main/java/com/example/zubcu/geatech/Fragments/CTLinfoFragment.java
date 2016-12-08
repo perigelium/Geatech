@@ -1,7 +1,6 @@
 package com.example.zubcu.geatech.Fragments;
 
 import android.Manifest;
-import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.pm.PackageManager;
@@ -9,7 +8,6 @@ import android.location.Location;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
@@ -18,15 +16,13 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.zubcu.geatech.Interfaces.LocationDataEventListener;
 import com.example.zubcu.geatech.Models.ClientData;
-import com.example.zubcu.geatech.Models.DateTimeSetListCellModel;
 import com.example.zubcu.geatech.Models.ProductData;
+import com.example.zubcu.geatech.Models.ReportStatesModel;
 import com.example.zubcu.geatech.Models.VisitData;
 import com.example.zubcu.geatech.Models.VisitItem;
-import com.example.zubcu.geatech.Network.LocationReceiver;
 import com.example.zubcu.geatech.R;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -34,13 +30,7 @@ import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.ArrayList;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -51,7 +41,7 @@ import okhttp3.Response;
 import static com.example.zubcu.geatech.Network.RESTdataReceiver.visitItems;
 import static com.google.android.gms.location.LocationServices.FusedLocationApi;
 
-public class FragmentCTLinfo extends Fragment implements View.OnClickListener,
+public class CTLinfoFragment extends Fragment implements View.OnClickListener,
         GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener,
         LocationListener, LocationDataEventListener, Callback
 {
@@ -71,14 +61,14 @@ public class FragmentCTLinfo extends Fragment implements View.OnClickListener,
     Location mLastLocation;
     LocationRequest locationRequest;
     Call callDownloadURL;
-    double altitude;
+    int altitude;
     private int selectedIndex;
 
-    public FragmentCTLinfo() {}
+    public CTLinfoFragment() {}
 
     // TODO: Rename and change types and number of parameters
-    public static FragmentCTLinfo newInstance(String param1, String param2) {
-        FragmentCTLinfo fragment = new FragmentCTLinfo();
+    public static CTLinfoFragment newInstance(String param1, String param2) {
+        CTLinfoFragment fragment = new CTLinfoFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -167,6 +157,7 @@ public class FragmentCTLinfo extends Fragment implements View.OnClickListener,
         ClientData clientData = visitItem.getClientData();
         ProductData productData = visitItem.getProductData();
         VisitData visitData = visitItem.getVisitData();
+        ReportStatesModel reportStatesModel = visitItem.getReportStatesModel();
 
         TextView clientNameTextView = (TextView) rootView.findViewById(R.id.tvClientName);
         clientNameTextView.setText(clientData.getName());
@@ -224,10 +215,12 @@ public class FragmentCTLinfo extends Fragment implements View.OnClickListener,
                 {
                     etCoordNord.setText(String.valueOf(mLastLocation.getLatitude()), TextView.BufferType.EDITABLE);
                     etCoordEst.setText(String.valueOf(mLastLocation.getLongitude()), TextView.BufferType.EDITABLE);
+                    visitItems.get(selectedIndex).getReportStatesModel().setCoordNord(mLastLocation.getLatitude());
+                    visitItems.get(selectedIndex).getReportStatesModel().setCoordEst(mLastLocation.getLongitude());
 
                     if(mLastLocation.hasAltitude())
                     {
-                        etAltitude.setText(String.valueOf(mLastLocation.getAltitude()), TextView.BufferType.EDITABLE);
+                        etAltitude.setText(String.valueOf((int)mLastLocation.getAltitude()), TextView.BufferType.EDITABLE);
                     }
                     else
                     if(isNetworkAvailable())
@@ -327,11 +320,12 @@ public class FragmentCTLinfo extends Fragment implements View.OnClickListener,
         String result = response.body().string();
         //mLastLocation.setAltitude(getElevationFromGoogleMaps(result));
 
-        altitude = getElevationFromGoogleMaps(result);
+        altitude = (int)getElevationFromGoogleMaps(result);
 
         getActivity().runOnUiThread(new Runnable() {
             public void run() {
-                etAltitude.setText(String.valueOf((int)altitude), TextView.BufferType.EDITABLE);
+                visitItems.get(selectedIndex).getReportStatesModel().setAltitude(altitude);
+                etAltitude.setText(String.valueOf(altitude), TextView.BufferType.EDITABLE);
             }
         });
 

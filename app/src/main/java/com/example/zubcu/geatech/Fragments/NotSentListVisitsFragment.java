@@ -15,7 +15,7 @@ import java.util.ArrayList;
 
 import static com.example.zubcu.geatech.Network.RESTdataReceiver.visitItems;
 
-public class NotSentListVisitsFragment extends ListFragment
+public class NotSentListVisitsFragment extends ListFragment implements View.OnClickListener
 {
 
     private Communicator mCommunicator;
@@ -49,7 +49,6 @@ public class NotSentListVisitsFragment extends ListFragment
         super.onCreate(savedInstanceState);
 
         mCommunicator = (Communicator)getActivity();
-
     }
 
     @Override
@@ -57,6 +56,15 @@ public class NotSentListVisitsFragment extends ListFragment
                              Bundle savedInstanceState)
     {
         return inflater.inflate(R.layout.list_visits_fragment, container, false);
+    }
+
+    @Override
+    public void onClick(View v)
+    {
+        if (v.getId() == R.id.btnSendReportNow)
+        {
+            getActivity().getFragmentManager().beginTransaction().remove(this).commit();
+        }
     }
 }
 

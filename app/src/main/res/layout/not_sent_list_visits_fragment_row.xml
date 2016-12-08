@@ -243,8 +243,15 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start|center_vertical"
-                android:layout_marginLeft="6dp"
-                android:text="Prossimo tentativo ore" />
+                android:layout_marginLeft="1dp"
+                android:text="23:59" />
+
+            <Button
+                android:text="Invia ora"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="9dp"
+                android:id="@+id/btnSendReportNow"/>
 
         </LinearLayout>
 

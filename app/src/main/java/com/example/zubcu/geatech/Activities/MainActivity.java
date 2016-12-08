@@ -5,7 +5,6 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 
 import com.example.zubcu.geatech.Fragments.ComingListVisitsFragment;
@@ -14,21 +13,17 @@ import com.example.zubcu.geatech.Fragments.CtrlBtnReportDetailed;
 import com.example.zubcu.geatech.Fragments.CtrlBtnsFragment1;
 import com.example.zubcu.geatech.Fragments.CtrlBtnsFragment2;
 import com.example.zubcu.geatech.Fragments.SetDateTimeFragment;
-import com.example.zubcu.geatech.Fragments.FragmentCTLinfo;
+import com.example.zubcu.geatech.Fragments.CTLinfoFragment;
 import com.example.zubcu.geatech.Fragments.ListVisitsFragment;
 import com.example.zubcu.geatech.Fragments.InWorkListVisitsFragment;
 import com.example.zubcu.geatech.Fragments.NotSentListVisitsFragment;
 import com.example.zubcu.geatech.Fragments.PhotoGalleryGridFragment;
-import com.example.zubcu.geatech.Fragments.ReportDetailedFragment;
+import com.example.zubcu.geatech.Fragments.ReportSentDetailedFragment;
 import com.example.zubcu.geatech.Fragments.ReportsListFragment;
 import com.example.zubcu.geatech.Fragments.SendReportFragment;
 import com.example.zubcu.geatech.Interfaces.Communicator;
-import com.example.zubcu.geatech.Models.VisitItem;
 import com.example.zubcu.geatech.R;
 import com.example.zubcu.geatech.Utils.SwipeDetector;
-import com.example.zubcu.geatech.Utils.JSON_to_model;
-
-import java.util.ArrayList;
 
 public class MainActivity extends Activity implements Communicator
 {
@@ -45,9 +40,9 @@ public class MainActivity extends Activity implements Communicator
     ComingListVisitsFragment comingListVisits;
     NotSentListVisitsFragment notSentListVisits;
     ReportsListFragment reportsList;
-    FragmentCTLinfo ctlInfo;
+    CTLinfoFragment ctlInfo;
     CtrlBtnReportDetailed ctrlBtnsReportDetailed;
-    ReportDetailedFragment reportDetailedFragment;
+    ReportSentDetailedFragment reportDetailedFragment;
     SendReportFragment sendReportFragment;
     PhotoGalleryGridFragment photoGalleryGridFragment;
     ComposeReportTemplateFragment composeReportTemplateFragment;
@@ -71,9 +66,9 @@ public class MainActivity extends Activity implements Communicator
         comingListVisits = new ComingListVisitsFragment();
         notSentListVisits = new NotSentListVisitsFragment();
         reportsList = new ReportsListFragment();
-        ctlInfo = new FragmentCTLinfo();
+        ctlInfo = new CTLinfoFragment();
         ctrlBtnsReportDetailed = new CtrlBtnReportDetailed();
-        reportDetailedFragment = new ReportDetailedFragment();
+        reportDetailedFragment = new ReportSentDetailedFragment();
         sendReportFragment = new SendReportFragment();
         photoGalleryGridFragment = new PhotoGalleryGridFragment();
         composeReportTemplateFragment = new ComposeReportTemplateFragment();
@@ -321,7 +316,11 @@ public class MainActivity extends Activity implements Communicator
         mFragmentTransaction.commit();
 
         removeAllLists();
+        Bundle args = new Bundle();
+        args.putInt("selectedIndex", itemIndex);
+        reportDetailedFragment.setArguments(args);
         setVisitsListContent(reportDetailedFragment);
+
         ctrlBtnsFragment1.setCheckedBtnId(R.id.btnReports);
     }
 
