@@ -182,12 +182,30 @@
 
     </LinearLayout>
 
-    <ListView
-        android:id="@+id/list"
-        android:layout="@layout/visits_day_time_set_list_row"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" > <!--hardcoded needs to be replaced-->
-    </ListView>
+    <View android:layout_height="1px" android:layout_gravity="bottom" android:layout_marginLeft="40dp" android:layout_width="match_parent" android:background="#000000"/>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="2dp"
+        android:orientation="vertical" >
+
+        <ListView
+            android:id="@+id/list"
+            android:layout="@layout/visits_day_time_set_list_row"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+        </ListView>
+
+        <TextView
+            android:id="@id/android:empty"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="Nessun dato" >
+        </TextView>
+
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="wrap_content"

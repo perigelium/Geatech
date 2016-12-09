@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
+
 import com.example.zubcu.geatech.Adapters.NotSentListVisitsAdapter;
 import com.example.zubcu.geatech.Interfaces.Communicator;
 import com.example.zubcu.geatech.Models.VisitItem;
@@ -63,7 +65,8 @@ public class NotSentListVisitsFragment extends ListFragment implements View.OnCl
     {
         if (v.getId() == R.id.btnSendReportNow)
         {
-            getActivity().getFragmentManager().beginTransaction().remove(this).commit();
+            Toast.makeText(getActivity(),"Rapporto inviato", Toast.LENGTH_LONG).show();
+            //getActivity().getFragmentManager().beginTransaction().remove(this).commit();
         }
     }
 }

@@ -12,6 +12,7 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.zubcu.geatech.Models.ClientData;
 import com.example.zubcu.geatech.Models.GeneralInfoModel;
@@ -65,7 +66,7 @@ public class NotSentListVisitsAdapter extends BaseAdapter
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         // return super.getView(position, convertView, parent);
 
         LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -97,10 +98,22 @@ public class NotSentListVisitsAdapter extends BaseAdapter
         TextView tvNotSentReason = (TextView) row.findViewById(R.id.tvNotSentReason);
         tvNotSentReason.setText(reportStatesModel.getSendingReportTriesStateString());
 
-        TextView tvLastTimeTryToSendReport = (TextView) row.findViewById(R.id.tvLastTimeTryToSendReport);
-        tvLastTimeTryToSendReport.setText(reportStatesModel.getDataOraUltimoTentativo());
+        TextView tvNextTimeTryToSendReport = (TextView) row.findViewById(R.id.tvNextTimeTryToSendReport);
+        tvNextTimeTryToSendReport.setText(reportStatesModel.getDataOraProssimoTentativo());
 
         Button btnSendReportNow = (Button) row.findViewById(R.id.btnSendReportNow);
+        btnSendReportNow.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                Toast.makeText(mContext,"Rapporto inviato", Toast.LENGTH_LONG).show();
+                visitItemsDateTimeSet.remove(position);
+                notifyDataSetChanged();
+
+                //sendReportNow(mPosition);
+            }
+        });
 
         String visitDateTime = visitData.getDataOraSopralluogo();
 

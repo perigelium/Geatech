@@ -12,6 +12,7 @@ import com.example.zubcu.geatech.Fragments.ComposeReportTemplateFragment;
 import com.example.zubcu.geatech.Fragments.CtrlBtnReportDetailed;
 import com.example.zubcu.geatech.Fragments.CtrlBtnsFragment1;
 import com.example.zubcu.geatech.Fragments.CtrlBtnsFragment2;
+import com.example.zubcu.geatech.Fragments.NotificationBarFragment;
 import com.example.zubcu.geatech.Fragments.SetDateTimeFragment;
 import com.example.zubcu.geatech.Fragments.CTLinfoFragment;
 import com.example.zubcu.geatech.Fragments.ListVisitsFragment;
@@ -46,7 +47,7 @@ public class MainActivity extends Activity implements Communicator
     SendReportFragment sendReportFragment;
     PhotoGalleryGridFragment photoGalleryGridFragment;
     ComposeReportTemplateFragment composeReportTemplateFragment;
-    //String visitsDownloadedData;
+    NotificationBarFragment notificationBarFragment;
 
     @Override
     public void onCreate(Bundle savedInstanceState)
@@ -72,10 +73,13 @@ public class MainActivity extends Activity implements Communicator
         sendReportFragment = new SendReportFragment();
         photoGalleryGridFragment = new PhotoGalleryGridFragment();
         composeReportTemplateFragment = new ComposeReportTemplateFragment();
+        notificationBarFragment = new NotificationBarFragment();
 
         mFragmentManager = getFragmentManager();
 
         FragmentTransaction mFragmentTransaction = mFragmentManager.beginTransaction();
+
+        mFragmentTransaction.add(R.id.NotificationBarFragContainer, notificationBarFragment);
 
         mFragmentTransaction.add(R.id.CtrlBtnFragContainer, ctrlBtnsFragment1);
         mFragmentTransaction.add(R.id.CtrlBtnFragContainer, ctrlBtnsFragment2);
@@ -89,6 +93,11 @@ public class MainActivity extends Activity implements Communicator
         mFragmentTransaction.show(ctrlBtnsFragment1);
 
         mFragmentTransaction.commit();
+    }
+
+    public void sendReportNow(int position)
+    {
+
     }
 
     @Override
@@ -322,6 +331,12 @@ public class MainActivity extends Activity implements Communicator
         setVisitsListContent(reportDetailedFragment);
 
         ctrlBtnsFragment1.setCheckedBtnId(R.id.btnReports);
+    }
+
+    @Override
+    public void onNotificationReportReturned(View view)
+    {
+
     }
 
     @Override

@@ -16,7 +16,8 @@ public class ReportStatesModel
 
     private String dataOraProssimoTentativo;
     private String dataOraUltimoTentativo;
-    private String dataOraRaportoCompletato;
+    private String dataOraRaportoCompilato;
+    private String dataOraRaportoInviato;
 
     public String[] reportCompletionStatuses;
     public String[] generalInfoCompletionStatuses;
@@ -44,8 +45,10 @@ public class ReportStatesModel
         sendingReportTriesState = 0;
         photoAddedState = 0;
         reportSent = false;
-        dataOraRaportoCompletato = "2017-01-01 22:00:00";
-        dataOraUltimoTentativo = "2017-01-01 19:00:00";
+        dataOraRaportoCompilato = "2017-01-01 22:00:00";
+        dataOraRaportoInviato = "2017-01-01 23:00:00";
+        dataOraUltimoTentativo = "19:00";
+        dataOraProssimoTentativo = "21:00";
     }
 
     public String getReportCompletionStateString()
@@ -95,22 +98,32 @@ public class ReportStatesModel
 
     public String getDataOraRaportoCompletato()
     {
-        return dataOraRaportoCompletato;
+        return dataOraRaportoCompilato;
     }
 
     public void setDataOraRaportoCompletato(String dataOraRaportoCompletato)
     {
-        this.dataOraRaportoCompletato = dataOraRaportoCompletato;
+        this.dataOraRaportoCompilato = dataOraRaportoCompletato;
     }
 
-    public String getDataOraUltimoTentativo()
+    public String getDataOraRaportoInviato()
     {
-        return dataOraUltimoTentativo;
+        return dataOraRaportoInviato;
     }
 
-    public void setDataOraUltimoTentativo(String dataOraUltimoTentativo)
+    public void setDataOraRaportoInviato(String dataOraRaportoInviato)
     {
-        this.dataOraUltimoTentativo = dataOraUltimoTentativo;
+        this.dataOraRaportoInviato = dataOraRaportoInviato;
+    }
+
+    public String getDataOraProssimoTentativo()
+    {
+        return dataOraProssimoTentativo;
+    }
+
+    public void dataOraProssimoTentativo(String dataOraProssimoTentativo)
+    {
+        this.dataOraProssimoTentativo = dataOraProssimoTentativo;
     }
 
     public double getCoordNord()

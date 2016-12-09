@@ -8,7 +8,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="70dp"
+        android:layout_height="wrap_content"
         android:orientation="vertical">
 
         <LinearLayout
@@ -26,7 +26,7 @@
                 android:textSize="15dp"/>
 
             <TextView
-                android:id="@+id/tvSopraluoghoDataOra"
+                android:id="@+id/tvdataOraSopralluogo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="left|center_vertical"
@@ -52,7 +52,7 @@
                 android:textSize="15dp"/>
 
             <TextView
-                android:id="@+id/tvRapportoCompilatoDataOra"
+                android:id="@+id/tvdataOraRaportoCompletato"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="left|center_vertical"
@@ -78,7 +78,7 @@
                 android:textSize="15dp"/>
 
             <TextView
-                android:id="@+id/tvRapportoInviatoDataOra"
+                android:id="@+id/tvdataOraRaportoInviato"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="left|center_vertical"
@@ -93,8 +93,7 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="9dp"
-        android:layout_weight="3"
+        android:layout_margin="15dp"
         android:orientation="vertical">
 
 

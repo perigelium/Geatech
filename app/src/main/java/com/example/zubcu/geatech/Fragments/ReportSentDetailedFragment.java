@@ -48,6 +48,15 @@ public class ReportSentDetailedFragment extends Fragment
         VisitData visitData = visitItem.getVisitData();
         ReportStatesModel reportStatesModel = visitItem.getReportStatesModel();
 
+        TextView tvdataOraSopralluogo = (TextView) rootView.findViewById(R.id.tvdataOraSopralluogo);
+        tvdataOraSopralluogo.setText(visitData.getDataOraSopralluogo());
+
+        TextView tvdataOraRaportoCompletato = (TextView) rootView.findViewById(R.id.tvdataOraRaportoCompletato);
+        tvdataOraRaportoCompletato.setText(reportStatesModel.getDataOraRaportoCompletato());
+
+        TextView tvdataOraRaportoInviato = (TextView) rootView.findViewById(R.id.tvdataOraRaportoInviato);
+        tvdataOraRaportoInviato.setText(reportStatesModel.getDataOraRaportoInviato());
+
         TextView clientNameTextView = (TextView) rootView.findViewById(R.id.tvClientName);
         clientNameTextView.setText(clientData.getName());
 

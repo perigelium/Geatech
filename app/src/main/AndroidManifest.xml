@@ -24,7 +24,6 @@
 
         <activity android:name=".Activities.MainActivity"/>
         <activity android:name=".Activities.UserFirstAccess"/>
-        <activity android:name=".Activities.UserPasswordRecover"/>
 
         <meta-data
             android:name="com.google.android.gms.version"

@@ -239,7 +239,7 @@
                 android:text="Prossimo tentativo: ore " />
 
             <TextView
-                android:id="@+id/tvLastTimeTryToSendReport"
+                android:id="@+id/tvNextTimeTryToSendReport"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start|center_vertical"
@@ -251,6 +251,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="9dp"
+                android:focusable="false"
                 android:id="@+id/btnSendReportNow"/>
 
         </LinearLayout>

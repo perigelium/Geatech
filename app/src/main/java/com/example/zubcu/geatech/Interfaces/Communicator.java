@@ -22,4 +22,6 @@ public interface Communicator
     public void OnListItemSelected(int itemIndex, Boolean dateTimeHasSet);
 
     public void OnListItemSelected(int itemIndex);
+
+    void onNotificationReportReturned(View view);
 }

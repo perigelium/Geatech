@@ -1,42 +1,59 @@
 package com.example.zubcu.geatech.Activities;
 
 import android.app.Activity;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.example.zubcu.geatech.Fragments.UserFirstAccessFragment;
+import com.example.zubcu.geatech.Fragments.UserLoginFragment;
+import com.example.zubcu.geatech.Fragments.UserPasswordRecoverFragment;
+import com.example.zubcu.geatech.Interfaces.LoginCommunicator;
 import com.example.zubcu.geatech.Interfaces.RESTdataReceiverEventListener;
 import com.example.zubcu.geatech.Network.RESTdataReceiver;
+import com.example.zubcu.geatech.R;
 
 import static com.example.zubcu.geatech.R.*;
 
 
-public class LoginActivity extends Activity implements RESTdataReceiverEventListener, View.OnClickListener
+public class LoginActivity extends Activity implements RESTdataReceiverEventListener, LoginCommunicator
 {
-    RESTdataReceiver resTdataReceiver;
-
-    Button btnLogin;
-    Button btnFirstAccess;
-    Button btnPasswordRecover;
+    RESTdataReceiver restDataReceiver;
+    private FragmentManager mFragmentManager;
+    UserFirstAccessFragment userFirstAccessFragment;
+    UserPasswordRecoverFragment userPasswordRecoverFragment;
+    UserLoginFragment userLoginFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        setContentView(layout.login_activity);
+        setContentView(R.layout.login_window_container);
 
-        btnLogin = (Button) findViewById(id.btLogin);
-        btnLogin.setOnClickListener(this);
 
-        resTdataReceiver = new RESTdataReceiver( this, this );
+        userLoginFragment = new UserLoginFragment();
+        userFirstAccessFragment = new UserFirstAccessFragment();
+        userPasswordRecoverFragment = new UserPasswordRecoverFragment();
+
+        mFragmentManager = getFragmentManager();
+
+        FragmentTransaction mFragmentTransaction = mFragmentManager.beginTransaction();
+
+        mFragmentTransaction.add(R.id.loginFragContainer, userLoginFragment);
+
+        mFragmentTransaction.commit();
+
+        restDataReceiver = new RESTdataReceiver( this, this );
     }
 
     @Override
     public void onTokenReceiveCompleted()
     {
-        resTdataReceiver.getJSONfromServer();
+        restDataReceiver.getJSONfromServer();
     }
 
     @Override
@@ -53,9 +70,22 @@ public class LoginActivity extends Activity implements RESTdataReceiverEventList
     }
 
     @Override
-    public void onClick(View view)
+    public void onButtonClicked(View view)
     {
-        resTdataReceiver.getLoginToken();
+        if(view.getId() == R.id.btnPasswordRecover )
+        {
+            Toast.makeText(this, "btnPasswordRecover clicked", Toast.LENGTH_LONG).show();
+        }
+
+        if(view.getId() == R.id.btnFirstAccess )
+        {
+            Toast.makeText(this, "btnFirstAccess clicked", Toast.LENGTH_LONG).show();
+        }
+
+        if(view.getId() == R.id.btnLogin )
+        {
+            restDataReceiver.getLoginToken();
+        }
     }
 }
 
