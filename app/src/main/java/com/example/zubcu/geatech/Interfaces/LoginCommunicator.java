@@ -12,4 +12,7 @@ public interface LoginCommunicator
 
     public void onButtonClicked(View view);
 
+    void onPasswordSentReturned();
+
+    void onRecoverPasswordReturned();
 }

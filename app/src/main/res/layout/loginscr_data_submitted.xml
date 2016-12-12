@@ -11,7 +11,7 @@
         android:layout_below="@+id/txtRecupera"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="30dp"
-        android:id="@+id/btnContinue"
+        android:id="@+id/btnCredentialsSent"
         android:textColor="@android:color/holo_green_dark"
         android:minHeight="60dp"
         android:minWidth="220dp"

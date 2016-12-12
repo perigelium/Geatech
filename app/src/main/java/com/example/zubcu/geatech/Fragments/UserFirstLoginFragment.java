@@ -14,7 +14,7 @@ import com.example.zubcu.geatech.Interfaces.Communicator;
 import com.example.zubcu.geatech.Interfaces.LoginCommunicator;
 import com.example.zubcu.geatech.R;
 
-public class UserPasswordRecoverFragment extends Fragment implements View.OnClickListener
+public class UserFirstLoginFragment extends Fragment implements View.OnClickListener
 {
     Context context;
     Button InviaPassword;
@@ -30,15 +30,15 @@ public class UserPasswordRecoverFragment extends Fragment implements View.OnClic
     private LoginCommunicator mCommunicator;
 
 
-    public UserPasswordRecoverFragment()
+    public UserFirstLoginFragment()
     {
         // Required empty public constructor
     }
 
     // TODO: Rename and change types and number of parameters
-    public static UserPasswordRecoverFragment newInstance(String param1, String param2)
+    public static UserFirstLoginFragment newInstance(String param1, String param2)
     {
-        UserPasswordRecoverFragment fragment = new UserPasswordRecoverFragment();
+        UserFirstLoginFragment fragment = new UserFirstLoginFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -71,7 +71,7 @@ public class UserPasswordRecoverFragment extends Fragment implements View.OnClic
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState)
     {
-        View rootView = inflater.inflate(R.layout.loginscr_password_recover, container, false);
+        View rootView = inflater.inflate(R.layout.loginscr_first_access, container, false);
 
         InviaPassword = (Button) rootView.findViewById(R.id.btnInviaPassword);
         InviaPassword.setOnClickListener(this);

@@ -4,15 +4,23 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.text.InputType;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
 
 import com.example.zubcu.geatech.Interfaces.Communicator;
+import com.example.zubcu.geatech.Models.ClimatizzazioneModel;
 import com.example.zubcu.geatech.R;
 
-public class ComposeReportTemplateFragment extends Fragment implements View.OnClickListener
+public class ComposeReportTemplateFragment extends Fragment implements View.OnTouchListener
 {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -27,20 +35,29 @@ public class ComposeReportTemplateFragment extends Fragment implements View.OnCl
 
     private OnFragmentInteractionListener mListener;
     private Button sendReport;
+    Context context;
+    AutoCompleteTextView atvTipoDiEdificio, atvPosizionamentoUnitaEsterna,
+            atvTipologiaCostruttivaMurature, atvLocaliEOPianiDelledificio;
+
+    ClimatizzazioneModel climatizzazioneModel;
+
+    private static final String[] TipiDiEdificie = new String[] {
+            "Appartamento", "Villa(Singola/Multi)", "Negozio", "Altro"};
+
+    private static final String[] PosizionamentiUnitaEsterna = new String[] {
+            "A Parete", "A Pavimento"};
+
+    private static final String[] TipologieCostruttiveMurature = new String[] {
+            "Cemento Armato", "Mattoni Pieni", "Mattoni Forati", "Pietra", "Altro"};
+
+    private static final String[] LocaliEOPianiDelledificio = new String[] {
+            "Interrato", "Piano rialzato", "Piano Terra", "Altro"};
 
     public ComposeReportTemplateFragment()
     {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment SendReportFragment.
-     */
     // TODO: Rename and change types and number of parameters
     public static SendReportFragment newInstance(String param1, String param2)
     {
@@ -62,6 +79,11 @@ public class ComposeReportTemplateFragment extends Fragment implements View.OnCl
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
+
+        context = getActivity();
+
+        climatizzazioneModel = new ClimatizzazioneModel();
+
         if (getArguments() != null)
         {
             mParam1 = getArguments().getString(ARG_PARAM1);
@@ -70,13 +92,140 @@ public class ComposeReportTemplateFragment extends Fragment implements View.OnCl
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(LayoutInflater inflater, final ViewGroup container,
                              Bundle savedInstanceState)
     {
-        rootView =  inflater.inflate(R.layout.compose_report_template, container, false);
+        rootView =  inflater.inflate(R.layout.climatizzazione0_report, container, false);
 
-        //sendReport = (Button) rootView.findViewById(R.id.btnSendReport);
-        //sendReport.setOnClickListener(this);
+        ArrayAdapter<String> TipiDiEdificieAdapter = new ArrayAdapter<>(context, android.R.layout.simple_dropdown_item_1line, TipiDiEdificie);
+
+        ArrayAdapter<String> PosizionamentiUnitaEsternaAdapter = new ArrayAdapter<>(context, android.R.layout.simple_dropdown_item_1line, PosizionamentiUnitaEsterna);
+
+        ArrayAdapter<String> TipologieCostruttiveMuratureAdapter = new ArrayAdapter<>(context, android.R.layout.simple_dropdown_item_1line, TipologieCostruttiveMurature);
+
+        ArrayAdapter<String> LocaliEOPianiDelledificioAdapter = new ArrayAdapter<>(context, android.R.layout.simple_dropdown_item_1line, LocaliEOPianiDelledificio);
+
+
+        atvTipoDiEdificio = (AutoCompleteTextView) rootView.findViewById(R.id.atvTipoDiEdificio);
+        atvTipoDiEdificio.setText(climatizzazioneModel.getTipoDiEdificio());
+        atvTipoDiEdificio.setAdapter(TipiDiEdificieAdapter);
+
+        atvTipoDiEdificio.setOnTouchListener(this);
+        atvTipoDiEdificio.setInputType(InputType.TYPE_NULL);
+
+        atvTipoDiEdificio.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view,
+                                    int position, long id)
+            {
+                String selectedItem = parent.getItemAtPosition(position).toString();
+                climatizzazioneModel.setTipoDiEdificio(selectedItem);
+
+                Toast.makeText(context, selectedItem, Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        atvPosizionamentoUnitaEsterna = (AutoCompleteTextView) rootView.findViewById(R.id.atvPosizionamentoUnitaEsterna);
+        atvPosizionamentoUnitaEsterna.setText(climatizzazioneModel.getPosizionamentoUnitaEsterna());
+        atvPosizionamentoUnitaEsterna.setAdapter(PosizionamentiUnitaEsternaAdapter);
+        atvPosizionamentoUnitaEsterna.setOnTouchListener(this);
+        atvPosizionamentoUnitaEsterna.setInputType(InputType.TYPE_NULL);
+
+        atvPosizionamentoUnitaEsterna.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view,
+                                    int position, long id)
+            {
+                String selectedItem = parent.getItemAtPosition(position).toString();
+                climatizzazioneModel.setPosizionamentoUnitaEsterna(selectedItem);
+                Toast.makeText(context, selectedItem, Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        atvTipologiaCostruttivaMurature = (AutoCompleteTextView) rootView.findViewById(R.id.atvTipologiaCostruttivaMurature);
+        atvTipologiaCostruttivaMurature.setText(climatizzazioneModel.getTipologiaCostruttivaMurature());
+        atvTipologiaCostruttivaMurature.setAdapter(TipologieCostruttiveMuratureAdapter);
+        atvTipologiaCostruttivaMurature.setOnTouchListener(this);
+        atvTipologiaCostruttivaMurature.setInputType(InputType.TYPE_NULL);
+
+        atvTipologiaCostruttivaMurature.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view,
+                                    int position, long id)
+            {
+                String selectedItem = parent.getItemAtPosition(position).toString();
+                climatizzazioneModel.setTipologiaCostruttivaMurature(selectedItem);
+                Toast.makeText(context, selectedItem, Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        atvLocaliEOPianiDelledificio = (AutoCompleteTextView) rootView.findViewById(R.id.atvLocaliEOPianiDelledificio);
+        atvLocaliEOPianiDelledificio.setText(climatizzazioneModel.getLocaliEOPianiDelledificio());
+        atvLocaliEOPianiDelledificio.setAdapter(LocaliEOPianiDelledificioAdapter);
+        atvLocaliEOPianiDelledificio.setOnTouchListener(this);
+        atvLocaliEOPianiDelledificio.setInputType(InputType.TYPE_NULL);
+
+        atvLocaliEOPianiDelledificio.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view,
+                                    int position, long id)
+            {
+                String selectedItem = parent.getItemAtPosition(position).toString();
+                climatizzazioneModel.setLocaliEOPianiDelledificio(selectedItem);
+                Toast.makeText(context, selectedItem, Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        EditText etNoteSulLuoghoDiInstallazione = (EditText) rootView.findViewById(R.id.etNoteSulLuoghoDiInstallazione);
+
+        etNoteSulLuoghoDiInstallazione.setOnFocusChangeListener(new View.OnFocusChangeListener()
+        {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus)
+            {
+                if (hasFocus)
+                {
+                    climatizzazioneModel.setNoteSulLuoghoDiInstallazione();
+                    Toast.makeText(context, "onFocusChange etNoteSulLuoghoDiInstallazione", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+        final EditText etNoteSulTipologiaDellImpianto = (EditText) rootView.findViewById(R.id.etNoteSulTipologiaDellImpianto);
+        etNoteSulTipologiaDellImpianto.setText(climatizzazioneModel.getNoteSulTipologiaDellImpianto());
+
+        etNoteSulTipologiaDellImpianto.setOnFocusChangeListener(new View.OnFocusChangeListener()
+        {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus)
+            {
+                if (v == etNoteSulTipologiaDellImpianto && !hasFocus)
+                {
+                    climatizzazioneModel.setNoteSulTipologiaDellImpianto();
+                    Toast.makeText(context, "onFocusChange etNoteSulTipologiaDellImpianto", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+        final EditText etNoteRelativeAlCollegamento = (EditText) rootView.findViewById(R.id.etNoteRelativeAlCollegamento);
+        etNoteRelativeAlCollegamento.setText(climatizzazioneModel.getNoteRelativeAlCollegamento());
+
+        etNoteRelativeAlCollegamento.setOnFocusChangeListener(new View.OnFocusChangeListener()
+        {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus)
+            {
+                if (v == etNoteRelativeAlCollegamento && !hasFocus)
+                {
+                    climatizzazioneModel.setNoteRelativeAlCollegamento();
+                    Toast.makeText(context, "onFocusChange etNoteRelativeAlCollegamento", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
 
         return rootView;
     }
@@ -112,13 +261,29 @@ public class ComposeReportTemplateFragment extends Fragment implements View.OnCl
     }
 
     @Override
-    public void onClick(View view)
+    public boolean onTouch(View view, MotionEvent motionEvent)
     {
-/*        if(view.getId() == R.id.btnSendReport)
+        if(view == atvTipoDiEdificio)
         {
-            //getActivity().getFragmentManager().beginTransaction().remove(this).commit();
-            mCommunicator.onSendReportReturned();
-        }*/
+            atvTipoDiEdificio.showDropDown();
+        }
+
+        if(view == atvPosizionamentoUnitaEsterna)
+        {
+            atvPosizionamentoUnitaEsterna.showDropDown();
+        }
+
+        if(view == atvTipologiaCostruttivaMurature)
+        {
+            atvTipologiaCostruttivaMurature.showDropDown();
+        }
+
+        if(view == atvLocaliEOPianiDelledificio)
+        {
+            atvLocaliEOPianiDelledificio.showDropDown();
+        }
+
+        return false;
     }
 
     public interface OnFragmentInteractionListener
@@ -126,6 +291,4 @@ public class ComposeReportTemplateFragment extends Fragment implements View.OnCl
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
-
-
 }

@@ -9,7 +9,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.example.zubcu.geatech.Fragments.UserFirstAccessFragment;
+import com.example.zubcu.geatech.Fragments.CredentialsSentFragment;
+import com.example.zubcu.geatech.Fragments.UserFirstLoginFragment;
 import com.example.zubcu.geatech.Fragments.UserLoginFragment;
 import com.example.zubcu.geatech.Fragments.UserPasswordRecoverFragment;
 import com.example.zubcu.geatech.Interfaces.LoginCommunicator;
@@ -24,9 +25,11 @@ public class LoginActivity extends Activity implements RESTdataReceiverEventList
 {
     RESTdataReceiver restDataReceiver;
     private FragmentManager mFragmentManager;
-    UserFirstAccessFragment userFirstAccessFragment;
+
+    UserFirstLoginFragment userFirstLoginFragment;
     UserPasswordRecoverFragment userPasswordRecoverFragment;
     UserLoginFragment userLoginFragment;
+    CredentialsSentFragment credentialsSentFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -34,10 +37,10 @@ public class LoginActivity extends Activity implements RESTdataReceiverEventList
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login_window_container);
 
-
         userLoginFragment = new UserLoginFragment();
-        userFirstAccessFragment = new UserFirstAccessFragment();
+        userFirstLoginFragment = new UserFirstLoginFragment();
         userPasswordRecoverFragment = new UserPasswordRecoverFragment();
+        credentialsSentFragment = new CredentialsSentFragment();
 
         mFragmentManager = getFragmentManager();
 
@@ -74,18 +77,54 @@ public class LoginActivity extends Activity implements RESTdataReceiverEventList
     {
         if(view.getId() == R.id.btnPasswordRecover )
         {
-            Toast.makeText(this, "btnPasswordRecover clicked", Toast.LENGTH_LONG).show();
+            //Toast.makeText(this, "btnPasswordRecover clicked", Toast.LENGTH_LONG).show();
+
+            FragmentTransaction mFragmentTransaction = mFragmentManager.beginTransaction();
+
+            mFragmentTransaction.replace(R.id.loginFragContainer, userPasswordRecoverFragment);
+
+            mFragmentTransaction.commit();
         }
 
         if(view.getId() == R.id.btnFirstAccess )
         {
-            Toast.makeText(this, "btnFirstAccess clicked", Toast.LENGTH_LONG).show();
+            //Toast.makeText(this, "btnFirstAccess clicked", Toast.LENGTH_LONG).show();
+
+            FragmentTransaction mFragmentTransaction = mFragmentManager.beginTransaction();
+
+            mFragmentTransaction.replace(R.id.loginFragContainer, userFirstLoginFragment);
+
+            mFragmentTransaction.commit();
+
         }
 
         if(view.getId() == R.id.btnLogin )
         {
             restDataReceiver.getLoginToken();
         }
+    }
+
+    @Override
+    public void onPasswordSentReturned()
+    {
+        FragmentTransaction mFragmentTransaction = mFragmentManager.beginTransaction();
+
+        mFragmentTransaction.replace(R.id.loginFragContainer, userLoginFragment);
+
+        mFragmentTransaction.commit();
+    }
+
+    @Override
+    public void onRecoverPasswordReturned()
+    {
+        // Implement sending request for a new password
+
+
+        FragmentTransaction mFragmentTransaction = mFragmentManager.beginTransaction();
+
+        mFragmentTransaction.replace(R.id.loginFragContainer, credentialsSentFragment);
+
+        mFragmentTransaction.commit();
     }
 }
 
