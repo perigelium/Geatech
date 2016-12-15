@@ -1,34 +1,30 @@
 package com.example.zubcu.geatech.Fragments;
 
-import android.Manifest;
 import android.app.Fragment;
 import android.content.Context;
-import android.content.pm.PackageManager;
 import android.location.Location;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import com.example.zubcu.geatech.Interfaces.LocationDataEventListener;
+import com.example.zubcu.geatech.Interfaces.LocationRetrievedEvents;
 import com.example.zubcu.geatech.Models.ClientData;
 import com.example.zubcu.geatech.Models.ProductData;
 import com.example.zubcu.geatech.Models.ReportStatesModel;
 import com.example.zubcu.geatech.Models.VisitData;
 import com.example.zubcu.geatech.Models.VisitItem;
+import com.example.zubcu.geatech.Network.LocationRetriever;
 import com.example.zubcu.geatech.R;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.LocationListener;
-import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationServices;
 
 import java.io.IOException;
 
@@ -39,14 +35,9 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 import static com.example.zubcu.geatech.Network.RESTdataReceiver.visitItems;
-import static com.google.android.gms.location.LocationServices.FusedLocationApi;
 
-public class CTLinfoFragment extends Fragment implements View.OnClickListener,
-        GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener,
-        LocationListener, LocationDataEventListener, Callback
+public class CTLinfoFragment extends Fragment implements View.OnClickListener, LocationRetrievedEvents, Callback
 {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
@@ -56,18 +47,21 @@ public class CTLinfoFragment extends Fragment implements View.OnClickListener,
 
     private Button mSetCurrentCoordsButton;
     private OnFragmentInteractionListener mListener;
-    GoogleApiClient mGoogleApiClient = null;
     EditText etCoordNord, etCoordEst, etAltitude;
-    Location mLastLocation;
-    LocationRequest locationRequest;
     Call callDownloadURL;
     int altitude;
     private int selectedIndex;
+    LocationRetriever locationRetriever;
+    Context context;
+    Location mLastLocation;
 
-    public CTLinfoFragment() {}
+    public CTLinfoFragment()
+    {
+    }
 
     // TODO: Rename and change types and number of parameters
-    public static CTLinfoFragment newInstance(String param1, String param2) {
+    public static CTLinfoFragment newInstance(String param1, String param2)
+    {
         CTLinfoFragment fragment = new CTLinfoFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
@@ -79,41 +73,22 @@ public class CTLinfoFragment extends Fragment implements View.OnClickListener,
     @Override
     public void onStart()
     {
-        mGoogleApiClient.connect();
         super.onStart();
     }
 
     @Override
-    public void onStop() {
-        mGoogleApiClient.disconnect();
+    public void onStop()
+    {
         super.onStop();
     }
 
     @Override
-    public void onConnected(Bundle connectionHint)
+    public void onCreate(Bundle savedInstanceState)
     {
-        if(mGoogleApiClient == null)
-        {
-            return;
-        }
-
-        if (getActivity().
-                checkCallingOrSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                && getActivity().checkCallingOrSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED)
-        {
-            return;
-        }
-
-        FusedLocationApi.requestLocationUpdates(mGoogleApiClient, locationRequest, this);
-    }
-
-    @Override
-    public void onConnectionSuspended(int i) {}
-
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        context = getActivity();
+
         if (getArguments() != null)
         {
             mParam1 = getArguments().getString(ARG_PARAM1);
@@ -124,32 +99,19 @@ public class CTLinfoFragment extends Fragment implements View.OnClickListener,
         {
             selectedIndex = getArguments().getInt("selectedIndex");
         }
-
-        locationRequest = new LocationRequest()
-                .setInterval(30000)
-                .setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
-
-            // Create an instance of GoogleAPIClient.
-            if (mGoogleApiClient == null)
-            {
-                mGoogleApiClient = new GoogleApiClient.Builder(getActivity())
-                        .addConnectionCallbacks(this)
-                        .addOnConnectionFailedListener(this)
-                        .addApi(LocationServices.API)
-                        .build();
-            }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+                             Bundle savedInstanceState)
+    {
 
         View rootView = inflater.inflate(R.layout.ctl_info_fragment, container, false);
 
         mSetCurrentCoordsButton = (Button) rootView.findViewById(R.id.btnSetCurrentCoords);
-        etCoordNord = (EditText)rootView.findViewById(R.id.etCoordNord);
-        etCoordEst = (EditText)rootView.findViewById(R.id.etCoordEst);
-        etAltitude = (EditText)rootView.findViewById(R.id.etAltitude);
+        etCoordNord = (EditText) rootView.findViewById(R.id.etCoordNord);
+        etCoordEst = (EditText) rootView.findViewById(R.id.etCoordEst);
+        etAltitude = (EditText) rootView.findViewById(R.id.etAltitude);
 
         mSetCurrentCoordsButton.setOnClickListener(this);
 
@@ -172,25 +134,31 @@ public class CTLinfoFragment extends Fragment implements View.OnClickListener,
     }
 
     // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
+    public void onButtonPressed(Uri uri)
+    {
+        if (mListener != null)
+        {
             mListener.onFragmentInteraction(uri);
         }
     }
 
     @Override
-    public void onAttach(Context context) {
+    public void onAttach(Context context)
+    {
         super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
+        if (context instanceof OnFragmentInteractionListener)
+        {
             mListener = (OnFragmentInteractionListener) context;
-        } else {
+        } else
+        {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
         }
     }
 
     @Override
-    public void onDetach() {
+    public void onDetach()
+    {
         super.onDetach();
         mListener = null;
     }
@@ -200,57 +168,18 @@ public class CTLinfoFragment extends Fragment implements View.OnClickListener,
     {
         if (view.getId() == R.id.btnSetCurrentCoords)
         {
-            if (getActivity().checkCallingOrSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED
-                    || getActivity().checkCallingOrSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-
-                //LocationReceiver locationReceiver = new LocationReceiver(this, getActivity());
-
-                //locationReceiver.getCurrentLocation();
-
-                mLastLocation = FusedLocationApi.getLastLocation(mGoogleApiClient);
-
-                LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient,this);
-
-                if (mLastLocation != null)
-                {
-                    etCoordNord.setText(String.valueOf(mLastLocation.getLatitude()), TextView.BufferType.EDITABLE);
-                    etCoordEst.setText(String.valueOf(mLastLocation.getLongitude()), TextView.BufferType.EDITABLE);
-                    visitItems.get(selectedIndex).getReportStatesModel().setCoordNord(mLastLocation.getLatitude());
-                    visitItems.get(selectedIndex).getReportStatesModel().setCoordEst(mLastLocation.getLongitude());
-
-                    if(mLastLocation.hasAltitude())
-                    {
-                        etAltitude.setText(String.valueOf((int)mLastLocation.getAltitude()), TextView.BufferType.EDITABLE);
-                    }
-                    else
-                    if(isNetworkAvailable())
-                    {
-                        String elevationUrl = "http://maps.googleapis.com/maps/api/elevation/"
-                                + "xml?locations=" + String.valueOf(mLastLocation.getLatitude())
-                                + "," + String.valueOf(mLastLocation.getLongitude())
-                                + "&sensor=true";
-
-                        downloadURL(elevationUrl);
-                    }
-                }
+            if (!isNetworkAvailable())
+            {
+                Toast.makeText(context, "Check internet connection.", Toast.LENGTH_LONG).show();
+                return;
             }
+
+                locationRetriever = new LocationRetriever(context, this);
         }
     }
 
-    @Override
-    public void onLocationDataReceiveCompleted()
+    private boolean isNetworkAvailable()
     {
-        //Location location = locationReceiver.getLastLocation();
-
-        getActivity().runOnUiThread(new Runnable() {
-            public void run() {
-                etAltitude.setText(String.valueOf(altitude), TextView.BufferType.EDITABLE);
-            }
-        });
-
-    }
-
-    private boolean isNetworkAvailable() {
         ConnectivityManager connectivityManager
                 = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
@@ -258,16 +187,36 @@ public class CTLinfoFragment extends Fragment implements View.OnClickListener,
     }
 
     @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+    public void onLocationReceived()
+    {
+        mLastLocation = locationRetriever.getLastLocation();
 
+        if (mLastLocation != null)
+        {
+            etCoordNord.setText(String.valueOf(mLastLocation.getLatitude()), TextView.BufferType.EDITABLE);
+            etCoordEst.setText(String.valueOf(mLastLocation.getLongitude()), TextView.BufferType.EDITABLE);
+            visitItems.get(selectedIndex).getReportStatesModel().setCoordNord(mLastLocation.getLatitude());
+            visitItems.get(selectedIndex).getReportStatesModel().setCoordEst(mLastLocation.getLongitude());
+
+            if (mLastLocation.hasAltitude())
+            {
+                etAltitude.setText(String.valueOf((int) mLastLocation.getAltitude()), TextView.BufferType.EDITABLE);
+            } else
+            {
+                String elevationUrl = "http://maps.googleapis.com/maps/api/elevation/"
+                        + "xml?locations=" + String.valueOf(mLastLocation.getLatitude())
+                        + "," + String.valueOf(mLastLocation.getLongitude())
+                        + "&sensor=true";
+
+                downloadURL(elevationUrl);
+            }
+        }
+
+        //Log.d("new", "coords= " + String.valueOf(latitude) + " " + String.valueOf(longitude));
     }
 
-    @Override
-    public void onLocationChanged(Location location) {
-
-    }
-
-    public interface OnFragmentInteractionListener {
+    public interface OnFragmentInteractionListener
+    {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
@@ -318,20 +267,16 @@ public class CTLinfoFragment extends Fragment implements View.OnClickListener,
     public void onResponse(Call call, Response response) throws IOException
     {
         String result = response.body().string();
-        //mLastLocation.setAltitude(getElevationFromGoogleMaps(result));
 
-        altitude = (int)getElevationFromGoogleMaps(result);
+        altitude = (int) getElevationFromGoogleMaps(result);
 
-        getActivity().runOnUiThread(new Runnable() {
-            public void run() {
+        getActivity().runOnUiThread(new Runnable()
+        {
+            public void run()
+            {
                 visitItems.get(selectedIndex).getReportStatesModel().setAltitude(altitude);
                 etAltitude.setText(String.valueOf(altitude), TextView.BufferType.EDITABLE);
             }
         });
-
-/*        if (callback != null)
-        {
-            callback.onLocationDataReceiveCompleted();
-        }*/
     }
 }

@@ -4,14 +4,16 @@ package com.example.zubcu.geatech.Fragments;
 import android.content.Context;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.TextView;
+import android.widget.Toast;
 
-import com.example.zubcu.geatech.Interfaces.Communicator;
+import com.example.zubcu.geatech.Interfaces.LocationRetrievedEvents;
 import com.example.zubcu.geatech.Interfaces.LoginCommunicator;
+import com.example.zubcu.geatech.Network.LocationRetriever;
 import com.example.zubcu.geatech.R;
 
 public class UserFirstLoginFragment extends Fragment implements View.OnClickListener
@@ -50,8 +52,6 @@ public class UserFirstLoginFragment extends Fragment implements View.OnClickList
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-
-
 
         if (getArguments() != null)
         {
