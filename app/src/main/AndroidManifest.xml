@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.zubcu.geatech">
+    package="ru.alexangan.developer.geatech">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -23,7 +23,6 @@
         </activity>
 
         <activity android:name=".Activities.MainActivity"/>
-        <activity android:name=".Activities.UserFirstAccess"/>
 
         <meta-data
             android:name="com.google.android.gms.version"

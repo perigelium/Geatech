@@ -3,7 +3,7 @@
              android:layout_width="match_parent"
              android:layout_height="match_parent"
              android:overScrollMode="never"
-             tools:context="com.example.zubcu.geatech.Fragments.SetDateTimeFragment">
+             tools:context="ru.alexangan.developer.geatech.Fragments.SetDateTimeFragment">
 
     <LinearLayout
         android:layout_width="match_parent"

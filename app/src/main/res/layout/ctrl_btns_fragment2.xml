@@ -7,7 +7,7 @@
     android:layout_gravity="center"
     android:background="#9e9e9e"
     android:orientation="horizontal"
-    tools:context="com.example.zubcu.geatech.Fragments.CtrlBtnsFragment2">
+    tools:context="ru.alexangan.developer.geatech.Fragments.CtrlBtnsFragment2">
 
     <RadioGroup
         android:id="@+id/toggleGroup"
