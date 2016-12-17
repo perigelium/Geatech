@@ -4,18 +4,14 @@ package ru.alexangan.developer.geatech.Models;
 import io.realm.RealmList;
 import io.realm.RealmObject;
 
-public class ReportStatesModel extends RealmObject
+public class ReportStates extends RealmObject
 {
+    int id;
     public int reportCompletionState;
     boolean reportSent;
     public int generalInfoCompletionState;
     public int sendingReportTriesState;
     public int photoAddedState;
-
-    public double coordNord;
-    public double coordEst;
-
-    public int altitude;
 
     private String dataOraProssimoTentativo;
     private String dataOraUltimoTentativo;
@@ -29,31 +25,34 @@ public class ReportStatesModel extends RealmObject
 
     public int photoAddedQuant;
 
-    private static ReportStatesModel ourInstance = new ReportStatesModel();
+    //private static ReportStates ourInstance = new ReportStates();
 
-    public static ReportStatesModel getInstance()
-    {
-        return ourInstance;
-    }
+    /*    public static ReportStates getInstance()
+        {
+            return ourInstance;
+        }*/
 
-    public ReportStatesModel()
+    public ReportStates() {}
+
+    public ReportStates(int id)
     {
+        this.id = id;
         reportCompletionStatuses = new RealmList<>();
-        reportCompletionStatuses.add(new RealmString("Non iniziato") );
-        reportCompletionStatuses.add(new RealmString("Parziamente completato") );
-        reportCompletionStatuses.add(new RealmString("Completato") );
+        reportCompletionStatuses.add(new RealmString(id, "Non iniziato") );
+        reportCompletionStatuses.add(new RealmString(id, "Parziamente completato") );
+        reportCompletionStatuses.add(new RealmString(id, "Completato") );
 
         generalInfoCompletionStatuses = new RealmList<>();
-        generalInfoCompletionStatuses.add(new RealmString("Non iniziato") );
-        generalInfoCompletionStatuses.add(new RealmString("Parziamente completato") );
-        generalInfoCompletionStatuses.add(new RealmString("Completato") );
+        generalInfoCompletionStatuses.add(new RealmString(id, "Non iniziato") );
+        generalInfoCompletionStatuses.add(new RealmString(id, "Parziamente completato") );
+        generalInfoCompletionStatuses.add(new RealmString(id, "Completato") );
 
         sendingReportFailedStatuses = new RealmList<>();
-        sendingReportFailedStatuses.add(new RealmString("Invio falito per mancanza connesione dati") );
+        sendingReportFailedStatuses.add(new RealmString(id, "Invio falito per mancanza connesione dati") );
 
         photoAddedStatuses = new RealmList<>();
-        photoAddedStatuses.add(new RealmString("Nessun fotografia") );
-        photoAddedStatuses.add(new RealmString(" foto inserite") );
+        photoAddedStatuses.add(new RealmString(id, "Nessun fotografia") );
+        photoAddedStatuses.add(new RealmString(id, " foto inserite") );
 
         //reportCompletionStatuses = new String[]{"Non iniziato", "Parziamente completato", "Completato"};
         //generalInfoCompletionStatuses = new String[]{"Non iniziato", "Parziamente completato", "Completato"};
@@ -147,33 +146,8 @@ public class ReportStatesModel extends RealmObject
         this.dataOraProssimoTentativo = dataOraProssimoTentativo;
     }
 
-    public double getCoordNord()
+    public int getId()
     {
-        return coordNord;
-    }
-
-    public void setCoordNord(double coordNord)
-    {
-        this.coordNord = coordNord;
-    }
-
-    public double getCoordEst()
-    {
-        return coordEst;
-    }
-
-    public void setCoordEst(double coordEst)
-    {
-        this.coordEst = coordEst;
-    }
-
-    public double getAltitude()
-    {
-        return altitude;
-    }
-
-    public void setAltitude(int altitude)
-    {
-        this.altitude = altitude;
+        return id;
     }
 }

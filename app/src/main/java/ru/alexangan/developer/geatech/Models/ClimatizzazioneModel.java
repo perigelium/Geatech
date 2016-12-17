@@ -8,14 +8,16 @@ import io.realm.RealmObject;
 
 public class ClimatizzazioneModel extends RealmObject
 {
-
+    int id;
     String tipoDiEdificio, posizionamentoUnitaEsterna, tipologiaCostruttivaMurature, localiEOPianiDelledificio,
             NoteSulLuoghoDiInstallazione, NoteSulTipologiaDellImpianto, NoteRelativeAlCollegamento, noteSulTipologiaDellImpianto,
             noteRelativeAlCollegamento;
 
-    public ClimatizzazioneModel()
-    {
+    public ClimatizzazioneModel(){};
 
+    public ClimatizzazioneModel(int id)
+    {
+        this.id = id;
     }
 
     public void setTipoDiEdificio(String tipoDiEdificio)
@@ -81,5 +83,10 @@ public class ClimatizzazioneModel extends RealmObject
     public String getNoteRelativeAlCollegamento()
     {
         return noteRelativeAlCollegamento;
+    }
+
+    public int getId()
+    {
+        return id;
     }
 }

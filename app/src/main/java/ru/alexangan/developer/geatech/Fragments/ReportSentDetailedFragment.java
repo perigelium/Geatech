@@ -10,8 +10,8 @@ import android.widget.TextView;
 
 import ru.alexangan.developer.geatech.Models.ClientData;
 import ru.alexangan.developer.geatech.Models.ProductData;
-import ru.alexangan.developer.geatech.Models.ReportStatesModel;
-import ru.alexangan.developer.geatech.Models.VisitData;
+import ru.alexangan.developer.geatech.Models.ReportStates;
+import ru.alexangan.developer.geatech.Models.VisitStates;
 import ru.alexangan.developer.geatech.Models.VisitItem;
 import ru.alexangan.developer.geatech.R;
 
@@ -39,17 +39,17 @@ public class ReportSentDetailedFragment extends Fragment
         VisitItem visitItem = visitItems.get(selectedIndex);
         ClientData clientData = visitItem.getClientData();
         ProductData productData = visitItem.getProductData();
-        VisitData visitData = visitItem.getVisitData();
-        ReportStatesModel reportStatesModel = visitItem.getReportStatesModel();
+        VisitStates visitStates = visitItem.getVisitStates();
+        ReportStates reportStates = visitItem.getReportStates();
 
         TextView tvdataOraSopralluogo = (TextView) rootView.findViewById(R.id.tvdataOraSopralluogo);
-        tvdataOraSopralluogo.setText(visitData.getDataOraSopralluogo());
+        tvdataOraSopralluogo.setText(visitStates.getDataOraSopralluogo());
 
         TextView tvdataOraRaportoCompletato = (TextView) rootView.findViewById(R.id.tvdataOraRaportoCompletato);
-        tvdataOraRaportoCompletato.setText(reportStatesModel.getDataOraRaportoCompletato());
+        tvdataOraRaportoCompletato.setText(reportStates.getDataOraRaportoCompletato());
 
         TextView tvdataOraRaportoInviato = (TextView) rootView.findViewById(R.id.tvdataOraRaportoInviato);
-        tvdataOraRaportoInviato.setText(reportStatesModel.getDataOraRaportoInviato());
+        tvdataOraRaportoInviato.setText(reportStates.getDataOraRaportoInviato());
 
         TextView clientNameTextView = (TextView) rootView.findViewById(R.id.tvClientName);
         clientNameTextView.setText(clientData.getName());
@@ -64,9 +64,9 @@ public class ReportSentDetailedFragment extends Fragment
         EditText etCoordEst = (EditText)rootView.findViewById(R.id.etCoordEst);
         EditText etAltitude = (EditText)rootView.findViewById(R.id.etAltitude);
 
-        etCoordNord.setText(String.valueOf(reportStatesModel.getCoordNord()));
-        etCoordEst.setText(String.valueOf(reportStatesModel.getCoordEst()));
-        etAltitude.setText(String.valueOf((int)reportStatesModel.getAltitude()));
+        etCoordNord.setText(String.valueOf(clientData.getCoordNord()));
+        etCoordEst.setText(String.valueOf(clientData.getCoordEst()));
+        etAltitude.setText(String.valueOf((int)clientData.getAltitude()));
 
         return rootView;
     }

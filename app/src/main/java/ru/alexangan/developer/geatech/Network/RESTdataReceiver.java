@@ -10,6 +10,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import io.realm.RealmList;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.MediaType;
@@ -40,7 +41,7 @@ public class RESTdataReceiver implements Callback
     private Activity loginActivity;
 
 
-    public static ArrayList<VisitItem> visitItems;
+    public static RealmList<VisitItem> visitItems;
 
     public RESTdataReceiver(RESTdataReceiverEventListener cb, LoginActivity activity)
     {

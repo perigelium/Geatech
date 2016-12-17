@@ -69,11 +69,11 @@ public class ListVisitsFragment extends ListFragment
                 {
                     if(swipeDetector.getAction() == SwipeDetector.Action.LR)
                     {
-                        mCommunicator.OnListItemSwiped(position, RESTdataReceiver.visitItems.get(position).getVisitData().getDataOraSopralluogo() != null);
+                        mCommunicator.OnListItemSwiped(position, RESTdataReceiver.visitItems.get(position).getVisitStates().getDataOraSopralluogo() != null);
                     }
                 } else
                 {
-                    mCommunicator.OnListItemSelected(position, RESTdataReceiver.visitItems.get(position).getVisitData().getDataOraSopralluogo() != null);
+                    mCommunicator.OnListItemSelected(position, RESTdataReceiver.visitItems.get(position).getVisitStates().getDataOraSopralluogo() != null);
                 }
             }
         });
@@ -88,7 +88,7 @@ public class ListVisitsFragment extends ListFragment
                     // do the onSwipe action
                 } else
                 {
-                    if(RESTdataReceiver.visitItems.get(position).getVisitData().getDataOraSopralluogo() != null)
+                    if(RESTdataReceiver.visitItems.get(position).getVisitStates().getDataOraSopralluogo() != null)
                     {
                         mCommunicator.OnListItemSelected(position, false);
                     }

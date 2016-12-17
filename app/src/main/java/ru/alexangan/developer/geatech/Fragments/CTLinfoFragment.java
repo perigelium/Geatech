@@ -25,8 +25,8 @@ import okhttp3.Response;
 import ru.alexangan.developer.geatech.Interfaces.LocationRetrievedEvents;
 import ru.alexangan.developer.geatech.Models.ClientData;
 import ru.alexangan.developer.geatech.Models.ProductData;
-import ru.alexangan.developer.geatech.Models.ReportStatesModel;
-import ru.alexangan.developer.geatech.Models.VisitData;
+import ru.alexangan.developer.geatech.Models.ReportStates;
+import ru.alexangan.developer.geatech.Models.VisitStates;
 import ru.alexangan.developer.geatech.Models.VisitItem;
 import ru.alexangan.developer.geatech.Network.LocationRetriever;
 import ru.alexangan.developer.geatech.R;
@@ -115,8 +115,8 @@ public class CTLinfoFragment extends Fragment implements View.OnClickListener, L
         VisitItem visitItem = visitItems.get(selectedIndex);
         ClientData clientData = visitItem.getClientData();
         ProductData productData = visitItem.getProductData();
-        VisitData visitData = visitItem.getVisitData();
-        ReportStatesModel reportStatesModel = visitItem.getReportStatesModel();
+        VisitStates visitStates = visitItem.getVisitStates();
+        ReportStates reportStates = visitItem.getReportStates();
 
         TextView clientNameTextView = (TextView) rootView.findViewById(R.id.tvClientName);
         clientNameTextView.setText(clientData.getName());
@@ -192,8 +192,8 @@ public class CTLinfoFragment extends Fragment implements View.OnClickListener, L
         {
             etCoordNord.setText(String.valueOf(mLastLocation.getLatitude()), TextView.BufferType.EDITABLE);
             etCoordEst.setText(String.valueOf(mLastLocation.getLongitude()), TextView.BufferType.EDITABLE);
-            visitItems.get(selectedIndex).getReportStatesModel().setCoordNord(mLastLocation.getLatitude());
-            visitItems.get(selectedIndex).getReportStatesModel().setCoordEst(mLastLocation.getLongitude());
+            visitItems.get(selectedIndex).getClientData().setCoordNord(mLastLocation.getLatitude());
+            visitItems.get(selectedIndex).getClientData().setCoordEst(mLastLocation.getLongitude());
 
             if (mLastLocation.hasAltitude())
             {
@@ -271,7 +271,7 @@ public class CTLinfoFragment extends Fragment implements View.OnClickListener, L
         {
             public void run()
             {
-                visitItems.get(selectedIndex).getReportStatesModel().setAltitude(altitude);
+                visitItems.get(selectedIndex).getClientData().setAltitude(altitude);
                 etAltitude.setText(String.valueOf(altitude), TextView.BufferType.EDITABLE);
             }
         });

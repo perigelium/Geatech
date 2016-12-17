@@ -33,7 +33,7 @@ public class ReportsListFragment extends ListFragment
 
         for (int i = 0; i< visitItems.size(); i++)
         {
-            if(visitItems.get(i).getVisitData().getDataOraSopralluogo() != null)
+            if(visitItems.get(i).getVisitStates().getDataOraSopralluogo() != null)
             {
                 visitItemsDateTimeSet.add(visitItems.get(i));
                 visitItemsPositions.add(i);

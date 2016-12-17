@@ -31,7 +31,7 @@ public class InWorkListVisitsFragment extends ListFragment
 
         for (VisitItem item : visitItems)
         {
-            if(item.getVisitData().getDataOraSopralluogo() != null)
+            if(item.getVisitStates().getDataOraSopralluogo() != null)
             {
                 visitItemsDateTimeSet.add(item);
             }

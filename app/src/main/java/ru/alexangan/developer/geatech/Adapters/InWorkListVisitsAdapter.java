@@ -16,8 +16,8 @@ import java.util.Locale;
 import ru.alexangan.developer.geatech.Models.ClientData;
 import ru.alexangan.developer.geatech.Models.ItalianMonths;
 import ru.alexangan.developer.geatech.Models.ProductData;
-import ru.alexangan.developer.geatech.Models.ReportStatesModel;
-import ru.alexangan.developer.geatech.Models.VisitData;
+import ru.alexangan.developer.geatech.Models.ReportStates;
+import ru.alexangan.developer.geatech.Models.VisitStates;
 import ru.alexangan.developer.geatech.Models.VisitItem;
 import ru.alexangan.developer.geatech.R;
 
@@ -68,7 +68,8 @@ public class InWorkListVisitsAdapter extends BaseAdapter
 
         ClientData clientData = visitItem.getClientData();
         ProductData productData = visitItem.getProductData();
-        VisitData visitData = visitItem.getVisitData();
+        VisitStates visitStates = visitItem.getVisitStates();
+        ReportStates reportStates = visitItem.getReportStates();
 
         TextView tvVisitDay = (TextView)row.findViewById(R.id.tvVisitDay);
         TextView tvVisitMonth = (TextView)row.findViewById(R.id.tvVisitMonth);
@@ -83,7 +84,7 @@ public class InWorkListVisitsAdapter extends BaseAdapter
         TextView clientAddressTextView = (TextView) row.findViewById(R.id.tvClientAddress);
         clientAddressTextView.setText(clientData.getAddress());
 
-        String visitDateTime = visitData.getDataOraSopralluogo();
+        String visitDateTime = visitStates.getDataOraSopralluogo();
 
         if(visitDateTime != null)
         {
@@ -111,10 +112,9 @@ public class InWorkListVisitsAdapter extends BaseAdapter
             tvVisitTime.setText(Integer.toString(calendar.get(calendar.HOUR_OF_DAY)) + ":" + minuteStr);
         }
 
-        ReportStatesModel reportStatesModel = ReportStatesModel.getInstance();
-        String GeneralInfoCompletionState = reportStatesModel.getGeneralInfoCompletionStateString().Value();
-        String reportCompletionState = reportStatesModel.getReportCompletionStateString().Value();
-        String photoAddedState = reportStatesModel.getPhotoAddedStateString().Value();
+        String GeneralInfoCompletionState = reportStates.getGeneralInfoCompletionStateString().Value();
+        String reportCompletionState = reportStates.getReportCompletionStateString().Value();
+        String photoAddedState = reportStates.getPhotoAddedStateString().Value();
 
         TextView tvPhotosPresent = (TextView) row.findViewById(R.id.tvPhotosPresent);
         tvPhotosPresent.setText(photoAddedState);

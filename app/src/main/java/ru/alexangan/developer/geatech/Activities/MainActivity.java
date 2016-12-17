@@ -7,6 +7,9 @@ import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.view.View;
 
+import io.realm.Realm;
+import io.realm.RealmConfiguration;
+import io.realm.exceptions.RealmMigrationNeededException;
 import ru.alexangan.developer.geatech.Fragments.CTLinfoFragment;
 import ru.alexangan.developer.geatech.Fragments.ComingListVisitsFragment;
 import ru.alexangan.developer.geatech.Fragments.ComposeReportTemplateFragment;
@@ -23,8 +26,12 @@ import ru.alexangan.developer.geatech.Fragments.ReportsListFragment;
 import ru.alexangan.developer.geatech.Fragments.SendReportFragment;
 import ru.alexangan.developer.geatech.Fragments.SetDateTimeFragment;
 import ru.alexangan.developer.geatech.Interfaces.Communicator;
+import ru.alexangan.developer.geatech.Models.VisitItem;
 import ru.alexangan.developer.geatech.R;
 import ru.alexangan.developer.geatech.Utils.SwipeDetector;
+
+import static ru.alexangan.developer.geatech.Activities.LoginActivity.realm;
+import static ru.alexangan.developer.geatech.Network.RESTdataReceiver.visitItems;
 
 public class MainActivity extends Activity implements Communicator
 {
@@ -50,10 +57,23 @@ public class MainActivity extends Activity implements Communicator
     NotificationBarFragment notificationBarFragment;
 
     @Override
+    protected void onDestroy()
+    {
+        super.onDestroy();
+    }
+
+    @Override
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.work_window);
+
+/*        for (VisitItem visitItem : visitItems)
+        {
+            realm.beginTransaction();
+            realm.copyToRealmOrUpdate(visitItem);
+            realm.commitTransaction();
+        }*/
 
         //String visitsJSONData = getIntent().getStringExtra("JSON");
 

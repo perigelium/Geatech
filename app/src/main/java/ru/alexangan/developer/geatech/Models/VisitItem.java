@@ -3,31 +3,35 @@ package ru.alexangan.developer.geatech.Models;
 
 
 import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
 
 public class VisitItem extends RealmObject
 {
-
-    private VisitData visitData;
+    @PrimaryKey
+    private int id;
+    private VisitStates visitStates;
     private ClientData clientData;
     private ProductData productData;
-    private ReportStatesModel reportStatesModel;
+    private ReportStates reportStates;
 
     public VisitItem() {
     }
 
-    public VisitItem(VisitData visitData, ClientData clientData, ProductData productData, ReportStatesModel reportStatesModel) {
-        this.visitData = visitData;
+    public VisitItem(int id, VisitStates visitStates, ClientData clientData, ProductData productData, ReportStates reportStates)
+    {
+        this.id = id;
+        this.visitStates = visitStates;
         this.clientData = clientData;
         this.productData = productData;
-        this.reportStatesModel = reportStatesModel;
+        this.reportStates = reportStates;
     }
 
-    public VisitData getVisitData() {
-        return visitData;
+    public VisitStates getVisitStates() {
+        return visitStates;
     }
 
-    public void setVisitData(VisitData visitData) {
-        this.visitData = visitData;
+    public void setVisitStates(VisitStates visitStates) {
+        this.visitStates = visitStates;
     }
 
     public ClientData getClientData() {
@@ -47,13 +51,18 @@ public class VisitItem extends RealmObject
     }
 
 
-    public ReportStatesModel getReportStatesModel()
+    public ReportStates getReportStates()
     {
-        return reportStatesModel;
+        return reportStates;
     }
 
-    public void setReportStatesModel(ReportStatesModel reportStatesModel)
+    public void setReportStates(ReportStates reportStates)
     {
-        this.reportStatesModel = reportStatesModel;
+        this.reportStates = reportStates;
+    }
+
+    public int getId()
+    {
+        return id;
     }
 }

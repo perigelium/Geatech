@@ -17,7 +17,7 @@ import java.util.Locale;
 import ru.alexangan.developer.geatech.Models.ClientData;
 import ru.alexangan.developer.geatech.Models.ItalianMonths;
 import ru.alexangan.developer.geatech.Models.ProductData;
-import ru.alexangan.developer.geatech.Models.VisitData;
+import ru.alexangan.developer.geatech.Models.VisitStates;
 import ru.alexangan.developer.geatech.Models.VisitItem;
 import ru.alexangan.developer.geatech.R;
 
@@ -81,12 +81,12 @@ public class MyListVisitsAdapter extends BaseAdapter
         VisitItem visitItem = visitItems.get(position);
         ClientData clientData = visitItem.getClientData();
         ProductData productData = visitItem.getProductData();
-        VisitData visitData = visitItem.getVisitData();
+        VisitStates visitStates = visitItem.getVisitStates();
 
-        String visitDateTime = visitData.getDataOraSopralluogo();
+        String visitDateTime = visitStates.getDataOraSopralluogo();
         if(visitDateTime == null)
         {
-            visitDateTime = visitData.getDataSollecitoAppuntamento();
+            visitDateTime = visitStates.getDataSollecitoAppuntamento();
         }
 
         Calendar calendar = Calendar.getInstance();

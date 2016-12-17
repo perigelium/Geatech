@@ -25,16 +25,20 @@ import java.util.List;
 import java.util.Locale;
 
 import io.realm.Realm;
+import io.realm.RealmConfiguration;
+import io.realm.RealmList;
+import io.realm.exceptions.RealmMigrationNeededException;
 import ru.alexangan.developer.geatech.Adapters.SetVisitDateTimeListAdapter;
 import ru.alexangan.developer.geatech.Interfaces.Communicator;
 import ru.alexangan.developer.geatech.Models.ClientData;
 import ru.alexangan.developer.geatech.Models.ProductData;
-import ru.alexangan.developer.geatech.Models.ReportStatesModel;
+import ru.alexangan.developer.geatech.Models.ReportStates;
 import ru.alexangan.developer.geatech.Models.SubproductItem;
-import ru.alexangan.developer.geatech.Models.VisitData;
+import ru.alexangan.developer.geatech.Models.VisitStates;
 import ru.alexangan.developer.geatech.Models.VisitItem;
 import ru.alexangan.developer.geatech.R;
 
+import static ru.alexangan.developer.geatech.Activities.LoginActivity.realm;
 import static ru.alexangan.developer.geatech.Network.RESTdataReceiver.visitItems;
 
 public class SetDateTimeFragment extends Fragment implements View.OnClickListener
@@ -162,7 +166,7 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
         VisitItem visitItem = visitItems.get(selectedIndex);
         ClientData clientData = visitItem.getClientData();
         ProductData productData = visitItem.getProductData();
-        VisitData visitData = visitItem.getVisitData();
+        VisitStates visitStates = visitItem.getVisitStates();
         List<SubproductItem> list = productData.getSubItem();
 
 
@@ -191,10 +195,10 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
         mDateSetTextView = (TextView) rootView.findViewById(R.id.tvDateSet);
         mTimeSetTextView = (TextView) rootView.findViewById(R.id.tvTimeSet);
 
-        String visitDateTime = visitData.getDataOraSopralluogo();
+        String visitDateTime = visitStates.getDataOraSopralluogo();
         if(visitDateTime == null)
         {
-            visitDateTime = visitData.getDataSollecitoAppuntamento();
+            visitDateTime = visitStates.getDataSollecitoAppuntamento();
         }
 
         Calendar calendar = Calendar.getInstance();
@@ -236,16 +240,26 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
 
 
         // Initialize Realm
-        Realm.init(getActivity());
+        //Realm.init(getActivity());
 
 // Get a Realm instance for this thread
-        Realm realm = Realm.getDefaultInstance();
+        //Realm realm = Realm.getDefaultInstance();
 
         realm.beginTransaction();
-        VisitItem realmVisitItem = realm.createObject(VisitItem.class); // Create managed objects directly
-        ReportStatesModel reportStatesModel = realmVisitItem.getReportStatesModel();
-        String status = reportStatesModel.getGeneralInfoCompletionStateString().Value();
 
+        //final VisitItem realmVisitItem = realm.createObject(VisitItem.class);
+
+        int visitItemsSize = visitItems.size();
+        VisitItem realmVisitItem = realm.where(VisitItem.class).equalTo("id", 5).findFirst();
+        Boolean isReportsent = realmVisitItem.getReportStates().isReportSent();
+        int notesCount = realm.where(VisitItem.class).findAll().size();
+        //final VisitItem realmVisitItem = realm.copyToRealmOrUpdate(visitItem);
+
+        notesCount = realm.where(ReportStates.class).findAll().size();
+
+        ReportStates reportStates = realmVisitItem.getReportStates();
+        String status = reportStates.getGeneralInfoCompletionStateString().Value();
+        realmVisitItem.getReportStates().setReportSent(true);
         realm.commitTransaction();
 
 
@@ -298,8 +312,8 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
     {
         if (v.getId() == R.id.btnApriMappa)
         {
-            double latitude = visitItems.get(selectedIndex).getReportStatesModel().getCoordNord();
-            double longitude = visitItems.get(selectedIndex).getReportStatesModel().getCoordEst();
+            double latitude = visitItems.get(selectedIndex).getClientData().getCoordNord();
+            double longitude = visitItems.get(selectedIndex).getClientData().getCoordEst();
 
             String uri = String.format(Locale.ENGLISH, "http://maps.google.com/maps?daddr=%f,%f (%s)", (float)latitude, (float)longitude, "Where the party is at");
             Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
@@ -362,11 +376,11 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
 
 
             VisitItem visitItem = visitItems.get(selectedIndex);
-            VisitData visitData = visitItem.getVisitData();
+            VisitStates visitStates = visitItem.getVisitStates();
 
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
             strDateTime = sdf.format(calendar.getTime());
-            visitData.setDataOraSopralluogo(strDateTime);
+            visitStates.setDataOraSopralluogo(strDateTime);
 
             //getActivity().getFragmentManager().beginTransaction().remove(this).commit();
             mCommunicator.onDateTimeSetReturned(true);

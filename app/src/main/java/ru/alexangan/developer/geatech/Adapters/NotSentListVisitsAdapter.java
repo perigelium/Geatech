@@ -18,8 +18,8 @@ import java.util.Locale;
 import ru.alexangan.developer.geatech.Models.ClientData;
 import ru.alexangan.developer.geatech.Models.ItalianMonths;
 import ru.alexangan.developer.geatech.Models.ProductData;
-import ru.alexangan.developer.geatech.Models.ReportStatesModel;
-import ru.alexangan.developer.geatech.Models.VisitData;
+import ru.alexangan.developer.geatech.Models.ReportStates;
+import ru.alexangan.developer.geatech.Models.VisitStates;
 import ru.alexangan.developer.geatech.Models.VisitItem;
 import ru.alexangan.developer.geatech.R;
 
@@ -70,8 +70,8 @@ public class NotSentListVisitsAdapter extends BaseAdapter
 
         ClientData clientData = visitItem.getClientData();
         ProductData productData = visitItem.getProductData();
-        VisitData visitData = visitItem.getVisitData();
-        ReportStatesModel reportStatesModel = visitItem.getReportStatesModel();
+        VisitStates visitStates = visitItem.getVisitStates();
+        ReportStates reportStates = visitItem.getReportStates();
 
         TextView tvVisitDay = (TextView)row.findViewById(R.id.tvVisitDay);
         TextView tvVisitMonth = (TextView)row.findViewById(R.id.tvVisitMonth);
@@ -87,13 +87,13 @@ public class NotSentListVisitsAdapter extends BaseAdapter
         clientAddressTextView.setText(clientData.getAddress());
 
         TextView tvReportCompletionState = (TextView) row.findViewById(R.id.tvReportCompletionState);
-        tvReportCompletionState.setText(reportStatesModel.getDataOraRaportoCompletato());
+        tvReportCompletionState.setText(reportStates.getDataOraRaportoCompletato());
 
         TextView tvNotSentReason = (TextView) row.findViewById(R.id.tvNotSentReason);
-        tvNotSentReason.setText(reportStatesModel.getSendingReportTriesStateString().Value());
+        tvNotSentReason.setText(reportStates.getSendingReportTriesStateString().Value());
 
         TextView tvNextTimeTryToSendReport = (TextView) row.findViewById(R.id.tvNextTimeTryToSendReport);
-        tvNextTimeTryToSendReport.setText(reportStatesModel.getDataOraProssimoTentativo());
+        tvNextTimeTryToSendReport.setText(reportStates.getDataOraProssimoTentativo());
 
         Button btnSendReportNow = (Button) row.findViewById(R.id.btnSendReportNow);
         btnSendReportNow.setOnClickListener(new View.OnClickListener()
@@ -109,7 +109,7 @@ public class NotSentListVisitsAdapter extends BaseAdapter
             }
         });
 
-        String visitDateTime = visitData.getDataOraSopralluogo();
+        String visitDateTime = visitStates.getDataOraSopralluogo();
 
         if(visitDateTime != null)
         {

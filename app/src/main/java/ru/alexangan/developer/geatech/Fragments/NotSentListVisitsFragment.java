@@ -32,8 +32,8 @@ public class NotSentListVisitsFragment extends ListFragment implements View.OnCl
 
         for (VisitItem item : visitItems)
         {
-            //if(item.getReportStatesModel().getReportCompletionState() == 2) // 2 = completed, 0 = not started
-            if(item.getVisitData().getDataOraSopralluogo() != null)
+            //if(item.getReportStates().getReportCompletionState() == 2) // 2 = completed, 0 = not started
+            if(item.getVisitStates().getDataOraSopralluogo() != null)
             {
                 visitItemsDateTimeSet.add(item);
             }

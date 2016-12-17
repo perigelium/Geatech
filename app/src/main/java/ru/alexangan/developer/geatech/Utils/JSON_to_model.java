@@ -9,10 +9,12 @@ import java.util.ArrayList;
 import io.realm.RealmList;
 import ru.alexangan.developer.geatech.Models.ClientData;
 import ru.alexangan.developer.geatech.Models.ProductData;
-import ru.alexangan.developer.geatech.Models.ReportStatesModel;
+import ru.alexangan.developer.geatech.Models.ReportStates;
 import ru.alexangan.developer.geatech.Models.SubproductItem;
-import ru.alexangan.developer.geatech.Models.VisitData;
+import ru.alexangan.developer.geatech.Models.VisitStates;
 import ru.alexangan.developer.geatech.Models.VisitItem;
+
+import static ru.alexangan.developer.geatech.Activities.LoginActivity.realm;
 
 /**
  * Created by user on 12/2/2016.
@@ -20,9 +22,9 @@ import ru.alexangan.developer.geatech.Models.VisitItem;
 
 public class JSON_to_model
 {
-    public static ArrayList<VisitItem> getVisitTtemsList (String visits_downloaded_data)
+    public static RealmList<VisitItem> getVisitTtemsList (String visits_downloaded_data)
     {
-        ArrayList<VisitItem> visitItems = new ArrayList<>();
+        RealmList<VisitItem> visitItems = new RealmList<>();
 
         try
         {
@@ -46,7 +48,7 @@ public class JSON_to_model
                 String note_sopralluogo = visit_data.getString("note_sopralluogo");
                 String tipo_gestione_sopralluogo = visit_data.getString("tipo_gestione_sopralluogo");
 
-                VisitData visitData = new VisitData(data_sollecito_appuntamento);
+                VisitStates visitStates = new VisitStates(data_sollecito_appuntamento);
 
                 JSONObject client_dataJSONObject = client_data.getJSONObject(0);
 
@@ -55,7 +57,7 @@ public class JSON_to_model
                 String phone = client_dataJSONObject.getString("phone");
                 String mobile = client_dataJSONObject.getString("mobile");
 
-                ClientData clientData = new ClientData( name,  address,  phone,  mobile);
+                ClientData clientData = new ClientData(i, name,  address,  phone,  mobile);
 
                 String productType = client_dataJSONObject.getString("product_type");
                 String product = client_dataJSONObject.getString("product");
@@ -72,13 +74,14 @@ public class JSON_to_model
                     String subproduct_type = subproduct_dataJSONObject.getString("product_type");
                     Integer pieces_nr = subproduct_dataJSONObject.getInt("pieces_nr");
 
-                    SubproductItem item = new SubproductItem(subproduct, subproduct_type, pieces_nr);
+                    SubproductItem item = new SubproductItem(i, subproduct, subproduct_type, pieces_nr);
                     subproductsList.add(item);
                 }
 
-                ProductData productData = new ProductData( productType,  product, subproductsList);
-                ReportStatesModel reportStatesModel = ReportStatesModel.getInstance();
-                VisitItem visitItem = new VisitItem(visitData, clientData, productData, reportStatesModel);
+                ProductData productData = new ProductData(i, productType,  product, subproductsList);
+                ReportStates reportStates = new ReportStates(i);
+                VisitItem visitItem = new VisitItem(i, visitStates, clientData, productData, reportStates);
+
                 visitItems.add(visitItem);
             }
 

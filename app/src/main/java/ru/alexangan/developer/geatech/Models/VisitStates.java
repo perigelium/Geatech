@@ -4,9 +4,9 @@ package ru.alexangan.developer.geatech.Models;
 
 import io.realm.RealmObject;
 
-public class VisitData  extends RealmObject
+public class VisitStates extends RealmObject
 {
-
+    private int id;
     private String idSopralluogo;
     private String idFornitore;
     private String idPractice;
@@ -21,10 +21,14 @@ public class VisitData  extends RealmObject
     private String tipoGestioneSopralluogo;
     private String noteSopralluogo;
 
-    public VisitData() {
+    public VisitStates(){};
+
+    public VisitStates(int id)
+    {
+        this.id = id;
     }
 
-    public VisitData(String dataSollecitoAppuntamento) {
+    public VisitStates(String dataSollecitoAppuntamento) {
 /*        this.idSopralluogo = idSopralluogo;
         this.idFornitore = idFornitore;
         this.idPractice = idPractice;
@@ -274,4 +278,8 @@ public class VisitData  extends RealmObject
         this.noteSopralluogo = noteSopralluogo;
     }
 
+    public int getId()
+    {
+        return id;
+    }
 }

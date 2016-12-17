@@ -9,6 +9,8 @@ import android.view.View;
 import android.widget.Toast;
 
 import io.realm.Realm;
+import io.realm.RealmConfiguration;
+import io.realm.exceptions.RealmMigrationNeededException;
 import ru.alexangan.developer.geatech.Fragments.CredentialsSentFragment;
 import ru.alexangan.developer.geatech.Fragments.UserFirstLoginFragment;
 import ru.alexangan.developer.geatech.Fragments.UserLoginFragment;
@@ -18,6 +20,8 @@ import ru.alexangan.developer.geatech.Interfaces.RESTdataReceiverEventListener;
 import ru.alexangan.developer.geatech.Models.VisitItem;
 import ru.alexangan.developer.geatech.Network.RESTdataReceiver;
 import ru.alexangan.developer.geatech.R;
+
+import static ru.alexangan.developer.geatech.Network.RESTdataReceiver.visitItems;
 
 
 public class LoginActivity extends Activity implements RESTdataReceiverEventListener, LoginCommunicator
@@ -29,12 +33,41 @@ public class LoginActivity extends Activity implements RESTdataReceiverEventList
     UserPasswordRecoverFragment userPasswordRecoverFragment;
     UserLoginFragment userLoginFragment;
     CredentialsSentFragment credentialsSentFragment;
+    public static Realm realm;
+
+    @Override
+    protected void onDestroy()
+    {
+        super.onDestroy();
+
+        realm.close();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login_window_container);
+
+        Realm.init(getApplicationContext());
+        RealmConfiguration realmConfiguration = new RealmConfiguration
+                .Builder()
+                .deleteRealmIfMigrationNeeded()
+                .build();
+
+
+        try {
+            realm =  Realm.getInstance(realmConfiguration);
+        } catch (RealmMigrationNeededException e){
+            try {
+                Realm.deleteRealm(realmConfiguration);
+                //Realm file has been deleted.
+                realm =   Realm.getInstance(realmConfiguration);
+            } catch (Exception ex){
+                throw ex;
+                //No Realm file to remove.
+            }
+        }
 
         userLoginFragment = new UserLoginFragment();
         userFirstLoginFragment = new UserFirstLoginFragment();

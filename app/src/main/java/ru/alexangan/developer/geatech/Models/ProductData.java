@@ -8,6 +8,7 @@ import io.realm.RealmObject;
 public class ProductData extends RealmObject
 {
 
+    private int id;
     private String productType;
     private String idProductType;
     private String product;
@@ -17,8 +18,9 @@ public class ProductData extends RealmObject
     {
     }
 
-    public ProductData(String productType, String product, RealmList<SubproductItem> subItem)
+    public ProductData(int id, String productType, String product, RealmList<SubproductItem> subItem)
     {
+        this.id = id;
         this.productType = productType;
         //this.idProductType = idProductType;
         this.product = product;
@@ -54,4 +56,8 @@ public class ProductData extends RealmObject
         this.subItem = subItem;
     }
 
+    public int getId()
+    {
+        return id;
+    }
 }

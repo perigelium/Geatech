@@ -6,15 +6,16 @@ import io.realm.RealmObject;
 
 public class SubproductItem  extends RealmObject
 {
-
+    private int id;
     private String subproduct;
     private String productType;
     private Integer piecesNr;
 
-    public SubproductItem() {
-    }
+    public SubproductItem() {}
 
-    public SubproductItem(String subproduct, String productType, Integer piecesNr) {
+    public SubproductItem(int id, String subproduct, String productType, Integer piecesNr)
+    {
+        this.id = id;
         this.subproduct = subproduct;
         this.productType = productType;
         this.piecesNr = piecesNr;
@@ -34,5 +35,8 @@ public class SubproductItem  extends RealmObject
         return piecesNr;
     }
 
-
+    public int getId()
+    {
+        return id;
+    }
 }
