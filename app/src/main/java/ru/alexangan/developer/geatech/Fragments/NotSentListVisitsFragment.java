@@ -10,11 +10,14 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
+import io.realm.RealmResults;
 import ru.alexangan.developer.geatech.Adapters.NotSentListVisitsAdapter;
 import ru.alexangan.developer.geatech.Interfaces.Communicator;
+import ru.alexangan.developer.geatech.Models.ReportStates;
 import ru.alexangan.developer.geatech.Models.VisitItem;
 import ru.alexangan.developer.geatech.R;
 
+import static ru.alexangan.developer.geatech.Activities.MainActivity.realm;
 import static ru.alexangan.developer.geatech.Network.RESTdataReceiver.visitItems;
 
 public class NotSentListVisitsFragment extends ListFragment implements View.OnClickListener
@@ -30,12 +33,23 @@ public class NotSentListVisitsFragment extends ListFragment implements View.OnCl
 
         ArrayList<VisitItem> visitItemsDateTimeSet = new ArrayList<>();
 
-        for (VisitItem item : visitItems)
+        realm.beginTransaction();
+
+        RealmResults<ReportStates> reportStatesList = realm.where(ReportStates.class).findAll();
+
+        realm.commitTransaction();
+
+
+        for (VisitItem visitItem : visitItems)
         {
-            //if(item.getReportStates().getReportCompletionState() == 2) // 2 = completed, 0 = not started
-            if(item.getVisitStates().getDataOraSopralluogo() != null)
+            for(ReportStates reportStates : reportStatesList)
             {
-                visitItemsDateTimeSet.add(item);
+                if (visitItem.getVisitStates().getIdSopralluogo() == reportStates.getIdSopralluogo()
+                        && reportStates.getDataOraSopralluogo()!=null)
+                {
+                    visitItemsDateTimeSet.add(visitItem);
+                    break;
+                }
             }
         }
 

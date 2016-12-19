@@ -33,14 +33,11 @@ public class LoginActivity extends Activity implements RESTdataReceiverEventList
     UserPasswordRecoverFragment userPasswordRecoverFragment;
     UserLoginFragment userLoginFragment;
     CredentialsSentFragment credentialsSentFragment;
-    public static Realm realm;
 
     @Override
     protected void onDestroy()
     {
         super.onDestroy();
-
-        realm.close();
     }
 
     @Override
@@ -48,26 +45,6 @@ public class LoginActivity extends Activity implements RESTdataReceiverEventList
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login_window_container);
-
-        Realm.init(getApplicationContext());
-        RealmConfiguration realmConfiguration = new RealmConfiguration
-                .Builder()
-                .deleteRealmIfMigrationNeeded()
-                .build();
-
-
-        try {
-            realm =  Realm.getInstance(realmConfiguration);
-        } catch (RealmMigrationNeededException e){
-            try {
-                Realm.deleteRealm(realmConfiguration);
-                //Realm file has been deleted.
-                realm =   Realm.getInstance(realmConfiguration);
-            } catch (Exception ex){
-                throw ex;
-                //No Realm file to remove.
-            }
-        }
 
         userLoginFragment = new UserLoginFragment();
         userFirstLoginFragment = new UserFirstLoginFragment();
@@ -105,7 +82,7 @@ public class LoginActivity extends Activity implements RESTdataReceiverEventList
     }
 
     @Override
-    public void onButtonClicked(View view)
+    public void onButtonClicked(View view, Boolean credentialsesFound)
     {
         if(view.getId() == R.id.btnPasswordRecover )
         {
@@ -132,7 +109,15 @@ public class LoginActivity extends Activity implements RESTdataReceiverEventList
 
         if(view.getId() == R.id.btnLogin )
         {
-            restDataReceiver.getLoginToken();
+            if(credentialsesFound)
+            {
+                Intent registerIntent = new Intent(LoginActivity.this, MainActivity.class);
+                startActivity(registerIntent);
+            }
+            else
+            {
+                restDataReceiver.getLoginToken();
+            }
         }
     }
 

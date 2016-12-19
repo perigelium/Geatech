@@ -23,6 +23,8 @@ import ru.alexangan.developer.geatech.Models.VisitStates;
 import ru.alexangan.developer.geatech.Models.VisitItem;
 import ru.alexangan.developer.geatech.R;
 
+import static ru.alexangan.developer.geatech.Activities.MainActivity.realm;
+
 /**
  * Created by user on 11/21/2016.
  */
@@ -71,7 +73,7 @@ public class NotSentListVisitsAdapter extends BaseAdapter
         ClientData clientData = visitItem.getClientData();
         ProductData productData = visitItem.getProductData();
         VisitStates visitStates = visitItem.getVisitStates();
-        ReportStates reportStates = visitItem.getReportStates();
+        int idSopralluogo = visitStates.getIdSopralluogo();
 
         TextView tvVisitDay = (TextView)row.findViewById(R.id.tvVisitDay);
         TextView tvVisitMonth = (TextView)row.findViewById(R.id.tvVisitMonth);
@@ -86,14 +88,21 @@ public class NotSentListVisitsAdapter extends BaseAdapter
         TextView clientAddressTextView = (TextView) row.findViewById(R.id.tvClientAddress);
         clientAddressTextView.setText(clientData.getAddress());
 
-        TextView tvReportCompletionState = (TextView) row.findViewById(R.id.tvReportCompletionState);
-        tvReportCompletionState.setText(reportStates.getDataOraRaportoCompletato());
+        realm.beginTransaction();
+        ReportStates reportStates = realm.where(ReportStates.class).equalTo("idSopralluogo", idSopralluogo).findFirst();
+        realm.commitTransaction();
 
-        TextView tvNotSentReason = (TextView) row.findViewById(R.id.tvNotSentReason);
-        tvNotSentReason.setText(reportStates.getSendingReportTriesStateString().Value());
+        if(reportStates != null)
+        {
+            TextView tvReportCompletionState = (TextView) row.findViewById(R.id.tvReportCompletionState);
+            tvReportCompletionState.setText(reportStates.getDataOraRaportoCompletato());
 
-        TextView tvNextTimeTryToSendReport = (TextView) row.findViewById(R.id.tvNextTimeTryToSendReport);
-        tvNextTimeTryToSendReport.setText(reportStates.getDataOraProssimoTentativo());
+            TextView tvNotSentReason = (TextView) row.findViewById(R.id.tvNotSentReason);
+            tvNotSentReason.setText(reportStates.getSendingReportTriesStateString().Value());
+
+            TextView tvNextTimeTryToSendReport = (TextView) row.findViewById(R.id.tvNextTimeTryToSendReport);
+            tvNextTimeTryToSendReport.setText(reportStates.getDataOraProssimoTentativo());
+        }
 
         Button btnSendReportNow = (Button) row.findViewById(R.id.btnSendReportNow);
         btnSendReportNow.setOnClickListener(new View.OnClickListener()
@@ -109,7 +118,7 @@ public class NotSentListVisitsAdapter extends BaseAdapter
             }
         });
 
-        String visitDateTime = visitStates.getDataOraSopralluogo();
+        String visitDateTime = reportStates.getDataOraSopralluogo();
 
         if(visitDateTime != null)
         {

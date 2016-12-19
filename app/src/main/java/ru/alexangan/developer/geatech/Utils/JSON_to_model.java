@@ -14,8 +14,6 @@ import ru.alexangan.developer.geatech.Models.SubproductItem;
 import ru.alexangan.developer.geatech.Models.VisitStates;
 import ru.alexangan.developer.geatech.Models.VisitItem;
 
-import static ru.alexangan.developer.geatech.Activities.LoginActivity.realm;
-
 /**
  * Created by user on 12/2/2016.
  */
@@ -48,7 +46,7 @@ public class JSON_to_model
                 String note_sopralluogo = visit_data.getString("note_sopralluogo");
                 String tipo_gestione_sopralluogo = visit_data.getString("tipo_gestione_sopralluogo");
 
-                VisitStates visitStates = new VisitStates(data_sollecito_appuntamento);
+                VisitStates visitStates = new VisitStates(id_sopralluogo, data_sollecito_appuntamento);
 
                 JSONObject client_dataJSONObject = client_data.getJSONObject(0);
 
@@ -79,8 +77,8 @@ public class JSON_to_model
                 }
 
                 ProductData productData = new ProductData(i, productType,  product, subproductsList);
-                ReportStates reportStates = new ReportStates(i);
-                VisitItem visitItem = new VisitItem(i, visitStates, clientData, productData, reportStates);
+
+                VisitItem visitItem = new VisitItem(i, visitStates, clientData, productData);
 
                 visitItems.add(visitItem);
             }

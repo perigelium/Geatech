@@ -9,10 +9,13 @@ import android.view.ViewGroup;
 
 import java.util.ArrayList;
 
+import io.realm.RealmResults;
 import ru.alexangan.developer.geatech.Adapters.InWorkListVisitsAdapter;
+import ru.alexangan.developer.geatech.Models.ReportStates;
 import ru.alexangan.developer.geatech.Models.VisitItem;
 import ru.alexangan.developer.geatech.R;
 
+import static ru.alexangan.developer.geatech.Activities.MainActivity.realm;
 import static ru.alexangan.developer.geatech.Network.RESTdataReceiver.visitItems;
 
 public class InWorkListVisitsFragment extends ListFragment
@@ -29,11 +32,23 @@ public class InWorkListVisitsFragment extends ListFragment
 
         ArrayList<VisitItem> visitItemsDateTimeSet = new ArrayList<>();
 
-        for (VisitItem item : visitItems)
+        realm.beginTransaction();
+
+        RealmResults<ReportStates> reportStatesList = realm.where(ReportStates.class).findAll();
+
+        realm.commitTransaction();
+
+
+        for (VisitItem visitItem : visitItems)
         {
-            if(item.getVisitStates().getDataOraSopralluogo() != null)
+            for(ReportStates reportStates : reportStatesList)
             {
-                visitItemsDateTimeSet.add(item);
+                if (visitItem.getVisitStates().getIdSopralluogo() == reportStates.getIdSopralluogo()
+                        && reportStates.getDataOraSopralluogo()!=null)
+                {
+                    visitItemsDateTimeSet.add(visitItem);
+                    break;
+                }
             }
         }
 
@@ -47,11 +62,6 @@ public class InWorkListVisitsFragment extends ListFragment
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-
-        //mCommunicator = (Communicator)getActivity();
-
-        //listener = (OnItemSelectedListener) getActivity();
-
     }
 
     @Override
@@ -60,23 +70,6 @@ public class InWorkListVisitsFragment extends ListFragment
     {
         return inflater.inflate(R.layout.list_visits_fragment, container, false);
     }
-
-/*    @Override
-    public void onListItemClick(ListView l, View v, int position, long id)
-    {
-        super.onListItemClick(l, v, position, id);
-
-        //listener.OnListItemSelected(position, !listVisitsArrayList.get(position).getVISIT_DAY().isEmpty());
-
-*//*        Toast.makeText(getActivity(),
-                getListView().getItemAtPosition(position).toString(),
-                Toast.LENGTH_LONG).show();*//*
-    }*/
-
-/*    public interface OnItemSelectedListener
-    {
-        void OnListItemSelected(int itemIndex, Boolean dateTimeHasSet);
-    }*/
 }
 
 /*            int optionId = randomInteger!=0 ? R.layout.list_visits_cell_datetime_set : R.layout.list_visits_cell_datetime_set;

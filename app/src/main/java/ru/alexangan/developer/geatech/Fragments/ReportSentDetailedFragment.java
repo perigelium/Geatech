@@ -15,6 +15,7 @@ import ru.alexangan.developer.geatech.Models.VisitStates;
 import ru.alexangan.developer.geatech.Models.VisitItem;
 import ru.alexangan.developer.geatech.R;
 
+import static ru.alexangan.developer.geatech.Activities.MainActivity.realm;
 import static ru.alexangan.developer.geatech.Network.RESTdataReceiver.visitItems;
 
 /**
@@ -40,16 +41,23 @@ public class ReportSentDetailedFragment extends Fragment
         ClientData clientData = visitItem.getClientData();
         ProductData productData = visitItem.getProductData();
         VisitStates visitStates = visitItem.getVisitStates();
-        ReportStates reportStates = visitItem.getReportStates();
+        int idSopralluogo = visitStates.getIdSopralluogo();
 
         TextView tvdataOraSopralluogo = (TextView) rootView.findViewById(R.id.tvdataOraSopralluogo);
         tvdataOraSopralluogo.setText(visitStates.getDataOraSopralluogo());
 
-        TextView tvdataOraRaportoCompletato = (TextView) rootView.findViewById(R.id.tvdataOraRaportoCompletato);
-        tvdataOraRaportoCompletato.setText(reportStates.getDataOraRaportoCompletato());
+        realm.beginTransaction();
+        ReportStates reportStates = realm.where(ReportStates.class).equalTo("idSopralluogo", idSopralluogo).findFirst();
+        realm.commitTransaction();
 
-        TextView tvdataOraRaportoInviato = (TextView) rootView.findViewById(R.id.tvdataOraRaportoInviato);
-        tvdataOraRaportoInviato.setText(reportStates.getDataOraRaportoInviato());
+        if(reportStates != null)
+        {
+            TextView tvdataOraRaportoCompletato = (TextView) rootView.findViewById(R.id.tvdataOraRaportoCompletato);
+            tvdataOraRaportoCompletato.setText(reportStates.getDataOraRaportoCompletato());
+
+            TextView tvdataOraRaportoInviato = (TextView) rootView.findViewById(R.id.tvdataOraRaportoInviato);
+            tvdataOraRaportoInviato.setText(reportStates.getDataOraRaportoInviato());
+        }
 
         TextView clientNameTextView = (TextView) rootView.findViewById(R.id.tvClientName);
         clientNameTextView.setText(clientData.getName());
@@ -60,13 +68,20 @@ public class ReportSentDetailedFragment extends Fragment
         TextView clientAddressTextView = (TextView) rootView.findViewById(R.id.tvClientAddress);
         clientAddressTextView.setText(clientData.getAddress());
 
-        EditText etCoordNord = (EditText)rootView.findViewById(R.id.etCoordNord);
-        EditText etCoordEst = (EditText)rootView.findViewById(R.id.etCoordEst);
-        EditText etAltitude = (EditText)rootView.findViewById(R.id.etAltitude);
+        TextView etCoordNord = (TextView)rootView.findViewById(R.id.etCoordNord);
+        TextView etCoordEst = (TextView)rootView.findViewById(R.id.etCoordEst);
+        TextView etAltitude = (TextView)rootView.findViewById(R.id.etAltitude);
 
-        etCoordNord.setText(String.valueOf(clientData.getCoordNord()));
-        etCoordEst.setText(String.valueOf(clientData.getCoordEst()));
-        etAltitude.setText(String.valueOf((int)clientData.getAltitude()));
+        if(reportStates != null && reportStates.getLatitude()!=0.0 && reportStates.getLongitude()!=0.0 && reportStates.getAltitude()!=0.0)
+        {
+            double latitude = reportStates.getLatitude();
+            double longitude = reportStates.getLongitude();
+            double altitude = reportStates.getAltitude();
+
+            etCoordNord.setText(String.valueOf(latitude));
+            etCoordEst.setText(String.valueOf(longitude));
+            etAltitude.setText(String.valueOf((int) altitude));
+        }
 
         return rootView;
     }

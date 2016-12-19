@@ -15,9 +15,12 @@ import java.util.Locale;
 
 import ru.alexangan.developer.geatech.Models.ClientData;
 import ru.alexangan.developer.geatech.Models.ProductData;
+import ru.alexangan.developer.geatech.Models.ReportStates;
 import ru.alexangan.developer.geatech.Models.VisitStates;
 import ru.alexangan.developer.geatech.Models.VisitItem;
 import ru.alexangan.developer.geatech.R;
+
+import static ru.alexangan.developer.geatech.Activities.MainActivity.realm;
 
 /**
  * Created by user on 11/21/2016.
@@ -74,6 +77,13 @@ public class ComingListVisitsAdapter extends BaseAdapter
         ClientData clientData = visitItem.getClientData();
         ProductData productData = visitItem.getProductData();
         VisitStates visitStates = visitItem.getVisitStates();
+        int idSopralluogo = visitStates.getIdSopralluogo();
+
+        realm.beginTransaction();
+
+        ReportStates reportStates = realm.where(ReportStates.class).equalTo("idSopralluogo", idSopralluogo).findFirst();
+
+        realm.commitTransaction();
 
         TextView tvVisitDay = (TextView)row.findViewById(R.id.tvVisitDay);
         //TextView tvVisitMonth = (TextView)row.findViewById(R.id.tvVisitMonth);
@@ -87,16 +97,10 @@ public class ComingListVisitsAdapter extends BaseAdapter
         TextView clientAddressTextView = (TextView) row.findViewById(R.id.tvClientAddress);
         clientAddressTextView.setText(clientData.getAddress());
 
-        String visitDateTime = visitStates.getDataOraSopralluogo();
+        String visitDateTime = reportStates.getDataOraSopralluogo();
 
         if(visitDateTime != null)
         {
-/*            calendar.set(Calendar.YEAR, visitsList.get(position).getVisitYear());
-            calendar.set(Calendar.MONTH, visitsList.get(position).getVisitMonth() - 1);
-            calendar.set(Calendar.DAY_OF_MONTH, visitsList.get(position).getVisitDay());
-            calendar.set(Calendar.HOUR_OF_DAY, visitsList.get(position).getVisitHour());
-            calendar.set(Calendar.MINUTE, visitsList.get(position).getVisitMinute());*/
-
             Calendar calendar = Calendar.getInstance();
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
 

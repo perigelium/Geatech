@@ -12,18 +12,18 @@ public class VisitItem extends RealmObject
     private VisitStates visitStates;
     private ClientData clientData;
     private ProductData productData;
-    private ReportStates reportStates;
+    //private ReportStates reportStates;
 
     public VisitItem() {
     }
 
-    public VisitItem(int id, VisitStates visitStates, ClientData clientData, ProductData productData, ReportStates reportStates)
+    public VisitItem(int id, VisitStates visitStates, ClientData clientData, ProductData productData)
     {
         this.id = id;
         this.visitStates = visitStates;
         this.clientData = clientData;
         this.productData = productData;
-        this.reportStates = reportStates;
+        //this.reportStates = reportStates;
     }
 
     public VisitStates getVisitStates() {
@@ -51,7 +51,7 @@ public class VisitItem extends RealmObject
     }
 
 
-    public ReportStates getReportStates()
+/*    public ReportStates getReportStates()
     {
         return reportStates;
     }
@@ -59,7 +59,7 @@ public class VisitItem extends RealmObject
     public void setReportStates(ReportStates reportStates)
     {
         this.reportStates = reportStates;
-    }
+    }*/
 
     public int getId()
     {

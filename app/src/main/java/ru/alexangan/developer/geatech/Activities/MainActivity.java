@@ -9,6 +9,7 @@ import android.view.View;
 
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
+import io.realm.RealmResults;
 import io.realm.exceptions.RealmMigrationNeededException;
 import ru.alexangan.developer.geatech.Fragments.CTLinfoFragment;
 import ru.alexangan.developer.geatech.Fragments.ComingListVisitsFragment;
@@ -26,16 +27,16 @@ import ru.alexangan.developer.geatech.Fragments.ReportsListFragment;
 import ru.alexangan.developer.geatech.Fragments.SendReportFragment;
 import ru.alexangan.developer.geatech.Fragments.SetDateTimeFragment;
 import ru.alexangan.developer.geatech.Interfaces.Communicator;
+import ru.alexangan.developer.geatech.Models.ReportStates;
 import ru.alexangan.developer.geatech.Models.VisitItem;
 import ru.alexangan.developer.geatech.R;
 import ru.alexangan.developer.geatech.Utils.SwipeDetector;
 
-import static ru.alexangan.developer.geatech.Activities.LoginActivity.realm;
 import static ru.alexangan.developer.geatech.Network.RESTdataReceiver.visitItems;
 
 public class MainActivity extends Activity implements Communicator
 {
-
+    public static Realm realm;
     private FragmentManager mFragmentManager;
     //private FragmentTransaction mFragmentTransaction;
     SwipeDetector swipeDetector;
@@ -60,6 +61,8 @@ public class MainActivity extends Activity implements Communicator
     protected void onDestroy()
     {
         super.onDestroy();
+
+        realm.close();
     }
 
     @Override
@@ -68,12 +71,82 @@ public class MainActivity extends Activity implements Communicator
         super.onCreate(savedInstanceState);
         setContentView(R.layout.work_window);
 
-/*        for (VisitItem visitItem : visitItems)
+        Realm.init(getApplicationContext());
+        RealmConfiguration realmConfiguration = new RealmConfiguration
+                .Builder()
+                .deleteRealmIfMigrationNeeded()
+                .build();
+
+
+        try {
+            realm =  Realm.getInstance(realmConfiguration);
+        } catch (RealmMigrationNeededException e){
+            try {
+                Realm.deleteRealm(realmConfiguration);
+                //Realm file has been deleted.
+                realm =   Realm.getInstance(realmConfiguration);
+            } catch (Exception ex){
+                throw ex;
+                //No Realm file to remove.
+            }
+        }
+
+
+        for (VisitItem visitItem : visitItems)
         {
             realm.beginTransaction();
             realm.copyToRealmOrUpdate(visitItem);
             realm.commitTransaction();
+        }
+
+        realm.beginTransaction();
+
+        int visitItemsSize = visitItems.size();
+        int realmVisitItemsCount = realm.where(VisitItem.class).findAll().size();
+        int reportStatesCount = realm.where(ReportStates.class).findAll().size();
+
+        RealmResults<VisitItem> realmVisitItems = realm.where(VisitItem.class).findAll();
+        for (VisitItem realmVisitItem : realmVisitItems)
+        {
+            int idSopralluogo = realmVisitItem.getVisitStates().getIdSopralluogo();
+
+            Boolean addressAndProductPresent = false;
+            RealmResults<ReportStates> reportStatesList = realm.where(ReportStates.class).findAll();
+            for (ReportStates reportStates : reportStatesList)
+            {
+                int idSopralluogoRep = reportStates.getIdSopralluogo();
+
+                if(idSopralluogo == idSopralluogoRep)
+                {
+                    addressAndProductPresent = true;
+                    reportStates.setVisitId(realmVisitItem.getId());
+                }
+            }
+
+            if(addressAndProductPresent == false)
+            {
+                ReportStates newReportStates = new ReportStates(reportStatesList.size(), realmVisitItem.getId());
+                newReportStates.setIdSopralluogo(idSopralluogo);
+                realm.copyToRealm(newReportStates);
+            }
+        }
+
+/*        ReportStates realmReportStates5 = realm.where(ReportStates.class).equalTo("id", 5).findFirst();
+        if(realmReportStates5 != null)
+        {
+
+            Boolean isReportsent = realmReportStates5.isReportSent();
+
+            //final VisitItem realmVisitItem = realm.copyToRealmOrUpdate(visitItem);
+
+
+
+            String status = realmReportStates5.getGeneralInfoCompletionStateString().Value();
+            realmReportStates5.setReportSent(true);
         }*/
+
+
+        realm.commitTransaction();
 
         //String visitsJSONData = getIntent().getStringExtra("JSON");
 

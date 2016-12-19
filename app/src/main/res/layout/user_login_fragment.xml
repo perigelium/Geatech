@@ -38,7 +38,7 @@
                 app:srcCompat="@drawable/layer_61"/>
 
             <EditText
-                android:id="@+id/editText"
+                android:id="@+id/etLogin"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_alignParentLeft="true"
@@ -63,7 +63,7 @@
             android:background="#ffff">
 
             <EditText
-                android:id="@+id/editText4"
+                android:id="@+id/etPassword"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_alignParentBottom="true"
@@ -95,7 +95,7 @@
 
 
             <CheckBox
-                android:id="@+id/checkBox"
+                android:id="@+id/chkboxRememberMe"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="sans-serif"

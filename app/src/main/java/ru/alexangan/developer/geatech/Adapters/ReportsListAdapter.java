@@ -21,6 +21,8 @@ import ru.alexangan.developer.geatech.Models.VisitStates;
 import ru.alexangan.developer.geatech.Models.VisitItem;
 import ru.alexangan.developer.geatech.R;
 
+import static ru.alexangan.developer.geatech.Activities.MainActivity.realm;
+
 /**
  * Created by user on 11/21/2016.
  */
@@ -69,7 +71,6 @@ public class ReportsListAdapter extends BaseAdapter
         ClientData clientData = visitItem.getClientData();
         ProductData productData = visitItem.getProductData();
         VisitStates visitStates = visitItem.getVisitStates();
-        ReportStates reportStates = visitItem.getReportStates();
 
         TextView tvVisitDay = (TextView)row.findViewById(R.id.tvVisitDay);
         TextView tvVisitMonth = (TextView)row.findViewById(R.id.tvVisitMonth);
@@ -84,7 +85,15 @@ public class ReportsListAdapter extends BaseAdapter
         TextView clientAddressTextView = (TextView) row.findViewById(R.id.tvClientAddress);
         clientAddressTextView.setText(clientData.getAddress());
 
-        String visitDateTime = visitStates.getDataOraSopralluogo();
+        int idSopralluogo = visitStates.getIdSopralluogo();
+
+        realm.beginTransaction();
+
+        ReportStates reportStates = realm.where(ReportStates.class).equalTo("idSopralluogo", idSopralluogo).findFirst();
+
+        realm.commitTransaction();
+
+        String visitDateTime = reportStates.getDataOraSopralluogo();
 
         if(visitDateTime != null)
         {

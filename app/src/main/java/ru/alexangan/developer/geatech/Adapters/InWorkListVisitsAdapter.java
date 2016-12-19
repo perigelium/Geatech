@@ -21,6 +21,8 @@ import ru.alexangan.developer.geatech.Models.VisitStates;
 import ru.alexangan.developer.geatech.Models.VisitItem;
 import ru.alexangan.developer.geatech.R;
 
+import static ru.alexangan.developer.geatech.Activities.MainActivity.realm;
+
 /**
  * Created by user on 11/21/2016.
  */
@@ -69,7 +71,13 @@ public class InWorkListVisitsAdapter extends BaseAdapter
         ClientData clientData = visitItem.getClientData();
         ProductData productData = visitItem.getProductData();
         VisitStates visitStates = visitItem.getVisitStates();
-        ReportStates reportStates = visitItem.getReportStates();
+        int idSopralluogo = visitStates.getIdSopralluogo();
+
+        realm.beginTransaction();
+
+        ReportStates reportStates = realm.where(ReportStates.class).equalTo("idSopralluogo", idSopralluogo).findFirst();
+
+        realm.commitTransaction();
 
         TextView tvVisitDay = (TextView)row.findViewById(R.id.tvVisitDay);
         TextView tvVisitMonth = (TextView)row.findViewById(R.id.tvVisitMonth);
@@ -84,7 +92,7 @@ public class InWorkListVisitsAdapter extends BaseAdapter
         TextView clientAddressTextView = (TextView) row.findViewById(R.id.tvClientAddress);
         clientAddressTextView.setText(clientData.getAddress());
 
-        String visitDateTime = visitStates.getDataOraSopralluogo();
+        String visitDateTime = reportStates.getDataOraSopralluogo();
 
         if(visitDateTime != null)
         {
@@ -112,18 +120,22 @@ public class InWorkListVisitsAdapter extends BaseAdapter
             tvVisitTime.setText(Integer.toString(calendar.get(calendar.HOUR_OF_DAY)) + ":" + minuteStr);
         }
 
-        String GeneralInfoCompletionState = reportStates.getGeneralInfoCompletionStateString().Value();
-        String reportCompletionState = reportStates.getReportCompletionStateString().Value();
-        String photoAddedState = reportStates.getPhotoAddedStateString().Value();
 
-        TextView tvPhotosPresent = (TextView) row.findViewById(R.id.tvPhotosPresent);
-        tvPhotosPresent.setText(photoAddedState);
+        if(reportStates != null)
+        {
+            String GeneralInfoCompletionState = reportStates.getGeneralInfoCompletionStateString().Value();
+            String reportCompletionState = reportStates.getReportCompletionStateString().Value();
+            String photoAddedState = reportStates.getPhotoAddedStateString().Value();
 
-        TextView tvGeneralInfo = (TextView) row.findViewById(R.id.tvGeneralInfo);
-        tvGeneralInfo.setText(GeneralInfoCompletionState);
+            TextView tvPhotosPresent = (TextView) row.findViewById(R.id.tvPhotosPresent);
+            tvPhotosPresent.setText(photoAddedState);
 
-        TextView tvTecnicalReportState = (TextView) row.findViewById(R.id.tvTecnicalReportState);
-        tvTecnicalReportState.setText(reportCompletionState);
+            TextView tvGeneralInfo = (TextView) row.findViewById(R.id.tvGeneralInfo);
+            tvGeneralInfo.setText(GeneralInfoCompletionState);
+
+            TextView tvTecnicalReportState = (TextView) row.findViewById(R.id.tvTecnicalReportState);
+            tvTecnicalReportState.setText(reportCompletionState);
+        }
 
         return row;
     }

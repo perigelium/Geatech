@@ -7,7 +7,7 @@ import io.realm.RealmObject;
 public class VisitStates extends RealmObject
 {
     private int id;
-    private String idSopralluogo;
+    private int idSopralluogo;
     private String idFornitore;
     private String idPractice;
     private String dataOraAssegnazione;
@@ -28,8 +28,10 @@ public class VisitStates extends RealmObject
         this.id = id;
     }
 
-    public VisitStates(String dataSollecitoAppuntamento) {
-/*        this.idSopralluogo = idSopralluogo;
+    public VisitStates(int idSopralluogo, String dataSollecitoAppuntamento)
+    {
+        this.idSopralluogo = idSopralluogo;
+/*
         this.idFornitore = idFornitore;
         this.idPractice = idPractice;
         this.dataOraAssegnazione = dataOraAssegnazione;*/
@@ -49,7 +51,7 @@ public class VisitStates extends RealmObject
      * @return
      *     The idSopralluogo
      */
-    public String getIdSopralluogo() {
+    public int getIdSopralluogo() {
         return idSopralluogo;
     }
 
@@ -58,7 +60,7 @@ public class VisitStates extends RealmObject
      * @param idSopralluogo
      *     The id_sopralluogo
      */
-    public void setIdSopralluogo(String idSopralluogo) {
+    public void setIdSopralluogo(int idSopralluogo) {
         this.idSopralluogo = idSopralluogo;
     }
 

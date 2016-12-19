@@ -10,11 +10,14 @@ import android.widget.ListView;
 
 import java.util.ArrayList;
 
+import io.realm.RealmResults;
 import ru.alexangan.developer.geatech.Adapters.ReportsListAdapter;
 import ru.alexangan.developer.geatech.Interfaces.Communicator;
+import ru.alexangan.developer.geatech.Models.ReportStates;
 import ru.alexangan.developer.geatech.Models.VisitItem;
 import ru.alexangan.developer.geatech.R;
 
+import static ru.alexangan.developer.geatech.Activities.MainActivity.realm;
 import static ru.alexangan.developer.geatech.Network.RESTdataReceiver.visitItems;
 
 public class ReportsListFragment extends ListFragment
@@ -31,14 +34,37 @@ public class ReportsListFragment extends ListFragment
         ArrayList<VisitItem> visitItemsDateTimeSet = new ArrayList<>();
         visitItemsPositions = new ArrayList<>();
 
-        for (int i = 0; i< visitItems.size(); i++)
+        realm.beginTransaction();
+
+        RealmResults<ReportStates> reportStatesList = realm.where(ReportStates.class).findAll();
+
+        realm.commitTransaction();
+
+
+        for (VisitItem visitItem : visitItems)
+        {
+            for(ReportStates reportStates : reportStatesList)
+            {
+                if (visitItem.getVisitStates().getIdSopralluogo() == reportStates.getIdSopralluogo()
+                        && reportStates.getDataOraSopralluogo()!=null)
+                {
+                    visitItemsDateTimeSet.add(visitItem);
+                    visitItemsPositions.add(visitItem.getId());
+                    break;
+                }
+            }
+        }
+
+
+
+/*        for (int i = 0; i< visitItems.size(); i++)
         {
             if(visitItems.get(i).getVisitStates().getDataOraSopralluogo() != null)
             {
                 visitItemsDateTimeSet.add(visitItems.get(i));
                 visitItemsPositions.add(i);
             }
-        }
+        }*/
 
         ReportsListAdapter myListAdapter =
                 new ReportsListAdapter(getActivity(), R.layout.reports_list_fragment_row, visitItemsDateTimeSet);

@@ -38,7 +38,7 @@ import ru.alexangan.developer.geatech.Models.VisitStates;
 import ru.alexangan.developer.geatech.Models.VisitItem;
 import ru.alexangan.developer.geatech.R;
 
-import static ru.alexangan.developer.geatech.Activities.LoginActivity.realm;
+import static ru.alexangan.developer.geatech.Activities.MainActivity.realm;
 import static ru.alexangan.developer.geatech.Network.RESTdataReceiver.visitItems;
 
 public class SetDateTimeFragment extends Fragment implements View.OnClickListener
@@ -47,6 +47,7 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
     Calendar calendar;
     long elapsedDays;
     String strDateTime;
+    ReportStates reportStates;
 
     private TextView mDateSetTextView, mTimeSetTextView, mSetDateButton, mAnnullaSetDateTimeButton, mSetDateTimeSubmitButton,
             btnApriMappa, btnChiama;
@@ -167,7 +168,12 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
         ClientData clientData = visitItem.getClientData();
         ProductData productData = visitItem.getProductData();
         VisitStates visitStates = visitItem.getVisitStates();
+        int idSopralluogo = visitStates.getIdSopralluogo();
         List<SubproductItem> list = productData.getSubItem();
+
+        realm.beginTransaction();
+        reportStates = realm.where(ReportStates.class).equalTo("idSopralluogo", idSopralluogo).findFirst();
+        realm.commitTransaction();
 
 
             SetVisitDateTimeListAdapter adapter = new SetVisitDateTimeListAdapter(getActivity(),  list);
@@ -195,76 +201,40 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
         mDateSetTextView = (TextView) rootView.findViewById(R.id.tvDateSet);
         mTimeSetTextView = (TextView) rootView.findViewById(R.id.tvTimeSet);
 
-        String visitDateTime = visitStates.getDataOraSopralluogo();
+        String visitDateTime = reportStates.getDataOraSopralluogo();
         if(visitDateTime == null)
         {
             visitDateTime = visitStates.getDataSollecitoAppuntamento();
         }
 
-        Calendar calendar = Calendar.getInstance();
+        //Calendar calendar = Calendar.getInstance();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ITALIAN);
 
         try
         {
             calendar.setTime(sdf.parse(visitDateTime));
+
+            int millsDiff = calendar.compareTo(calendarNow);
+
+            if(millsDiff < 0)
+            {
+                calendar = calendarNow;
+            }
+
         } catch (ParseException e)
         {
             e.printStackTrace();
+
+            calendar = calendarNow;
         }
 
-        mYear = calendarNow.get(Calendar.YEAR);
-        mMonth = calendarNow.get(Calendar.MONTH) + 1;
-        mDay = calendarNow.get(Calendar.DAY_OF_MONTH);
-        mHour = calendarNow.get(Calendar.HOUR_OF_DAY);
-        mMinute = calendarNow.get(Calendar.MINUTE);
-
-/*        mYear = visitsList.get(selectedIndex).getVisitYear();
-        mMonth =  visitsList.get(selectedIndex).getVisitMonth();
-        mDay =  visitsList.get(selectedIndex).getVisitDay();
-        mHour =  visitsList.get(selectedIndex).getVisitHour();
-        mMinute =  visitsList.get(selectedIndex).getVisitMinute();*/
-
-/*        else
-        {
-            mYear = calendarNow.get(Calendar.YEAR);
-            mMonth = calendarNow.get(Calendar.MONTH) + 1;
-            mDay = calendarNow.get(Calendar.DAY_OF_MONTH);
-            mHour = calendarNow.get(Calendar.HOUR_OF_DAY);
-            mMinute = calendarNow.get(Calendar.MINUTE);
-        }*/
+        mYear = calendar.get(Calendar.YEAR);
+        mMonth = calendar.get(Calendar.MONTH) + 1;
+        mDay = calendar.get(Calendar.DAY_OF_MONTH);
+        mHour = calendar.get(Calendar.HOUR_OF_DAY);
+        mMinute = calendar.get(Calendar.MINUTE);
 
         updateDisplay();
-
-
-
-
-
-        // Initialize Realm
-        //Realm.init(getActivity());
-
-// Get a Realm instance for this thread
-        //Realm realm = Realm.getDefaultInstance();
-
-        realm.beginTransaction();
-
-        //final VisitItem realmVisitItem = realm.createObject(VisitItem.class);
-
-        int visitItemsSize = visitItems.size();
-        VisitItem realmVisitItem = realm.where(VisitItem.class).equalTo("id", 5).findFirst();
-        Boolean isReportsent = realmVisitItem.getReportStates().isReportSent();
-        int notesCount = realm.where(VisitItem.class).findAll().size();
-        //final VisitItem realmVisitItem = realm.copyToRealmOrUpdate(visitItem);
-
-        notesCount = realm.where(ReportStates.class).findAll().size();
-
-        ReportStates reportStates = realmVisitItem.getReportStates();
-        String status = reportStates.getGeneralInfoCompletionStateString().Value();
-        realmVisitItem.getReportStates().setReportSent(true);
-        realm.commitTransaction();
-
-
-
-
 
         return  rootView;
     }
@@ -377,10 +347,17 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
 
             VisitItem visitItem = visitItems.get(selectedIndex);
             VisitStates visitStates = visitItem.getVisitStates();
+            int idSopralluogo = visitStates.getIdSopralluogo();
 
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
             strDateTime = sdf.format(calendar.getTime());
-            visitStates.setDataOraSopralluogo(strDateTime);
+
+            if(reportStates!=null)
+            {
+                realm.beginTransaction();
+                reportStates.setDataOraSopralluogo(strDateTime);
+                realm.commitTransaction();
+            }
 
             //getActivity().getFragmentManager().beginTransaction().remove(this).commit();
             mCommunicator.onDateTimeSetReturned(true);

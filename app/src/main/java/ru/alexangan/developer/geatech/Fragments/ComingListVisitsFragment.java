@@ -9,10 +9,17 @@ import android.view.ViewGroup;
 
 import java.util.ArrayList;
 
+import io.realm.Realm;
+import io.realm.RealmResults;
 import ru.alexangan.developer.geatech.Adapters.ComingListVisitsAdapter;
+import ru.alexangan.developer.geatech.Models.ClientData;
+import ru.alexangan.developer.geatech.Models.ProductData;
+import ru.alexangan.developer.geatech.Models.ReportStates;
 import ru.alexangan.developer.geatech.Models.VisitItem;
+import ru.alexangan.developer.geatech.Models.VisitStates;
 import ru.alexangan.developer.geatech.R;
 
+import static ru.alexangan.developer.geatech.Activities.MainActivity.realm;
 import static ru.alexangan.developer.geatech.Network.RESTdataReceiver.visitItems;
 
 public class ComingListVisitsFragment extends ListFragment
@@ -25,11 +32,23 @@ public class ComingListVisitsFragment extends ListFragment
 
         ArrayList<VisitItem> visitItemsDateTimeSet = new ArrayList<>();
 
-        for (VisitItem item : visitItems)
+        realm.beginTransaction();
+
+        RealmResults <ReportStates> reportStatesList = realm.where(ReportStates.class).findAll();
+
+        realm.commitTransaction();
+
+
+        for (VisitItem visitItem : visitItems)
         {
-            if(item.getVisitStates().getDataOraSopralluogo() != null)
+            for(ReportStates reportStates : reportStatesList)
             {
-                visitItemsDateTimeSet.add(item);
+                if (visitItem.getVisitStates().getIdSopralluogo() == reportStates.getIdSopralluogo()
+                        && reportStates.getDataOraSopralluogo()!=null)
+                {
+                    visitItemsDateTimeSet.add(visitItem);
+                    break;
+                }
             }
         }
 

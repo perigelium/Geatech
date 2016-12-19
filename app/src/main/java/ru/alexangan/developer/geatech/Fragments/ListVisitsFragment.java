@@ -11,9 +11,13 @@ import android.widget.ListView;
 
 import ru.alexangan.developer.geatech.Adapters.MyListVisitsAdapter;
 import ru.alexangan.developer.geatech.Interfaces.Communicator;
+import ru.alexangan.developer.geatech.Models.ReportStates;
+import ru.alexangan.developer.geatech.Models.VisitItem;
 import ru.alexangan.developer.geatech.Network.RESTdataReceiver;
 import ru.alexangan.developer.geatech.R;
 import ru.alexangan.developer.geatech.Utils.SwipeDetector;
+
+import static ru.alexangan.developer.geatech.Activities.MainActivity.realm;
 
 public class ListVisitsFragment extends ListFragment
 {
@@ -65,15 +69,21 @@ public class ListVisitsFragment extends ListFragment
         {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id)
             {
+                int idSopralluogo = RESTdataReceiver.visitItems.get(position).getVisitStates().getIdSopralluogo();
+                realm.beginTransaction();
+                ReportStates reportStates = realm.where(ReportStates.class)
+                        .equalTo("idSopralluogo", idSopralluogo).findFirst();
+                realm.commitTransaction();
+
                 if (swipeDetector.swipeDetected())
                 {
                     if(swipeDetector.getAction() == SwipeDetector.Action.LR)
                     {
-                        mCommunicator.OnListItemSwiped(position, RESTdataReceiver.visitItems.get(position).getVisitStates().getDataOraSopralluogo() != null);
+                        mCommunicator.OnListItemSwiped(position, reportStates.getDataOraSopralluogo() != null);
                     }
                 } else
                 {
-                    mCommunicator.OnListItemSelected(position, RESTdataReceiver.visitItems.get(position).getVisitStates().getDataOraSopralluogo() != null);
+                    mCommunicator.OnListItemSelected(position, reportStates.getDataOraSopralluogo() != null);
                 }
             }
         });
@@ -83,12 +93,18 @@ public class ListVisitsFragment extends ListFragment
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view,int position, long id)
             {
+                int idSopralluogo = RESTdataReceiver.visitItems.get(position).getVisitStates().getIdSopralluogo();
+                realm.beginTransaction();
+                ReportStates reportStates = realm.where(ReportStates.class)
+                        .equalTo("idSopralluogo", idSopralluogo).findFirst();
+                realm.commitTransaction();
+
                 if (swipeDetector.swipeDetected())
                 {
                     // do the onSwipe action
                 } else
                 {
-                    if(RESTdataReceiver.visitItems.get(position).getVisitStates().getDataOraSopralluogo() != null)
+                    if(reportStates.getDataOraSopralluogo() != null)
                     {
                         mCommunicator.OnListItemSelected(position, false);
                     }

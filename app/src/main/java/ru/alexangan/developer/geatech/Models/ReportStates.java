@@ -7,6 +7,13 @@ import io.realm.RealmObject;
 public class ReportStates extends RealmObject
 {
     int id;
+    int visitId;
+    int idSopralluogo;
+    String dataOraSopralluogo;
+
+    private double latitude;
+    private double longitude;
+    private int altitude;
     public int reportCompletionState;
     boolean reportSent;
     public int generalInfoCompletionState;
@@ -34,9 +41,10 @@ public class ReportStates extends RealmObject
 
     public ReportStates() {}
 
-    public ReportStates(int id)
+    public ReportStates(int id, int visitId)
     {
         this.id = id;
+        this.visitId = visitId;
         reportCompletionStatuses = new RealmList<>();
         reportCompletionStatuses.add(new RealmString(id, "Non iniziato") );
         reportCompletionStatuses.add(new RealmString(id, "Parziamente completato") );
@@ -149,5 +157,65 @@ public class ReportStates extends RealmObject
     public int getId()
     {
         return id;
+    }
+
+    public String getDataOraSopralluogo()
+    {
+        return dataOraSopralluogo;
+    }
+
+    public void setDataOraSopralluogo(String dataOraSopralluogo)
+    {
+        this.dataOraSopralluogo = dataOraSopralluogo;
+    }
+
+    public int getVisitId()
+    {
+        return visitId;
+    }
+
+    public void setVisitId(int visitId)
+    {
+        this.visitId = visitId;
+    }
+
+    public int getIdSopralluogo()
+    {
+        return idSopralluogo;
+    }
+
+    public void setIdSopralluogo(int idSopralluogo)
+    {
+        this.idSopralluogo = idSopralluogo;
+    }
+
+    public double getLongitude()
+    {
+        return longitude;
+    }
+
+    public void setLongitude(double longitude)
+    {
+        this.longitude = longitude;
+    }
+
+    public double getLatitude()
+    {
+        return latitude;
+    }
+
+    public void setLatitude(double latitude)
+    {
+        this.latitude = latitude;
+    }
+
+    public double getAltitude()
+    {
+        return altitude;
+    }
+
+    public void setAltitude(int altitude)
+    {
+        this.altitude = altitude;
     }
 }

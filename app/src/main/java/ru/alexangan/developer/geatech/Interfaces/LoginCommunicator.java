@@ -10,7 +10,7 @@ import android.view.View;
 public interface LoginCommunicator
 {
 
-    public void onButtonClicked(View view);
+    public void onButtonClicked(View view, Boolean credentialsesFound);
 
     void onPasswordSentReturned();
 

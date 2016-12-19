@@ -17,10 +17,12 @@ import java.util.Locale;
 import ru.alexangan.developer.geatech.Models.ClientData;
 import ru.alexangan.developer.geatech.Models.ItalianMonths;
 import ru.alexangan.developer.geatech.Models.ProductData;
+import ru.alexangan.developer.geatech.Models.ReportStates;
 import ru.alexangan.developer.geatech.Models.VisitStates;
 import ru.alexangan.developer.geatech.Models.VisitItem;
 import ru.alexangan.developer.geatech.R;
 
+import static ru.alexangan.developer.geatech.Activities.MainActivity.realm;
 import static ru.alexangan.developer.geatech.Network.RESTdataReceiver.visitItems;
 
 /**
@@ -82,8 +84,15 @@ public class MyListVisitsAdapter extends BaseAdapter
         ClientData clientData = visitItem.getClientData();
         ProductData productData = visitItem.getProductData();
         VisitStates visitStates = visitItem.getVisitStates();
+        int idSopralluogo = visitStates.getIdSopralluogo();
 
-        String visitDateTime = visitStates.getDataOraSopralluogo();
+        realm.beginTransaction();
+
+        ReportStates reportStates = realm.where(ReportStates.class).equalTo("idSopralluogo", idSopralluogo).findFirst();
+
+        realm.commitTransaction();
+
+        String visitDateTime = reportStates.getDataOraSopralluogo();
         if(visitDateTime == null)
         {
             visitDateTime = visitStates.getDataSollecitoAppuntamento();

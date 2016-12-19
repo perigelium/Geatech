@@ -20,6 +20,7 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 import ru.alexangan.developer.geatech.Activities.LoginActivity;
 import ru.alexangan.developer.geatech.Interfaces.RESTdataReceiverEventListener;
+import ru.alexangan.developer.geatech.Models.ReportStates;
 import ru.alexangan.developer.geatech.Models.VisitItem;
 import ru.alexangan.developer.geatech.Utils.JSON_to_model;
 

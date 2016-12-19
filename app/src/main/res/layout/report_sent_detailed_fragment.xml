@@ -240,15 +240,16 @@
                 android:layout_marginLeft="6dp"
                 android:text="Coord.Nord*" />
 
-            <EditText
+            <TextView
                 android:id="@+id/etCoordNord"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="6dp"
+                android:layout_gravity="start|center_vertical"
                 android:background="@android:color/transparent"
-                android:ems="10"
                 android:inputType="number"
-                android:maxLines="1"
+                android:textSize="19dp"
+                android:textStyle="bold"
                 android:text="Sconoscuto" />
 
         </LinearLayout>
@@ -273,14 +274,15 @@
                 android:layout_marginLeft="6dp"
                 android:text="Coord.Est*" />
 
-            <EditText
+            <TextView
                 android:id="@+id/etCoordEst"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="6dp"
+                android:layout_gravity="start|center_vertical"
                 android:background="@android:color/transparent"
-                android:ems="10"
-                android:inputType="number"
+                android:textSize="19dp"
+                android:textStyle="bold"
                 android:maxLines="1"
                 android:text="Sconoscuto" />
 
@@ -306,14 +308,15 @@
                 android:layout_marginLeft="6dp"
                 android:text="Altitudine*" />
 
-            <EditText
+            <TextView
                 android:id="@+id/etAltitude"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="6dp"
+                android:layout_gravity="start|center_vertical"
                 android:background="@android:color/transparent"
-                android:ems="10"
-                android:inputType="number"
+                android:textSize="19dp"
+                android:textStyle="bold"
                 android:maxLines="1"
                 android:text="Sconoscuto" />
 

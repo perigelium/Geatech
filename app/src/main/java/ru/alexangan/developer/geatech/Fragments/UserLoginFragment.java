@@ -7,9 +7,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 
+import io.realm.RealmResults;
 import ru.alexangan.developer.geatech.Interfaces.LoginCommunicator;
+import ru.alexangan.developer.geatech.Models.LoginCredentials;
+import ru.alexangan.developer.geatech.Models.ReportStates;
 import ru.alexangan.developer.geatech.R;
+
+import static ru.alexangan.developer.geatech.Activities.MainActivity.realm;
 
 public class UserLoginFragment extends Fragment implements  View.OnClickListener
 {
@@ -24,7 +30,9 @@ public class UserLoginFragment extends Fragment implements  View.OnClickListener
 
 
     Button btnLogin, btnPasswordRecover, btnFirstAccess;
+    EditText etLogin, etPassword;
     LoginCommunicator loginCommunicator;
+
 
     public UserLoginFragment()
     {
@@ -68,6 +76,9 @@ public class UserLoginFragment extends Fragment implements  View.OnClickListener
         btnFirstAccess = (Button) rootView.findViewById(R.id.btnFirstAccess);
         btnFirstAccess.setOnClickListener(this);
 
+        etLogin = (EditText) rootView.findViewById(R.id.etLogin);
+        etPassword = (EditText) rootView.findViewById(R.id.etPassword);
+
         return rootView;
     }
 
@@ -82,6 +93,21 @@ public class UserLoginFragment extends Fragment implements  View.OnClickListener
     @Override
     public void onClick(View view)
     {
-        loginCommunicator.onButtonClicked(view);
+        realm.beginTransaction();
+        RealmResults <LoginCredentials> loginCredentialses = realm.where(LoginCredentials.class).findAll();
+        realm.commitTransaction();
+
+        Boolean credentialsesFound = false;
+        for(LoginCredentials loginCredentials :loginCredentialses)
+        {
+            if(etLogin.getText().toString().compareTo(loginCredentials.getLogin()) == 0
+                    && etPassword.getText().toString().compareTo(loginCredentials.getPassword()) == 0)
+            {
+                credentialsesFound = true;
+                break;
+            }
+        }
+
+        loginCommunicator.onButtonClicked(view, credentialsesFound);
     }
 }
