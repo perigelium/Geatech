@@ -1,21 +1,24 @@
 package ru.alexangan.developer.geatech.Models;
 
 import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
 
 /**
  * Created by user on 12/8/2016.
  */
 
-public class ClimatizzazioneModel extends RealmObject
+public class Clima1Model extends RealmObject
 {
+    @PrimaryKey
     int id;
+
+    int idSopralluogo;
     String tipoDiEdificio, posizionamentoUnitaEsterna, tipologiaCostruttivaMurature, localiEOPianiDelledificio,
-            NoteSulLuoghoDiInstallazione, NoteSulTipologiaDellImpianto, NoteRelativeAlCollegamento, noteSulTipologiaDellImpianto,
-            noteRelativeAlCollegamento;
+            noteSulLuoghoDiInstallazione, noteSulTipologiaDellImpianto, noteRelativeAlCollegamento;
 
-    public ClimatizzazioneModel(){};
+    public Clima1Model(){};
 
-    public ClimatizzazioneModel(int id)
+    public Clima1Model(int id)
     {
         this.id = id;
     }
@@ -40,19 +43,19 @@ public class ClimatizzazioneModel extends RealmObject
         this.localiEOPianiDelledificio = localiEOPianiDelledificio;
     }
 
-    public void setNoteSulLuoghoDiInstallazione()
+    public void setNoteSulLuoghoDiInstallazione(String NoteSulLuoghoDiInstallazione)
     {
-        this.NoteSulLuoghoDiInstallazione = NoteSulLuoghoDiInstallazione;
+        this.noteSulLuoghoDiInstallazione = NoteSulLuoghoDiInstallazione;
     }
 
-    public void setNoteSulTipologiaDellImpianto()
+    public void setNoteSulTipologiaDellImpianto(String NoteSulTipologiaDellImpianto)
     {
-        this.NoteSulTipologiaDellImpianto = NoteSulTipologiaDellImpianto;
+        this.noteSulTipologiaDellImpianto = NoteSulTipologiaDellImpianto;
     }
 
-    public void setNoteRelativeAlCollegamento()
+    public void setNoteRelativeAlCollegamento(String NoteRelativeAlCollegamento)
     {
-        this.NoteRelativeAlCollegamento = NoteRelativeAlCollegamento;
+        this.noteRelativeAlCollegamento = NoteRelativeAlCollegamento;
     }
 
     public String getTipoDiEdificio()
@@ -88,5 +91,20 @@ public class ClimatizzazioneModel extends RealmObject
     public int getId()
     {
         return id;
+    }
+
+    public String getNoteSulLuoghoDiInstallazione()
+    {
+        return noteSulLuoghoDiInstallazione;
+    }
+
+    public int getIdSopralluogo()
+    {
+        return idSopralluogo;
+    }
+
+    public void setIdSopralluogo(int idSopralluogo)
+    {
+        this.idSopralluogo = idSopralluogo;
     }
 }

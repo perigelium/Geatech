@@ -19,11 +19,11 @@ import ru.alexangan.developer.geatech.Models.ClientData;
 import ru.alexangan.developer.geatech.Models.ItalianMonths;
 import ru.alexangan.developer.geatech.Models.ProductData;
 import ru.alexangan.developer.geatech.Models.ReportStates;
-import ru.alexangan.developer.geatech.Models.VisitStates;
 import ru.alexangan.developer.geatech.Models.VisitItem;
+import ru.alexangan.developer.geatech.Models.VisitStates;
 import ru.alexangan.developer.geatech.R;
 
-import static ru.alexangan.developer.geatech.Activities.MainActivity.realm;
+import static ru.alexangan.developer.geatech.Activities.LoginActivity.realm;
 
 /**
  * Created by user on 11/21/2016.
@@ -98,7 +98,7 @@ public class NotSentListVisitsAdapter extends BaseAdapter
             tvReportCompletionState.setText(reportStates.getDataOraRaportoCompletato());
 
             TextView tvNotSentReason = (TextView) row.findViewById(R.id.tvNotSentReason);
-            tvNotSentReason.setText(reportStates.getSendingReportTriesStateString().Value());
+            tvNotSentReason.setText(reportStates.getSendingReportTriesStateString(reportStates.getSendingReportTriesState()).Value());
 
             TextView tvNextTimeTryToSendReport = (TextView) row.findViewById(R.id.tvNextTimeTryToSendReport);
             tvNextTimeTryToSendReport.setText(reportStates.getDataOraProssimoTentativo());

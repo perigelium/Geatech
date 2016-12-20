@@ -15,6 +15,15 @@ public class LoginCredentials extends RealmObject
     private String login;
     private String password;
 
+    public LoginCredentials(){};
+
+    public LoginCredentials(int id, String login, String password)
+    {
+        this.id = id;
+        this.login = login;
+        this.password = password;
+    }
+
     public String getLogin()
     {
         return login;

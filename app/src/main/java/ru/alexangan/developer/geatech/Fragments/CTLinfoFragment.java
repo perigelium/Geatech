@@ -3,15 +3,12 @@ package ru.alexangan.developer.geatech.Fragments;
 import android.app.Fragment;
 import android.content.Context;
 import android.location.Location;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,15 +21,15 @@ import okhttp3.Request;
 import okhttp3.Response;
 import ru.alexangan.developer.geatech.Interfaces.LocationRetrievedEvents;
 import ru.alexangan.developer.geatech.Models.ClientData;
-import ru.alexangan.developer.geatech.Models.ProductData;
 import ru.alexangan.developer.geatech.Models.ReportStates;
-import ru.alexangan.developer.geatech.Models.VisitStates;
 import ru.alexangan.developer.geatech.Models.VisitItem;
+import ru.alexangan.developer.geatech.Models.VisitStates;
 import ru.alexangan.developer.geatech.Network.LocationRetriever;
+import ru.alexangan.developer.geatech.Network.NetworkUtils;
 import ru.alexangan.developer.geatech.R;
 
-import static ru.alexangan.developer.geatech.Activities.MainActivity.realm;
-import static ru.alexangan.developer.geatech.Network.RESTdataReceiver.visitItems;
+import static ru.alexangan.developer.geatech.Activities.LoginActivity.realm;
+import static ru.alexangan.developer.geatech.Activities.MainActivity.visitItems;
 
 public class CTLinfoFragment extends Fragment implements View.OnClickListener, LocationRetrievedEvents, Callback
 {
@@ -177,7 +174,7 @@ public class CTLinfoFragment extends Fragment implements View.OnClickListener, L
     {
         if (view.getId() == R.id.btnSetCurrentCoords)
         {
-            if (!isNetworkAvailable())
+            if (!NetworkUtils.isNetworkAvailable(context))
             {
                 Toast.makeText(context, "Check internet connection.", Toast.LENGTH_LONG).show();
                 return;
@@ -185,14 +182,6 @@ public class CTLinfoFragment extends Fragment implements View.OnClickListener, L
 
                 locationRetriever = new LocationRetriever(context, this);
         }
-    }
-
-    private boolean isNetworkAvailable()
-    {
-        ConnectivityManager connectivityManager
-                = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
-        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 
     @Override

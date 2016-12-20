@@ -17,11 +17,11 @@ import ru.alexangan.developer.geatech.Models.ClientData;
 import ru.alexangan.developer.geatech.Models.ItalianMonths;
 import ru.alexangan.developer.geatech.Models.ProductData;
 import ru.alexangan.developer.geatech.Models.ReportStates;
-import ru.alexangan.developer.geatech.Models.VisitStates;
 import ru.alexangan.developer.geatech.Models.VisitItem;
+import ru.alexangan.developer.geatech.Models.VisitStates;
 import ru.alexangan.developer.geatech.R;
 
-import static ru.alexangan.developer.geatech.Activities.MainActivity.realm;
+import static ru.alexangan.developer.geatech.Activities.LoginActivity.realm;
 
 /**
  * Created by user on 11/21/2016.
@@ -123,9 +123,9 @@ public class InWorkListVisitsAdapter extends BaseAdapter
 
         if(reportStates != null)
         {
-            String GeneralInfoCompletionState = reportStates.getGeneralInfoCompletionStateString().Value();
-            String reportCompletionState = reportStates.getReportCompletionStateString().Value();
-            String photoAddedState = reportStates.getPhotoAddedStateString().Value();
+            String GeneralInfoCompletionState = reportStates.getGeneralInfoCompletionStateString(reportStates.getGeneralInfoCompletionState()).Value();
+            String reportCompletionState = reportStates.getReportCompletionStateString(reportStates.getReportCompletionState()).Value();
+            String photoAddedState = reportStates.getPhotoAddedStateString(reportStates.getPhotoAddedState()).Value();
 
             TextView tvPhotosPresent = (TextView) row.findViewById(R.id.tvPhotosPresent);
             tvPhotosPresent.setText(photoAddedState);

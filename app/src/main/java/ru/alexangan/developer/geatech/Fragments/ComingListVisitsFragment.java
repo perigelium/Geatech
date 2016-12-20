@@ -9,18 +9,14 @@ import android.view.ViewGroup;
 
 import java.util.ArrayList;
 
-import io.realm.Realm;
 import io.realm.RealmResults;
 import ru.alexangan.developer.geatech.Adapters.ComingListVisitsAdapter;
-import ru.alexangan.developer.geatech.Models.ClientData;
-import ru.alexangan.developer.geatech.Models.ProductData;
 import ru.alexangan.developer.geatech.Models.ReportStates;
 import ru.alexangan.developer.geatech.Models.VisitItem;
-import ru.alexangan.developer.geatech.Models.VisitStates;
 import ru.alexangan.developer.geatech.R;
 
-import static ru.alexangan.developer.geatech.Activities.MainActivity.realm;
-import static ru.alexangan.developer.geatech.Network.RESTdataReceiver.visitItems;
+import static ru.alexangan.developer.geatech.Activities.LoginActivity.realm;
+import static ru.alexangan.developer.geatech.Activities.MainActivity.visitItems;
 
 public class ComingListVisitsFragment extends ListFragment
 {

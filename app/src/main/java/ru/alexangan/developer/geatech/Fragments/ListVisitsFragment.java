@@ -9,27 +9,24 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import ru.alexangan.developer.geatech.Activities.MainActivity;
 import ru.alexangan.developer.geatech.Adapters.MyListVisitsAdapter;
 import ru.alexangan.developer.geatech.Interfaces.Communicator;
 import ru.alexangan.developer.geatech.Models.ReportStates;
-import ru.alexangan.developer.geatech.Models.VisitItem;
 import ru.alexangan.developer.geatech.Network.RESTdataReceiver;
 import ru.alexangan.developer.geatech.R;
 import ru.alexangan.developer.geatech.Utils.SwipeDetector;
 
-import static ru.alexangan.developer.geatech.Activities.MainActivity.realm;
+import static ru.alexangan.developer.geatech.Activities.LoginActivity.realm;
 
 public class ListVisitsFragment extends ListFragment
 {
-    //GeneralInfoReceiver generalInfoReceiver;
     private Communicator mCommunicator;
     SwipeDetector swipeDetector;
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
-        //generalInfoReceiver = GeneralInfoReceiver.getInstance();
 
         MyListVisitsAdapter myListAdapter =
                 new MyListVisitsAdapter(getActivity(), R.layout.list_visits_fragment_row);
@@ -69,7 +66,7 @@ public class ListVisitsFragment extends ListFragment
         {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id)
             {
-                int idSopralluogo = RESTdataReceiver.visitItems.get(position).getVisitStates().getIdSopralluogo();
+                int idSopralluogo = MainActivity.visitItems.get(position).getVisitStates().getIdSopralluogo();
                 realm.beginTransaction();
                 ReportStates reportStates = realm.where(ReportStates.class)
                         .equalTo("idSopralluogo", idSopralluogo).findFirst();
@@ -93,7 +90,7 @@ public class ListVisitsFragment extends ListFragment
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view,int position, long id)
             {
-                int idSopralluogo = RESTdataReceiver.visitItems.get(position).getVisitStates().getIdSopralluogo();
+                int idSopralluogo = MainActivity.visitItems.get(position).getVisitStates().getIdSopralluogo();
                 realm.beginTransaction();
                 ReportStates reportStates = realm.where(ReportStates.class)
                         .equalTo("idSopralluogo", idSopralluogo).findFirst();
@@ -115,11 +112,6 @@ public class ListVisitsFragment extends ListFragment
         });
     }
 }
-
-/*        Toast.makeText(getActivity(),
-                getListView().getItemAtPosition(position).toString(),
-                Toast.LENGTH_LONG).show();*//*
-    }*/
 
 /*            int optionId = randomInteger!=0 ? R.layout.list_visits_cell_datetime_set : R.layout.list_visits_cell_datetime_set;
             View C = inflater.inflate(optionId, parent, false);

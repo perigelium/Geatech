@@ -15,8 +15,8 @@ import ru.alexangan.developer.geatech.Models.ReportStates;
 import ru.alexangan.developer.geatech.Models.VisitItem;
 import ru.alexangan.developer.geatech.R;
 
-import static ru.alexangan.developer.geatech.Activities.MainActivity.realm;
-import static ru.alexangan.developer.geatech.Network.RESTdataReceiver.visitItems;
+import static ru.alexangan.developer.geatech.Activities.LoginActivity.realm;
+import static ru.alexangan.developer.geatech.Activities.MainActivity.visitItems;
 
 public class InWorkListVisitsFragment extends ListFragment
 {
@@ -33,18 +33,16 @@ public class InWorkListVisitsFragment extends ListFragment
         ArrayList<VisitItem> visitItemsDateTimeSet = new ArrayList<>();
 
         realm.beginTransaction();
-
         RealmResults<ReportStates> reportStatesList = realm.where(ReportStates.class).findAll();
-
         realm.commitTransaction();
-
 
         for (VisitItem visitItem : visitItems)
         {
             for(ReportStates reportStates : reportStatesList)
             {
                 if (visitItem.getVisitStates().getIdSopralluogo() == reportStates.getIdSopralluogo()
-                        && reportStates.getDataOraSopralluogo()!=null)
+                        && reportStates.getDataOraSopralluogo()!=null  // visit time has set
+                        && (reportStates.getLatitude()!=0 || reportStates.getReportCompletionState()!=0))
                 {
                     visitItemsDateTimeSet.add(visitItem);
                     break;

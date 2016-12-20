@@ -12,10 +12,9 @@ import android.widget.EditText;
 import io.realm.RealmResults;
 import ru.alexangan.developer.geatech.Interfaces.LoginCommunicator;
 import ru.alexangan.developer.geatech.Models.LoginCredentials;
-import ru.alexangan.developer.geatech.Models.ReportStates;
 import ru.alexangan.developer.geatech.R;
 
-import static ru.alexangan.developer.geatech.Activities.MainActivity.realm;
+import static ru.alexangan.developer.geatech.Activities.LoginActivity.realm;
 
 public class UserLoginFragment extends Fragment implements  View.OnClickListener
 {
@@ -59,6 +58,15 @@ public class UserLoginFragment extends Fragment implements  View.OnClickListener
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
+        LoginCredentials loginCredentials = new LoginCredentials();
+
+        loginCredentials.setLogin("l");
+        loginCredentials.setPassword("p");
+
+        realm.beginTransaction();
+        realm.copyToRealmOrUpdate(loginCredentials);
+        realm.commitTransaction();
     }
 
     @Override

@@ -8,7 +8,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.util.ArrayList;
 
 import io.realm.RealmList;
 import okhttp3.Call;
@@ -20,7 +19,6 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 import ru.alexangan.developer.geatech.Activities.LoginActivity;
 import ru.alexangan.developer.geatech.Interfaces.RESTdataReceiverEventListener;
-import ru.alexangan.developer.geatech.Models.ReportStates;
 import ru.alexangan.developer.geatech.Models.VisitItem;
 import ru.alexangan.developer.geatech.Utils.JSON_to_model;
 
@@ -42,7 +40,7 @@ public class RESTdataReceiver implements Callback
     private Activity loginActivity;
 
 
-    public static RealmList<VisitItem> visitItems;
+    public static RealmList<VisitItem> inVisitItems;
 
     public RESTdataReceiver(RESTdataReceiverEventListener cb, LoginActivity activity)
     {
@@ -141,9 +139,9 @@ public class RESTdataReceiver implements Callback
                 return;
             }
 
-            visitItems = JSON_to_model.getVisitTtemsList(visitsJSONData);
+            inVisitItems = JSON_to_model.getVisitTtemsList(visitsJSONData);
 
-            Log.d("DEBUG", String.valueOf(visitItems.size()));
+            Log.d("DEBUG", String.valueOf(inVisitItems.size()));
 
             //Log.d("DEBUG", visitsJSONData);
 

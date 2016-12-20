@@ -17,8 +17,8 @@ import ru.alexangan.developer.geatech.Models.ReportStates;
 import ru.alexangan.developer.geatech.Models.VisitItem;
 import ru.alexangan.developer.geatech.R;
 
-import static ru.alexangan.developer.geatech.Activities.MainActivity.realm;
-import static ru.alexangan.developer.geatech.Network.RESTdataReceiver.visitItems;
+import static ru.alexangan.developer.geatech.Activities.LoginActivity.realm;
+import static ru.alexangan.developer.geatech.Activities.MainActivity.visitItems;
 
 public class ReportsListFragment extends ListFragment
 {
@@ -46,7 +46,7 @@ public class ReportsListFragment extends ListFragment
             for(ReportStates reportStates : reportStatesList)
             {
                 if (visitItem.getVisitStates().getIdSopralluogo() == reportStates.getIdSopralluogo()
-                        && reportStates.getDataOraSopralluogo()!=null)
+                        && reportStates.isReportSent() == true)
                 {
                     visitItemsDateTimeSet.add(visitItem);
                     visitItemsPositions.add(visitItem.getId());

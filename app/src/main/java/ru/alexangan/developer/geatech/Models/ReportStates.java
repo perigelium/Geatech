@@ -8,29 +8,30 @@ public class ReportStates extends RealmObject
 {
     int id;
     int visitId;
-    int idSopralluogo;
-    String dataOraSopralluogo;
+    private int idSopralluogo;
+    private String dataOraSopralluogo;
 
     private double latitude;
     private double longitude;
     private int altitude;
-    public int reportCompletionState;
-    boolean reportSent;
-    public int generalInfoCompletionState;
-    public int sendingReportTriesState;
-    public int photoAddedState;
+    private int reportCompletionState;
+    private boolean reportSent;
+    private int generalInfoCompletionState;
+
+    private int sendingReportTriesState;
+    private int photoAddedState;
 
     private String dataOraProssimoTentativo;
     private String dataOraUltimoTentativo;
     private String dataOraRaportoCompilato;
     private String dataOraRaportoInviato;
 
-    public RealmList<RealmString> reportCompletionStatuses;
-    public RealmList<RealmString> generalInfoCompletionStatuses;
-    public RealmList<RealmString> sendingReportFailedStatuses;
-    public RealmList<RealmString> photoAddedStatuses;
+    private RealmList<RealmString> reportCompletionStatuses;
+    private RealmList<RealmString> generalInfoCompletionStatuses;
+    private RealmList<RealmString> sendingReportFailedStatuses;
+    private RealmList<RealmString> photoAddedStatuses;
 
-    public int photoAddedQuant;
+    private int photoAddedQuant;
 
     //private static ReportStates ourInstance = new ReportStates();
 
@@ -40,6 +41,11 @@ public class ReportStates extends RealmObject
         }*/
 
     public ReportStates() {}
+
+    public void setId(int id)
+    {
+        this.id = id;
+    }
 
     public ReportStates(int id, int visitId)
     {
@@ -79,17 +85,17 @@ public class ReportStates extends RealmObject
         dataOraProssimoTentativo = "21:00";
     }
 
-    public RealmString getReportCompletionStateString()
+    public RealmString getReportCompletionStateString(int reportCompletionState)
     {
         return reportCompletionStatuses.get(reportCompletionState);
     }
 
-    public RealmString getGeneralInfoCompletionStateString()
+    public RealmString getGeneralInfoCompletionStateString(int generalInfoCompletionState)
     {
         return generalInfoCompletionStatuses.get(generalInfoCompletionState);
     }
 
-    public RealmString getSendingReportTriesStateString()
+    public RealmString getSendingReportTriesStateString(int sendingReportTriesState)
     {
         return sendingReportFailedStatuses.get(sendingReportTriesState);
     }
@@ -99,7 +105,7 @@ public class ReportStates extends RealmObject
         return photoAddedQuant;
     }
 
-    public RealmString getPhotoAddedStateString()
+    public RealmString getPhotoAddedStateString(int photoAddedState)
     {
         return photoAddedStatuses.get(photoAddedState);
     }
@@ -217,5 +223,30 @@ public class ReportStates extends RealmObject
     public void setAltitude(int altitude)
     {
         this.altitude = altitude;
+    }
+
+    public int getGeneralInfoCompletionState()
+    {
+        return generalInfoCompletionState;
+    }
+
+    public int getPhotoAddedState()
+    {
+        return photoAddedState;
+    }
+
+    public void setPhotoAddedState(int photoAddedState)
+    {
+        this.photoAddedState = photoAddedState;
+    }
+
+    public int getSendingReportTriesState()
+    {
+        return sendingReportTriesState;
+    }
+
+    public void setSendingReportTriesState(int sendingReportTriesState)
+    {
+        this.sendingReportTriesState = sendingReportTriesState;
     }
 }

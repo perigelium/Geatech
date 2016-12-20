@@ -6,14 +6,12 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Toast;
 
-import io.realm.Realm;
-import io.realm.RealmConfiguration;
 import io.realm.RealmResults;
-import io.realm.exceptions.RealmMigrationNeededException;
 import ru.alexangan.developer.geatech.Fragments.CTLinfoFragment;
 import ru.alexangan.developer.geatech.Fragments.ComingListVisitsFragment;
-import ru.alexangan.developer.geatech.Fragments.ComposeReportTemplateFragment;
+import ru.alexangan.developer.geatech.Fragments.Clima1ReportFragment;
 import ru.alexangan.developer.geatech.Fragments.CtrlBtnReportDetailed;
 import ru.alexangan.developer.geatech.Fragments.CtrlBtnsFragment1;
 import ru.alexangan.developer.geatech.Fragments.CtrlBtnsFragment2;
@@ -32,13 +30,12 @@ import ru.alexangan.developer.geatech.Models.VisitItem;
 import ru.alexangan.developer.geatech.R;
 import ru.alexangan.developer.geatech.Utils.SwipeDetector;
 
-import static ru.alexangan.developer.geatech.Network.RESTdataReceiver.visitItems;
+import static ru.alexangan.developer.geatech.Activities.LoginActivity.realm;
+import static ru.alexangan.developer.geatech.Network.RESTdataReceiver.inVisitItems;
 
 public class MainActivity extends Activity implements Communicator
 {
-    public static Realm realm;
     private FragmentManager mFragmentManager;
-    //private FragmentTransaction mFragmentTransaction;
     SwipeDetector swipeDetector;
 
     CtrlBtnsFragment1 ctrlBtnsFragment1;
@@ -54,15 +51,14 @@ public class MainActivity extends Activity implements Communicator
     ReportSentDetailedFragment reportDetailedFragment;
     SendReportFragment sendReportFragment;
     PhotoGalleryGridFragment photoGalleryGridFragment;
-    ComposeReportTemplateFragment composeReportTemplateFragment;
+    Clima1ReportFragment clima1ReportFragment;
     NotificationBarFragment notificationBarFragment;
+    public static RealmResults<VisitItem> visitItems;
 
     @Override
     protected void onDestroy()
     {
         super.onDestroy();
-
-        realm.close();
     }
 
     @Override
@@ -71,49 +67,44 @@ public class MainActivity extends Activity implements Communicator
         super.onCreate(savedInstanceState);
         setContentView(R.layout.work_window);
 
-        Realm.init(getApplicationContext());
-        RealmConfiguration realmConfiguration = new RealmConfiguration
-                .Builder()
-                .deleteRealmIfMigrationNeeded()
-                .build();
-
-
-        try {
-            realm =  Realm.getInstance(realmConfiguration);
-        } catch (RealmMigrationNeededException e){
-            try {
-                Realm.deleteRealm(realmConfiguration);
-                //Realm file has been deleted.
-                realm =   Realm.getInstance(realmConfiguration);
-            } catch (Exception ex){
-                throw ex;
-                //No Realm file to remove.
-            }
-        }
-
-
-        for (VisitItem visitItem : visitItems)
+        if(inVisitItems!=null)
         {
             realm.beginTransaction();
-            realm.copyToRealmOrUpdate(visitItem);
+            for (VisitItem visitItem : inVisitItems)
+            {
+                realm.copyToRealmOrUpdate(visitItem);
+            }
             realm.commitTransaction();
+
+            //int visitItemsSize = visitItems.size();
         }
 
         realm.beginTransaction();
+        visitItems = realm.where(VisitItem.class).findAll();
+        realm.commitTransaction();
 
-        int visitItemsSize = visitItems.size();
-        int realmVisitItemsCount = realm.where(VisitItem.class).findAll().size();
+        if(visitItems.size() == 0)
+        {
+            Toast.makeText(this, "Database inizializzazione falito", Toast.LENGTH_LONG).show();
+
+            this.finish();
+        }
+
+        realm.beginTransaction();
         int reportStatesCount = realm.where(ReportStates.class).findAll().size();
+        realm.commitTransaction();
 
-        RealmResults<VisitItem> realmVisitItems = realm.where(VisitItem.class).findAll();
-        for (VisitItem realmVisitItem : realmVisitItems)
+        for (VisitItem realmVisitItem : visitItems)
         {
             int idSopralluogo = realmVisitItem.getVisitStates().getIdSopralluogo();
 
             Boolean addressAndProductPresent = false;
+            realm.beginTransaction();
             RealmResults<ReportStates> reportStatesList = realm.where(ReportStates.class).findAll();
+            realm.commitTransaction();
             for (ReportStates reportStates : reportStatesList)
             {
+                realm.beginTransaction();
                 int idSopralluogoRep = reportStates.getIdSopralluogo();
 
                 if(idSopralluogo == idSopralluogoRep)
@@ -121,32 +112,19 @@ public class MainActivity extends Activity implements Communicator
                     addressAndProductPresent = true;
                     reportStates.setVisitId(realmVisitItem.getId());
                 }
+                realm.commitTransaction();
             }
 
             if(addressAndProductPresent == false)
             {
+                realm.beginTransaction();
                 ReportStates newReportStates = new ReportStates(reportStatesList.size(), realmVisitItem.getId());
                 newReportStates.setIdSopralluogo(idSopralluogo);
                 realm.copyToRealm(newReportStates);
+                realm.commitTransaction();
             }
         }
 
-/*        ReportStates realmReportStates5 = realm.where(ReportStates.class).equalTo("id", 5).findFirst();
-        if(realmReportStates5 != null)
-        {
-
-            Boolean isReportsent = realmReportStates5.isReportSent();
-
-            //final VisitItem realmVisitItem = realm.copyToRealmOrUpdate(visitItem);
-
-
-
-            String status = realmReportStates5.getGeneralInfoCompletionStateString().Value();
-            realmReportStates5.setReportSent(true);
-        }*/
-
-
-        realm.commitTransaction();
 
         //String visitsJSONData = getIntent().getStringExtra("JSON");
 
@@ -165,7 +143,7 @@ public class MainActivity extends Activity implements Communicator
         reportDetailedFragment = new ReportSentDetailedFragment();
         sendReportFragment = new SendReportFragment();
         photoGalleryGridFragment = new PhotoGalleryGridFragment();
-        composeReportTemplateFragment = new ComposeReportTemplateFragment();
+        clima1ReportFragment = new Clima1ReportFragment();
         notificationBarFragment = new NotificationBarFragment();
 
         mFragmentManager = getFragmentManager();
@@ -227,7 +205,7 @@ public class MainActivity extends Activity implements Communicator
         if (view == findViewById(R.id.btnFillReport))
         {
             removeAllLists();
-            setVisitsListContent(composeReportTemplateFragment);
+            setVisitsListContent(clima1ReportFragment);
         }
 
         if (view == findViewById(R.id.btnAddPhotos))
@@ -285,9 +263,9 @@ public class MainActivity extends Activity implements Communicator
     {
         FragmentTransaction mFragmentTransaction = mFragmentManager.beginTransaction();
 
-        if (composeReportTemplateFragment.isAdded())
+        if (clima1ReportFragment.isAdded())
         {
-            mFragmentTransaction.remove(composeReportTemplateFragment);
+            mFragmentTransaction.remove(clima1ReportFragment);
         }
 
         if (photoGalleryGridFragment.isAdded())

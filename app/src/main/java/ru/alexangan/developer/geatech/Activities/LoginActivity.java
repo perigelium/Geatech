@@ -3,6 +3,7 @@ package ru.alexangan.developer.geatech.Activities;
 import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -17,11 +18,9 @@ import ru.alexangan.developer.geatech.Fragments.UserLoginFragment;
 import ru.alexangan.developer.geatech.Fragments.UserPasswordRecoverFragment;
 import ru.alexangan.developer.geatech.Interfaces.LoginCommunicator;
 import ru.alexangan.developer.geatech.Interfaces.RESTdataReceiverEventListener;
-import ru.alexangan.developer.geatech.Models.VisitItem;
+import ru.alexangan.developer.geatech.Network.NetworkUtils;
 import ru.alexangan.developer.geatech.Network.RESTdataReceiver;
 import ru.alexangan.developer.geatech.R;
-
-import static ru.alexangan.developer.geatech.Network.RESTdataReceiver.visitItems;
 
 
 public class LoginActivity extends Activity implements RESTdataReceiverEventListener, LoginCommunicator
@@ -33,11 +32,15 @@ public class LoginActivity extends Activity implements RESTdataReceiverEventList
     UserPasswordRecoverFragment userPasswordRecoverFragment;
     UserLoginFragment userLoginFragment;
     CredentialsSentFragment credentialsSentFragment;
+    private Context context;
+    public static Realm realm;
 
     @Override
     protected void onDestroy()
     {
         super.onDestroy();
+
+        realm.close();
     }
 
     @Override
@@ -45,6 +48,8 @@ public class LoginActivity extends Activity implements RESTdataReceiverEventList
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login_window_container);
+
+        context = getApplicationContext();
 
         userLoginFragment = new UserLoginFragment();
         userFirstLoginFragment = new UserFirstLoginFragment();
@@ -60,6 +65,30 @@ public class LoginActivity extends Activity implements RESTdataReceiverEventList
         mFragmentTransaction.commit();
 
         restDataReceiver = new RESTdataReceiver( this, this );
+
+        Realm.init(getApplicationContext());
+        RealmConfiguration realmConfiguration = new RealmConfiguration
+                .Builder()
+                .deleteRealmIfMigrationNeeded()
+                .build();
+
+
+        try
+        {
+            realm = Realm.getInstance(realmConfiguration);
+        } catch (RealmMigrationNeededException e)
+        {
+            try
+            {
+                Realm.deleteRealm(realmConfiguration);
+                //Realm file has been deleted.
+                realm = Realm.getInstance(realmConfiguration);
+            } catch (Exception ex)
+            {
+                throw ex;
+                //No Realm file to remove.
+            }
+        }
     }
 
     @Override
@@ -86,8 +115,6 @@ public class LoginActivity extends Activity implements RESTdataReceiverEventList
     {
         if(view.getId() == R.id.btnPasswordRecover )
         {
-            //Toast.makeText(this, "btnPasswordRecover clicked", Toast.LENGTH_LONG).show();
-
             FragmentTransaction mFragmentTransaction = mFragmentManager.beginTransaction();
 
             mFragmentTransaction.replace(R.id.loginFragContainer, userPasswordRecoverFragment);
@@ -97,19 +124,20 @@ public class LoginActivity extends Activity implements RESTdataReceiverEventList
 
         if(view.getId() == R.id.btnFirstAccess )
         {
-            //Toast.makeText(this, "btnFirstAccess clicked", Toast.LENGTH_LONG).show();
-
             FragmentTransaction mFragmentTransaction = mFragmentManager.beginTransaction();
 
             mFragmentTransaction.replace(R.id.loginFragContainer, userFirstLoginFragment);
 
             mFragmentTransaction.commit();
-
         }
 
         if(view.getId() == R.id.btnLogin )
         {
-            if(credentialsesFound)
+            if (!credentialsesFound)
+            {
+                Toast.makeText(this, "Login failed", Toast.LENGTH_LONG).show();
+            }
+            else if(!NetworkUtils.isNetworkAvailable(context))
             {
                 Intent registerIntent = new Intent(LoginActivity.this, MainActivity.class);
                 startActivity(registerIntent);
