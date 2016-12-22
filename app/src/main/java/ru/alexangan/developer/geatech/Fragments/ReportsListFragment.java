@@ -46,7 +46,7 @@ public class ReportsListFragment extends ListFragment
             for(ReportStates reportStates : reportStatesList)
             {
                 if (visitItem.getVisitStates().getIdSopralluogo() == reportStates.getIdSopralluogo()
-                        && reportStates.isReportSent() == true)
+                        && reportStates.getDataOraRaportoInviato()!=null)
                 {
                     visitItemsDateTimeSet.add(visitItem);
                     visitItemsPositions.add(visitItem.getId());

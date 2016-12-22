@@ -43,7 +43,8 @@ public class ReportSentDetailedFragment extends Fragment
         int idSopralluogo = visitStates.getIdSopralluogo();
 
         TextView tvdataOraSopralluogo = (TextView) rootView.findViewById(R.id.tvdataOraSopralluogo);
-        tvdataOraSopralluogo.setText(visitStates.getDataOraSopralluogo());
+        TextView tvdataOraRaportoCompletato = (TextView) rootView.findViewById(R.id.tvdataOraRaportoCompletato);
+        TextView tvdataOraRaportoInviato = (TextView) rootView.findViewById(R.id.tvdataOraRaportoInviato);
 
         realm.beginTransaction();
         ReportStates reportStates = realm.where(ReportStates.class).equalTo("idSopralluogo", idSopralluogo).findFirst();
@@ -51,10 +52,10 @@ public class ReportSentDetailedFragment extends Fragment
 
         if(reportStates != null)
         {
-            TextView tvdataOraRaportoCompletato = (TextView) rootView.findViewById(R.id.tvdataOraRaportoCompletato);
+            tvdataOraSopralluogo.setText(reportStates.getDataOraSopralluogo());
+
             tvdataOraRaportoCompletato.setText(reportStates.getDataOraRaportoCompletato());
 
-            TextView tvdataOraRaportoInviato = (TextView) rootView.findViewById(R.id.tvdataOraRaportoInviato);
             tvdataOraRaportoInviato.setText(reportStates.getDataOraRaportoInviato());
         }
 

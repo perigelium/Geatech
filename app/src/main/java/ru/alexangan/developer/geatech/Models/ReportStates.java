@@ -15,11 +15,9 @@ public class ReportStates extends RealmObject
     private double longitude;
     private int altitude;
     private int reportCompletionState;
-    private boolean reportSent;
     private int generalInfoCompletionState;
 
     private int sendingReportTriesState;
-    private int photoAddedState;
 
     private String dataOraProssimoTentativo;
     private String dataOraUltimoTentativo;
@@ -31,7 +29,7 @@ public class ReportStates extends RealmObject
     private RealmList<RealmString> sendingReportFailedStatuses;
     private RealmList<RealmString> photoAddedStatuses;
 
-    private int photoAddedQuant;
+    private int photoAddedNumber;
 
     //private static ReportStates ourInstance = new ReportStates();
 
@@ -53,11 +51,13 @@ public class ReportStates extends RealmObject
         this.visitId = visitId;
         reportCompletionStatuses = new RealmList<>();
         reportCompletionStatuses.add(new RealmString(id, "Non iniziato") );
+        reportCompletionStatuses.add(new RealmString(id, "Iniziato") );
         reportCompletionStatuses.add(new RealmString(id, "Parziamente completato") );
         reportCompletionStatuses.add(new RealmString(id, "Completato") );
 
         generalInfoCompletionStatuses = new RealmList<>();
         generalInfoCompletionStatuses.add(new RealmString(id, "Non iniziato") );
+        //generalInfoCompletionStatuses.add(new RealmString(id, "Iniziato") );
         generalInfoCompletionStatuses.add(new RealmString(id, "Parziamente completato") );
         generalInfoCompletionStatuses.add(new RealmString(id, "Completato") );
 
@@ -73,14 +73,10 @@ public class ReportStates extends RealmObject
         //sendingReportFailedStatuses = new String[]{"Invio falito per mancanza connesione dati"};
         //photoAddedStatuses = new String[]{"Nessun fotografia", " foto inserite"};
 
-        photoAddedQuant = 0;
+        photoAddedNumber = 0;
         reportCompletionState = 0;
         generalInfoCompletionState = 0;
         sendingReportTriesState = 0;
-        photoAddedState = 0;
-        reportSent = false;
-        dataOraRaportoCompilato = "2017-01-01 22:00:00";
-        dataOraRaportoInviato = "2017-01-01 23:00:00";
         dataOraUltimoTentativo = "19:00";
         dataOraProssimoTentativo = "21:00";
     }
@@ -100,14 +96,9 @@ public class ReportStates extends RealmObject
         return sendingReportFailedStatuses.get(sendingReportTriesState);
     }
 
-    public int getPhotoAddedQuant()
+    public RealmString getPhotoAddedNumberString(int photoAddedNumber)
     {
-        return photoAddedQuant;
-    }
-
-    public RealmString getPhotoAddedStateString(int photoAddedState)
-    {
-        return photoAddedStatuses.get(photoAddedState);
+        return photoAddedStatuses.get(photoAddedNumber);
     }
 
     public void setReportCompletionState(int reportCompletionState)
@@ -115,19 +106,9 @@ public class ReportStates extends RealmObject
         this.reportCompletionState = reportCompletionState;
     }
 
-    public void setReportSent(boolean reportSent)
-    {
-        this.reportSent = reportSent;
-    }
-
     public int getReportCompletionState()
     {
         return reportCompletionState;
-    }
-
-    public boolean isReportSent()
-    {
-        return reportSent;
     }
 
     public String getDataOraRaportoCompletato()
@@ -230,14 +211,14 @@ public class ReportStates extends RealmObject
         return generalInfoCompletionState;
     }
 
-    public int getPhotoAddedState()
+    public int getPhotoAddedNumber()
     {
-        return photoAddedState;
+        return photoAddedNumber;
     }
 
-    public void setPhotoAddedState(int photoAddedState)
+    public void setPhotoAddedNumber(int photoAddedNumber)
     {
-        this.photoAddedState = photoAddedState;
+        this.photoAddedNumber = photoAddedNumber;
     }
 
     public int getSendingReportTriesState()
@@ -248,5 +229,10 @@ public class ReportStates extends RealmObject
     public void setSendingReportTriesState(int sendingReportTriesState)
     {
         this.sendingReportTriesState = sendingReportTriesState;
+    }
+
+    public void setGeneralInfoCompletionState(int generalInfoCompletionState)
+    {
+        this.generalInfoCompletionState = generalInfoCompletionState;
     }
 }

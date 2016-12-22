@@ -74,9 +74,7 @@ public class InWorkListVisitsAdapter extends BaseAdapter
         int idSopralluogo = visitStates.getIdSopralluogo();
 
         realm.beginTransaction();
-
         ReportStates reportStates = realm.where(ReportStates.class).equalTo("idSopralluogo", idSopralluogo).findFirst();
-
         realm.commitTransaction();
 
         TextView tvVisitDay = (TextView)row.findViewById(R.id.tvVisitDay);
@@ -123,15 +121,26 @@ public class InWorkListVisitsAdapter extends BaseAdapter
 
         if(reportStates != null)
         {
-            String GeneralInfoCompletionState = reportStates.getGeneralInfoCompletionStateString(reportStates.getGeneralInfoCompletionState()).Value();
+            String generalInfoCompletionState = reportStates.getGeneralInfoCompletionStateString(reportStates.getGeneralInfoCompletionState()).Value();
             String reportCompletionState = reportStates.getReportCompletionStateString(reportStates.getReportCompletionState()).Value();
-            String photoAddedState = reportStates.getPhotoAddedStateString(reportStates.getPhotoAddedState()).Value();
+
+            int photoAddedNumber =  reportStates.getPhotoAddedNumber();
+            String photoAddedNumberStr;
+
+            if(photoAddedNumber == 0)
+            {
+                photoAddedNumberStr = reportStates.getPhotoAddedNumberString(photoAddedNumber).Value();
+            }
+            else
+            {
+                photoAddedNumberStr = photoAddedNumber + reportStates.getPhotoAddedNumberString(photoAddedNumber).Value();
+            }
 
             TextView tvPhotosPresent = (TextView) row.findViewById(R.id.tvPhotosPresent);
-            tvPhotosPresent.setText(photoAddedState);
+            tvPhotosPresent.setText(photoAddedNumberStr);
 
             TextView tvGeneralInfo = (TextView) row.findViewById(R.id.tvGeneralInfo);
-            tvGeneralInfo.setText(GeneralInfoCompletionState);
+            tvGeneralInfo.setText(generalInfoCompletionState);
 
             TextView tvTecnicalReportState = (TextView) row.findViewById(R.id.tvTecnicalReportState);
             tvTecnicalReportState.setText(reportCompletionState);

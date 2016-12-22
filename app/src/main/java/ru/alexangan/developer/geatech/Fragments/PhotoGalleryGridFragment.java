@@ -23,22 +23,20 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import io.realm.RealmResults;
 import ru.alexangan.developer.geatech.Adapters.GridViewAdapter;
+import ru.alexangan.developer.geatech.Models.Clima1Model;
+import ru.alexangan.developer.geatech.Models.ReportStates;
+import ru.alexangan.developer.geatech.Models.VisitItem;
+import ru.alexangan.developer.geatech.Models.VisitStates;
 import ru.alexangan.developer.geatech.R;
 
 import static android.app.Activity.RESULT_OK;
+import static ru.alexangan.developer.geatech.Activities.LoginActivity.realm;
+import static ru.alexangan.developer.geatech.Activities.MainActivity.visitItems;
 
 public class PhotoGalleryGridFragment extends Fragment
 {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
     private GridView gridView;
     private GridViewAdapter gridAdapter;
 
@@ -52,6 +50,7 @@ public class PhotoGalleryGridFragment extends Fragment
     ArrayList<Bitmap> imageItems;
     Bitmap photoAddButton;
     Context context;
+    private int selectedIndex;
 
 
     public PhotoGalleryGridFragment()
@@ -63,10 +62,10 @@ public class PhotoGalleryGridFragment extends Fragment
     public static PhotoGalleryGridFragment newInstance(String param1, String param2)
     {
         PhotoGalleryGridFragment fragment = new PhotoGalleryGridFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
+
+/*        Bundle args = new Bundle();
+        fragment.setArguments(args);*/
+
         return fragment;
     }
 
@@ -79,8 +78,7 @@ public class PhotoGalleryGridFragment extends Fragment
 
         if (getArguments() != null)
         {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            selectedIndex = getArguments().getInt("selectedIndex");
         }
     }
 
@@ -131,12 +129,20 @@ public class PhotoGalleryGridFragment extends Fragment
 
                 currentPicPos = position;
 
-                Intent pickIntent = new Intent();
-                pickIntent.setType("image/*");
-                pickIntent.setAction(Intent.ACTION_PICK);
+                if(currentPicPos == imageItems.size() -1)
+                {
 
-                //startActivityForResult(Intent.createChooser(pickIntent, "Select Picture"), PICKER);
-                startActivityForResult(pickIntent, PICKER);
+                    Intent pickIntent = new Intent();
+                    pickIntent.setType("image/*");
+                    pickIntent.setAction(Intent.ACTION_PICK);
+
+                    startActivityForResult(pickIntent, PICKER);
+                }
+                else
+                {
+                    // open image in full size
+
+                }
             }
         });
 
@@ -162,6 +168,25 @@ public class PhotoGalleryGridFragment extends Fragment
         });
 
         return rootView;
+    }
+
+    @Override
+    public void onPause()
+    {
+        super.onPause();
+
+        realm.beginTransaction();
+
+        VisitItem visitItem = visitItems.get(selectedIndex);
+        VisitStates visitStates = visitItem.getVisitStates();
+        int idSopralluogo = visitStates.getIdSopralluogo();
+        ReportStates reportStates = realm.where(ReportStates.class).equalTo("idSopralluogo", idSopralluogo).findFirst();
+        if(reportStates!=null)
+        {
+            reportStates.setPhotoAddedNumber(imageItems.size() - 1);
+        }
+
+        realm.commitTransaction();
     }
 
     @Override
@@ -236,6 +261,8 @@ public class PhotoGalleryGridFragment extends Fragment
                 }
             }
         }
+
+
         // superclass method
         super.onActivityResult(requestCode, resultCode, imageReturnedIntent);
     }

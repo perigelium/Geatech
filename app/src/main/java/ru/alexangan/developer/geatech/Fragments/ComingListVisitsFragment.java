@@ -29,9 +29,7 @@ public class ComingListVisitsFragment extends ListFragment
         ArrayList<VisitItem> visitItemsDateTimeSet = new ArrayList<>();
 
         realm.beginTransaction();
-
         RealmResults <ReportStates> reportStatesList = realm.where(ReportStates.class).findAll();
-
         realm.commitTransaction();
 
 

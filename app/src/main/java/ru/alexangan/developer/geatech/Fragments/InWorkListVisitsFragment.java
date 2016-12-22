@@ -42,7 +42,7 @@ public class InWorkListVisitsFragment extends ListFragment
             {
                 if (visitItem.getVisitStates().getIdSopralluogo() == reportStates.getIdSopralluogo()
                         && reportStates.getDataOraSopralluogo()!=null  // visit time has set
-                        && (reportStates.getLatitude()!=0 || reportStates.getReportCompletionState()!=0))
+                        && (reportStates.getGeneralInfoCompletionState()!=0 || reportStates.getReportCompletionState()!=0))
                 {
                     visitItemsDateTimeSet.add(visitItem);
                     break;

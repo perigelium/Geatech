@@ -54,6 +54,7 @@ public class MainActivity extends Activity implements Communicator
     Clima1ReportFragment clima1ReportFragment;
     NotificationBarFragment notificationBarFragment;
     public static RealmResults<VisitItem> visitItems;
+    int currentSelIndex;
 
     @Override
     protected void onDestroy()
@@ -66,6 +67,8 @@ public class MainActivity extends Activity implements Communicator
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.work_window);
+
+        currentSelIndex = -1;
 
         if(inVisitItems!=null)
         {
@@ -85,14 +88,14 @@ public class MainActivity extends Activity implements Communicator
 
         if(visitItems.size() == 0)
         {
-            Toast.makeText(this, "Database inizializzazione falito", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Database inizializzazione falito, controlla la connessione a Internet", Toast.LENGTH_LONG).show();
 
             this.finish();
         }
 
-        realm.beginTransaction();
+/*        realm.beginTransaction();
         int reportStatesCount = realm.where(ReportStates.class).findAll().size();
-        realm.commitTransaction();
+        realm.commitTransaction();*/
 
         for (VisitItem realmVisitItem : visitItems)
         {
@@ -181,6 +184,7 @@ public class MainActivity extends Activity implements Communicator
 
         if (view == findViewById(R.id.btnReturn))
         {
+            currentSelIndex = -1;
             FragmentTransaction mFragmentTransaction = mFragmentManager.beginTransaction();
             mFragmentTransaction.hide(ctrlBtnsFragment2);
             mFragmentTransaction.show(ctrlBtnsFragment1);
@@ -205,24 +209,44 @@ public class MainActivity extends Activity implements Communicator
         if (view == findViewById(R.id.btnFillReport))
         {
             removeAllLists();
+
+            Bundle args = new Bundle();
+            args.putInt("selectedIndex", currentSelIndex);
+            clima1ReportFragment.setArguments(args);
+
             setVisitsListContent(clima1ReportFragment);
         }
 
         if (view == findViewById(R.id.btnAddPhotos))
         {
             removeAllLists();
+
+            Bundle args = new Bundle();
+            args.putInt("selectedIndex", currentSelIndex);
+            photoGalleryGridFragment.setArguments(args);
+
             setVisitsListContent(photoGalleryGridFragment);
         }
 
         if (view == findViewById(R.id.btnInfo))
         {
             removeAllLists();
+
+            Bundle args = new Bundle();
+            args.putInt("selectedIndex", currentSelIndex);
+            ctlInfo.setArguments(args);
+
             setVisitsListContent(ctlInfo);
         }
 
         if (view == findViewById(R.id.btnGreenCloud))
         {
             removeAllLists();
+
+            Bundle args = new Bundle();
+            args.putInt("selectedIndex", currentSelIndex);
+            sendReportFragment.setArguments(args);
+
             setVisitsListContent(sendReportFragment);
         }
 
@@ -337,6 +361,7 @@ public class MainActivity extends Activity implements Communicator
     public void OnListItemSelected(int itemIndex, Boolean dateTimeHasSet)
     {
         removeAllLists();
+        currentSelIndex = itemIndex;
 
         if (dateTimeHasSet) // if visit day is empty, show set datetime fragment, otherwise show CTL info.
         {
@@ -387,6 +412,7 @@ public class MainActivity extends Activity implements Communicator
     @Override
     public void OnListItemSelected(int itemIndex)
     {
+        currentSelIndex = itemIndex;
         FragmentTransaction mFragmentTransaction = mFragmentManager.beginTransaction();
 
         mFragmentTransaction.hide(ctrlBtnsFragment2);
@@ -399,6 +425,7 @@ public class MainActivity extends Activity implements Communicator
         Bundle args = new Bundle();
         args.putInt("selectedIndex", itemIndex);
         reportDetailedFragment.setArguments(args);
+
         setVisitsListContent(reportDetailedFragment);
 
         ctrlBtnsFragment1.setCheckedBtnId(R.id.btnReports);

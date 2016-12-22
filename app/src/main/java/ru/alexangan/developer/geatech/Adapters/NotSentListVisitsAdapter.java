@@ -89,7 +89,7 @@ public class NotSentListVisitsAdapter extends BaseAdapter
         clientAddressTextView.setText(clientData.getAddress());
 
         realm.beginTransaction();
-        ReportStates reportStates = realm.where(ReportStates.class).equalTo("idSopralluogo", idSopralluogo).findFirst();
+        final ReportStates reportStates = realm.where(ReportStates.class).equalTo("idSopralluogo", idSopralluogo).findFirst();
         realm.commitTransaction();
 
         if(reportStates != null)
@@ -110,11 +110,23 @@ public class NotSentListVisitsAdapter extends BaseAdapter
             @Override
             public void onClick(View view)
             {
-                Toast.makeText(mContext,"Rapporto inviato", Toast.LENGTH_LONG).show();
-                visitItemsDateTimeSet.remove(position);
-                notifyDataSetChanged();
+                if(reportStates != null)
+                {
+                    Calendar calendarNow = Calendar.getInstance();
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
+                    String strDateTime = sdf.format(calendarNow.getTime());
+
+                    realm.beginTransaction();
+                    reportStates.setDataOraRaportoInviato(strDateTime);
+                    realm.commitTransaction();
+                }
 
                 //sendReportNow(mPosition);
+
+                Toast.makeText(mContext,"Rapporto inviato", Toast.LENGTH_LONG).show();
+
+                visitItemsDateTimeSet.remove(position);
+                notifyDataSetChanged();
             }
         });
 

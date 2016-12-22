@@ -87,12 +87,6 @@ public class CTLinfoFragment extends Fragment implements View.OnClickListener, L
 
         if (getArguments() != null)
         {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-
-        if (getArguments() != null)
-        {
             selectedIndex = getArguments().getInt("selectedIndex");
         }
     }
@@ -176,7 +170,7 @@ public class CTLinfoFragment extends Fragment implements View.OnClickListener, L
         {
             if (!NetworkUtils.isNetworkAvailable(context))
             {
-                Toast.makeText(context, "Check internet connection.", Toast.LENGTH_LONG).show();
+                Toast.makeText(context, "Controlla la connessione a Internet", Toast.LENGTH_LONG).show();
                 return;
             }
 
@@ -199,6 +193,7 @@ public class CTLinfoFragment extends Fragment implements View.OnClickListener, L
                 realm.beginTransaction();
                 reportStates.setLatitude(mLastLocation.getLatitude());
                 reportStates.setLongitude(mLastLocation.getLongitude());
+                reportStates.setGeneralInfoCompletionState(2);
                 realm.commitTransaction();
             }
 

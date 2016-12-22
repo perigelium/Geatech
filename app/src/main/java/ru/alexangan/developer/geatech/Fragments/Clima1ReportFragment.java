@@ -4,16 +4,21 @@ import android.app.Fragment;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
-import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
+import android.widget.Spinner;
 import android.widget.Button;
 import android.widget.EditText;
+
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Locale;
 
 import io.realm.RealmResults;
 import ru.alexangan.developer.geatech.Interfaces.Communicator;
@@ -26,7 +31,7 @@ import ru.alexangan.developer.geatech.R;
 import static ru.alexangan.developer.geatech.Activities.LoginActivity.realm;
 import static ru.alexangan.developer.geatech.Activities.MainActivity.visitItems;
 
-public class Clima1ReportFragment extends Fragment implements View.OnTouchListener
+public class Clima1ReportFragment extends Fragment //implements View.OnTouchListener
 {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -36,33 +41,33 @@ public class Clima1ReportFragment extends Fragment implements View.OnTouchListen
     // TODO: Rename and change types of parameters
     private int selectedIndex;
     View rootView;
-    private Communicator mCommunicator;
 
     private OnFragmentInteractionListener mListener;
-    private Button sendReport;
     Context context;
-    AutoCompleteTextView atvTipoDiEdificio, atvPosizionamentoUnitaEsterna,
+    Spinner atvTipoDiEdificio, atvPosizionamentoUnitaEsterna,
             atvTipologiaCostruttivaMurature, atvLocaliEOPianiDelledificio;
 
     EditText etNoteSulLuoghoDiInstallazione, etNoteSulTipologiaDellImpianto, etNoteRelativeAlCollegamento;
 
     Clima1Model clima1Model;
 
-    private static final String[] TipiDiEdificie = new String[] {
-            "Appartamento", "Villa(Singola/Multi)", "Negozio", "Altro"};
+    private static final String[] TipiDiEdificieStrA = new String[] {
+            "", "Appartamento", "Villa(Singola/Multi)", "Negozio", "Altro"};
 
-    private static final String[] PosizionamentiUnitaEsterna = new String[] {
-            "A Parete", "A Pavimento"};
+    private static final String[] PosizionamentiUnitaEsternaStrA = new String[] {
+            "","A Parete", "A Pavimento"};
 
-    private static final String[] TipologieCostruttiveMurature = new String[] {
-            "Cemento Armato", "Mattoni Pieni", "Mattoni Forati", "Pietra", "Altro"};
+    private static final String[] TipologieCostruttiveMuratureStrA = new String[] {
+            "","Cemento Armato", "Mattoni Pieni", "Mattoni Forati", "Pietra", "Altro"};
 
-    private static final String[] LocaliEOPianiDelledificio = new String[] {
-            "Interrato", "Piano rialzato", "Piano Terra", "Altro"};
+    private static final String[] LocaliEOPianiDelledificioStrA = new String[] {
+            "","Interrato", "Piano rialzato", "Piano Terra", "Altro"};
+
+    ArrayList<String> tipiDiEdificie, posizionamentiUnitaEsterna, tipologieCostruttiveMurature, localiEOPianiDelledificio;
+
 
     public Clima1ReportFragment()
     {
-        // Required empty public constructor
     }
 
     // TODO: Rename and change types and number of parameters
@@ -79,13 +84,12 @@ public class Clima1ReportFragment extends Fragment implements View.OnTouchListen
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mCommunicator = (Communicator)getActivity();
     }
 
     @Override
-    public void onDestroy()
+    public void onPause()
     {
-        super.onDestroy();
+        super.onPause();
 
         realm.beginTransaction();
 
@@ -98,22 +102,32 @@ public class Clima1ReportFragment extends Fragment implements View.OnTouchListen
 
         if (reportStates != null && clima1Model!=null)
         {
-            clima1Model.setTipoDiEdificio(atvTipoDiEdificio.getText().toString());
-            clima1Model.setPosizionamentoUnitaEsterna(atvPosizionamentoUnitaEsterna.getText().toString());
-            clima1Model.setTipologiaCostruttivaMurature(atvTipologiaCostruttivaMurature.getText().toString());
-            clima1Model.setLocaliEOPianiDelledificio(atvLocaliEOPianiDelledificio.getText().toString());
+            clima1Model.setTipoDiEdificio(atvTipoDiEdificio.getSelectedItem().toString());
+            clima1Model.setPosizionamentoUnitaEsterna(atvPosizionamentoUnitaEsterna.getSelectedItem().toString());
+            clima1Model.setTipologiaCostruttivaMurature(atvTipologiaCostruttivaMurature.getSelectedItem().toString());
+            clima1Model.setLocaliEOPianiDelledificio(atvLocaliEOPianiDelledificio.getSelectedItem().toString());
 
             clima1Model.setNoteSulLuoghoDiInstallazione(etNoteSulLuoghoDiInstallazione.getText().toString());
             clima1Model.setNoteSulTipologiaDellImpianto(etNoteSulTipologiaDellImpianto.getText().toString());
             clima1Model.setNoteRelativeAlCollegamento(etNoteRelativeAlCollegamento.getText().toString());
 
-            if (clima1Model.getTipoDiEdificio().length() != 0)
+            if(clima1Model.getTipoDiEdificio().length() != 0)
             {
                 reportStates.setReportCompletionState(1);
 
-                if (clima1Model.getNoteRelativeAlCollegamento().length() != 0)
+                if (clima1Model.getNoteSulLuoghoDiInstallazione().length() != 0)
                 {
                     reportStates.setReportCompletionState(2);
+
+                    if (clima1Model.getNoteRelativeAlCollegamento().length() != 0 && clima1Model.getNoteSulTipologiaDellImpianto().length() != 0)
+                    {
+                        reportStates.setReportCompletionState(3);
+
+                        Calendar calendarNow = Calendar.getInstance();
+                        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
+                        String strDateTime = sdf.format(calendarNow.getTime());
+                        reportStates.setDataOraRaportoCompletato(strDateTime);
+                    }
                 }
             }
         }
@@ -126,6 +140,12 @@ public class Clima1ReportFragment extends Fragment implements View.OnTouchListen
     }
 
     @Override
+    public void onDestroy()
+    {
+        super.onDestroy();
+    }
+
+    @Override
     public void onViewCreated(View view, Bundle savedInstanceState)
     {
         super.onViewCreated(view, savedInstanceState);
@@ -134,10 +154,10 @@ public class Clima1ReportFragment extends Fragment implements View.OnTouchListen
 
         if (clima1Model != null)
         {
-                atvTipoDiEdificio.setText(clima1Model.getTipoDiEdificio());
-                atvPosizionamentoUnitaEsterna.setText((clima1Model.getPosizionamentoUnitaEsterna()));
-                atvTipologiaCostruttivaMurature.setText(clima1Model.getTipologiaCostruttivaMurature());
-                atvLocaliEOPianiDelledificio.setText(clima1Model.getLocaliEOPianiDelledificio());
+                atvTipoDiEdificio.setSelection(tipiDiEdificie.indexOf(clima1Model.getTipoDiEdificio()));
+                atvPosizionamentoUnitaEsterna.setSelection(posizionamentiUnitaEsterna.indexOf(clima1Model.getPosizionamentoUnitaEsterna()));
+                atvTipologiaCostruttivaMurature.setSelection(tipologieCostruttiveMurature.indexOf(clima1Model.getTipologiaCostruttivaMurature()));
+                atvLocaliEOPianiDelledificio.setSelection(localiEOPianiDelledificio.indexOf(clima1Model.getLocaliEOPianiDelledificio()));
                 etNoteSulLuoghoDiInstallazione.setText(clima1Model.getNoteSulLuoghoDiInstallazione());
                 etNoteSulTipologiaDellImpianto.setText(clima1Model.getNoteSulTipologiaDellImpianto());
                 etNoteRelativeAlCollegamento.setText(clima1Model.getNoteRelativeAlCollegamento());
@@ -156,6 +176,11 @@ public class Clima1ReportFragment extends Fragment implements View.OnTouchListen
         {
             selectedIndex = getArguments().getInt("selectedIndex");
         }
+
+        tipiDiEdificie = new ArrayList<>();
+        posizionamentiUnitaEsterna = new ArrayList<>();
+        tipologieCostruttiveMurature = new ArrayList<>();
+        localiEOPianiDelledificio = new ArrayList<>();
     }
 
     @Override
@@ -164,17 +189,20 @@ public class Clima1ReportFragment extends Fragment implements View.OnTouchListen
     {
         rootView =  inflater.inflate(R.layout.climatizzazione0_report, container, false);
 
-        ArrayAdapter<String> TipiDiEdificieAdapter = new ArrayAdapter<>(context, android.R.layout.simple_dropdown_item_1line, TipiDiEdificie);
+        tipiDiEdificie.addAll(Arrays.asList(TipiDiEdificieStrA));
+        posizionamentiUnitaEsterna.addAll(Arrays.asList(PosizionamentiUnitaEsternaStrA));
+        tipologieCostruttiveMurature.addAll(Arrays.asList(TipologieCostruttiveMuratureStrA));
+        localiEOPianiDelledificio.addAll(Arrays.asList(LocaliEOPianiDelledificioStrA));
 
-        ArrayAdapter<String> PosizionamentiUnitaEsternaAdapter = new ArrayAdapter<>(context, android.R.layout.simple_dropdown_item_1line, PosizionamentiUnitaEsterna);
+        ArrayAdapter<String> TipiDiEdificieAdapter = new ArrayAdapter<>(context, android.R.layout.simple_dropdown_item_1line, tipiDiEdificie);
 
-        ArrayAdapter<String> TipologieCostruttiveMuratureAdapter = new ArrayAdapter<>(context, android.R.layout.simple_dropdown_item_1line, TipologieCostruttiveMurature);
+        ArrayAdapter<String> PosizionamentiUnitaEsternaAdapter = new ArrayAdapter<>(context, android.R.layout.simple_dropdown_item_1line, posizionamentiUnitaEsterna);
 
-        ArrayAdapter<String> LocaliEOPianiDelledificioAdapter = new ArrayAdapter<>(context, android.R.layout.simple_dropdown_item_1line, LocaliEOPianiDelledificio);
+        ArrayAdapter<String> TipologieCostruttiveMuratureAdapter = new ArrayAdapter<>(context, android.R.layout.simple_dropdown_item_1line, tipologieCostruttiveMurature);
 
+        ArrayAdapter<String> LocaliEOPianiDelledificioAdapter = new ArrayAdapter<>(context, android.R.layout.simple_dropdown_item_1line, localiEOPianiDelledificio);
 
         realm.beginTransaction();
-
         VisitItem visitItem = visitItems.get(selectedIndex);
         VisitStates visitStates = visitItem.getVisitStates();
         int idSopralluogo = visitStates.getIdSopralluogo();
@@ -194,81 +222,130 @@ public class Clima1ReportFragment extends Fragment implements View.OnTouchListen
         }
         realm.commitTransaction();
 
-        atvTipoDiEdificio = (AutoCompleteTextView) rootView.findViewById(R.id.atvTipoDiEdificio);
-        atvTipoDiEdificio.setText(clima1Model.getTipoDiEdificio());
+        atvTipoDiEdificio = null;
+        atvTipoDiEdificio = (Spinner) rootView.findViewById(R.id.atvTipoDiEdificio);
+
+        //atvTipoDiEdificio.setListSelection(tipiDiEdificie.indexOf(clima1Model.getTipoDiEdificio()));
+
         atvTipoDiEdificio.setAdapter(TipiDiEdificieAdapter);
 
-        atvTipoDiEdificio.setOnTouchListener(this);
-        atvTipoDiEdificio.setInputType(InputType.TYPE_NULL);
+        //atvTipoDiEdificio.setOnTouchListener(this);
+        //atvTipoDiEdificio.setInputType(InputType.TYPE_NULL);
 
-        atvTipoDiEdificio.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        atvTipoDiEdificio.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 
             @Override
-            public void onItemClick(AdapterView<?> parent, View view,
+            public void onItemSelected(AdapterView<?> parent, View view,
                                     int position, long id)
             {
                 String selectedItem = parent.getItemAtPosition(position).toString();
+                realm.beginTransaction();
                 clima1Model.setTipoDiEdificio(selectedItem);
+                realm.commitTransaction();
 
                 //Toast.makeText(context, selectedItem, Toast.LENGTH_SHORT).show();
             }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView)
+            {
+
+            }
         });
 
-        atvPosizionamentoUnitaEsterna = (AutoCompleteTextView) rootView.findViewById(R.id.atvPosizionamentoUnitaEsterna);
-        atvPosizionamentoUnitaEsterna.setText(clima1Model.getPosizionamentoUnitaEsterna());
+        atvPosizionamentoUnitaEsterna = null;
+        atvPosizionamentoUnitaEsterna = (Spinner) rootView.findViewById(R.id.atvPosizionamentoUnitaEsterna);
+        //atvPosizionamentoUnitaEsterna.setText(clima1Model.getPosizionamentoUnitaEsterna());
+
+        //atvPosizionamentoUnitaEsterna.setListSelection(posizionamentiUnitaEsterna.indexOf(clima1Model.getTipoDiEdificio()));
+
         atvPosizionamentoUnitaEsterna.setAdapter(PosizionamentiUnitaEsternaAdapter);
-        atvPosizionamentoUnitaEsterna.setOnTouchListener(this);
-        atvPosizionamentoUnitaEsterna.setInputType(InputType.TYPE_NULL);
+        //atvPosizionamentoUnitaEsterna.setOnTouchListener(this);
+        //atvPosizionamentoUnitaEsterna.setInputType(InputType.TYPE_NULL);
 
-        atvPosizionamentoUnitaEsterna.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        atvPosizionamentoUnitaEsterna.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 
             @Override
-            public void onItemClick(AdapterView<?> parent, View view,
+            public void onItemSelected(AdapterView<?> parent, View view,
                                     int position, long id)
             {
                 String selectedItem = parent.getItemAtPosition(position).toString();
+                realm.beginTransaction();
                 clima1Model.setPosizionamentoUnitaEsterna(selectedItem);
+                realm.commitTransaction();
                 //Toast.makeText(context, selectedItem, Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView)
+            {
+
             }
         });
 
-        atvTipologiaCostruttivaMurature = (AutoCompleteTextView) rootView.findViewById(R.id.atvTipologiaCostruttivaMurature);
-        atvTipologiaCostruttivaMurature.setText(clima1Model.getTipologiaCostruttivaMurature());
+        atvTipologiaCostruttivaMurature = null;
+        atvTipologiaCostruttivaMurature = (Spinner) rootView.findViewById(R.id.atvTipologiaCostruttivaMurature);
+
+        //atvTipologiaCostruttivaMurature.setListSelection(tipologieCostruttiveMurature.indexOf(clima1Model.getTipoDiEdificio()));
+
+        //atvTipologiaCostruttivaMurature.setText(clima1Model.getTipologiaCostruttivaMurature());
         atvTipologiaCostruttivaMurature.setAdapter(TipologieCostruttiveMuratureAdapter);
-        atvTipologiaCostruttivaMurature.setOnTouchListener(this);
-        atvTipologiaCostruttivaMurature.setInputType(InputType.TYPE_NULL);
+        //atvTipologiaCostruttivaMurature.setOnTouchListener(this);
+        //atvTipologiaCostruttivaMurature.setInputType(InputType.TYPE_NULL);
 
-        atvTipologiaCostruttivaMurature.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        atvTipologiaCostruttivaMurature.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 
             @Override
-            public void onItemClick(AdapterView<?> parent, View view,
+            public void onItemSelected(AdapterView<?> parent, View view,
                                     int position, long id)
             {
                 String selectedItem = parent.getItemAtPosition(position).toString();
+                realm.beginTransaction();
                 clima1Model.setTipologiaCostruttivaMurature(selectedItem);
+                realm.commitTransaction();
                 //Toast.makeText(context, selectedItem, Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView)
+            {
+
             }
         });
 
-        atvLocaliEOPianiDelledificio = (AutoCompleteTextView) rootView.findViewById(R.id.atvLocaliEOPianiDelledificio);
-        atvLocaliEOPianiDelledificio.setText(clima1Model.getLocaliEOPianiDelledificio());
-        atvLocaliEOPianiDelledificio.setAdapter(LocaliEOPianiDelledificioAdapter);
-        atvLocaliEOPianiDelledificio.setOnTouchListener(this);
-        atvLocaliEOPianiDelledificio.setInputType(InputType.TYPE_NULL);
+        atvLocaliEOPianiDelledificio = null;
+        atvLocaliEOPianiDelledificio = (Spinner) rootView.findViewById(R.id.atvLocaliEOPianiDelledificio);
+        //atvLocaliEOPianiDelledificio.setText(clima1Model.getLocaliEOPianiDelledificio());
 
-        atvLocaliEOPianiDelledificio.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        //atvLocaliEOPianiDelledificio.setListSelection(localiEOPianiDelledificio.indexOf(clima1Model.getLocaliEOPianiDelledificio()));
+
+        atvLocaliEOPianiDelledificio.setAdapter(LocaliEOPianiDelledificioAdapter);
+        //atvLocaliEOPianiDelledificio.setOnTouchListener(this);
+        //atvLocaliEOPianiDelledificio.setInputType(InputType.TYPE_NULL);
+
+        atvLocaliEOPianiDelledificio.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 
             @Override
-            public void onItemClick(AdapterView<?> parent, View view,
+            public void onNothingSelected(AdapterView<?> adapterView)
+            {
+
+            }
+
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view,
                                     int position, long id)
             {
                 String selectedItem = parent.getItemAtPosition(position).toString();
+                realm.beginTransaction();
                 clima1Model.setLocaliEOPianiDelledificio(selectedItem);
+                realm.commitTransaction();
                 //Toast.makeText(context, selectedItem, Toast.LENGTH_SHORT).show();
             }
         });
 
         etNoteSulLuoghoDiInstallazione = (EditText) rootView.findViewById(R.id.etNoteSulLuoghoDiInstallazione);
+
+        etNoteSulLuoghoDiInstallazione.setText(clima1Model.getNoteSulLuoghoDiInstallazione());
 
         etNoteSulLuoghoDiInstallazione.setOnFocusChangeListener(new View.OnFocusChangeListener()
         {
@@ -277,7 +354,9 @@ public class Clima1ReportFragment extends Fragment implements View.OnTouchListen
             {
                 if (hasFocus)
                 {
+                    realm.beginTransaction();
                     clima1Model.setNoteSulLuoghoDiInstallazione(etNoteSulLuoghoDiInstallazione.getText().toString());
+                    realm.commitTransaction();
                     //Toast.makeText(context, "onFocusChange etNoteSulLuoghoDiInstallazione", Toast.LENGTH_SHORT).show();
                 }
             }
@@ -294,7 +373,9 @@ public class Clima1ReportFragment extends Fragment implements View.OnTouchListen
             {
                 if (v == etNoteSulTipologiaDellImpianto && !hasFocus)
                 {
+                    realm.beginTransaction();
                     clima1Model.setNoteSulTipologiaDellImpianto(etNoteSulTipologiaDellImpianto.getText().toString());
+                    realm.commitTransaction();
                     //Toast.makeText(context, "onFocusChange etNoteSulTipologiaDellImpianto", Toast.LENGTH_SHORT).show();
                 }
             }
@@ -310,7 +391,9 @@ public class Clima1ReportFragment extends Fragment implements View.OnTouchListen
             {
                 if (v == etNoteRelativeAlCollegamento && !hasFocus)
                 {
+                    realm.beginTransaction();
                     clima1Model.setNoteRelativeAlCollegamento(etNoteRelativeAlCollegamento.getText().toString());
+                    realm.commitTransaction();
                     //Toast.makeText(context, "onFocusChange etNoteRelativeAlCollegamento", Toast.LENGTH_SHORT).show();
                 }
             }
@@ -349,31 +432,23 @@ public class Clima1ReportFragment extends Fragment implements View.OnTouchListen
         mListener = null;
     }
 
-    @Override
-    public boolean onTouch(View view, MotionEvent motionEvent)
+/*    @Override
+    public boolean onTouch(View v, MotionEvent motionEvent)
     {
-        if(view == atvTipoDiEdificio)
-        {
-            atvTipoDiEdificio.showDropDown();
-        }
 
-        if(view == atvPosizionamentoUnitaEsterna)
+        if (v.getId() == R.id.etNoteSulLuoghoDiInstallazione)
         {
-            atvPosizionamentoUnitaEsterna.showDropDown();
-        }
-
-        if(view == atvTipologiaCostruttivaMurature)
-        {
-            atvTipologiaCostruttivaMurature.showDropDown();
-        }
-
-        if(view == atvLocaliEOPianiDelledificio)
-        {
-            atvLocaliEOPianiDelledificio.showDropDown();
+            v.getParent().requestDisallowInterceptTouchEvent(true);
+            switch (motionEvent.getAction() & MotionEvent.ACTION_MASK)
+            {
+                case MotionEvent.ACTION_UP:
+                    v.getParent().requestDisallowInterceptTouchEvent(false);
+                    break;
+            }
         }
 
         return false;
-    }
+    }*/
 
     public interface OnFragmentInteractionListener
     {

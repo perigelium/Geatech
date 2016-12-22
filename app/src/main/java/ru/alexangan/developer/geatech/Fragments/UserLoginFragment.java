@@ -2,11 +2,13 @@ package ru.alexangan.developer.geatech.Fragments;
 
 
 import android.app.Fragment;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 
 import io.realm.RealmResults;
@@ -14,6 +16,7 @@ import ru.alexangan.developer.geatech.Interfaces.LoginCommunicator;
 import ru.alexangan.developer.geatech.Models.LoginCredentials;
 import ru.alexangan.developer.geatech.R;
 
+import static ru.alexangan.developer.geatech.Activities.LoginActivity.mSettings;
 import static ru.alexangan.developer.geatech.Activities.LoginActivity.realm;
 
 public class UserLoginFragment extends Fragment implements  View.OnClickListener
@@ -31,6 +34,9 @@ public class UserLoginFragment extends Fragment implements  View.OnClickListener
     Button btnLogin, btnPasswordRecover, btnFirstAccess;
     EditText etLogin, etPassword;
     LoginCommunicator loginCommunicator;
+    public static final String CHKBOX_REMEMBER_ME_STATE = "rememberMeState";
+    private boolean chkboxRememberMeState;
+    CheckBox chkboxRememberMe;
 
 
     public UserLoginFragment()
@@ -70,6 +76,31 @@ public class UserLoginFragment extends Fragment implements  View.OnClickListener
     }
 
     @Override
+    public void onResume()
+    {
+        super.onResume();
+
+        if(mSettings.contains(CHKBOX_REMEMBER_ME_STATE))
+        {
+            chkboxRememberMeState = mSettings.getBoolean(CHKBOX_REMEMBER_ME_STATE, false);
+            chkboxRememberMe.setChecked(chkboxRememberMeState);
+
+            if(chkboxRememberMeState == true)
+            {
+                realm.beginTransaction();
+                RealmResults<LoginCredentials> loginCredentialses = realm.where(LoginCredentials.class).findAll();
+                realm.commitTransaction();
+
+                if(loginCredentialses.size() != 0)
+                {
+                    etLogin.setText(loginCredentialses.get(loginCredentialses.size() - 1).getLogin());
+                    etPassword.setText(loginCredentialses.get(loginCredentialses.size() - 1).getPassword());
+                }
+            }
+        }
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState)
     {
@@ -86,6 +117,7 @@ public class UserLoginFragment extends Fragment implements  View.OnClickListener
 
         etLogin = (EditText) rootView.findViewById(R.id.etLogin);
         etPassword = (EditText) rootView.findViewById(R.id.etPassword);
+        chkboxRememberMe = (CheckBox) rootView.findViewById(R.id.chkboxRememberMe);
 
         return rootView;
     }
@@ -99,6 +131,18 @@ public class UserLoginFragment extends Fragment implements  View.OnClickListener
     }
 
     @Override
+    public void onPause()
+    {
+        super.onPause();
+
+        chkboxRememberMeState = chkboxRememberMe.isChecked();
+
+        SharedPreferences.Editor editor = mSettings.edit();
+        editor.putBoolean(CHKBOX_REMEMBER_ME_STATE, chkboxRememberMeState);
+        editor.apply();
+    }
+
+    @Override
     public void onClick(View view)
     {
         realm.beginTransaction();
@@ -106,7 +150,8 @@ public class UserLoginFragment extends Fragment implements  View.OnClickListener
         realm.commitTransaction();
 
         Boolean credentialsesFound = false;
-        for(LoginCredentials loginCredentials :loginCredentialses)
+
+        for(LoginCredentials loginCredentials : loginCredentialses)
         {
             if(etLogin.getText().toString().compareTo(loginCredentials.getLogin()) == 0
                     && etPassword.getText().toString().compareTo(loginCredentials.getPassword()) == 0)
