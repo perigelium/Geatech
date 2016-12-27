@@ -98,7 +98,14 @@ public class ReportStates extends RealmObject
 
     public RealmString getPhotoAddedNumberString(int photoAddedNumber)
     {
-        return photoAddedStatuses.get(photoAddedNumber);
+        if(photoAddedNumber != 0)
+        {
+            return photoAddedStatuses.get(1);
+        }
+        else
+        {
+            return photoAddedStatuses.get(0);
+        }
     }
 
     public void setReportCompletionState(int reportCompletionState)

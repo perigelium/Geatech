@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Locale;
 
@@ -32,14 +33,14 @@ import static ru.alexangan.developer.geatech.Activities.MainActivity.visitItems;
 public class MyListVisitsAdapter extends BaseAdapter
 {
     private Context mContext;
-    //ArrayList<VisitItem> visitItems = RESTdataReceiver.visitItems;
+    private ArrayList<VisitItem> visitItems;
     int layout_id;
 
-    public MyListVisitsAdapter(Context context, int layout_id)
+    public MyListVisitsAdapter(Context context, int layout_id, ArrayList<VisitItem> visitItems)
     {
         //super(context, textViewResourceId, objects);
         mContext = context;
-        //this.visitItems = visitItems;
+        this.visitItems = visitItems;
         this.layout_id = layout_id;
     }
 
@@ -86,6 +87,10 @@ public class MyListVisitsAdapter extends BaseAdapter
         VisitStates visitStates = visitItem.getVisitStates();
         int idSopralluogo = visitStates.getIdSopralluogo();
 
+        clientNameTextView.setText(clientData.getName());
+        serviceTypeTextView.setText(productData.getProductType());
+        clientAddressTextView.setText(clientData.getAddress());
+
         realm.beginTransaction();
 
         ReportStates reportStates = realm.where(ReportStates.class).equalTo("idSopralluogo", idSopralluogo).findFirst();
@@ -93,50 +98,54 @@ public class MyListVisitsAdapter extends BaseAdapter
         realm.commitTransaction();
 
         String visitDateTime = reportStates.getDataOraSopralluogo();
-        if(visitDateTime == null)
+/*        if(visitDateTime == null)
         {
             visitDateTime = visitStates.getDataSollecitoAppuntamento();
-        }
+        }*/
 
-        Calendar calendar = Calendar.getInstance();
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
-
-        try
+        if(visitDateTime != null)
         {
-            calendar.setTime(sdf.parse(visitDateTime));
+            Calendar calendar = Calendar.getInstance();
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
 
-        } catch (ParseException e)
-        {
-            e.printStackTrace();
-        }
-
-        clientNameTextView.setText(clientData.getName());
-        serviceTypeTextView.setText(productData.getProductType());
-        clientAddressTextView.setText(clientData.getAddress());
-
-        if(calendar.DAY_OF_MONTH != 0)
-        {
-            vVisitDateView.setBackgroundColor(Color.parseColor("#009922"));
-            tvVisitDay.setVisibility(View.VISIBLE);
-            tvVisitMonth.setVisibility(View.VISIBLE);
-            ivPersonTimeSet.setVisibility(View.VISIBLE);
-
-            tvVisitDay.setText(Integer.toString(calendar.get(calendar.DAY_OF_MONTH)));
-            tvVisitMonth.setText(ItalianMonths.numToString(calendar.get(calendar.MONTH)+1));
-
-            String minuteStr = Integer.toString(calendar.get(calendar.MINUTE));
-            if (minuteStr.length() == 1)
+            try
             {
-                minuteStr = "0" + minuteStr;
+                calendar.setTime(sdf.parse(visitDateTime));
+
+            } catch (ParseException e)
+            {
+                e.printStackTrace();
             }
 
-            tvVisitTime.setText(Integer.toString(calendar.get(calendar.HOUR_OF_DAY)) + ":" + minuteStr);
+            if (calendar.DAY_OF_MONTH != 0)
+            {
+                vVisitDateView.setBackgroundColor(Color.parseColor("#009922"));
+                tvVisitDay.setVisibility(View.VISIBLE);
+                tvVisitMonth.setVisibility(View.VISIBLE);
+                ivPersonTimeSet.setVisibility(View.VISIBLE);
+
+                tvVisitDay.setText(Integer.toString(calendar.get(calendar.DAY_OF_MONTH)));
+                tvVisitMonth.setText(ItalianMonths.numToString(calendar.get(calendar.MONTH) + 1));
+
+                String minuteStr = Integer.toString(calendar.get(calendar.MINUTE));
+                if (minuteStr.length() == 1)
+                {
+                    minuteStr = "0" + minuteStr;
+                }
+
+                tvVisitTime.setText(Integer.toString(calendar.get(calendar.HOUR_OF_DAY)) + ":" + minuteStr);
+            } else
+            {
+                calendarioIcon.setVisibility(View.VISIBLE);
+                ivPersonTimeUnset.setVisibility(View.VISIBLE);
+            }
         }
         else
         {
             calendarioIcon.setVisibility(View.VISIBLE);
             ivPersonTimeUnset.setVisibility(View.VISIBLE);
         }
+
 
         return row;
     }

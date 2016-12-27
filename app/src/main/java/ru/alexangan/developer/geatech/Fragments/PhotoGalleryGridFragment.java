@@ -43,11 +43,12 @@ public class PhotoGalleryGridFragment extends Fragment
     // variable for selection intent
     private final int PICKER = 1;
     // variable to store the currently selected image
-    public static int currentPicPos = 0;
-    final static String photosFolderName = "imagesFolder";
-    final static int imageHolderWidth = 100;
-    final static int imageHolderHeight = 75;
+    int currentPicPos = 0;
+    String photosFolderName;
+    int imageHolderWidth = 100;
+    int imageHolderHeight = 75;
     ArrayList<Bitmap> imageItems;
+    ArrayList<File> pathItems;
     Bitmap photoAddButton;
     Context context;
     private int selectedIndex;
@@ -79,10 +80,11 @@ public class PhotoGalleryGridFragment extends Fragment
         if (getArguments() != null)
         {
             selectedIndex = getArguments().getInt("selectedIndex");
+            photosFolderName = "photos" + selectedIndex;
         }
     }
 
-    private ArrayList<Bitmap> getImagesArray()
+    private void getImagesArray()
     {
         File appDirectory = new File(context.getFilesDir(), photosFolderName);
 
@@ -96,10 +98,10 @@ public class PhotoGalleryGridFragment extends Fragment
         for (File path : filePaths)
         {
             Bitmap bitmap = decodeSampledBitmapFromUri(path.getAbsolutePath(), imageHolderWidth, imageHolderHeight);
-            imageItems.add(bitmap);
-        }
 
-        return imageItems;
+            imageItems.add(bitmap);
+            pathItems.add(path);
+        }
     }
 
     @Override
@@ -113,15 +115,15 @@ public class PhotoGalleryGridFragment extends Fragment
         Resources resources = getResources();
         photoAddButton = BitmapFactory.decodeResource(resources, R.drawable.photo_add);
         imageItems = new ArrayList<>();
+        pathItems = new ArrayList<>();
 
-        imageItems = getImagesArray();
+        getImagesArray();
 
-        if(imageItems.size() == 0 || imageItems.get(imageItems.size() - 1) != photoAddButton)
-        {
-            imageItems.add(photoAddButton);
-        }
+        imageItems.add(photoAddButton);
+        pathItems.add(new File("photoAddButton"));
 
         gridAdapter = new GridViewAdapter(context, R.layout.grid_item_layout, imageItems);
+
         gridView.setAdapter(gridAdapter);
 
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -140,8 +142,12 @@ public class PhotoGalleryGridFragment extends Fragment
                 }
                 else
                 {
-                    // open image in full size
+/*                    Intent intent = new Intent();
+                    intent.setAction(Intent.ACTION_VIEW);
+                    File file = new File(context.getFilesDir(), photosFolderName + "/" + pathItems.get(position));
 
+                    intent.setDataAndType(Uri.parse(file.getAbsolutePath()), "image*//*");
+                    startActivity(intent);*/
                 }
             }
         });
@@ -153,13 +159,15 @@ public class PhotoGalleryGridFragment extends Fragment
             {
 
                 currentPicPos = position;
-                imageItems.remove(currentPicPos);
-                imageItems.removeAll(Collections.singleton(null));
 
-                if(imageItems.get(imageItems.size() - 1) != photoAddButton)
+                if(pathItems.get(currentPicPos).delete()==true)
                 {
-                    imageItems.add(photoAddButton);
+                    imageItems.remove(currentPicPos);
+                    pathItems.remove(currentPicPos);
                 }
+
+                imageItems.removeAll(Collections.singleton(null)); // remove all null items
+                pathItems.removeAll(Collections.singleton(null)); // remove all null items
 
                 gridView.setAdapter(gridAdapter);
 
@@ -246,22 +254,16 @@ public class PhotoGalleryGridFragment extends Fragment
 
                 if (file.length() != 0)
                 {
-
                     Bitmap bm = decodeSampledBitmapFromUri(file.getAbsolutePath(), imageHolderWidth, imageHolderHeight);
 
-                    gridAdapter.addPic(currentPicPos, bm);
-
-                    if(imageItems.get(imageItems.size() - 1) != photoAddButton)
-                    {
-                        imageItems.add(photoAddButton);
-                    }
+                    imageItems.add(0, bm);
+                    pathItems.add(0, file);
 
                     // redraw the gallery thumbnails to reflect the new addition
                     gridView.setAdapter(gridAdapter);
                 }
             }
         }
-
 
         // superclass method
         super.onActivityResult(requestCode, resultCode, imageReturnedIntent);

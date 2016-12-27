@@ -65,12 +65,13 @@ public class MainActivity extends Activity implements Communicator
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
+        setTheme(R.style.AppTheme);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.work_window);
 
         currentSelIndex = -1;
 
-        if(inVisitItems!=null)
+        if (inVisitItems != null)
         {
             realm.beginTransaction();
             for (VisitItem visitItem : inVisitItems)
@@ -86,7 +87,7 @@ public class MainActivity extends Activity implements Communicator
         visitItems = realm.where(VisitItem.class).findAll();
         realm.commitTransaction();
 
-        if(visitItems.size() == 0)
+        if (visitItems.size() == 0)
         {
             Toast.makeText(this, "Database inizializzazione falito, controlla la connessione a Internet", Toast.LENGTH_LONG).show();
 
@@ -110,7 +111,7 @@ public class MainActivity extends Activity implements Communicator
                 realm.beginTransaction();
                 int idSopralluogoRep = reportStates.getIdSopralluogo();
 
-                if(idSopralluogo == idSopralluogoRep)
+                if (idSopralluogo == idSopralluogoRep)
                 {
                     addressAndProductPresent = true;
                     reportStates.setVisitId(realmVisitItem.getId());
@@ -118,7 +119,7 @@ public class MainActivity extends Activity implements Communicator
                 realm.commitTransaction();
             }
 
-            if(addressAndProductPresent == false)
+            if (addressAndProductPresent == false)
             {
                 realm.beginTransaction();
                 ReportStates newReportStates = new ReportStates(reportStatesList.size(), realmVisitItem.getId());
@@ -127,9 +128,6 @@ public class MainActivity extends Activity implements Communicator
                 realm.commitTransaction();
             }
         }
-
-
-        //String visitsJSONData = getIntent().getStringExtra("JSON");
 
         swipeDetector = new SwipeDetector();
 
@@ -158,7 +156,14 @@ public class MainActivity extends Activity implements Communicator
         mFragmentTransaction.add(R.id.CtrlBtnFragContainer, ctrlBtnsFragment1);
         mFragmentTransaction.add(R.id.CtrlBtnFragContainer, ctrlBtnsFragment2);
         mFragmentTransaction.add(R.id.CtrlBtnFragContainer, ctrlBtnsReportDetailed);
+
+        mFragmentTransaction.addToBackStack("listVisits");
+
+        Bundle args = new Bundle();
+        args.putBoolean("withNoSopralluogoTime", false);
+        listVisits.setArguments(args);
         mFragmentTransaction.add(R.id.CtrlBtnFragContainer, listVisits);
+
         ctrlBtnsFragment1.setCheckedBtnId(R.id.btnVisits);
         ctrlBtnsFragment2.setCheckedBtnId(R.id.btnInfo);
 
@@ -175,11 +180,45 @@ public class MainActivity extends Activity implements Communicator
     }
 
     @Override
+    public void onBackPressed()
+    {
+        if (!listVisits.isAdded())
+        {
+            currentSelIndex = -1;
+            FragmentTransaction mFragmentTransaction = mFragmentManager.beginTransaction();
+            mFragmentTransaction.hide(ctrlBtnsReportDetailed);
+            mFragmentTransaction.hide(ctrlBtnsFragment2);
+            mFragmentTransaction.show(ctrlBtnsFragment1);
+            mFragmentTransaction.commit();
+
+            removeAllLists();
+            setVisitsListContent(listVisits);
+        } else
+        {
+            super.onBackPressed();
+            //this.finish();
+        }
+    }
+
+    @Override
     public void onCtrlButtonClicked(View view)
     {
-        if(!view.isShown())
+        if (!view.isShown())
         {
             return;
+        }
+
+        if (view == findViewById(R.id.btnVisits))
+        {
+            currentSelIndex = -1;
+            FragmentTransaction mFragmentTransaction = mFragmentManager.beginTransaction();
+            mFragmentTransaction.hide(ctrlBtnsFragment2);
+            mFragmentTransaction.show(ctrlBtnsFragment1);
+            mFragmentTransaction.commit();
+
+            removeAllLists();
+
+            setVisitsListContent(listVisits);
         }
 
         if (view == findViewById(R.id.btnReturn))
@@ -191,6 +230,7 @@ public class MainActivity extends Activity implements Communicator
             mFragmentTransaction.commit();
 
             removeAllLists();
+
             setVisitsListContent(listVisits);
         }
 
@@ -259,6 +299,7 @@ public class MainActivity extends Activity implements Communicator
         if (view == findViewById(R.id.btnVisits))
         {
             removeAllLists();
+
             setVisitsListContent(listVisits);
         }
 
@@ -317,17 +358,17 @@ public class MainActivity extends Activity implements Communicator
             mFragmentTransaction.remove(ctlInfo);
         }
 
-        if(listVisits.isAdded())
+        if (listVisits.isAdded())
         {
             mFragmentTransaction.remove(listVisits);
         }
 
-        if(comingListVisits.isAdded())
+        if (comingListVisits.isAdded())
         {
             mFragmentTransaction.remove(comingListVisits);
         }
 
-        if(inWorkListVisits.isAdded())
+        if (inWorkListVisits.isAdded())
         {
             mFragmentTransaction.remove(inWorkListVisits);
         }
@@ -337,7 +378,7 @@ public class MainActivity extends Activity implements Communicator
             mFragmentTransaction.remove(notSentListVisits);
         }
 
-        if(reportsList.isAdded())
+        if (reportsList.isAdded())
         {
             mFragmentTransaction.remove(reportsList);
         }
@@ -349,7 +390,7 @@ public class MainActivity extends Activity implements Communicator
     {
         FragmentTransaction vFragmentTransaction = mFragmentManager.beginTransaction();
 
-        if(!fragment.isAdded())
+        if (!fragment.isAdded())
         {
             vFragmentTransaction.add(R.id.CtrlBtnFragContainer, fragment);
         }
@@ -377,8 +418,7 @@ public class MainActivity extends Activity implements Communicator
 
             setVisitsListContent(ctlInfo);
             ctrlBtnsFragment2.setCheckedBtnId(R.id.btnInfo);
-        }
-        else
+        } else
         {
             Bundle args = new Bundle();
             args.putInt("selectedIndex", itemIndex);
@@ -422,7 +462,9 @@ public class MainActivity extends Activity implements Communicator
         mFragmentTransaction.commit();
 
         removeAllLists();
-        Bundle args = new Bundle();
+
+        Bundle args = reportDetailedFragment.getArguments() != null ? reportDetailedFragment.getArguments() : new Bundle();
+
         args.putInt("selectedIndex", itemIndex);
         reportDetailedFragment.setArguments(args);
 
@@ -434,17 +476,44 @@ public class MainActivity extends Activity implements Communicator
     @Override
     public void onNotificationReportReturned(View view)
     {
+        if (view.getId() == R.id.btnNotifTimeNotSetVisits)
+        {
+            removeAllLists();
 
+            FragmentTransaction mFragmentTransaction = mFragmentManager.beginTransaction();
+            mFragmentTransaction.remove(listVisits);
+            mFragmentManager.executePendingTransactions();
+            mFragmentTransaction.commit();
+
+            listVisits = new ListVisitsFragment();
+
+            Bundle args = new Bundle();
+            args.putBoolean("withNoSopralluogoTime", true);
+            listVisits.setArguments(args);
+
+            setVisitsListContent(listVisits);
+
+            ctrlBtnsFragment1.setCheckedBtnId(R.id.btnComingVisits);
+        }
+
+        if (view.getId() == R.id.btnNotifUrgentReports)
+        {
+            Toast.makeText(this, "Nessun urgente raporti trovato", Toast.LENGTH_LONG).show();
+        }
+
+        if (view.getId() == R.id.btnAppSettings)
+        {
+
+        }
     }
 
     @Override
     public void OnListItemSwiped(int itemIndex, Boolean dateTimeHasSet)
     {
-        if(!dateTimeHasSet)
+        if (!dateTimeHasSet)
         {
             OnListItemSelected(itemIndex, false);
-        }
-        else
+        } else
         {
             OnListItemSelected(itemIndex, true);
         }

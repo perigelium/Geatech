@@ -154,12 +154,6 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
         btnApriMappa = (TextView) rootView.findViewById(R.id.btnApriMappa);
         btnChiama = (TextView) rootView.findViewById(R.id.btnChiama);
 
-        mSetDateButton.setOnClickListener(this);
-        mAnnullaSetDateTimeButton.setOnClickListener(this);
-        mSetDateTimeSubmitButton.setOnClickListener(this);
-        btnApriMappa.setOnClickListener(this);
-        btnChiama.setOnClickListener(this);
-
         VisitItem visitItem = visitItems.get(selectedIndex);
         ClientData clientData = visitItem.getClientData();
         ProductData productData = visitItem.getProductData();
@@ -231,6 +225,12 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
         mMinute = calendar.get(Calendar.MINUTE);
 
         updateDisplay();
+
+        mSetDateButton.setOnClickListener(this);
+        mAnnullaSetDateTimeButton.setOnClickListener(this);
+        mSetDateTimeSubmitButton.setOnClickListener(this);
+        btnApriMappa.setOnClickListener(this);
+        btnChiama.setOnClickListener(this);
 
         return  rootView;
     }

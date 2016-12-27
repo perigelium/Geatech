@@ -56,6 +56,7 @@ public class LoginActivity extends Activity implements RESTdataReceiverEventList
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
+        setTheme(R.style.AppTheme);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login_window_container);
 

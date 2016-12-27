@@ -79,7 +79,6 @@ public class NotificationBarFragment extends Fragment implements View.OnClickLis
 
         if(view.getId() == R.id.btnNotifUrgentReports)
         {
-            Toast.makeText(getActivity(),"btnNotifUrgentReports clicked", Toast.LENGTH_LONG).show();
             mCommunicator.onNotificationReportReturned(view);
         }
 
