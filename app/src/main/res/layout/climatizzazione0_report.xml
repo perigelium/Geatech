@@ -73,14 +73,16 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content">
 
-                    <AutoCompleteTextView
+                    <Spinner
                         android:id="@+id/atvTipoDiEdificio"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_alignParentLeft="true"
                         android:layout_marginLeft="6dp"
                         android:background="#f0f0f0"
-                        android:ems="10"
+                        android:minWidth="200dp"
+                        android:minHeight="19dp"
+                        android:ems="5"
                         android:text=""/>
 
 
@@ -105,14 +107,16 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content">
 
-                    <AutoCompleteTextView
+                    <Spinner
                         android:id="@+id/atvPosizionamentoUnitaEsterna"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentLeft="true"
                         android:layout_marginLeft="6dp"
                         android:background="#f0f0f0"
-                        android:ems="10"
+                        android:minWidth="200dp"
+                        android:minHeight="19dp"
+                        android:ems="5"
                         android:text=""/>
 
                     <ImageView
@@ -136,14 +140,16 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content">
 
-                    <AutoCompleteTextView
+                    <Spinner
                         android:id="@+id/atvTipologiaCostruttivaMurature"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentLeft="true"
                         android:layout_marginLeft="6dp"
                         android:background="#f0f0f0"
-                        android:ems="10"
+                        android:minWidth="200dp"
+                        android:minHeight="19dp"
+                        android:ems="5"
                         android:text=""/>
 
                     <ImageView
@@ -167,14 +173,16 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content">
 
-                    <AutoCompleteTextView
+                    <Spinner
                         android:id="@+id/atvLocaliEOPianiDelledificio"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentLeft="true"
                         android:layout_marginLeft="6dp"
                         android:background="#f0f0f0"
-                        android:ems="10"
+                        android:minWidth="200dp"
+                        android:minHeight="19dp"
+                        android:ems="5"
                         android:text=""/>
 
                     <ImageView
@@ -286,11 +294,12 @@
             <EditText
                 android:id="@+id/etNoteSulLuoghoDiInstallazione"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
+                android:layout_height="150dp"
                 android:layout_alignParentLeft="true"
                 android:layout_marginLeft="6dp"
                 android:background="#f0f0f0"
-                android:ems="9"
+                android:ems="5"
+                android:inputType="textMultiLine"
                 android:text=""/>
 
             <TextView
@@ -305,11 +314,12 @@
             <EditText
                 android:id="@+id/etNoteSulTipologiaDellImpianto"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
+                android:layout_height="150dp"
                 android:layout_alignParentLeft="true"
                 android:layout_marginLeft="6dp"
                 android:background="#f0f0f0"
-                android:ems="9"
+                android:ems="5"
+                android:inputType="textMultiLine"
                 android:text=""/>
 
             <TextView
@@ -323,11 +333,12 @@
             <EditText
                 android:id="@+id/etNoteRelativeAlCollegamento"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
+                android:layout_height="150dp"
                 android:layout_alignParentLeft="true"
                 android:layout_marginLeft="6dp"
                 android:background="#f0f0f0"
-                android:ems="9"
+                android:inputType="textMultiLine"
+                android:ems="5"
                 android:text=""/>
 
         </LinearLayout>

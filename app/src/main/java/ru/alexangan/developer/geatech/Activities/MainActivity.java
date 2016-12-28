@@ -1,11 +1,20 @@
 package ru.alexangan.developer.geatech.Activities;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.app.ProgressDialog;
+import android.content.DialogInterface;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import io.realm.RealmResults;
@@ -55,6 +64,8 @@ public class MainActivity extends Activity implements Communicator
     NotificationBarFragment notificationBarFragment;
     public static RealmResults<VisitItem> visitItems;
     int currentSelIndex;
+    boolean ctrlBtnChkChanged;
+    AlertDialog alert;
 
     @Override
     protected void onDestroy()
@@ -65,11 +76,17 @@ public class MainActivity extends Activity implements Communicator
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
-        setTheme(R.style.AppTheme);
+        //setTheme(R.style.AppTheme);
+        Dialog dialog = ProgressDialog.show(this, "",
+                "Loading. Please wait...", true);
+        dialog.show();
+
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.work_window);
 
         currentSelIndex = -1;
+        ctrlBtnChkChanged = true;
 
         if (inVisitItems != null)
         {
@@ -127,6 +144,8 @@ public class MainActivity extends Activity implements Communicator
                 realm.copyToRealm(newReportStates);
                 realm.commitTransaction();
             }
+
+            dialog.dismiss();
         }
 
         swipeDetector = new SwipeDetector();
@@ -184,7 +203,6 @@ public class MainActivity extends Activity implements Communicator
     {
         if (!listVisits.isAdded())
         {
-            currentSelIndex = -1;
             FragmentTransaction mFragmentTransaction = mFragmentManager.beginTransaction();
             mFragmentTransaction.hide(ctrlBtnsReportDetailed);
             mFragmentTransaction.hide(ctrlBtnsFragment2);
@@ -195,41 +213,48 @@ public class MainActivity extends Activity implements Communicator
             setVisitsListContent(listVisits);
         } else
         {
-            super.onBackPressed();
-            //this.finish();
+            //super.onBackPressed();
+            this.finish();
         }
     }
 
     @Override
     public void onCtrlButtonClicked(View view)
     {
-        if (!view.isShown())
+        if (!view.isShown() || !ctrlBtnChkChanged)
         {
             return;
         }
 
         if (view == findViewById(R.id.btnVisits))
         {
-            currentSelIndex = -1;
-            FragmentTransaction mFragmentTransaction = mFragmentManager.beginTransaction();
-            mFragmentTransaction.hide(ctrlBtnsFragment2);
-            mFragmentTransaction.show(ctrlBtnsFragment1);
-            mFragmentTransaction.commit();
-
             removeAllLists();
+
+            listVisits = new ListVisitsFragment();
+
+            Bundle args = new Bundle();
+            args.putBoolean("visitTimeNotSetOnly", false);
+            listVisits.setArguments(args);
 
             setVisitsListContent(listVisits);
         }
 
         if (view == findViewById(R.id.btnReturn))
         {
-            currentSelIndex = -1;
             FragmentTransaction mFragmentTransaction = mFragmentManager.beginTransaction();
             mFragmentTransaction.hide(ctrlBtnsFragment2);
             mFragmentTransaction.show(ctrlBtnsFragment1);
             mFragmentTransaction.commit();
 
+            currentSelIndex = -1;
+
             removeAllLists();
+
+            listVisits = new ListVisitsFragment();
+
+            Bundle args = new Bundle();
+            args.putBoolean("visitTimeNotSetOnly", false);
+            listVisits.setArguments(args);
 
             setVisitsListContent(listVisits);
         }
@@ -241,6 +266,8 @@ public class MainActivity extends Activity implements Communicator
             mFragmentTransaction.hide(ctrlBtnsFragment2);
             mFragmentTransaction.show(ctrlBtnsFragment1);
             mFragmentTransaction.commit();
+
+            currentSelIndex = -1;
 
             removeAllLists();
             setVisitsListContent(reportsList);
@@ -294,13 +321,6 @@ public class MainActivity extends Activity implements Communicator
         {
             removeAllLists();
             setVisitsListContent(comingListVisits);
-        }
-
-        if (view == findViewById(R.id.btnVisits))
-        {
-            removeAllLists();
-
-            setVisitsListContent(listVisits);
         }
 
         if (view == findViewById(R.id.btnInWorkVisits))
@@ -383,6 +403,8 @@ public class MainActivity extends Activity implements Communicator
             mFragmentTransaction.remove(reportsList);
         }
 
+        mFragmentManager.executePendingTransactions();
+
         mFragmentTransaction.commit();
     }
 
@@ -402,6 +424,7 @@ public class MainActivity extends Activity implements Communicator
     public void OnListItemSelected(int itemIndex, Boolean dateTimeHasSet)
     {
         removeAllLists();
+
         currentSelIndex = itemIndex;
 
         if (dateTimeHasSet) // if visit day is empty, show set datetime fragment, otherwise show CTL info.
@@ -420,6 +443,8 @@ public class MainActivity extends Activity implements Communicator
             ctrlBtnsFragment2.setCheckedBtnId(R.id.btnInfo);
         } else
         {
+            //dateTimeSetFragment = new SetDateTimeFragment();
+
             Bundle args = new Bundle();
             args.putInt("selectedIndex", itemIndex);
             dateTimeSetFragment.setArguments(args);
@@ -434,6 +459,18 @@ public class MainActivity extends Activity implements Communicator
     public void onDateTimeSetReturned(Boolean mDatetimeAlreadySet)
     {
         removeAllLists();
+
+        ctrlBtnChkChanged = false;
+        ctrlBtnsFragment1.setCheckedBtnId(R.id.btnVisits);
+        ctrlBtnsFragment1.onHiddenChanged(true);
+        ctrlBtnChkChanged = true;
+
+        listVisits = new ListVisitsFragment();
+
+        Bundle args = new Bundle();
+        args.putBoolean("visitTimeNotSetOnly", false);
+        listVisits.setArguments(args);
+
         setVisitsListContent(listVisits);
     }
 
@@ -479,31 +516,83 @@ public class MainActivity extends Activity implements Communicator
         if (view.getId() == R.id.btnNotifTimeNotSetVisits)
         {
             removeAllLists();
+            removeAllLists();
 
-            FragmentTransaction mFragmentTransaction = mFragmentManager.beginTransaction();
-            mFragmentTransaction.remove(listVisits);
-            mFragmentManager.executePendingTransactions();
-            mFragmentTransaction.commit();
+            ctrlBtnChkChanged = false;
+            ctrlBtnsFragment1.setCheckedBtnId(R.id.btnComingVisits);
+            ctrlBtnsFragment1.onHiddenChanged(true);
+            ctrlBtnChkChanged = true;
 
             listVisits = new ListVisitsFragment();
 
             Bundle args = new Bundle();
-            args.putBoolean("withNoSopralluogoTime", true);
+            args.putBoolean("visitTimeNotSetOnly", true);
             listVisits.setArguments(args);
 
             setVisitsListContent(listVisits);
-
-            ctrlBtnsFragment1.setCheckedBtnId(R.id.btnComingVisits);
         }
 
         if (view.getId() == R.id.btnNotifUrgentReports)
         {
-            Toast.makeText(this, "Nessun urgente raporti trovato", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Nessun trovato delle urgente rapporti", Toast.LENGTH_LONG).show();
         }
 
         if (view.getId() == R.id.btnAppSettings)
         {
+            String[] listItemsArray = {"Esci", "Cambia\npassword"};
 
+            AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+
+            //LayoutInflater inflater = getLayoutInflater();
+            //View v = inflater.inflate(R.layout.how_dialog_custom, null);
+
+            //ListView listView = (ListView) v.findViewById(R.id.notifBarlist);
+
+            final ArrayAdapter <String> listAdapter = new ArrayAdapter<>(getApplicationContext(),
+                    android.R.layout.simple_list_item_1, listItemsArray);
+            //listView.setAdapter(listAdapter);
+            //listView.setBackgroundColor(Color.GRAY);
+
+            builder.setAdapter(listAdapter, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    String strName = listAdapter.getItem(which);
+                    AlertDialog.Builder builderInner = new AlertDialog.Builder(MainActivity.this);
+                    builderInner.setMessage(strName);
+                    builderInner.setTitle("Your Selected Item is");
+                    builderInner.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog,int which) {
+                            dialog.dismiss();
+                        }
+                    });
+                    builderInner.show();
+                }
+            });
+
+/*            listView.setOnItemClickListener(new AdapterView.OnItemClickListener()
+            {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int which, long id)
+                {
+                    if(which == 0)
+                    {
+                        Toast.makeText(getApplicationContext(), "Esci", Toast.LENGTH_LONG).show();
+                        alert.dismiss();
+                    }
+
+                    if(which == 1)
+                    {
+                        Toast.makeText(getApplicationContext(), "Cambia password", Toast.LENGTH_LONG).show();
+                        alert.dismiss();
+                    }
+                }
+            });
+
+            //builder.setView(v);*/
+
+            AlertDialog alert = builder.create();
+            alert.show();
         }
     }
 

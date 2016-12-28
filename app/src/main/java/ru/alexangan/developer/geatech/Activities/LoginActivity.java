@@ -1,8 +1,10 @@
 package ru.alexangan.developer.geatech.Activities;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -56,7 +58,10 @@ public class LoginActivity extends Activity implements RESTdataReceiverEventList
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
-        setTheme(R.style.AppTheme);
+        Dialog dialog = ProgressDialog.show(this, "",
+                "Loading. Please wait...", true);
+        dialog.show();
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login_window_container);
 
@@ -100,6 +105,8 @@ public class LoginActivity extends Activity implements RESTdataReceiverEventList
                 //No Realm file to remove.
             }
         }
+
+        dialog.dismiss();
     }
 
     @Override

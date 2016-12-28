@@ -71,9 +71,10 @@ public class NotificationBarFragment extends Fragment implements View.OnClickLis
     @Override
     public void onClick(View view)
     {
-        if(view.getId() == R.id.btnNotifTimeNotSetVisits)
+        mCommunicator.onNotificationReportReturned(view);
+
+/*        if(view.getId() == R.id.btnNotifTimeNotSetVisits)
         {
-            Toast.makeText(getActivity(),"btnNotifTimeNotSetVisits clicked", Toast.LENGTH_LONG).show();
             mCommunicator.onNotificationReportReturned(view);
         }
 
@@ -84,8 +85,7 @@ public class NotificationBarFragment extends Fragment implements View.OnClickLis
 
         if(view.getId() == R.id.btnAppSettings)
         {
-            Toast.makeText(getActivity(),"btnAppSettings clicked", Toast.LENGTH_LONG).show();
             mCommunicator.onNotificationReportReturned(view);
-        }
+        }*/
     }
 }

@@ -298,7 +298,7 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
                 }
                 catch(ActivityNotFoundException innerEx)
                 {
-                    Toast.makeText(getActivity(), "Please install a maps application", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getActivity(), "installare un'applicazione mappe", Toast.LENGTH_LONG).show();
                 }
             }
         }

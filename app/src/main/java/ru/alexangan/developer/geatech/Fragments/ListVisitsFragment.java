@@ -10,17 +10,12 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
 
 import io.realm.RealmResults;
-import ru.alexangan.developer.geatech.Activities.MainActivity;
 import ru.alexangan.developer.geatech.Adapters.MyListVisitsAdapter;
 import ru.alexangan.developer.geatech.Interfaces.Communicator;
 import ru.alexangan.developer.geatech.Models.ReportStates;
 import ru.alexangan.developer.geatech.Models.VisitItem;
-import ru.alexangan.developer.geatech.Network.RESTdataReceiver;
 import ru.alexangan.developer.geatech.R;
 import ru.alexangan.developer.geatech.Utils.SwipeDetector;
 
@@ -31,7 +26,7 @@ public class ListVisitsFragment extends ListFragment
 {
     private Communicator mCommunicator;
     SwipeDetector swipeDetector;
-    boolean withNoSopralluogoTime;
+    boolean visitTimeNotSetOnly;
     ArrayList<VisitItem> visitItemsFiltered;
     MyListVisitsAdapter myListAdapter;
     ListView lv;
@@ -68,12 +63,11 @@ public class ListVisitsFragment extends ListFragment
 
         mCommunicator = (Communicator)getActivity();
         swipeDetector = new SwipeDetector();
-
-        //withNoSopralluogoTime = false;
+        visitTimeNotSetOnly = false;
 
         if (getArguments() != null)
         {
-            withNoSopralluogoTime = getArguments().getBoolean("withNoSopralluogoTime");
+            visitTimeNotSetOnly = getArguments().getBoolean("visitTimeNotSetOnly");
         }
 
         visitItemsFiltered = new ArrayList<>();
@@ -89,7 +83,7 @@ public class ListVisitsFragment extends ListFragment
             {
                 if (visitItem.getVisitStates().getIdSopralluogo() == reportStates.getIdSopralluogo())
                 {
-                    if (!withNoSopralluogoTime || (withNoSopralluogoTime && reportStates.getDataOraSopralluogo() == null))
+                    if (!visitTimeNotSetOnly || (visitTimeNotSetOnly && reportStates.getDataOraSopralluogo() == null))
                     {
                         visitItemsFiltered.add(visitItem);
                         break;
@@ -154,6 +148,7 @@ public class ListVisitsFragment extends ListFragment
             public void onItemClick(AdapterView<?> parent, View view, int position, long id)
             {
                 int idSopralluogo = visitItemsFiltered.get(position).getVisitStates().getIdSopralluogo();
+                int idVisit = visitItemsFiltered.get(position).getId();
                 realm.beginTransaction();
                 ReportStates reportStates = realm.where(ReportStates.class)
                         .equalTo("idSopralluogo", idSopralluogo).findFirst();
@@ -163,11 +158,11 @@ public class ListVisitsFragment extends ListFragment
                 {
                     if(swipeDetector.getAction() == SwipeDetector.Action.LR)
                     {
-                        mCommunicator.OnListItemSwiped(position, reportStates.getDataOraSopralluogo() != null);
+                        mCommunicator.OnListItemSwiped(idVisit, reportStates.getDataOraSopralluogo() != null);
                     }
                 } else
                 {
-                    mCommunicator.OnListItemSelected(position, reportStates.getDataOraSopralluogo() != null);
+                    mCommunicator.OnListItemSelected(idVisit, reportStates.getDataOraSopralluogo() != null);
                 }
             }
         });
@@ -178,6 +173,7 @@ public class ListVisitsFragment extends ListFragment
             public boolean onItemLongClick(AdapterView<?> parent, View view,int position, long id)
             {
                 int idSopralluogo = visitItemsFiltered.get(position).getVisitStates().getIdSopralluogo();
+                int idVisit = visitItemsFiltered.get(position).getId();
                 realm.beginTransaction();
                 ReportStates reportStates = realm.where(ReportStates.class)
                         .equalTo("idSopralluogo", idSopralluogo).findFirst();
@@ -190,7 +186,7 @@ public class ListVisitsFragment extends ListFragment
                 {
                     if(reportStates.getDataOraSopralluogo() != null)
                     {
-                        mCommunicator.OnListItemSelected(position, false);
+                        mCommunicator.OnListItemSelected(idVisit, false);
                     }
                 }
 

@@ -31,7 +31,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="start|center_vertical"
                 android:layout_marginLeft="1dp"
-                android:text="Visit Time" />
+                android:text="Non impostato" />
 
             <ImageView
                 android:id="@+id/ivVisitsListTOS"
