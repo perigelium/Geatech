@@ -39,7 +39,7 @@ import static ru.alexangan.developer.geatech.Activities.MainActivity.visitItems;
 
 public class SetDateTimeFragment extends Fragment implements View.OnClickListener
 {
-    final Calendar calendarNow;
+    Calendar calendarNow;
     Calendar calendar;
     long elapsedDays;
     String strDateTime;
@@ -64,8 +64,6 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
 
     public SetDateTimeFragment()
     {
-        calendarNow = Calendar.getInstance();
-        calendar = Calendar.getInstance();
     }
 
     // TODO: Rename and change types and number of parameters
@@ -196,6 +194,9 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
         {
             visitDateTime = visitStates.getDataSollecitoAppuntamento();
         }
+
+        calendarNow = Calendar.getInstance();
+        calendar = Calendar.getInstance();
 
         //Calendar calendar = Calendar.getInstance();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ITALIAN);

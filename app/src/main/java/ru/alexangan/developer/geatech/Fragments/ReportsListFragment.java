@@ -31,7 +31,7 @@ public class ReportsListFragment extends ListFragment
 
         Context context = getActivity();
 
-        ArrayList<VisitItem> visitItemsDateTimeSet = new ArrayList<>();
+        ArrayList<VisitItem> visitItemsReportSent = new ArrayList<>();
         visitItemsPositions = new ArrayList<>();
 
         realm.beginTransaction();
@@ -48,26 +48,15 @@ public class ReportsListFragment extends ListFragment
                 if (visitItem.getVisitStates().getIdSopralluogo() == reportStates.getIdSopralluogo()
                         && reportStates.getDataOraRaportoInviato()!=null)
                 {
-                    visitItemsDateTimeSet.add(visitItem);
+                    visitItemsReportSent.add(visitItem);
                     visitItemsPositions.add(visitItem.getId());
                     break;
                 }
             }
         }
 
-
-
-/*        for (int i = 0; i< visitItems.size(); i++)
-        {
-            if(visitItems.get(i).getVisitStates().getDataOraSopralluogo() != null)
-            {
-                visitItemsDateTimeSet.add(visitItems.get(i));
-                visitItemsPositions.add(i);
-            }
-        }*/
-
         ReportsListAdapter myListAdapter =
-                new ReportsListAdapter(getActivity(), R.layout.reports_list_fragment_row, visitItemsDateTimeSet);
+                new ReportsListAdapter(getActivity(), R.layout.reports_list_fragment_row, visitItemsReportSent);
         setListAdapter(myListAdapter);
 
     }

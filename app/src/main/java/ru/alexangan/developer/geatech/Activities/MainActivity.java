@@ -2,14 +2,17 @@ package ru.alexangan.developer.geatech.Activities;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Application;
 import android.app.Dialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
@@ -76,12 +79,6 @@ public class MainActivity extends Activity implements Communicator
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
-        //setTheme(R.style.AppTheme);
-        Dialog dialog = ProgressDialog.show(this, "",
-                "Loading. Please wait...", true);
-        dialog.show();
-
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.work_window);
 
@@ -144,8 +141,6 @@ public class MainActivity extends Activity implements Communicator
                 realm.copyToRealm(newReportStates);
                 realm.commitTransaction();
             }
-
-            dialog.dismiss();
         }
 
         swipeDetector = new SwipeDetector();
@@ -541,6 +536,7 @@ public class MainActivity extends Activity implements Communicator
         {
             String[] listItemsArray = {"Esci", "Cambia\npassword"};
 
+            //ContextThemeWrapper themedContext = new ContextThemeWrapper(this, android.R.style.Theme_DeviceDefault_Light_Dialog_NoActionBar);
             AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
 
             //LayoutInflater inflater = getLayoutInflater();
@@ -553,20 +549,28 @@ public class MainActivity extends Activity implements Communicator
             //listView.setAdapter(listAdapter);
             //listView.setBackgroundColor(Color.GRAY);
 
-            builder.setAdapter(listAdapter, new DialogInterface.OnClickListener() {
+            builder.setAdapter(listAdapter, new DialogInterface.OnClickListener()
+            {
                 @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    String strName = listAdapter.getItem(which);
-                    AlertDialog.Builder builderInner = new AlertDialog.Builder(MainActivity.this);
-                    builderInner.setMessage(strName);
-                    builderInner.setTitle("Your Selected Item is");
-                    builderInner.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog,int which) {
-                            dialog.dismiss();
-                        }
-                    });
-                    builderInner.show();
+                public void onClick(DialogInterface dialog, int which)
+                {
+                    if(which == 1)  // exit app
+                    {
+                        Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        intent.putExtra("Password recover", true);
+                        startActivity(intent);
+                        finish();
+                    }
+
+                    if(which == 0) // password recover
+                    {
+                        Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        intent.putExtra("Exit app", true);
+                        startActivity(intent);
+                        finish();
+                    }
                 }
             });
 

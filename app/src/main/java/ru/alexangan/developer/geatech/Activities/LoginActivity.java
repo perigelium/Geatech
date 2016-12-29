@@ -58,12 +58,14 @@ public class LoginActivity extends Activity implements RESTdataReceiverEventList
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
-        Dialog dialog = ProgressDialog.show(this, "",
-                "Loading. Please wait...", true);
-        dialog.show();
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login_window_container);
+
+        if( getIntent().getBooleanExtra("Exit app", false))
+        {
+            finish();
+            return;
+        }
 
         context = getApplicationContext();
         mSettings = getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
@@ -106,7 +108,12 @@ public class LoginActivity extends Activity implements RESTdataReceiverEventList
             }
         }
 
-        dialog.dismiss();
+        if( getIntent().getBooleanExtra("Password recover", false))
+        {
+            FragmentTransaction cFragmentTransaction = mFragmentManager.beginTransaction();
+            cFragmentTransaction.replace(R.id.loginFragContainer, userPasswordRecoverFragment);
+            cFragmentTransaction.commit();
+        }
     }
 
     @Override

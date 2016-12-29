@@ -42,8 +42,7 @@ public class NotSentListVisitsFragment extends ListFragment implements View.OnCl
             for(ReportStates reportStates : reportStatesList)
             {
                 if (visitItem.getVisitStates().getIdSopralluogo() == reportStates.getIdSopralluogo()
-                        && reportStates.getDataOraSopralluogo()!=null
-                        && (reportStates.getGeneralInfoCompletionState()!=0 && reportStates.getReportCompletionState() ==3 )
+                        && (reportStates.getGeneralInfoCompletionState()==2 && reportStates.getReportCompletionState() ==3 )
                         && reportStates.getPhotoAddedNumber() != 0 && reportStates.getDataOraRaportoInviato()==null)
                 {
                     visitItemsDateTimeSet.add(visitItem);

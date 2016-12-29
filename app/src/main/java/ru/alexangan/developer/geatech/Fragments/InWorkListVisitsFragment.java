@@ -40,9 +40,15 @@ public class InWorkListVisitsFragment extends ListFragment
         {
             for(ReportStates reportStates : reportStatesList)
             {
+                int photoAddedStatus = reportStates.getPhotoAddedNumber();
+                int generalInfoCompletionState = reportStates.getGeneralInfoCompletionState();
+                int reportCompletionState = reportStates.getReportCompletionState();
+
                 if (visitItem.getVisitStates().getIdSopralluogo() == reportStates.getIdSopralluogo()
-                        && reportStates.getDataOraSopralluogo()!=null  // visit time has set
-                        && (reportStates.getGeneralInfoCompletionState()!=0 || reportStates.getReportCompletionState()!=0))
+
+                        && (photoAddedStatus!=0 || generalInfoCompletionState!=0 || reportCompletionState!=0) // report data not empty
+                        && !(photoAddedStatus!=0 && generalInfoCompletionState==2 && reportCompletionState==3) // report not complete
+                        )
                 {
                     visitItemsDateTimeSet.add(visitItem);
                     break;
