@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -206,5 +208,21 @@ public class RESTdataReceiver implements Callback
 
             callJSON = client1.newCall(request);
             callJSON.enqueue(this);
+    }
+
+    public void sendReport(String gsonStr)
+    {
+        OkHttpClient.Builder defaultHttpClient = new OkHttpClient.Builder();
+        OkHttpClient okHttpClient = defaultHttpClient.build();
+
+        RequestBody body = RequestBody.create(JSON, gsonStr);
+
+        Request request = new Request.Builder()
+                .url(REST_URL + TOKEN_URL_SUFFIX)
+                .post(body)
+                .build();
+
+        callToken = okHttpClient.newCall(request);
+        callToken.enqueue(this);
     }
 }

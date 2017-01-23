@@ -10,8 +10,25 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Locale;
+
+import ru.alexangan.developer.geatech.Activities.LoginActivity;
 import ru.alexangan.developer.geatech.Interfaces.Communicator;
+import ru.alexangan.developer.geatech.Interfaces.RESTdataReceiverEventListener;
+import ru.alexangan.developer.geatech.Models.ClientData;
+import ru.alexangan.developer.geatech.Models.ReportStates;
+import ru.alexangan.developer.geatech.Models.VisitItem;
+import ru.alexangan.developer.geatech.Models.VisitStates;
+import ru.alexangan.developer.geatech.Network.RESTdataReceiver;
 import ru.alexangan.developer.geatech.R;
+
+import static android.content.Context.RESTRICTIONS_SERVICE;
+import static ru.alexangan.developer.geatech.Activities.LoginActivity.realm;
+import static ru.alexangan.developer.geatech.Activities.MainActivity.visitItems;
 
 public class SendReportFragment extends Fragment implements View.OnClickListener
 {
@@ -28,6 +45,9 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
 
     private OnFragmentInteractionListener mListener;
     private Button sendReport;
+    private int selectedIndex;
+    ReportStates reportStates;
+    VisitItem visitItem;
 
     public SendReportFragment()
     {
@@ -63,10 +83,10 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
+
         if (getArguments() != null)
         {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            selectedIndex = getArguments().getInt("selectedIndex");
         }
     }
 
@@ -78,6 +98,14 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
 
         sendReport = (Button) rootView.findViewById(R.id.btnSendReport);
         sendReport.setOnClickListener(this);
+
+        visitItem = visitItems.get(selectedIndex);
+        VisitStates visitStates = visitItem.getVisitStates();
+        int idSopralluogo = visitStates.getIdSopralluogo();
+
+        realm.beginTransaction();
+        reportStates = realm.where(ReportStates.class).equalTo("idSopralluogo", idSopralluogo).findFirst();
+        realm.commitTransaction();
 
         return rootView;
     }
@@ -117,7 +145,23 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
     {
         if(view.getId() == R.id.btnSendReport)
         {
-            getActivity().getFragmentManager().beginTransaction().remove(this).commit();
+            if(reportStates != null)
+            {
+                Calendar calendarNow = Calendar.getInstance();
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
+                String strDateTime = sdf.format(calendarNow.getTime());
+
+                realm.beginTransaction();
+                reportStates.setDataOraRaportoInviato(strDateTime);
+                realm.commitTransaction();
+            }
+
+            Gson gson = new Gson();
+            String json = gson.toJson(reportStates);
+
+            //RESTdataReceiver resTdataReceiver = new RESTdataReceiver(cb, LoginActivity.this);
+            //resTdataReceiver.sendReport(json);
+
             Toast.makeText(getActivity(),"Rapporto inviato", Toast.LENGTH_LONG).show();
             
             mCommunicator.onSendReportReturned();
