@@ -20,7 +20,7 @@ import ru.alexangan.developer.geatech.R;
 import static ru.alexangan.developer.geatech.Activities.LoginActivity.realm;
 import static ru.alexangan.developer.geatech.Activities.MainActivity.visitItems;
 
-public class NotSentListVisitsFragment extends ListFragment implements View.OnClickListener
+public class NotSentListVisitsFragment extends ListFragment// implements View.OnClickListener
 {
 
     private Communicator mCommunicator;
@@ -43,7 +43,7 @@ public class NotSentListVisitsFragment extends ListFragment implements View.OnCl
             {
                 if (visitItem.getVisitStates().getIdSopralluogo() == reportStates.getIdSopralluogo()
                         && (reportStates.getGeneralInfoCompletionState()==2 && reportStates.getReportCompletionState() ==3 )
-                        && reportStates.getPhotoAddedNumber() != 0 && reportStates.getDataOraRaportoInviato()==null)
+                        && reportStates.getPhotoAddedNumber() >= 3 && reportStates.getDataOraRaportoInviato()==null)
                 {
                     visitItemsDateTimeSet.add(visitItem);
                     break;
@@ -72,15 +72,16 @@ public class NotSentListVisitsFragment extends ListFragment implements View.OnCl
         return inflater.inflate(R.layout.list_visits_fragment, container, false);
     }
 
-    @Override
+/*    @Override
     public void onClick(View v)
     {
         if (v.getId() == R.id.btnSendReportNow)
         {
+
             Toast.makeText(getActivity(),"Rapporto inviato", Toast.LENGTH_LONG).show();
             //getActivity().getFragmentManager().beginTransaction().remove(this).commit();
         }
-    }
+    }*/
 }
 
 /*            int optionId = randomInteger!=0 ? R.layout.list_visits_cell_datetime_set : R.layout.list_visits_cell_datetime_set;

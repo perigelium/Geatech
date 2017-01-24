@@ -44,7 +44,6 @@ public class Clima1ReportFragment extends Fragment //implements View.OnTouchList
     ReportStates reportStates;
     View rootView;
 
-    private OnFragmentInteractionListener mListener;
     Context context;
     Spinner atvTipoDiEdificio, atvPosizionamentoUnitaEsterna,
             atvTipologiaCostruttivaMurature, atvLocaliEOPianiDelledificio;
@@ -445,59 +444,5 @@ public class Clima1ReportFragment extends Fragment //implements View.OnTouchList
         });
 
         return rootView;
-    }
-
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri)
-    {
-        if (mListener != null)
-        {
-            mListener.onFragmentInteraction(uri);
-        }
-    }
-
-    @Override
-    public void onAttach(Context context)
-    {
-        super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener)
-        {
-            mListener = (OnFragmentInteractionListener) context;
-        } else
-        {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
-    }
-
-    @Override
-    public void onDetach()
-    {
-        super.onDetach();
-        mListener = null;
-    }
-
-/*    @Override
-    public boolean onTouch(View v, MotionEvent motionEvent)
-    {
-
-        if (v.getId() == R.id.etNoteSulLuoghoDiInstallazione)
-        {
-            v.getParent().requestDisallowInterceptTouchEvent(true);
-            switch (motionEvent.getAction() & MotionEvent.ACTION_MASK)
-            {
-                case MotionEvent.ACTION_UP:
-                    v.getParent().requestDisallowInterceptTouchEvent(false);
-                    break;
-            }
-        }
-
-        return false;
-    }*/
-
-    public interface OnFragmentInteractionListener
-    {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
     }
 }

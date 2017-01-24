@@ -1,5 +1,6 @@
 package ru.alexangan.developer.geatech.Adapters;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.view.LayoutInflater;
@@ -63,11 +64,39 @@ public class MyListVisitsAdapter extends BaseAdapter
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        // return super.getView(position, convertView, parent);
-
+    public View getView(int position, View convertView, ViewGroup parent)
+    {
         LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View row = inflater.inflate(layout_id, parent, false);
+
+        //ViewHolder holder;
+
+/*        if (convertView == null)
+        {
+            //LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            //row = inflater.inflate(layout_id, parent, false);
+
+            holder = new ViewHolder();
+
+            calendarioIcon = (ImageView) row.findViewById(R.id.calendario);
+            vVisitDateView = row.findViewById(R.id.vVisitDateCell);
+            tvVisitDay = (TextView)row.findViewById(R.id.tvVisitDay);
+            tvVisitMonth = (TextView)row.findViewById(R.id.tvVisitMonth);
+            tvVisitTime = (TextView)row.findViewById(R.id.tvVisitTime);
+            ivPersonTimeSet = (ImageView) row.findViewById(R.id.ivPersonTimeSet);
+            ivPersonTimeUnset = (ImageView) row.findViewById(R.id.ivPersonTimeUnset);
+
+            clientNameTextView = (TextView) row.findViewById(R.id.tvClientName);
+            serviceTypeTextView = (TextView) row.findViewById(R.id.tvVisitTOS);
+            clientAddressTextView = (TextView) row.findViewById(R.id.tvClientAddress);
+
+            row.setTag(holder);
+        } else
+        {
+            row = convertView;
+
+            holder = (ViewHolder) row.getTag();
+        }*/
 
         ImageView calendarioIcon = (ImageView) row.findViewById(R.id.calendario);
         View vVisitDateView = row.findViewById(R.id.vVisitDateCell);
@@ -148,5 +177,20 @@ public class MyListVisitsAdapter extends BaseAdapter
 
 
         return row;
+    }
+
+    static class ViewHolder
+    {
+        ImageView calendarioIcon;
+        View vVisitDateView;
+        TextView tvVisitDay;
+        TextView tvVisitMonth;
+        TextView tvVisitTime;
+        ImageView ivPersonTimeSet;
+        ImageView ivPersonTimeUnset;
+
+        TextView clientNameTextView;
+        TextView serviceTypeTextView;
+        TextView clientAddressTextView;
     }
 }

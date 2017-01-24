@@ -23,5 +23,6 @@ public interface Communicator
 
     public void OnListItemSelected(int itemIndex);
 
-    void onNotificationReportReturned(View view);
+    public void onNotificationReportReturned(View view);
+
 }

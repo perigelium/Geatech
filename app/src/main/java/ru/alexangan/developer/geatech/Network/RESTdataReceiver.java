@@ -39,15 +39,15 @@ public class RESTdataReceiver implements Callback
 
     private RESTdataReceiverEventListener callback;
     private String tokenStr;
-    private Activity loginActivity;
+    private Activity activity;
 
 
     public static RealmList<VisitItem> inVisitItems;
 
-    public RESTdataReceiver(RESTdataReceiverEventListener cb, LoginActivity activity)
+    public RESTdataReceiver(RESTdataReceiverEventListener cb, Activity activity)
     {
         callback = cb;
-        loginActivity = activity;
+        this.activity = activity;
     }
 
     @Override
@@ -55,9 +55,9 @@ public class RESTdataReceiver implements Callback
     {
         if (call == callToken)
         {
-            loginActivity.runOnUiThread(new Runnable() {
+            activity.runOnUiThread(new Runnable() {
                 public void run() {
-                    Toast.makeText(loginActivity, "Receive token failed", Toast.LENGTH_LONG).show();
+                    Toast.makeText(activity, "Receive token failed", Toast.LENGTH_LONG).show();
                 }
             });
 
@@ -66,9 +66,9 @@ public class RESTdataReceiver implements Callback
 
         if (call == callJSON)
         {
-            loginActivity.runOnUiThread(new Runnable() {
+            activity.runOnUiThread(new Runnable() {
                 public void run() {
-                    Toast.makeText(loginActivity, "Receive JSON data failed", Toast.LENGTH_LONG).show();
+                    Toast.makeText(activity, "Receive JSON data failed", Toast.LENGTH_LONG).show();
                 }
             });
         }
@@ -85,9 +85,9 @@ public class RESTdataReceiver implements Callback
 
             if (loginResponse == null)
             {
-                loginActivity.runOnUiThread(new Runnable() {
+                activity.runOnUiThread(new Runnable() {
                     public void run() {
-                        Toast.makeText(loginActivity, "Receive token failed", Toast.LENGTH_LONG).show();
+                        Toast.makeText(activity, "Receive token failed", Toast.LENGTH_LONG).show();
                     }
                 });
 
@@ -132,9 +132,9 @@ public class RESTdataReceiver implements Callback
 
             if(visitsJSONData == null)
             {
-                loginActivity.runOnUiThread(new Runnable() {
+                activity.runOnUiThread(new Runnable() {
                     public void run() {
-                        Toast.makeText(loginActivity, "Receive JSON data failed", Toast.LENGTH_LONG).show();
+                        Toast.makeText(activity, "Receive JSON data failed", Toast.LENGTH_LONG).show();
                     }
                 });
 
@@ -208,21 +208,5 @@ public class RESTdataReceiver implements Callback
 
             callJSON = client1.newCall(request);
             callJSON.enqueue(this);
-    }
-
-    public void sendReport(String gsonStr)
-    {
-        OkHttpClient.Builder defaultHttpClient = new OkHttpClient.Builder();
-        OkHttpClient okHttpClient = defaultHttpClient.build();
-
-        RequestBody body = RequestBody.create(JSON, gsonStr);
-
-        Request request = new Request.Builder()
-                .url(REST_URL + TOKEN_URL_SUFFIX)
-                .post(body)
-                .build();
-
-        callToken = okHttpClient.newCall(request);
-        callToken.enqueue(this);
     }
 }

@@ -1,6 +1,7 @@
 package ru.alexangan.developer.geatech.Adapters;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,6 +9,8 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.gson.Gson;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -21,6 +24,7 @@ import ru.alexangan.developer.geatech.Models.ProductData;
 import ru.alexangan.developer.geatech.Models.ReportStates;
 import ru.alexangan.developer.geatech.Models.VisitItem;
 import ru.alexangan.developer.geatech.Models.VisitStates;
+import ru.alexangan.developer.geatech.Network.NetworkUtils;
 import ru.alexangan.developer.geatech.R;
 
 import static ru.alexangan.developer.geatech.Activities.LoginActivity.realm;
@@ -34,6 +38,7 @@ public class NotSentListVisitsAdapter extends BaseAdapter
     private Context mContext;
     ArrayList<VisitItem> visitItemsDateTimeSet;
     int layout_id;
+    ReportStates reportStates;
 
     public NotSentListVisitsAdapter(Context context, int layout_id, ArrayList<VisitItem> objects)
     {
@@ -89,7 +94,7 @@ public class NotSentListVisitsAdapter extends BaseAdapter
         clientAddressTextView.setText(clientData.getAddress());
 
         realm.beginTransaction();
-        final ReportStates reportStates = realm.where(ReportStates.class).equalTo("idSopralluogo", idSopralluogo).findFirst();
+        reportStates = realm.where(ReportStates.class).equalTo("idSopralluogo", idSopralluogo).findFirst();
         realm.commitTransaction();
 
         if(reportStates != null)
@@ -116,17 +121,25 @@ public class NotSentListVisitsAdapter extends BaseAdapter
                     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
                     String strDateTime = sdf.format(calendarNow.getTime());
 
+                    // check whether report was received on server side and than set time at report has sent
                     realm.beginTransaction();
                     reportStates.setDataOraRaportoInviato(strDateTime);
                     realm.commitTransaction();
+
+                    reportStates = realm.copyFromRealm(reportStates);
+
+                    Gson gson = new Gson();
+                    String json = gson.toJson(reportStates);
+
+                    Log.d("DEBUG", json);
+
+                    //sendReport(json);
+
+                    Toast.makeText(mContext, "Rapporto inviato", Toast.LENGTH_LONG).show();
+
+                    visitItemsDateTimeSet.remove(position);
+                    notifyDataSetChanged();
                 }
-
-                //sendReportNow(mPosition);
-
-                Toast.makeText(mContext,"Rapporto inviato", Toast.LENGTH_LONG).show();
-
-                visitItemsDateTimeSet.remove(position);
-                notifyDataSetChanged();
             }
         });
 

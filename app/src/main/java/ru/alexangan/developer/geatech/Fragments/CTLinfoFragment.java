@@ -41,7 +41,6 @@ public class CTLinfoFragment extends Fragment implements View.OnClickListener, L
     private String mParam2;
 
     private Button mSetCurrentCoordsButton;
-    private OnFragmentInteractionListener mListener;
     TextView etCoordNord, etCoordEst, etAltitude;
     Call callDownloadURL;
     int altitude;
@@ -133,36 +132,6 @@ public class CTLinfoFragment extends Fragment implements View.OnClickListener, L
         return rootView;
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri)
-    {
-        if (mListener != null)
-        {
-            mListener.onFragmentInteraction(uri);
-        }
-    }
-
-    @Override
-    public void onAttach(Context context)
-    {
-        super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener)
-        {
-            mListener = (OnFragmentInteractionListener) context;
-        } else
-        {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
-    }
-
-    @Override
-    public void onDetach()
-    {
-        super.onDetach();
-        mListener = null;
-    }
-
     @Override
     public void onClick(View view)
     {
@@ -212,12 +181,6 @@ public class CTLinfoFragment extends Fragment implements View.OnClickListener, L
         }
 
         //Log.d("new", "coords= " + String.valueOf(latitude) + " " + String.valueOf(longitude));
-    }
-
-    public interface OnFragmentInteractionListener
-    {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
     }
 
 
