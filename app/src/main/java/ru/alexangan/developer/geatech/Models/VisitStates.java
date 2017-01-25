@@ -4,12 +4,13 @@ package ru.alexangan.developer.geatech.Models;
 
 import io.realm.RealmObject;
 
+// gea_sopralluoghi
 public class VisitStates extends RealmObject
 {
     private int id;
     private int idSopralluogo;
-    private String idFornitore;
     private String idPractice;
+    private String idFornitore;
     private String dataOraAssegnazione;
     private String dataSollecitoAppuntamento;
     private String dataOraPresaAppuntamento;

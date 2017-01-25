@@ -8,46 +8,37 @@ public class ReportStates extends RealmObject
 {
     int id;
     int visitId;
+    private int id_rapporto_sopralluogo;
     private int idSopralluogo;
     private String dataOraSopralluogo;
 
-    private double latitude;
-    private double longitude;
-    private int altitude;
+    private double latitude; // latitudine
+    private double longitude; // longitudine
+    private int altitude; // altitudine
     private int reportCompletionState;
-    private int generalInfoCompletionState;
+    private int generalInfoCompletionState; // data ora appuntamento era inserita
 
     private int sendingReportTriesState;
 
     private String dataOraProssimoTentativo;
     private String dataOraUltimoTentativo;
-    private String dataOraRaportoCompilato;
-    private String dataOraRaportoInviato;
+    private String dataOraRaportoCompilato; // data_ora_compilazione_rapporto
+    private String dataOraRaportoInviato; // data_ora_invio_rapporto
+    private String nome_tecnico;
+    private String note_tecnico;
+    private int photoAddedNumber; // immagini numero
 
     private RealmList<RealmString> reportCompletionStatuses;
     private RealmList<RealmString> generalInfoCompletionStatuses;
     private RealmList<RealmString> sendingReportFailedStatuses;
     private RealmList<RealmString> photoAddedStatuses;
 
-    private int photoAddedNumber;
-
-    //private static ReportStates ourInstance = new ReportStates();
-
-    /*    public static ReportStates getInstance()
-        {
-            return ourInstance;
-        }*/
-
     public ReportStates() {}
-
-    public void setId(int id)
-    {
-        this.id = id;
-    }
 
     public ReportStates(int id, int visitId)
     {
         this.id = id;
+        id_rapporto_sopralluogo = id;
         this.visitId = visitId;
         reportCompletionStatuses = new RealmList<>();
         reportCompletionStatuses.add(new RealmString(id, "Non iniziato") );
@@ -68,10 +59,6 @@ public class ReportStates extends RealmObject
         photoAddedStatuses.add(new RealmString(id, "Nessun fotografia") );
         photoAddedStatuses.add(new RealmString(id, " foto inserite") );
 
-        //reportCompletionStatuses = new String[]{"Non iniziato", "Parziamente completato", "Completato"};
-        //generalInfoCompletionStatuses = new String[]{"Non iniziato", "Parziamente completato", "Completato"};
-        //sendingReportFailedStatuses = new String[]{"Invio falito per mancanza connesione dati"};
-        //photoAddedStatuses = new String[]{"Nessun fotografia", " foto inserite"};
 
         photoAddedNumber = 0;
         reportCompletionState = 0;
@@ -79,6 +66,11 @@ public class ReportStates extends RealmObject
         sendingReportTriesState = 0;
         dataOraUltimoTentativo = "19:00";
         dataOraProssimoTentativo = "21:00";
+    }
+
+    public void setId(int id)
+    {
+        this.id = id;
     }
 
     public RealmString getReportCompletionStateString(int reportCompletionState)

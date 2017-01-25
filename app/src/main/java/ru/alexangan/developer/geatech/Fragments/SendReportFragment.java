@@ -15,11 +15,15 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
 
+import io.realm.RealmResults;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.MediaType;
@@ -32,6 +36,10 @@ import ru.alexangan.developer.geatech.Activities.MainActivity;
 import ru.alexangan.developer.geatech.Interfaces.Communicator;
 import ru.alexangan.developer.geatech.Interfaces.RESTdataReceiverEventListener;
 import ru.alexangan.developer.geatech.Models.ClientData;
+import ru.alexangan.developer.geatech.Models.Clima1Model;
+import ru.alexangan.developer.geatech.Models.Gea_immagini_rapporto_sopralluogo;
+import ru.alexangan.developer.geatech.Models.Gea_rapporto_sopralluogo;
+import ru.alexangan.developer.geatech.Models.ReportItem;
 import ru.alexangan.developer.geatech.Models.ReportStates;
 import ru.alexangan.developer.geatech.Models.VisitItem;
 import ru.alexangan.developer.geatech.Models.VisitStates;
@@ -42,6 +50,7 @@ import ru.alexangan.developer.geatech.R;
 import static android.content.Context.RESTRICTIONS_SERVICE;
 import static ru.alexangan.developer.geatech.Activities.LoginActivity.realm;
 import static ru.alexangan.developer.geatech.Activities.MainActivity.visitItems;
+import static ru.alexangan.developer.geatech.Network.RESTdataReceiver.tokenStr;
 
 public class SendReportFragment extends Fragment implements View.OnClickListener, Callback
 {
@@ -58,8 +67,12 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
 
     private Button sendReport;
     private int selectedIndex;
+
+    Gea_immagini_rapporto_sopralluogo gea_immagini_rapporto_sopralluogo;
     ReportStates reportStates;
+    Clima1Model clima1Model;
     VisitItem visitItem;
+    VisitStates visitStates;
 
     String reportSendResponse;
     Call callSendReport;
@@ -115,18 +128,20 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
         sendReport.setOnClickListener(this);
 
         visitItem = visitItems.get(selectedIndex);
-        VisitStates visitStates = visitItem.getVisitStates();
+        visitStates = visitItem.getVisitStates();
         int idSopralluogo = visitStates.getIdSopralluogo();
 
         realm.beginTransaction();
         reportStates = realm.where(ReportStates.class).equalTo("idSopralluogo", idSopralluogo).findFirst();
+        //gea_immagini_rapporto_sopralluogo = realm.where(Gea_immagini_rapporto_sopralluogo.class).equalTo("idSopralluogo", idSopralluogo).findFirst();
+        clima1Model = realm.where(Clima1Model.class).equalTo("idSopralluogo", idSopralluogo).findFirst();
         realm.commitTransaction();
 
         if (reportStates != null)
         {
             if (visitItem.getVisitStates().getIdSopralluogo() == reportStates.getIdSopralluogo()
                     && (reportStates.getGeneralInfoCompletionState() == 2 && reportStates.getReportCompletionState() == 3)
-                    && reportStates.getPhotoAddedNumber() >= 3 && reportStates.getDataOraRaportoInviato() == null)
+                    && reportStates.getPhotoAddedNumber() >= 3) //  && reportStates.getDataOraRaportoInviato() == null
             {
                 sendReport.setAlpha(1.0f);
                 sendReport.setEnabled(true);
@@ -182,40 +197,40 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
                 reportStates.setDataOraRaportoInviato(strDateTime);
                 realm.commitTransaction();
 
+                ReportStates reportStatesUnmanaged = realm.copyFromRealm(reportStates);
+                VisitStates visitStatesUnmanaged = realm.copyFromRealm(visitStates);
 
-                reportStates = realm.copyFromRealm(reportStates);
+                Gson gsonTmp = new Gson();
+                String tmp = gsonTmp.toJson(reportStatesUnmanaged);
+                Gea_rapporto_sopralluogo gea_rapporto_sopralluogo = gsonTmp.fromJson(tmp, Gea_rapporto_sopralluogo.class);
 
                 Gson gson = new Gson();
-                String json = gson.toJson(reportStates);
+                String gea_rapporto_sopralluogo_json = gson.toJson(gea_rapporto_sopralluogo);
+                String visitStatesUnmanaged_json = gson.toJson(visitStatesUnmanaged);
 
-                Log.d("DEBUG", json);
+                //reportItem.setGea_immagini_rapporto_sopralluogo(gea_immagini_rapporto_sopralluogo);
 
-                //sendReport(json);
+                JSONObject jsonObject = new JSONObject();
+                try
+                {
+                    jsonObject.put("gea_rapporto_sopralluogo", gea_rapporto_sopralluogo_json);
+                    jsonObject.put("gea_sopralluoghi", visitStatesUnmanaged_json);
+
+                } catch (JSONException e)
+                {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+
+
+                Log.d("DEBUG", String.valueOf(jsonObject));
+
                 NetworkUtils networkUtils = new NetworkUtils();
-                callSendReport = networkUtils.sendReport(this, json);
-
-                Toast.makeText(getActivity(), "Rapporto inviato", Toast.LENGTH_LONG).show();
+                callSendReport = networkUtils.sendReport(this, String.valueOf(jsonObject));
 
                 mCommunicator.onSendReportReturned();
-
             }
         }
-    }
-
-    public void sendReport(String gsonStr)
-    {
-        OkHttpClient.Builder defaultHttpClient = new OkHttpClient.Builder();
-        OkHttpClient okHttpClient = defaultHttpClient.build();
-
-        RequestBody body = RequestBody.create(JSON, gsonStr);
-
-        Request request = new Request.Builder()
-                .url(REST_URL + DATA_URL_SUFFIX)
-                .post(body)
-                .build();
-
-        callSendReport = okHttpClient.newCall(request);
-        callSendReport.enqueue(this);
     }
 
     @Override
@@ -246,7 +261,7 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
                 {
                     public void run()
                     {
-                        Toast.makeText(activity, "Send report data response does not received", Toast.LENGTH_LONG).show();
+                        Toast.makeText(activity, "Report data response not received", Toast.LENGTH_LONG).show();
                     }
                 });
 
@@ -257,7 +272,7 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
                 {
                     public void run()
                     {
-                        Toast.makeText(activity, reportSendResponse, Toast.LENGTH_LONG).show();
+                        Toast.makeText(activity, "Rapporto inviato, " + reportSendResponse + " received", Toast.LENGTH_LONG).show();
                     }
                 });
             }

@@ -18,10 +18,12 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Switch;
 import android.widget.Toast;
 
 import io.realm.RealmResults;
 import ru.alexangan.developer.geatech.Fragments.CTLinfoFragment;
+import ru.alexangan.developer.geatech.Fragments.Caldaia0ReportFragment;
 import ru.alexangan.developer.geatech.Fragments.ComingListVisitsFragment;
 import ru.alexangan.developer.geatech.Fragments.Clima1ReportFragment;
 import ru.alexangan.developer.geatech.Fragments.CtrlBtnReportDetailed;
@@ -37,6 +39,7 @@ import ru.alexangan.developer.geatech.Fragments.ReportsListFragment;
 import ru.alexangan.developer.geatech.Fragments.SendReportFragment;
 import ru.alexangan.developer.geatech.Fragments.SetDateTimeFragment;
 import ru.alexangan.developer.geatech.Interfaces.Communicator;
+import ru.alexangan.developer.geatech.Models.ProductData;
 import ru.alexangan.developer.geatech.Models.ReportStates;
 import ru.alexangan.developer.geatech.Models.VisitItem;
 import ru.alexangan.developer.geatech.R;
@@ -64,6 +67,7 @@ public class MainActivity extends Activity implements Communicator
     SendReportFragment sendReportFragment;
     PhotoGalleryGridFragment photoGalleryGridFragment;
     Clima1ReportFragment clima1ReportFragment;
+    Caldaia0ReportFragment caldaia0ReportFragment;
     NotificationBarFragment notificationBarFragment;
     public static RealmResults<VisitItem> visitItems;
     int currentSelIndex;
@@ -120,6 +124,7 @@ public class MainActivity extends Activity implements Communicator
             realm.beginTransaction();
             RealmResults<ReportStates> reportStatesList = realm.where(ReportStates.class).findAll();
             realm.commitTransaction();
+
             for (ReportStates reportStates : reportStatesList)
             {
                 realm.beginTransaction();
@@ -133,6 +138,7 @@ public class MainActivity extends Activity implements Communicator
                 realm.commitTransaction();
             }
 
+            // possible reasonable to initialize each ReportStates object on first call.
             if (addressAndProductPresent == false)
             {
                 realm.beginTransaction();
@@ -159,6 +165,7 @@ public class MainActivity extends Activity implements Communicator
         sendReportFragment = new SendReportFragment();
         photoGalleryGridFragment = new PhotoGalleryGridFragment();
         clima1ReportFragment = new Clima1ReportFragment();
+        caldaia0ReportFragment = new Caldaia0ReportFragment();
         notificationBarFragment = new NotificationBarFragment();
 
         mFragmentManager = getFragmentManager();
@@ -188,11 +195,6 @@ public class MainActivity extends Activity implements Communicator
         mFragmentTransaction.commit();
     }
 
-    public void sendReportNow(int position)
-    {
-
-    }
-
     @Override
     public void onBackPressed()
     {
@@ -201,11 +203,27 @@ public class MainActivity extends Activity implements Communicator
             FragmentTransaction mFragmentTransaction = mFragmentManager.beginTransaction();
             mFragmentTransaction.hide(ctrlBtnsReportDetailed);
             mFragmentTransaction.hide(ctrlBtnsFragment2);
-            mFragmentTransaction.show(ctrlBtnsFragment1);
+            mFragmentTransaction.hide(ctrlBtnsFragment1);
             mFragmentTransaction.commit();
 
+            ctrlBtnsFragment1.setCheckedBtnId(R.id.btnVisits);
+
+            FragmentTransaction mFragmentTransaction1 = mFragmentManager.beginTransaction();
+            mFragmentTransaction1.show(ctrlBtnsFragment1);
+            mFragmentTransaction1.commit();
+
             removeAllLists();
+
+            currentSelIndex = -1;
+
+            listVisits = new ListVisitsFragment();
+
+            Bundle args = new Bundle();
+            args.putBoolean("visitTimeNotSetOnly", false);
+            listVisits.setArguments(args);
+
             setVisitsListContent(listVisits);
+
         } else
         {
             //super.onBackPressed();
@@ -270,13 +288,28 @@ public class MainActivity extends Activity implements Communicator
 
         if (view == findViewById(R.id.btnFillReport))
         {
+            if(currentSelIndex == -1)
+            {
+                return;
+            }
+
+            VisitItem visitItem = visitItems.get(currentSelIndex);
+            ProductData productData = visitItem.getProductData();
+            String productType = productData.getProductType();
+
+            Fragment frag = assignFragmentModel(productType);
+
             removeAllLists();
 
-            Bundle args = new Bundle();
-            args.putInt("selectedIndex", currentSelIndex);
-            clima1ReportFragment.setArguments(args);
+            if(frag != null)
+            {
+                Bundle args = new Bundle();
+                args.putInt("selectedIndex", currentSelIndex);
 
-            setVisitsListContent(clima1ReportFragment);
+                frag.setArguments(args);
+
+                setVisitsListContent(frag);
+            }
         }
 
         if (view == findViewById(R.id.btnAddPhotos))
@@ -609,6 +642,32 @@ public class MainActivity extends Activity implements Communicator
         } else
         {
             OnListItemSelected(itemIndex, true);
+        }
+    }
+
+    private Fragment assignFragmentModel(String productType)
+    {
+        Fragment frag;
+
+        switch (productType)
+        {
+            case "CALDAIE":
+                return caldaia0ReportFragment;
+            case "CLIMATIZAZZIONE":
+                return clima1ReportFragment;
+/*            case "FOTOVOLTAICA":
+                return fotovoltaicaReportFragment;
+            case "TERMODINAMICO":
+                return termodinamicoReportFragment;
+            case "DOMOTICA":
+                return domoticaReportFragment;
+            case "POMPA DI CALORE":
+                return pompadicaloreReportFragment;
+            case "STORAGE":
+                return storageReportFragment;*/
+
+                default:
+                    return null;
         }
     }
 }

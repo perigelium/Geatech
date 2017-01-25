@@ -38,7 +38,7 @@ public class RESTdataReceiver implements Callback
     private final String REST_PASSWORD = "BF8hWoAr";
 
     private RESTdataReceiverEventListener callback;
-    private String tokenStr;
+    public static String tokenStr;
     private Activity activity;
 
 
