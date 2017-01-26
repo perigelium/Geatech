@@ -22,6 +22,22 @@
                 android:orientation="horizontal">
 
                 <ImageView
+                    android:id="@+id/ivVisitsListTOS"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start|center_vertical"
+                    android:layout_marginLeft="7dp"
+                    android:src="@drawable/service_orange"/>
+
+                <TextView
+                    android:id="@+id/tvTypeOfService"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start|center_vertical"
+                    android:layout_marginLeft="2dp"
+                    android:text="Tipo di servicio"/>
+
+                <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="start|center_vertical"
@@ -33,24 +49,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="start|center_vertical"
-                    android:layout_marginLeft="1dp"
+                    android:layout_marginLeft="0dp"
                     android:text="Visit Time" />
-
-                <ImageView
-                    android:id="@+id/ivVisitsListTOS"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="start|center_vertical"
-                    android:layout_marginLeft="6dp"
-                    android:src="@drawable/service_orange"/>
-
-                <TextView
-                    android:id="@+id/tvTypeOfService"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="start|center_vertical"
-                    android:layout_marginLeft="2dp"
-                    android:text="Tipo di servicio"/>
 
             </LinearLayout>
 
@@ -82,6 +82,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="6dp"
+                android:layout_marginTop="6dp"
                 android:orientation="horizontal">
 
                 <ImageView
@@ -89,7 +90,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="start|center_vertical"
-                    android:layout_marginLeft="6dp"
+                    android:layout_marginLeft="9dp"
                     android:src="@drawable/location_orange"/>
 
                 <TextView

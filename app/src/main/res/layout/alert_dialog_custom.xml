@@ -23,12 +23,13 @@
         android:background="#c0c0c0" />-->
 
     <ListView
-        android:id="@+id/notifBarlist"
+        android:id="@+id/alertList"
         android:layout_height="wrap_content"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_gravity="center_vertical|end"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
         android:divider="#c0c0c0"
-        android:background="#ffffff"
-        android:foreground="#000000"
         android:dividerHeight="1dp" />
 
 </LinearLayout>

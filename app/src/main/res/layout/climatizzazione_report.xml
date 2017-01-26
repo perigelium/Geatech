@@ -10,6 +10,89 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#ffcc22"
+            android:orientation="vertical">
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start|center_vertical"
+                android:layout_marginLeft="6dp"
+                android:layout_marginTop="10dp"
+                android:text="REPORT TECNICO"
+                android:textColor="#ffffff"
+                android:textSize="13dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start|center_vertical"
+                android:layout_marginBottom="20dp"
+                android:layout_marginLeft="6dp"
+                android:layout_marginTop="20dp"
+                android:text="Climatizzazione"
+                android:textColor="#ffffff"
+                android:textSize="29sp"/>
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#ff6633"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start|center_vertical"
+                android:layout_marginLeft="6dp"
+                android:layout_marginTop="10dp"
+                android:text="1.Rilievo dello stato dei luoghi"
+                android:textColor="#ffffff"
+                android:textSize="15dp"/>
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/llTipoDiCaldaia"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#eeeeee"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start|center_vertical"
+                    android:layout_margin="6dp"
+                    android:text=" 1.1 TIPO DI EDIFICIO:"
+                    android:textSize="13sp"/>
+
+            </LinearLayout>
+
+
+
+
+
+
+
+
+
+
+            
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -19,46 +102,9 @@
 
             <LinearLayout
                 android:id="@+id/detailsRows"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="start|center_vertical"
-                    android:layout_marginLeft="6dp"
-                    android:layout_marginTop="20dp"
-                    android:text="Climatizzazione"
-                    android:textColor="#ffcc22"
-                    android:textSize="25dp"/>
-
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="6dp"
-                    android:orientation="horizontal">
-
-                    <ImageView
-                        android:id="@+id/ivVisitsListTOS"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="start|center_vertical"
-                        android:layout_marginLeft="1dp"
-                        android:src="@drawable/checkmark_orange"/>
-
-                    <TextView
-                        android:id="@+id/tvVisitsListTOS"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="start|center_vertical"
-                        android:layout_marginLeft="2dp"
-                        android:text="Rilievo dello stato dei luogi"
-                        android:textColor="#ffcc22"
-                        android:textSize="15dp"/>
-
-                </LinearLayout>
 
 
                 <TextView
@@ -80,8 +126,8 @@
                         android:layout_alignParentLeft="true"
                         android:layout_marginLeft="6dp"
                         android:background="#f0f0f0"
-                        android:minWidth="200dp"
                         android:minHeight="30dp"
+                        android:minWidth="200dp"
                         android:text=""/>
 
 
@@ -113,9 +159,9 @@
                         android:layout_alignParentLeft="true"
                         android:layout_marginLeft="6dp"
                         android:background="#f0f0f0"
-                        android:minWidth="200dp"
-                        android:minHeight="30dp"
                         android:ems="5"
+                        android:minHeight="30dp"
+                        android:minWidth="200dp"
                         android:text=""/>
 
                     <ImageView
@@ -146,9 +192,9 @@
                         android:layout_alignParentLeft="true"
                         android:layout_marginLeft="6dp"
                         android:background="#f0f0f0"
-                        android:minWidth="200dp"
-                        android:minHeight="30dp"
                         android:ems="5"
+                        android:minHeight="30dp"
+                        android:minWidth="200dp"
                         android:text=""/>
 
                     <ImageView
@@ -179,9 +225,9 @@
                         android:layout_alignParentLeft="true"
                         android:layout_marginLeft="6dp"
                         android:background="#f0f0f0"
-                        android:minWidth="200dp"
-                        android:minHeight="30dp"
                         android:ems="5"
+                        android:minHeight="30dp"
+                        android:minWidth="200dp"
                         android:text=""/>
 
                     <ImageView
@@ -206,46 +252,6 @@
                     android:layout_height="wrap_content"
                     android:gravity="end"
                     android:orientation="vertical">
-
-                    <FrameLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="top|end"
-                        android:orientation="horizontal">
-
-                        <View
-                            android:id="@+id/vListVisitsDateCell"
-                            android:layout_width="99dp"
-                            android:layout_height="99dp"
-                            android:layout_gravity="top|end"
-                            android:background="#ffcc22"/>
-
-                        <TextView
-                            android:id="@+id/tvListVisitsDay"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="top|center_horizontal"
-                            android:text="R"
-                            android:textColor="#ffffff"
-                            android:textSize="70dp"/>
-
-                        <TextView
-                            android:id="@+id/tvListVisitsMonth"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_horizontal|bottom"
-                            android:text="Report Tecnico"
-                            android:textColor="#ffffff"
-                            android:textSize="13dp"/>
-
-                    </FrameLayout>
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="end"
-                        android:scaleType="fitCenter"
-                        android:src="@drawable/climatizzazione0"/>
 
                 </LinearLayout>
 
@@ -336,8 +342,8 @@
                 android:layout_alignParentLeft="true"
                 android:layout_marginLeft="6dp"
                 android:background="#f0f0f0"
-                android:inputType="textMultiLine"
                 android:ems="5"
+                android:inputType="textMultiLine"
                 android:text=""/>
 
         </LinearLayout>

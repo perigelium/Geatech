@@ -19,21 +19,6 @@
             android:orientation="horizontal">
 
             <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="start|center_vertical"
-                android:layout_margin="5dp"
-                android:src="@drawable/watch_green" />
-
-            <TextView
-                android:id="@+id/tvVisitTime"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="start|center_vertical"
-                android:layout_marginLeft="1dp"
-                android:text="Non impostato" />
-
-            <ImageView
                 android:id="@+id/ivVisitsListTOS"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -48,6 +33,21 @@
                 android:layout_gravity="start|center_vertical"
                 android:layout_marginLeft="1dp"
                 android:text="Tipo di servicio" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start|center_vertical"
+                android:layout_margin="5dp"
+                android:src="@drawable/watch_green" />
+
+            <TextView
+                android:id="@+id/tvVisitTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start|center_vertical"
+                android:layout_marginLeft="0dp"
+                android:text="N.I." />
 
         </LinearLayout>
 

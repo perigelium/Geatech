@@ -7,7 +7,7 @@ import io.realm.annotations.PrimaryKey;
  * Created by user on 12/8/2016.
  */
 
-public class Clima1Model extends RealmObject
+public class ClimaReportModel extends RealmObject
 {
     @PrimaryKey
     int id;
@@ -16,9 +16,9 @@ public class Clima1Model extends RealmObject
     String tipoDiEdificio, posizionamentoUnitaEsterna, tipologiaCostruttivaMurature, localiEOPianiDelledificio,
             noteSulLuoghoDiInstallazione, noteSulTipologiaDellImpianto, noteRelativeAlCollegamento;
 
-    public Clima1Model(){};
+    public ClimaReportModel(){};
 
-    public Clima1Model(int id)
+    public ClimaReportModel(int id)
     {
         this.id = id;
     }

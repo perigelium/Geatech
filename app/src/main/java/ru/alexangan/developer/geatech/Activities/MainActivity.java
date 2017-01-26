@@ -2,30 +2,23 @@ package ru.alexangan.developer.geatech.Activities;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Application;
-import android.app.Dialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
-import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.Switch;
 import android.widget.Toast;
 
 import io.realm.RealmResults;
 import ru.alexangan.developer.geatech.Fragments.CTLinfoFragment;
-import ru.alexangan.developer.geatech.Fragments.Caldaia0ReportFragment;
+import ru.alexangan.developer.geatech.Fragments.CaldaieReportFragment;
 import ru.alexangan.developer.geatech.Fragments.ComingListVisitsFragment;
-import ru.alexangan.developer.geatech.Fragments.Clima1ReportFragment;
+import ru.alexangan.developer.geatech.Fragments.ClimaReportFragment;
 import ru.alexangan.developer.geatech.Fragments.CtrlBtnReportDetailed;
 import ru.alexangan.developer.geatech.Fragments.CtrlBtnsFragment1;
 import ru.alexangan.developer.geatech.Fragments.CtrlBtnsFragment2;
@@ -66,8 +59,8 @@ public class MainActivity extends Activity implements Communicator
     ReportSentDetailedFragment reportDetailedFragment;
     SendReportFragment sendReportFragment;
     PhotoGalleryGridFragment photoGalleryGridFragment;
-    Clima1ReportFragment clima1ReportFragment;
-    Caldaia0ReportFragment caldaia0ReportFragment;
+    ClimaReportFragment climaReportFragment;
+    CaldaieReportFragment caldaieReportFragment;
     NotificationBarFragment notificationBarFragment;
     public static RealmResults<VisitItem> visitItems;
     int currentSelIndex;
@@ -164,8 +157,8 @@ public class MainActivity extends Activity implements Communicator
         reportDetailedFragment = new ReportSentDetailedFragment();
         sendReportFragment = new SendReportFragment();
         photoGalleryGridFragment = new PhotoGalleryGridFragment();
-        clima1ReportFragment = new Clima1ReportFragment();
-        caldaia0ReportFragment = new Caldaia0ReportFragment();
+        climaReportFragment = new ClimaReportFragment();
+        caldaieReportFragment = new CaldaieReportFragment();
         notificationBarFragment = new NotificationBarFragment();
 
         mFragmentManager = getFragmentManager();
@@ -376,9 +369,14 @@ public class MainActivity extends Activity implements Communicator
     {
         FragmentTransaction mFragmentTransaction = mFragmentManager.beginTransaction();
 
-        if (clima1ReportFragment.isAdded())
+        if (caldaieReportFragment.isAdded())
         {
-            mFragmentTransaction.remove(clima1ReportFragment);
+            mFragmentTransaction.remove(caldaieReportFragment);
+        }
+
+        if (climaReportFragment.isAdded())
+        {
+            mFragmentTransaction.remove(climaReportFragment);
         }
 
         if (photoGalleryGridFragment.isAdded())
@@ -569,20 +567,65 @@ public class MainActivity extends Activity implements Communicator
         {
             String[] listItemsArray = {"Esci", "Cambia\npassword"};
 
+
+/*            Dialog dialog = new Dialog(MainActivity.this);
+
+            // Установите заголовок
+            dialog.setTitle("Заголовок диалога");
+            // Передайте ссылку на разметку
+            dialog.setContentView(R.layout.alert_dialog_item_custom);
+            // Найдите элемент TextView внутри вашей разметки
+            // и установите ему соответствующий текст
+            TextView text = (TextView) dialog.findViewById(R.id.dialogTextView);
+            text.setText("Текст в диалоговом окне. Вы любите котов?");
+            dialog.show();*/
+
+
+
+
             //ContextThemeWrapper themedContext = new ContextThemeWrapper(this, android.R.style.Theme_DeviceDefault_Light_Dialog_NoActionBar);
             AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
 
-            //LayoutInflater inflater = getLayoutInflater();
-            //View v = inflater.inflate(R.layout.how_dialog_custom, null);
+            LayoutInflater inflater = getLayoutInflater();
+            View layout = inflater.inflate(R.layout.alert_dialog_custom, null);
+
+            ListView listView = (ListView) layout.findViewById(R.id.alertList);
+            ArrayAdapter <String> listAdapter = new ArrayAdapter<>(this, R.layout.alert_dialog_item_custom, listItemsArray);
+            listView.setAdapter(listAdapter);
+
+            listView.setOnItemClickListener(new AdapterView.OnItemClickListener()
+            {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int which, long id)
+                {
+                    if(which == 1)  // exit app
+                    {
+                        Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        intent.putExtra("Password recover", true);
+                        startActivity(intent);
+                        finish();
+                    }
+
+                    if(which == 0) // password recover
+                    {
+                        Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        intent.putExtra("Exit app", true);
+                        startActivity(intent);
+                        finish();
+                    }
+
+                }
+            });
 
             //ListView listView = (ListView) v.findViewById(R.id.notifBarlist);
 
-            final ArrayAdapter <String> listAdapter = new ArrayAdapter<>(getApplicationContext(),
-                    android.R.layout.simple_list_item_1, listItemsArray);
+            //final ArrayAdapter <String> listAdapter = new ArrayAdapter<>(this, R.id.dialogTextView, listItemsArray);
             //listView.setAdapter(listAdapter);
             //listView.setBackgroundColor(Color.GRAY);
 
-            builder.setAdapter(listAdapter, new DialogInterface.OnClickListener()
+/*            builder.setItems(listItemsArray, new DialogInterface.OnClickListener()
             {
                 @Override
                 public void onClick(DialogInterface dialog, int which)
@@ -605,29 +648,9 @@ public class MainActivity extends Activity implements Communicator
                         finish();
                     }
                 }
-            });
+            });*/
 
-/*            listView.setOnItemClickListener(new AdapterView.OnItemClickListener()
-            {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int which, long id)
-                {
-                    if(which == 0)
-                    {
-                        Toast.makeText(getApplicationContext(), "Esci", Toast.LENGTH_LONG).show();
-                        alert.dismiss();
-                    }
-
-                    if(which == 1)
-                    {
-                        Toast.makeText(getApplicationContext(), "Cambia password", Toast.LENGTH_LONG).show();
-                        alert.dismiss();
-                    }
-                }
-            });
-
-            //builder.setView(v);*/
-
+            builder.setView(layout);
             AlertDialog alert = builder.create();
             alert.show();
         }
@@ -645,16 +668,16 @@ public class MainActivity extends Activity implements Communicator
         }
     }
 
-    private Fragment assignFragmentModel(String productType)
+    public Fragment assignFragmentModel(String productType)
     {
         Fragment frag;
 
         switch (productType)
         {
             case "CALDAIE":
-                return caldaia0ReportFragment;
-            case "CLIMATIZAZZIONE":
-                return clima1ReportFragment;
+                return caldaieReportFragment;
+            case "CLIMATIZZAZIONE":
+                return climaReportFragment;
 /*            case "FOTOVOLTAICA":
                 return fotovoltaicaReportFragment;
             case "TERMODINAMICO":
@@ -666,8 +689,8 @@ public class MainActivity extends Activity implements Communicator
             case "STORAGE":
                 return storageReportFragment;*/
 
-                default:
-                    return null;
+            default:
+                return null;
         }
     }
 }

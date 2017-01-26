@@ -2,16 +2,13 @@ package ru.alexangan.developer.geatech.Fragments;
 
 import android.app.Fragment;
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
-import android.widget.Button;
 import android.widget.EditText;
 
 import java.text.SimpleDateFormat;
@@ -21,8 +18,7 @@ import java.util.Calendar;
 import java.util.Locale;
 
 import io.realm.RealmResults;
-import ru.alexangan.developer.geatech.Interfaces.Communicator;
-import ru.alexangan.developer.geatech.Models.Clima1Model;
+import ru.alexangan.developer.geatech.Models.ClimaReportModel;
 import ru.alexangan.developer.geatech.Models.ReportStates;
 import ru.alexangan.developer.geatech.Models.VisitItem;
 import ru.alexangan.developer.geatech.Models.VisitStates;
@@ -31,7 +27,7 @@ import ru.alexangan.developer.geatech.R;
 import static ru.alexangan.developer.geatech.Activities.LoginActivity.realm;
 import static ru.alexangan.developer.geatech.Activities.MainActivity.visitItems;
 
-public class Clima1ReportFragment extends Fragment //implements View.OnTouchListener
+public class ClimaReportFragment extends Fragment //implements View.OnTouchListener
 {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -50,7 +46,7 @@ public class Clima1ReportFragment extends Fragment //implements View.OnTouchList
 
     EditText etNoteSulLuoghoDiInstallazione, etNoteSulTipologiaDellImpianto, etNoteRelativeAlCollegamento;
 
-    Clima1Model clima1Model;
+    ClimaReportModel climaReportModel;
 
     private final String[] TipiDiEdificieStrA = new String[] {
              "Appartamento", "Villa(Singola/Multi)", "Negozio", "Altro"};
@@ -67,7 +63,7 @@ public class Clima1ReportFragment extends Fragment //implements View.OnTouchList
     ArrayList<String> tipiDiEdificie, posizionamentiUnitaEsterna, tipologieCostruttiveMurature, localiEOPianiDelledificio;
 
 
-    public Clima1ReportFragment()
+    public ClimaReportFragment()
     {
     }
 
@@ -92,7 +88,7 @@ public class Clima1ReportFragment extends Fragment //implements View.OnTouchList
     {
         super.onPause();
 
-        if (reportStates != null && clima1Model!=null)
+        if (reportStates != null && climaReportModel !=null)
         {
             realm.beginTransaction();
 
@@ -101,27 +97,27 @@ public class Clima1ReportFragment extends Fragment //implements View.OnTouchList
             String tipologiaCostruttivaMurature = atvTipologiaCostruttivaMurature.getSelectedItem().toString();
             String localiEOPianiDelledificio = atvLocaliEOPianiDelledificio.getSelectedItem().toString();
 
-            clima1Model.setTipoDiEdificio(atvTipoDiEdificio.getSelectedItem().toString());
-            clima1Model.setPosizionamentoUnitaEsterna(atvPosizionamentoUnitaEsterna.getSelectedItem().toString());
-            clima1Model.setTipologiaCostruttivaMurature(atvTipologiaCostruttivaMurature.getSelectedItem().toString());
-            clima1Model.setLocaliEOPianiDelledificio(atvLocaliEOPianiDelledificio.getSelectedItem().toString());
+            climaReportModel.setTipoDiEdificio(atvTipoDiEdificio.getSelectedItem().toString());
+            climaReportModel.setPosizionamentoUnitaEsterna(atvPosizionamentoUnitaEsterna.getSelectedItem().toString());
+            climaReportModel.setTipologiaCostruttivaMurature(atvTipologiaCostruttivaMurature.getSelectedItem().toString());
+            climaReportModel.setLocaliEOPianiDelledificio(atvLocaliEOPianiDelledificio.getSelectedItem().toString());
 
-            clima1Model.setNoteSulLuoghoDiInstallazione(etNoteSulLuoghoDiInstallazione.getText().toString());
-            clima1Model.setNoteSulTipologiaDellImpianto(etNoteSulTipologiaDellImpianto.getText().toString());
-            clima1Model.setNoteRelativeAlCollegamento(etNoteRelativeAlCollegamento.getText().toString());
+            climaReportModel.setNoteSulLuoghoDiInstallazione(etNoteSulLuoghoDiInstallazione.getText().toString());
+            climaReportModel.setNoteSulTipologiaDellImpianto(etNoteSulTipologiaDellImpianto.getText().toString());
+            climaReportModel.setNoteRelativeAlCollegamento(etNoteRelativeAlCollegamento.getText().toString());
 
-            if(clima1Model.getTipoDiEdificio().length() != 0 || clima1Model.getNoteSulLuoghoDiInstallazione().length() != 0
-                    || clima1Model.getNoteRelativeAlCollegamento().length() != 0 || clima1Model.getNoteSulTipologiaDellImpianto().length() != 0
+            if(climaReportModel.getTipoDiEdificio().length() != 0 || climaReportModel.getNoteSulLuoghoDiInstallazione().length() != 0
+                    || climaReportModel.getNoteRelativeAlCollegamento().length() != 0 || climaReportModel.getNoteSulTipologiaDellImpianto().length() != 0
                     )
             {
                 reportStates.setReportCompletionState(1);
 
-                if (clima1Model.getNoteSulLuoghoDiInstallazione().length() != 0 || clima1Model.getNoteRelativeAlCollegamento().length() != 0 || clima1Model.getNoteSulTipologiaDellImpianto().length() != 0)
+                if (climaReportModel.getNoteSulLuoghoDiInstallazione().length() != 0 || climaReportModel.getNoteRelativeAlCollegamento().length() != 0 || climaReportModel.getNoteSulTipologiaDellImpianto().length() != 0)
                 {
                     reportStates.setReportCompletionState(2);
 
-                    if (clima1Model.getTipoDiEdificio().length() != 0 && clima1Model.getNoteSulLuoghoDiInstallazione().length() != 0 &&
-                            clima1Model.getNoteRelativeAlCollegamento().length() != 0 && clima1Model.getNoteSulTipologiaDellImpianto().length() != 0)
+                    if (climaReportModel.getTipoDiEdificio().length() != 0 && climaReportModel.getNoteSulLuoghoDiInstallazione().length() != 0 &&
+                            climaReportModel.getNoteRelativeAlCollegamento().length() != 0 && climaReportModel.getNoteSulTipologiaDellImpianto().length() != 0)
                     {
                         reportStates.setReportCompletionState(3);
 
@@ -159,13 +155,13 @@ public class Clima1ReportFragment extends Fragment //implements View.OnTouchList
 
         realm.beginTransaction();
 
-        if (clima1Model != null)
+        if (climaReportModel != null)
         {
 
-            String tipoDiEdificioStr = clima1Model.getTipoDiEdificio();
-            String posizionamentoUnitaEsternaStr = clima1Model.getPosizionamentoUnitaEsterna();
-            String tipologiaCostruttivaMuratureStr = clima1Model.getTipologiaCostruttivaMurature();
-            String localiEOPianiDelledificioStr = clima1Model.getLocaliEOPianiDelledificio();
+            String tipoDiEdificioStr = climaReportModel.getTipoDiEdificio();
+            String posizionamentoUnitaEsternaStr = climaReportModel.getPosizionamentoUnitaEsterna();
+            String tipologiaCostruttivaMuratureStr = climaReportModel.getTipologiaCostruttivaMurature();
+            String localiEOPianiDelledificioStr = climaReportModel.getLocaliEOPianiDelledificio();
 
             final int posTipoDiEdificio = tipiDiEdificie.indexOf(tipoDiEdificioStr);
             final int posPosizionamentoUnitaEsterna = posizionamentiUnitaEsterna.indexOf(posizionamentoUnitaEsternaStr);
@@ -198,13 +194,13 @@ public class Clima1ReportFragment extends Fragment //implements View.OnTouchList
                 }
             });
 
-                //atvPosizionamentoUnitaEsterna.setSelection(posizionamentiUnitaEsterna.indexOf(clima1Model.getPosizionamentoUnitaEsterna()));
-                //atvTipologiaCostruttivaMurature.setSelection(tipologieCostruttiveMurature.indexOf(clima1Model.getTipologiaCostruttivaMurature()));
-                //atvLocaliEOPianiDelledificio.setSelection(localiEOPianiDelledificio.indexOf(clima1Model.getLocaliEOPianiDelledificio()));
+                //atvPosizionamentoUnitaEsterna.setSelection(posizionamentiUnitaEsterna.indexOf(climaReportModel.getPosizionamentoUnitaEsterna()));
+                //atvTipologiaCostruttivaMurature.setSelection(tipologieCostruttiveMurature.indexOf(climaReportModel.getTipologiaCostruttivaMurature()));
+                //atvLocaliEOPianiDelledificio.setSelection(localiEOPianiDelledificio.indexOf(climaReportModel.getLocaliEOPianiDelledificio()));
 
-                etNoteSulLuoghoDiInstallazione.setText(clima1Model.getNoteSulLuoghoDiInstallazione());
-                etNoteSulTipologiaDellImpianto.setText(clima1Model.getNoteSulTipologiaDellImpianto());
-                etNoteRelativeAlCollegamento.setText(clima1Model.getNoteRelativeAlCollegamento());
+                etNoteSulLuoghoDiInstallazione.setText(climaReportModel.getNoteSulLuoghoDiInstallazione());
+                etNoteSulTipologiaDellImpianto.setText(climaReportModel.getNoteSulTipologiaDellImpianto());
+                etNoteRelativeAlCollegamento.setText(climaReportModel.getNoteRelativeAlCollegamento());
         }
         realm.commitTransaction();
     }
@@ -236,7 +232,7 @@ public class Clima1ReportFragment extends Fragment //implements View.OnTouchList
     public View onCreateView(LayoutInflater inflater, final ViewGroup container,
                              Bundle savedInstanceState)
     {
-        rootView =  inflater.inflate(R.layout.climatizzazione0_report, container, false);
+        rootView =  inflater.inflate(R.layout.climatizzazione_report, container, false);
 
         ArrayAdapter<String> TipiDiEdificieAdapter = new ArrayAdapter<>(context, android.R.layout.simple_dropdown_item_1line, tipiDiEdificie);
 
@@ -252,16 +248,16 @@ public class Clima1ReportFragment extends Fragment //implements View.OnTouchList
         idSopralluogo = visitStates.getIdSopralluogo();
 
         reportStates = realm.where(ReportStates.class).equalTo("idSopralluogo", idSopralluogo).findFirst();
-        clima1Model = realm.where(Clima1Model.class).equalTo("idSopralluogo", idSopralluogo).findFirst();
-        RealmResults <Clima1Model> clima1Models = realm.where(Clima1Model.class).findAll();
+        climaReportModel = realm.where(ClimaReportModel.class).equalTo("idSopralluogo", idSopralluogo).findFirst();
+        RealmResults <ClimaReportModel> climaReportModels = realm.where(ClimaReportModel.class).findAll();
 
         if (reportStates != null)
         {
-            if (clima1Model == null)
+            if (climaReportModel == null)
             {
-                clima1Model = new Clima1Model(clima1Models.size());
-                clima1Model.setIdSopralluogo(idSopralluogo);
-                realm.copyToRealmOrUpdate(clima1Model);
+                climaReportModel = new ClimaReportModel(climaReportModels.size());
+                climaReportModel.setIdSopralluogo(idSopralluogo);
+                realm.copyToRealmOrUpdate(climaReportModel);
             }
         }
         realm.commitTransaction();
@@ -269,7 +265,7 @@ public class Clima1ReportFragment extends Fragment //implements View.OnTouchList
         atvTipoDiEdificio = null;
         atvTipoDiEdificio = (Spinner) rootView.findViewById(R.id.atvTipoDiEdificio);
 
-        //atvTipoDiEdificio.setListSelection(tipiDiEdificie.indexOf(clima1Model.getTipoDiEdificio()));
+        //atvTipoDiEdificio.setListSelection(tipiDiEdificie.indexOf(climaReportModel.getTipoDiEdificio()));
 
         atvTipoDiEdificio.setAdapter(TipiDiEdificieAdapter);
 
@@ -284,7 +280,7 @@ public class Clima1ReportFragment extends Fragment //implements View.OnTouchList
             {
                 String selectedItem = parent.getItemAtPosition(position).toString();
                 realm.beginTransaction();
-                clima1Model.setTipoDiEdificio(selectedItem);
+                climaReportModel.setTipoDiEdificio(selectedItem);
                 realm.commitTransaction();
 
                 //Toast.makeText(context, selectedItem, Toast.LENGTH_SHORT).show();
@@ -299,9 +295,9 @@ public class Clima1ReportFragment extends Fragment //implements View.OnTouchList
 
         atvPosizionamentoUnitaEsterna = null;
         atvPosizionamentoUnitaEsterna = (Spinner) rootView.findViewById(R.id.atvPosizionamentoUnitaEsterna);
-        //atvPosizionamentoUnitaEsterna.setText(clima1Model.getPosizionamentoUnitaEsterna());
+        //atvPosizionamentoUnitaEsterna.setText(climaReportModel.getPosizionamentoUnitaEsterna());
 
-        //atvPosizionamentoUnitaEsterna.setListSelection(posizionamentiUnitaEsterna.indexOf(clima1Model.getTipoDiEdificio()));
+        //atvPosizionamentoUnitaEsterna.setListSelection(posizionamentiUnitaEsterna.indexOf(climaReportModel.getTipoDiEdificio()));
 
         atvPosizionamentoUnitaEsterna.setAdapter(PosizionamentiUnitaEsternaAdapter);
         //atvPosizionamentoUnitaEsterna.setOnTouchListener(this);
@@ -315,7 +311,7 @@ public class Clima1ReportFragment extends Fragment //implements View.OnTouchList
             {
                 String selectedItem = parent.getItemAtPosition(position).toString();
                 realm.beginTransaction();
-                clima1Model.setPosizionamentoUnitaEsterna(selectedItem);
+                climaReportModel.setPosizionamentoUnitaEsterna(selectedItem);
                 realm.commitTransaction();
                 //Toast.makeText(context, selectedItem, Toast.LENGTH_SHORT).show();
             }
@@ -330,9 +326,9 @@ public class Clima1ReportFragment extends Fragment //implements View.OnTouchList
         atvTipologiaCostruttivaMurature = null;
         atvTipologiaCostruttivaMurature = (Spinner) rootView.findViewById(R.id.atvTipologiaCostruttivaMurature);
 
-        //atvTipologiaCostruttivaMurature.setListSelection(tipologieCostruttiveMurature.indexOf(clima1Model.getTipoDiEdificio()));
+        //atvTipologiaCostruttivaMurature.setListSelection(tipologieCostruttiveMurature.indexOf(climaReportModel.getTipoDiEdificio()));
 
-        //atvTipologiaCostruttivaMurature.setText(clima1Model.getTipologiaCostruttivaMurature());
+        //atvTipologiaCostruttivaMurature.setText(climaReportModel.getTipologiaCostruttivaMurature());
         atvTipologiaCostruttivaMurature.setAdapter(TipologieCostruttiveMuratureAdapter);
         //atvTipologiaCostruttivaMurature.setOnTouchListener(this);
         //atvTipologiaCostruttivaMurature.setInputType(InputType.TYPE_NULL);
@@ -345,7 +341,7 @@ public class Clima1ReportFragment extends Fragment //implements View.OnTouchList
             {
                 String selectedItem = parent.getItemAtPosition(position).toString();
                 realm.beginTransaction();
-                clima1Model.setTipologiaCostruttivaMurature(selectedItem);
+                climaReportModel.setTipologiaCostruttivaMurature(selectedItem);
                 realm.commitTransaction();
                 //Toast.makeText(context, selectedItem, Toast.LENGTH_SHORT).show();
             }
@@ -359,9 +355,9 @@ public class Clima1ReportFragment extends Fragment //implements View.OnTouchList
 
         atvLocaliEOPianiDelledificio = null;
         atvLocaliEOPianiDelledificio = (Spinner) rootView.findViewById(R.id.atvLocaliEOPianiDelledificio);
-        //atvLocaliEOPianiDelledificio.setText(clima1Model.getLocaliEOPianiDelledificio());
+        //atvLocaliEOPianiDelledificio.setText(climaReportModel.getLocaliEOPianiDelledificio());
 
-        //atvLocaliEOPianiDelledificio.setListSelection(localiEOPianiDelledificio.indexOf(clima1Model.getLocaliEOPianiDelledificio()));
+        //atvLocaliEOPianiDelledificio.setListSelection(localiEOPianiDelledificio.indexOf(climaReportModel.getLocaliEOPianiDelledificio()));
 
         atvLocaliEOPianiDelledificio.setAdapter(LocaliEOPianiDelledificioAdapter);
         //atvLocaliEOPianiDelledificio.setOnTouchListener(this);
@@ -381,7 +377,7 @@ public class Clima1ReportFragment extends Fragment //implements View.OnTouchList
             {
                 String selectedItem = parent.getItemAtPosition(position).toString();
                 realm.beginTransaction();
-                clima1Model.setLocaliEOPianiDelledificio(selectedItem);
+                climaReportModel.setLocaliEOPianiDelledificio(selectedItem);
                 realm.commitTransaction();
                 //Toast.makeText(context, selectedItem, Toast.LENGTH_SHORT).show();
             }
@@ -389,7 +385,7 @@ public class Clima1ReportFragment extends Fragment //implements View.OnTouchList
 
         etNoteSulLuoghoDiInstallazione = (EditText) rootView.findViewById(R.id.etNoteSulLuoghoDiInstallazione);
 
-        etNoteSulLuoghoDiInstallazione.setText(clima1Model.getNoteSulLuoghoDiInstallazione());
+        etNoteSulLuoghoDiInstallazione.setText(climaReportModel.getNoteSulLuoghoDiInstallazione());
 
         etNoteSulLuoghoDiInstallazione.setOnFocusChangeListener(new View.OnFocusChangeListener()
         {
@@ -399,7 +395,7 @@ public class Clima1ReportFragment extends Fragment //implements View.OnTouchList
                 if (hasFocus)
                 {
                     realm.beginTransaction();
-                    clima1Model.setNoteSulLuoghoDiInstallazione(etNoteSulLuoghoDiInstallazione.getText().toString());
+                    climaReportModel.setNoteSulLuoghoDiInstallazione(etNoteSulLuoghoDiInstallazione.getText().toString());
                     realm.commitTransaction();
                     //Toast.makeText(context, "onFocusChange etNoteSulLuoghoDiInstallazione", Toast.LENGTH_SHORT).show();
                 }
@@ -408,7 +404,7 @@ public class Clima1ReportFragment extends Fragment //implements View.OnTouchList
 
         etNoteSulTipologiaDellImpianto = (EditText) rootView.findViewById(R.id.etNoteSulTipologiaDellImpianto);
 
-        etNoteSulTipologiaDellImpianto.setText(clima1Model.getNoteSulTipologiaDellImpianto());
+        etNoteSulTipologiaDellImpianto.setText(climaReportModel.getNoteSulTipologiaDellImpianto());
 
         etNoteSulTipologiaDellImpianto.setOnFocusChangeListener(new View.OnFocusChangeListener()
         {
@@ -418,7 +414,7 @@ public class Clima1ReportFragment extends Fragment //implements View.OnTouchList
                 if (v == etNoteSulTipologiaDellImpianto && !hasFocus)
                 {
                     realm.beginTransaction();
-                    clima1Model.setNoteSulTipologiaDellImpianto(etNoteSulTipologiaDellImpianto.getText().toString());
+                    climaReportModel.setNoteSulTipologiaDellImpianto(etNoteSulTipologiaDellImpianto.getText().toString());
                     realm.commitTransaction();
                     //Toast.makeText(context, "onFocusChange etNoteSulTipologiaDellImpianto", Toast.LENGTH_SHORT).show();
                 }
@@ -426,7 +422,7 @@ public class Clima1ReportFragment extends Fragment //implements View.OnTouchList
         });
 
         etNoteRelativeAlCollegamento = (EditText) rootView.findViewById(R.id.etNoteRelativeAlCollegamento);
-        etNoteRelativeAlCollegamento.setText(clima1Model.getNoteRelativeAlCollegamento());
+        etNoteRelativeAlCollegamento.setText(climaReportModel.getNoteRelativeAlCollegamento());
 
         etNoteRelativeAlCollegamento.setOnFocusChangeListener(new View.OnFocusChangeListener()
         {
@@ -436,7 +432,7 @@ public class Clima1ReportFragment extends Fragment //implements View.OnTouchList
                 if (v == etNoteRelativeAlCollegamento && !hasFocus)
                 {
                     realm.beginTransaction();
-                    clima1Model.setNoteRelativeAlCollegamento(etNoteRelativeAlCollegamento.getText().toString());
+                    climaReportModel.setNoteRelativeAlCollegamento(etNoteRelativeAlCollegamento.getText().toString());
                     realm.commitTransaction();
                     //Toast.makeText(context, "onFocusChange etNoteRelativeAlCollegamento", Toast.LENGTH_SHORT).show();
                 }
