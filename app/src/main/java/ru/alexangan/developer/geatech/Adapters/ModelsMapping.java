@@ -1,4 +1,7 @@
-package ru.alexangan.developer.geatech.Models;
+package ru.alexangan.developer.geatech.Adapters;
+
+import ru.alexangan.developer.geatech.Models.CaldaieReportModel;
+import ru.alexangan.developer.geatech.Models.ClimaReportModel;
 
 /**
  * Created by user on 26.01.2017.

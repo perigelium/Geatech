@@ -118,7 +118,7 @@
             </RadioGroup>
 
             <EditText
-                android:id="@+id/etTipoDicaldaia"
+                android:id="@+id/etTipoDiCaldaia"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
@@ -870,7 +870,7 @@
                 android:layout_marginLeft="6dp"
                 android:text="2.1 Note sul luogho di installazione e individuazione
             di eventuali criticita sui collegamenti e sulla gestione dell'utenza:"
-                android:textColor="#006655"/>
+                android:textColor="#555555"/>
 
             <EditText
                 android:id="@+id/etNoteSulLuoghoDiInstallazione"
@@ -888,7 +888,7 @@
                 android:layout_gravity="start|center_vertical"
                 android:layout_marginLeft="6dp"
                 android:text="2.2 Note sulla tipologia dell'impianto esistente:"
-                android:textColor="#006655"/>
+                android:textColor="#555555"/>
 
             <EditText
                 android:id="@+id/etNoteSulTipologiaDellImpianto"

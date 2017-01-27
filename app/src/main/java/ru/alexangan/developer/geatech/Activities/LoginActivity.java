@@ -132,7 +132,7 @@ public class LoginActivity extends Activity implements RESTdataReceiverEventList
     @Override
     public void onEventFailed()
     {
-        Toast.makeText(this, "Login failed", Toast.LENGTH_LONG).show();
+        Toast.makeText(this, "login fallito", Toast.LENGTH_LONG).show();
     }
 
     @Override
@@ -160,7 +160,7 @@ public class LoginActivity extends Activity implements RESTdataReceiverEventList
         {
             if (!credentialsesFound)
             {
-                Toast.makeText(this, "Login failed", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "login fallito", Toast.LENGTH_LONG).show();
             }
             else if(!NetworkUtils.isNetworkAvailable(context))
             {

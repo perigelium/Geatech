@@ -22,6 +22,7 @@ import ru.alexangan.developer.geatech.Fragments.ClimaReportFragment;
 import ru.alexangan.developer.geatech.Fragments.CtrlBtnReportDetailed;
 import ru.alexangan.developer.geatech.Fragments.CtrlBtnsFragment1;
 import ru.alexangan.developer.geatech.Fragments.CtrlBtnsFragment2;
+import ru.alexangan.developer.geatech.Fragments.ExpandableListFragment;
 import ru.alexangan.developer.geatech.Fragments.InWorkListVisitsFragment;
 import ru.alexangan.developer.geatech.Fragments.ListVisitsFragment;
 import ru.alexangan.developer.geatech.Fragments.NotSentListVisitsFragment;
@@ -67,6 +68,8 @@ public class MainActivity extends Activity implements Communicator
     boolean ctrlBtnChkChanged;
     AlertDialog alert;
 
+    ExpandableListFragment expandableListFragment;
+
     @Override
     protected void onDestroy()
     {
@@ -100,7 +103,7 @@ public class MainActivity extends Activity implements Communicator
 
         if (visitItems.size() == 0)
         {
-            Toast.makeText(this, "Database inizializzazione falito, controlla la connessione a Internet", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Database inizializzazione fallito, controlla la connessione a Internet", Toast.LENGTH_LONG).show();
 
             this.finish();
         }
@@ -160,6 +163,8 @@ public class MainActivity extends Activity implements Communicator
         climaReportFragment = new ClimaReportFragment();
         caldaieReportFragment = new CaldaieReportFragment();
         notificationBarFragment = new NotificationBarFragment();
+
+        expandableListFragment = new ExpandableListFragment();
 
         mFragmentManager = getFragmentManager();
 
@@ -677,7 +682,8 @@ public class MainActivity extends Activity implements Communicator
             case "CALDAIE":
                 return caldaieReportFragment;
             case "CLIMATIZZAZIONE":
-                return climaReportFragment;
+                //return climaReportFragment;
+            return expandableListFragment;
 /*            case "FOTOVOLTAICA":
                 return fotovoltaicaReportFragment;
             case "TERMODINAMICO":

@@ -29,7 +29,7 @@ import ru.alexangan.developer.geatech.Interfaces.Communicator;
 import ru.alexangan.developer.geatech.Models.ClimaReportModel;
 import ru.alexangan.developer.geatech.Models.Gea_immagini_rapporto_sopralluogo;
 import ru.alexangan.developer.geatech.Models.Gea_rapporto_sopralluogo;
-import ru.alexangan.developer.geatech.Models.ModelsMapping;
+import ru.alexangan.developer.geatech.Adapters.ModelsMapping;
 import ru.alexangan.developer.geatech.Models.ProductData;
 import ru.alexangan.developer.geatech.Models.ReportStates;
 import ru.alexangan.developer.geatech.Models.VisitItem;

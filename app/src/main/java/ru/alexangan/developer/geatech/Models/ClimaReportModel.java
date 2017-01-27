@@ -13,8 +13,109 @@ public class ClimaReportModel extends RealmObject
     int id;
 
     int idSopralluogo;
-    String tipoDiEdificio, posizionamentoUnitaEsterna, tipologiaCostruttivaMurature, localiEOPianiDelledificio,
-            noteSulLuoghoDiInstallazione, noteSulTipologiaDellImpianto, noteRelativeAlCollegamento;
+
+    String rgTypeOfBuilding, rgUnitOutdoorPositioning, rgWallsType, rgBuildingPlan;
+    String etTypeOfBuilding, etUnitOutdoorPositioning, etWallsType, etBuildingPlan, etNoteInstallationPlace, etNoteExistingDev;
+
+    public String getRgTypeOfBuilding()
+    {
+        return rgTypeOfBuilding;
+    }
+
+    public void setRgTypeOfBuilding(String rgTypeOfBuilding)
+    {
+        this.rgTypeOfBuilding = rgTypeOfBuilding;
+    }
+
+    public String getRgUnitOutdoorPositioning()
+    {
+        return rgUnitOutdoorPositioning;
+    }
+
+    public void setRgUnitOutdoorPositioning(String rgUnitOutdoorPositioning)
+    {
+        this.rgUnitOutdoorPositioning = rgUnitOutdoorPositioning;
+    }
+
+    public String getRgWallsType()
+    {
+        return rgWallsType;
+    }
+
+    public void setRgWallsType(String rgWallsType)
+    {
+        this.rgWallsType = rgWallsType;
+    }
+
+    public String getRgBuildingPlan()
+    {
+        return rgBuildingPlan;
+    }
+
+    public void setRgBuildingPlan(String rgBuildingPlan)
+    {
+        this.rgBuildingPlan = rgBuildingPlan;
+    }
+
+    public String getEtTypeOfBuilding()
+    {
+        return etTypeOfBuilding;
+    }
+
+    public void setEtTypeOfBuilding(String etTypeOfBuilding)
+    {
+        this.etTypeOfBuilding = etTypeOfBuilding;
+    }
+
+    public String getEtUnitOutdoorPositioning()
+    {
+        return etUnitOutdoorPositioning;
+    }
+
+    public void setEtUnitOutdoorPositioning(String etUnitOutdoorPositioning)
+    {
+        this.etUnitOutdoorPositioning = etUnitOutdoorPositioning;
+    }
+
+    public String getEtWallsType()
+    {
+        return etWallsType;
+    }
+
+    public void setEtWallsType(String etWallsType)
+    {
+        this.etWallsType = etWallsType;
+    }
+
+    public String getEtBuildingPlan()
+    {
+        return etBuildingPlan;
+    }
+
+    public void setEtBuildingPlan(String etBuildingPlan)
+    {
+        this.etBuildingPlan = etBuildingPlan;
+    }
+
+    public String getEtNoteInstallationPlace()
+    {
+        return etNoteInstallationPlace;
+    }
+
+    public void setEtNoteInstallationPlace(String etNoteInstallationPlace)
+    {
+        this.etNoteInstallationPlace = etNoteInstallationPlace;
+    }
+
+    public String getEtNoteExistingDev()
+    {
+        return etNoteExistingDev;
+    }
+
+    public void setEtNoteExistingDev(String etNoteExistingDev)
+    {
+        this.etNoteExistingDev = etNoteExistingDev;
+    }
 
     public ClimaReportModel(){};
 
@@ -23,79 +124,9 @@ public class ClimaReportModel extends RealmObject
         this.id = id;
     }
 
-    public void setTipoDiEdificio(String tipoDiEdificio)
-    {
-        this.tipoDiEdificio = tipoDiEdificio;
-    }
-
-    public void setPosizionamentoUnitaEsterna(String posizionamentoUnitaEsterna)
-    {
-        this.posizionamentoUnitaEsterna = posizionamentoUnitaEsterna;
-    }
-
-    public void setTipologiaCostruttivaMurature(String tipologiaCostruttivaMurature)
-    {
-        this.tipologiaCostruttivaMurature = tipologiaCostruttivaMurature;
-    }
-
-    public void setLocaliEOPianiDelledificio(String localiEOPianiDelledificio)
-    {
-        this.localiEOPianiDelledificio = localiEOPianiDelledificio;
-    }
-
-    public void setNoteSulLuoghoDiInstallazione(String NoteSulLuoghoDiInstallazione)
-    {
-        this.noteSulLuoghoDiInstallazione = NoteSulLuoghoDiInstallazione;
-    }
-
-    public void setNoteSulTipologiaDellImpianto(String NoteSulTipologiaDellImpianto)
-    {
-        this.noteSulTipologiaDellImpianto = NoteSulTipologiaDellImpianto;
-    }
-
-    public void setNoteRelativeAlCollegamento(String NoteRelativeAlCollegamento)
-    {
-        this.noteRelativeAlCollegamento = NoteRelativeAlCollegamento;
-    }
-
-    public String getTipoDiEdificio()
-    {
-        return tipoDiEdificio;
-    }
-
-    public String getPosizionamentoUnitaEsterna()
-    {
-        return posizionamentoUnitaEsterna;
-    }
-
-    public String getTipologiaCostruttivaMurature()
-    {
-        return tipologiaCostruttivaMurature;
-    }
-
-    public String getLocaliEOPianiDelledificio()
-    {
-        return localiEOPianiDelledificio;
-    }
-
-    public String getNoteSulTipologiaDellImpianto()
-    {
-        return noteSulTipologiaDellImpianto;
-    }
-
-    public String getNoteRelativeAlCollegamento()
-    {
-        return noteRelativeAlCollegamento;
-    }
-
     public int getId()
     {
         return id;
-    }
-
-    public String getNoteSulLuoghoDiInstallazione()
-    {
-        return noteSulLuoghoDiInstallazione;
     }
 
     public int getIdSopralluogo()
