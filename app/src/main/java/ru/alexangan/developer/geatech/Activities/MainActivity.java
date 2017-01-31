@@ -682,8 +682,7 @@ public class MainActivity extends Activity implements Communicator
             case "CALDAIE":
                 return caldaieReportFragment;
             case "CLIMATIZZAZIONE":
-                //return climaReportFragment;
-            return expandableListFragment;
+                return climaReportFragment;
 /*            case "FOTOVOLTAICA":
                 return fotovoltaicaReportFragment;
             case "TERMODINAMICO":
