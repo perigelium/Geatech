@@ -1,6 +1,6 @@
 package ru.alexangan.developer.geatech.Adapters;
 
-import ru.alexangan.developer.geatech.Models.CaldaieReportModel;
+import ru.alexangan.developer.geatech.Models.CaldaiaReportModel;
 import ru.alexangan.developer.geatech.Models.ClimaReportModel;
 
 /**
@@ -16,7 +16,7 @@ public class ModelsMapping
             case "CLIMATIZZAZIONE":
                 return ClimaReportModel.class;
             case "CALDAIE":
-                return CaldaieReportModel.class;
+                return CaldaiaReportModel.class;
 /*            case "SOLARE TERMODINAMICO":
                 return SolareTermodinamicoReportModel.class;
             case "FOTOVOLTAICO":

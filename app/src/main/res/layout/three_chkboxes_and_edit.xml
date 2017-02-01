@@ -6,7 +6,7 @@
               android:orientation="vertical">
 
     <LinearLayout
-        android:id="@+id/llFourRadiosSectionName"
+        android:id="@+id/llThreeChkboxesSectionName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#eeeeee"
@@ -18,7 +18,7 @@
             android:layout_height="wrap_content">
 
             <TextView
-                android:id="@+id/tvFourRadios"
+                android:id="@+id/tvThreeChkboxes"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start|center_vertical"
@@ -27,7 +27,7 @@
                 android:textSize="13sp"/>
 
             <ImageView
-                android:id="@+id/ivFourRadiosDropdownArrow"
+                android:id="@+id/ivThreeChkboxesDropdownArrow"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical|end"
@@ -39,59 +39,45 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/llFourRadios"
+        android:id="@+id/llThreeChkboxes"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:visibility="gone">
 
-        <RadioGroup
-            android:id="@+id/rgFourRadios"
+
+        <CheckBox
+            android:id="@+id/chkThreeChkboxes1"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content"
+            android:layout_margin="9dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:button="@null"
+            android:drawableRight="@drawable/checkbox_selector"
+            android:text="chkbox 1"/>
 
-            <RadioButton
-                android:id="@+id/rgFourRadiosBtn1"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
-                android:button="@null"
-                android:drawableRight="@android:drawable/btn_radio"
-                android:text="Radio 1"/>
+        <CheckBox
+            android:id="@+id/chkThreeChkboxes2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="9dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:button="@null"
+            android:drawableRight="@drawable/checkbox_selector"
+            android:text="chkbox 2"/>
 
-            <RadioButton
-                android:id="@+id/rgFourRadiosBtn2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
-                android:button="@null"
-                android:drawableRight="@android:drawable/btn_radio"
-                android:text="Radio 2"/>
-
-            <RadioButton
-                android:id="@+id/rgFourRadiosBtn3"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
-                android:button="@null"
-                android:drawableRight="@android:drawable/btn_radio"
-                android:text="Radio 3"/>
-
-            <RadioButton
-                android:id="@+id/rgFourRadiosBtn4"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
-                android:button="@null"
-                android:drawableRight="@android:drawable/btn_radio"
-                android:text="Radio 4   "/>
-
-        </RadioGroup>
-
+        <CheckBox
+            android:id="@+id/chkThreeChkboxes3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="9dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:button="@null"
+            android:drawableRight="@drawable/checkbox_selector"
+            android:text="chkbox 3"/>
 
 
     <LinearLayout
@@ -107,7 +93,7 @@
             android:textSize="13sp"/>
 
         <EditText
-            android:id="@+id/etFourRadios"
+            android:id="@+id/etThreeChkboxes"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
@@ -115,9 +101,12 @@
             android:layout_marginLeft="16dp"
             android:background="#f0f0f0"
             android:ems="10"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
             android:inputType="none"
             android:text=""
             android:textColor="#c0c0c0"/>
+
     </LinearLayout>
 
     </LinearLayout>

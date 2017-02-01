@@ -5,12 +5,14 @@ import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -22,10 +24,14 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.List;
 import java.util.Locale;
 
+import io.realm.RealmList;
 import io.realm.RealmResults;
 import ru.alexangan.developer.geatech.Models.ClimaReportModel;
+import ru.alexangan.developer.geatech.Models.RealmString;
 import ru.alexangan.developer.geatech.Models.ReportStates;
 import ru.alexangan.developer.geatech.Models.VisitItem;
 import ru.alexangan.developer.geatech.Models.VisitStates;
@@ -50,6 +56,10 @@ public class ClimaReportFragment extends Fragment implements View.OnClickListene
     private RadioGroup rgTypeOfBuilding, rgUnitOutdoorPositioning, rgWallsType;
     private EditText etTypeOfBuilding, etWallsType, etBuildingPlan, etNoteInstallationPlace, etNoteExistingDev;
     CheckBox chkUnderground, chkMezzanine, chkGroundFloor;
+    ImageView ivTwoRadiosDropdownArrow;
+    private ImageView ivThreeRadiosDropdownArrow;
+    private ImageView ivFourRadiosDropdownArrow;
+    private ImageView ivThreeChkboxesDropdownArrow;
 
     private final String strReportTitle = "Climatizzazione";
 
@@ -95,11 +105,8 @@ public class ClimaReportFragment extends Fragment implements View.OnClickListene
         {
             realm.beginTransaction();
 
-            String strTypeOfBuilding = etTypeOfBuilding.getText().toString();
 
-            if(strTypeOfBuilding.equals("Inserire") || strTypeOfBuilding.equals("Altro"))
-            {
-                strTypeOfBuilding = "";
+                String strTypeOfBuilding = "";
                 int checkedBtnId = rgTypeOfBuilding.getCheckedRadioButtonId();
                 if (checkedBtnId != -1)
                 {
@@ -108,16 +115,16 @@ public class ClimaReportFragment extends Fragment implements View.OnClickListene
 
                     Log.d("DEBUG", strTypeOfBuilding);
                 }
-            }
+                else
+                {
+                    strTypeOfBuilding = etTypeOfBuilding.getText().toString();
+                }
+
             climaReportModel.setEtTypeOfBuilding(strTypeOfBuilding);
 
 
-            String strWallsType = etWallsType.getText().toString();
-
-            if(strTypeOfBuilding.equals("inserire"))
-            {
-                strWallsType = "";
-                int checkedBtnId = rgWallsType.getCheckedRadioButtonId();
+                String strWallsType = "";
+                checkedBtnId = rgWallsType.getCheckedRadioButtonId();
                 if (checkedBtnId != -1)
                 {
                     RadioButton radioButton = (RadioButton) rgWallsType.findViewById(checkedBtnId);
@@ -125,26 +132,37 @@ public class ClimaReportFragment extends Fragment implements View.OnClickListene
 
                     Log.d("DEBUG", strWallsType);
                 }
-            }
+                else
+                {
+                    strWallsType = etWallsType.getText().toString();
+                }
             climaReportModel.setEtWallsType(strWallsType);
 
             String strUnitOutdoorPosition = "";
-            int checkedBtnId = rgUnitOutdoorPositioning.getCheckedRadioButtonId();
+            checkedBtnId = rgUnitOutdoorPositioning.getCheckedRadioButtonId();
             if (checkedBtnId != -1)
             {
                 RadioButton radioButton = (RadioButton) rgUnitOutdoorPositioning.findViewById(checkedBtnId);
                 strUnitOutdoorPosition = radioButton.getText().toString();
 
                 Log.d("DEBUG", strUnitOutdoorPosition);
+
+                climaReportModel.setEtUnitOutdoorPositioning(strUnitOutdoorPosition);
             }
-            climaReportModel.setEtUnitOutdoorPositioning(strUnitOutdoorPosition);
 
-            String strUnderground = chkUnderground.getText().toString();
-            String strMezzanine = chkMezzanine.getText().toString();
-            String strGroundFloor = chkGroundFloor.getText().toString();
+            String strAltroBuildingPlan = etBuildingPlan.getText().toString();
 
-            climaReportModel.setEtBuildingPlan(strUnderground + " " + strMezzanine + " " + strGroundFloor);
-
+            if(strAltroBuildingPlan == null || strAltroBuildingPlan.length() < 4)
+            {
+                String strUnderground = chkUnderground.isChecked() ? chkUnderground.getText().toString() : null;
+                String strMezzanine = chkMezzanine.isChecked() ? chkMezzanine.getText().toString() : null;
+                String strGroundFloor = chkGroundFloor.isChecked() ? chkGroundFloor.getText().toString() : null;
+                climaReportModel.setEtBuildingPlan(strUnderground + "," + strMezzanine + "," + strGroundFloor);
+            }
+            else
+            {
+                climaReportModel.setEtAltroBuildingPlan(strAltroBuildingPlan);
+            }
 
             String strNoteInstallationPlace = etNoteInstallationPlace.getText().toString();
 
@@ -212,8 +230,8 @@ public class ClimaReportFragment extends Fragment implements View.OnClickListene
         {
             if (climaReportModel == null)
             {
-                climaReportModel = new ClimaReportModel(climaReportModels.size());
-                climaReportModel.setIdSopralluogo(idSopralluogo);
+                climaReportModel = new ClimaReportModel(climaReportModels.size(), idSopralluogo);
+                //climaReportModel.setIdSopralluogo(idSopralluogo);
                 realm.copyToRealmOrUpdate(climaReportModel);
             }
         }
@@ -223,63 +241,88 @@ public class ClimaReportFragment extends Fragment implements View.OnClickListene
 
         if (climaReportModel != null)
         {
-
-            String strTypeOfBuilding = climaReportModel.getEtTypeOfBuilding();
-            String strWallsType = climaReportModel.getEtWallsType();
-            String strUnitOutdoorPosition = climaReportModel.getEtUnitOutdoorPositioning();
-            String strBuildingPlan = climaReportModel.getEtBuildingPlan();
-
             int i;
-            for (i = 0; i < rgTypeOfBuilding.getChildCount(); i++)
-            {
-                RadioButton rb = (RadioButton) rgTypeOfBuilding.getChildAt(i);
+            String strTypeOfBuilding = climaReportModel.getEtTypeOfBuilding();
 
-                if(strTypeOfBuilding.equals(rb.getText().toString()))
+            if(strTypeOfBuilding != null)
+            {
+                for (i = 0; i < rgTypeOfBuilding.getChildCount(); i++)
                 {
-                    rb.setChecked(true);
-                    break;
+                    RadioButton rb = (RadioButton) rgTypeOfBuilding.getChildAt(i);
+
+                    if (strTypeOfBuilding.equals(rb.getText().toString()))
+                    {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+
+                if (i == rgTypeOfBuilding.getChildCount())
+                {
+                    etTypeOfBuilding.setText(strTypeOfBuilding);
                 }
             }
 
-            if(i == rgTypeOfBuilding.getChildCount())
+            String strWallsType = climaReportModel.getEtWallsType();
+            if(strWallsType != null)
             {
-                etTypeOfBuilding.setText(strTypeOfBuilding);
+                for (i = 0; i < rgWallsType.getChildCount(); i++)
+                {
+                    RadioButton rb = (RadioButton) rgWallsType.getChildAt(i);
+
+                    if (strWallsType.equals(rb.getText().toString()))
+                    {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+
+                if (i == rgWallsType.getChildCount())
+                {
+                    etWallsType.setText(strWallsType);
+                }
             }
 
+            String strUnitOutdoorPosition = climaReportModel.getEtUnitOutdoorPositioning();
 
-/*                atvTipoDiEdificio.setSelection(posTipoDiEdificio, false);
-            atvPosizionamentoUnitaEsterna.setSelection(posPosizionamentoUnitaEsterna, false);
-            atvTipologiaCostruttivaMurature.setSelection(posTipologiaCostruttivaMurature, false);
-            atvLocaliEOPianiDelledificio.setSelection(posLocaliEOPianiDelledificio, false);*//*
+            if(strUnitOutdoorPosition!=null)
+            {
+                for (i = 0; i < rgUnitOutdoorPositioning.getChildCount(); i++)
+                {
+                    RadioButton rb = (RadioButton) rgUnitOutdoorPositioning.getChildAt(i);
 
-            atvTipoDiEdificio.post(new Runnable() {
-                public void run() {
-                    atvTipoDiEdificio.setSelection(posTipoDiEdificio, true);
+                    if (strUnitOutdoorPosition.equals(rb.getText().toString()))
+                    {
+                        rb.setChecked(true);
+                        break;
+                    }
                 }
-            });
-            atvPosizionamentoUnitaEsterna.post(new Runnable() {
-                public void run() {
-                    atvPosizionamentoUnitaEsterna.setSelection(posPosizionamentoUnitaEsterna, true);
-                }
-            });
-            atvTipologiaCostruttivaMurature.post(new Runnable() {
-                public void run() {
-                    atvTipologiaCostruttivaMurature.setSelection(posTipologiaCostruttivaMurature, true);
-                }
-            });
-            atvLocaliEOPianiDelledificio.post(new Runnable() {
-                public void run() {
-                    atvLocaliEOPianiDelledificio.setSelection(posLocaliEOPianiDelledificio, true);
-                }
-            });
+            }
 
-                //atvPosizionamentoUnitaEsterna.setSelection(posizionamentiUnitaEsterna.indexOf(climaReportModel.getPosizionamentoUnitaEsterna()));
-                //atvTipologiaCostruttivaMurature.setSelection(tipologieCostruttiveMurature.indexOf(climaReportModel.getTipologiaCostruttivaMurature()));
-                //atvLocaliEOPianiDelledificio.setSelection(localiEOPianiDelledificio.indexOf(climaReportModel.getLocaliEOPianiDelledificio()));
+            if(climaReportModel.getEtBuildingPlan()!=null)
+            {
+                if (climaReportModel.getEtBuildingPlan().contains(chkUnderground.getText().toString()))
+                {
+                    chkUnderground.setChecked(true);
+                }
 
-                etNoteSulLuoghoDiInstallazione.setText(climaReportModel.getNoteSulLuoghoDiInstallazione());
-                etNoteSulTipologiaDellImpianto.setText(climaReportModel.getNoteSulTipologiaDellImpianto());
-                etNoteRelativeAlCollegamento.setText(climaReportModel.getNoteRelativeAlCollegamento());*/
+                if (climaReportModel.getEtBuildingPlan().contains(chkMezzanine.getText().toString()))
+                {
+                    chkMezzanine.setChecked(true);
+                }
+
+                if (climaReportModel.getEtBuildingPlan().contains(chkGroundFloor.getText().toString()))
+                {
+                    chkGroundFloor.setChecked(true);
+                }
+            }
+            if(climaReportModel.getEtAltroBuildingPlan() != null && climaReportModel.getEtAltroBuildingPlan().length() > 3)
+            {
+                etBuildingPlan.setText(climaReportModel.getEtAltroBuildingPlan());
+            }
+
+            etNoteInstallationPlace.setText(climaReportModel.getEtNoteInstallationPlace());
+            etNoteExistingDev.setText(climaReportModel.getEtNoteExistingDev());
         }
         realm.commitTransaction();
 
@@ -329,6 +372,8 @@ public class ClimaReportFragment extends Fragment implements View.OnClickListene
         llThreeRadiosSectionName = (LinearLayout) rootView.findViewById(R.id.llThreeRadiosSectionName);
         llThreeRadiosSectionName.setOnClickListener(this);
 
+        ivThreeRadiosDropdownArrow = (ImageView) rootView.findViewById(R.id.ivThreeRadiosDropdownArrow);
+
         tvTypeOfBuilding = (TextView) rootView.findViewById(R.id.tvThreeRadios);
 
         tvTypeOfBuilding.setText(saSectionTitles.get(sectionNumber++));
@@ -345,12 +390,24 @@ public class ClimaReportFragment extends Fragment implements View.OnClickListene
             rb.setText(saTypesOfBuilding.get(i));
         }
 
-        etTypeOfBuilding = (EditText) rootView.findViewById(R.id.etThreeChkboxes);
-        etTypeOfBuilding.setOnClickListener(this);
+        etTypeOfBuilding = (EditText) rootView.findViewById(R.id.etThreeRadios);
+        //etTypeOfBuilding.setOnClickListener(this);
+        etTypeOfBuilding.setOnTouchListener(new View.OnTouchListener()
+        {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent)
+            {
+                rgTypeOfBuilding.clearCheck();
+                return false;
+            }
+        });
         //etTypeOfBuilding.setText(saTypesOfBuilding.get(i));
+
 
         llFourRadiosSectionName = (LinearLayout) rootView.findViewById(R.id.llFourRadiosSectionName);
         llFourRadiosSectionName.setOnClickListener(this);
+
+        ivFourRadiosDropdownArrow = (ImageView) rootView.findViewById(R.id.ivFourRadiosDropdownArrow);
 
         tvWallsType = (TextView) rootView.findViewById(R.id.tvFourRadios);
 
@@ -368,7 +425,16 @@ public class ClimaReportFragment extends Fragment implements View.OnClickListene
         }
 
         etWallsType = (EditText) rootView.findViewById(R.id.etFourRadios);
-        etWallsType.setOnClickListener(this);
+        //etWallsType.setOnClickListener(this);
+        etWallsType.setOnTouchListener(new View.OnTouchListener()
+        {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent)
+            {
+                rgWallsType.clearCheck();
+                return false;
+            }
+        });
         //etWallsType.setText(saWallsType.get(i));
 
 
@@ -378,6 +444,8 @@ public class ClimaReportFragment extends Fragment implements View.OnClickListene
         tvUnitOutdoorPositioning = (TextView) rootView.findViewById(R.id.tvTwoRadios);
 
         tvUnitOutdoorPositioning.setText(saSectionTitles.get(sectionNumber++));
+
+        ivTwoRadiosDropdownArrow = (ImageView) rootView.findViewById(R.id.ivTwoRadiosDropdownArrow);
 
         llTwoRadios = (LinearLayout) rootView.findViewById(R.id.llTwoRadios);
         
@@ -393,6 +461,8 @@ public class ClimaReportFragment extends Fragment implements View.OnClickListene
         llThreeChkboxesSectionName = (LinearLayout) rootView.findViewById(R.id.llThreeChkboxesSectionName);
         llThreeChkboxesSectionName.setOnClickListener(this);
 
+        ivThreeChkboxesDropdownArrow = (ImageView) rootView.findViewById(R.id.ivThreeChkboxesDropdownArrow);
+
         tvBuildingPlan = (TextView) rootView.findViewById(R.id.tvThreeChkboxes);
 
         tvBuildingPlan.setText(saSectionTitles.get(sectionNumber++));
@@ -407,6 +477,17 @@ public class ClimaReportFragment extends Fragment implements View.OnClickListene
         chkGroundFloor.setText(saBuildingPlan.get(2));
 
         etBuildingPlan = (EditText) rootView.findViewById(R.id.etThreeChkboxes);
+        etBuildingPlan.setOnTouchListener(new View.OnTouchListener()
+        {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent)
+            {
+                chkUnderground.setChecked(false);
+                chkMezzanine.setChecked(false);
+                chkGroundFloor.setChecked(false);
+                return false;
+            }
+        });
         //etBuildingPlan.setText(saBuildingPlan.get(3));
 
         tvTwoTextTwoEdit1 = (TextView) rootView.findViewById(R.id.tvTwoTextTwoEdit1);
@@ -426,35 +507,32 @@ public class ClimaReportFragment extends Fragment implements View.OnClickListene
     @Override
     public void onClick(View view)
     {
-        if (view == etTypeOfBuilding)
-        {
-          rgTypeOfBuilding.clearCheck();
-        }
-
-        if (view == etWallsType)
-        {
-            rgWallsType.clearCheck();
-        }
-
-
         if (view == llThreeRadiosSectionName)
         {
             llThreeRadios.setVisibility(llThreeRadios.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
+            ivThreeRadiosDropdownArrow.setImageResource(llThreeRadios.getVisibility() == View.VISIBLE
+                    ? android.R.drawable.arrow_up_float : android.R.drawable.arrow_down_float);
         }
 
         if (view == llTwoRadiosSectionName)
         {
             llTwoRadios.setVisibility(llTwoRadios.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
+            ivTwoRadiosDropdownArrow.setImageResource(llTwoRadios.getVisibility() == View.VISIBLE
+                    ? android.R.drawable.arrow_up_float : android.R.drawable.arrow_down_float);
         }
 
         if (view == llFourRadiosSectionName)
         {
             llFourRadios.setVisibility(llFourRadios.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
+            ivFourRadiosDropdownArrow.setImageResource(llFourRadios.getVisibility() == View.VISIBLE
+                    ? android.R.drawable.arrow_up_float : android.R.drawable.arrow_down_float);
         }
 
         if (view == llThreeChkboxesSectionName)
         {
             llThreeChkboxes.setVisibility(llThreeChkboxes.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
+            ivThreeChkboxesDropdownArrow.setImageResource(llThreeChkboxes.getVisibility() == View.VISIBLE
+                    ? android.R.drawable.arrow_up_float : android.R.drawable.arrow_down_float);
         }
     }
 }

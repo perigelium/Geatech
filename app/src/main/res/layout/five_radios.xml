@@ -6,20 +6,19 @@
               android:orientation="vertical">
 
     <LinearLayout
-        android:id="@+id/llTwoRadiosSectionName"
-        android:clickable="true"
+        android:id="@+id/llFourRadiosSectionName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#eeeeee"
+        android:clickable="true"
         android:orientation="horizontal">
 
         <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:layout_height="wrap_content">
 
             <TextView
-                android:id="@+id/tvTwoRadios"
+                android:id="@+id/tvFourRadios"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start|center_vertical"
@@ -28,48 +27,78 @@
                 android:textSize="13sp"/>
 
             <ImageView
-                android:id="@+id/ivTwoRadiosDropdownArrow"
+                android:id="@+id/ivFourRadiosDropdownArrow"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="50dp"
                 android:layout_gravity="center_vertical|end"
+                android:layout_marginRight="50dp"
                 android:src="@android:drawable/arrow_down_float"/>
 
         </FrameLayout>
 
-        </LinearLayout>
+    </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/llTwoRadios"
+        android:id="@+id/llFourRadios"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:visibility="gone"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:visibility="gone">
 
         <RadioGroup
+            android:id="@+id/rgFourRadios"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/rgTwoRadios">
+            android:layout_height="match_parent">
 
             <RadioButton
-                android:id="@+id/rbTwoRadiosBtn1"
+                android:id="@+id/rgFourRadiosBtn1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
                 android:button="@null"
                 android:drawableRight="@android:drawable/btn_radio"
-                android:text="radio one"/>
+                android:text="Radio 1"/>
 
             <RadioButton
-                android:id="@+id/rbTwoRadiosBtn2"
+                android:id="@+id/rgFourRadiosBtn2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
                 android:button="@null"
                 android:drawableRight="@android:drawable/btn_radio"
-                android:text="radio two"/>
+                android:text="Radio 2"/>
+
+            <RadioButton
+                android:id="@+id/rgFourRadiosBtn3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:button="@null"
+                android:drawableRight="@android:drawable/btn_radio"
+                android:text="Radio 3"/>
+
+            <RadioButton
+                android:id="@+id/rgFourRadiosBtn4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:button="@null"
+                android:drawableRight="@android:drawable/btn_radio"
+                android:text="Radio 4   "/>
+
+            <RadioButton
+                android:id="@+id/rgFourRadiosBtn5"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:button="@null"
+                android:drawableRight="@android:drawable/btn_radio"
+                android:text="Radio 5   "/>
 
         </RadioGroup>
 

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#ff6633"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start|center_vertical"
+            android:layout_marginLeft="6dp"
+            android:layout_marginTop="10dp"
+            android:text="2.Impianto"
+            android:textColor="#ffffff"
+            android:textSize="15dp"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="6dp"
+        android:background="#eeeeee"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tvTwoTextTwoEdit1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start|center_vertical"
+            android:layout_marginLeft="6dp"
+            android:text="2.1"
+            android:textColor="#555555"/>
+
+        <EditText
+            android:id="@+id/etTwoTextTwoEdit1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="6dp"
+            android:layout_marginTop="6dp"
+            android:background="#ffffff"
+            android:ems="15"
+            android:text=""/>
+
+        <TextView
+            android:id="@+id/tvTwoTextTwoEdit2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start|center_vertical"
+            android:layout_marginLeft="6dp"
+            android:text="2.2"
+            android:textColor="#555555"/>
+
+        <EditText
+            android:id="@+id/etTwoTextTwoEdit2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="6dp"
+            android:layout_marginTop="6dp"
+            android:background="#ffffff"
+            android:ems="15"
+            android:text=""/>
+
+    </LinearLayout>
+
+</LinearLayout>

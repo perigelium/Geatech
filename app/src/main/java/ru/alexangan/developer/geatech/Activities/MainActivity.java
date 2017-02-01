@@ -16,7 +16,7 @@ import android.widget.Toast;
 
 import io.realm.RealmResults;
 import ru.alexangan.developer.geatech.Fragments.CTLinfoFragment;
-import ru.alexangan.developer.geatech.Fragments.CaldaieReportFragment;
+import ru.alexangan.developer.geatech.Fragments.CaldaiaReportFragment;
 import ru.alexangan.developer.geatech.Fragments.ComingListVisitsFragment;
 import ru.alexangan.developer.geatech.Fragments.ClimaReportFragment;
 import ru.alexangan.developer.geatech.Fragments.CtrlBtnReportDetailed;
@@ -32,6 +32,7 @@ import ru.alexangan.developer.geatech.Fragments.ReportSentDetailedFragment;
 import ru.alexangan.developer.geatech.Fragments.ReportsListFragment;
 import ru.alexangan.developer.geatech.Fragments.SendReportFragment;
 import ru.alexangan.developer.geatech.Fragments.SetDateTimeFragment;
+import ru.alexangan.developer.geatech.Fragments.TermodinamicoReportFragment;
 import ru.alexangan.developer.geatech.Interfaces.Communicator;
 import ru.alexangan.developer.geatech.Models.ProductData;
 import ru.alexangan.developer.geatech.Models.ReportStates;
@@ -60,8 +61,10 @@ public class MainActivity extends Activity implements Communicator
     ReportSentDetailedFragment reportDetailedFragment;
     SendReportFragment sendReportFragment;
     PhotoGalleryGridFragment photoGalleryGridFragment;
+
+    TermodinamicoReportFragment termodinamicoReportFragment;
     ClimaReportFragment climaReportFragment;
-    CaldaieReportFragment caldaieReportFragment;
+    CaldaiaReportFragment caldaieReportFragment;
     NotificationBarFragment notificationBarFragment;
     public static RealmResults<VisitItem> visitItems;
     int currentSelIndex;
@@ -160,8 +163,10 @@ public class MainActivity extends Activity implements Communicator
         reportDetailedFragment = new ReportSentDetailedFragment();
         sendReportFragment = new SendReportFragment();
         photoGalleryGridFragment = new PhotoGalleryGridFragment();
+
+        termodinamicoReportFragment = new TermodinamicoReportFragment();
         climaReportFragment = new ClimaReportFragment();
-        caldaieReportFragment = new CaldaieReportFragment();
+        caldaieReportFragment = new CaldaiaReportFragment();
         notificationBarFragment = new NotificationBarFragment();
 
         expandableListFragment = new ExpandableListFragment();
@@ -679,14 +684,15 @@ public class MainActivity extends Activity implements Communicator
 
         switch (productType)
         {
+            case "SOLARE TERMODINAMICO":
+                return termodinamicoReportFragment;
             case "CALDAIE":
                 return caldaieReportFragment;
             case "CLIMATIZZAZIONE":
                 return climaReportFragment;
+
 /*            case "FOTOVOLTAICA":
                 return fotovoltaicaReportFragment;
-            case "TERMODINAMICO":
-                return termodinamicoReportFragment;
             case "DOMOTICA":
                 return domoticaReportFragment;
             case "POMPA DI CALORE":

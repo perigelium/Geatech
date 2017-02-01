@@ -1,5 +1,11 @@
 package ru.alexangan.developer.geatech.Models;
 
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+
+import io.realm.RealmList;
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 
@@ -11,50 +17,44 @@ public class ClimaReportModel extends RealmObject
 {
     @PrimaryKey
     int id;
-
     int idSopralluogo;
 
-    String rgTypeOfBuilding, rgUnitOutdoorPositioning, rgWallsType, rgBuildingPlan;
-    String etTypeOfBuilding, etUnitOutdoorPositioning, etWallsType, etBuildingPlan, etNoteInstallationPlace, etNoteExistingDev;
+    private String etTypeOfBuilding;
+    private String etUnitOutdoorPositioning;
+    private String etWallsType;
+    private String etNoteInstallationPlace;
+    private String etNoteExistingDev;
 
-    public String getRgTypeOfBuilding()
+    private String etBuildingPlan;
+
+    private String etAltroBuildingPlan;
+
+    public ClimaReportModel(){};
+
+    public ClimaReportModel(int id, int idSopralluogo)
     {
-        return rgTypeOfBuilding;
+        this.id = id;
+        this.idSopralluogo = idSopralluogo;
     }
 
-    public void setRgTypeOfBuilding(String rgTypeOfBuilding)
+    public String getEtAltroBuildingPlan()
     {
-        this.rgTypeOfBuilding = rgTypeOfBuilding;
+        return etAltroBuildingPlan;
     }
 
-    public String getRgUnitOutdoorPositioning()
+    public void setEtAltroBuildingPlan(String etAltroBuildingPlan)
     {
-        return rgUnitOutdoorPositioning;
+        this.etAltroBuildingPlan = etAltroBuildingPlan;
     }
 
-    public void setRgUnitOutdoorPositioning(String rgUnitOutdoorPositioning)
+    public String getEtBuildingPlan()
     {
-        this.rgUnitOutdoorPositioning = rgUnitOutdoorPositioning;
+        return etBuildingPlan;
     }
 
-    public String getRgWallsType()
+    public void setEtBuildingPlan(String etBuildingPlan)
     {
-        return rgWallsType;
-    }
-
-    public void setRgWallsType(String rgWallsType)
-    {
-        this.rgWallsType = rgWallsType;
-    }
-
-    public String getRgBuildingPlan()
-    {
-        return rgBuildingPlan;
-    }
-
-    public void setRgBuildingPlan(String rgBuildingPlan)
-    {
-        this.rgBuildingPlan = rgBuildingPlan;
+        this.etBuildingPlan = etBuildingPlan;
     }
 
     public String getEtTypeOfBuilding()
@@ -87,16 +87,6 @@ public class ClimaReportModel extends RealmObject
         this.etWallsType = etWallsType;
     }
 
-    public String getEtBuildingPlan()
-    {
-        return etBuildingPlan;
-    }
-
-    public void setEtBuildingPlan(String etBuildingPlan)
-    {
-        this.etBuildingPlan = etBuildingPlan;
-    }
-
     public String getEtNoteInstallationPlace()
     {
         return etNoteInstallationPlace;
@@ -115,13 +105,6 @@ public class ClimaReportModel extends RealmObject
     public void setEtNoteExistingDev(String etNoteExistingDev)
     {
         this.etNoteExistingDev = etNoteExistingDev;
-    }
-
-    public ClimaReportModel(){};
-
-    public ClimaReportModel(int id)
-    {
-        this.id = id;
     }
 
     public int getId()

@@ -6,20 +6,19 @@
               android:orientation="vertical">
 
     <LinearLayout
-        android:id="@+id/llTwoRadiosSectionName"
-        android:clickable="true"
+        android:id="@+id/llThreeRadiosSectionName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#eeeeee"
+        android:clickable="true"
         android:orientation="horizontal">
 
         <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:layout_height="wrap_content">
 
             <TextView
-                android:id="@+id/tvTwoRadios"
+                android:id="@+id/tvThreeRadios"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start|center_vertical"
@@ -28,51 +27,80 @@
                 android:textSize="13sp"/>
 
             <ImageView
-                android:id="@+id/ivTwoRadiosDropdownArrow"
+                android:id="@+id/ivThreeRadiosDropdownArrow"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="50dp"
                 android:layout_gravity="center_vertical|end"
+                android:layout_marginRight="50dp"
                 android:src="@android:drawable/arrow_down_float"/>
 
         </FrameLayout>
 
-        </LinearLayout>
+    </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/llTwoRadios"
+        android:id="@+id/llThreeRadios"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:visibility="gone"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:visibility="gone">
+
 
         <RadioGroup
+            android:id="@+id/rgThreeRadios"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/rgTwoRadios">
+            android:layout_height="match_parent">
 
             <RadioButton
-                android:id="@+id/rbTwoRadiosBtn1"
+                android:id="@+id/rgThreeRadiosBtn1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
                 android:button="@null"
                 android:drawableRight="@android:drawable/btn_radio"
-                android:text="radio one"/>
+                android:text="radio 1"/>
 
             <RadioButton
-                android:id="@+id/rbTwoRadiosBtn2"
+                android:id="@+id/rgThreeRadiosBtn2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
                 android:button="@null"
                 android:drawableRight="@android:drawable/btn_radio"
-                android:text="radio two"/>
+                android:text="radio 2"/>
 
         </RadioGroup>
 
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start|center_vertical"
+            android:layout_margin="9dp"
+            android:text="Altro: "
+            android:textSize="13sp"/>
+
+        <EditText
+            android:id="@+id/etThreeRadios"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_gravity="start|center_vertical"
+            android:layout_marginLeft="16dp"
+            android:background="#f0f0f0"
+            android:ems="10"
+            android:inputType="none"
+            android:text=""
+            android:textColor="#c0c0c0"/>
+
+    </LinearLayout>
     </LinearLayout>
 
 </LinearLayout>
