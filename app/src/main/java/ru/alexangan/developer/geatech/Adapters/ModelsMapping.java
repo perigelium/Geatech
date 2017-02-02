@@ -2,6 +2,8 @@ package ru.alexangan.developer.geatech.Adapters;
 
 import ru.alexangan.developer.geatech.Models.CaldaiaReportModel;
 import ru.alexangan.developer.geatech.Models.ClimaReportModel;
+import ru.alexangan.developer.geatech.Models.FotovoltaicoReportModel;
+import ru.alexangan.developer.geatech.Models.SolareTermodinamicoReportModel;
 
 /**
  * Created by user on 26.01.2017.
@@ -13,15 +15,15 @@ public class ModelsMapping
     {
         switch (productType)
         {
-            case "CLIMATIZZAZIONE":
-                return ClimaReportModel.class;
+            case "SOLARE TERMODINAMICO":
+                return SolareTermodinamicoReportModel.class;
             case "CALDAIE":
                 return CaldaiaReportModel.class;
-/*            case "SOLARE TERMODINAMICO":
-                return SolareTermodinamicoReportModel.class;
+            case "CLIMATIZZAZIONE":
+                return ClimaReportModel.class;
             case "FOTOVOLTAICO":
                 return FotovoltaicoReportModel.class;
-            case "LED":
+/*            case "LED":
                 return LedReportModel.class;
             case "POMPA DI CALORE":
                 return PompaDiCaloreModel.class;

@@ -6,7 +6,7 @@
               android:orientation="vertical">
 
     <LinearLayout
-        android:id="@+id/llTwoRadiosSectionName"
+        android:id="@+id/llSectionTwoRadios1"
         android:clickable="true"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -19,7 +19,7 @@
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/tvTwoRadios"
+                android:id="@+id/tvSectionTwoRadios1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start|center_vertical"
@@ -28,7 +28,7 @@
                 android:textSize="13sp"/>
 
             <ImageView
-                android:id="@+id/ivTwoRadiosDropdownArrow"
+                android:id="@+id/ivArrowTwoRadios1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="50dp"
@@ -40,19 +40,19 @@
         </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/llTwoRadios"
+        android:id="@+id/llTwoRadios1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:visibility="gone"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        ><!--android:visibility="gone"-->
 
         <RadioGroup
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/rgTwoRadios">
+            android:id="@+id/rgTwoRadios1">
 
             <RadioButton
-                android:id="@+id/rbTwoRadiosBtn1"
+                android:id="@+id/rb1TwoRadios1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="16dp"
@@ -62,7 +62,7 @@
                 android:text="radio one"/>
 
             <RadioButton
-                android:id="@+id/rbTwoRadiosBtn2"
+                android:id="@+id/rb2TwoRadios1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="16dp"

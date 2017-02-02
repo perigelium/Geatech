@@ -51,7 +51,7 @@ public class ClimaReportFragment extends Fragment implements View.OnClickListene
 
     private LinearLayout llThreeRadiosSectionName, llThreeRadios, llTwoRadiosSectionName, llTwoRadios,
             llFourRadiosSectionName, llFourRadios, llThreeChkboxesSectionName, llThreeChkboxes;
-    private TextView tvReportTitle, tvTwoTextTwoEdit1, tvTwoTextTwoEdit2, tvFirstSectionTitle,
+    private TextView tvReportTitle, tvTwoTextTwoEdit1, tvTwoTextTwoEdit2, tvFirstSectionTitle, tvSecondSectionTitle,
             tvTypeOfBuilding, tvUnitOutdoorPositioning, tvWallsType, tvBuildingPlan;
     private RadioGroup rgTypeOfBuilding, rgUnitOutdoorPositioning, rgWallsType;
     private EditText etTypeOfBuilding, etWallsType, etBuildingPlan, etNoteInstallationPlace, etNoteExistingDev;
@@ -63,7 +63,7 @@ public class ClimaReportFragment extends Fragment implements View.OnClickListene
 
     private final String strReportTitle = "Climatizzazione";
 
-    private final String strFirstSectionTitle = "1.Rilievo dello stato dei luoghi";
+    private final String [] strSectionTitles = {"1. Rilievo dello stato dei luoghi", "2. Impianto"};
 
     private final String[] strSectionsTitles = new String[] {
             " 1.1 TIPO DI EDIFICIO:", " 1.2 TIPOLOGIA COSTRUTTIVA MURATURE:",
@@ -364,23 +364,22 @@ public class ClimaReportFragment extends Fragment implements View.OnClickListene
 
         tvReportTitle.setText(strReportTitle);
 
-        tvFirstSectionTitle = (TextView) rootView.findViewById(R.id.tvFirstSectionTitle);
+        tvFirstSectionTitle = (TextView) rootView.findViewById(R.id.tvSectionHeader1);
+        tvFirstSectionTitle.setText(strSectionsTitles[0]);
 
-        tvFirstSectionTitle.setText(strFirstSectionTitle);
 
-
-        llThreeRadiosSectionName = (LinearLayout) rootView.findViewById(R.id.llThreeRadiosSectionName);
+        llThreeRadiosSectionName = (LinearLayout) rootView.findViewById(R.id.llSectionThreeRadiosAndEdit1);
         llThreeRadiosSectionName.setOnClickListener(this);
 
-        ivThreeRadiosDropdownArrow = (ImageView) rootView.findViewById(R.id.ivThreeRadiosDropdownArrow);
+        ivThreeRadiosDropdownArrow = (ImageView) rootView.findViewById(R.id.ivArrowThreeRadiosAndEdit1);
 
-        tvTypeOfBuilding = (TextView) rootView.findViewById(R.id.tvThreeRadios);
+        tvTypeOfBuilding = (TextView) rootView.findViewById(R.id.tvSectionThreeRadiosAndEdit1);
 
         tvTypeOfBuilding.setText(saSectionTitles.get(sectionNumber++));
 
-        llThreeRadios = (LinearLayout) rootView.findViewById(R.id.llThreeRadios);
+        llThreeRadios = (LinearLayout) rootView.findViewById(R.id.llThreeRadiosAndEdit1);
         
-        rgTypeOfBuilding = (RadioGroup) rootView.findViewById(R.id.rgThreeRadios);
+        rgTypeOfBuilding = (RadioGroup) rootView.findViewById(R.id.rgThreeRadiosAndEdit1);
 
         int i;
         for (i = 0; i < rgTypeOfBuilding.getChildCount(); i++)
@@ -390,7 +389,7 @@ public class ClimaReportFragment extends Fragment implements View.OnClickListene
             rb.setText(saTypesOfBuilding.get(i));
         }
 
-        etTypeOfBuilding = (EditText) rootView.findViewById(R.id.etThreeRadios);
+        etTypeOfBuilding = (EditText) rootView.findViewById(R.id.et1ThreeRadiosAndEdit1);
         //etTypeOfBuilding.setOnClickListener(this);
         etTypeOfBuilding.setOnTouchListener(new View.OnTouchListener()
         {
@@ -404,18 +403,18 @@ public class ClimaReportFragment extends Fragment implements View.OnClickListene
         //etTypeOfBuilding.setText(saTypesOfBuilding.get(i));
 
 
-        llFourRadiosSectionName = (LinearLayout) rootView.findViewById(R.id.llFourRadiosSectionName);
+        llFourRadiosSectionName = (LinearLayout) rootView.findViewById(R.id.llSectionFourRadiosAndEdit1);
         llFourRadiosSectionName.setOnClickListener(this);
 
-        ivFourRadiosDropdownArrow = (ImageView) rootView.findViewById(R.id.ivFourRadiosDropdownArrow);
+        ivFourRadiosDropdownArrow = (ImageView) rootView.findViewById(R.id.ivArrowFourRadiosAndEdit1);
 
-        tvWallsType = (TextView) rootView.findViewById(R.id.tvFourRadios);
+        tvWallsType = (TextView) rootView.findViewById(R.id.tvSectionFourRadiosAndEdit1);
 
         tvWallsType.setText(saSectionTitles.get(sectionNumber++));
 
-        llFourRadios = (LinearLayout) rootView.findViewById(R.id.llFourRadios);
+        llFourRadios = (LinearLayout) rootView.findViewById(R.id.llFourRadiosAndEdit1);
 
-        rgWallsType = (RadioGroup) rootView.findViewById(R.id.rgFourRadios);
+        rgWallsType = (RadioGroup) rootView.findViewById(R.id.rgFourRadiosAndEdit1);
 
         for (i = 0; i < rgWallsType.getChildCount(); i++)
         {
@@ -424,7 +423,7 @@ public class ClimaReportFragment extends Fragment implements View.OnClickListene
             rb.setText(saWallsType.get(i));
         }
 
-        etWallsType = (EditText) rootView.findViewById(R.id.etFourRadios);
+        etWallsType = (EditText) rootView.findViewById(R.id.etFourRadiosAndEdit1);
         //etWallsType.setOnClickListener(this);
         etWallsType.setOnTouchListener(new View.OnTouchListener()
         {
@@ -438,18 +437,18 @@ public class ClimaReportFragment extends Fragment implements View.OnClickListene
         //etWallsType.setText(saWallsType.get(i));
 
 
-        llTwoRadiosSectionName = (LinearLayout) rootView.findViewById(R.id.llTwoRadiosSectionName);
+        llTwoRadiosSectionName = (LinearLayout) rootView.findViewById(R.id.llSectionTwoRadios1);
         llTwoRadiosSectionName.setOnClickListener(this);
 
-        tvUnitOutdoorPositioning = (TextView) rootView.findViewById(R.id.tvTwoRadios);
+        tvUnitOutdoorPositioning = (TextView) rootView.findViewById(R.id.tvSectionTwoRadios1);
 
         tvUnitOutdoorPositioning.setText(saSectionTitles.get(sectionNumber++));
 
-        ivTwoRadiosDropdownArrow = (ImageView) rootView.findViewById(R.id.ivTwoRadiosDropdownArrow);
+        ivTwoRadiosDropdownArrow = (ImageView) rootView.findViewById(R.id.ivArrowTwoRadios1);
 
-        llTwoRadios = (LinearLayout) rootView.findViewById(R.id.llTwoRadios);
+        llTwoRadios = (LinearLayout) rootView.findViewById(R.id.llTwoRadios1);
         
-        rgUnitOutdoorPositioning = (RadioGroup) rootView.findViewById(R.id.rgTwoRadios);
+        rgUnitOutdoorPositioning = (RadioGroup) rootView.findViewById(R.id.rgTwoRadios1);
 
         for (i = 0; i < rgUnitOutdoorPositioning.getChildCount(); i++)
         {
@@ -458,25 +457,25 @@ public class ClimaReportFragment extends Fragment implements View.OnClickListene
             rb.setText(saUnitOutdoorPosition.get(i));
         }
 
-        llThreeChkboxesSectionName = (LinearLayout) rootView.findViewById(R.id.llThreeChkboxesSectionName);
+        llThreeChkboxesSectionName = (LinearLayout) rootView.findViewById(R.id.llSectionThreeChkboxesAndEdit1);
         llThreeChkboxesSectionName.setOnClickListener(this);
 
-        ivThreeChkboxesDropdownArrow = (ImageView) rootView.findViewById(R.id.ivThreeChkboxesDropdownArrow);
+        ivThreeChkboxesDropdownArrow = (ImageView) rootView.findViewById(R.id.ivArrowThreeChkboxesAndEdit1);
 
-        tvBuildingPlan = (TextView) rootView.findViewById(R.id.tvThreeChkboxes);
+        tvBuildingPlan = (TextView) rootView.findViewById(R.id.tvSectionThreeChkboxesAndEdit1);
 
         tvBuildingPlan.setText(saSectionTitles.get(sectionNumber++));
 
-        llThreeChkboxes = (LinearLayout) rootView.findViewById(R.id.llThreeChkboxes);
+        llThreeChkboxes = (LinearLayout) rootView.findViewById(R.id.llThreeChkboxesAndEdit1);
 
-            chkUnderground = (CheckBox) rootView.findViewById(R.id.chkThreeChkboxes1);
+            chkUnderground = (CheckBox) rootView.findViewById(R.id.chk1ThreeChkboxesAndEdit1);
         chkUnderground.setText(saBuildingPlan.get(0));
-            chkMezzanine = (CheckBox) rootView.findViewById(R.id.chkThreeChkboxes2);
+            chkMezzanine = (CheckBox) rootView.findViewById(R.id.chk2ThreeChkboxesAndEdit1);
         chkMezzanine.setText(saBuildingPlan.get(1));
-            chkGroundFloor = (CheckBox) rootView.findViewById(R.id.chkThreeChkboxes3);
+            chkGroundFloor = (CheckBox) rootView.findViewById(R.id.chk3ThreeChkboxesAndEdit1);
         chkGroundFloor.setText(saBuildingPlan.get(2));
 
-        etBuildingPlan = (EditText) rootView.findViewById(R.id.etThreeChkboxes);
+        etBuildingPlan = (EditText) rootView.findViewById(R.id.et1ThreeChkboxesAndEdit1);
         etBuildingPlan.setOnTouchListener(new View.OnTouchListener()
         {
             @Override
@@ -490,16 +489,19 @@ public class ClimaReportFragment extends Fragment implements View.OnClickListene
         });
         //etBuildingPlan.setText(saBuildingPlan.get(3));
 
-        tvTwoTextTwoEdit1 = (TextView) rootView.findViewById(R.id.tvTwoTextTwoEdit1);
+        tvSecondSectionTitle = (TextView) rootView.findViewById(R.id.tvSectionHeader2);
+        tvSecondSectionTitle.setText(strSectionsTitles[1]);
+
+        tvTwoTextTwoEdit1 = (TextView) rootView.findViewById(R.id.tv1TwoTextTwoEdit1);
 
         tvTwoTextTwoEdit1.setText(strImpianto[0]);
         
-        tvTwoTextTwoEdit2 = (TextView) rootView.findViewById(R.id.tvTwoTextTwoEdit2);
+        tvTwoTextTwoEdit2 = (TextView) rootView.findViewById(R.id.tv2TwoTextTwoEdit1);
 
         tvTwoTextTwoEdit2.setText(strImpianto[1]);
 
-        etNoteInstallationPlace = (EditText) rootView.findViewById(R.id.etTwoTextTwoEdit1);
-        etNoteExistingDev = (EditText) rootView.findViewById(R.id.etTwoTextTwoEdit2);
+        etNoteInstallationPlace = (EditText) rootView.findViewById(R.id.et1TwoTextTwoEdit1);
+        etNoteExistingDev = (EditText) rootView.findViewById(R.id.et2TwoTextTwoEdit1);
 
         return rootView;
     }

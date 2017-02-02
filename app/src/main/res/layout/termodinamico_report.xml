@@ -12,15 +12,16 @@
 
         <include layout="@layout/report_header"/>
 
+        <include layout="@layout/section_header1"/>
 
 
-        <include layout="@layout/three_radios_and_edit"/>
+<!--        <include layout="@layout/three_radios_and_edit"/>
 
         <include layout="@layout/four_radios"/>
 
-        <!--<include layout="@layout/three_textviews"/>-->
+        &lt;!&ndash;<include layout="@layout/three_textviews"/>&ndash;&gt;
 
-        <!--<include layout="@layout/three_textviews"/>-->
+        &lt;!&ndash;<include layout="@layout/three_textviews"/>&ndash;&gt;
 
         <include layout="@layout/three_radios_and_edit"/>
 
@@ -30,14 +31,15 @@
 
         <include layout="@layout/three_radios"/>
 
-        <include layout="@layout/five_radios"/>
+        <include layout="@layout/five_radios"/>-->
 
 <!--        <include layout="@layout/two_radios_and_switch"/>-->
 
         <!--        <include layout="@layout/two_radios_and_switch"/>-->
 
+        <include layout="@layout/section_header2"/>
 
-        <include layout="@layout/impianto_2_text_2_edit"/>
+        <include layout="@layout/two_texts_two_edits1"/>
 
     </LinearLayout>
 

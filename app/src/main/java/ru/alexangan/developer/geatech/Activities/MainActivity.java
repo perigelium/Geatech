@@ -22,7 +22,7 @@ import ru.alexangan.developer.geatech.Fragments.ClimaReportFragment;
 import ru.alexangan.developer.geatech.Fragments.CtrlBtnReportDetailed;
 import ru.alexangan.developer.geatech.Fragments.CtrlBtnsFragment1;
 import ru.alexangan.developer.geatech.Fragments.CtrlBtnsFragment2;
-import ru.alexangan.developer.geatech.Fragments.ExpandableListFragment;
+import ru.alexangan.developer.geatech.Fragments.FotovoltaicoReportFragment;
 import ru.alexangan.developer.geatech.Fragments.InWorkListVisitsFragment;
 import ru.alexangan.developer.geatech.Fragments.ListVisitsFragment;
 import ru.alexangan.developer.geatech.Fragments.NotSentListVisitsFragment;
@@ -63,15 +63,15 @@ public class MainActivity extends Activity implements Communicator
     PhotoGalleryGridFragment photoGalleryGridFragment;
 
     TermodinamicoReportFragment termodinamicoReportFragment;
-    ClimaReportFragment climaReportFragment;
     CaldaiaReportFragment caldaieReportFragment;
+    ClimaReportFragment climaReportFragment;
+    FotovoltaicoReportFragment fotovoltaicoReportFragment;
+
     NotificationBarFragment notificationBarFragment;
     public static RealmResults<VisitItem> visitItems;
     int currentSelIndex;
     boolean ctrlBtnChkChanged;
     AlertDialog alert;
-
-    ExpandableListFragment expandableListFragment;
 
     @Override
     protected void onDestroy()
@@ -165,11 +165,11 @@ public class MainActivity extends Activity implements Communicator
         photoGalleryGridFragment = new PhotoGalleryGridFragment();
 
         termodinamicoReportFragment = new TermodinamicoReportFragment();
-        climaReportFragment = new ClimaReportFragment();
         caldaieReportFragment = new CaldaiaReportFragment();
-        notificationBarFragment = new NotificationBarFragment();
+        climaReportFragment = new ClimaReportFragment();
+        fotovoltaicoReportFragment = new FotovoltaicoReportFragment();
 
-        expandableListFragment = new ExpandableListFragment();
+        notificationBarFragment = new NotificationBarFragment();
 
         mFragmentManager = getFragmentManager();
 
@@ -262,10 +262,10 @@ public class MainActivity extends Activity implements Communicator
             mFragmentTransaction.show(ctrlBtnsFragment1);
             mFragmentTransaction.commit();
 
-            currentSelIndex = -1;
+
 
             removeAllLists();
-
+            currentSelIndex = -1;
             listVisits = new ListVisitsFragment();
 
             Bundle args = new Bundle();
@@ -283,9 +283,8 @@ public class MainActivity extends Activity implements Communicator
             mFragmentTransaction.show(ctrlBtnsFragment1);
             mFragmentTransaction.commit();
 
-            currentSelIndex = -1;
-
             removeAllLists();
+            currentSelIndex = -1;
             setVisitsListContent(reportsList);
         }
 
@@ -379,7 +378,21 @@ public class MainActivity extends Activity implements Communicator
     {
         FragmentTransaction mFragmentTransaction = mFragmentManager.beginTransaction();
 
-        if (caldaieReportFragment.isAdded())
+        if(currentSelIndex != -1)
+        {
+        VisitItem visitItem = visitItems.get(currentSelIndex);
+            ProductData productData = visitItem.getProductData();
+            String productType = productData.getProductType();
+
+            Fragment frag = assignFragmentModel(productType);
+
+            if (frag.isAdded())
+            {
+                mFragmentTransaction.remove(frag);
+            }
+        }
+
+/*        if (caldaieReportFragment.isAdded())
         {
             mFragmentTransaction.remove(caldaieReportFragment);
         }
@@ -387,7 +400,7 @@ public class MainActivity extends Activity implements Communicator
         if (climaReportFragment.isAdded())
         {
             mFragmentTransaction.remove(climaReportFragment);
-        }
+        }*/
 
         if (photoGalleryGridFragment.isAdded())
         {
@@ -690,10 +703,10 @@ public class MainActivity extends Activity implements Communicator
                 return caldaieReportFragment;
             case "CLIMATIZZAZIONE":
                 return climaReportFragment;
+            case "FOTOVOLTAICA":
+                return fotovoltaicoReportFragment;
 
-/*            case "FOTOVOLTAICA":
-                return fotovoltaicaReportFragment;
-            case "DOMOTICA":
+/*            case "DOMOTICA":
                 return domoticaReportFragment;
             case "POMPA DI CALORE":
                 return pompadicaloreReportFragment;
