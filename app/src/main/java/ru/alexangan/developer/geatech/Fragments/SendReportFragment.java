@@ -16,6 +16,7 @@ import com.google.gson.Gson;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -27,7 +28,7 @@ import okhttp3.Callback;
 import okhttp3.Response;
 import ru.alexangan.developer.geatech.Interfaces.Communicator;
 import ru.alexangan.developer.geatech.Models.ClimaReportModel;
-import ru.alexangan.developer.geatech.Models.Gea_immagini_rapporto_sopralluogo;
+import ru.alexangan.developer.geatech.Models.ImagesReport;
 import ru.alexangan.developer.geatech.Models.Gea_rapporto_sopralluogo;
 import ru.alexangan.developer.geatech.Adapters.ModelsMapping;
 import ru.alexangan.developer.geatech.Models.ProductData;
@@ -48,14 +49,15 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
     private Button sendReport;
     private int selectedIndex;
 
-    Gea_immagini_rapporto_sopralluogo gea_immagini_rapporto_sopralluogo;
+    ImagesReport gea_immagini_rapporto_sopralluogo;
     ReportStates reportStates;
     ClimaReportModel climaReportModel;
     VisitItem visitItem;
     VisitStates visitStates;
+    ImagesReport imagesReport;
 
     String reportSendResponse;
-    Call callSendReport;
+    Call callSendReport, callSendImage;
     Activity activity;
     RealmObject modelReport;
 
@@ -103,7 +105,7 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
 
         realm.beginTransaction();
         reportStates = realm.where(ReportStates.class).equalTo("idSopralluogo", idSopralluogo).findFirst();
-        //gea_immagini_rapporto_sopralluogo = realm.where(Gea_immagini_rapporto_sopralluogo.class).equalTo("idSopralluogo", idSopralluogo).findFirst();
+        imagesReport = realm.where(ImagesReport.class).equalTo("id_rapporto_sopralluogo", idSopralluogo).findFirst();
         modelReport = (RealmObject) realm.where(modelClass).equalTo("idSopralluogo", idSopralluogo).findFirst();
         realm.commitTransaction();
 
@@ -111,7 +113,7 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
         {
             if (visitItem.getVisitStates().getIdSopralluogo() == reportStates.getIdSopralluogo()
                     && (reportStates.getGeneralInfoCompletionState() == 2 && reportStates.getReportCompletionState() == 3)
-                    && reportStates.getPhotoAddedNumber() >= 3) //  && reportStates.getDataOraRaportoInviato() == null
+                    && reportStates.getPhotoAddedNumber() >= 1) //  && reportStates.getDataOraRaportoInviato() == null
             {
                 sendReport.setAlpha(1.0f);
                 sendReport.setEnabled(true);
@@ -161,6 +163,7 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
 
                 ReportStates reportStatesUnmanaged = realm.copyFromRealm(reportStates);
                 VisitStates visitStatesUnmanaged = realm.copyFromRealm(visitStates);
+                ImagesReport imagesReportUnmanaged = realm.copyFromRealm(imagesReport);
                 Object modelReportUnmanaged = realm.copyFromRealm(modelReport);
 
                 Gson gsonTmp = new Gson();
@@ -171,6 +174,7 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
                 String gea_rapporto_sopralluogo_json = gson.toJson(gea_rapporto_sopralluogo);
                 String visitStatesUnmanaged_json = gson.toJson(visitStatesUnmanaged);
                 String modelReportUnmanaged_json = gson.toJson(modelReportUnmanaged);
+                String gea_immagineUnmanaged_json = gson.toJson(imagesReportUnmanaged);
 
 
                 //reportItem.setGea_immagini_rapporto_sopralluogo(gea_immagini_rapporto_sopralluogo);
@@ -181,6 +185,7 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
                     jsonObject.put("gea_rapporto_sopralluogo", gea_rapporto_sopralluogo_json);
                     jsonObject.put("gea_sopralluoghi", visitStatesUnmanaged_json);
                     jsonObject.put("gea_rapporto_modello", modelReportUnmanaged_json);
+                    jsonObject.put("gea_immagine_rapporto_sopralluogo", gea_immagineUnmanaged_json);
 
                 } catch (JSONException e)
                 {
@@ -188,11 +193,21 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
                     e.printStackTrace();
                 }
 
-
                 Log.d("DEBUG", String.valueOf(jsonObject));
 
                 NetworkUtils networkUtils = new NetworkUtils();
                 callSendReport = networkUtils.sendReport(this, String.valueOf(jsonObject));
+
+                String filePaths = imagesReportUnmanaged.getFilePaths();
+                String [] strFilePaths = filePaths.split(",");
+
+                for (int i = 0; i < strFilePaths.length; i++)
+                {
+                    File file = new File(strFilePaths[i]);
+
+                    callSendImage = networkUtils.sendImage(this, activity, file, imagesReportUnmanaged.getId_immagine_rapporto(),
+                            imagesReportUnmanaged.getId_rapporto_sopralluogo());
+                }
 
                 mCommunicator.onSendReportReturned();
             }
@@ -212,11 +227,50 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
                 }
             });
         }
+
+        if (call == callSendImage)
+        {
+            activity.runOnUiThread(new Runnable()
+            {
+                public void run()
+                {
+                    Toast.makeText(activity, "Invio immagine fallito", Toast.LENGTH_LONG).show();
+                }
+            });
+        }
     }
 
     @Override
     public void onResponse(Call call, Response response) throws IOException
     {
+
+        if (call == callSendImage)
+        {
+            reportSendResponse = response.body().string();
+
+            if (reportSendResponse == null)
+            {
+                activity.runOnUiThread(new Runnable()
+                {
+                    public void run()
+                    {
+                        Toast.makeText(activity, "Immagine inviato, risposta non ha ricevuto", Toast.LENGTH_LONG).show();
+                    }
+                });
+
+                return;
+            } else
+            {
+                activity.runOnUiThread(new Runnable()
+                {
+                    public void run()
+                    {
+                        Toast.makeText(activity, "Immagine inviato " + reportSendResponse, Toast.LENGTH_LONG).show();
+                    }
+                });
+            }
+        }
+
         if (call == callSendReport)
         {
             reportSendResponse = response.body().string();

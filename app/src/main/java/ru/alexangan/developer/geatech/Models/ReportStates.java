@@ -41,23 +41,23 @@ public class ReportStates extends RealmObject
         id_rapporto_sopralluogo = id;
         this.visitId = visitId;
         reportCompletionStatuses = new RealmList<>();
-        reportCompletionStatuses.add(new RealmString(id, "Non iniziato") );
-        reportCompletionStatuses.add(new RealmString(id, "Iniziato") );
-        reportCompletionStatuses.add(new RealmString(id, "Parziamente completato") );
-        reportCompletionStatuses.add(new RealmString(id, "Completato") );
+        reportCompletionStatuses.add(new RealmString( "Non iniziato") );
+        reportCompletionStatuses.add(new RealmString( "Iniziato") );
+        reportCompletionStatuses.add(new RealmString( "Parziamente completato") );
+        reportCompletionStatuses.add(new RealmString( "Completato") );
 
         generalInfoCompletionStatuses = new RealmList<>();
-        generalInfoCompletionStatuses.add(new RealmString(id, "Non iniziato") );
-        //generalInfoCompletionStatuses.add(new RealmString(id, "Iniziato") );
-        generalInfoCompletionStatuses.add(new RealmString(id, "Parziamente completato") );
-        generalInfoCompletionStatuses.add(new RealmString(id, "Completato") );
+        generalInfoCompletionStatuses.add(new RealmString( "Non iniziato") );
+        //generalInfoCompletionStatuses.add(new RealmString( "Iniziato") );
+        generalInfoCompletionStatuses.add(new RealmString( "Parziamente completato") );
+        generalInfoCompletionStatuses.add(new RealmString( "Completato") );
 
         sendingReportFailedStatuses = new RealmList<>();
-        sendingReportFailedStatuses.add(new RealmString(id, "Invio falito per mancanza connesione dati") );
+        sendingReportFailedStatuses.add(new RealmString( "Invio falito per mancanza connesione dati") );
 
         photoAddedStatuses = new RealmList<>();
-        photoAddedStatuses.add(new RealmString(id, "Nessun fotografia") );
-        photoAddedStatuses.add(new RealmString(id, " foto inserite") );
+        photoAddedStatuses.add(new RealmString( "Nessun fotografia") );
+        photoAddedStatuses.add(new RealmString( " foto inserite") );
 
 
         photoAddedNumber = 0;
