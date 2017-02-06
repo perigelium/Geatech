@@ -1,12 +1,10 @@
 package ru.alexangan.developer.geatech.Network;
 
-import android.content.ContentResolver;
 import android.content.Context;
 import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
-import android.webkit.MimeTypeMap;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -23,7 +21,8 @@ import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
-import ru.alexangan.developer.geatech.Models.ImagesReport;
+import ru.alexangan.developer.geatech.Models.ImageReport;
+import ru.alexangan.developer.geatech.Utils.ImageUtils;
 
 import static ru.alexangan.developer.geatech.Network.RESTdataReceiver.tokenStr;
 
@@ -36,7 +35,7 @@ public class NetworkUtils
     private final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
     private final String REST_URL = "http://www.bludelego.com/dev/geatech/api.php";
     private final String DATA_URL_SUFFIX = "?case=send_data";
-    private final String SEND_IMAGE_URL_SUFFIX = "http://www.bludelego.com/dev/geatech/send_image.php";
+    private final String SEND_IMAGE_URL = "http://www.bludelego.com/dev/geatech/send_image.php";
     private final String TOKEN_URL_SUFFIX = "?case=login";
     private final String REST_LOGIN = "alexgheorghianu@yahoo.com";
     private final String REST_PASSWORD = "BF8hWoAr";
@@ -81,6 +80,35 @@ public class NetworkUtils
         return callToken;
     }
 
+    public Call getJSONfromServer(Callback callback)
+    {
+        JSONObject jsonToken = new JSONObject();
+        try
+        {
+            jsonToken.put("token", tokenStr);
+
+        } catch (JSONException e)
+        {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            return null;
+        }
+
+        RequestBody body = RequestBody.create(JSON, String.valueOf(jsonToken));
+
+        Request request = new Request.Builder()
+                .url(REST_URL + DATA_URL_SUFFIX)
+                .post(body)
+                .build();
+
+        OkHttpClient client1 = new OkHttpClient();
+
+        Call callJSON = client1.newCall(request);
+        callJSON.enqueue(callback);
+
+        return callJSON;
+    }
+
     public Call sendReport(Callback callback, String gsonStr)
     {
         OkHttpClient.Builder defaultHttpClient = new OkHttpClient.Builder();
@@ -113,9 +141,9 @@ public class NetworkUtils
     }
 
 
-    public Call sendImage(Callback callback, Context context, File file, int idImage, int idSopralluogo)
+    public Call sendImage(Callback callback, Context context, ImageReport imageReport)
     {
-        String fileName = file.getName();
+        String fileName = imageReport.getFileName();
         String fileExtension = "";
         int extensionPtr = fileName.lastIndexOf(".");
 
@@ -124,7 +152,7 @@ public class NetworkUtils
             fileExtension = fileName.substring(extensionPtr);
         }
 
-        String strMediaType = getMimeTypeOfUri(context, Uri.fromFile(file));
+        String strMediaType = ImageUtils.getMimeTypeOfUri(context, Uri.fromFile(imageReport.getFile()));
 
         if(fileExtension.length() < 3)
         {
@@ -139,13 +167,13 @@ public class NetworkUtils
         RequestBody requestBody = new MultipartBody.Builder()
                 .setType(MultipartBody.FORM)
 
-                .addFormDataPart("file", fileName, RequestBody.create(MediaType.parse(strMediaType), file))
-                .addFormDataPart("id_immagine_rapporto", String.valueOf(idImage))
-                .addFormDataPart("id_rapporto_sopralluogo", String.valueOf(idSopralluogo))
+                .addFormDataPart("file", fileName, RequestBody.create(MediaType.parse(strMediaType), imageReport.getFile()))
+                .addFormDataPart("id_immagine_rapporto", String.valueOf(imageReport.getId_immagine_rapporto()))
+                .addFormDataPart("id_rapporto_sopralluogo", String.valueOf(imageReport.getId_rapporto_sopralluogo()))
                 .build();
 
         Request request = new Request.Builder()
-                .url(SEND_IMAGE_URL_SUFFIX)
+                .url(SEND_IMAGE_URL)
                 .post(requestBody)
                 .build();
 
@@ -153,33 +181,5 @@ public class NetworkUtils
         callData.enqueue(callback);
 
         return callData;
-    }
-
-    public String getMimeTypeOfUri(Context context, Uri uri) {
-        BitmapFactory.Options opt = new BitmapFactory.Options();
-    /* The doc says that if inJustDecodeBounds set to true, the decoder
-     * will return null (no bitmap), but the out... fields will still be
-     * set, allowing the caller to query the bitmap without having to
-     * allocate the memory for its pixels. */
-        opt.inJustDecodeBounds = true;
-
-        InputStream istream = null;
-        try
-        {
-            istream = context.getContentResolver().openInputStream(uri);
-        } catch (FileNotFoundException e)
-        {
-            e.printStackTrace();
-        }
-        BitmapFactory.decodeStream(istream, null, opt);
-        try
-        {
-            istream.close();
-        } catch (IOException e)
-        {
-            e.printStackTrace();
-        }
-
-        return opt.outMimeType;
     }
 }

@@ -22,16 +22,19 @@ import ru.alexangan.developer.geatech.Fragments.ClimaReportFragment;
 import ru.alexangan.developer.geatech.Fragments.CtrlBtnReportDetailed;
 import ru.alexangan.developer.geatech.Fragments.CtrlBtnsFragment1;
 import ru.alexangan.developer.geatech.Fragments.CtrlBtnsFragment2;
+import ru.alexangan.developer.geatech.Fragments.DomoticaReportFragment;
 import ru.alexangan.developer.geatech.Fragments.FotovoltaicoReportFragment;
 import ru.alexangan.developer.geatech.Fragments.InWorkListVisitsFragment;
 import ru.alexangan.developer.geatech.Fragments.ListVisitsFragment;
 import ru.alexangan.developer.geatech.Fragments.NotSentListVisitsFragment;
 import ru.alexangan.developer.geatech.Fragments.NotificationBarFragment;
 import ru.alexangan.developer.geatech.Fragments.PhotoGalleryGridFragment;
+import ru.alexangan.developer.geatech.Fragments.PompaDiCaloreReportFragment;
 import ru.alexangan.developer.geatech.Fragments.ReportSentDetailedFragment;
 import ru.alexangan.developer.geatech.Fragments.ReportsListFragment;
 import ru.alexangan.developer.geatech.Fragments.SendReportFragment;
 import ru.alexangan.developer.geatech.Fragments.SetDateTimeFragment;
+import ru.alexangan.developer.geatech.Fragments.StorageReportFragment;
 import ru.alexangan.developer.geatech.Fragments.TermodinamicoReportFragment;
 import ru.alexangan.developer.geatech.Interfaces.Communicator;
 import ru.alexangan.developer.geatech.Models.ProductData;
@@ -66,6 +69,9 @@ public class MainActivity extends Activity implements Communicator
     CaldaiaReportFragment caldaieReportFragment;
     ClimaReportFragment climaReportFragment;
     FotovoltaicoReportFragment fotovoltaicoReportFragment;
+    DomoticaReportFragment domoticaReportFragment;
+    PompaDiCaloreReportFragment pompaDiCaloreReportFragment;
+    StorageReportFragment storageReportFragment;
 
     NotificationBarFragment notificationBarFragment;
     public static RealmResults<VisitItem> visitItems;
@@ -168,6 +174,9 @@ public class MainActivity extends Activity implements Communicator
         caldaieReportFragment = new CaldaiaReportFragment();
         climaReportFragment = new ClimaReportFragment();
         fotovoltaicoReportFragment = new FotovoltaicoReportFragment();
+        domoticaReportFragment = new DomoticaReportFragment();
+        pompaDiCaloreReportFragment = new PompaDiCaloreReportFragment();
+        storageReportFragment = new StorageReportFragment();
 
         notificationBarFragment = new NotificationBarFragment();
 
@@ -703,15 +712,14 @@ public class MainActivity extends Activity implements Communicator
                 return caldaieReportFragment;
             case "CLIMATIZZAZIONE":
                 return climaReportFragment;
-            case "FOTOVOLTAICA":
+            case "FOTOVOLTAICO":
                 return fotovoltaicoReportFragment;
-
-/*            case "DOMOTICA":
+            case "DOMOTICA":
                 return domoticaReportFragment;
-            case "POMPA DI CALORE":
-                return pompadicaloreReportFragment;
             case "STORAGE":
-                return storageReportFragment;*/
+                return storageReportFragment;
+            case "POMPA DI CALORE":
+                return pompaDiCaloreReportFragment;
 
             default:
                 return null;

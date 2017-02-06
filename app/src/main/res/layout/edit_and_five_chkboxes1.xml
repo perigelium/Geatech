@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:layout_marginBottom="5dp"
+              android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/llHeaderFourChkboxes1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#eeeeee"
+        android:clickable="true"
+        android:orientation="horizontal">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/tvHeaderFourChkboxes1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start|center_vertical"
+                android:layout_margin="9dp"
+                android:text=" Section name"
+                android:textSize="13sp"/>
+
+            <ImageView
+                android:id="@+id/ivArrowFourChkboxes1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical|end"
+                android:layout_marginRight="50dp"
+                android:src="@android:drawable/arrow_down_float"/>
+
+        </FrameLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/llSectionFourChkboxes1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        ><!--android:visibility="gone">-->
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/tv1FourChkboxes1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start|center_vertical"
+            android:layout_margin="9dp"
+            android:text="Altro: "
+            android:textSize="13sp"/>
+
+        <EditText
+            android:id="@+id/et1FourChkboxes1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_gravity="start|center_vertical"
+            android:layout_marginLeft="16dp"
+            android:background="#f0f0f0"
+            android:ems="10"
+            android:inputType="none"
+            android:text=""
+            android:textColor="#c0c0c0"/>
+
+    </LinearLayout>
+
+
+        <CheckBox
+            android:id="@+id/chk1FourChkboxes1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="9dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:button="@null"
+            android:drawableRight="@drawable/checkbox_selector"
+            android:text="chkbox 1"/>
+
+        <CheckBox
+            android:id="@+id/chk2FourChkboxes1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="9dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:button="@null"
+            android:drawableRight="@drawable/checkbox_selector"
+            android:text="chkbox 2"/>
+
+        <CheckBox
+            android:id="@+id/chk3FourChkboxes1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="9dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:button="@null"
+            android:drawableRight="@drawable/checkbox_selector"
+            android:text="chkbox 3"/>
+
+        <CheckBox
+            android:id="@+id/chk4FourChkboxes1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="9dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:button="@null"
+            android:drawableRight="@drawable/checkbox_selector"
+            android:text="chkbox 4"/>
+
+        <CheckBox
+            android:id="@+id/chk5FourChkboxes1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="9dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:button="@null"
+            android:drawableRight="@drawable/checkbox_selector"
+            android:text="chkbox 5"/>
+
+
+    </LinearLayout>
+
+</LinearLayout>

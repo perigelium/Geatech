@@ -6,7 +6,7 @@
               android:orientation="vertical">
 
     <LinearLayout
-        android:id="@+id/llSectionFourRadios1"
+        android:id="@+id/llHeaderFourRadios1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#eeeeee"
@@ -18,7 +18,7 @@
             android:layout_height="wrap_content">
 
             <TextView
-                android:id="@+id/tvSectionFourRadios1"
+                android:id="@+id/tvHeaderFourRadios1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start|center_vertical"
@@ -27,7 +27,7 @@
                 android:textSize="13sp"/>
 
             <ImageView
-                android:id="@+id/ivSectionFourRadios1"
+                android:id="@+id/ivArrowFourRadios1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical|end"
@@ -39,14 +39,14 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/llFourRadios1"
+        android:id="@+id/llSectionFourRadios1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         ><!--android:visibility="gone">-->
 
         <RadioGroup
-            android:id="@+id/rgFourRadios1"
+            android:id="@+id/rg1FourRadios1"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 

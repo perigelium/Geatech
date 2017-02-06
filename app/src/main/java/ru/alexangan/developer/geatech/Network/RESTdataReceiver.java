@@ -41,7 +41,6 @@ public class RESTdataReceiver implements Callback
     public static String tokenStr;
     private Activity activity;
 
-
     public static RealmList<VisitItem> inVisitItems;
 
     public RESTdataReceiver(RESTdataReceiverEventListener cb, Activity activity)

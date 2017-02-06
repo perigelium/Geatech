@@ -7,7 +7,7 @@
               android:orientation="vertical">
 
     <LinearLayout
-        android:id="@+id/llSectionTwoRadiosAndEdit"
+        android:id="@+id/llSectionTwoRadiosAndEdit1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#eeeeee"
@@ -19,14 +19,14 @@
             android:layout_height="wrap_content">
 
             <TextView
-                android:id="@+id/tvSectionTwoRadiosAndEdit1"
+                android:id="@+id/tvHeaderTwoRadiosAndEdit1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start|center_vertical"
                 android:layout_margin="9dp"
+                android:elevation="1dp"
                 android:text=" Section name"
-                android:textSize="13sp"
-                android:elevation="1dp"/>
+                android:textSize="13sp"/>
 
             <ImageView
                 android:id="@+id/ivArrowTwoRadiosAndEdit1"
@@ -41,14 +41,14 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/llTwoRadiosAndEdit1"
+        android:id="@+id/llSectionTwoRadiosAndEdit1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         ><!--android:visibility="gone">-->
 
         <RadioGroup
-            android:id="@+id/rgTwoRadiosAndEdit1"
+            android:id="@+id/rg1TwoRadiosAndEdit1"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
@@ -75,33 +75,32 @@
         </RadioGroup>
 
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start|center_vertical"
+                android:layout_margin="9dp"
+                android:text="Altro: "
+                android:textSize="13sp"/>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="start|center_vertical"
-            android:layout_margin="9dp"
-            android:text="Altro: "
-            android:textSize="13sp"/>
+            <EditText
+                android:id="@+id/et1TwoRadiosAndEdit1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_gravity="start|center_vertical"
+                android:layout_marginLeft="16dp"
+                android:background="#f0f0f0"
+                android:ems="10"
+                android:inputType="none"
+                android:text=""
+                android:textColor="#c0c0c0"/>
 
-        <EditText
-            android:id="@+id/etTwoRadiosAndEdit"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_gravity="start|center_vertical"
-            android:layout_marginLeft="16dp"
-            android:background="#f0f0f0"
-            android:ems="10"
-            android:inputType="none"
-            android:text=""
-            android:textColor="#c0c0c0"/>
-
-    </LinearLayout>
+        </LinearLayout>
     </LinearLayout>
 
 </LinearLayout>

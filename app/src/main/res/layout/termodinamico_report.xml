@@ -15,27 +15,31 @@
         <include layout="@layout/section_header1"/>
 
 
-<!--        <include layout="@layout/three_radios_and_edit"/>
+        <include layout="@layout/three_radios_and_edit1"/>
 
-        <include layout="@layout/four_radios"/>
+        <include layout="@layout/two_radios1"/>
 
-        &lt;!&ndash;<include layout="@layout/three_textviews"/>&ndash;&gt;
+        <include layout="@layout/two_radios2"/>
 
-        &lt;!&ndash;<include layout="@layout/three_textviews"/>&ndash;&gt;
+        <include layout="@layout/three_edits1"/>
 
-        <include layout="@layout/three_radios_and_edit"/>
+        <include layout="@layout/three_edits2"/>
 
-        <include layout="@layout/three_radios"/>
+        <include layout="@layout/three_radios_and_edit1"/>
 
-        <include layout="@layout/four_chkboxes"/>
+        <include layout="@layout/section_header22"/>
 
-        <include layout="@layout/three_radios"/>
+        <include layout="@layout/three_radios1"/>
 
-        <include layout="@layout/five_radios"/>-->
+        <include layout="@layout/four_chkboxes1"/>
 
-<!--        <include layout="@layout/two_radios_and_switch"/>-->
+        <include layout="@layout/three_radios_and_switch1"/>
 
-        <!--        <include layout="@layout/two_radios_and_switch"/>-->
+        <include layout="@layout/five_radios1"/>
+
+        <include layout="@layout/two_radios_and_switch1"/>
+
+        <include layout="@layout/two_radios_and_switch2"/>
 
         <include layout="@layout/section_header2"/>
 

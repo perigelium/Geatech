@@ -6,7 +6,7 @@
               android:orientation="vertical">
 
     <LinearLayout
-        android:id="@+id/llSectionFourRadiosAndEdit1"
+        android:id="@+id/llHeaderFourRadiosAndEdit1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#eeeeee"
@@ -18,7 +18,7 @@
             android:layout_height="wrap_content">
 
             <TextView
-                android:id="@+id/tvSectionFourRadiosAndEdit1"
+                android:id="@+id/tvHeaderFourRadiosAndEdit1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start|center_vertical"
@@ -39,14 +39,14 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/llFourRadiosAndEdit1"
+        android:id="@+id/llSectionFourRadiosAndEdit1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         ><!--android:visibility="gone">-->
 
         <RadioGroup
-            android:id="@+id/rgFourRadiosAndEdit1"
+            android:id="@+id/rg1FourRadiosAndEdit1"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
@@ -99,6 +99,7 @@
         android:layout_height="wrap_content">
 
         <TextView
+            android:id="@+id/tv1FourRadiosAndEdit1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="start|center_vertical"
@@ -107,7 +108,7 @@
             android:textSize="13sp"/>
 
         <EditText
-            android:id="@+id/etFourRadiosAndEdit1"
+            android:id="@+id/et1FourRadiosAndEdit1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"

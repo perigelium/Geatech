@@ -8,7 +8,7 @@ public class ReportItem
 {
     private VisitStates visitStates;
     private Gea_rapporto_sopralluogo gea_rapporto_sopralluogo;
-    private ImagesReport gea_immagini_rapporto_sopralluogo;
+    private ImageReport gea_immagini_rapporto_sopralluogo;
 
     public VisitStates getVisitStates()
     {
@@ -30,12 +30,12 @@ public class ReportItem
         this.gea_rapporto_sopralluogo = gea_rapporto_sopralluogo;
     }
 
-    public ImagesReport getGea_immagini_rapporto_sopralluogo()
+    public ImageReport getGea_immagini_rapporto_sopralluogo()
     {
         return gea_immagini_rapporto_sopralluogo;
     }
 
-    public void setGea_immagini_rapporto_sopralluogo(ImagesReport gea_immagini_rapporto_sopralluogo)
+    public void setGea_immagini_rapporto_sopralluogo(ImageReport gea_immagini_rapporto_sopralluogo)
     {
         this.gea_immagini_rapporto_sopralluogo = gea_immagini_rapporto_sopralluogo;
     }

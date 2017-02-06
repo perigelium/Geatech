@@ -15,9 +15,9 @@
         <include layout="@layout/section_header1"/>
 
 
-<!--        <include layout="@layout/two_radios_and_edit"/>
+        <include layout="@layout/two_radios_and_edit1"/>
 
-        <include layout="@layout/three_radios_and_edit"/>
+        <include layout="@layout/three_radios_and_edit1"/>
 
 
 
@@ -25,15 +25,15 @@
 
         <include layout="@layout/three_radios_and_edit2"/>
 
-        <include layout="@layout/switch_and_edit"/>
+        <include layout="@layout/switch_and_edit1"/>
 
-        <include layout="@layout/four_radios"/>
+        <include layout="@layout/four_radios1"/>
 
-        <include layout="@layout/four_radios_and_two_edits"/>
+        <include layout="@layout/four_radios_and_two_edits1"/>
 
-        <include layout="@layout/two_radios"/>
+        <include layout="@layout/two_radios1"/>
 
-        <include layout="@layout/three_radios"/>
+        <include layout="@layout/three_radios1"/>
 
         <include layout="@layout/switch_and_edit2"/>
 
@@ -41,7 +41,7 @@
 
         <include layout="@layout/section_header2"/>
 
-        <include layout="@layout/impianto_2_text_2_edit"/>-->
+        <include layout="@layout/two_texts_two_edits1"/>
 
     </LinearLayout>
 

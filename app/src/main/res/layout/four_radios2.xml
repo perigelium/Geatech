@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:layout_marginBottom="5dp"
+              android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/llHeaderFourRadios2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#eeeeee"
+        android:clickable="true"
+        android:orientation="horizontal">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/tvHeaderFourRadios2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start|center_vertical"
+                android:layout_margin="9dp"
+                android:text=" Section name"
+                android:textSize="13sp"/>
+
+            <ImageView
+                android:id="@+id/ivArrowFourRadios2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical|end"
+                android:layout_marginRight="50dp"
+                android:src="@android:drawable/arrow_down_float"/>
+
+        </FrameLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/llSectionFourRadios2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        ><!--android:visibility="gone">-->
+
+        <RadioGroup
+            android:id="@+id/rg1FourRadios2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <RadioButton
+                android:id="@+id/rb1FourRadios2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:button="@null"
+                android:drawableRight="@android:drawable/btn_radio"
+                android:text="Radio 1"/>
+
+            <RadioButton
+                android:id="@+id/rb2FourRadios2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:button="@null"
+                android:drawableRight="@android:drawable/btn_radio"
+                android:text="Radio 2"/>
+
+            <RadioButton
+                android:id="@+id/rb3FourRadios2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:button="@null"
+                android:drawableRight="@android:drawable/btn_radio"
+                android:text="Radio 3"/>
+
+            <RadioButton
+                android:id="@+id/rb4FourRadios2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:button="@null"
+                android:drawableRight="@android:drawable/btn_radio"
+                android:text="Radio 4   "/>
+
+        </RadioGroup>
+
+    </LinearLayout>
+
+</LinearLayout>

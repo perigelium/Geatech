@@ -24,6 +24,7 @@ public class ReportStates extends RealmObject
     private String dataOraUltimoTentativo;
     private String dataOraRaportoCompilato; // data_ora_compilazione_rapporto
     private String dataOraRaportoInviato; // data_ora_invio_rapporto
+
     private String nome_tecnico;
     private String note_tecnico;
     private int photoAddedNumber; // immagini numero
@@ -66,6 +67,7 @@ public class ReportStates extends RealmObject
         sendingReportTriesState = 0;
         dataOraUltimoTentativo = "19:00";
         dataOraProssimoTentativo = "21:00";
+        nome_tecnico = "";
     }
 
     public void setId(int id)
@@ -233,5 +235,15 @@ public class ReportStates extends RealmObject
     public void setGeneralInfoCompletionState(int generalInfoCompletionState)
     {
         this.generalInfoCompletionState = generalInfoCompletionState;
+    }
+
+    public String getNome_tecnico()
+    {
+        return nome_tecnico;
+    }
+
+    public void setNome_tecnico(String nome_tecnico)
+    {
+        this.nome_tecnico = nome_tecnico;
     }
 }

@@ -6,7 +6,7 @@
               android:orientation="vertical">
 
     <LinearLayout
-        android:id="@+id/llSectionFourChkboxes1"
+        android:id="@+id/llHeaderFourChkboxes1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#eeeeee"
@@ -18,7 +18,7 @@
             android:layout_height="wrap_content">
 
             <TextView
-                android:id="@+id/tvSectionFourChkboxes1"
+                android:id="@+id/tvHeaderFourChkboxes1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start|center_vertical"
@@ -39,7 +39,7 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/llFourChkboxes1"
+        android:id="@+id/llSectionFourChkboxes1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"

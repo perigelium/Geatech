@@ -5,9 +5,9 @@
               android:orientation="vertical">
 
     <LinearLayout
+        android:id="@+id/llSectionTwoTextTwoEdit1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="6dp"
         android:background="#eeeeee"
         android:orientation="vertical">
 

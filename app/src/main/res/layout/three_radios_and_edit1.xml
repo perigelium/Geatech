@@ -6,7 +6,7 @@
               android:orientation="vertical">
 
     <LinearLayout
-        android:id="@+id/llSectionThreeRadiosAndEdit1"
+        android:id="@+id/llHeaderThreeRadiosAndEdit1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#eeeeee"
@@ -18,7 +18,7 @@
             android:layout_height="wrap_content">
 
             <TextView
-                android:id="@+id/tvSectionThreeRadiosAndEdit1"
+                android:id="@+id/tvHeaderThreeRadiosAndEdit1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start|center_vertical"
@@ -39,7 +39,7 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/llThreeRadiosAndEdit1"
+        android:id="@+id/llSectionThreeRadiosAndEdit1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
@@ -47,7 +47,7 @@
 
 
         <RadioGroup
-            android:id="@+id/rgThreeRadiosAndEdit1"
+            android:id="@+id/rg1ThreeRadiosAndEdit1"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 

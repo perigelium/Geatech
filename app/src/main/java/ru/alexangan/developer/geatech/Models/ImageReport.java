@@ -1,26 +1,31 @@
 package ru.alexangan.developer.geatech.Models;
 
+import java.io.File;
+
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 
 /**
  * Created by user on 25.01.2017.
  */
-public class ImagesReport extends RealmObject
+public class ImageReport extends RealmObject
 {
     @PrimaryKey
     private int id_immagine_rapporto;
 
     private int id_rapporto_sopralluogo;
-    private String filePaths;
+    private String fileName;
+    File file;
 
-    public ImagesReport(int id_rapporto_sopralluogo, int id_immagine_rapporto)
+    public ImageReport(int id_rapporto_sopralluogo, int id_immagine_rapporto, File file)
     {
         this.id_rapporto_sopralluogo = id_rapporto_sopralluogo;
         this.id_immagine_rapporto = id_immagine_rapporto;
+        this.file = file;
+        this.fileName = file.getName();
     }
 
-    public ImagesReport()
+    public ImageReport()
     {
     }
 
@@ -34,13 +39,23 @@ public class ImagesReport extends RealmObject
         return id_rapporto_sopralluogo;
     }
 
-    public String getFilePaths()
+    public File getFile()
     {
-        return filePaths;
+        return file;
     }
 
-    public void setFilePaths(String filePaths)
+    public void setFile(File file)
     {
-        this.filePaths = filePaths;
+        this.file = file;
+    }
+
+    public String getFileName()
+    {
+        return fileName;
+    }
+
+    public void setFileName(String fileName)
+    {
+        this.fileName = fileName;
     }
 }

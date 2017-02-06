@@ -25,7 +25,7 @@ import java.util.Collections;
 
 import io.realm.RealmResults;
 import ru.alexangan.developer.geatech.Adapters.GridViewAdapter;
-import ru.alexangan.developer.geatech.Models.ImagesReport;
+import ru.alexangan.developer.geatech.Models.ImageReport;
 import ru.alexangan.developer.geatech.Models.ReportStates;
 import ru.alexangan.developer.geatech.Models.VisitItem;
 import ru.alexangan.developer.geatech.Models.VisitStates;
@@ -52,7 +52,7 @@ public class PhotoGalleryGridFragment extends Fragment
     Bitmap photoAddButton;
     Context context;
     private int selectedIndex;
-    ImagesReport gea_immagine;
+    ImageReport gea_immagine;
 
 
     public PhotoGalleryGridFragment()
@@ -190,37 +190,28 @@ public class PhotoGalleryGridFragment extends Fragment
         VisitStates visitStates = visitItem.getVisitStates();
         int idSopralluogo = visitStates.getIdSopralluogo();
         ReportStates reportStates = realm.where(ReportStates.class).equalTo("idSopralluogo", idSopralluogo).findFirst();
-        RealmResults<ImagesReport> gea_immagini = realm.where(ImagesReport.class).findAll();
-        gea_immagine = realm.where(ImagesReport.class).equalTo("id_rapporto_sopralluogo", idSopralluogo).findFirst();
+        RealmResults<ImageReport> gea_immagini = realm.where(ImageReport.class).equalTo("idSopralluogo", idSopralluogo).findAll();
+        gea_immagini.deleteAllFromRealm();
 
         realm.commitTransaction();
-
-        realm.beginTransaction();
 
         if(reportStates!=null)
         {
             reportStates.setPhotoAddedNumber(imageItems.size() - 1);
         }
 
-        if (gea_immagine == null)
-        {
-            gea_immagine = new ImagesReport( idSopralluogo, gea_immagini.size());
-            realm.copyToRealmOrUpdate(gea_immagine);
-        }
-
-        String filePaths = "";
-
         for(File file : pathItems)
         {
             if(!file.getPath().equals("photoAddButton"))
             {
-                filePaths += file.getAbsolutePath() + ",";
+                realm.beginTransaction();
+
+                    ImageReport gea_immagine = new ImageReport( idSopralluogo, gea_immagini.size(), file);
+                    realm.copyToRealmOrUpdate(gea_immagine);
+
+                realm.commitTransaction();
             }
         }
-
-        gea_immagine.setFilePaths(filePaths);
-
-        realm.commitTransaction();
     }
 
     @Override
