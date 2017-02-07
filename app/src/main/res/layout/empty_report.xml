@@ -14,17 +14,7 @@
 
         <include layout="@layout/section_header1"/>
 
-        <include layout="@layout/three_radios_and_edit1"/>
-
-        <include layout="@layout/four_radios_and_edit1"/>
-
-        <include layout="@layout/two_radios1"/>
-
-        <include layout="@layout/three_chkboxes_and_edit1"/>
-
         <include layout="@layout/section_header2"/>
-
-        <include layout="@layout/three_texts_three_edits1"/>
 
     </LinearLayout>
 

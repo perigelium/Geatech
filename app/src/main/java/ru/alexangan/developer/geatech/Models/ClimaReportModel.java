@@ -1,11 +1,5 @@
 package ru.alexangan.developer.geatech.Models;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-
-import io.realm.RealmList;
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 
@@ -19,15 +13,13 @@ public class ClimaReportModel extends RealmObject
     int id;
     int idSopralluogo;
 
-    private String etTypeOfBuilding;
-    private String etUnitOutdoorPositioning;
-    private String etWallsType;
-    private String etNoteInstallationPlace;
-    private String etNoteExistingDev;
-
-    private String etBuildingPlan;
-
-    private String etAltroBuildingPlan;
+    private String id_item_72;
+    private String id_item_73;
+    private String id_item_74;
+    private String id_item_75;
+    private String id_item_76;
+    private String id_item_77;
+    private String id_item_78;
 
     public ClimaReportModel(){};
 
@@ -37,74 +29,64 @@ public class ClimaReportModel extends RealmObject
         this.idSopralluogo = idSopralluogo;
     }
 
-    public String getEtAltroBuildingPlan()
+    public String getId_item_75()
     {
-        return etAltroBuildingPlan;
+        return id_item_75;
     }
 
-    public void setEtAltroBuildingPlan(String etAltroBuildingPlan)
+    public void setId_item_75(String id_item_75)
     {
-        this.etAltroBuildingPlan = etAltroBuildingPlan;
+        this.id_item_75 = id_item_75;
     }
 
-    public String getEtBuildingPlan()
+    public String getId_item_72()
     {
-        return etBuildingPlan;
+        return id_item_72;
     }
 
-    public void setEtBuildingPlan(String etBuildingPlan)
+    public void setId_item_72(String id_item_72)
     {
-        this.etBuildingPlan = etBuildingPlan;
+        this.id_item_72 = id_item_72;
     }
 
-    public String getEtTypeOfBuilding()
+    public String getId_item_74()
     {
-        return etTypeOfBuilding;
+        return id_item_74;
     }
 
-    public void setEtTypeOfBuilding(String etTypeOfBuilding)
+    public void setId_item_74(String id_item_74)
     {
-        this.etTypeOfBuilding = etTypeOfBuilding;
+        this.id_item_74 = id_item_74;
     }
 
-    public String getEtUnitOutdoorPositioning()
+    public String getId_item_73()
     {
-        return etUnitOutdoorPositioning;
+        return id_item_73;
     }
 
-    public void setEtUnitOutdoorPositioning(String etUnitOutdoorPositioning)
+    public void setId_item_73(String id_item_73)
     {
-        this.etUnitOutdoorPositioning = etUnitOutdoorPositioning;
+        this.id_item_73 = id_item_73;
     }
 
-    public String getEtWallsType()
+    public String getId_item_76()
     {
-        return etWallsType;
+        return id_item_76;
     }
 
-    public void setEtWallsType(String etWallsType)
+    public void setId_item_76(String id_item_76)
     {
-        this.etWallsType = etWallsType;
+        this.id_item_76 = id_item_76;
     }
 
-    public String getEtNoteInstallationPlace()
+    public String getId_item_77()
     {
-        return etNoteInstallationPlace;
+        return id_item_77;
     }
 
-    public void setEtNoteInstallationPlace(String etNoteInstallationPlace)
+    public void setId_item_77(String id_item_77)
     {
-        this.etNoteInstallationPlace = etNoteInstallationPlace;
-    }
-
-    public String getEtNoteExistingDev()
-    {
-        return etNoteExistingDev;
-    }
-
-    public void setEtNoteExistingDev(String etNoteExistingDev)
-    {
-        this.etNoteExistingDev = etNoteExistingDev;
+        this.id_item_77 = id_item_77;
     }
 
     public int getId()
@@ -120,5 +102,15 @@ public class ClimaReportModel extends RealmObject
     public void setIdSopralluogo(int idSopralluogo)
     {
         this.idSopralluogo = idSopralluogo;
+    }
+
+    public String getId_item_78()
+    {
+        return id_item_78;
+    }
+
+    public void setId_item_78(String id_item_78)
+    {
+        this.id_item_78 = id_item_78;
     }
 }

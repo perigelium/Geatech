@@ -9,6 +9,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
@@ -17,8 +18,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Locale;
 
@@ -40,44 +39,38 @@ public class ClimaReportFragment extends Fragment implements View.OnClickListene
     View rootView;
     Context context;
     ClimaReportModel climaReportModel;
+    private boolean allSections1Collapsed, allSections2Collapsed;
 
+    private FrameLayout flSectionHeader1, flSectionHeader2;
     private LinearLayout llHeaderThreeRadiosAndEdit1, llSectionThreeRadiosAndEdit1, llHeaderTwoRadios1, llSectionTwoRadios1,
-            llHeaderFourRadiosAndEdit1, llSectionFourRadiosAndEdit1, llHeaderThreeChkboxesAndEdit1, llSectionThreeChkboxesAndEdit1;
-    private TextView tvReportTitle, tv1TwoTextTwoEdit1, tv2TwoTextTwoEdit1, tvFirstSectionTitle, tvSectionHeader2,
-            tvHeaderThreeRadiosAndEdit1, tvHeaderTwoRadios1, tvHeaderFourRadiosAndEdit1, tvHeaderThreeChkboxesAndEdit1;
+            llHeaderFourRadiosAndEdit1, llSectionFourRadiosAndEdit1, llHeaderThreeChkboxesAndEdit1, llSectionThreeChkboxesAndEdit1, llSectionThreeTextThreeEdit1;
+    private TextView tvReportTitle, tv1ThreeTextThreeEdit1, tv2ThreeTextThreeEdit1, tv3ThreeTextThreeEdit1, tvFirstSectionHeader,
+            tvSectionHeader2, tvHeaderThreeRadiosAndEdit1, tvHeaderTwoRadios1, tvHeaderFourRadiosAndEdit1, tvHeaderThreeChkboxesAndEdit1;
     private RadioGroup rg1ThreeRadiosAndEdit1, rg1TwoRadios1, rg1FourRadiosAndEdit1;
-    private EditText et1ThreeRadiosAndEdit1, et1FourRadiosAndEdit1, et1ThreeChkboxesAndEdit1, et1TwoTextTwoEdit1, et2TwoTextTwoEdit1;
+    private EditText et1ThreeRadiosAndEdit1, et1FourRadiosAndEdit1, et1ThreeChkboxesAndEdit1, et1ThreeTextThreeEdit1, et2ThreeTextThreeEdit1, et3ThreeTextThreeEdit1;
     CheckBox chk1ThreeChkboxesAndEdit1, chk2ThreeChkboxesAndEdit1, chk3ThreeChkboxesAndEdit1;
-    ImageView ivArrowTwoRadios1;
-    private ImageView ivArrowThreeRadiosAndEdit1;
-    private ImageView ivArrowFourRadiosAndEdit1;
-    private ImageView ivArrowThreeChkboxesAndEdit1;
+    ImageView ivArrowTwoRadios1, ivArrowThreeRadiosAndEdit1, ivArrowFourRadiosAndEdit1, ivArrowThreeChkboxesAndEdit1;
 
     private final String strReportTitle = "Climatizzazione";
 
-    private final String [] strSectionTitles = {"1. Rilievo dello stato dei luoghi", "2. Impianto"};
+    private final String [] strHeaderTitles = {"1. Rilievo dello stato dei luoghi", "2. Impianto"};
 
-    private final String[] strSectionsTitles = new String[] {
+    private final String[] saSectionTitles = new String[] {
             " 1.1 TIPO DI EDIFICIO:", " 1.2 TIPOLOGIA COSTRUTTIVA MURATURE:",
             " 1.3 POSIZIONAMENTO UNITÀ ESTERNA:", " 1.4 LOCALI E/O PIANI DELL'EDIFICIO:"};
 
-    private final String[] strTypesOfBuilding = new String[] {
-             "Appartamento", "Villa(Singola/Multi)", "Negozio"};
+    private final String[] sa_id_item_72 =  {"Appartamento", "Villa(Singola/Multi)", "Negozio"};
 
-    private final String[] strUnitOutdoorPosition = new String[] {
-            "A Parete", "A Pavimento"};
+    private final String[] sa_id_item_73 =  {"Cemento Armato", "Mattoni Pieni", "Mattoni Forati", "Pietra"};
 
-    private final String[] strWallsType = new String[] {
-            "Cemento Armato", "Mattoni Pieni", "Mattoni Forati", "Pietra"};
+    private final String[] sa_id_item_74 =  {"A Parete", "A Pavimento"};
 
-    private final String[] strBuildingPlan = new String[] {
-            "Interrato", "Piano rialzato", "Piano Terra"};
+    private final String[] sa_id_item_75 =  {"Interrato", "Piano rialzato", "Piano Terra"};
 
-    private final String[] strImpianto = new String[] { " 2.1 NOTE SUL LUOGO DI INSTALLAZIONE E INDIVIDUAZIONE DI EVENTUALI CRITICITÀ SUI COLLEGAMENTI IDRAULICI E/O SULLA GESTIONE DELL'UTENZA:",
+    private final String[] strImpianto =  { " 2.1 NOTE SUL LUOGO DI INSTALLAZIONE E INDIVIDUAZIONE DI EVENTUALI CRITICITÀ SUI COLLEGAMENTI IDRAULICI E/O SULLA GESTIONE DELL'UTENZA:",
             " 2.2 NOTE SULLA TIPOLOGIA DELL'IMPIANTO ESISTENTE (CALDAIA, ELEMENTI RADIANTI, TUBAZIONI, ETC.)\n" +
-                    "DESCRIVERE COMA VERRÀ INTERFACCIATO IL SISTEMA ALL'UTENZA PRINCIPALEE I COMPONENTI CHE VERRANNO UTILIZZATI:"};
-
-    ArrayList<String> saSectionTitles, saTypesOfBuilding, saUnitOutdoorPosition, saWallsType, saBuildingPlan;
+                    "DESCRIVERE COMA VERRÀ INTERFACCIATO IL SISTEMA ALL'UTENZA PRINCIPALEE I COMPONENTI CHE VERRANNO UTILIZZATI:",
+    "2.3 NOTE RELATIVE A COLLEGAMENTO DELL'IMPIANTO ESISTENTE"};
 
     public ClimaReportFragment()
     {
@@ -98,82 +91,86 @@ public class ClimaReportFragment extends Fragment implements View.OnClickListene
             realm.beginTransaction();
 
 
-                String strTypeOfBuilding = "";
+                String strId_item_72 = "";
                 int checkedBtnId = rg1ThreeRadiosAndEdit1.getCheckedRadioButtonId();
                 if (checkedBtnId != -1)
                 {
                     RadioButton radioButton = (RadioButton) rg1ThreeRadiosAndEdit1.findViewById(checkedBtnId);
-                    strTypeOfBuilding = radioButton.getText().toString();
+                    strId_item_72 = radioButton.getText().toString();
 
-                    Log.d("DEBUG", strTypeOfBuilding);
+                    Log.d("DEBUG", strId_item_72);
                 }
                 else
                 {
-                    strTypeOfBuilding = et1ThreeRadiosAndEdit1.getText().toString();
+                    strId_item_72 = et1ThreeRadiosAndEdit1.getText().toString();
                 }
 
-            climaReportModel.setEtTypeOfBuilding(strTypeOfBuilding);
+            climaReportModel.setId_item_72(strId_item_72);
 
 
-                String strWallsType = "";
+                String strId_item_73 = "";
                 checkedBtnId = rg1FourRadiosAndEdit1.getCheckedRadioButtonId();
                 if (checkedBtnId != -1)
                 {
                     RadioButton radioButton = (RadioButton) rg1FourRadiosAndEdit1.findViewById(checkedBtnId);
-                    strWallsType = radioButton.getText().toString();
+                    strId_item_73 = radioButton.getText().toString();
 
-                    Log.d("DEBUG", strWallsType);
+                    Log.d("DEBUG", strId_item_73);
                 }
                 else
                 {
-                    strWallsType = et1FourRadiosAndEdit1.getText().toString();
+                    strId_item_73 = et1FourRadiosAndEdit1.getText().toString();
                 }
-            climaReportModel.setEtWallsType(strWallsType);
+            climaReportModel.setId_item_73(strId_item_73);
 
-            String strUnitOutdoorPosition = "";
+            String strId_item_74 = "";
             checkedBtnId = rg1TwoRadios1.getCheckedRadioButtonId();
             if (checkedBtnId != -1)
             {
                 RadioButton radioButton = (RadioButton) rg1TwoRadios1.findViewById(checkedBtnId);
-                strUnitOutdoorPosition = radioButton.getText().toString();
+                strId_item_74 = radioButton.getText().toString();
 
-                Log.d("DEBUG", strUnitOutdoorPosition);
+                Log.d("DEBUG", strId_item_74);
 
-                climaReportModel.setEtUnitOutdoorPositioning(strUnitOutdoorPosition);
+                climaReportModel.setId_item_74(strId_item_74);
             }
 
-            String strAltroBuildingPlan = et1ThreeChkboxesAndEdit1.getText().toString();
+            String strId_item_75 = et1ThreeChkboxesAndEdit1.getText().toString();
 
-            if(strAltroBuildingPlan == null || strAltroBuildingPlan.length() < 4)
+            if(strId_item_75 == null || strId_item_75.length() < 4)
             {
-                String strUnderground = chk1ThreeChkboxesAndEdit1.isChecked() ? chk1ThreeChkboxesAndEdit1.getText().toString() : null;
-                String strMezzanine = chk2ThreeChkboxesAndEdit1.isChecked() ? chk2ThreeChkboxesAndEdit1.getText().toString() : null;
-                String strGroundFloor = chk3ThreeChkboxesAndEdit1.isChecked() ? chk3ThreeChkboxesAndEdit1.getText().toString() : null;
-                climaReportModel.setEtBuildingPlan(strUnderground + "," + strMezzanine + "," + strGroundFloor);
+                String strChk1 = chk1ThreeChkboxesAndEdit1.isChecked() ? chk1ThreeChkboxesAndEdit1.getText().toString() : "";
+                String strChk2 = chk2ThreeChkboxesAndEdit1.isChecked() ? chk2ThreeChkboxesAndEdit1.getText().toString() : "";
+                String strChk3 = chk3ThreeChkboxesAndEdit1.isChecked() ? chk3ThreeChkboxesAndEdit1.getText().toString() : "";
+                climaReportModel.setId_item_75(strChk1 + " " + strChk2 + " " + strChk3);
             }
             else
             {
-                climaReportModel.setEtAltroBuildingPlan(strAltroBuildingPlan);
+                climaReportModel.setId_item_75(strId_item_75);
             }
 
-            String strNoteInstallationPlace = et1TwoTextTwoEdit1.getText().toString();
+            String strId_item_76 = et1ThreeTextThreeEdit1.getText().toString();
 
-            climaReportModel.setEtNoteInstallationPlace(strNoteInstallationPlace);
+            climaReportModel.setId_item_76(strId_item_76);
 
-            String strNoteExistingDev = et2TwoTextTwoEdit1.getText().toString();
+            String strId_item_77 = et2ThreeTextThreeEdit1.getText().toString();
 
-            climaReportModel.setEtNoteExistingDev(strNoteExistingDev);
+            climaReportModel.setId_item_77(strId_item_77);
+
+            String str_Id_item_78 = et3ThreeTextThreeEdit1.getText().toString();
+
+            climaReportModel.setId_item_78(str_Id_item_78);
 
 
-            if(strTypeOfBuilding.length() != 0)
+            if(strId_item_72.length() != 0)
             {
                 reportStates.setReportCompletionState(1);
 
-                if (strUnitOutdoorPosition.length() != 0 || strWallsType.length() != 0)
+                if (strId_item_74.length() != 0 || strId_item_73.length() != 0)
                 {
                     reportStates.setReportCompletionState(2);
 
-                    if (strTypeOfBuilding.length() != 0 && strUnitOutdoorPosition.length() != 0 && strWallsType.length() != 0)
+                    if (strId_item_72.length() != 0 && strId_item_74.length() != 0 && strId_item_73.length() != 0)
                     {
                         reportStates.setReportCompletionState(3);
 
@@ -223,7 +220,6 @@ public class ClimaReportFragment extends Fragment implements View.OnClickListene
             if (climaReportModel == null)
             {
                 climaReportModel = new ClimaReportModel(climaReportModels.size(), idSopralluogo);
-                //climaReportModel.setIdSopralluogo(idSopralluogo);
                 realm.copyToRealmOrUpdate(climaReportModel);
             }
         }
@@ -234,7 +230,7 @@ public class ClimaReportFragment extends Fragment implements View.OnClickListene
         if (climaReportModel != null)
         {
             int i;
-            String strTypeOfBuilding = climaReportModel.getEtTypeOfBuilding();
+            String strTypeOfBuilding = climaReportModel.getId_item_72();
 
             if(strTypeOfBuilding != null)
             {
@@ -255,7 +251,7 @@ public class ClimaReportFragment extends Fragment implements View.OnClickListene
                 }
             }
 
-            String strWallsType = climaReportModel.getEtWallsType();
+            String strWallsType = climaReportModel.getId_item_73();
             if(strWallsType != null)
             {
                 for (i = 0; i < rg1FourRadiosAndEdit1.getChildCount(); i++)
@@ -275,7 +271,7 @@ public class ClimaReportFragment extends Fragment implements View.OnClickListene
                 }
             }
 
-            String strUnitOutdoorPosition = climaReportModel.getEtUnitOutdoorPositioning();
+            String strUnitOutdoorPosition = climaReportModel.getId_item_74();
 
             if(strUnitOutdoorPosition!=null)
             {
@@ -291,30 +287,29 @@ public class ClimaReportFragment extends Fragment implements View.OnClickListene
                 }
             }
 
-            if(climaReportModel.getEtBuildingPlan()!=null)
+            if(climaReportModel.getId_item_75()!=null)
             {
-                if (climaReportModel.getEtBuildingPlan().contains(chk1ThreeChkboxesAndEdit1.getText().toString()))
+                if (climaReportModel.getId_item_75().contains(chk1ThreeChkboxesAndEdit1.getText().toString()))
                 {
                     chk1ThreeChkboxesAndEdit1.setChecked(true);
                 }
 
-                if (climaReportModel.getEtBuildingPlan().contains(chk2ThreeChkboxesAndEdit1.getText().toString()))
+                if (climaReportModel.getId_item_75().contains(chk2ThreeChkboxesAndEdit1.getText().toString()))
                 {
                     chk2ThreeChkboxesAndEdit1.setChecked(true);
                 }
 
-                if (climaReportModel.getEtBuildingPlan().contains(chk3ThreeChkboxesAndEdit1.getText().toString()))
+                if (climaReportModel.getId_item_75().contains(chk3ThreeChkboxesAndEdit1.getText().toString()))
                 {
                     chk3ThreeChkboxesAndEdit1.setChecked(true);
                 }
-            }
-            if(climaReportModel.getEtAltroBuildingPlan() != null && climaReportModel.getEtAltroBuildingPlan().length() > 3)
-            {
-                et1ThreeChkboxesAndEdit1.setText(climaReportModel.getEtAltroBuildingPlan());
+                et1ThreeChkboxesAndEdit1.setText(climaReportModel.getId_item_75());
             }
 
-            et1TwoTextTwoEdit1.setText(climaReportModel.getEtNoteInstallationPlace());
-            et2TwoTextTwoEdit1.setText(climaReportModel.getEtNoteExistingDev());
+            et1ThreeTextThreeEdit1.setText(climaReportModel.getId_item_76());
+            et2ThreeTextThreeEdit1.setText(climaReportModel.getId_item_77());
+            et3ThreeTextThreeEdit1.setText(climaReportModel.getId_item_78());
+
         }
         realm.commitTransaction();
 
@@ -332,17 +327,8 @@ public class ClimaReportFragment extends Fragment implements View.OnClickListene
             selectedIndex = getArguments().getInt("selectedIndex");
         }
 
-        saSectionTitles = new ArrayList<>();
-        saTypesOfBuilding = new ArrayList<>();
-        saUnitOutdoorPosition = new ArrayList<>();
-        saWallsType = new ArrayList<>();
-        saBuildingPlan = new ArrayList<>();
-
-        saSectionTitles.addAll(Arrays.asList(strSectionsTitles));
-        saTypesOfBuilding.addAll(Arrays.asList(strTypesOfBuilding));
-        saUnitOutdoorPosition.addAll(Arrays.asList(strUnitOutdoorPosition));
-        saWallsType.addAll(Arrays.asList(strWallsType));
-        saBuildingPlan.addAll(Arrays.asList(strBuildingPlan));
+        allSections1Collapsed = false;
+        allSections2Collapsed = false;
     }
 
     @Override
@@ -353,13 +339,14 @@ public class ClimaReportFragment extends Fragment implements View.OnClickListene
         rootView =  inflater.inflate(R.layout.climatizzazione_report, container, false);
 
         tvReportTitle = (TextView) rootView.findViewById(R.id.tvReportTitle);
-
         tvReportTitle.setText(strReportTitle);
 
-        tvFirstSectionTitle = (TextView) rootView.findViewById(R.id.tvSectionHeader1);
-        tvFirstSectionTitle.setText(strSectionsTitles[0]);
+        flSectionHeader1 = (FrameLayout) rootView.findViewById(R.id.flSectionHeader1);
+        flSectionHeader1.setOnClickListener(this);
 
-
+        tvFirstSectionHeader = (TextView) rootView.findViewById(R.id.tvSectionHeader1);
+        tvFirstSectionHeader.setText(strHeaderTitles[0]);
+        
         llHeaderThreeRadiosAndEdit1 = (LinearLayout) rootView.findViewById(R.id.llHeaderThreeRadiosAndEdit1);
         llHeaderThreeRadiosAndEdit1.setOnClickListener(this);
 
@@ -367,7 +354,7 @@ public class ClimaReportFragment extends Fragment implements View.OnClickListene
 
         tvHeaderThreeRadiosAndEdit1 = (TextView) rootView.findViewById(R.id.tvHeaderThreeRadiosAndEdit1);
 
-        tvHeaderThreeRadiosAndEdit1.setText(saSectionTitles.get(sectionNumber++));
+        tvHeaderThreeRadiosAndEdit1.setText(saSectionTitles[sectionNumber++]);
 
         llSectionThreeRadiosAndEdit1 = (LinearLayout) rootView.findViewById(R.id.llSectionThreeRadiosAndEdit1);
         
@@ -378,11 +365,10 @@ public class ClimaReportFragment extends Fragment implements View.OnClickListene
         {
             RadioButton rb = (RadioButton) rg1ThreeRadiosAndEdit1.getChildAt(i);
 
-            rb.setText(saTypesOfBuilding.get(i));
+            rb.setText(sa_id_item_72[i]);
         }
 
         et1ThreeRadiosAndEdit1 = (EditText) rootView.findViewById(R.id.et1ThreeRadiosAndEdit1);
-        //et1ThreeRadiosAndEdit1.setOnClickListener(this);
         et1ThreeRadiosAndEdit1.setOnTouchListener(new View.OnTouchListener()
         {
             @Override
@@ -392,7 +378,6 @@ public class ClimaReportFragment extends Fragment implements View.OnClickListene
                 return false;
             }
         });
-        //et1ThreeRadiosAndEdit1.setText(saTypesOfBuilding.get(i));
 
 
         llHeaderFourRadiosAndEdit1 = (LinearLayout) rootView.findViewById(R.id.llHeaderFourRadiosAndEdit1);
@@ -401,8 +386,7 @@ public class ClimaReportFragment extends Fragment implements View.OnClickListene
         ivArrowFourRadiosAndEdit1 = (ImageView) rootView.findViewById(R.id.ivArrowFourRadiosAndEdit1);
 
         tvHeaderFourRadiosAndEdit1 = (TextView) rootView.findViewById(R.id.tvHeaderFourRadiosAndEdit1);
-
-        tvHeaderFourRadiosAndEdit1.setText(saSectionTitles.get(sectionNumber++));
+        tvHeaderFourRadiosAndEdit1.setText(saSectionTitles[sectionNumber++]);
 
         llSectionFourRadiosAndEdit1 = (LinearLayout) rootView.findViewById(R.id.llSectionFourRadiosAndEdit1);
 
@@ -412,11 +396,10 @@ public class ClimaReportFragment extends Fragment implements View.OnClickListene
         {
             RadioButton rb = (RadioButton) rg1FourRadiosAndEdit1.getChildAt(i);
 
-            rb.setText(saWallsType.get(i));
+            rb.setText(sa_id_item_73[i]);
         }
 
         et1FourRadiosAndEdit1 = (EditText) rootView.findViewById(R.id.et1FourRadiosAndEdit1);
-        //et1FourRadiosAndEdit1.setOnClickListener(this);
         et1FourRadiosAndEdit1.setOnTouchListener(new View.OnTouchListener()
         {
             @Override
@@ -426,15 +409,12 @@ public class ClimaReportFragment extends Fragment implements View.OnClickListene
                 return false;
             }
         });
-        //et1FourRadiosAndEdit1.setText(saWallsType.get(i));
-
 
         llHeaderTwoRadios1 = (LinearLayout) rootView.findViewById(R.id.llHeaderTwoRadios1);
         llHeaderTwoRadios1.setOnClickListener(this);
 
         tvHeaderTwoRadios1 = (TextView) rootView.findViewById(R.id.tvHeaderTwoRadios1);
-
-        tvHeaderTwoRadios1.setText(saSectionTitles.get(sectionNumber++));
+        tvHeaderTwoRadios1.setText(saSectionTitles[sectionNumber++]);
 
         ivArrowTwoRadios1 = (ImageView) rootView.findViewById(R.id.ivArrowTwoRadios1);
 
@@ -446,7 +426,7 @@ public class ClimaReportFragment extends Fragment implements View.OnClickListene
         {
             RadioButton rb = (RadioButton) rg1TwoRadios1.getChildAt(i);
 
-            rb.setText(saUnitOutdoorPosition.get(i));
+            rb.setText(sa_id_item_74[i]);
         }
 
         llHeaderThreeChkboxesAndEdit1 = (LinearLayout) rootView.findViewById(R.id.llHeaderThreeChkboxesAndEdit1);
@@ -455,17 +435,16 @@ public class ClimaReportFragment extends Fragment implements View.OnClickListene
         ivArrowThreeChkboxesAndEdit1 = (ImageView) rootView.findViewById(R.id.ivArrowThreeChkboxesAndEdit1);
 
         tvHeaderThreeChkboxesAndEdit1 = (TextView) rootView.findViewById(R.id.tvHeaderThreeChkboxesAndEdit1);
-
-        tvHeaderThreeChkboxesAndEdit1.setText(saSectionTitles.get(sectionNumber++));
+        tvHeaderThreeChkboxesAndEdit1.setText(saSectionTitles[sectionNumber++]);
 
         llSectionThreeChkboxesAndEdit1 = (LinearLayout) rootView.findViewById(R.id.llSectionThreeChkboxesAndEdit1);
 
             chk1ThreeChkboxesAndEdit1 = (CheckBox) rootView.findViewById(R.id.chk1ThreeChkboxesAndEdit1);
-        chk1ThreeChkboxesAndEdit1.setText(saBuildingPlan.get(0));
+        chk1ThreeChkboxesAndEdit1.setText(sa_id_item_75[0]);
             chk2ThreeChkboxesAndEdit1 = (CheckBox) rootView.findViewById(R.id.chk2ThreeChkboxesAndEdit1);
-        chk2ThreeChkboxesAndEdit1.setText(saBuildingPlan.get(1));
+        chk2ThreeChkboxesAndEdit1.setText(sa_id_item_75[1]);
             chk3ThreeChkboxesAndEdit1 = (CheckBox) rootView.findViewById(R.id.chk3ThreeChkboxesAndEdit1);
-        chk3ThreeChkboxesAndEdit1.setText(saBuildingPlan.get(2));
+        chk3ThreeChkboxesAndEdit1.setText(sa_id_item_75[2]);
 
         et1ThreeChkboxesAndEdit1 = (EditText) rootView.findViewById(R.id.et1ThreeChkboxesAndEdit1);
         et1ThreeChkboxesAndEdit1.setOnTouchListener(new View.OnTouchListener()
@@ -479,21 +458,29 @@ public class ClimaReportFragment extends Fragment implements View.OnClickListene
                 return false;
             }
         });
-        //et1ThreeChkboxesAndEdit1.setText(saBuildingPlan.get(3));
+
+        flSectionHeader2 = (FrameLayout) rootView.findViewById(R.id.flSectionHeader2);
+        flSectionHeader2.setOnClickListener(this);
+
+        flSectionHeader2 = (FrameLayout) rootView.findViewById(R.id.flSectionHeader2);
+
+        llSectionThreeTextThreeEdit1 = (LinearLayout) rootView.findViewById(R.id.llSectionThreeTextThreeEdit1);
 
         tvSectionHeader2 = (TextView) rootView.findViewById(R.id.tvSectionHeader2);
-        tvSectionHeader2.setText(strSectionsTitles[1]);
+        tvSectionHeader2.setText(strHeaderTitles[1]);
 
-        tv1TwoTextTwoEdit1 = (TextView) rootView.findViewById(R.id.tv1TwoTextTwoEdit1);
+        tv1ThreeTextThreeEdit1 = (TextView) rootView.findViewById(R.id.tv1ThreeTextThreeEdit1);
+        tv1ThreeTextThreeEdit1.setText(strImpianto[0]);
 
-        tv1TwoTextTwoEdit1.setText(strImpianto[0]);
-        
-        tv2TwoTextTwoEdit1 = (TextView) rootView.findViewById(R.id.tv2TwoTextTwoEdit1);
+        tv2ThreeTextThreeEdit1 = (TextView) rootView.findViewById(R.id.tv2ThreeTextThreeEdit1);
+        tv2ThreeTextThreeEdit1.setText(strImpianto[1]);
 
-        tv2TwoTextTwoEdit1.setText(strImpianto[1]);
+        tv3ThreeTextThreeEdit1 = (TextView) rootView.findViewById(R.id.tv3ThreeTextThreeEdit1);
+        tv3ThreeTextThreeEdit1.setText(strImpianto[2]);
 
-        et1TwoTextTwoEdit1 = (EditText) rootView.findViewById(R.id.et1TwoTextTwoEdit1);
-        et2TwoTextTwoEdit1 = (EditText) rootView.findViewById(R.id.et2TwoTextTwoEdit1);
+        et1ThreeTextThreeEdit1 = (EditText) rootView.findViewById(R.id.et1ThreeTextThreeEdit1);
+        et2ThreeTextThreeEdit1 = (EditText) rootView.findViewById(R.id.et2ThreeTextThreeEdit1);
+        et3ThreeTextThreeEdit1 = (EditText) rootView.findViewById(R.id.et3ThreeTextThreeEdit1);
 
         return rootView;
     }
@@ -501,6 +488,23 @@ public class ClimaReportFragment extends Fragment implements View.OnClickListene
     @Override
     public void onClick(View view)
     {
+        if (view == flSectionHeader1)
+        {
+            llSectionThreeRadiosAndEdit1.setVisibility(!allSections1Collapsed ? View.GONE : View.VISIBLE);
+            llSectionTwoRadios1.setVisibility(!allSections1Collapsed ? View.GONE : View.VISIBLE);
+            llSectionFourRadiosAndEdit1.setVisibility(!allSections1Collapsed ? View.GONE : View.VISIBLE);
+            llSectionThreeChkboxesAndEdit1.setVisibility(!allSections1Collapsed ? View.GONE : View.VISIBLE);
+
+            allSections1Collapsed=!allSections1Collapsed;
+        }
+
+        if (view == flSectionHeader2)
+        {
+            llSectionThreeTextThreeEdit1.setVisibility(!allSections2Collapsed ? View.GONE : View.VISIBLE);
+
+            allSections2Collapsed=!allSections2Collapsed;
+        }
+
         if (view == llHeaderThreeRadiosAndEdit1)
         {
             llSectionThreeRadiosAndEdit1.setVisibility(llSectionThreeRadiosAndEdit1.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);

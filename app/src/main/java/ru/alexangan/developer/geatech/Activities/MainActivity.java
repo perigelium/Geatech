@@ -23,6 +23,7 @@ import ru.alexangan.developer.geatech.Fragments.CtrlBtnReportDetailed;
 import ru.alexangan.developer.geatech.Fragments.CtrlBtnsFragment1;
 import ru.alexangan.developer.geatech.Fragments.CtrlBtnsFragment2;
 import ru.alexangan.developer.geatech.Fragments.DomoticaReportFragment;
+import ru.alexangan.developer.geatech.Fragments.EmptyReportFragment;
 import ru.alexangan.developer.geatech.Fragments.FotovoltaicoReportFragment;
 import ru.alexangan.developer.geatech.Fragments.InWorkListVisitsFragment;
 import ru.alexangan.developer.geatech.Fragments.ListVisitsFragment;
@@ -72,6 +73,7 @@ public class MainActivity extends Activity implements Communicator
     DomoticaReportFragment domoticaReportFragment;
     PompaDiCaloreReportFragment pompaDiCaloreReportFragment;
     StorageReportFragment storageReportFragment;
+    EmptyReportFragment emptyReportFragment;
 
     NotificationBarFragment notificationBarFragment;
     public static RealmResults<VisitItem> visitItems;
@@ -177,6 +179,7 @@ public class MainActivity extends Activity implements Communicator
         domoticaReportFragment = new DomoticaReportFragment();
         pompaDiCaloreReportFragment = new PompaDiCaloreReportFragment();
         storageReportFragment = new StorageReportFragment();
+        emptyReportFragment = new EmptyReportFragment();
 
         notificationBarFragment = new NotificationBarFragment();
 
@@ -389,7 +392,7 @@ public class MainActivity extends Activity implements Communicator
 
         if(currentSelIndex != -1)
         {
-        VisitItem visitItem = visitItems.get(currentSelIndex);
+            VisitItem visitItem = visitItems.get(currentSelIndex);
             ProductData productData = visitItem.getProductData();
             String productType = productData.getProductType();
 
@@ -599,22 +602,6 @@ public class MainActivity extends Activity implements Communicator
         {
             String[] listItemsArray = {"Esci", "Cambia\npassword"};
 
-
-/*            Dialog dialog = new Dialog(MainActivity.this);
-
-            // Установите заголовок
-            dialog.setTitle("Заголовок диалога");
-            // Передайте ссылку на разметку
-            dialog.setContentView(R.layout.alert_dialog_item_custom);
-            // Найдите элемент TextView внутри вашей разметки
-            // и установите ему соответствующий текст
-            TextView text = (TextView) dialog.findViewById(R.id.dialogTextView);
-            text.setText("Текст в диалоговом окне. Вы любите котов?");
-            dialog.show();*/
-
-
-
-
             //ContextThemeWrapper themedContext = new ContextThemeWrapper(this, android.R.style.Theme_DeviceDefault_Light_Dialog_NoActionBar);
             AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
 
@@ -722,7 +709,7 @@ public class MainActivity extends Activity implements Communicator
                 return pompaDiCaloreReportFragment;
 
             default:
-                return null;
+                return emptyReportFragment;
         }
     }
 }

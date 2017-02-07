@@ -20,7 +20,7 @@
                 android:layout_marginLeft="6dp"
                 android:text="3. Section title"
                 android:textColor="#ffffff"
-                android:textSize="15sp"/>
+                android:textSize="17sp"/>
 
             <ImageView
                 android:id="@+id/ivArrowSectionHeader3"

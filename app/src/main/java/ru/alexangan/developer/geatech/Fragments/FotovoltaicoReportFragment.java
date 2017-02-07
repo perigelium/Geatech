@@ -20,7 +20,7 @@ import static ru.alexangan.developer.geatech.Activities.MainActivity.visitItems;
 public class FotovoltaicoReportFragment extends Fragment
 {
     View rootView;
-    CaldaiaReportModel caldaiaReportModel;
+    FotovoltaicoReportFragment fotovoltaicoReportFragment;
     private int selectedIndex;
     int idSopralluogo;
     ReportStates reportStates;

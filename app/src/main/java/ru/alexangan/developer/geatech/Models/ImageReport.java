@@ -15,14 +15,14 @@ public class ImageReport extends RealmObject
 
     private int id_rapporto_sopralluogo;
     private String fileName;
-    File file;
+    private String filePath;
 
-    public ImageReport(int id_rapporto_sopralluogo, int id_immagine_rapporto, File file)
+    public ImageReport(int id_rapporto_sopralluogo, int id_immagine_rapporto, String filePath, String fileName)
     {
         this.id_rapporto_sopralluogo = id_rapporto_sopralluogo;
         this.id_immagine_rapporto = id_immagine_rapporto;
-        this.file = file;
-        this.fileName = file.getName();
+        this.filePath = filePath;
+        this.fileName = fileName;
     }
 
     public ImageReport()
@@ -39,16 +39,6 @@ public class ImageReport extends RealmObject
         return id_rapporto_sopralluogo;
     }
 
-    public File getFile()
-    {
-        return file;
-    }
-
-    public void setFile(File file)
-    {
-        this.file = file;
-    }
-
     public String getFileName()
     {
         return fileName;
@@ -57,5 +47,15 @@ public class ImageReport extends RealmObject
     public void setFileName(String fileName)
     {
         this.fileName = fileName;
+    }
+
+    public String getFilePath()
+    {
+        return filePath;
+    }
+
+    public void setFilePath(String filePath)
+    {
+        this.filePath = filePath;
     }
 }

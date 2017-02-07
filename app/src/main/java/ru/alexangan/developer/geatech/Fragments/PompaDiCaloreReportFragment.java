@@ -20,7 +20,7 @@ import static ru.alexangan.developer.geatech.Activities.MainActivity.visitItems;
 public class PompaDiCaloreReportFragment extends Fragment
 {
     View rootView;
-    CaldaiaReportModel caldaiaReportModel;
+    PompaDiCaloreReportFragment pompaDiCaloreReportFragment;
     private int selectedIndex;
     int idSopralluogo;
     ReportStates reportStates;

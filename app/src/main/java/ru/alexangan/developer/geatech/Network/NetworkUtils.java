@@ -39,7 +39,6 @@ public class NetworkUtils
     private final String TOKEN_URL_SUFFIX = "?case=login";
     private final String REST_LOGIN = "alexgheorghianu@yahoo.com";
     private final String REST_PASSWORD = "BF8hWoAr";
-    private static final MediaType MEDIA_TYPE_PNG = MediaType.parse("image/png");
 
     public static boolean isNetworkAvailable(Context context)
     {
@@ -144,22 +143,9 @@ public class NetworkUtils
     public Call sendImage(Callback callback, Context context, ImageReport imageReport)
     {
         String fileName = imageReport.getFileName();
-        String fileExtension = "";
-        int extensionPtr = fileName.lastIndexOf(".");
 
-        if(extensionPtr!=-1)
-        {
-            fileExtension = fileName.substring(extensionPtr);
-        }
-
-        String strMediaType = ImageUtils.getMimeTypeOfUri(context, Uri.fromFile(imageReport.getFile()));
-
-        if(fileExtension.length() < 3)
-        {
-            fileExtension = strMediaType.substring(strMediaType.lastIndexOf("/") + 1);
-            fileExtension = "." + fileExtension;
-            fileName+=fileExtension;
-        }
+        File imageFile = new File(imageReport.getFilePath());
+        String strMediaType = ImageUtils.getMimeTypeOfUri(context, Uri.fromFile(imageFile));
 
         OkHttpClient.Builder defaultHttpClient = new OkHttpClient.Builder();
         OkHttpClient okHttpClient = defaultHttpClient.build();
@@ -167,9 +153,10 @@ public class NetworkUtils
         RequestBody requestBody = new MultipartBody.Builder()
                 .setType(MultipartBody.FORM)
 
-                .addFormDataPart("file", fileName, RequestBody.create(MediaType.parse(strMediaType), imageReport.getFile()))
+                .addFormDataPart("file", fileName, RequestBody.create(MediaType.parse(strMediaType), imageFile))
                 .addFormDataPart("id_immagine_rapporto", String.valueOf(imageReport.getId_immagine_rapporto()))
                 .addFormDataPart("id_rapporto_sopralluogo", String.valueOf(imageReport.getId_rapporto_sopralluogo()))
+                .addFormDataPart("file_nome", fileName)
                 .build();
 
         Request request = new Request.Builder()

@@ -160,6 +160,11 @@ public class ListVisitsFragment extends ListFragment
                     {
                         mCommunicator.OnListItemSwiped(idVisit, reportStates.getDataOraSopralluogo() != null);
                     }
+
+                    if(swipeDetector.getAction() == SwipeDetector.Action.RL)
+                    {
+                        mCommunicator.OnListItemSwiped(idVisit, false);
+                    }
                 } else
                 {
                     mCommunicator.OnListItemSelected(idVisit, reportStates.getDataOraSopralluogo() != null);

@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import io.realm.RealmResults;
 import ru.alexangan.developer.geatech.Models.CaldaiaReportModel;
 import ru.alexangan.developer.geatech.Models.ReportStates;
+import ru.alexangan.developer.geatech.Models.StorageReportModel;
 import ru.alexangan.developer.geatech.Models.VisitItem;
 import ru.alexangan.developer.geatech.Models.VisitStates;
 import ru.alexangan.developer.geatech.R;
@@ -20,7 +21,7 @@ import static ru.alexangan.developer.geatech.Activities.MainActivity.visitItems;
 public class StorageReportFragment extends Fragment
 {
     View rootView;
-    CaldaiaReportModel caldaiaReportModel;
+    StorageReportModel storageReportModel;
     private int selectedIndex;
     int idSopralluogo;
     ReportStates reportStates;

@@ -13,13 +13,16 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Locale;
 
 import io.realm.RealmObject;
@@ -58,7 +61,7 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
     Call callSendReport, callSendImage;
     Activity activity;
     RealmObject modelReport;
-    RealmResults<ImageReport> gea_immagini;
+    RealmResults<ImageReport> reportImages;
 
     public SendReportFragment()
     {
@@ -105,7 +108,7 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
         realm.beginTransaction();
         reportStates = realm.where(ReportStates.class).equalTo("idSopralluogo", idSopralluogo).findFirst();
         modelReport = (RealmObject) realm.where(modelClass).equalTo("idSopralluogo", idSopralluogo).findFirst();
-        RealmResults<ImageReport> gea_immagini = realm.where(ImageReport.class).equalTo("idSopralluogo", idSopralluogo).findAll();
+        reportImages = realm.where(ImageReport.class).equalTo("id_rapporto_sopralluogo", idSopralluogo).findAll();
         realm.commitTransaction();
 
         if (reportStates != null)
@@ -162,7 +165,6 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
 
                 ReportStates reportStatesUnmanaged = realm.copyFromRealm(reportStates);
                 VisitStates visitStatesUnmanaged = realm.copyFromRealm(visitStates);
-                //ImageReport imageReportUnmanaged = realm.copyFromRealm(imageReport);
                 Object modelReportUnmanaged = realm.copyFromRealm(modelReport);
 
                 Gson gsonTmp = new Gson();
@@ -173,7 +175,6 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
                 String gea_rapporto_sopralluogo_json = gson.toJson(gea_rapporto_sopralluogo);
                 String visitStatesUnmanaged_json = gson.toJson(visitStatesUnmanaged);
                 String modelReportUnmanaged_json = gson.toJson(modelReportUnmanaged);
-                //String gea_immagineUnmanaged_json = gson.toJson(imageReportUnmanaged);
 
                 JSONObject jsonObject = new JSONObject();
                 try
@@ -181,7 +182,19 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
                     jsonObject.put("gea_rapporto_sopralluogo", gea_rapporto_sopralluogo_json);
                     jsonObject.put("gea_sopralluoghi", visitStatesUnmanaged_json);
                     jsonObject.put("gea_rapporto_modello", modelReportUnmanaged_json);
-                    //jsonObject.put("gea_immagine_rapporto_sopralluogo", gea_immagineUnmanaged_json);
+
+                    List<ImageReport> imagesArray = new ArrayList<>();
+
+                    for (ImageReport imageReport : reportImages)
+                    {
+                        ImageReport imageReportUnmanaged = realm.copyFromRealm(imageReport);
+                        imageReportUnmanaged.setFilePath(null);
+                        imagesArray.add(imageReportUnmanaged);
+                    }
+
+                    String imagesReport_json = gson.toJson(imagesArray);
+
+                    jsonObject.put("gea_immagini_rapporto_sopralluogo", imagesReport_json);
 
                 } catch (JSONException e)
                 {
@@ -189,20 +202,18 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
                     e.printStackTrace();
                 }
 
-                Log.d("DEBUG", String.valueOf(jsonObject));
+                //Log.d("DEBUG", String.valueOf(jsonObject));
 
-                for (ImageReport imageReport : gea_immagini)
+                NetworkUtils networkUtils = new NetworkUtils();
+                callSendReport = networkUtils.sendReport(this, String.valueOf(jsonObject));
+
+                for (ImageReport imageReport : reportImages)
                 {
-
-                    NetworkUtils networkUtils = new NetworkUtils();
-                    callSendReport = networkUtils.sendReport(this, String.valueOf(jsonObject));
-
-
                     callSendImage = networkUtils.sendImage(this, activity, imageReport);
                 }
             }
 
-                mCommunicator.onSendReportReturned();
+            mCommunicator.onSendReportReturned();
 
         }
     }
@@ -285,7 +296,7 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
                 {
                     public void run()
                     {
-                        Toast.makeText(activity, "Rapporto inviato, server ritorna: " + reportSendResponse , Toast.LENGTH_LONG).show();
+                        Toast.makeText(activity, "Rapporto inviato, server ritorna: " + reportSendResponse, Toast.LENGTH_LONG).show();
 
                         Calendar calendarNow = Calendar.getInstance();
                         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);

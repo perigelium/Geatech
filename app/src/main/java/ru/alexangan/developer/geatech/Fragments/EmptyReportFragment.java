@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 
 import io.realm.RealmResults;
 import ru.alexangan.developer.geatech.Models.CaldaiaReportModel;
-import ru.alexangan.developer.geatech.Models.DomoticaReportModel;
+import ru.alexangan.developer.geatech.Models.EmptyReportModel;
 import ru.alexangan.developer.geatech.Models.ReportStates;
 import ru.alexangan.developer.geatech.Models.VisitItem;
 import ru.alexangan.developer.geatech.Models.VisitStates;
@@ -18,10 +18,10 @@ import ru.alexangan.developer.geatech.R;
 import static ru.alexangan.developer.geatech.Activities.LoginActivity.realm;
 import static ru.alexangan.developer.geatech.Activities.MainActivity.visitItems;
 
-public class DomoticaReportFragment extends Fragment
+public class EmptyReportFragment extends Fragment
 {
     View rootView;
-    DomoticaReportModel domoticaReportModel;
+    EmptyReportModel emptyReportModel;
     private int selectedIndex;
     int idSopralluogo;
     ReportStates reportStates;
@@ -34,7 +34,7 @@ public class DomoticaReportFragment extends Fragment
     private String mParam1;
     private String mParam2;
 
-    public DomoticaReportFragment()
+    public EmptyReportFragment()
     {
         // Required empty public constructor
     }
@@ -67,7 +67,7 @@ public class DomoticaReportFragment extends Fragment
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState)
     {
-        rootView =  inflater.inflate(R.layout.domotica_report, container, false);
+        rootView =  inflater.inflate(R.layout.empty_report, container, false);
 
         realm.beginTransaction();
         VisitItem visitItem = visitItems.get(selectedIndex);

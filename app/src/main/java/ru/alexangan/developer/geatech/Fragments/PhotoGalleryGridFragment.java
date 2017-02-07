@@ -30,6 +30,7 @@ import ru.alexangan.developer.geatech.Models.ReportStates;
 import ru.alexangan.developer.geatech.Models.VisitItem;
 import ru.alexangan.developer.geatech.Models.VisitStates;
 import ru.alexangan.developer.geatech.R;
+import ru.alexangan.developer.geatech.Utils.ImageUtils;
 
 import static android.app.Activity.RESULT_OK;
 import static ru.alexangan.developer.geatech.Activities.LoginActivity.realm;
@@ -98,7 +99,7 @@ public class PhotoGalleryGridFragment extends Fragment
 
         for (File path : filePaths)
         {
-            Bitmap bitmap = decodeSampledBitmapFromUri(path.getAbsolutePath(), imageHolderWidth, imageHolderHeight);
+            Bitmap bitmap = ImageUtils.decodeSampledBitmapFromUri(path.getAbsolutePath(), imageHolderWidth, imageHolderHeight);
 
             imageItems.add(bitmap);
             pathItems.add(path);
@@ -190,23 +191,43 @@ public class PhotoGalleryGridFragment extends Fragment
         VisitStates visitStates = visitItem.getVisitStates();
         int idSopralluogo = visitStates.getIdSopralluogo();
         ReportStates reportStates = realm.where(ReportStates.class).equalTo("idSopralluogo", idSopralluogo).findFirst();
-        RealmResults<ImageReport> gea_immagini = realm.where(ImageReport.class).equalTo("idSopralluogo", idSopralluogo).findAll();
-        gea_immagini.deleteAllFromRealm();
-
-        realm.commitTransaction();
+        RealmResults<ImageReport> reportImages = realm.where(ImageReport.class).equalTo("id_rapporto_sopralluogo", idSopralluogo).findAll();
+        reportImages.deleteAllFromRealm();
 
         if(reportStates!=null)
         {
             reportStates.setPhotoAddedNumber(imageItems.size() - 1);
         }
 
-        for(File file : pathItems)
+        realm.commitTransaction();
+
+        int reportImagesSize = reportImages.size();
+
+        for(File imageFile : pathItems)
         {
-            if(!file.getPath().equals("photoAddButton"))
+            if(!imageFile.getPath().equals("photoAddButton"))
             {
+
+                String fileName = imageFile.getName();
+                String fileExtension = "";
+                int extensionPtr = fileName.lastIndexOf(".");
+
+                if(extensionPtr!=-1)
+                {
+                    fileExtension = fileName.substring(extensionPtr);
+                }
+
+                String strMediaType = ImageUtils.getMimeTypeOfUri(context, Uri.fromFile(imageFile));
+
+                if(fileExtension.length() < 3)
+                {
+                    fileExtension = strMediaType.substring(strMediaType.lastIndexOf("/") + 1);
+                    fileExtension = "." + fileExtension;
+                    fileName+=fileExtension;
+                }
                 realm.beginTransaction();
 
-                    ImageReport gea_immagine = new ImageReport( idSopralluogo, gea_immagini.size(), file);
+                    ImageReport gea_immagine = new ImageReport( idSopralluogo, reportImagesSize++, imageFile.getAbsolutePath(), fileName);
                     realm.copyToRealmOrUpdate(gea_immagine);
 
                 realm.commitTransaction();
@@ -277,7 +298,7 @@ public class PhotoGalleryGridFragment extends Fragment
 
                 if (file.length() != 0)
                 {
-                    Bitmap bm = decodeSampledBitmapFromUri(file.getAbsolutePath(), imageHolderWidth, imageHolderHeight);
+                    Bitmap bm = ImageUtils.decodeSampledBitmapFromUri(file.getAbsolutePath(), imageHolderWidth, imageHolderHeight);
 
                     imageItems.add(0, bm);
                     pathItems.add(0, file);
@@ -290,43 +311,5 @@ public class PhotoGalleryGridFragment extends Fragment
 
         // superclass method
         super.onActivityResult(requestCode, resultCode, imageReturnedIntent);
-    }
-
-    public int calculateInSampleSize(
-
-            BitmapFactory.Options options, int reqWidth, int reqHeight) {
-        // Raw height and width of image
-        final int height = options.outHeight;
-        final int width = options.outWidth;
-        int inSampleSize = 1;
-
-        if (height > reqHeight || width > reqWidth) {
-            if (width > height) {
-                inSampleSize = Math.round((float) height / (float) reqHeight);
-            } else {
-                inSampleSize = Math.round((float) width / (float) reqWidth);
-            }
-        }
-        return inSampleSize;
-    }
-
-    public Bitmap decodeSampledBitmapFromUri(String path, int reqWidth,
-                                             int reqHeight) {
-        Bitmap bm = null;
-
-        // First decode with inJustDecodeBounds=true to check dimensions
-        final BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inJustDecodeBounds = true;
-        BitmapFactory.decodeFile(path, options);
-
-        // Calculate inSampleSize
-        options.inSampleSize = calculateInSampleSize(options, reqWidth,
-                reqHeight);
-
-        // Decode bitmap with inSampleSize set
-        options.inJustDecodeBounds = false;
-        bm = BitmapFactory.decodeFile(path, options);
-
-        return bm;
     }
 }

@@ -20,7 +20,7 @@ import static ru.alexangan.developer.geatech.Activities.MainActivity.visitItems;
 public class TermodinamicoReportFragment extends Fragment
 {
     View rootView;
-    CaldaiaReportModel caldaiaReportModel;
+    TermodinamicoReportFragment termodinamicoReportFragment;
     private int selectedIndex;
     int idSopralluogo;
     ReportStates reportStates;

@@ -3,6 +3,7 @@ package ru.alexangan.developer.geatech.Adapters;
 import ru.alexangan.developer.geatech.Models.CaldaiaReportModel;
 import ru.alexangan.developer.geatech.Models.ClimaReportModel;
 import ru.alexangan.developer.geatech.Models.DomoticaReportModel;
+import ru.alexangan.developer.geatech.Models.EmptyReportModel;
 import ru.alexangan.developer.geatech.Models.FotovoltaicoReportModel;
 import ru.alexangan.developer.geatech.Models.PompaDiCaloreReportModel;
 import ru.alexangan.developer.geatech.Models.SolareTermodinamicoReportModel;
@@ -34,7 +35,7 @@ public class ModelsMapping
                 return PompaDiCaloreReportModel.class;
 
             default:
-                return null;
+                return EmptyReportModel.class;
         }
     }
 }
