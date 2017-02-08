@@ -18,11 +18,15 @@
 
         <include layout="@layout/two_radios2"/>
 
-        <include layout="@layout/edit_and_two_switches1"/>
+        <include layout="@layout/edit1"/>
+
+        <include layout="@layout/two_switches1"/>
 
         <include layout="@layout/four_radios_and_edit1"/>
 
-        <include layout="@layout/three_edits1"/>
+        <include layout="@layout/two_edits1"/>
+
+        <include layout="@layout/edit2"/>
 
         <include layout="@layout/switch_and_edit1"/>
 

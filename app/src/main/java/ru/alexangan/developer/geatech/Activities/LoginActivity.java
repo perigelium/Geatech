@@ -147,14 +147,14 @@ public class LoginActivity extends Activity implements RESTdataReceiverEventList
             mFragmentTransaction.commit();
         }
 
-        if(view.getId() == R.id.btnFirstAccess )
+/*        if(view.getId() == R.id.btnFirstAccess )
         {
             FragmentTransaction mFragmentTransaction = mFragmentManager.beginTransaction();
 
             mFragmentTransaction.replace(R.id.loginFragContainer, userFirstLoginFragment);
 
             mFragmentTransaction.commit();
-        }
+        }*/
 
         if(view.getId() == R.id.btnLogin )
         {

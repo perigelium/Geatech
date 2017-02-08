@@ -104,16 +104,16 @@ public class UserLoginFragment extends Fragment implements  View.OnClickListener
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState)
     {
-        View rootView = inflater.inflate(R.layout.user_login_fragment, container, false);
+        View rootView = inflater.inflate(R.layout.login_company_fragment, container, false);
 
         btnLogin = (Button) rootView.findViewById(R.id.btnLogin);
         btnLogin.setOnClickListener(this);
 
-        btnPasswordRecover = (Button) rootView.findViewById(R.id.btnPasswordRecover);
-        btnPasswordRecover.setOnClickListener(this);
+/*        btnPasswordRecover = (Button) rootView.findViewById(R.id.btnPasswordRecover);
+        btnPasswordRecover.setOnClickListener(this);*/
 
-        btnFirstAccess = (Button) rootView.findViewById(R.id.btnFirstAccess);
-        btnFirstAccess.setOnClickListener(this);
+/*        btnFirstAccess = (Button) rootView.findViewById(R.id.btnFirstAccess);
+        btnFirstAccess.setOnClickListener(this);*/
 
         etLogin = (EditText) rootView.findViewById(R.id.etLogin);
         etPassword = (EditText) rootView.findViewById(R.id.etPassword);
