@@ -10,9 +10,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -24,7 +21,7 @@ import okhttp3.RequestBody;
 import ru.alexangan.developer.geatech.Models.ImageReport;
 import ru.alexangan.developer.geatech.Utils.ImageUtils;
 
-import static ru.alexangan.developer.geatech.Network.RESTdataReceiver.tokenStr;
+import static ru.alexangan.developer.geatech.Activities.MainActivity.tokenStr;
 
 /**
  * Created by user on 12/20/2016.
@@ -33,7 +30,7 @@ import static ru.alexangan.developer.geatech.Network.RESTdataReceiver.tokenStr;
 public class NetworkUtils
 {
     private final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
-    private final String REST_URL = "http://www.bludelego.com/dev/geatech/api.php";
+    private final String REST_URL = "http://www.bludelego.com/dev/geatech/gea.php";
     private final String DATA_URL_SUFFIX = "?case=send_data";
     private final String SEND_IMAGE_URL = "http://www.bludelego.com/dev/geatech/send_image.php";
     private final String TOKEN_URL_SUFFIX = "?case=login";
@@ -46,6 +43,37 @@ public class NetworkUtils
                 = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+    }
+
+    public Call getTecnicianList(Callback callback)
+    {
+        OkHttpClient.Builder defaultHttpClient = new OkHttpClient.Builder();
+        OkHttpClient okHttpClient = defaultHttpClient.build();
+
+        JSONObject jsonObject = new JSONObject();
+        try
+        {
+            jsonObject.put("login", REST_LOGIN);
+            jsonObject.put("password", REST_PASSWORD);
+
+        } catch (JSONException e)
+        {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            return null;
+        }
+
+        RequestBody body = RequestBody.create(JSON, String.valueOf(jsonObject));
+
+        Request request = new Request.Builder()
+                .url(REST_URL + TOKEN_URL_SUFFIX)
+                .post(body)
+                .build();
+
+        Call callToken = okHttpClient.newCall(request);
+        callToken.enqueue(callback);
+
+        return callToken;
     }
 
     public Call getLoginToken(Callback callback)

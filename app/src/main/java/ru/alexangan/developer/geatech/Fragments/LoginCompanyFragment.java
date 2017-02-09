@@ -10,60 +10,40 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import io.realm.RealmResults;
+import okhttp3.Call;
 import ru.alexangan.developer.geatech.Interfaces.LoginCommunicator;
+import ru.alexangan.developer.geatech.Interfaces.NetworkEventsListener;
 import ru.alexangan.developer.geatech.Models.LoginCredentials;
 import ru.alexangan.developer.geatech.R;
 
 import static ru.alexangan.developer.geatech.Activities.LoginActivity.mSettings;
 import static ru.alexangan.developer.geatech.Activities.LoginActivity.realm;
 
-public class UserLoginFragment extends Fragment implements  View.OnClickListener
+public class LoginCompanyFragment extends Fragment implements  View.OnClickListener
 {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-
-    Button btnLogin, btnPasswordRecover, btnFirstAccess;
+    TextView tvBtnPasswordRecover;
+    Button btnLogin, btnFirstAccess;
     EditText etLogin, etPassword;
     LoginCommunicator loginCommunicator;
     public static final String CHKBOX_REMEMBER_ME_STATE = "rememberMeState";
     private boolean chkboxRememberMeState;
     CheckBox chkboxRememberMe;
+    NetworkEventsListener networkEventsListener;
+    Call callTechnicianList;
 
 
-    public UserLoginFragment()
+    public LoginCompanyFragment()
     {
         // Required empty public constructor
-    }
-
-    // TODO: Rename and change types and number of parameters
-    public static UserPasswordRecoverFragment newInstance(String param1, String param2)
-    {
-        UserPasswordRecoverFragment fragment = new UserPasswordRecoverFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null)
-        {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
 
         LoginCredentials loginCredentials = new LoginCredentials();
 
@@ -109,8 +89,8 @@ public class UserLoginFragment extends Fragment implements  View.OnClickListener
         btnLogin = (Button) rootView.findViewById(R.id.btnLogin);
         btnLogin.setOnClickListener(this);
 
-/*        btnPasswordRecover = (Button) rootView.findViewById(R.id.btnPasswordRecover);
-        btnPasswordRecover.setOnClickListener(this);*/
+        tvBtnPasswordRecover = (TextView) rootView.findViewById(R.id.tvBtnPasswordRecover);
+        tvBtnPasswordRecover.setOnClickListener(this);
 
 /*        btnFirstAccess = (Button) rootView.findViewById(R.id.btnFirstAccess);
         btnFirstAccess.setOnClickListener(this);*/

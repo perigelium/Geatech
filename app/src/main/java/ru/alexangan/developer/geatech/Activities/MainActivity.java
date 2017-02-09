@@ -14,6 +14,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import io.realm.RealmList;
 import io.realm.RealmResults;
 import ru.alexangan.developer.geatech.Fragments.CTLinfoFragment;
 import ru.alexangan.developer.geatech.Fragments.CaldaiaReportFragment;
@@ -45,7 +46,6 @@ import ru.alexangan.developer.geatech.R;
 import ru.alexangan.developer.geatech.Utils.SwipeDetector;
 
 import static ru.alexangan.developer.geatech.Activities.LoginActivity.realm;
-import static ru.alexangan.developer.geatech.Network.RESTdataReceiver.inVisitItems;
 
 public class MainActivity extends Activity implements Communicator
 {
@@ -79,7 +79,8 @@ public class MainActivity extends Activity implements Communicator
     public static RealmResults<VisitItem> visitItems;
     int currentSelIndex;
     boolean ctrlBtnChkChanged;
-    AlertDialog alert;
+    public static RealmList<VisitItem> inVisitItems;
+    public static String tokenStr;
 
     @Override
     protected void onDestroy()
