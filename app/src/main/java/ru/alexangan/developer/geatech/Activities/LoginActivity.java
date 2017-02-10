@@ -19,6 +19,7 @@ import ru.alexangan.developer.geatech.Fragments.LoginCompanyFragment;
 import ru.alexangan.developer.geatech.Fragments.UserPasswordRecoverFragment;
 import ru.alexangan.developer.geatech.Interfaces.LoginCommunicator;
 import ru.alexangan.developer.geatech.Interfaces.NetworkEventsListener;
+import ru.alexangan.developer.geatech.Models.TecnicianModel;
 import ru.alexangan.developer.geatech.Network.NetworkUtils;
 import ru.alexangan.developer.geatech.R;
 
@@ -36,6 +37,7 @@ public class LoginActivity extends Activity implements NetworkEventsListener, Lo
     public static Realm realm;
     public static SharedPreferences mSettings;
     public static final String APP_PREFERENCES = "mysettings";
+    public static TecnicianModel selectedTech;
 
 
     @Override
@@ -120,8 +122,9 @@ public class LoginActivity extends Activity implements NetworkEventsListener, Lo
     }*/
 
     @Override
-    public void onJSONdataReceiveCompleted()
+    public void onJSONdataReceiveCompleted(TecnicianModel tecnicianModel)
     {
+        selectedTech = tecnicianModel;
         Intent registerIntent = new Intent(LoginActivity.this, MainActivity.class);
         startActivity(registerIntent);
     }
@@ -133,7 +136,7 @@ public class LoginActivity extends Activity implements NetworkEventsListener, Lo
     }
 
     @Override
-    public void onButtonClicked(View view, Boolean credentialsesFound)
+    public void onLoginSucceeded(View view, Boolean credentialsesFound)
     {
         if (view.getId() == R.id.tvBtnPasswordRecover)
         {
@@ -172,6 +175,14 @@ public class LoginActivity extends Activity implements NetworkEventsListener, Lo
 
             }
         }
+    }
+
+    @Override
+    public void onReturnToLoginScreen()
+    {
+        FragmentTransaction mFragmentTransaction = mFragmentManager.beginTransaction();
+        mFragmentTransaction.replace(R.id.loginFragContainer, loginCompanyFragment);
+        mFragmentTransaction.commit();
     }
 
     @Override

@@ -6,21 +6,22 @@ package ru.alexangan.developer.geatech.Models;
 import java.util.List;
 
 import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
 
 public class TecnicianModel extends RealmObject
 {
-
+    @PrimaryKey
     private String id;
-    private String fullNameTehnic;
+    private String full_name_tehnic;
 
     public TecnicianModel()
     {
     }
 
-    public TecnicianModel(String id, String fullNameTehnic)
+    public TecnicianModel(String id, String full_name_tehnic)
     {
         this.id = id;
-        this.fullNameTehnic = fullNameTehnic;
+        this.full_name_tehnic = full_name_tehnic;
     }
 
     public String getId()
@@ -35,11 +36,11 @@ public class TecnicianModel extends RealmObject
 
     public String getFullNameTehnic()
     {
-        return fullNameTehnic;
+        return full_name_tehnic;
     }
 
-    public void setFullNameTehnic(String fullNameTehnic)
+    public void setFullNameTehnic(String full_name_tehnic)
     {
-        this.fullNameTehnic = fullNameTehnic;
+        this.full_name_tehnic = full_name_tehnic;
     }
 }

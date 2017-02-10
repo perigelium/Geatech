@@ -6,10 +6,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import ru.alexangan.developer.geatech.Interfaces.Communicator;
 import ru.alexangan.developer.geatech.R;
+
+import static ru.alexangan.developer.geatech.Activities.LoginActivity.selectedTech;
 
 /**
  * Created by user on 11/10/2016.
@@ -31,6 +34,9 @@ public class NotificationBarFragment extends Fragment implements View.OnClickLis
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
         View rootView = inflater.inflate(R.layout.notification_bar, container, false);
+
+        TextView tvTechName = (TextView) rootView.findViewById(R.id.tvTechName);
+        tvTechName.setText(selectedTech.getFullNameTehnic());
 
         Button btnNotifTimeNotSetVisits = (Button) rootView.findViewById(R.id.btnNotifTimeNotSetVisits);
         btnNotifTimeNotSetVisits.setOnClickListener(this);

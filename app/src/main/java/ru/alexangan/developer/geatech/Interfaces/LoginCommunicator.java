@@ -10,7 +10,9 @@ import android.view.View;
 public interface LoginCommunicator
 {
 
-    public void onButtonClicked(View view, Boolean credentialsesFound);
+    void onLoginSucceeded(View view, Boolean credentialsesFound);
+
+    void onReturnToLoginScreen();
 
     void onPasswordSentReturned();
 

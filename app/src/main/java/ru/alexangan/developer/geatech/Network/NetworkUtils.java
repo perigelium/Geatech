@@ -1,7 +1,6 @@
 package ru.alexangan.developer.geatech.Network;
 
 import android.content.Context;
-import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -30,10 +29,12 @@ import static ru.alexangan.developer.geatech.Activities.MainActivity.tokenStr;
 public class NetworkUtils
 {
     private final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
+    private final String OLD_REST_URL = "http://www.bludelego.com/dev/geatech/api.php";
     private final String REST_URL = "http://www.bludelego.com/dev/geatech/gea.php";
-    private final String DATA_URL_SUFFIX = "?case=send_data";
+    private final String SEND_DATA_URL_SUFFIX = "?case=send_data";
+    private final String GET_DATA_URL_SUFFIX = "?case=get_raport";
     private final String SEND_IMAGE_URL = "http://www.bludelego.com/dev/geatech/send_image.php";
-    private final String TOKEN_URL_SUFFIX = "?case=login";
+    private final String LOGIN_URL_SUFFIX = "?case=login";
     private final String REST_LOGIN = "alexgheorghianu@yahoo.com";
     private final String REST_PASSWORD = "BF8hWoAr";
 
@@ -45,7 +46,7 @@ public class NetworkUtils
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 
-    public Call getTecnicianList(Callback callback)
+    public Call loginRequest(Callback callback, String techName, String techId)
     {
         OkHttpClient.Builder defaultHttpClient = new OkHttpClient.Builder();
         OkHttpClient okHttpClient = defaultHttpClient.build();
@@ -55,6 +56,15 @@ public class NetworkUtils
         {
             jsonObject.put("login", REST_LOGIN);
             jsonObject.put("password", REST_PASSWORD);
+
+            if(techName!=null)
+            {
+                jsonObject.put("full_name_tehnic", techName);
+            }
+            if(techId!=null)
+            {
+                jsonObject.put("id", techId);
+            }
 
         } catch (JSONException e)
         {
@@ -66,50 +76,20 @@ public class NetworkUtils
         RequestBody body = RequestBody.create(JSON, String.valueOf(jsonObject));
 
         Request request = new Request.Builder()
-                .url(REST_URL + TOKEN_URL_SUFFIX)
+                .url(REST_URL + LOGIN_URL_SUFFIX)
                 .post(body)
                 .build();
 
-        Call callToken = okHttpClient.newCall(request);
-        callToken.enqueue(callback);
+        Call call = okHttpClient.newCall(request);
+        call.enqueue(callback);
 
-        return callToken;
+        return call;
     }
 
-    public Call getLoginToken(Callback callback)
-    {
-        OkHttpClient.Builder defaultHttpClient = new OkHttpClient.Builder();
-        OkHttpClient okHttpClient = defaultHttpClient.build();
-
-        JSONObject jsonObject = new JSONObject();
-        try
-        {
-            jsonObject.put("login", REST_LOGIN);
-            jsonObject.put("password", REST_PASSWORD);
-
-        } catch (JSONException e)
-        {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-            return null;
-        }
-
-        RequestBody body = RequestBody.create(JSON, String.valueOf(jsonObject));
-
-        Request request = new Request.Builder()
-                .url(REST_URL + TOKEN_URL_SUFFIX)
-                .post(body)
-                .build();
-
-        Call callToken = okHttpClient.newCall(request);
-        callToken.enqueue(callback);
-
-        return callToken;
-    }
-
-    public Call getJSONfromServer(Callback callback)
+    public Call getJSONfromServer(Callback callback, String tokenStr)
     {
         JSONObject jsonToken = new JSONObject();
+
         try
         {
             jsonToken.put("token", tokenStr);
@@ -124,7 +104,7 @@ public class NetworkUtils
         RequestBody body = RequestBody.create(JSON, String.valueOf(jsonToken));
 
         Request request = new Request.Builder()
-                .url(REST_URL + DATA_URL_SUFFIX)
+                .url(OLD_REST_URL + GET_DATA_URL_SUFFIX)
                 .post(body)
                 .build();
 
@@ -157,7 +137,7 @@ public class NetworkUtils
         RequestBody body = RequestBody.create(JSON, String.valueOf(jsonObject));
 
         Request request = new Request.Builder()
-                .url(REST_URL + DATA_URL_SUFFIX)
+                .url(REST_URL + SEND_DATA_URL_SUFFIX)
                 .post(body)
                 .build();
 

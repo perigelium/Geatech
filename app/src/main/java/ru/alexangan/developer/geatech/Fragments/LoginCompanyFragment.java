@@ -13,9 +13,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import io.realm.RealmResults;
-import okhttp3.Call;
 import ru.alexangan.developer.geatech.Interfaces.LoginCommunicator;
-import ru.alexangan.developer.geatech.Interfaces.NetworkEventsListener;
 import ru.alexangan.developer.geatech.Models.LoginCredentials;
 import ru.alexangan.developer.geatech.R;
 
@@ -25,15 +23,12 @@ import static ru.alexangan.developer.geatech.Activities.LoginActivity.realm;
 public class LoginCompanyFragment extends Fragment implements  View.OnClickListener
 {
     TextView tvBtnPasswordRecover;
-    Button btnLogin, btnFirstAccess;
+    Button btnLogin;
     EditText etLogin, etPassword;
     LoginCommunicator loginCommunicator;
     public static final String CHKBOX_REMEMBER_ME_STATE = "rememberMeState";
     private boolean chkboxRememberMeState;
     CheckBox chkboxRememberMe;
-    NetworkEventsListener networkEventsListener;
-    Call callTechnicianList;
-
 
     public LoginCompanyFragment()
     {
@@ -92,9 +87,6 @@ public class LoginCompanyFragment extends Fragment implements  View.OnClickListe
         tvBtnPasswordRecover = (TextView) rootView.findViewById(R.id.tvBtnPasswordRecover);
         tvBtnPasswordRecover.setOnClickListener(this);
 
-/*        btnFirstAccess = (Button) rootView.findViewById(R.id.btnFirstAccess);
-        btnFirstAccess.setOnClickListener(this);*/
-
         etLogin = (EditText) rootView.findViewById(R.id.etLogin);
         etPassword = (EditText) rootView.findViewById(R.id.etPassword);
         chkboxRememberMe = (CheckBox) rootView.findViewById(R.id.chkboxRememberMe);
@@ -141,6 +133,6 @@ public class LoginCompanyFragment extends Fragment implements  View.OnClickListe
             }
         }
 
-        loginCommunicator.onButtonClicked(view, credentialsesFound);
+        loginCommunicator.onLoginSucceeded(view, credentialsesFound);
     }
 }

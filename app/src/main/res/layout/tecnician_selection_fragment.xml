@@ -17,6 +17,7 @@
             android:layout_marginBottom="20dp"
             android:layout_marginLeft="20dp"
             android:layout_marginTop="20dp"
+            android:clickable="true"
             android:text="REGISTRA NUOVO TECNICO"
             android:textColor="#ffffff"
             android:textSize="17sp"/>
@@ -27,18 +28,19 @@
             android:layout_gravity="bottom"
             android:background="#ffffff"/>
 
-
-        <LinearLayout
-            android:id="@+id/llTechnNameAndSurname"
+<!--        <LinearLayout
+            android:id="@+id/llTechnicianAdded"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="9dp"
-            android:orientation="vertical">
+            android:orientation="vertical">-->
 
             <FrameLayout
+                android:id="@+id/flTechnicianAdded"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <!--android:visibility="gone"-->
+                android:layout_height="wrap_content"
+                android:layout_margin="9dp"
+                android:visibility="gone">
 
                 <TextView
                     android:id="@+id/tvNoteTecnicianAdded"
@@ -58,12 +60,24 @@
                     android:src="@drawable/login_success"/>
 
             </FrameLayout>
+<!--
+            </LinearLayout>-->
+
+        <LinearLayout
+            android:id="@+id/llTechnNameAndSurname"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="9dp"
+            android:orientation="vertical"
+            android:visibility="gone">
 
             <EditText
-                android:id="@+id/etLoginTecnNome"
+                android:id="@+id/etTechNome"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:minHeight="40dp"
                 android:ems="10"
+                android:background="@android:color/transparent"
                 android:hint="Nome"
                 android:inputType="textEmailAddress"
                 android:textColorHint="#cccccc"/>
@@ -81,23 +95,15 @@
                 android:layout_height="wrap_content">
 
                 <EditText
-                    android:id="@+id/etLoginTecnCognome"
+                    android:minHeight="40dp"
+                    android:id="@+id/etTechCognome"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
                     android:ems="10"
                     android:hint="Cognome"
                     android:inputType="textEmailAddress"
                     android:textColorHint="#cccccc"/>
-
-                <ImageButton
-                    android:id="@+id/ibAddTechnician"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:layout_gravity="center_vertical|right"
-                    android:layout_marginRight="20dp"
-                    android:background="@android:color/transparent"
-                    android:scaleType="centerInside"
-                    android:src="@drawable/login_add"/>
 
             </FrameLayout>
 
@@ -110,6 +116,16 @@
                 android:background="#ffffff"/>
 
         </LinearLayout>
+
+        <ImageButton
+            android:id="@+id/ibAddTechnician"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_gravity="center_vertical|right"
+            android:layout_marginRight="30dp"
+            android:background="@android:color/transparent"
+            android:scaleType="centerInside"
+            android:src="@drawable/login_add"/>
 
 
         <TextView
@@ -162,6 +178,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="9dp"
             android:text=" Tecnico predefinito"
+            android:button="@drawable/login_checkbox_selector"
             android:textColor="#cccccc"
             android:textSize="16sp"/>
 
