@@ -11,25 +11,25 @@ import io.realm.annotations.PrimaryKey;
 public class TecnicianModel extends RealmObject
 {
     @PrimaryKey
-    private String id;
+    private int id;
     private String full_name_tehnic;
 
     public TecnicianModel()
     {
     }
 
-    public TecnicianModel(String id, String full_name_tehnic)
+    public TecnicianModel(int id, String full_name_tehnic)
     {
         this.id = id;
         this.full_name_tehnic = full_name_tehnic;
     }
 
-    public String getId()
+    public int getId()
     {
         return id;
     }
 
-    public void setId(String id)
+    public void setId(int id)
     {
         this.id = id;
     }

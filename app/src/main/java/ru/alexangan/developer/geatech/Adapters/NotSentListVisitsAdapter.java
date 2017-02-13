@@ -27,7 +27,7 @@ import ru.alexangan.developer.geatech.Models.VisitStates;
 import ru.alexangan.developer.geatech.Network.NetworkUtils;
 import ru.alexangan.developer.geatech.R;
 
-import static ru.alexangan.developer.geatech.Activities.LoginActivity.realm;
+import static ru.alexangan.developer.geatech.Models.GlobalConstants.realm;
 
 /**
  * Created by user on 11/21/2016.

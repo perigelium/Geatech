@@ -20,7 +20,7 @@ import okhttp3.RequestBody;
 import ru.alexangan.developer.geatech.Models.ImageReport;
 import ru.alexangan.developer.geatech.Utils.ImageUtils;
 
-import static ru.alexangan.developer.geatech.Activities.MainActivity.tokenStr;
+import static ru.alexangan.developer.geatech.Models.GlobalConstants.tokenStr;
 
 /**
  * Created by user on 12/20/2016.
@@ -46,7 +46,7 @@ public class NetworkUtils
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 
-    public Call loginRequest(Callback callback, String techName, String techId)
+    public Call loginRequest(Callback callback, String techName, int techId)
     {
         OkHttpClient.Builder defaultHttpClient = new OkHttpClient.Builder();
         OkHttpClient okHttpClient = defaultHttpClient.build();
@@ -61,7 +61,7 @@ public class NetworkUtils
             {
                 jsonObject.put("full_name_tehnic", techName);
             }
-            if(techId!=null)
+            if(techId!=-1)
             {
                 jsonObject.put("id", techId);
             }

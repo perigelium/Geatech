@@ -33,8 +33,8 @@ import ru.alexangan.developer.geatech.R;
 import ru.alexangan.developer.geatech.Utils.ImageUtils;
 
 import static android.app.Activity.RESULT_OK;
-import static ru.alexangan.developer.geatech.Activities.LoginActivity.realm;
-import static ru.alexangan.developer.geatech.Activities.MainActivity.visitItems;
+import static ru.alexangan.developer.geatech.Models.GlobalConstants.realm;
+import static ru.alexangan.developer.geatech.Models.GlobalConstants.visitItems;
 
 public class PhotoGalleryGridFragment extends Fragment
 {

@@ -14,7 +14,6 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import io.realm.RealmList;
 import io.realm.RealmResults;
 import ru.alexangan.developer.geatech.Fragments.CTLinfoFragment;
 import ru.alexangan.developer.geatech.Fragments.CaldaiaReportFragment;
@@ -45,7 +44,9 @@ import ru.alexangan.developer.geatech.Models.VisitItem;
 import ru.alexangan.developer.geatech.R;
 import ru.alexangan.developer.geatech.Utils.SwipeDetector;
 
-import static ru.alexangan.developer.geatech.Activities.LoginActivity.realm;
+import static ru.alexangan.developer.geatech.Models.GlobalConstants.inVisitItems;
+import static ru.alexangan.developer.geatech.Models.GlobalConstants.realm;
+import static ru.alexangan.developer.geatech.Models.GlobalConstants.visitItems;
 
 public class MainActivity extends Activity implements Communicator
 {
@@ -76,11 +77,11 @@ public class MainActivity extends Activity implements Communicator
     EmptyReportFragment emptyReportFragment;
 
     NotificationBarFragment notificationBarFragment;
-    public static RealmResults<VisitItem> visitItems;
+    //public static RealmResults<VisitItem> visitItems;
     int currentSelIndex;
     boolean ctrlBtnChkChanged;
-    public static RealmList<VisitItem> inVisitItems;
-    public static String tokenStr;
+    //public static RealmList<VisitItem> inVisitItems;
+    //public static String tokenStr;
 
     @Override
     protected void onDestroy()
@@ -97,7 +98,7 @@ public class MainActivity extends Activity implements Communicator
         currentSelIndex = -1;
         ctrlBtnChkChanged = true;
 
-        if (inVisitItems != null)
+/*        if (inVisitItems != null)
         {
             realm.beginTransaction();
             for (VisitItem visitItem : inVisitItems)
@@ -111,7 +112,7 @@ public class MainActivity extends Activity implements Communicator
 
         realm.beginTransaction();
         visitItems = realm.where(VisitItem.class).findAll();
-        realm.commitTransaction();
+        realm.commitTransaction();*/
 
         if (visitItems.size() == 0)
         {

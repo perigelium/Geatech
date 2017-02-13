@@ -3,6 +3,7 @@ package ru.alexangan.developer.geatech.Fragments;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,18 +12,17 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -36,45 +36,39 @@ import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
 import ru.alexangan.developer.geatech.Interfaces.LoginCommunicator;
-import ru.alexangan.developer.geatech.Interfaces.NetworkEventsListener;
-import ru.alexangan.developer.geatech.Models.ReportStates;
+import ru.alexangan.developer.geatech.Models.GlobalConstants;
+import ru.alexangan.developer.geatech.Models.LoginCredentials;
 import ru.alexangan.developer.geatech.Models.TecnicianModel;
 import ru.alexangan.developer.geatech.Network.NetworkUtils;
 import ru.alexangan.developer.geatech.R;
 import ru.alexangan.developer.geatech.Utils.JSON_to_model;
 
-import static ru.alexangan.developer.geatech.Activities.LoginActivity.realm;
-import static ru.alexangan.developer.geatech.Activities.MainActivity.inVisitItems;
+import static ru.alexangan.developer.geatech.Models.GlobalConstants.inVisitItems;
+import static ru.alexangan.developer.geatech.Models.GlobalConstants.mSettings;
+import static ru.alexangan.developer.geatech.Models.GlobalConstants.realm;
 
 public class TechnicianSelectFragment extends Fragment implements View.OnClickListener, Callback
 {
     Activity activity;
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
     private LoginCommunicator loginCommunicator;
     Call callTechnicianList, callLoginToken, callVisits;
     String visitsJSONData;
-    NetworkEventsListener networkEventsListener;
     NetworkUtils networkUtils;
 
-    TextView tvNewTechnician;
     ImageButton ibAddTechnician;
-    Button btnSessionDisconnect, btnApplyAndEnterApp;
+    Button btnSessionDisconnect, btnApplyAndEnterApp, btnNewTechnician;
     LinearLayout llTechnNameAndSurname;
     FrameLayout flTechnicianAdded;
     EditText etTechCognome, etTechNome;
     boolean bNewTechAdded;
     TecnicianModel selectedTech;
+    private CheckBox chkboxRememberTech;
 
     Spinner spTecnicianList;
     int spinnerCurItem;
 
     ArrayList<String> saTecnicianList;
-
-
-
 
     public TechnicianSelectFragment()
     {
@@ -91,8 +85,6 @@ public class TechnicianSelectFragment extends Fragment implements View.OnClickLi
         activity = getActivity();
         spinnerCurItem = 0;
         bNewTechAdded = false;
-
-        networkEventsListener = (NetworkEventsListener) getActivity();
     }
 
     @Override
@@ -108,19 +100,15 @@ public class TechnicianSelectFragment extends Fragment implements View.OnClickLi
     {
         super.onViewCreated(view, savedInstanceState);
 
-        callTechnicianList = networkUtils.loginRequest(this, null, null);
-
         spTecnicianList.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
         {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view,
-                                       int position, long id)
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
             {
-                if(spinnerCurItem == position)
+                if (spinnerCurItem == position)
                 {
                     return;
-                }
-                else
+                } else
                 {
 
                     String selectedItem = parent.getItemAtPosition(position).toString();
@@ -128,10 +116,24 @@ public class TechnicianSelectFragment extends Fragment implements View.OnClickLi
                     selectedTech = realm.where(TecnicianModel.class).equalTo("full_name_tehnic", selectedItem).findFirst();
                     realm.commitTransaction();
 
-                    //Toast.makeText(activity, selectedTech.getFullNameTehnic(), Toast.LENGTH_SHORT).show();
-
                     spinnerCurItem = position;
+
+                    //Toast.makeText(activity, selectedTech.getFullNameTehnic(), Toast.LENGTH_SHORT).show();
                 }
+
+                if (selectedTech != null)
+                {
+                    chkboxRememberTech.setTextColor(Color.parseColor("#ffffff"));
+                    chkboxRememberTech.setEnabled(true);
+                } else
+                {
+                    chkboxRememberTech.setChecked(false);
+                    chkboxRememberTech.setEnabled(false);
+                    chkboxRememberTech.setTextColor(Color.parseColor("#93D8A8"));
+                }
+
+/*                spTecnicianList.setBackgroundColor(Color.parseColor("#29B352"));
+                spTecnicianList.invalidate();*/
             }
 
             @Override
@@ -146,10 +148,10 @@ public class TechnicianSelectFragment extends Fragment implements View.OnClickLi
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState)
     {
-        View rootView = inflater.inflate(R.layout.tecnician_selection_fragment, container, false);
+        View rootView = inflater.inflate(R.layout.login_tech_selection_fragment, container, false);
 
-        tvNewTechnician = (TextView) rootView.findViewById(R.id.tvNewTechnician);
-        tvNewTechnician.setOnClickListener(this);
+        btnNewTechnician = (Button) rootView.findViewById(R.id.btnNewTechnician);
+        btnNewTechnician.setOnClickListener(this);
 
         llTechnNameAndSurname = (LinearLayout) rootView.findViewById(R.id.llTechnNameAndSurname);
 
@@ -161,26 +163,87 @@ public class TechnicianSelectFragment extends Fragment implements View.OnClickLi
         ibAddTechnician = (ImageButton) rootView.findViewById(R.id.ibAddTechnician);
         ibAddTechnician.setOnClickListener(this);
 
+        chkboxRememberTech = (CheckBox) rootView.findViewById(R.id.chkboxRememberTech);
+
         btnSessionDisconnect = (Button) rootView.findViewById(R.id.btnSessionDisconnect);
         btnSessionDisconnect.setOnClickListener(this);
 
         btnApplyAndEnterApp = (Button) rootView.findViewById(R.id.btnApplyAndEnterApp);
         btnApplyAndEnterApp.setOnClickListener(this);
 
-        RealmResults<TecnicianModel> techModelList = realm.where(TecnicianModel.class).findAll();
-        saTecnicianList.add("");
-        for (TecnicianModel technicianItem : techModelList)
-        {
-            saTecnicianList.add(technicianItem.getFullNameTehnic());
-        }
-
-        //saTecnicianList.addAll(Arrays.asList(TipiDiEdificieStrA));
-        ArrayAdapter<String> technicianListAdapter = new ArrayAdapter<>(activity, android.R.layout.simple_dropdown_item_1line, saTecnicianList);
         spTecnicianList = (Spinner) rootView.findViewById(R.id.spTecnicianList);
 
-        //atvTipoDiEdificio.setListSelection(tipiDiEdificie.indexOf(clima1Model.getTipoDiEdificio()));
+        String technician_list = mSettings.getString("technician_list", null);
 
-        spTecnicianList.setAdapter(technicianListAdapter);
+        if (technician_list != null)
+        {
+            Gson gson = new Gson();
+            Type type = new TypeToken<List<TecnicianModel>>()
+            {
+            }.getType();
+
+            final List<TecnicianModel> techModelList = gson.fromJson(technician_list, type);
+
+            activity.runOnUiThread(new Runnable()
+            {
+                public void run()
+                {
+                    saTecnicianList.clear();
+                    saTecnicianList.add("");
+                    for (TecnicianModel technicianItem : techModelList)
+                    {
+                        realm.beginTransaction();
+                        saTecnicianList.add(technicianItem.getFullNameTehnic());
+                        TecnicianModel tecnicianModelR = realm.where(TecnicianModel.class).equalTo("id", technicianItem.getId()).findFirst();
+
+                        if (tecnicianModelR == null)
+                        {
+                            realm.copyToRealm(technicianItem);
+                        }
+                        realm.commitTransaction();
+                    }
+
+                    ArrayAdapter<String> technicianListAdapter = new ArrayAdapter<>(activity, R.layout.spinner_tech_selection_row, R.id.tvSpinnerTechSelItem, saTecnicianList);
+                    spTecnicianList.setAdapter(technicianListAdapter);
+
+                    if (bNewTechAdded)
+                    {
+                        llTechnNameAndSurname.setVisibility(View.GONE);
+                        flTechnicianAdded.setVisibility(View.VISIBLE);
+                        bNewTechAdded = false;
+                    }
+                }
+            });
+        } else
+        {
+            RealmResults<TecnicianModel> techModelList = realm.where(TecnicianModel.class).findAll();
+
+            if (techModelList.size() > 0)
+            {
+                saTecnicianList.add("");
+                int idPredefinedTech = mSettings.getInt("idPredefinedTech", -1);
+                int selectedTechPos = -1;
+
+                for (int i = 0; i < techModelList.size(); i++)
+                {
+                    saTecnicianList.add(techModelList.get(i).getFullNameTehnic());
+
+                    if (idPredefinedTech != -1 && techModelList.get(i).getId() == idPredefinedTech)
+                    {
+                        selectedTechPos = i;
+                    }
+                }
+
+                ArrayAdapter<String> technicianListAdapter = new ArrayAdapter<>(activity, R.layout.spinner_tech_selection_row, R.id.tvSpinnerTechSelItem, saTecnicianList);
+                spTecnicianList.setAdapter(technicianListAdapter);
+
+                if (idPredefinedTech != -1)
+                {
+                    spTecnicianList.setSelection(selectedTechPos + 1);
+                    chkboxRememberTech.setChecked(true);
+                }
+            }
+        }
 
         return rootView;
     }
@@ -193,7 +256,7 @@ public class TechnicianSelectFragment extends Fragment implements View.OnClickLi
             loginCommunicator.onReturnToLoginScreen();
         }
 
-        if (view.getId() == R.id.tvNewTechnician)
+        if (view.getId() == R.id.btnNewTechnician)
         {
             llTechnNameAndSurname.setVisibility(View.VISIBLE);
         }
@@ -204,18 +267,50 @@ public class TechnicianSelectFragment extends Fragment implements View.OnClickLi
             String strTechCognome = etTechCognome.getText().toString();
             String strNomeCognome = strTechNome + " " + strTechCognome;
 
-            if(strNomeCognome.length() > 7)
+            if (strNomeCognome.length() > 7)
             {
                 bNewTechAdded = true;
-                callTechnicianList = networkUtils.loginRequest(this, strNomeCognome, null);
+                callTechnicianList = networkUtils.loginRequest(this, strNomeCognome, -1);
             }
         }
 
-        if (view.getId() == R.id.btnApplyAndEnterApp && selectedTech!=null)
+        if (view.getId() == R.id.btnApplyAndEnterApp)
         {
             //getactivity().getFragmentManager().beginTransaction().remove(this).commit();
 
-            callLoginToken = networkUtils.loginRequest(TechnicianSelectFragment.this, selectedTech.getFullNameTehnic(), selectedTech.getId());
+            GlobalConstants.selectedTech = selectedTech;
+
+            if (selectedTech == null)
+            {
+                activity.runOnUiThread(new Runnable()
+                {
+                    public void run()
+                    {
+                        Toast.makeText(activity, "Seleziona il tecnico per favore", Toast.LENGTH_LONG).show();
+                    }
+                });
+                return;
+            }
+
+            if (chkboxRememberTech.isChecked())
+            {
+                if (selectedTech != null)
+                {
+                    mSettings.edit().putInt("idPredefinedTech", selectedTech.getId()).apply();
+                }
+            } else
+            {
+                mSettings.edit().putInt("idPredefinedTech", -1).apply();
+            }
+
+            if (NetworkUtils.isNetworkAvailable(activity))
+            {
+                callLoginToken = networkUtils.loginRequest(TechnicianSelectFragment.this,
+                        selectedTech.getFullNameTehnic(), selectedTech.getId());
+            } else
+            {
+                loginCommunicator.onBtnSelectTechAndEnterAppClicked();
+            }
         }
     }
 
@@ -231,6 +326,7 @@ public class TechnicianSelectFragment extends Fragment implements View.OnClickLi
                     Toast.makeText(activity, "Receive token failed", Toast.LENGTH_LONG).show();
                 }
             });
+            loginCommunicator.onLoginFailed();
         }
 
         if (call == callVisits)
@@ -239,9 +335,10 @@ public class TechnicianSelectFragment extends Fragment implements View.OnClickLi
             {
                 public void run()
                 {
-                    Toast.makeText(activity, "Receive JSON data failed", Toast.LENGTH_LONG).show();
+                    Toast.makeText(activity, "Receive visits data failed", Toast.LENGTH_LONG).show();
                 }
             });
+            loginCommunicator.onLoginFailed();
         }
     }
 
@@ -264,8 +361,6 @@ public class TechnicianSelectFragment extends Fragment implements View.OnClickLi
                     }
                 });
 
-                Log.d("DEBUG", "Receive technician list failed");
-
                 return;
             }
 
@@ -282,12 +377,34 @@ public class TechnicianSelectFragment extends Fragment implements View.OnClickLi
 
             if (jsonObject.has("data_tehnic"))
             {
+                boolean credentialsesFound = mSettings.getBoolean("credentialsesFound", false);
+
+                if (!credentialsesFound)
+                {
+                    LoginCredentials loginCredentials = new LoginCredentials();
+
+                    String login = mSettings.getString("login", null);
+                    String password = mSettings.getString("password", null);
+
+                    if (login != null && password != null)
+                    {
+                        loginCredentials.setLogin(login);
+                        loginCredentials.setPassword(password);
+                    }
+
+                    realm.beginTransaction();
+                    realm.copyToRealmOrUpdate(loginCredentials);
+                    realm.commitTransaction();
+                }
+
                 try
                 {
                     String technicianStr = jsonObject.getString("data_tehnic");
 
                     Gson gson = new Gson();
-                    Type type = new TypeToken<List<TecnicianModel>>() {}.getType();
+                    Type type = new TypeToken<List<TecnicianModel>>()
+                    {
+                    }.getType();
 
                     final List<TecnicianModel> techModelList = gson.fromJson(technicianStr, type);
 
@@ -303,17 +420,17 @@ public class TechnicianSelectFragment extends Fragment implements View.OnClickLi
                                 saTecnicianList.add(technicianItem.getFullNameTehnic());
                                 TecnicianModel tecnicianModelR = realm.where(TecnicianModel.class).equalTo("id", technicianItem.getId()).findFirst();
 
-                                if(tecnicianModelR==null)
+                                if (tecnicianModelR == null)
                                 {
                                     realm.copyToRealm(technicianItem);
                                 }
                                 realm.commitTransaction();
                             }
 
-                            ArrayAdapter<String> technicianListAdapter = new ArrayAdapter<>(activity, android.R.layout.simple_dropdown_item_1line, saTecnicianList);
+                            ArrayAdapter<String> technicianListAdapter = new ArrayAdapter<>(activity, R.layout.spinner_tech_selection_row, R.id.tvSpinnerTechSelItem, saTecnicianList);
                             spTecnicianList.setAdapter(technicianListAdapter);
 
-                            if(bNewTechAdded)
+                            if (bNewTechAdded)
                             {
                                 llTechnNameAndSurname.setVisibility(View.GONE);
                                 flTechnicianAdded.setVisibility(View.VISIBLE);
@@ -325,8 +442,20 @@ public class TechnicianSelectFragment extends Fragment implements View.OnClickLi
                 } catch (JSONException e)
                 {
                     e.printStackTrace();
-                    return;
+
+                    activity.runOnUiThread(new Runnable()
+                    {
+                        public void run()
+                        {
+                            Toast.makeText(activity, "Receive data failed", Toast.LENGTH_LONG).show();
+                        }
+                    });
+
+                    loginCommunicator.onLoginFailed();
                 }
+            } else
+            {
+                loginCommunicator.onLoginFailed();
             }
         }
 
@@ -347,7 +476,7 @@ public class TechnicianSelectFragment extends Fragment implements View.OnClickLi
                     }
                 });
 
-                Log.d("DEBUG", "Receive token failed");
+                //Log.d("DEBUG", "Receive token failed");
 
                 return;
             }
@@ -392,7 +521,7 @@ public class TechnicianSelectFragment extends Fragment implements View.OnClickLi
                 {
                     public void run()
                     {
-                        Toast.makeText(activity, "Receive JSON data failed", Toast.LENGTH_LONG).show();
+                        Toast.makeText(activity, "Receive visits data failed", Toast.LENGTH_LONG).show();
                     }
                 });
 
@@ -405,10 +534,7 @@ public class TechnicianSelectFragment extends Fragment implements View.OnClickLi
 
             //Log.d("DEBUG", visitsJSONData);
 
-            if(inVisitItems!=null)
-            {
-                networkEventsListener.onJSONdataReceiveCompleted(selectedTech);
-            }
+            loginCommunicator.onBtnSelectTechAndEnterAppClicked();
         }
     }
 }

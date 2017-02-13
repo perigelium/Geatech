@@ -12,7 +12,7 @@ import android.widget.Toast;
 import ru.alexangan.developer.geatech.Interfaces.Communicator;
 import ru.alexangan.developer.geatech.R;
 
-import static ru.alexangan.developer.geatech.Activities.LoginActivity.selectedTech;
+import static ru.alexangan.developer.geatech.Models.GlobalConstants.selectedTech;
 
 /**
  * Created by user on 11/10/2016.

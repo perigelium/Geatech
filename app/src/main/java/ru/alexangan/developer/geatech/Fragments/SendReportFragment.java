@@ -42,8 +42,8 @@ import ru.alexangan.developer.geatech.Models.VisitStates;
 import ru.alexangan.developer.geatech.Network.NetworkUtils;
 import ru.alexangan.developer.geatech.R;
 
-import static ru.alexangan.developer.geatech.Activities.LoginActivity.realm;
-import static ru.alexangan.developer.geatech.Activities.MainActivity.visitItems;
+import static ru.alexangan.developer.geatech.Models.GlobalConstants.realm;
+import static ru.alexangan.developer.geatech.Models.GlobalConstants.visitItems;
 
 public class SendReportFragment extends Fragment implements View.OnClickListener, Callback
 {

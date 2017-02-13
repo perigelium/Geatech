@@ -28,8 +28,8 @@ import ru.alexangan.developer.geatech.Network.LocationRetriever;
 import ru.alexangan.developer.geatech.Network.NetworkUtils;
 import ru.alexangan.developer.geatech.R;
 
-import static ru.alexangan.developer.geatech.Activities.LoginActivity.realm;
-import static ru.alexangan.developer.geatech.Activities.MainActivity.visitItems;
+import static ru.alexangan.developer.geatech.Models.GlobalConstants.realm;
+import static ru.alexangan.developer.geatech.Models.GlobalConstants.visitItems;
 
 public class CTLinfoFragment extends Fragment implements View.OnClickListener, LocationRetrievedEvents, Callback
 {
