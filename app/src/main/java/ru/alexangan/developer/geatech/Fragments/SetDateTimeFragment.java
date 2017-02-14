@@ -4,7 +4,6 @@ import android.app.DatePickerDialog;
 import android.app.Fragment;
 import android.app.TimePickerDialog;
 import android.content.ActivityNotFoundException;
-import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -155,7 +154,7 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
         ClientData clientData = visitItem.getClientData();
         ProductData productData = visitItem.getProductData();
         VisitStates visitStates = visitItem.getVisitStates();
-        int idSopralluogo = visitStates.getIdSopralluogo();
+        int idSopralluogo = visitStates.getId_sopralluogo();
         List<SubproductItem> list = productData.getSubItem();
 
         realm.beginTransaction();
@@ -191,7 +190,7 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
         String visitDateTime = reportStates.getDataOraSopralluogo();
         if(visitDateTime == null)
         {
-            visitDateTime = visitStates.getDataSollecitoAppuntamento();
+            visitDateTime = visitStates.getData_sollecito_appuntamento();
         }
 
         calendarNow = Calendar.getInstance();
@@ -304,7 +303,7 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
 
             VisitItem visitItem = visitItems.get(selectedIndex);
             VisitStates visitStates = visitItem.getVisitStates();
-            int idSopralluogo = visitStates.getIdSopralluogo();
+            int idSopralluogo = visitStates.getId_sopralluogo();
 
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
             strDateTime = sdf.format(calendar.getTime());

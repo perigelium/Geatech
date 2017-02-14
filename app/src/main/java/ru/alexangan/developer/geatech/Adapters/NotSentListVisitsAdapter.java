@@ -24,7 +24,6 @@ import ru.alexangan.developer.geatech.Models.ProductData;
 import ru.alexangan.developer.geatech.Models.ReportStates;
 import ru.alexangan.developer.geatech.Models.VisitItem;
 import ru.alexangan.developer.geatech.Models.VisitStates;
-import ru.alexangan.developer.geatech.Network.NetworkUtils;
 import ru.alexangan.developer.geatech.R;
 
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.realm;
@@ -78,7 +77,7 @@ public class NotSentListVisitsAdapter extends BaseAdapter
         ClientData clientData = visitItem.getClientData();
         ProductData productData = visitItem.getProductData();
         VisitStates visitStates = visitItem.getVisitStates();
-        int idSopralluogo = visitStates.getIdSopralluogo();
+        int idSopralluogo = visitStates.getId_sopralluogo();
 
         TextView tvVisitDay = (TextView)row.findViewById(R.id.tvVisitDay);
         TextView tvVisitMonth = (TextView)row.findViewById(R.id.tvVisitMonth);

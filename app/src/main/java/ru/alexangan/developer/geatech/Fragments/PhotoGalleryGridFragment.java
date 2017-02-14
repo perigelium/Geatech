@@ -189,7 +189,7 @@ public class PhotoGalleryGridFragment extends Fragment
 
         VisitItem visitItem = visitItems.get(selectedIndex);
         VisitStates visitStates = visitItem.getVisitStates();
-        int idSopralluogo = visitStates.getIdSopralluogo();
+        int idSopralluogo = visitStates.getId_sopralluogo();
         ReportStates reportStates = realm.where(ReportStates.class).equalTo("idSopralluogo", idSopralluogo).findFirst();
         RealmResults<ImageReport> reportImages = realm.where(ImageReport.class).equalTo("id_rapporto_sopralluogo", idSopralluogo).findAll();
         reportImages.deleteAllFromRealm();

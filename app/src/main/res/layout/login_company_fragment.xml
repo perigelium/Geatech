@@ -41,7 +41,7 @@
 
             <EditText
                 android:id="@+id/etLogin"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
                 android:hint="inserire e-mail"
@@ -74,7 +74,7 @@
 
             <EditText
                 android:id="@+id/etPassword"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="inserire password"
                 android:inputType="textPassword"

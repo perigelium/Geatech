@@ -3,7 +3,6 @@ package ru.alexangan.developer.geatech.Fragments;
 import android.app.Activity;
 import android.app.Fragment;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,11 +12,9 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -31,7 +28,6 @@ import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
 import ru.alexangan.developer.geatech.Interfaces.Communicator;
-import ru.alexangan.developer.geatech.Models.ClimaReportModel;
 import ru.alexangan.developer.geatech.Models.ImageReport;
 import ru.alexangan.developer.geatech.Models.Gea_rapporto_sopralluogo;
 import ru.alexangan.developer.geatech.Adapters.ModelsMapping;
@@ -42,6 +38,7 @@ import ru.alexangan.developer.geatech.Models.VisitStates;
 import ru.alexangan.developer.geatech.Network.NetworkUtils;
 import ru.alexangan.developer.geatech.R;
 
+import static ru.alexangan.developer.geatech.Models.GlobalConstants.SEND_DATA_URL_SUFFIX;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.realm;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.visitItems;
 
@@ -101,7 +98,7 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
         visitStates = visitItem.getVisitStates();
         ProductData productData = visitItem.getProductData();
         String productType = productData.getProductType();
-        int idSopralluogo = visitStates.getIdSopralluogo();
+        int idSopralluogo = visitStates.getId_sopralluogo();
 
         Class modelClass = ModelsMapping.assignClassModel(productType);
 
@@ -113,9 +110,9 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
 
         if (reportStates != null)
         {
-            if (visitItem.getVisitStates().getIdSopralluogo() == reportStates.getIdSopralluogo()
+            if (visitItem.getVisitStates().getId_sopralluogo() == reportStates.getIdSopralluogo()
                     && (reportStates.getGeneralInfoCompletionState() == 2 && reportStates.getReportCompletionState() == 3)
-                    && reportStates.getPhotoAddedNumber() >= 1) //  && reportStates.getDataOraRaportoInviato() == null
+                    && reportStates.getPhotoAddedNumber() >= 1) //  && reportStates.getData_ora_invio_rapporto() == null
             {
                 sendReport.setAlpha(1.0f);
                 sendReport.setEnabled(true);
@@ -205,7 +202,7 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
                 //Log.d("DEBUG", String.valueOf(jsonObject));
 
                 NetworkUtils networkUtils = new NetworkUtils();
-                callSendReport = networkUtils.sendReport(this, String.valueOf(jsonObject));
+                callSendReport = networkUtils.setData(this, SEND_DATA_URL_SUFFIX, String.valueOf(jsonObject));
 
                 for (ImageReport imageReport : reportImages)
                 {

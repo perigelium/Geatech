@@ -40,7 +40,7 @@ public class ReportSentDetailedFragment extends Fragment
         ClientData clientData = visitItem.getClientData();
         ProductData productData = visitItem.getProductData();
         VisitStates visitStates = visitItem.getVisitStates();
-        int idSopralluogo = visitStates.getIdSopralluogo();
+        int idSopralluogo = visitStates.getId_sopralluogo();
 
         TextView tvdataOraSopralluogo = (TextView) rootView.findViewById(R.id.tvdataOraSopralluogo);
         TextView tvdataOraRaportoCompletato = (TextView) rootView.findViewById(R.id.tvdataOraRaportoCompletato);

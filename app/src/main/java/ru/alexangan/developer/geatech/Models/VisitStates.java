@@ -8,19 +8,20 @@ import io.realm.RealmObject;
 public class VisitStates extends RealmObject
 {
     private int id;
-    private int idSopralluogo;
-    private String idPractice;
-    private String idFornitore;
-    private String dataOraAssegnazione;
-    private String dataSollecitoAppuntamento;
-    private String dataOraPresaAppuntamento;
-    private String dataOraSopralluogo;
-    private String dataSollecitoRapporto;
-    private String dataInizioRimodulazione;
-    private String dataFineRimodulazione;
-    private String esitoSopralluogo;
-    private String tipoGestioneSopralluogo;
-    private String noteSopralluogo;
+    private int id_sopralluogo;
+    private String inizializzazione;
+    private String id_fornitore;
+    private String id_practice;
+    private String data_ora_assegnazione;
+    private String data_sollecito_appuntamento;
+    private String data_ora_presa_appuntamento;
+    private String data_ora_sopralluogo;
+    private String data_sollecito_rapporto;
+    private String data_inizio_rimodulazione;
+    private String data_fine_rimodulazione;
+    private String esito_sopralluogo;
+    private String tipo_gestione_sopralluogo;
+    private String note_sopralluogo;
 
     public VisitStates(){};
 
@@ -29,256 +30,256 @@ public class VisitStates extends RealmObject
         this.id = id;
     }
 
-    public VisitStates(int idSopralluogo, String dataSollecitoAppuntamento)
+    public VisitStates(int id_sopralluogo, String data_sollecito_appuntamento)
     {
-        this.idSopralluogo = idSopralluogo;
+        this.id_sopralluogo = id_sopralluogo;
 /*
-        this.idFornitore = idFornitore;
-        this.idPractice = idPractice;
-        this.dataOraAssegnazione = dataOraAssegnazione;*/
-        this.dataSollecitoAppuntamento = dataSollecitoAppuntamento;
-//        this.dataOraPresaAppuntamento = dataOraPresaAppuntamento;
-        //this.dataOraSopralluogo = dataOraSopralluogo;
-/*        this.dataSollecitoRapporto = dataSollecitoRapporto;
-        this.dataInizioRimodulazione = dataInizioRimodulazione;
-        this.dataFineRimodulazione = dataFineRimodulazione;
-        this.esitoSopralluogo = esitoSopralluogo;
-        this.tipoGestioneSopralluogo = tipoGestioneSopralluogo;
-        this.noteSopralluogo = noteSopralluogo;*/
+        this.id_fornitore = id_fornitore;
+        this.id_practice = id_practice;
+        this.data_ora_assegnazione = data_ora_assegnazione;*/
+        this.data_sollecito_appuntamento = data_sollecito_appuntamento;
+//        this.data_ora_presa_appuntamento = data_ora_presa_appuntamento;
+        //this.data_ora_sopralluogo = data_ora_sopralluogo;
+/*        this.data_sollecito_rapporto = data_sollecito_rapporto;
+        this.data_inizio_rimodulazione = data_inizio_rimodulazione;
+        this.data_fine_rimodulazione = data_fine_rimodulazione;
+        this.esito_sopralluogo = esito_sopralluogo;
+        this.tipo_gestione_sopralluogo = tipo_gestione_sopralluogo;
+        this.note_sopralluogo = note_sopralluogo;*/
     }
 
     /**
      * 
      * @return
-     *     The idSopralluogo
-     */
-    public int getIdSopralluogo() {
-        return idSopralluogo;
-    }
-
-    /**
-     * 
-     * @param idSopralluogo
      *     The id_sopralluogo
      */
-    public void setIdSopralluogo(int idSopralluogo) {
-        this.idSopralluogo = idSopralluogo;
+    public int getId_sopralluogo() {
+        return id_sopralluogo;
+    }
+
+    /**
+     * 
+     * @param id_sopralluogo
+     *     The id_sopralluogo
+     */
+    public void setId_sopralluogo(int id_sopralluogo) {
+        this.id_sopralluogo = id_sopralluogo;
     }
 
     /**
      * 
      * @return
-     *     The idFornitore
-     */
-    public String getIdFornitore() {
-        return idFornitore;
-    }
-
-    /**
-     * 
-     * @param idFornitore
      *     The id_fornitore
      */
-    public void setIdFornitore(String idFornitore) {
-        this.idFornitore = idFornitore;
+    public String getId_fornitore() {
+        return id_fornitore;
+    }
+
+    /**
+     * 
+     * @param id_fornitore
+     *     The id_fornitore
+     */
+    public void setId_fornitore(String id_fornitore) {
+        this.id_fornitore = id_fornitore;
     }
 
     /**
      * 
      * @return
-     *     The idPractice
-     */
-    public String getIdPractice() {
-        return idPractice;
-    }
-
-    /**
-     * 
-     * @param idPractice
      *     The id_practice
      */
-    public void setIdPractice(String idPractice) {
-        this.idPractice = idPractice;
+    public String getId_practice() {
+        return id_practice;
+    }
+
+    /**
+     * 
+     * @param id_practice
+     *     The id_practice
+     */
+    public void setId_practice(String id_practice) {
+        this.id_practice = id_practice;
     }
 
     /**
      * 
      * @return
-     *     The dataOraAssegnazione
-     */
-    public String getDataOraAssegnazione() {
-        return dataOraAssegnazione;
-    }
-
-    /**
-     * 
-     * @param dataOraAssegnazione
      *     The data_ora_assegnazione
      */
-    public void setDataOraAssegnazione(String dataOraAssegnazione) {
-        this.dataOraAssegnazione = dataOraAssegnazione;
+    public String getData_ora_assegnazione() {
+        return data_ora_assegnazione;
+    }
+
+    /**
+     * 
+     * @param data_ora_assegnazione
+     *     The data_ora_assegnazione
+     */
+    public void setData_ora_assegnazione(String data_ora_assegnazione) {
+        this.data_ora_assegnazione = data_ora_assegnazione;
     }
 
     /**
      * 
      * @return
-     *     The dataSollecitoAppuntamento
-     */
-    public String getDataSollecitoAppuntamento() {
-        return dataSollecitoAppuntamento;
-    }
-
-    /**
-     * 
-     * @param dataSollecitoAppuntamento
      *     The data_sollecito_appuntamento
      */
-    public void setDataSollecitoAppuntamento(String dataSollecitoAppuntamento) {
-        this.dataSollecitoAppuntamento = dataSollecitoAppuntamento;
+    public String getData_sollecito_appuntamento() {
+        return data_sollecito_appuntamento;
+    }
+
+    /**
+     * 
+     * @param data_sollecito_appuntamento
+     *     The data_sollecito_appuntamento
+     */
+    public void setData_sollecito_appuntamento(String data_sollecito_appuntamento) {
+        this.data_sollecito_appuntamento = data_sollecito_appuntamento;
     }
 
     /**
      * 
      * @return
-     *     The dataOraPresaAppuntamento
-     */
-    public String getDataOraPresaAppuntamento() {
-        return dataOraPresaAppuntamento;
-    }
-
-    /**
-     * 
-     * @param dataOraPresaAppuntamento
      *     The data_ora_presa_appuntamento
      */
-    public void setDataOraPresaAppuntamento(String dataOraPresaAppuntamento) {
-        this.dataOraPresaAppuntamento = dataOraPresaAppuntamento;
+    public String getData_ora_presa_appuntamento() {
+        return data_ora_presa_appuntamento;
+    }
+
+    /**
+     * 
+     * @param data_ora_presa_appuntamento
+     *     The data_ora_presa_appuntamento
+     */
+    public void setData_ora_presa_appuntamento(String data_ora_presa_appuntamento) {
+        this.data_ora_presa_appuntamento = data_ora_presa_appuntamento;
     }
 
     /**
      * 
      * @return
-     *     The dataOraSopralluogo
-     */
-    public String getDataOraSopralluogo() {
-        return dataOraSopralluogo;
-    }
-
-    /**
-     * 
-     * @param dataOraSopralluogo
      *     The data_ora_sopralluogo
      */
-    public void setDataOraSopralluogo(String dataOraSopralluogo) {
-        this.dataOraSopralluogo = dataOraSopralluogo;
+    public String getData_ora_sopralluogo() {
+        return data_ora_sopralluogo;
+    }
+
+    /**
+     * 
+     * @param data_ora_sopralluogo
+     *     The data_ora_sopralluogo
+     */
+    public void setData_ora_sopralluogo(String data_ora_sopralluogo) {
+        this.data_ora_sopralluogo = data_ora_sopralluogo;
     }
 
     /**
      * 
      * @return
-     *     The dataSollecitoRapporto
-     */
-    public String getDataSollecitoRapporto() {
-        return dataSollecitoRapporto;
-    }
-
-    /**
-     * 
-     * @param dataSollecitoRapporto
      *     The data_sollecito_rapporto
      */
-    public void setDataSollecitoRapporto(String dataSollecitoRapporto) {
-        this.dataSollecitoRapporto = dataSollecitoRapporto;
+    public String getData_sollecito_rapporto() {
+        return data_sollecito_rapporto;
+    }
+
+    /**
+     * 
+     * @param data_sollecito_rapporto
+     *     The data_sollecito_rapporto
+     */
+    public void setData_sollecito_rapporto(String data_sollecito_rapporto) {
+        this.data_sollecito_rapporto = data_sollecito_rapporto;
     }
 
     /**
      * 
      * @return
-     *     The dataInizioRimodulazione
-     */
-    public String getDataInizioRimodulazione() {
-        return dataInizioRimodulazione;
-    }
-
-    /**
-     * 
-     * @param dataInizioRimodulazione
      *     The data_inizio_rimodulazione
      */
-    public void setDataInizioRimodulazione(String dataInizioRimodulazione) {
-        this.dataInizioRimodulazione = dataInizioRimodulazione;
+    public String getData_inizio_rimodulazione() {
+        return data_inizio_rimodulazione;
+    }
+
+    /**
+     * 
+     * @param data_inizio_rimodulazione
+     *     The data_inizio_rimodulazione
+     */
+    public void setData_inizio_rimodulazione(String data_inizio_rimodulazione) {
+        this.data_inizio_rimodulazione = data_inizio_rimodulazione;
     }
 
     /**
      * 
      * @return
-     *     The dataFineRimodulazione
-     */
-    public String getDataFineRimodulazione() {
-        return dataFineRimodulazione;
-    }
-
-    /**
-     * 
-     * @param dataFineRimodulazione
      *     The data_fine_rimodulazione
      */
-    public void setDataFineRimodulazione(String dataFineRimodulazione) {
-        this.dataFineRimodulazione = dataFineRimodulazione;
+    public String getData_fine_rimodulazione() {
+        return data_fine_rimodulazione;
+    }
+
+    /**
+     * 
+     * @param data_fine_rimodulazione
+     *     The data_fine_rimodulazione
+     */
+    public void setData_fine_rimodulazione(String data_fine_rimodulazione) {
+        this.data_fine_rimodulazione = data_fine_rimodulazione;
     }
 
     /**
      * 
      * @return
-     *     The esitoSopralluogo
-     */
-    public String getEsitoSopralluogo() {
-        return esitoSopralluogo;
-    }
-
-    /**
-     * 
-     * @param esitoSopralluogo
      *     The esito_sopralluogo
      */
-    public void setEsitoSopralluogo(String esitoSopralluogo) {
-        this.esitoSopralluogo = esitoSopralluogo;
+    public String getEsito_sopralluogo() {
+        return esito_sopralluogo;
+    }
+
+    /**
+     * 
+     * @param esito_sopralluogo
+     *     The esito_sopralluogo
+     */
+    public void setEsito_sopralluogo(String esito_sopralluogo) {
+        this.esito_sopralluogo = esito_sopralluogo;
     }
 
     /**
      * 
      * @return
-     *     The tipoGestioneSopralluogo
-     */
-    public String getTipoGestioneSopralluogo() {
-        return tipoGestioneSopralluogo;
-    }
-
-    /**
-     * 
-     * @param tipoGestioneSopralluogo
      *     The tipo_gestione_sopralluogo
      */
-    public void setTipoGestioneSopralluogo(String tipoGestioneSopralluogo) {
-        this.tipoGestioneSopralluogo = tipoGestioneSopralluogo;
+    public String getTipo_gestione_sopralluogo() {
+        return tipo_gestione_sopralluogo;
+    }
+
+    /**
+     * 
+     * @param tipo_gestione_sopralluogo
+     *     The tipo_gestione_sopralluogo
+     */
+    public void setTipo_gestione_sopralluogo(String tipo_gestione_sopralluogo) {
+        this.tipo_gestione_sopralluogo = tipo_gestione_sopralluogo;
     }
 
     /**
      * 
      * @return
-     *     The noteSopralluogo
+     *     The note_sopralluogo
      */
-    public String getNoteSopralluogo() {
-        return noteSopralluogo;
+    public String getNote_sopralluogo() {
+        return note_sopralluogo;
     }
 
     /**
      * 
-     * @param noteSopralluogo
+     * @param note_sopralluogo
      *     The note_sopralluogo
      */
-    public void setNoteSopralluogo(String noteSopralluogo) {
-        this.noteSopralluogo = noteSopralluogo;
+    public void setNote_sopralluogo(String note_sopralluogo) {
+        this.note_sopralluogo = note_sopralluogo;
     }
 
     public int getId()

@@ -3,7 +3,6 @@ package ru.alexangan.developer.geatech.Fragments;
 import android.app.Fragment;
 import android.content.Context;
 import android.location.Location;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -107,7 +106,7 @@ public class CTLinfoFragment extends Fragment implements View.OnClickListener, L
         VisitItem visitItem = visitItems.get(selectedIndex);
         ClientData clientData = visitItem.getClientData();
         VisitStates visitStates = visitItem.getVisitStates();
-        int idSopralluogo = visitStates.getIdSopralluogo();
+        int idSopralluogo = visitStates.getId_sopralluogo();
 
         TextView clientNameTextView = (TextView) rootView.findViewById(R.id.tvClientName);
         clientNameTextView.setText(clientData.getName());

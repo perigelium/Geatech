@@ -12,7 +12,7 @@ public interface LoginCommunicator
 
     void onLoginSucceeded();
 
-    void onBtnSelectTechAndEnterAppClicked();
+    void onTechSelectedAndApplied();
 
     void onReturnToLoginScreen();
 

@@ -71,7 +71,7 @@ public class InWorkListVisitsAdapter extends BaseAdapter
         ClientData clientData = visitItem.getClientData();
         ProductData productData = visitItem.getProductData();
         VisitStates visitStates = visitItem.getVisitStates();
-        int idSopralluogo = visitStates.getIdSopralluogo();
+        int idSopralluogo = visitStates.getId_sopralluogo();
 
         realm.beginTransaction();
         ReportStates reportStates = realm.where(ReportStates.class).equalTo("idSopralluogo", idSopralluogo).findFirst();

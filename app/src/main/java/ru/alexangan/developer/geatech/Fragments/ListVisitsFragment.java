@@ -46,7 +46,7 @@ public class ListVisitsFragment extends ListFragment
                 VisitItem p1 = (VisitItem) o1;
                 VisitItem p2 = (VisitItem) o2;
                 // ## Ascending order
-                return p1.getVisitStates().getDataOraSopralluogo().compareToIgnoreCase(p2.getVisitStates().getDataOraSopralluogo()); // To compare string values
+                return p1.getVisitStates().getData_ora_sopralluogo().compareToIgnoreCase(p2.getVisitStates().getData_ora_sopralluogo()); // To compare string values
                 // return Integer.valueOf(emp1.getId()).compareTo(emp2.getId()); // To compare integer values
 
                 // ## Descending order
@@ -81,7 +81,7 @@ public class ListVisitsFragment extends ListFragment
         {
             for(ReportStates reportStates : reportStatesList)
             {
-                if (visitItem.getVisitStates().getIdSopralluogo() == reportStates.getIdSopralluogo())
+                if (visitItem.getVisitStates().getId_sopralluogo() == reportStates.getIdSopralluogo())
                 {
                     if (!visitTimeNotSetOnly || (visitTimeNotSetOnly && reportStates.getDataOraSopralluogo() == null))
                     {
@@ -108,9 +108,9 @@ public class ListVisitsFragment extends ListFragment
         {
             for(ReportStates reportStates : reportStatesList)
             {
-                if (visitItem.getVisitStates().getIdSopralluogo() == reportStates.getIdSopralluogo())
+                if (visitItem.getVisitStates().getId_sopralluogo() == reportStates.getId_sopralluogo())
                 {
-                    if (filterTimeSetItems && reportStates.getDataOraSopralluogo() != null)
+                    if (filterTimeSetItems && reportStates.getData_ora_sopralluogo() != null)
                     {
                         visitItemsFiltered.remove(visitItem);
                         myListAdapter.notifyDataSetChanged();
@@ -147,7 +147,7 @@ public class ListVisitsFragment extends ListFragment
         {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id)
             {
-                int idSopralluogo = visitItemsFiltered.get(position).getVisitStates().getIdSopralluogo();
+                int idSopralluogo = visitItemsFiltered.get(position).getVisitStates().getId_sopralluogo();
                 int idVisit = visitItemsFiltered.get(position).getId();
                 realm.beginTransaction();
                 ReportStates reportStates = realm.where(ReportStates.class)
@@ -177,7 +177,7 @@ public class ListVisitsFragment extends ListFragment
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view,int position, long id)
             {
-                int idSopralluogo = visitItemsFiltered.get(position).getVisitStates().getIdSopralluogo();
+                int idSopralluogo = visitItemsFiltered.get(position).getVisitStates().getId_sopralluogo();
                 int idVisit = visitItemsFiltered.get(position).getId();
                 realm.beginTransaction();
                 ReportStates reportStates = realm.where(ReportStates.class)

@@ -45,7 +45,7 @@ public class ReportsListFragment extends ListFragment
         {
             for(ReportStates reportStates : reportStatesList)
             {
-                if (visitItem.getVisitStates().getIdSopralluogo() == reportStates.getIdSopralluogo()
+                if (visitItem.getVisitStates().getId_sopralluogo() == reportStates.getIdSopralluogo()
                         && reportStates.getDataOraRaportoInviato()!=null)
                 {
                     visitItemsReportSent.add(visitItem);

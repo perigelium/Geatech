@@ -1,6 +1,5 @@
 package ru.alexangan.developer.geatech.Adapters;
 
-import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.view.LayoutInflater;
@@ -25,7 +24,6 @@ import ru.alexangan.developer.geatech.Models.VisitStates;
 import ru.alexangan.developer.geatech.R;
 
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.realm;
-import static ru.alexangan.developer.geatech.Models.GlobalConstants.visitItems;
 
 /**
  * Created by user on 11/21/2016.
@@ -114,7 +112,7 @@ public class MyListVisitsAdapter extends BaseAdapter
         ClientData clientData = visitItem.getClientData();
         ProductData productData = visitItem.getProductData();
         VisitStates visitStates = visitItem.getVisitStates();
-        int idSopralluogo = visitStates.getIdSopralluogo();
+        int idSopralluogo = visitStates.getId_sopralluogo();
 
         clientNameTextView.setText(clientData.getName());
         serviceTypeTextView.setText(productData.getProductType());
@@ -129,7 +127,7 @@ public class MyListVisitsAdapter extends BaseAdapter
         String visitDateTime = reportStates.getDataOraSopralluogo();
 /*        if(visitDateTime == null)
         {
-            visitDateTime = visitStates.getDataSollecitoAppuntamento();
+            visitDateTime = visitStates.getData_sollecito_appuntamento();
         }*/
 
         if(visitDateTime != null)

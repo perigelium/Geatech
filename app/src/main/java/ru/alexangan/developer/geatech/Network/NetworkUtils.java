@@ -20,6 +20,8 @@ import okhttp3.RequestBody;
 import ru.alexangan.developer.geatech.Models.ImageReport;
 import ru.alexangan.developer.geatech.Utils.ImageUtils;
 
+import static ru.alexangan.developer.geatech.Models.GlobalConstants.LOGIN_URL_SUFFIX;
+import static ru.alexangan.developer.geatech.Models.GlobalConstants.SEND_IMAGE_URL;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.tokenStr;
 
 /**
@@ -29,24 +31,16 @@ import static ru.alexangan.developer.geatech.Models.GlobalConstants.tokenStr;
 public class NetworkUtils
 {
     private final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
-    private final String OLD_REST_URL = "http://www.bludelego.com/dev/geatech/api.php";
     private final String REST_URL = "http://www.bludelego.com/dev/geatech/gea.php";
-    private final String SEND_DATA_URL_SUFFIX = "?case=send_data";
-    private final String GET_DATA_URL_SUFFIX = "?case=get_raport";
-    private final String SEND_IMAGE_URL = "http://www.bludelego.com/dev/geatech/send_image.php";
-    private final String LOGIN_URL_SUFFIX = "?case=login";
-    private final String REST_LOGIN = "alexgheorghianu@yahoo.com";
-    private final String REST_PASSWORD = "BF8hWoAr";
 
     public static boolean isNetworkAvailable(Context context)
     {
-        ConnectivityManager connectivityManager
-                = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 
-    public Call loginRequest(Callback callback, String techName, int techId)
+    public Call loginRequest(Callback callback, String login, String password, String techName, int techId)
     {
         OkHttpClient.Builder defaultHttpClient = new OkHttpClient.Builder();
         OkHttpClient okHttpClient = defaultHttpClient.build();
@@ -54,8 +48,8 @@ public class NetworkUtils
         JSONObject jsonObject = new JSONObject();
         try
         {
-            jsonObject.put("login", REST_LOGIN);
-            jsonObject.put("password", REST_PASSWORD);
+            jsonObject.put("login", login);
+            jsonObject.put("password", password);
 
             if(techName!=null)
             {
@@ -86,7 +80,7 @@ public class NetworkUtils
         return call;
     }
 
-    public Call getJSONfromServer(Callback callback, String tokenStr)
+    public Call getData(Callback callback, String urlSuffix, String tokenStr)
     {
         JSONObject jsonToken = new JSONObject();
 
@@ -104,7 +98,7 @@ public class NetworkUtils
         RequestBody body = RequestBody.create(JSON, String.valueOf(jsonToken));
 
         Request request = new Request.Builder()
-                .url(OLD_REST_URL + GET_DATA_URL_SUFFIX)
+                .url(REST_URL + urlSuffix)
                 .post(body)
                 .build();
 
@@ -116,7 +110,72 @@ public class NetworkUtils
         return callJSON;
     }
 
-    public Call sendReport(Callback callback, String gsonStr)
+/*    public Call getJSONfromServer(Callback callback, String tokenStr)
+    {
+        JSONObject jsonToken = new JSONObject();
+
+        try
+        {
+            jsonToken.put("token", tokenStr);
+
+        } catch (JSONException e)
+        {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            return null;
+        }
+
+        RequestBody body = RequestBody.create(JSON, String.valueOf(jsonToken));
+
+        Request request = new Request.Builder()
+                .url(REST_URL + GET_REPORT_URL_SUFFIX)
+                .post(body)
+                .build();
+
+        OkHttpClient client1 = new OkHttpClient();
+
+        Call callJSON = client1.newCall(request);
+        callJSON.enqueue(callback);
+
+        return callJSON;
+    }*/
+
+    public Call setData(Callback callback, String urlSuffix, String gsonStr)
+    {
+        OkHttpClient.Builder defaultHttpClient = new OkHttpClient.Builder();
+        OkHttpClient okHttpClient = defaultHttpClient.build();
+
+        JSONObject jsonObject = new JSONObject();
+        try
+        {
+            jsonObject.put("token", tokenStr);
+
+            if(gsonStr!=null)
+            {
+                jsonObject.put("report_data", gsonStr);
+            }
+
+        } catch (JSONException e)
+        {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            return null;
+        }
+
+        RequestBody body = RequestBody.create(JSON, String.valueOf(jsonObject));
+
+        Request request = new Request.Builder()
+                .url(REST_URL + urlSuffix)
+                .post(body)
+                .build();
+
+        Call callData = okHttpClient.newCall(request);
+        callData.enqueue(callback);
+
+        return callData;
+    }
+
+/*    public Call sendReport(Callback callback, String gsonStr)
     {
         OkHttpClient.Builder defaultHttpClient = new OkHttpClient.Builder();
         OkHttpClient okHttpClient = defaultHttpClient.build();
@@ -145,12 +204,12 @@ public class NetworkUtils
         callData.enqueue(callback);
 
         return callData;
-    }
+    }*/
 
 
     public Call sendImage(Callback callback, Context context, ImageReport imageReport)
     {
-        String fileName = imageReport.getFileName();
+        String fileName = imageReport.getNome_file();
 
         File imageFile = new File(imageReport.getFilePath());
         String strMediaType = ImageUtils.getMimeTypeOfUri(context, Uri.fromFile(imageFile));

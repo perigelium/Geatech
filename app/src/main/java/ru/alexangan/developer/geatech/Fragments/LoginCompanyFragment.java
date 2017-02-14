@@ -31,7 +31,7 @@ import ru.alexangan.developer.geatech.R;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.mSettings;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.realm;
 
-public class LoginCompanyFragment extends Fragment implements  View.OnClickListener, Callback
+public class LoginCompanyFragment extends Fragment implements View.OnClickListener, Callback
 {
     Activity activity;
     Button btnLogin, btnPasswordRecover;
@@ -42,6 +42,7 @@ public class LoginCompanyFragment extends Fragment implements  View.OnClickListe
     CheckBox chkboxRememberMe;
     private Call callTechnicianList;
     NetworkUtils networkUtils;
+    String strLogin, strPassword;
 
     public LoginCompanyFragment()
     {
@@ -62,21 +63,23 @@ public class LoginCompanyFragment extends Fragment implements  View.OnClickListe
     {
         super.onResume();
 
-        if(mSettings.contains(CHKBOX_REMEMBER_ME_STATE))
+        if (mSettings.contains(CHKBOX_REMEMBER_ME_STATE))
         {
             chkboxRememberMeState = mSettings.getBoolean(CHKBOX_REMEMBER_ME_STATE, false);
             chkboxRememberMe.setChecked(chkboxRememberMeState);
 
-            if(chkboxRememberMeState == true)
+            if (chkboxRememberMeState == true)
             {
                 realm.beginTransaction();
                 RealmResults<LoginCredentials> loginCredentialses = realm.where(LoginCredentials.class).findAll();
                 realm.commitTransaction();
 
-                if(loginCredentialses.size() != 0)
+                if (loginCredentialses.size() != 0)
                 {
-                    etLogin.setText(loginCredentialses.get(loginCredentialses.size() - 1).getLogin());
-                    etPassword.setText(loginCredentialses.get(loginCredentialses.size() - 1).getPassword());
+                    String strLogin = loginCredentialses.get(loginCredentialses.size() - 1).getLogin();
+                    etLogin.setText(strLogin);
+                    String strPassword = loginCredentialses.get(loginCredentialses.size() - 1).getPassword();
+                    etPassword.setText(strPassword);
                 }
             }
         }
@@ -144,48 +147,71 @@ public class LoginCompanyFragment extends Fragment implements  View.OnClickListe
     @Override
     public void onClick(View view)
     {
-        if(view.getId() == R.id.btnLogin)
+        if (view.getId() == R.id.btnLogin)
         {
             realm.beginTransaction();
             RealmResults<LoginCredentials> loginCredentialses = realm.where(LoginCredentials.class).findAll();
-            //loginCredentialses.deleteAllFromRealm();
+
+            //loginCredentialses.deleteAllFromRealm();             ////   Remove
+
             realm.commitTransaction();
 
             credentialsesFound = false;
-            String strLogin = etLogin.getText().toString();
-            String strPassword = etPassword.getText().toString();
+            strLogin = etLogin.getText().toString();
+
+            if (!android.util.Patterns.EMAIL_ADDRESS.matcher(strLogin).matches())
+            {
+                activity.runOnUiThread(new Runnable()
+                {
+                    public void run()
+                    {
+                        Toast.makeText(activity, "login non e valido.", Toast.LENGTH_LONG).show();
+                    }
+                });
+                return;
+            }
+
+            strPassword = etPassword.getText().toString();
+
+            if (strPassword == null || strPassword.length() < 5)
+            {
+                activity.runOnUiThread(new Runnable()
+                {
+                    public void run()
+                    {
+                        Toast.makeText(activity, "Password non e valido.", Toast.LENGTH_LONG).show();
+                    }
+                });
+                return;
+            }
 
             for (LoginCredentials loginCredentials : loginCredentialses)
             {
-                if (strLogin.compareTo(loginCredentials.getLogin()) == 0
-                        && strPassword.compareTo(loginCredentials.getPassword()) == 0)
+                if (strLogin.equals(loginCredentials.getLogin())
+                        && strPassword.equals(loginCredentials.getPassword()))
                 {
                     credentialsesFound = true;
                     break;
                 }
             }
 
-/*            mSettings.edit().putBoolean("credentialsesFound", credentialsesFound).apply();
+            //mSettings.edit().putBoolean("credentialsesFound", credentialsesFound).apply();
 
-            if(!credentialsesFound)
-            {
-                SharedPreferences.Editor editor = mSettings.edit();
-                editor.putString("login", strLogin);
-                editor.putString("password", strPassword);
-                editor.apply();
-            }*/
+            SharedPreferences.Editor editor = mSettings.edit();
+            editor.putString("login", strLogin);
+            editor.putString("password", strPassword);
+            editor.apply();
 
-            if(credentialsesFound)
+            if (!networkUtils.isNetworkAvailable(activity))
             {
                 loginCommunicator.onLoginSucceeded();
-            }
-            else
+            } else
             {
-                callTechnicianList = networkUtils.loginRequest(this, null, -1);
+                callTechnicianList = networkUtils.loginRequest(this, strLogin, strPassword, null, -1);
             }
         }
 
-        if(view.getId() == R.id.btnPasswordRecover)
+        if (view.getId() == R.id.btnPasswordRecover)
         {
             loginCommunicator.onRecoverPasswordClicked();
         }
@@ -200,7 +226,7 @@ public class LoginCompanyFragment extends Fragment implements  View.OnClickListe
             {
                 public void run()
                 {
-                    Toast.makeText(activity, "Receive technician list failed", Toast.LENGTH_LONG).show();
+                    Toast.makeText(activity, "Login fallito, controlla la connessione a Internet", Toast.LENGTH_LONG).show();
                 }
             });
         }
@@ -221,7 +247,7 @@ public class LoginCompanyFragment extends Fragment implements  View.OnClickListe
                 {
                     public void run()
                     {
-                        Toast.makeText(activity, "Receive technician list failed", Toast.LENGTH_LONG).show();
+                        Toast.makeText(activity, "Ricevere lista tecnici non è riuscito", Toast.LENGTH_LONG).show();
                     }
                 });
 
@@ -241,31 +267,27 @@ public class LoginCompanyFragment extends Fragment implements  View.OnClickListe
 
             if (jsonObject.has("data_tehnic"))
             {
-                //boolean credentialsesFound = mSettings.getBoolean("credentialsesFound", false);
-
-                if(!credentialsesFound)
+                if (!credentialsesFound && strLogin != null && strPassword != null)
                 {
-                    LoginCredentials loginCredentials = new LoginCredentials();
-
-                    String login = mSettings.getString("login", null);
-                    String password = mSettings.getString("password", null);
-
-                    if(login != null && password != null)
+                    activity.runOnUiThread(new Runnable()
                     {
-                        loginCredentials.setLogin(login);
-                        loginCredentials.setPassword(password);
-                    }
-
-                    realm.beginTransaction();
-                    realm.copyToRealmOrUpdate(loginCredentials);
-                    realm.commitTransaction();
+                        public void run()
+                        {
+                            realm.beginTransaction();
+                            RealmResults<LoginCredentials> loginCredentialsCount = realm.where(LoginCredentials.class).findAll();
+                            LoginCredentials loginCredentials =
+                                    new LoginCredentials(loginCredentialsCount.size(), strLogin, strPassword);
+                            realm.copyToRealm(loginCredentials);
+                            realm.commitTransaction();
+                        }
+                    });
                 }
 
                 try
                 {
                     String technicianStr = jsonObject.getString("data_tehnic");
 
-                    mSettings.edit().putString("data_tehnic", technicianStr).apply();
+                    mSettings.edit().putString("technician_list_json", technicianStr).apply();
 
                     loginCommunicator.onLoginSucceeded();
 
@@ -277,20 +299,46 @@ public class LoginCompanyFragment extends Fragment implements  View.OnClickListe
                     {
                         public void run()
                         {
-                            Toast.makeText(activity, "Receive technic list failed", Toast.LENGTH_LONG).show();
+                            Toast.makeText(activity, "Parse lista tecnici non è riuscito", Toast.LENGTH_LONG).show();
                         }
                     });
                 }
-            }
-            else
+            } else
             {
-                activity.runOnUiThread(new Runnable()
+                if (jsonObject.has("error"))
                 {
-                    public void run()
+                    final String errorStr;
+
+                    try
                     {
-                        Toast.makeText(activity, "Receive technic list failed", Toast.LENGTH_LONG).show();
+                        errorStr = jsonObject.getString("error");
+                        if (errorStr.length() != 0)
+                        {
+                            activity.runOnUiThread(new Runnable()
+                            {
+                                public void run()
+                                {
+                                    Toast.makeText(activity, errorStr, Toast.LENGTH_LONG).show();
+                                }
+                            });
+                        }
+
+                    } catch (JSONException e)
+                    {
+                        e.printStackTrace();
+                        return;
                     }
-                });
+                }
+                else
+                {
+                    activity.runOnUiThread(new Runnable()
+                    {
+                        public void run()
+                        {
+                            Toast.makeText(activity, "Login o password non è valido", Toast.LENGTH_LONG).show();
+                        }
+                    });
+                }
             }
         }
     }

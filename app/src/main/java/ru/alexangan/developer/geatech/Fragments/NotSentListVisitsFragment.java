@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -41,7 +40,7 @@ public class NotSentListVisitsFragment extends ListFragment// implements View.On
         {
             for(ReportStates reportStates : reportStatesList)
             {
-                if (visitItem.getVisitStates().getIdSopralluogo() == reportStates.getIdSopralluogo()
+                if (visitItem.getVisitStates().getId_sopralluogo() == reportStates.getIdSopralluogo()
                         && (reportStates.getGeneralInfoCompletionState()==2 && reportStates.getReportCompletionState() ==3 )
                         && reportStates.getPhotoAddedNumber() >= 3 && reportStates.getDataOraRaportoInviato()==null)
                 {

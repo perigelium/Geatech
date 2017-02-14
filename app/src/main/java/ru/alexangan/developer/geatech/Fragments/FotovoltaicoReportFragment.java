@@ -7,8 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import io.realm.RealmResults;
-import ru.alexangan.developer.geatech.Models.CaldaiaReportModel;
 import ru.alexangan.developer.geatech.Models.ReportStates;
 import ru.alexangan.developer.geatech.Models.VisitItem;
 import ru.alexangan.developer.geatech.Models.VisitStates;
@@ -71,7 +69,7 @@ public class FotovoltaicoReportFragment extends Fragment
         realm.beginTransaction();
         VisitItem visitItem = visitItems.get(selectedIndex);
         VisitStates visitStates = visitItem.getVisitStates();
-        idSopralluogo = visitStates.getIdSopralluogo();
+        idSopralluogo = visitStates.getId_sopralluogo();
 
         reportStates = realm.where(ReportStates.class).equalTo("idSopralluogo", idSopralluogo).findFirst();
         //caldaiaReportModel = realm.where(CaldaiaReportModel.class).equalTo("idSopralluogo", idSopralluogo).findFirst();
@@ -82,7 +80,7 @@ public class FotovoltaicoReportFragment extends Fragment
 /*            if (caldaiaReportModel == null)
             {
                 caldaiaReportModel = new CaldaiaReportModel(caldaieModels.size());
-                caldaiaReportModel.setIdSopralluogo(idSopralluogo);
+                caldaiaReportModel.setId_sopralluogo(idSopralluogo);
                 realm.copyToRealmOrUpdate(caldaiaReportModel);
             }*/
         }

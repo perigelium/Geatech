@@ -44,7 +44,7 @@ public class InWorkListVisitsFragment extends ListFragment
                 int generalInfoCompletionState = reportStates.getGeneralInfoCompletionState();
                 int reportCompletionState = reportStates.getReportCompletionState();
 
-                if (visitItem.getVisitStates().getIdSopralluogo() == reportStates.getIdSopralluogo()
+                if (visitItem.getVisitStates().getId_sopralluogo() == reportStates.getIdSopralluogo()
 
                         && (photoAddedStatus!=0 || generalInfoCompletionState!=0 || reportCompletionState!=0) // report data not empty
                         && !(photoAddedStatus!=0 && generalInfoCompletionState==2 && reportCompletionState==3) // report not complete

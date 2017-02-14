@@ -209,7 +209,7 @@ public class ClimaReportFragment extends Fragment implements View.OnClickListene
         realm.beginTransaction();
         VisitItem visitItem = visitItems.get(selectedIndex);
         VisitStates visitStates = visitItem.getVisitStates();
-        idSopralluogo = visitStates.getIdSopralluogo();
+        idSopralluogo = visitStates.getId_sopralluogo();
 
         reportStates = realm.where(ReportStates.class).equalTo("idSopralluogo", idSopralluogo).findFirst();
         climaReportModel = realm.where(ClimaReportModel.class).equalTo("idSopralluogo", idSopralluogo).findFirst();

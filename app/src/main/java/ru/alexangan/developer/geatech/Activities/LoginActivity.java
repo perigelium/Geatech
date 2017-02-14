@@ -6,6 +6,7 @@ import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -18,6 +19,7 @@ import ru.alexangan.developer.geatech.Fragments.LoginPasswordRecoverFragment;
 import ru.alexangan.developer.geatech.Interfaces.LoginCommunicator;
 import ru.alexangan.developer.geatech.Models.VisitItem;
 import ru.alexangan.developer.geatech.R;
+import ru.alexangan.developer.geatech.Utils.JSON_to_model;
 
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.APP_PREFERENCES;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.inVisitItems;
@@ -33,7 +35,6 @@ public class LoginActivity extends Activity implements LoginCommunicator
     LoginPasswordRecoverFragment loginPasswordRecoverFragment;
     LoginCompanyFragment loginCompanyFragment;
     TechnicianSelectFragment technicianSelectFragment;
-    private Context context;
 
     @Override
     protected void onDestroy()
@@ -61,7 +62,7 @@ public class LoginActivity extends Activity implements LoginCommunicator
             return;
         }
 
-        context = getApplicationContext();
+        //context = getApplicationContext();
         mSettings = getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
 
         loginCompanyFragment = new LoginCompanyFragment();
@@ -108,66 +109,18 @@ public class LoginActivity extends Activity implements LoginCommunicator
     }
 
     @Override
-    public void onBtnSelectTechAndEnterAppClicked()
+    public void onTechSelectedAndApplied()
     {
-        if (inVisitItems != null)
-        {
-            realm.beginTransaction();
-            for (VisitItem visitItem : inVisitItems)
-            {
-                realm.copyToRealmOrUpdate(visitItem);
-            }
-            realm.commitTransaction();
-
-            //int visitItemsSize = visitItems.size();
-        }
-
-        realm.beginTransaction();
-        visitItems = realm.where(VisitItem.class).findAll();
-        realm.commitTransaction();
-
-        if(visitItems.size() != 0)
-        {
-            Intent registerIntent = new Intent(LoginActivity.this, MainActivity.class);
-            startActivity(registerIntent);
-        }
-        else
-        {
-            Toast.makeText(this, "Database inizializzazione fallito, controlla la connessione a Internet", Toast.LENGTH_LONG).show();
-        }
+        Intent registerIntent = new Intent(LoginActivity.this, MainActivity.class);
+        startActivity(registerIntent);
     }
 
     @Override
     public void onLoginSucceeded()
     {
-/*        if (view.getId() == R.id.btnPasswordRecover)
-        {
-            FragmentTransaction mFragmentTransaction = mFragmentManager.beginTransaction();
-
-            mFragmentTransaction.replace(R.id.loginFragContainer, loginPasswordRecoverFragment);
-
-            mFragmentTransaction.commit();
-        }*/
-
-        //if (view.getId() == R.id.btnLogin)
-        {
-/*            if (!credentialsesFound)
-            {
-                Toast.makeText(this, "login fallito", Toast.LENGTH_LONG).show();
-            }*/
-/*            else if(!NetworkUtils.isNetworkAvailable(context))
-            {
-                Intent registerIntent = new Intent(LoginActivity.this, MainActivity.class);
-                startActivity(registerIntent);
-            }*/
-            //else
-            {
-                FragmentTransaction mFragmentTransaction = mFragmentManager.beginTransaction();
-                mFragmentTransaction.replace(R.id.loginFragContainer, technicianSelectFragment);
-                mFragmentTransaction.commit();
-
-            }
-        }
+        FragmentTransaction mFragmentTransaction = mFragmentManager.beginTransaction();
+        mFragmentTransaction.replace(R.id.loginFragContainer, technicianSelectFragment);
+        mFragmentTransaction.commit();
     }
 
     @Override
@@ -182,9 +135,7 @@ public class LoginActivity extends Activity implements LoginCommunicator
     public void onPasswordSentReturned()
     {
         FragmentTransaction mFragmentTransaction = mFragmentManager.beginTransaction();
-
         mFragmentTransaction.replace(R.id.loginFragContainer, loginCompanyFragment);
-
         mFragmentTransaction.commit();
     }
 
@@ -192,9 +143,7 @@ public class LoginActivity extends Activity implements LoginCommunicator
     public void onRecoverPasswordClicked()
     {
         FragmentTransaction mFragmentTransaction = mFragmentManager.beginTransaction();
-
         mFragmentTransaction.replace(R.id.loginFragContainer, loginPasswordRecoverFragment);
-
         mFragmentTransaction.commit();
     }
 
@@ -214,8 +163,7 @@ public class LoginActivity extends Activity implements LoginCommunicator
             FragmentTransaction mFragmentTransaction = mFragmentManager.beginTransaction();
             mFragmentTransaction.replace(R.id.loginFragContainer, loginCompanyFragment);
             mFragmentTransaction.commit();
-        }
-        else
+        } else
         {
             finish();
         }

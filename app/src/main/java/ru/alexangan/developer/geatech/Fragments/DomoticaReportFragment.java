@@ -8,7 +8,6 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -265,7 +264,7 @@ public class DomoticaReportFragment extends Fragment implements View.OnClickList
         realm.beginTransaction();
         VisitItem visitItem = visitItems.get(selectedIndex);
         VisitStates visitStates = visitItem.getVisitStates();
-        idSopralluogo = visitStates.getIdSopralluogo();
+        idSopralluogo = visitStates.getId_sopralluogo();
 
         reportStates = realm.where(ReportStates.class).equalTo("idSopralluogo", idSopralluogo).findFirst();
         domoticaReportModel = realm.where(DomoticaReportModel.class).equalTo("idSopralluogo", idSopralluogo).findFirst();
@@ -404,7 +403,7 @@ public class DomoticaReportFragment extends Fragment implements View.OnClickList
         realm.beginTransaction();
         VisitItem visitItem = visitItems.get(selectedIndex);
         VisitStates visitStates = visitItem.getVisitStates();
-        idSopralluogo = visitStates.getIdSopralluogo();
+        idSopralluogo = visitStates.getId_sopralluogo();
 
         reportStates = realm.where(ReportStates.class).equalTo("idSopralluogo", idSopralluogo).findFirst();
         domoticaReportModel = realm.where(DomoticaReportModel.class).equalTo("idSopralluogo", idSopralluogo).findFirst();

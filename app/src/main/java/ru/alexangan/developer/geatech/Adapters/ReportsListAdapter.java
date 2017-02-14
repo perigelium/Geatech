@@ -85,7 +85,7 @@ public class ReportsListAdapter extends BaseAdapter
         TextView clientAddressTextView = (TextView) row.findViewById(R.id.tvClientAddress);
         clientAddressTextView.setText(clientData.getAddress());
 
-        int idSopralluogo = visitStates.getIdSopralluogo();
+        int idSopralluogo = visitStates.getId_sopralluogo();
 
         realm.beginTransaction();
 
