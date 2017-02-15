@@ -71,14 +71,14 @@ public class LoginCompanyFragment extends Fragment implements View.OnClickListen
             if (chkboxRememberMeState == true)
             {
                 realm.beginTransaction();
-                RealmResults<LoginCredentials> loginCredentialses = realm.where(LoginCredentials.class).findAll();
+                LoginCredentials loginCredentials = realm.where(LoginCredentials.class).findFirst();
                 realm.commitTransaction();
 
-                if (loginCredentialses.size() != 0)
+                if (loginCredentials!=null)
                 {
-                    String strLogin = loginCredentialses.get(loginCredentialses.size() - 1).getLogin();
+                    String strLogin = loginCredentials.getLogin();
                     etLogin.setText(strLogin);
-                    String strPassword = loginCredentialses.get(loginCredentialses.size() - 1).getPassword();
+                    String strPassword = loginCredentials.getPassword();
                     etPassword.setText(strPassword);
                 }
             }
@@ -161,13 +161,7 @@ public class LoginCompanyFragment extends Fragment implements View.OnClickListen
 
             if (!android.util.Patterns.EMAIL_ADDRESS.matcher(strLogin).matches())
             {
-                activity.runOnUiThread(new Runnable()
-                {
-                    public void run()
-                    {
-                        Toast.makeText(activity, "login non e valido.", Toast.LENGTH_LONG).show();
-                    }
-                });
+                showToastMessage("Login non e valido.");
                 return;
             }
 
@@ -175,13 +169,7 @@ public class LoginCompanyFragment extends Fragment implements View.OnClickListen
 
             if (strPassword == null || strPassword.length() < 5)
             {
-                activity.runOnUiThread(new Runnable()
-                {
-                    public void run()
-                    {
-                        Toast.makeText(activity, "Password non e valido.", Toast.LENGTH_LONG).show();
-                    }
-                });
+                showToastMessage("Password non e valido.");
                 return;
             }
 
@@ -195,8 +183,6 @@ public class LoginCompanyFragment extends Fragment implements View.OnClickListen
                 }
             }
 
-            //mSettings.edit().putBoolean("credentialsesFound", credentialsesFound).apply();
-
             SharedPreferences.Editor editor = mSettings.edit();
             editor.putString("login", strLogin);
             editor.putString("password", strPassword);
@@ -204,7 +190,14 @@ public class LoginCompanyFragment extends Fragment implements View.OnClickListen
 
             if (!networkUtils.isNetworkAvailable(activity))
             {
-                loginCommunicator.onLoginSucceeded();
+                if(credentialsesFound)
+                {
+                    loginCommunicator.onLoginSucceeded();
+                }
+                else
+                {
+                    showToastMessage("Login fallito, controlla la connessione a Internet");
+                }
             } else
             {
                 callTechnicianList = networkUtils.loginRequest(this, strLogin, strPassword, null, -1);
@@ -222,13 +215,7 @@ public class LoginCompanyFragment extends Fragment implements View.OnClickListen
     {
         if (call == callTechnicianList)
         {
-            activity.runOnUiThread(new Runnable()
-            {
-                public void run()
-                {
-                    Toast.makeText(activity, "Login fallito, controlla la connessione a Internet", Toast.LENGTH_LONG).show();
-                }
-            });
+            showToastMessage("Login fallito, controlla la connessione a Internet");
         }
     }
 
@@ -243,14 +230,7 @@ public class LoginCompanyFragment extends Fragment implements View.OnClickListen
 
             if (technListResponse == null)
             {
-                activity.runOnUiThread(new Runnable()
-                {
-                    public void run()
-                    {
-                        Toast.makeText(activity, "Ricevere lista tecnici non è riuscito", Toast.LENGTH_LONG).show();
-                    }
-                });
-
+                showToastMessage("Ricevere lista tecnici non è riuscito");
                 return;
             }
 
@@ -274,9 +254,9 @@ public class LoginCompanyFragment extends Fragment implements View.OnClickListen
                         public void run()
                         {
                             realm.beginTransaction();
-                            RealmResults<LoginCredentials> loginCredentialsCount = realm.where(LoginCredentials.class).findAll();
-                            LoginCredentials loginCredentials =
-                                    new LoginCredentials(loginCredentialsCount.size(), strLogin, strPassword);
+                            RealmResults<LoginCredentials> loginCredentialses = realm.where(LoginCredentials.class).findAll();
+                            loginCredentialses.deleteAllFromRealm();
+                            LoginCredentials loginCredentials = new LoginCredentials(strLogin, strPassword);
                             realm.copyToRealm(loginCredentials);
                             realm.commitTransaction();
                         }
@@ -294,14 +274,7 @@ public class LoginCompanyFragment extends Fragment implements View.OnClickListen
                 } catch (JSONException e)
                 {
                     e.printStackTrace();
-
-                    activity.runOnUiThread(new Runnable()
-                    {
-                        public void run()
-                        {
-                            Toast.makeText(activity, "Parse lista tecnici non è riuscito", Toast.LENGTH_LONG).show();
-                        }
-                    });
+                    showToastMessage("Parse lista tecnici non è riuscito");
                 }
             } else
             {
@@ -314,13 +287,7 @@ public class LoginCompanyFragment extends Fragment implements View.OnClickListen
                         errorStr = jsonObject.getString("error");
                         if (errorStr.length() != 0)
                         {
-                            activity.runOnUiThread(new Runnable()
-                            {
-                                public void run()
-                                {
-                                    Toast.makeText(activity, errorStr, Toast.LENGTH_LONG).show();
-                                }
-                            });
+                            showToastMessage(errorStr);
                         }
 
                     } catch (JSONException e)
@@ -331,15 +298,20 @@ public class LoginCompanyFragment extends Fragment implements View.OnClickListen
                 }
                 else
                 {
-                    activity.runOnUiThread(new Runnable()
-                    {
-                        public void run()
-                        {
-                            Toast.makeText(activity, "Login o password non è valido", Toast.LENGTH_LONG).show();
-                        }
-                    });
+                    showToastMessage("Login o password non è valido");
                 }
             }
         }
+    }
+
+    private void showToastMessage(final String msg)
+    {
+        activity.runOnUiThread(new Runnable()
+        {
+            public void run()
+            {
+                Toast.makeText(activity, msg, Toast.LENGTH_LONG).show();
+            }
+        });
     }
 }

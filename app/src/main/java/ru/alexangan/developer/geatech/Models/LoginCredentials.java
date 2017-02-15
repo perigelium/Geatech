@@ -10,16 +10,13 @@ import io.realm.annotations.PrimaryKey;
 public class LoginCredentials extends RealmObject
 {
     @PrimaryKey
-    private int id;
-
     private String login;
     private String password;
 
     public LoginCredentials(){};
 
-    public LoginCredentials(int id, String login, String password)
+    public LoginCredentials(String login, String password)
     {
-        this.id = id;
         this.login = login;
         this.password = password;
     }

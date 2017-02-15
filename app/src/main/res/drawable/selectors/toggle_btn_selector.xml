@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:drawable="@drawable/menu2_2" android:state_checked="false"/>
+    <item android:drawable="@drawable/menu2_2_1" android:state_checked="true"/>
+
+    <item android:drawable="@drawable/menu2_3" android:state_checked="false"/>
+    <item android:drawable="@drawable/menu2_3_1" android:state_checked="true"/>
+
+    <item android:drawable="@drawable/menu2_4" android:state_checked="false"/>
+    <item android:drawable="@drawable/menu2_4_1" android:state_checked="true"/>
+
+
+    <item android:drawable="@drawable/menu2_5" android:state_checked="false"/>
+    <item android:drawable="@drawable/menu2_5_1" android:state_checked="true"/>
+</selector>

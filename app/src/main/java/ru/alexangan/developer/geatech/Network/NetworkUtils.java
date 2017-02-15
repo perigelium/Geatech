@@ -82,6 +82,9 @@ public class NetworkUtils
 
     public Call getData(Callback callback, String urlSuffix, String tokenStr)
     {
+        OkHttpClient.Builder defaultHttpClient = new OkHttpClient.Builder();
+        OkHttpClient okHttpClient = defaultHttpClient.build();
+
         JSONObject jsonToken = new JSONObject();
 
         try
@@ -102,43 +105,11 @@ public class NetworkUtils
                 .post(body)
                 .build();
 
-        OkHttpClient client1 = new OkHttpClient();
+        Call call = okHttpClient.newCall(request);
+        call.enqueue(callback);
 
-        Call callJSON = client1.newCall(request);
-        callJSON.enqueue(callback);
-
-        return callJSON;
+        return call;
     }
-
-/*    public Call getJSONfromServer(Callback callback, String tokenStr)
-    {
-        JSONObject jsonToken = new JSONObject();
-
-        try
-        {
-            jsonToken.put("token", tokenStr);
-
-        } catch (JSONException e)
-        {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-            return null;
-        }
-
-        RequestBody body = RequestBody.create(JSON, String.valueOf(jsonToken));
-
-        Request request = new Request.Builder()
-                .url(REST_URL + GET_REPORT_URL_SUFFIX)
-                .post(body)
-                .build();
-
-        OkHttpClient client1 = new OkHttpClient();
-
-        Call callJSON = client1.newCall(request);
-        callJSON.enqueue(callback);
-
-        return callJSON;
-    }*/
 
     public Call setData(Callback callback, String urlSuffix, String gsonStr)
     {

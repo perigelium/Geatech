@@ -29,18 +29,8 @@ public class TecnicianModel extends RealmObject
         return id;
     }
 
-    public void setId(int id)
-    {
-        this.id = id;
-    }
-
     public String getFullNameTehnic()
     {
         return full_name_tehnic;
-    }
-
-    public void setFullNameTehnic(String full_name_tehnic)
-    {
-        this.full_name_tehnic = full_name_tehnic;
     }
 }

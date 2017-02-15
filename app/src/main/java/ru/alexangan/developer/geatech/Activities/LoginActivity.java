@@ -48,6 +48,19 @@ public class LoginActivity extends Activity implements LoginCommunicator
     protected void onResume()
     {
         super.onResume();
+
+/*        if (getIntent().getBooleanExtra("Exit app", false))
+        {
+            finish();
+            return;
+        }*/
+
+/*        if (getIntent().getBooleanExtra("Password recover", false))
+        {
+            FragmentTransaction cFragmentTransaction = mFragmentManager.beginTransaction();
+            cFragmentTransaction.replace(R.id.loginFragContainer, loginPasswordRecoverFragment);
+            cFragmentTransaction.commit();
+        }*/
     }
 
     @Override
@@ -55,12 +68,6 @@ public class LoginActivity extends Activity implements LoginCommunicator
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login_window_container);
-
-        if (getIntent().getBooleanExtra("Exit app", false))
-        {
-            finish();
-            return;
-        }
 
         //context = getApplicationContext();
         mSettings = getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
@@ -98,13 +105,6 @@ public class LoginActivity extends Activity implements LoginCommunicator
                 throw ex;
                 //No Realm file to remove.
             }
-        }
-
-        if (getIntent().getBooleanExtra("Password recover", false))
-        {
-            FragmentTransaction cFragmentTransaction = mFragmentManager.beginTransaction();
-            cFragmentTransaction.replace(R.id.loginFragContainer, loginPasswordRecoverFragment);
-            cFragmentTransaction.commit();
         }
     }
 
