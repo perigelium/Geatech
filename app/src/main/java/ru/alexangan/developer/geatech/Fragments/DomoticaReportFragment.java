@@ -19,10 +19,14 @@ import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Locale;
 
 import io.realm.RealmResults;
 import ru.alexangan.developer.geatech.Models.DomoticaReportModel;
+import ru.alexangan.developer.geatech.Models.GeaItemModelliRapportoSopralluogo;
+import ru.alexangan.developer.geatech.Models.GeaModelloRapportoSopralluogo;
+import ru.alexangan.developer.geatech.Models.GeaSezioneModelliRapportoSopralluogo;
 import ru.alexangan.developer.geatech.Models.ReportStates;
 import ru.alexangan.developer.geatech.Models.VisitItem;
 import ru.alexangan.developer.geatech.Models.VisitStates;
@@ -63,7 +67,7 @@ public class DomoticaReportFragment extends Fragment implements View.OnClickList
     ImageView ivArrowTwoRadios1, ivArrowTwoRadios2, ivArrowThreeRadiosAndEdit1, ivArrowFourRadiosAndEdit1, ivArrowThreeChkboxesAndEdit1,
             ivArrowEdit1, ivArrowEdit2, ivArrowTwoSwitches1, ivArrowTwoEdits1, ivArrowSwitchAndEdit1;
 
-    private final String strReportTitle = "Domotica componenti";
+/*    private final String strReportTitle = "Domotica componenti";
 
     private final String [] saHeaderTitles = {"1. Rilievo dello stato dei luoghi", "2. Impianto"};
 
@@ -76,7 +80,7 @@ public class DomoticaReportFragment extends Fragment implements View.OnClickList
             " 1.6 NUMERO ELEMENTI RADIANTI:",
             " 1.7 MARCA VALVOLE E DETENITORI:",
             " 1.8 ABITAZIONE:",
-    };
+    };*/
 
     private final String[] strImpianto =  {
      " 2.1 NOTE SUL LUOGO DI INSTALLAZIONE E INDIVIDUAZIONE DI EVENTUALI CRITICITÀ SUI COLLEGAMENTI IDRAULICI E/O SULLA GESTIONE DELL'UTENZA:",
@@ -398,7 +402,6 @@ public class DomoticaReportFragment extends Fragment implements View.OnClickList
                              Bundle savedInstanceState)
     {
         rootView =  inflater.inflate(R.layout.domotica_report, container, false);
-        int sectionNumber = 0;
 
         realm.beginTransaction();
         VisitItem visitItem = visitItems.get(selectedIndex);
@@ -420,22 +423,39 @@ public class DomoticaReportFragment extends Fragment implements View.OnClickList
         realm.commitTransaction();
         
         int i;
+        int headerNumber = 0;
+        int sectionNumber = 0;
+        
+        realm.beginTransaction();
+        GeaModelloRapportoSopralluogo geaModello = realm.where(GeaModelloRapportoSopralluogo.class).equalTo("nome_modello", "DOMOTICA").findFirst();
+        realm.commitTransaction();
 
+        realm.beginTransaction();
+        List<GeaSezioneModelliRapportoSopralluogo> geaSezioniModelli = realm.where(GeaSezioneModelliRapportoSopralluogo.class).equalTo("id_modello", geaModello.getId_modello()).findAll();
+        realm.commitTransaction();
+
+        realm.beginTransaction();
+        List<GeaItemModelliRapportoSopralluogo> geaItemModelli = realm.where(GeaItemModelliRapportoSopralluogo.class)
+                .between("id_sezione", geaSezioniModelli.get(0).id_sezione, geaSezioniModelli.get(geaSezioniModelli.size()-1).id_sezione)
+                .between("id_item_modello", 139, 152).findAll();
+        realm.commitTransaction();
+
+        
         tvReportTitle = (TextView) rootView.findViewById(R.id.tvReportTitle);
-        tvReportTitle.setText(strReportTitle);
+        tvReportTitle.setText(geaModello.getNome_modello());
 
         flSectionHeader1 = (FrameLayout) rootView.findViewById(R.id.flSectionHeader1);
         flSectionHeader1.setOnClickListener(this);
 
         tvSectionHeader1 = (TextView) rootView.findViewById(R.id.tvSectionHeader1);
-        tvSectionHeader1.setText(saHeaderTitles[0]);
+        tvSectionHeader1.setText(geaSezioniModelli.get(headerNumber++).getDescrizione_sezione());
 
         // TwoRadios1
         llHeaderTwoRadios1 = (LinearLayout) rootView.findViewById(R.id.llHeaderTwoRadios1);
         llHeaderTwoRadios1.setOnClickListener(this);
 
         tvHeaderTwoRadios1 = (TextView) rootView.findViewById(R.id.tvHeaderTwoRadios1);
-        tvHeaderTwoRadios1.setText(saSectionTitles[sectionNumber++]);
+        tvHeaderTwoRadios1.setText(geaItemModelli.get(sectionNumber++).getDescrizione_item());
 
         ivArrowTwoRadios1 = (ImageView) rootView.findViewById(R.id.ivArrowTwoRadios1);
 
@@ -455,7 +475,7 @@ public class DomoticaReportFragment extends Fragment implements View.OnClickList
         llHeaderTwoRadios2.setOnClickListener(this);
 
         tvHeaderTwoRadios2 = (TextView) rootView.findViewById(R.id.tvHeaderTwoRadios2);
-        tvHeaderTwoRadios2.setText(saSectionTitles[sectionNumber++]);
+        tvHeaderTwoRadios2.setText(geaItemModelli.get(sectionNumber++).getDescrizione_item());
 
         ivArrowTwoRadios2 = (ImageView) rootView.findViewById(R.id.ivArrowTwoRadios2);
 
@@ -475,7 +495,7 @@ public class DomoticaReportFragment extends Fragment implements View.OnClickList
         llHeaderEdit1.setOnClickListener(this);
 
         tvHeaderEdit1 = (TextView) rootView.findViewById(R.id.tvHeaderEdit1);
-        tvHeaderEdit1.setText(saSectionTitles[sectionNumber++]);
+        tvHeaderEdit1.setText(geaItemModelli.get(sectionNumber++).getDescrizione_item());
 
         llSectionEdit1 = (LinearLayout) rootView.findViewById(R.id.llSectionEdit1);
 
@@ -493,7 +513,7 @@ public class DomoticaReportFragment extends Fragment implements View.OnClickList
         llHeaderTwoSwitches1.setOnClickListener(this);
 
         tvHeaderTwoSwitches1 = (TextView) rootView.findViewById(R.id.tvHeaderTwoSwitches1);
-        tvHeaderTwoSwitches1.setText(saSectionTitles[sectionNumber++]);
+        tvHeaderTwoSwitches1.setText(geaItemModelli.get(sectionNumber++).getDescrizione_item());
 
         llSectionTwoSwitches1 = (LinearLayout) rootView.findViewById(R.id.llSectionTwoSwitches1);
 
@@ -512,7 +532,7 @@ public class DomoticaReportFragment extends Fragment implements View.OnClickList
         llHeaderFourRadiosAndEdit1.setOnClickListener(this);
 
         tvHeaderFourRadiosAndEdit1 = (TextView) rootView.findViewById(R.id.tvHeaderFourRadiosAndEdit1);
-        tvHeaderFourRadiosAndEdit1.setText(saSectionTitles[sectionNumber++]);
+        tvHeaderFourRadiosAndEdit1.setText(geaItemModelli.get(sectionNumber++).getDescrizione_item());
 
         ivArrowFourRadiosAndEdit1 = (ImageView) rootView.findViewById(R.id.ivArrowFourRadiosAndEdit1);
 
@@ -544,7 +564,7 @@ public class DomoticaReportFragment extends Fragment implements View.OnClickList
         llHeaderTwoEdits1.setOnClickListener(this);
 
         tvHeaderTwoEdits1 = (TextView) rootView.findViewById(R.id.tvHeaderTwoEdits1);
-        tvHeaderTwoEdits1.setText(saSectionTitles[sectionNumber++]);
+        tvHeaderTwoEdits1.setText(geaItemModelli.get(sectionNumber++).getDescrizione_item());
 
         llSectionTwoEdits1 = (LinearLayout) rootView.findViewById(R.id.llSectionTwoEdits1);
 
@@ -567,7 +587,7 @@ public class DomoticaReportFragment extends Fragment implements View.OnClickList
         llHeaderEdit2.setOnClickListener(this);
 
         tvHeaderEdit2 = (TextView) rootView.findViewById(R.id.tvHeaderEdit2);
-        tvHeaderEdit2.setText(saSectionTitles[sectionNumber++]);
+        tvHeaderEdit2.setText(geaItemModelli.get(sectionNumber++).getDescrizione_item());
 
         llSectionEdit2 = (LinearLayout) rootView.findViewById(R.id.llSectionEdit2);
 
@@ -583,7 +603,7 @@ public class DomoticaReportFragment extends Fragment implements View.OnClickList
         llHeaderSwitchAndEdit1.setOnClickListener(this);
 
         tvHeaderSwitchAndEdit1 = (TextView) rootView.findViewById(R.id.tvHeaderSwitchAndEdit1);
-        tvHeaderSwitchAndEdit1.setText(saSectionTitles[sectionNumber++]);
+        tvHeaderSwitchAndEdit1.setText(geaItemModelli.get(sectionNumber++).getDescrizione_item());
 
         llSectionSwitchAndEdit1 = (LinearLayout) rootView.findViewById(R.id.llSectionSwitchAndEdit1);
 
@@ -606,7 +626,7 @@ public class DomoticaReportFragment extends Fragment implements View.OnClickList
         flSectionHeader2.setOnClickListener(this);
 
         tvSectionHeader2 = (TextView) rootView.findViewById(R.id.tvSectionHeader2);
-        tvSectionHeader2.setText(saHeaderTitles[1]);
+        tvSectionHeader2.setText(geaSezioniModelli.get(headerNumber++).getDescrizione_sezione());
 
 
         // ThreeTextThreeEdit1

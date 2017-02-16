@@ -18,10 +18,16 @@ import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Locale;
 
+import io.realm.RealmList;
 import io.realm.RealmResults;
 import ru.alexangan.developer.geatech.Models.ClimaReportModel;
+import ru.alexangan.developer.geatech.Models.GeaItemModelliRapportoSopralluogo;
+import ru.alexangan.developer.geatech.Models.GeaItemRapportoSopralluogo;
+import ru.alexangan.developer.geatech.Models.GeaModelloRapportoSopralluogo;
+import ru.alexangan.developer.geatech.Models.GeaSezioneModelliRapportoSopralluogo;
 import ru.alexangan.developer.geatech.Models.ReportStates;
 import ru.alexangan.developer.geatech.Models.VisitItem;
 import ru.alexangan.developer.geatech.Models.VisitStates;
@@ -30,11 +36,12 @@ import ru.alexangan.developer.geatech.R;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.realm;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.visitItems;
 
-public class ClimaReportFragment extends Fragment implements View.OnClickListener
+public class ClimatizzazioneReportFragment extends Fragment implements View.OnClickListener
 {
     private int selectedIndex;
     int idSopralluogo;
     ReportStates reportStates;
+    RealmList <GeaItemRapportoSopralluogo> geaReportItems;
     View rootView;
     Context context;
     ClimaReportModel climaReportModel;
@@ -50,7 +57,7 @@ public class ClimaReportFragment extends Fragment implements View.OnClickListene
     CheckBox chk1ThreeChkboxesAndEdit1, chk2ThreeChkboxesAndEdit1, chk3ThreeChkboxesAndEdit1;
     ImageView ivArrowTwoRadios1, ivArrowThreeRadiosAndEdit1, ivArrowFourRadiosAndEdit1, ivArrowThreeChkboxesAndEdit1;
 
-    private final String strReportTitle = "Climatizzazione";
+/*    private final String strReportTitle = "Climatizzatore";
 
     private final String [] saHeaderTitles = {"1. Rilievo dello stato dei luoghi", "2. Impianto"};
 
@@ -59,7 +66,7 @@ public class ClimaReportFragment extends Fragment implements View.OnClickListene
             " 1.2 TIPOLOGIA COSTRUTTIVA MURATURE:",
             " 1.3 POSIZIONAMENTO UNITÀ ESTERNA:",
             " 1.4 LOCALI E/O PIANI DELL'EDIFICIO:"
-    };
+    };*/
 
     private final String[] sa_id_item_72 =  {"Appartamento", "Villa(Singola/Multi)", "Negozio"};
 
@@ -76,7 +83,7 @@ public class ClimaReportFragment extends Fragment implements View.OnClickListene
     "2.3 NOTE RELATIVE A COLLEGAMENTO DELL'IMPIANTO ESISTENTE"
     };
 
-    public ClimaReportFragment()
+    public ClimatizzazioneReportFragment()
     {
     }
 
@@ -106,7 +113,12 @@ public class ClimaReportFragment extends Fragment implements View.OnClickListene
                 {
                     strId_item_72 = et1ThreeRadiosAndEdit1.getText().toString();
                 }
-                climaReportModel.setId_item_72(strId_item_72);
+                GeaItemRapportoSopralluogo gi72 = new GeaItemRapportoSopralluogo(idSopralluogo, 72, strId_item_72);
+
+                realm.beginTransaction();
+                realm.copyToRealm(gi72);
+                realm.commitTransaction();
+
 
                 // FourRadiosAndEdit1
                 String strId_item_73 = "";
@@ -212,8 +224,16 @@ public class ClimaReportFragment extends Fragment implements View.OnClickListene
         idSopralluogo = visitStates.getId_sopralluogo();
 
         reportStates = realm.where(ReportStates.class).equalTo("idSopralluogo", idSopralluogo).findFirst();
-        climaReportModel = realm.where(ClimaReportModel.class).equalTo("idSopralluogo", idSopralluogo).findFirst();
-        RealmResults <ClimaReportModel> climaReportModels = realm.where(ClimaReportModel.class).findAll();
+
+        //climaReportModel = realm.where(ClimaReportModel.class).equalTo("idSopralluogo", idSopralluogo).findFirst();
+        //RealmResults <ClimaReportModel> climaReportModels = realm.where(ClimaReportModel.class).findAll();
+
+        geaReportItems = new RealmList<>();
+
+        for (int i = 72; i < 79; i++)
+        {
+            geaReportItems.add(null);
+        }
 
         realm.commitTransaction();
 
@@ -343,19 +363,34 @@ public class ClimaReportFragment extends Fragment implements View.OnClickListene
     public View onCreateView(LayoutInflater inflater, final ViewGroup container,
                              Bundle savedInstanceState)
     {
-        int sectionNumber = 0;
         rootView =  inflater.inflate(R.layout.climatizzazione_report, container, false);
 
+
+        realm.beginTransaction();
+        GeaModelloRapportoSopralluogo geaModello = realm.where(GeaModelloRapportoSopralluogo.class).equalTo("nome_modello", "CLIMATIZZATORE").findFirst();
+        realm.commitTransaction();
+
+        realm.beginTransaction();
+        List<GeaSezioneModelliRapportoSopralluogo> geaSezioniModelli = realm.where(GeaSezioneModelliRapportoSopralluogo.class).equalTo("id_modello", geaModello.getId_modello()).findAll();
+        realm.commitTransaction();
+
+        realm.beginTransaction();
+        List<GeaItemModelliRapportoSopralluogo> geaItemModelli = realm.where(GeaItemModelliRapportoSopralluogo.class)
+                .between("id_sezione", geaSezioniModelli.get(0).id_sezione, geaSezioniModelli.get(geaSezioniModelli.size()-1).id_sezione)
+                .between("id_item_modello", 72, 78).findAll();
+        realm.commitTransaction();
+
+        int headerNumber = 0;
+        int sectionNumber = 0;
+
         tvReportTitle = (TextView) rootView.findViewById(R.id.tvReportTitle);
-        tvReportTitle.setText(strReportTitle);
+        tvReportTitle.setText(geaModello.getNome_modello());
 
         flSectionHeader1 = (FrameLayout) rootView.findViewById(R.id.flSectionHeader1);
         flSectionHeader1.setOnClickListener(this);
 
         tvSectionHeader1 = (TextView) rootView.findViewById(R.id.tvSectionHeader1);
-        tvSectionHeader1.setText(saHeaderTitles[0]);
-
-
+        tvSectionHeader1.setText(geaSezioniModelli.get(headerNumber++).getDescrizione_sezione());
 
         // ThreeRadiosAndEdit1
         llHeaderThreeRadiosAndEdit1 = (LinearLayout) rootView.findViewById(R.id.llHeaderThreeRadiosAndEdit1);
@@ -364,7 +399,7 @@ public class ClimaReportFragment extends Fragment implements View.OnClickListene
         ivArrowThreeRadiosAndEdit1 = (ImageView) rootView.findViewById(R.id.ivArrowThreeRadiosAndEdit1);
 
         tvHeaderThreeRadiosAndEdit1 = (TextView) rootView.findViewById(R.id.tvHeaderThreeRadiosAndEdit1);
-        tvHeaderThreeRadiosAndEdit1.setText(saSectionTitles[sectionNumber++]);
+        tvHeaderThreeRadiosAndEdit1.setText(geaItemModelli.get(sectionNumber++).getDescrizione_item());
 
         llSectionThreeRadiosAndEdit1 = (LinearLayout) rootView.findViewById(R.id.llSectionThreeRadiosAndEdit1);
 
@@ -396,7 +431,7 @@ public class ClimaReportFragment extends Fragment implements View.OnClickListene
         ivArrowFourRadiosAndEdit1 = (ImageView) rootView.findViewById(R.id.ivArrowFourRadiosAndEdit1);
 
         tvHeaderFourRadiosAndEdit1 = (TextView) rootView.findViewById(R.id.tvHeaderFourRadiosAndEdit1);
-        tvHeaderFourRadiosAndEdit1.setText(saSectionTitles[sectionNumber++]);
+        tvHeaderFourRadiosAndEdit1.setText(geaItemModelli.get(sectionNumber++).getDescrizione_item());
 
         llSectionFourRadiosAndEdit1 = (LinearLayout) rootView.findViewById(R.id.llSectionFourRadiosAndEdit1);
 
@@ -426,7 +461,7 @@ public class ClimaReportFragment extends Fragment implements View.OnClickListene
         llHeaderTwoRadios1.setOnClickListener(this);
 
         tvHeaderTwoRadios1 = (TextView) rootView.findViewById(R.id.tvHeaderTwoRadios1);
-        tvHeaderTwoRadios1.setText(saSectionTitles[sectionNumber++]);
+        tvHeaderTwoRadios1.setText(geaItemModelli.get(sectionNumber++).getDescrizione_item());
 
         ivArrowTwoRadios1 = (ImageView) rootView.findViewById(R.id.ivArrowTwoRadios1);
 
@@ -449,7 +484,7 @@ public class ClimaReportFragment extends Fragment implements View.OnClickListene
         ivArrowThreeChkboxesAndEdit1 = (ImageView) rootView.findViewById(R.id.ivArrowThreeChkboxesAndEdit1);
 
         tvHeaderThreeChkboxesAndEdit1 = (TextView) rootView.findViewById(R.id.tvHeaderThreeChkboxesAndEdit1);
-        tvHeaderThreeChkboxesAndEdit1.setText(saSectionTitles[sectionNumber++]);
+        tvHeaderThreeChkboxesAndEdit1.setText(geaItemModelli.get(sectionNumber++).getDescrizione_item());
 
         llSectionThreeChkboxesAndEdit1 = (LinearLayout) rootView.findViewById(R.id.llSectionThreeChkboxesAndEdit1);
 
@@ -479,14 +514,14 @@ public class ClimaReportFragment extends Fragment implements View.OnClickListene
         flSectionHeader2.setOnClickListener(this);
 
         tvSectionHeader2 = (TextView) rootView.findViewById(R.id.tvSectionHeader2);
-        tvSectionHeader2.setText(saHeaderTitles[1]);
+        tvSectionHeader2.setText(geaSezioniModelli.get(headerNumber++).getDescrizione_sezione());
 
 
         // ThreeTextThreeEdit1
         llSectionThreeTextThreeEdit1 = (LinearLayout) rootView.findViewById(R.id.llSectionThreeTextThreeEdit1);
 
         tv1ThreeTextThreeEdit1 = (TextView) rootView.findViewById(R.id.tv1ThreeTextThreeEdit1);
-        tv1ThreeTextThreeEdit1.setText(strImpianto[0]);
+        tv1ThreeTextThreeEdit1.setText(geaItemModelli.get(sectionNumber++).getDescrizione_item());
 
         tv2ThreeTextThreeEdit1 = (TextView) rootView.findViewById(R.id.tv2ThreeTextThreeEdit1);
         tv2ThreeTextThreeEdit1.setText(strImpianto[1]);

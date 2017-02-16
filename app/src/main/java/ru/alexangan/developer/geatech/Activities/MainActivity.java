@@ -17,8 +17,8 @@ import android.widget.Toast;
 import io.realm.RealmResults;
 import ru.alexangan.developer.geatech.Fragments.CTLinfoFragment;
 import ru.alexangan.developer.geatech.Fragments.CaldaiaReportFragment;
+import ru.alexangan.developer.geatech.Fragments.ClimatizzazioneReportFragment;
 import ru.alexangan.developer.geatech.Fragments.ComingListVisitsFragment;
-import ru.alexangan.developer.geatech.Fragments.ClimaReportFragment;
 import ru.alexangan.developer.geatech.Fragments.CtrlBtnReportDetailed;
 import ru.alexangan.developer.geatech.Fragments.CtrlBtnsFragment1;
 import ru.alexangan.developer.geatech.Fragments.CtrlBtnsFragment2;
@@ -68,7 +68,7 @@ public class MainActivity extends Activity implements Communicator
 
     TermodinamicoReportFragment termodinamicoReportFragment;
     CaldaiaReportFragment caldaieReportFragment;
-    ClimaReportFragment climaReportFragment;
+    ClimatizzazioneReportFragment climatizzazioneReportFragment;
     FotovoltaicoReportFragment fotovoltaicoReportFragment;
     DomoticaReportFragment domoticaReportFragment;
     PompaDiCaloreReportFragment pompaDiCaloreReportFragment;
@@ -156,7 +156,7 @@ public class MainActivity extends Activity implements Communicator
 
         termodinamicoReportFragment = new TermodinamicoReportFragment();
         caldaieReportFragment = new CaldaiaReportFragment();
-        climaReportFragment = new ClimaReportFragment();
+        climatizzazioneReportFragment = new ClimatizzazioneReportFragment();
         fotovoltaicoReportFragment = new FotovoltaicoReportFragment();
         domoticaReportFragment = new DomoticaReportFragment();
         pompaDiCaloreReportFragment = new PompaDiCaloreReportFragment();
@@ -391,9 +391,9 @@ public class MainActivity extends Activity implements Communicator
             mFragmentTransaction.remove(caldaieReportFragment);
         }
 
-        if (climaReportFragment.isAdded())
+        if (climatizzazioneReportFragment.isAdded())
         {
-            mFragmentTransaction.remove(climaReportFragment);
+            mFragmentTransaction.remove(climatizzazioneReportFragment);
         }*/
 
         if (photoGalleryGridFragment.isAdded())
@@ -680,7 +680,7 @@ public class MainActivity extends Activity implements Communicator
             case "CALDAIE":
                 return caldaieReportFragment;
             case "CLIMATIZZAZIONE":
-                return climaReportFragment;
+                return climatizzazioneReportFragment;
             case "FOTOVOLTAICO":
                 return fotovoltaicoReportFragment;
             case "DOMOTICA":

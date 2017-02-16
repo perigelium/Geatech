@@ -98,6 +98,7 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
         visitStates = visitItem.getVisitStates();
         ProductData productData = visitItem.getProductData();
         String productType = productData.getProductType();
+        //int idProductType = productData.getIdProductType();
         int idSopralluogo = visitStates.getId_sopralluogo();
 
         Class modelClass = ModelsMapping.assignClassModel(productType);

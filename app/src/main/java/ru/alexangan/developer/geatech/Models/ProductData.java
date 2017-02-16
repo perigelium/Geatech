@@ -10,7 +10,7 @@ public class ProductData extends RealmObject
 
     private int id;
     private String productType;
-    private String idProductType;
+    private int idProductType;
     private String product;
     private RealmList<SubproductItem> subItem = new RealmList<>();
 
@@ -18,11 +18,11 @@ public class ProductData extends RealmObject
     {
     }
 
-    public ProductData(int id, String productType, String product, RealmList<SubproductItem> subItem)
+    public ProductData(int id, String productType, int idProductType, String product, RealmList<SubproductItem> subItem)
     {
         this.id = id;
         this.productType = productType;
-        //this.idProductType = idProductType;
+        this.idProductType = idProductType;
         this.product = product;
         this.subItem = subItem;
     }
@@ -33,7 +33,7 @@ public class ProductData extends RealmObject
     }
 
 
-    public String getIdProductType()
+    public int getIdProductType()
     {
         return idProductType;
     }

@@ -105,7 +105,6 @@
                 android:text=" Ricordami"
                 android:textColor="#ffff"
                 android:button="@drawable/login_checkbox_selector"
-                android:textColorLink="@color/cardview_shadow_end_color"
                 android:textSize="16sp"/>
 
             <Button

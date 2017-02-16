@@ -23,7 +23,6 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -36,11 +35,11 @@ import io.realm.RealmResults;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
-import ru.alexangan.developer.geatech.Activities.LoginActivity;
 import ru.alexangan.developer.geatech.Interfaces.LoginCommunicator;
+import ru.alexangan.developer.geatech.Models.GeaItemModelliRapportoSopralluogo;
+import ru.alexangan.developer.geatech.Models.GeaModelloRapportoSopralluogo;
+import ru.alexangan.developer.geatech.Models.GeaSezioneModelliRapportoSopralluogo;
 import ru.alexangan.developer.geatech.Models.GlobalConstants;
-import ru.alexangan.developer.geatech.Models.ItemsModelli;
-import ru.alexangan.developer.geatech.Models.LoginCredentials;
 import ru.alexangan.developer.geatech.Models.TecnicianModel;
 import ru.alexangan.developer.geatech.Models.VisitItem;
 import ru.alexangan.developer.geatech.Network.NetworkUtils;
@@ -52,7 +51,6 @@ import static ru.alexangan.developer.geatech.Models.GlobalConstants.GET_VISITS_U
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.inVisitItems;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.mSettings;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.realm;
-import static ru.alexangan.developer.geatech.Models.GlobalConstants.tokenStr;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.visitItems;
 
 public class TechnicianSelectFragment extends Fragment implements View.OnClickListener, Callback
@@ -211,15 +209,20 @@ public class TechnicianSelectFragment extends Fragment implements View.OnClickLi
             {
                 public void run()
                 {
-                    saTecnicianList.clear();
-                    saTecnicianList.add("");
+                    //saTecnicianList.clear();
+                    realm.beginTransaction();
+                    RealmResults<TecnicianModel> techModelListOld = realm.where(TecnicianModel.class).findAll();
+                    techModelListOld.deleteAllFromRealm();
+                    realm.commitTransaction();
+
+                    //saTecnicianList.add("");
                     for (TecnicianModel technicianItem : techModelList)
                     {
                         realm.beginTransaction();
-                        saTecnicianList.add(technicianItem.getFullNameTehnic());
-                        TecnicianModel tecnicianModelR = realm.where(TecnicianModel.class).equalTo("id", technicianItem.getId()).findFirst();
+                        //saTecnicianList.add(technicianItem.getFullNameTehnic());
+                        //TecnicianModel tecnicianModelR = realm.where(TecnicianModel.class).equalTo("id", technicianItem.getId()).findFirst();
 
-                        if (tecnicianModelR == null)
+                        //if (tecnicianModelR == null)
                         {
                             realm.copyToRealm(technicianItem);
                         }
@@ -232,37 +235,39 @@ public class TechnicianSelectFragment extends Fragment implements View.OnClickLi
                         flTechnicianAdded.setVisibility(View.VISIBLE);
                         bNewTechAdded = false;
                     }
+
+                    realm.beginTransaction();
+                    RealmResults<TecnicianModel> techModelList = realm.where(TecnicianModel.class).findAll();
+                    realm.commitTransaction();
+
+                    if (techModelList.size() != 0)
+                    {
+                        saTecnicianList.clear();
+                        saTecnicianList.add("");
+                        int idPredefinedTech = mSettings.getInt("idPredefinedTech", -1);
+                        int selectedTechPos = -1;
+
+                        for (int i = 0; i < techModelList.size(); i++)
+                        {
+                            saTecnicianList.add(techModelList.get(i).getFullNameTehnic());
+
+                            if (idPredefinedTech != -1 && techModelList.get(i).getId() == idPredefinedTech)
+                            {
+                                selectedTechPos = i;
+                            }
+                        }
+
+                        ArrayAdapter<String> technicianListAdapter = new ArrayAdapter<>(activity, R.layout.spinner_tech_selection_row, R.id.tvSpinnerTechSelItem, saTecnicianList);
+                        spTecnicianList.setAdapter(technicianListAdapter);
+
+                        if (idPredefinedTech != -1)
+                        {
+                            spTecnicianList.setSelection(selectedTechPos + 1);
+                            chkboxRememberTech.setChecked(true);
+                        }
+                    }
                 }
             });
-        }
-
-        RealmResults<TecnicianModel> techModelList = realm.where(TecnicianModel.class).findAll();
-
-        if (techModelList.size()!=0)
-        {
-            saTecnicianList.clear();
-            saTecnicianList.add("");
-            int idPredefinedTech = mSettings.getInt("idPredefinedTech", -1);
-            int selectedTechPos = -1;
-
-            for (int i = 0; i < techModelList.size(); i++)
-            {
-                saTecnicianList.add(techModelList.get(i).getFullNameTehnic());
-
-                if (idPredefinedTech != -1 && techModelList.get(i).getId() == idPredefinedTech)
-                {
-                    selectedTechPos = i;
-                }
-            }
-
-            ArrayAdapter<String> technicianListAdapter = new ArrayAdapter<>(activity, R.layout.spinner_tech_selection_row, R.id.tvSpinnerTechSelItem, saTecnicianList);
-            spTecnicianList.setAdapter(technicianListAdapter);
-
-            if (idPredefinedTech != -1)
-            {
-                spTecnicianList.setSelection(selectedTechPos + 1);
-                chkboxRememberTech.setChecked(true);
-            }
         }
     }
 
@@ -435,7 +440,11 @@ public class TechnicianSelectFragment extends Fragment implements View.OnClickLi
                     if (tokenStr.length() != 0)
                     {
                         callVisits = networkUtils.getData(this, GET_VISITS_URL_SUFFIX, tokenStr);
-                        callModels = networkUtils.getData(this, GET_MODELS_URL_SUFFIX, tokenStr);
+
+                        //if(listModelli == null || listSezioniModelli == null || listItemsModelli == null)
+                        {
+                            callModels = networkUtils.getData(this, GET_MODELS_URL_SUFFIX, tokenStr);
+                        }
                     }
 
                 } catch (JSONException e)
@@ -528,37 +537,71 @@ public class TechnicianSelectFragment extends Fragment implements View.OnClickLi
             {
                 try
                 {
+                    JSONObject type_report_data = jsonObject.getJSONObject("type_report_data");
+
+                    String str_gea_modelli = type_report_data.getString("gea_modelli_rapporto_sopralluogo");
+                    String str_gea_sezioni_modelli = type_report_data.getString("gea_sezioni_modelli_rapporto_sopralluogo");
+                    String str_gea_items_modelli = type_report_data.getString("gea_items_modelli_rapporto_sopralluogo");
 
                     Gson gson = new Gson();
-                    ItemsModelli obj = gson.fromJson(String.valueOf(jsonObject), ItemModelli.class);
 
-                    Log.d("DEBUG", "SUCCESS");
-
-/*                    JSONObject type_report_data = jsonObject.getJSONObject("type_report_data");
-                    JSONObject gea_modelli_rapporto_sopralluogo = type_report_data.getJSONObject("gea_modelli_rapporto_sopralluogo");
-                    JSONObject array_modello_4 = gea_modelli_rapporto_sopralluogo.getJSONObject("array_modello_4");
-                    JSONObject GeaSezioniModelliRapportoSopralluogo = array_modello_4.getJSONObject("GeaSezioniModelliRapportoSopralluogo");
-                    JSONObject array_sezione_11 = gea_modelli_rapporto_sopralluogo.getJSONObject("array_sezione_11");
-                    JSONObject array_modello_1 = gea_modelli_rapporto_sopralluogo.getJSONObject("array_modello_1");
-                    JSONObject array_modello_1 = gea_modelli_rapporto_sopralluogo.getJSONObject("array_modello_1");*/
-
-
-/*                    if (type_report_data != null)
+                    Type typeGeaModelli = new TypeToken<List<GeaModelloRapportoSopralluogo>>()
                     {
+                    }.getType();
+                    final List<GeaModelloRapportoSopralluogo> l_geaModelli = gson.fromJson(str_gea_modelli, typeGeaModelli);
 
-                        try
+                    Type typeGeaSezioniModelli = new TypeToken<List<GeaSezioneModelliRapportoSopralluogo>>()
+                    {
+                    }.getType();
+                    final List<GeaSezioneModelliRapportoSopralluogo> l_geaSezioniModelli = gson.fromJson(str_gea_sezioni_modelli, typeGeaSezioniModelli);
+
+                    Type typeGeaItemsModelli = new TypeToken<List<GeaItemModelliRapportoSopralluogo>>()
+                    {
+                    }.getType();
+                    final List<GeaItemModelliRapportoSopralluogo> l_geaItemsModelli = gson.fromJson(str_gea_items_modelli, typeGeaItemsModelli);
+
+
+                    activity.runOnUiThread(new Runnable()
+                    {
+                        public void run()
                         {
-                            Gson gson = new Gson();
-                            ItemsModelli obj = gson.fromJson(String.valueOf(type_report_data), ItemsModelli.class);
+                            realm.beginTransaction();
+                            RealmResults<GeaModelloRapportoSopralluogo> geaModelli = realm.where(GeaModelloRapportoSopralluogo.class).findAll();
+                            geaModelli.deleteAllFromRealm();
+                            realm.commitTransaction();
 
-                            Log.d("DEBUG", "SUCCESS");
+                            for (GeaModelloRapportoSopralluogo gm : l_geaModelli)
+                            {
+                                realm.beginTransaction();
+                                realm.copyToRealm(gm);
+                                realm.commitTransaction();
+                            }
 
-                        } catch (Exception ex)
-                        {
-                            showToastMessage(ex.toString());
+                            realm.beginTransaction();
+                            RealmResults<GeaSezioneModelliRapportoSopralluogo> geaSezioniModelli = realm.where(GeaSezioneModelliRapportoSopralluogo.class).findAll();
+                            geaSezioniModelli.deleteAllFromRealm();
+                            realm.commitTransaction();
+
+                            for (GeaSezioneModelliRapportoSopralluogo gs : l_geaSezioniModelli)
+                            {
+                                realm.beginTransaction();
+                                realm.copyToRealm(gs);
+                                realm.commitTransaction();
+                            }
+
+                            realm.beginTransaction();
+                            RealmResults<GeaItemModelliRapportoSopralluogo> geaItemModelli = realm.where(GeaItemModelliRapportoSopralluogo.class).findAll();
+                            geaItemModelli.deleteAllFromRealm();
+                            realm.commitTransaction();
+
+                            for (GeaItemModelliRapportoSopralluogo gi : l_geaItemsModelli)
+                            {
+                                realm.beginTransaction();
+                                realm.copyToRealm(gi);
+                                realm.commitTransaction();
+                            }
                         }
-                    }*/
-
+                    });
                 } catch (Exception e)
                 {
                     e.printStackTrace();
@@ -566,28 +609,12 @@ public class TechnicianSelectFragment extends Fragment implements View.OnClickLi
                 }
             }
 
-
-
-
             activity.runOnUiThread(new Runnable()
             {
                 public void run()
                 {
-
                     realm.beginTransaction();
 
-/*                    inVisitItems = JSON_to_model.getVisitTtemsList(modelsJSONData);
-
-                    if(inVisitItems.size() > 0)
-                    {
-                        visitItems = realm.where(VisitItem.class).findAll();
-                        visitItems.deleteAllFromRealm();
-
-                        for (VisitItem visitItem : inVisitItems)
-                        {
-                            realm.copyToRealm(visitItem);
-                        }
-                    }*/
                     realm.commitTransaction();
 
                     loginCommunicator.onTechSelectedAndApplied();

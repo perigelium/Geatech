@@ -55,6 +55,7 @@ public class JSON_to_model
                 ClientData clientData = new ClientData(i, name,  address,  phone,  mobile);
 
                 String productType = client_dataJSONObject.getString("product_type");
+                int idProductType = client_dataJSONObject.getInt("id_product_type");
                 String product = client_dataJSONObject.getString("product");
 
 
@@ -73,7 +74,7 @@ public class JSON_to_model
                     subproductsList.add(item);
                 }
 
-                ProductData productData = new ProductData(i, productType,  product, subproductsList);
+                ProductData productData = new ProductData(i, productType,  idProductType, product, subproductsList);
 
                 VisitItem visitItem = new VisitItem(i, visitStates, clientData, productData);
 
