@@ -46,7 +46,7 @@ public class ListVisitsFragment extends ListFragment
                 VisitItem p1 = (VisitItem) o1;
                 VisitItem p2 = (VisitItem) o2;
                 // ## Ascending order
-                return p1.getVisitStates().getData_ora_sopralluogo().compareToIgnoreCase(p2.getVisitStates().getData_ora_sopralluogo()); // To compare string values
+                return p1.getGeaSopralluogo().getData_ora_sopralluogo().compareToIgnoreCase(p2.getGeaSopralluogo().getData_ora_sopralluogo()); // To compare string values
                 // return Integer.valueOf(emp1.getId()).compareTo(emp2.getId()); // To compare integer values
 
                 // ## Descending order
@@ -81,9 +81,9 @@ public class ListVisitsFragment extends ListFragment
         {
             for(ReportStates reportStates : reportStatesList)
             {
-                if (visitItem.getVisitStates().getId_sopralluogo() == reportStates.getIdSopralluogo())
+                if (visitItem.getGeaSopralluogo().getId_sopralluogo() == reportStates.getId_sopralluogo())
                 {
-                    if (!visitTimeNotSetOnly || (visitTimeNotSetOnly && reportStates.getDataOraSopralluogo() == null))
+                    if (!visitTimeNotSetOnly || (visitTimeNotSetOnly && reportStates.getData_ora_sopralluogo() == null))
                     {
                         visitItemsFiltered.add(visitItem);
                         break;
@@ -108,7 +108,7 @@ public class ListVisitsFragment extends ListFragment
         {
             for(ReportStates reportStates : reportStatesList)
             {
-                if (visitItem.getVisitStates().getId_sopralluogo() == reportStates.getId_sopralluogo())
+                if (visitItem.getGeaSopralluogo().getId_sopralluogo() == reportStates.getId_sopralluogo())
                 {
                     if (filterTimeSetItems && reportStates.getData_ora_sopralluogo() != null)
                     {
@@ -147,18 +147,18 @@ public class ListVisitsFragment extends ListFragment
         {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id)
             {
-                int idSopralluogo = visitItemsFiltered.get(position).getVisitStates().getId_sopralluogo();
+                int idSopralluogo = visitItemsFiltered.get(position).getGeaSopralluogo().getId_sopralluogo();
                 int idVisit = visitItemsFiltered.get(position).getId();
                 realm.beginTransaction();
                 ReportStates reportStates = realm.where(ReportStates.class)
-                        .equalTo("idSopralluogo", idSopralluogo).findFirst();
+                        .equalTo("id_sopralluogo", idSopralluogo).findFirst();
                 realm.commitTransaction();
 
                 if (swipeDetector.swipeDetected())
                 {
                     if(swipeDetector.getAction() == SwipeDetector.Action.LR)
                     {
-                        mCommunicator.OnListItemSwiped(idVisit, reportStates.getDataOraSopralluogo() != null);
+                        mCommunicator.OnListItemSwiped(idVisit, reportStates.getData_ora_sopralluogo() != null);
                     }
 
                     if(swipeDetector.getAction() == SwipeDetector.Action.RL)
@@ -167,7 +167,7 @@ public class ListVisitsFragment extends ListFragment
                     }
                 } else
                 {
-                    mCommunicator.OnListItemSelected(idVisit, reportStates.getDataOraSopralluogo() != null);
+                    mCommunicator.OnListItemSelected(idVisit, reportStates.getData_ora_sopralluogo() != null);
                 }
             }
         });
@@ -177,11 +177,11 @@ public class ListVisitsFragment extends ListFragment
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view,int position, long id)
             {
-                int idSopralluogo = visitItemsFiltered.get(position).getVisitStates().getId_sopralluogo();
+                int idSopralluogo = visitItemsFiltered.get(position).getGeaSopralluogo().getId_sopralluogo();
                 int idVisit = visitItemsFiltered.get(position).getId();
                 realm.beginTransaction();
                 ReportStates reportStates = realm.where(ReportStates.class)
-                        .equalTo("idSopralluogo", idSopralluogo).findFirst();
+                        .equalTo("id_sopralluogo", idSopralluogo).findFirst();
                 realm.commitTransaction();
 
                 if (swipeDetector.swipeDetected())
@@ -189,7 +189,7 @@ public class ListVisitsFragment extends ListFragment
                     // do the onSwipe action
                 } else
                 {
-                    if(reportStates.getDataOraSopralluogo() != null)
+                    if(reportStates.getData_ora_sopralluogo() != null)
                     {
                         mCommunicator.OnListItemSelected(idVisit, false);
                     }

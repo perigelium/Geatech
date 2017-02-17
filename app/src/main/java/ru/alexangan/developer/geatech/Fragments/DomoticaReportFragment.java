@@ -23,13 +23,13 @@ import java.util.List;
 import java.util.Locale;
 
 import io.realm.RealmResults;
-import ru.alexangan.developer.geatech.Models.DomoticaReportModel;
-import ru.alexangan.developer.geatech.Models.GeaItemModelliRapportoSopralluogo;
-import ru.alexangan.developer.geatech.Models.GeaModelloRapportoSopralluogo;
-import ru.alexangan.developer.geatech.Models.GeaSezioneModelliRapportoSopralluogo;
+import ru.alexangan.developer.geatech.Models.ReportModelDomotica;
+import ru.alexangan.developer.geatech.Models.GeaItemModelliRapporto;
+import ru.alexangan.developer.geatech.Models.GeaModelloRapporto;
+import ru.alexangan.developer.geatech.Models.GeaSezioneModelliRapporto;
+import ru.alexangan.developer.geatech.Models.GeaSopralluogo;
 import ru.alexangan.developer.geatech.Models.ReportStates;
 import ru.alexangan.developer.geatech.Models.VisitItem;
-import ru.alexangan.developer.geatech.Models.VisitStates;
 import ru.alexangan.developer.geatech.R;
 
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.realm;
@@ -38,7 +38,7 @@ import static ru.alexangan.developer.geatech.Models.GlobalConstants.visitItems;
 public class DomoticaReportFragment extends Fragment implements View.OnClickListener
 {
     View rootView;
-    DomoticaReportModel domoticaReportModel;
+    ReportModelDomotica reportModelDomotica;
     private int selectedIndex;
     int idSopralluogo;
     ReportStates reportStates;
@@ -125,7 +125,7 @@ public class DomoticaReportFragment extends Fragment implements View.OnClickList
     {
         super.onPause();
 
-        if (reportStates != null && domoticaReportModel !=null)
+        if (reportStates != null && reportModelDomotica !=null)
         {
             realm.beginTransaction();
 
@@ -139,7 +139,7 @@ public class DomoticaReportFragment extends Fragment implements View.OnClickList
                 RadioButton radioButton = (RadioButton) rg1TwoRadios1.findViewById(checkedBtnId);
                 strId_item_139 = radioButton.getText().toString();
 
-                domoticaReportModel.setId_item_139(strId_item_139);
+                reportModelDomotica.setId_item_139(strId_item_139);
             }
 
             // TwoRadios2
@@ -150,30 +150,30 @@ public class DomoticaReportFragment extends Fragment implements View.OnClickList
                 RadioButton radioButton = (RadioButton) rg1TwoRadios2.findViewById(checkedBtnId);
                 strId_item_140 = radioButton.getText().toString();
 
-                domoticaReportModel.setId_item_140(strId_item_140);
+                reportModelDomotica.setId_item_140(strId_item_140);
             }
 
             // Edit1
             String strId_item_141 = et1Edit1.getText().toString();
-            domoticaReportModel.setId_item_141(strId_item_141);
+            reportModelDomotica.setId_item_141(strId_item_141);
 
             // TwoSwitches1
             if(sw1TwoSwitches1.isChecked())
             {
-                domoticaReportModel.setId_item_142(str_id_item_142);
+                reportModelDomotica.setId_item_142(str_id_item_142);
             }
             else
             {
-                domoticaReportModel.setId_item_142("no");
+                reportModelDomotica.setId_item_142("no");
             }
 
             if(sw2TwoSwitches1.isChecked())
             {
-                domoticaReportModel.setId_item_143(str_id_item_143);
+                reportModelDomotica.setId_item_143(str_id_item_143);
             }
             else
             {
-                domoticaReportModel.setId_item_143("no");
+                reportModelDomotica.setId_item_143("no");
             }
 
             // FourRadiosAndEdit1
@@ -188,42 +188,42 @@ public class DomoticaReportFragment extends Fragment implements View.OnClickList
             {
                 strId_item_144 = et1FourRadiosAndEdit1.getText().toString();
             }
-            domoticaReportModel.setId_item_144(strId_item_144);
+            reportModelDomotica.setId_item_144(strId_item_144);
 
             // TwoEdits1
             String strId_item_145 = et1TwoEdits1.getText().toString();
-            domoticaReportModel.setId_item_145(strId_item_145);
+            reportModelDomotica.setId_item_145(strId_item_145);
             String strId_item_146 = et2TwoEdits1.getText().toString();
-            domoticaReportModel.setId_item_146(strId_item_146);
+            reportModelDomotica.setId_item_146(strId_item_146);
 
             // Edit2
             String strId_item_147 = et1Edit2.getText().toString();
-            domoticaReportModel.setId_item_147(strId_item_147);
+            reportModelDomotica.setId_item_147(strId_item_147);
 
             // SwitchAndEdit1
             if(sw1SwitchAndEdit1.isChecked())
             {
-                domoticaReportModel.setId_item_148(str_id_item_148);
+                reportModelDomotica.setId_item_148(str_id_item_148);
             }
             else
             {
-                domoticaReportModel.setId_item_148("no");
+                reportModelDomotica.setId_item_148("no");
             }
 
             String strId_item_149 = et1SwitchAndEdit1.getText().toString();
-            domoticaReportModel.setId_item_149(strId_item_149);
+            reportModelDomotica.setId_item_149(strId_item_149);
 
             // ThreeTextThreeEdit1
             String strId_item_150 = et1ThreeTextThreeEdit1.getText().toString();
-            domoticaReportModel.setId_item_150(strId_item_150);
+            reportModelDomotica.setId_item_150(strId_item_150);
 
 
             String strId_item_151 = et2ThreeTextThreeEdit1.getText().toString();
-            domoticaReportModel.setId_item_151(strId_item_151);
+            reportModelDomotica.setId_item_151(strId_item_151);
 
 
             String str_Id_item_152 = et3ThreeTextThreeEdit1.getText().toString();
-            domoticaReportModel.setId_item_152(str_Id_item_152);
+            reportModelDomotica.setId_item_152(str_Id_item_152);
 
 
             // Completion state
@@ -267,23 +267,23 @@ public class DomoticaReportFragment extends Fragment implements View.OnClickList
 
         realm.beginTransaction();
         VisitItem visitItem = visitItems.get(selectedIndex);
-        VisitStates visitStates = visitItem.getVisitStates();
-        idSopralluogo = visitStates.getId_sopralluogo();
+        GeaSopralluogo geaSopralluogo = visitItem.getGeaSopralluogo();
+        idSopralluogo = geaSopralluogo.getId_sopralluogo();
 
-        reportStates = realm.where(ReportStates.class).equalTo("idSopralluogo", idSopralluogo).findFirst();
-        domoticaReportModel = realm.where(DomoticaReportModel.class).equalTo("idSopralluogo", idSopralluogo).findFirst();
-        RealmResults <DomoticaReportModel> domoticaReportModels = realm.where(DomoticaReportModel.class).findAll();
+        reportStates = realm.where(ReportStates.class).equalTo("id_sopralluogo", idSopralluogo).findFirst();
+        reportModelDomotica = realm.where(ReportModelDomotica.class).equalTo("id_sopralluogo", idSopralluogo).findFirst();
+        RealmResults <ReportModelDomotica> reportModelDomoticas = realm.where(ReportModelDomotica.class).findAll();
 
         realm.commitTransaction();
 
         realm.beginTransaction();
 
-        if (domoticaReportModel != null)
+        if (reportModelDomotica != null)
         {
             int i;
 
             // TwoRadios1
-            String strId_item_139 = domoticaReportModel.getId_item_139();
+            String strId_item_139 = reportModelDomotica.getId_item_139();
 
             if(strId_item_139 !=null)
             {
@@ -300,7 +300,7 @@ public class DomoticaReportFragment extends Fragment implements View.OnClickList
             }
 
             // TwoRadios2
-            String strId_item_140 = domoticaReportModel.getId_item_140();
+            String strId_item_140 = reportModelDomotica.getId_item_140();
 
             if(strId_item_140 !=null)
             {
@@ -317,25 +317,25 @@ public class DomoticaReportFragment extends Fragment implements View.OnClickList
             }
 
             // Edit1
-            String strId_item_141 = domoticaReportModel.getId_item_141();
+            String strId_item_141 = reportModelDomotica.getId_item_141();
             et1Edit1.setText(strId_item_141);
 
                 // TwoSwitches1
-                String strId_item_142 = domoticaReportModel.getId_item_142();
+                String strId_item_142 = reportModelDomotica.getId_item_142();
 
                 if (strId_item_142!=null && strId_item_142.contains(sw1TwoSwitches1.getText().toString()))
                 {
                     sw1TwoSwitches1.setChecked(true);
                 }
 
-                String strId_item_143 = domoticaReportModel.getId_item_143();
+                String strId_item_143 = reportModelDomotica.getId_item_143();
                 if (strId_item_143!=null && strId_item_143.contains(sw2TwoSwitches1.getText().toString()))
                 {
                     sw2TwoSwitches1.setChecked(true);
                 }
 
             // FourRadiosAndEdit1
-            String strId_item_144 = domoticaReportModel.getId_item_144();
+            String strId_item_144 = reportModelDomotica.getId_item_144();
             if(strId_item_144 != null)
             {
                 for (i = 0; i < rg1FourRadiosAndEdit1.getChildCount(); i++)
@@ -356,30 +356,30 @@ public class DomoticaReportFragment extends Fragment implements View.OnClickList
             }
 
             // TwoEdits1
-            String strId_item_145 = domoticaReportModel.getId_item_145();
+            String strId_item_145 = reportModelDomotica.getId_item_145();
             et1TwoEdits1.setText(strId_item_145);
 
-            String strId_item_146 = domoticaReportModel.getId_item_146();
+            String strId_item_146 = reportModelDomotica.getId_item_146();
             et2TwoEdits1.setText(strId_item_146);
 
             // Edit2
-            String strId_item_147 = domoticaReportModel.getId_item_147();
+            String strId_item_147 = reportModelDomotica.getId_item_147();
             et1Edit2.setText(strId_item_147);
 
             // SwitchAndEdit1
-            String strId_item_148 = domoticaReportModel.getId_item_143();
+            String strId_item_148 = reportModelDomotica.getId_item_143();
             if (strId_item_148!=null && strId_item_148.contains(sw1SwitchAndEdit1.getText().toString()))
             {
                 sw1SwitchAndEdit1.setChecked(true);
             }
             
-            String strId_item_149 = domoticaReportModel.getId_item_149();
+            String strId_item_149 = reportModelDomotica.getId_item_149();
             et1SwitchAndEdit1.setText(strId_item_149);
 
             // ThreeTextsThreeEdits1
-            et1ThreeTextThreeEdit1.setText(domoticaReportModel.getId_item_150());
-            et2ThreeTextThreeEdit1.setText(domoticaReportModel.getId_item_151());
-            et3ThreeTextThreeEdit1.setText(domoticaReportModel.getId_item_152());
+            et1ThreeTextThreeEdit1.setText(reportModelDomotica.getId_item_150());
+            et2ThreeTextThreeEdit1.setText(reportModelDomotica.getId_item_151());
+            et3ThreeTextThreeEdit1.setText(reportModelDomotica.getId_item_152());
         }
 
         realm.commitTransaction();
@@ -388,10 +388,10 @@ public class DomoticaReportFragment extends Fragment implements View.OnClickList
 
         if (reportStates != null)
         {
-            if (domoticaReportModel == null)
+            if (reportModelDomotica == null)
             {
-                domoticaReportModel = new DomoticaReportModel(domoticaReportModels.size(), idSopralluogo);
-                realm.copyToRealmOrUpdate(domoticaReportModel);
+                reportModelDomotica = new ReportModelDomotica(reportModelDomoticas.size(), idSopralluogo);
+                realm.copyToRealmOrUpdate(reportModelDomotica);
             }
         }
         realm.commitTransaction();
@@ -405,19 +405,19 @@ public class DomoticaReportFragment extends Fragment implements View.OnClickList
 
         realm.beginTransaction();
         VisitItem visitItem = visitItems.get(selectedIndex);
-        VisitStates visitStates = visitItem.getVisitStates();
-        idSopralluogo = visitStates.getId_sopralluogo();
+        GeaSopralluogo geaSopralluogo = visitItem.getGeaSopralluogo();
+        idSopralluogo = geaSopralluogo.getId_sopralluogo();
 
-        reportStates = realm.where(ReportStates.class).equalTo("idSopralluogo", idSopralluogo).findFirst();
-        domoticaReportModel = realm.where(DomoticaReportModel.class).equalTo("idSopralluogo", idSopralluogo).findFirst();
-        RealmResults<DomoticaReportModel> domoticaReportModels = realm.where(DomoticaReportModel.class).findAll();
+        reportStates = realm.where(ReportStates.class).equalTo("id_sopralluogo", idSopralluogo).findFirst();
+        reportModelDomotica = realm.where(ReportModelDomotica.class).equalTo("id_sopralluogo", idSopralluogo).findFirst();
+        RealmResults<ReportModelDomotica> reportModelDomoticas = realm.where(ReportModelDomotica.class).findAll();
 
         if (reportStates != null)
         {
-            if (domoticaReportModel == null)
+            if (reportModelDomotica == null)
             {
-                domoticaReportModel = new DomoticaReportModel(domoticaReportModels.size(), idSopralluogo);
-                realm.copyToRealmOrUpdate(domoticaReportModel);
+                reportModelDomotica = new ReportModelDomotica(reportModelDomoticas.size(), idSopralluogo);
+                realm.copyToRealmOrUpdate(reportModelDomotica);
             }
         }
         realm.commitTransaction();
@@ -427,16 +427,16 @@ public class DomoticaReportFragment extends Fragment implements View.OnClickList
         int sectionNumber = 0;
         
         realm.beginTransaction();
-        GeaModelloRapportoSopralluogo geaModello = realm.where(GeaModelloRapportoSopralluogo.class).equalTo("nome_modello", "DOMOTICA").findFirst();
+        GeaModelloRapporto geaModello = realm.where(GeaModelloRapporto.class).equalTo("nome_modello", "DOMOTICA").findFirst();
         realm.commitTransaction();
 
         realm.beginTransaction();
-        List<GeaSezioneModelliRapportoSopralluogo> geaSezioniModelli = realm.where(GeaSezioneModelliRapportoSopralluogo.class).equalTo("id_modello", geaModello.getId_modello()).findAll();
+        List<GeaSezioneModelliRapporto> geaSezioniModelli = realm.where(GeaSezioneModelliRapporto.class).equalTo("id_modello", geaModello.getId_modello()).findAll();
         realm.commitTransaction();
 
         realm.beginTransaction();
-        List<GeaItemModelliRapportoSopralluogo> geaItemModelli = realm.where(GeaItemModelliRapportoSopralluogo.class)
-                .between("id_sezione", geaSezioniModelli.get(0).id_sezione, geaSezioniModelli.get(geaSezioniModelli.size()-1).id_sezione)
+        List<GeaItemModelliRapporto> geaItemModelli = realm.where(GeaItemModelliRapporto.class)
+                .between("id_sezione", geaSezioniModelli.get(0).getId_sezione(), geaSezioniModelli.get(geaSezioniModelli.size()-1).getId_sezione())
                 .between("id_item_modello", 139, 152).findAll();
         realm.commitTransaction();
 

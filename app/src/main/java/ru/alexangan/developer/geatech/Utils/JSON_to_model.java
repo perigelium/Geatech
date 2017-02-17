@@ -1,5 +1,9 @@
 package ru.alexangan.developer.geatech.Utils;
 
+import android.util.Log;
+
+import com.google.gson.Gson;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -9,7 +13,7 @@ import ru.alexangan.developer.geatech.Models.ClientData;
 import ru.alexangan.developer.geatech.Models.ProductData;
 import ru.alexangan.developer.geatech.Models.SubproductItem;
 import ru.alexangan.developer.geatech.Models.VisitItem;
-import ru.alexangan.developer.geatech.Models.VisitStates;
+import ru.alexangan.developer.geatech.Models.GeaSopralluogo;
 
 /**
  * Created by user on 12/2/2016.
@@ -36,6 +40,7 @@ public class JSON_to_model
                 JSONArray subproducts = visit_item.getJSONArray(2);
 
                 Integer id_sopralluogo = visit_data.getInt("id_sopralluogo");
+                String inizializzazione = visit_data.getString("inizializzazione");
                 String data_ora_assegnazione = visit_data.getString("data_ora_assegnazione");
                 String data_ora_presa_appuntamento = visit_data.getString("data_ora_presa_appuntamento");
                 String data_sollecito_appuntamento = visit_data.getString("data_sollecito_appuntamento");
@@ -43,7 +48,7 @@ public class JSON_to_model
                 String note_sopralluogo = visit_data.getString("note_sopralluogo");
                 String tipo_gestione_sopralluogo = visit_data.getString("tipo_gestione_sopralluogo");
 
-                VisitStates visitStates = new VisitStates(id_sopralluogo, data_sollecito_appuntamento);
+                GeaSopralluogo geaSopralluogo = new GeaSopralluogo(id_sopralluogo, inizializzazione, data_sollecito_appuntamento);
 
                 JSONObject client_dataJSONObject = client_data.getJSONObject(0);
 
@@ -51,8 +56,10 @@ public class JSON_to_model
                 String address = client_dataJSONObject.getString("address");
                 String phone = client_dataJSONObject.getString("phone");
                 String mobile = client_dataJSONObject.getString("mobile");
+                double coordNord = client_dataJSONObject.getDouble("lat");
+                double coordEst = client_dataJSONObject.getDouble("lng");
 
-                ClientData clientData = new ClientData(i, name,  address,  phone,  mobile);
+                ClientData clientData = new ClientData(i, name,  address,  phone,  mobile, coordNord, coordEst);
 
                 String productType = client_dataJSONObject.getString("product_type");
                 int idProductType = client_dataJSONObject.getInt("id_product_type");
@@ -76,7 +83,7 @@ public class JSON_to_model
 
                 ProductData productData = new ProductData(i, productType,  idProductType, product, subproductsList);
 
-                VisitItem visitItem = new VisitItem(i, visitStates, clientData, productData);
+                VisitItem visitItem = new VisitItem(i, geaSopralluogo, clientData, productData);
 
                 visitItems.add(visitItem);
             }

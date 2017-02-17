@@ -1,13 +1,13 @@
 package ru.alexangan.developer.geatech.Adapters;
 
-import ru.alexangan.developer.geatech.Models.CaldaiaReportModel;
-import ru.alexangan.developer.geatech.Models.ClimaReportModel;
-import ru.alexangan.developer.geatech.Models.DomoticaReportModel;
-import ru.alexangan.developer.geatech.Models.EmptyReportModel;
-import ru.alexangan.developer.geatech.Models.FotovoltaicoReportModel;
-import ru.alexangan.developer.geatech.Models.PompaDiCaloreReportModel;
-import ru.alexangan.developer.geatech.Models.SolareTermodinamicoReportModel;
-import ru.alexangan.developer.geatech.Models.StorageReportModel;
+import ru.alexangan.developer.geatech.Models.ReportModelCaldaia;
+import ru.alexangan.developer.geatech.Models.ReportModelClimatizzatore;
+import ru.alexangan.developer.geatech.Models.ReportModelDomotica;
+import ru.alexangan.developer.geatech.Models.ReportModelEmpty;
+import ru.alexangan.developer.geatech.Models.ReportModelFotovoltaico;
+import ru.alexangan.developer.geatech.Models.ReportModelPompaDiCalore;
+import ru.alexangan.developer.geatech.Models.ReportModelSTermodinamico;
+import ru.alexangan.developer.geatech.Models.ReportModelStorage;
 
 /**
  * Created by user on 26.01.2017.
@@ -20,22 +20,22 @@ public class ModelsMapping
         switch (productType)
         {
             case "SOLARE TERMODINAMICO":
-                return SolareTermodinamicoReportModel.class;
+                return ReportModelSTermodinamico.class;
             case "CALDAIE":
-                return CaldaiaReportModel.class;
+                return ReportModelCaldaia.class;
             case "CLIMATIZZAZIONE":
-                return ClimaReportModel.class;
+                return ReportModelClimatizzatore.class;
             case "FOTOVOLTAICO":
-                return FotovoltaicoReportModel.class;
+                return ReportModelFotovoltaico.class;
             case "DOMOTICA":
-                return DomoticaReportModel.class;
+                return ReportModelDomotica.class;
             case "STORAGE":
-                return StorageReportModel.class;
+                return ReportModelStorage.class;
             case "POMPA DI CALORE":
-                return PompaDiCaloreReportModel.class;
+                return ReportModelPompaDiCalore.class;
 
             default:
-                return EmptyReportModel.class;
+                return ReportModelEmpty.class;
         }
     }
 }

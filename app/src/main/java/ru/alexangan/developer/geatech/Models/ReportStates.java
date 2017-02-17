@@ -9,12 +9,13 @@ public class ReportStates extends RealmObject
     int id;
     int visitId;
     private int id_rapporto_sopralluogo;
-    private int idSopralluogo;
-    private String dataOraSopralluogo;
+    private int id_sopralluogo;
+    private String data_ora_sopralluogo;
 
-    private double latitude; // latitudine
-    private double longitude; // longitudine
-    private int altitude; // altitudine
+    private double latitudine; // latitudine
+    private double longitudine; // longitudine
+    private int altitudine; // altitudine
+
     private int reportCompletionState;
     private int generalInfoCompletionState; // data ora appuntamento era inserita
 
@@ -147,14 +148,14 @@ public class ReportStates extends RealmObject
         return id;
     }
 
-    public String getDataOraSopralluogo()
+    public String getData_ora_sopralluogo()
     {
-        return dataOraSopralluogo;
+        return data_ora_sopralluogo;
     }
 
-    public void setDataOraSopralluogo(String dataOraSopralluogo)
+    public void setData_ora_sopralluogo(String data_ora_sopralluogo)
     {
-        this.dataOraSopralluogo = dataOraSopralluogo;
+        this.data_ora_sopralluogo = data_ora_sopralluogo;
     }
 
     public int getVisitId()
@@ -167,44 +168,44 @@ public class ReportStates extends RealmObject
         this.visitId = visitId;
     }
 
-    public int getIdSopralluogo()
+    public int getId_sopralluogo()
     {
-        return idSopralluogo;
+        return id_sopralluogo;
     }
 
-    public void setIdSopralluogo(int idSopralluogo)
+    public void setId_sopralluogo(int id_sopralluogo)
     {
-        this.idSopralluogo = idSopralluogo;
+        this.id_sopralluogo = id_sopralluogo;
     }
 
-    public double getLongitude()
+    public double getLongitudine()
     {
-        return longitude;
+        return longitudine;
     }
 
-    public void setLongitude(double longitude)
+    public void setLongitudine(double longitudine)
     {
-        this.longitude = longitude;
+        this.longitudine = longitudine;
     }
 
-    public double getLatitude()
+    public double getLatitudine()
     {
-        return latitude;
+        return latitudine;
     }
 
-    public void setLatitude(double latitude)
+    public void setLatitudine(double latitudine)
     {
-        this.latitude = latitude;
+        this.latitudine = latitudine;
     }
 
-    public double getAltitude()
+    public double getAltitudine()
     {
-        return altitude;
+        return altitudine;
     }
 
-    public void setAltitude(int altitude)
+    public void setAltitudine(int altitudine)
     {
-        this.altitude = altitude;
+        this.altitudine = altitudine;
     }
 
     public int getGeneralInfoCompletionState()

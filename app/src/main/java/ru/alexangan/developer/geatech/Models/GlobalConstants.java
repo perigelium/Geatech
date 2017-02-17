@@ -15,7 +15,7 @@ public class GlobalConstants
     public static Realm realm;
     public static SharedPreferences mSettings;
     public static final String APP_PREFERENCES = "mysettings";
-    public static TecnicianModel selectedTech;
+    public static TecnicianNameId selectedTech;
     public static RealmResults<VisitItem> visitItems;
     public static RealmList<VisitItem> inVisitItems;
     public static String tokenStr;
@@ -27,4 +27,5 @@ public class GlobalConstants
     public static String SET_DATA_URL_SUFFIX = "?case=set_data_supraluogo";
     public static String SEND_DATA_URL_SUFFIX = "?case=send_data";
     public static String SEND_IMAGE_URL = "http://www.bludelego.com/dev/geatech/send_image.php";
+    public static String REST_URL = "http://www.bludelego.com/dev/geatech/gea.php";
 }

@@ -21,16 +21,13 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
-import io.realm.RealmList;
-import io.realm.RealmResults;
-import ru.alexangan.developer.geatech.Models.ClimaReportModel;
-import ru.alexangan.developer.geatech.Models.GeaItemModelliRapportoSopralluogo;
-import ru.alexangan.developer.geatech.Models.GeaItemRapportoSopralluogo;
-import ru.alexangan.developer.geatech.Models.GeaModelloRapportoSopralluogo;
-import ru.alexangan.developer.geatech.Models.GeaSezioneModelliRapportoSopralluogo;
+import ru.alexangan.developer.geatech.Models.GeaItemModelliRapporto;
+import ru.alexangan.developer.geatech.Models.GeaItemRapporto;
+import ru.alexangan.developer.geatech.Models.GeaModelloRapporto;
+import ru.alexangan.developer.geatech.Models.GeaSezioneModelliRapporto;
 import ru.alexangan.developer.geatech.Models.ReportStates;
 import ru.alexangan.developer.geatech.Models.VisitItem;
-import ru.alexangan.developer.geatech.Models.VisitStates;
+import ru.alexangan.developer.geatech.Models.GeaSopralluogo;
 import ru.alexangan.developer.geatech.R;
 
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.realm;
@@ -41,10 +38,8 @@ public class ClimatizzazioneReportFragment extends Fragment implements View.OnCl
     private int selectedIndex;
     int idSopralluogo;
     ReportStates reportStates;
-    RealmList <GeaItemRapportoSopralluogo> geaReportItems;
     View rootView;
     Context context;
-    ClimaReportModel climaReportModel;
     private boolean allSections1Collapsed, allSections2Collapsed;
 
     private FrameLayout flSectionHeader1, flSectionHeader2;
@@ -68,7 +63,7 @@ public class ClimatizzazioneReportFragment extends Fragment implements View.OnCl
             " 1.4 LOCALI E/O PIANI DELL'EDIFICIO:"
     };*/
 
-    private final String[] sa_id_item_72 =  {"Appartamento", "Villa(Singola/Multi)", "Negozio"};
+    private final String[] sa_id_item_72 =  {"Appartamento", "Villa (Singola/Multi)", "Negozio"};
 
     private final String[] sa_id_item_73 =  {"Cemento Armato", "Mattoni Pieni", "Mattoni Forati", "Pietra"};
 
@@ -76,12 +71,12 @@ public class ClimatizzazioneReportFragment extends Fragment implements View.OnCl
 
     private final String[] sa_id_item_75 =  {"Interrato", "Piano rialzato", "Piano Terra"};
 
-    private final String[] strImpianto =  {
+/*    private final String[] strImpianto =  {
     " 2.1 NOTE SUL LUOGO DI INSTALLAZIONE E INDIVIDUAZIONE DI EVENTUALI CRITICITÀ SUI COLLEGAMENTI IDRAULICI E/O SULLA GESTIONE DELL'UTENZA:",
     " 2.2 NOTE SULLA TIPOLOGIA DELL'IMPIANTO ESISTENTE (CALDAIA, ELEMENTI RADIANTI, TUBAZIONI, ETC.)\n" +
       "DESCRIVERE COMA VERRÀ INTERFACCIATO IL SISTEMA ALL'UTENZA PRINCIPALEE I COMPONENTI CHE VERRANNO UTILIZZATI:",
     "2.3 NOTE RELATIVE A COLLEGAMENTO DELL'IMPIANTO ESISTENTE"
-    };
+    };*/
 
     public ClimatizzazioneReportFragment()
     {
@@ -97,10 +92,8 @@ public class ClimatizzazioneReportFragment extends Fragment implements View.OnCl
     {
         super.onPause();
 
-        if (reportStates != null && climaReportModel !=null)
+        if (reportStates != null)
         {
-            realm.beginTransaction();
-
                 // ThreeRadiosAndEdit1
                 String strId_item_72 = "";
                 int checkedBtnId = rg1ThreeRadiosAndEdit1.getCheckedRadioButtonId();
@@ -113,12 +106,7 @@ public class ClimatizzazioneReportFragment extends Fragment implements View.OnCl
                 {
                     strId_item_72 = et1ThreeRadiosAndEdit1.getText().toString();
                 }
-                GeaItemRapportoSopralluogo gi72 = new GeaItemRapportoSopralluogo(idSopralluogo, 72, strId_item_72);
-
-                realm.beginTransaction();
-                realm.copyToRealm(gi72);
-                realm.commitTransaction();
-
+                insertStringInReportItem(72, strId_item_72);
 
                 // FourRadiosAndEdit1
                 String strId_item_73 = "";
@@ -132,7 +120,8 @@ public class ClimatizzazioneReportFragment extends Fragment implements View.OnCl
                 {
                     strId_item_73 = et1FourRadiosAndEdit1.getText().toString();
                 }
-                climaReportModel.setId_item_73(strId_item_73);
+                //climaReportModel.setId_item_73(strId_item_73);
+            insertStringInReportItem(73, strId_item_73);
 
             // TwoRadios1
             String strId_item_74 = "";
@@ -142,7 +131,7 @@ public class ClimatizzazioneReportFragment extends Fragment implements View.OnCl
                 RadioButton radioButton = (RadioButton) rg1TwoRadios1.findViewById(checkedBtnId);
                 strId_item_74 = radioButton.getText().toString();
 
-                climaReportModel.setId_item_74(strId_item_74);
+                insertStringInReportItem(74, strId_item_74);
             }
 
             // ThreeChkboxesAndEdit1
@@ -153,26 +142,27 @@ public class ClimatizzazioneReportFragment extends Fragment implements View.OnCl
                 String strChk1 = chk1ThreeChkboxesAndEdit1.isChecked() ? chk1ThreeChkboxesAndEdit1.getText().toString() : "";
                 String strChk2 = chk2ThreeChkboxesAndEdit1.isChecked() ? chk2ThreeChkboxesAndEdit1.getText().toString() : "";
                 String strChk3 = chk3ThreeChkboxesAndEdit1.isChecked() ? chk3ThreeChkboxesAndEdit1.getText().toString() : "";
-                climaReportModel.setId_item_75(strChk1 + " " + strChk2 + " " + strChk3);
+                insertStringInReportItem(75, strChk1 + " " + strChk2 + " " + strChk3);
             }
             else
             {
-                climaReportModel.setId_item_75(strId_item_75);
+                insertStringInReportItem(75, strId_item_75);
             }
 
             // ThreeTextThreeEdit1
             String strId_item_76 = et1ThreeTextThreeEdit1.getText().toString();
-            climaReportModel.setId_item_76(strId_item_76);
+            insertStringInReportItem(76, strId_item_76);
 
 
             String strId_item_77 = et2ThreeTextThreeEdit1.getText().toString();
-            climaReportModel.setId_item_77(strId_item_77);
+            insertStringInReportItem(77, strId_item_77);
 
 
             String str_Id_item_78 = et3ThreeTextThreeEdit1.getText().toString();
-            climaReportModel.setId_item_78(str_Id_item_78);
+            insertStringInReportItem(78, str_Id_item_78);
 
 
+            realm.beginTransaction();
             // Completion state
             if(strId_item_72.length() != 0)
             {
@@ -198,8 +188,8 @@ public class ClimatizzazioneReportFragment extends Fragment implements View.OnCl
                 reportStates.setReportCompletionState(0);
                 reportStates.setDataOraRaportoCompletato(null);
             }
+            realm.commitTransaction();
         }
-        realm.commitTransaction();
 
         if (reportStates == null)
         {
@@ -220,39 +210,25 @@ public class ClimatizzazioneReportFragment extends Fragment implements View.OnCl
 
         realm.beginTransaction();
         VisitItem visitItem = visitItems.get(selectedIndex);
-        VisitStates visitStates = visitItem.getVisitStates();
-        idSopralluogo = visitStates.getId_sopralluogo();
+        GeaSopralluogo geaSopralluogo = visitItem.getGeaSopralluogo();
+        idSopralluogo = geaSopralluogo.getId_sopralluogo();
 
-        reportStates = realm.where(ReportStates.class).equalTo("idSopralluogo", idSopralluogo).findFirst();
-
-        //climaReportModel = realm.where(ClimaReportModel.class).equalTo("idSopralluogo", idSopralluogo).findFirst();
-        //RealmResults <ClimaReportModel> climaReportModels = realm.where(ClimaReportModel.class).findAll();
-
-        geaReportItems = new RealmList<>();
-
-        for (int i = 72; i < 79; i++)
-        {
-            geaReportItems.add(null);
-        }
+        reportStates = realm.where(ReportStates.class).equalTo("id_sopralluogo", idSopralluogo).findFirst();
 
         realm.commitTransaction();
 
-        realm.beginTransaction();
-
-        if (climaReportModel != null)
-        {
             int i;
 
             // ThreeRadiosAndEdit1
-            String strId_item_72 = climaReportModel.getId_item_72();
+            String strId_item = getValueFromReportItem(72);
 
-            if(strId_item_72 != null)
+            if(strId_item != null)
             {
                 for (i = 0; i < rg1ThreeRadiosAndEdit1.getChildCount(); i++)
                 {
                     RadioButton rb = (RadioButton) rg1ThreeRadiosAndEdit1.getChildAt(i);
 
-                    if (strId_item_72.equals(rb.getText().toString()))
+                    if (strId_item.equals(rb.getText().toString()))
                     {
                         rb.setChecked(true);
                         break;
@@ -261,19 +237,20 @@ public class ClimatizzazioneReportFragment extends Fragment implements View.OnCl
 
                 if (i == rg1ThreeRadiosAndEdit1.getChildCount())
                 {
-                    et1ThreeRadiosAndEdit1.setText(strId_item_72);
+                    et1ThreeRadiosAndEdit1.setText(strId_item);
                 }
             }
 
             // FourRadiosAndEdit1
-            String strId_item_73 = climaReportModel.getId_item_73();
-            if(strId_item_73 != null)
+            strId_item = getValueFromReportItem(73);
+
+            if(strId_item != null)
             {
                 for (i = 0; i < rg1FourRadiosAndEdit1.getChildCount(); i++)
                 {
                     RadioButton rb = (RadioButton) rg1FourRadiosAndEdit1.getChildAt(i);
 
-                    if (strId_item_73.equals(rb.getText().toString()))
+                    if (strId_item.equals(rb.getText().toString()))
                     {
                         rb.setChecked(true);
                         break;
@@ -282,20 +259,20 @@ public class ClimatizzazioneReportFragment extends Fragment implements View.OnCl
 
                 if (i == rg1FourRadiosAndEdit1.getChildCount())
                 {
-                    et1FourRadiosAndEdit1.setText(strId_item_73);
+                    et1FourRadiosAndEdit1.setText(strId_item);
                 }
             }
 
             // TwoRadios1
-            String strId_item_74 = climaReportModel.getId_item_74();
+            strId_item = getValueFromReportItem(74);
 
-            if(strId_item_74 !=null)
+            if(strId_item !=null)
             {
                 for (i = 0; i < rg1TwoRadios1.getChildCount(); i++)
                 {
                     RadioButton rb = (RadioButton) rg1TwoRadios1.getChildAt(i);
 
-                    if (strId_item_74.equals(rb.getText().toString()))
+                    if (strId_item.equals(rb.getText().toString()))
                     {
                         rb.setChecked(true);
                         break;
@@ -304,43 +281,36 @@ public class ClimatizzazioneReportFragment extends Fragment implements View.OnCl
             }
 
             // ThreeChkboxesAndEdit1
-            if(climaReportModel.getId_item_75()!=null)
+            String strValue = getValueFromReportItem(75);
+
+            if(strValue!=null)
             {
-                if (climaReportModel.getId_item_75().contains(chk1ThreeChkboxesAndEdit1.getText().toString()))
+                String strChk1 = chk1ThreeChkboxesAndEdit1.getText().toString();
+                if (strValue.contains(strChk1))
                 {
                     chk1ThreeChkboxesAndEdit1.setChecked(true);
+                    strValue = strValue.replace(strChk1, "");
                 }
 
-                if (climaReportModel.getId_item_75().contains(chk2ThreeChkboxesAndEdit1.getText().toString()))
+                String strChk2 = chk2ThreeChkboxesAndEdit1.getText().toString();
+                if (strValue.contains(strChk2))
                 {
                     chk2ThreeChkboxesAndEdit1.setChecked(true);
+                    strValue = strValue.replace(strChk2, "");
                 }
 
-                if (climaReportModel.getId_item_75().contains(chk3ThreeChkboxesAndEdit1.getText().toString()))
+                String strChk3 = chk3ThreeChkboxesAndEdit1.getText().toString();
+                if (strValue.contains(strChk3))
                 {
                     chk3ThreeChkboxesAndEdit1.setChecked(true);
+                    strValue = strValue.replace(strChk3, "");
                 }
-                et1ThreeChkboxesAndEdit1.setText(climaReportModel.getId_item_75());
+                et1ThreeChkboxesAndEdit1.setText(strValue);
             }
 
-            et1ThreeTextThreeEdit1.setText(climaReportModel.getId_item_76());
-            et2ThreeTextThreeEdit1.setText(climaReportModel.getId_item_77());
-            et3ThreeTextThreeEdit1.setText(climaReportModel.getId_item_78());
-
-        }
-        realm.commitTransaction();
-
-        realm.beginTransaction();
-
-        if (reportStates != null)
-        {
-            if (climaReportModel == null)
-            {
-                climaReportModel = new ClimaReportModel(climaReportModels.size(), idSopralluogo);
-                realm.copyToRealmOrUpdate(climaReportModel);
-            }
-        }
-        realm.commitTransaction();
+            et1ThreeTextThreeEdit1.setText(getValueFromReportItem(76));
+            et2ThreeTextThreeEdit1.setText(getValueFromReportItem(77));
+            et3ThreeTextThreeEdit1.setText(getValueFromReportItem(78));
     }
 
     @Override
@@ -367,16 +337,16 @@ public class ClimatizzazioneReportFragment extends Fragment implements View.OnCl
 
 
         realm.beginTransaction();
-        GeaModelloRapportoSopralluogo geaModello = realm.where(GeaModelloRapportoSopralluogo.class).equalTo("nome_modello", "CLIMATIZZATORE").findFirst();
+        GeaModelloRapporto geaModello = realm.where(GeaModelloRapporto.class).equalTo("nome_modello", "CLIMATIZZATORE").findFirst();
         realm.commitTransaction();
 
         realm.beginTransaction();
-        List<GeaSezioneModelliRapportoSopralluogo> geaSezioniModelli = realm.where(GeaSezioneModelliRapportoSopralluogo.class).equalTo("id_modello", geaModello.getId_modello()).findAll();
+        List<GeaSezioneModelliRapporto> geaSezioniModelli = realm.where(GeaSezioneModelliRapporto.class).equalTo("id_modello", geaModello.getId_modello()).findAll();
         realm.commitTransaction();
 
         realm.beginTransaction();
-        List<GeaItemModelliRapportoSopralluogo> geaItemModelli = realm.where(GeaItemModelliRapportoSopralluogo.class)
-                .between("id_sezione", geaSezioniModelli.get(0).id_sezione, geaSezioniModelli.get(geaSezioniModelli.size()-1).id_sezione)
+        List<GeaItemModelliRapporto> geaItemModelli = realm.where(GeaItemModelliRapporto.class)
+                .between("id_sezione", geaSezioniModelli.get(0).getId_sezione(), geaSezioniModelli.get(geaSezioniModelli.size()-1).getId_sezione())
                 .between("id_item_modello", 72, 78).findAll();
         realm.commitTransaction();
 
@@ -524,10 +494,10 @@ public class ClimatizzazioneReportFragment extends Fragment implements View.OnCl
         tv1ThreeTextThreeEdit1.setText(geaItemModelli.get(sectionNumber++).getDescrizione_item());
 
         tv2ThreeTextThreeEdit1 = (TextView) rootView.findViewById(R.id.tv2ThreeTextThreeEdit1);
-        tv2ThreeTextThreeEdit1.setText(strImpianto[1]);
+        tv2ThreeTextThreeEdit1.setText(geaItemModelli.get(sectionNumber++).getDescrizione_item());
 
         tv3ThreeTextThreeEdit1 = (TextView) rootView.findViewById(R.id.tv3ThreeTextThreeEdit1);
-        tv3ThreeTextThreeEdit1.setText(strImpianto[2]);
+        tv3ThreeTextThreeEdit1.setText(geaItemModelli.get(sectionNumber++).getDescrizione_item());
 
         et1ThreeTextThreeEdit1 = (EditText) rootView.findViewById(R.id.et1ThreeTextThreeEdit1);
         et2ThreeTextThreeEdit1 = (EditText) rootView.findViewById(R.id.et2ThreeTextThreeEdit1);
@@ -583,6 +553,44 @@ public class ClimatizzazioneReportFragment extends Fragment implements View.OnCl
             llSectionThreeChkboxesAndEdit1.setVisibility(llSectionThreeChkboxesAndEdit1.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
             ivArrowThreeChkboxesAndEdit1.setImageResource(llSectionThreeChkboxesAndEdit1.getVisibility() == View.VISIBLE
                     ? android.R.drawable.arrow_up_float : android.R.drawable.arrow_down_float);
+        }
+    }
+
+    private void insertStringInReportItem(int idItem, String strData)
+    {
+        realm.beginTransaction();
+        GeaItemRapporto geaItemRapporto =
+         realm.where(GeaItemRapporto.class).equalTo("id_rapporto_sopralluogo", idSopralluogo).equalTo("id_item_modello", idItem).findFirst();
+        realm.commitTransaction();
+
+        realm.beginTransaction();
+        if(geaItemRapporto == null)
+        {
+
+            GeaItemRapporto geaItem = new GeaItemRapporto(idSopralluogo, idItem, strData);
+            realm.copyToRealm(geaItem);
+        }
+        else
+        {
+            geaItemRapporto.setValore(strData);
+        }
+        realm.commitTransaction();
+    }
+
+    private String getValueFromReportItem(int idItem)
+    {
+        realm.beginTransaction();
+        GeaItemRapporto geaItemRapporto =
+         realm.where(GeaItemRapporto.class).equalTo("id_rapporto_sopralluogo", idSopralluogo).equalTo("id_item_modello", idItem).findFirst();
+        realm.commitTransaction();
+
+        if(geaItemRapporto !=null)
+        {
+            return geaItemRapporto.getValore();
+        }
+        else
+        {
+            return null;
         }
     }
 }

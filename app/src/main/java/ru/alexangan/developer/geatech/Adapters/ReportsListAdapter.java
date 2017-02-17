@@ -18,7 +18,7 @@ import ru.alexangan.developer.geatech.Models.ItalianMonths;
 import ru.alexangan.developer.geatech.Models.ProductData;
 import ru.alexangan.developer.geatech.Models.ReportStates;
 import ru.alexangan.developer.geatech.Models.VisitItem;
-import ru.alexangan.developer.geatech.Models.VisitStates;
+import ru.alexangan.developer.geatech.Models.GeaSopralluogo;
 import ru.alexangan.developer.geatech.R;
 
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.realm;
@@ -70,7 +70,7 @@ public class ReportsListAdapter extends BaseAdapter
 
         ClientData clientData = visitItem.getClientData();
         ProductData productData = visitItem.getProductData();
-        VisitStates visitStates = visitItem.getVisitStates();
+        GeaSopralluogo geaSopralluogo = visitItem.getGeaSopralluogo();
 
         TextView tvVisitDay = (TextView)row.findViewById(R.id.tvVisitDay);
         TextView tvVisitMonth = (TextView)row.findViewById(R.id.tvVisitMonth);
@@ -85,15 +85,15 @@ public class ReportsListAdapter extends BaseAdapter
         TextView clientAddressTextView = (TextView) row.findViewById(R.id.tvClientAddress);
         clientAddressTextView.setText(clientData.getAddress());
 
-        int idSopralluogo = visitStates.getId_sopralluogo();
+        int idSopralluogo = geaSopralluogo.getId_sopralluogo();
 
         realm.beginTransaction();
 
-        ReportStates reportStates = realm.where(ReportStates.class).equalTo("idSopralluogo", idSopralluogo).findFirst();
+        ReportStates reportStates = realm.where(ReportStates.class).equalTo("id_sopralluogo", idSopralluogo).findFirst();
 
         realm.commitTransaction();
 
-        String visitDateTime = reportStates.getDataOraSopralluogo();
+        String visitDateTime = reportStates.getData_ora_sopralluogo();
 
         if(visitDateTime != null)
         {

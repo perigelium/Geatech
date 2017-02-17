@@ -7,18 +7,18 @@ import io.realm.annotations.PrimaryKey;
  * Created by user on 26.01.2017.
  */
 
-public class CaldaiaReportModel extends RealmObject
+public class ReportModelPompaDiCalore extends RealmObject
 {
         @PrimaryKey
         int id;
         int idSopralluogo;
 
-        public CaldaiaReportModel(int id)
+        public ReportModelPompaDiCalore(int id)
         {
                 this.id = id;
         }
 
-        public CaldaiaReportModel()
+        public ReportModelPompaDiCalore()
         {
         }
 

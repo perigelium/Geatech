@@ -8,10 +8,10 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import io.realm.RealmResults;
-import ru.alexangan.developer.geatech.Models.CaldaiaReportModel;
+import ru.alexangan.developer.geatech.Models.ReportModelCaldaia;
+import ru.alexangan.developer.geatech.Models.GeaSopralluogo;
 import ru.alexangan.developer.geatech.Models.ReportStates;
 import ru.alexangan.developer.geatech.Models.VisitItem;
-import ru.alexangan.developer.geatech.Models.VisitStates;
 import ru.alexangan.developer.geatech.R;
 
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.realm;
@@ -20,7 +20,7 @@ import static ru.alexangan.developer.geatech.Models.GlobalConstants.visitItems;
 public class CaldaiaReportFragment extends Fragment
 {
     View rootView;
-    CaldaiaReportModel caldaiaReportModel;
+    ReportModelCaldaia reportModelCaldaia;
     private int selectedIndex;
     int idSopralluogo;
     ReportStates reportStates;
@@ -70,20 +70,20 @@ public class CaldaiaReportFragment extends Fragment
 
         realm.beginTransaction();
         VisitItem visitItem = visitItems.get(selectedIndex);
-        VisitStates visitStates = visitItem.getVisitStates();
-        idSopralluogo = visitStates.getId_sopralluogo();
+        GeaSopralluogo geaSopralluogo = visitItem.getGeaSopralluogo();
+        idSopralluogo = geaSopralluogo.getId_sopralluogo();
 
-        reportStates = realm.where(ReportStates.class).equalTo("idSopralluogo", idSopralluogo).findFirst();
-        caldaiaReportModel = realm.where(CaldaiaReportModel.class).equalTo("idSopralluogo", idSopralluogo).findFirst();
-        RealmResults<CaldaiaReportModel> caldaieModels = realm.where(CaldaiaReportModel.class).findAll();
+        reportStates = realm.where(ReportStates.class).equalTo("id_sopralluogo", idSopralluogo).findFirst();
+        reportModelCaldaia = realm.where(ReportModelCaldaia.class).equalTo("id_sopralluogo", idSopralluogo).findFirst();
+        RealmResults<ReportModelCaldaia> caldaieModels = realm.where(ReportModelCaldaia.class).findAll();
 
         if (reportStates != null)
         {
-            if (caldaiaReportModel == null)
+            if (reportModelCaldaia == null)
             {
-                caldaiaReportModel = new CaldaiaReportModel(caldaieModels.size());
-                caldaiaReportModel.setIdSopralluogo(idSopralluogo);
-                realm.copyToRealmOrUpdate(caldaiaReportModel);
+                reportModelCaldaia = new ReportModelCaldaia(caldaieModels.size());
+                reportModelCaldaia.setIdSopralluogo(idSopralluogo);
+                realm.copyToRealmOrUpdate(reportModelCaldaia);
             }
         }
         realm.commitTransaction();

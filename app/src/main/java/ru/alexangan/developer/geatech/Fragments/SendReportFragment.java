@@ -3,6 +3,7 @@ package ru.alexangan.developer.geatech.Fragments;
 import android.app.Activity;
 import android.app.Fragment;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,9 +13,6 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -22,24 +20,26 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
-import io.realm.RealmObject;
 import io.realm.RealmResults;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
 import ru.alexangan.developer.geatech.Interfaces.Communicator;
-import ru.alexangan.developer.geatech.Models.ImageReport;
-import ru.alexangan.developer.geatech.Models.Gea_rapporto_sopralluogo;
+import ru.alexangan.developer.geatech.Models.GeaImagineRapporto;
+import ru.alexangan.developer.geatech.Models.GeaItemRapporto;
+import ru.alexangan.developer.geatech.Models.GeaRapporto;
+import ru.alexangan.developer.geatech.Models.GeaSopralluogo;
 import ru.alexangan.developer.geatech.Adapters.ModelsMapping;
 import ru.alexangan.developer.geatech.Models.ProductData;
+import ru.alexangan.developer.geatech.Models.ReportItem;
 import ru.alexangan.developer.geatech.Models.ReportStates;
 import ru.alexangan.developer.geatech.Models.VisitItem;
-import ru.alexangan.developer.geatech.Models.VisitStates;
 import ru.alexangan.developer.geatech.Network.NetworkUtils;
 import ru.alexangan.developer.geatech.R;
 
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.SEND_DATA_URL_SUFFIX;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.realm;
+import static ru.alexangan.developer.geatech.Models.GlobalConstants.tokenStr;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.visitItems;
 
 public class SendReportFragment extends Fragment implements View.OnClickListener, Callback
@@ -49,16 +49,16 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
 
     private Button sendReport;
     private int selectedIndex;
+    int idSopralluogo;
+    int idRapportoSopralluogo;
 
     ReportStates reportStates;
     VisitItem visitItem;
-    VisitStates visitStates;
+    GeaSopralluogo geaSopralluogo;
 
     String reportSendResponse;
     Call callSendReport, callSendImage;
     Activity activity;
-    RealmObject modelReport;
-    RealmResults<ImageReport> reportImages;
 
     public SendReportFragment()
     {
@@ -95,23 +95,24 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
         sendReport.setOnClickListener(this);
 
         visitItem = visitItems.get(selectedIndex);
-        visitStates = visitItem.getVisitStates();
+        geaSopralluogo = visitItem.getGeaSopralluogo();
         ProductData productData = visitItem.getProductData();
         String productType = productData.getProductType();
         //int idProductType = productData.getIdProductType();
-        int idSopralluogo = visitStates.getId_sopralluogo();
+        idSopralluogo = geaSopralluogo.getId_sopralluogo();
+        idRapportoSopralluogo = idSopralluogo;
 
         Class modelClass = ModelsMapping.assignClassModel(productType);
 
         realm.beginTransaction();
-        reportStates = realm.where(ReportStates.class).equalTo("idSopralluogo", idSopralluogo).findFirst();
-        modelReport = (RealmObject) realm.where(modelClass).equalTo("idSopralluogo", idSopralluogo).findFirst();
-        reportImages = realm.where(ImageReport.class).equalTo("id_rapporto_sopralluogo", idSopralluogo).findAll();
+        reportStates = realm.where(ReportStates.class).equalTo("id_sopralluogo", idSopralluogo).findFirst();
+        //modelReport = (RealmObject) realm.where(modelClass).equalTo("id_sopralluogo", idSopralluogo).findFirst();
+        //reportImages = realm.where(GeaImagineRapporto.class).equalTo("id_rapporto_sopralluogo", idSopralluogo).findAll();
         realm.commitTransaction();
 
         if (reportStates != null)
         {
-            if (visitItem.getVisitStates().getId_sopralluogo() == reportStates.getIdSopralluogo()
+            if (visitItem.getGeaSopralluogo().getId_sopralluogo() == reportStates.getId_sopralluogo()
                     && (reportStates.getGeneralInfoCompletionState() == 2 && reportStates.getReportCompletionState() == 3)
                     && reportStates.getPhotoAddedNumber() >= 1) //  && reportStates.getData_ora_invio_rapporto() == null
             {
@@ -161,33 +162,33 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
                 sendReport.setAlpha(.4f);
                 sendReport.setEnabled(false);
 
-                ReportStates reportStatesUnmanaged = realm.copyFromRealm(reportStates);
-                VisitStates visitStatesUnmanaged = realm.copyFromRealm(visitStates);
+/*                ReportStates reportStatesUnmanaged = realm.copyFromRealm(reportStates);
+                GeaSopralluogo geaSopralluogoUnmanaged = realm.copyFromRealm(geaSopralluogo);
                 Object modelReportUnmanaged = realm.copyFromRealm(modelReport);
 
                 Gson gsonTmp = new Gson();
-                String tmp = gsonTmp.toJson(reportStatesUnmanaged);
-                Gea_rapporto_sopralluogo gea_rapporto_sopralluogo = gsonTmp.fromJson(tmp, Gea_rapporto_sopralluogo.class);
+                String strReportStatesUnmanaged = gsonTmp.toJson(reportStatesUnmanaged);
+                GeaRapporto gea_rapporto = gsonTmp.fromJson(tmp, GeaRapporto.class);
 
                 Gson gson = new Gson();
-                String gea_rapporto_sopralluogo_json = gson.toJson(gea_rapporto_sopralluogo);
-                String visitStatesUnmanaged_json = gson.toJson(visitStatesUnmanaged);
+                String gea_rapporto_sopralluogo_json = gson.toJson(gea_rapporto);
+                String visitStatesUnmanaged_json = gson.toJson(geaSopralluogoUnmanaged);
                 String modelReportUnmanaged_json = gson.toJson(modelReportUnmanaged);
 
                 JSONObject jsonObject = new JSONObject();
                 try
                 {
-                    jsonObject.put("gea_rapporto_sopralluogo", gea_rapporto_sopralluogo_json);
+                    jsonObject.put("gea_rapporto", gea_rapporto_sopralluogo_json);
                     jsonObject.put("gea_sopralluoghi", visitStatesUnmanaged_json);
                     jsonObject.put("gea_rapporto_modello", modelReportUnmanaged_json);
 
-                    List<ImageReport> imagesArray = new ArrayList<>();
+                    List<GeaImagineRapporto> imagesArray = new ArrayList<>();
 
-                    for (ImageReport imageReport : reportImages)
+                    for (GeaImagineRapporto geaImagineRapporto : reportImages)
                     {
-                        ImageReport imageReportUnmanaged = realm.copyFromRealm(imageReport);
-                        imageReportUnmanaged.setFilePath(null);
-                        imagesArray.add(imageReportUnmanaged);
+                        GeaImagineRapporto geaImagineRapportoUnmanaged = realm.copyFromRealm(geaImagineRapporto);
+                        geaImagineRapportoUnmanaged.setFilePath(null);
+                        imagesArray.add(geaImagineRapportoUnmanaged);
                     }
 
                     String imagesReport_json = gson.toJson(imagesArray);
@@ -198,16 +199,63 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
                 {
                     // TODO Auto-generated catch block
                     e.printStackTrace();
-                }
+                }*/
 
                 //Log.d("DEBUG", String.valueOf(jsonObject));
 
-                NetworkUtils networkUtils = new NetworkUtils();
-                callSendReport = networkUtils.setData(this, SEND_DATA_URL_SUFFIX, String.valueOf(jsonObject));
 
-                for (ImageReport imageReport : reportImages)
+                realm.beginTransaction();
+                ReportItem reportItem = new ReportItem();
+                Gson gson = new Gson();
+
+                GeaSopralluogo geaSopralluogo = realm.where(GeaSopralluogo.class).equalTo("id_sopralluogo", idSopralluogo).findFirst();
+                GeaSopralluogo geaSopralluogoUnmanaged = realm.copyFromRealm(geaSopralluogo);
+                reportItem.setGeaSopralluogo(geaSopralluogoUnmanaged);
+
+
+                ReportStates reportStatesUnmanaged = realm.copyFromRealm(reportStates);
+                String strReportStatesUnmanaged = gson.toJson(reportStatesUnmanaged);
+                GeaRapporto gea_rapporto = gson.fromJson(strReportStatesUnmanaged, GeaRapporto.class);
+                reportItem.setGea_rapporto_sopralluogo(gea_rapporto);
+
+
+                RealmResults geaItemsRapporto = realm.where(GeaItemRapporto.class).equalTo("id_rapporto_sopralluogo", idSopralluogo).findAll();
+                List<GeaItemRapporto> listGeaItemRapporto = new ArrayList<>();
+
+                for(Object gi : geaItemsRapporto)
                 {
-                    callSendImage = networkUtils.sendImage(this, activity, imageReport);
+                    GeaItemRapporto gi_unmanaged = realm.copyFromRealm((GeaItemRapporto)gi);
+                    listGeaItemRapporto.add(gi_unmanaged);
+                }
+                reportItem.setGea_items_rapporto_sopralluogo(listGeaItemRapporto);
+
+
+                RealmResults<GeaImagineRapporto> listReportImages = realm.where(GeaImagineRapporto.class).equalTo("id_rapporto_sopralluogo", idSopralluogo).findAll();
+
+                List<GeaImagineRapporto> imagesArray = new ArrayList<>();
+
+                for (GeaImagineRapporto geaImagineRapporto : listReportImages)
+                {
+                    GeaImagineRapporto geaImagineRapportoUnmanaged = realm.copyFromRealm(geaImagineRapporto);
+                    geaImagineRapportoUnmanaged.setFilePath(null);
+                    imagesArray.add(geaImagineRapportoUnmanaged);
+                }
+                reportItem.setGea_immagini_rapporto_sopralluogo(imagesArray);
+
+
+                realm.commitTransaction();
+
+
+                String str_ReportItem_json = gson.toJson(reportItem);
+
+                Log.d("DEBUG", str_ReportItem_json);
+
+                NetworkUtils networkUtils = new NetworkUtils();
+                callSendReport = networkUtils.setData(this, SEND_DATA_URL_SUFFIX, tokenStr, str_ReportItem_json);
+
+                for (GeaImagineRapporto geaImagineRapporto : listReportImages)
+                {
+                    callSendImage = networkUtils.sendImage(this, activity, geaImagineRapporto);
                 }
             }
 

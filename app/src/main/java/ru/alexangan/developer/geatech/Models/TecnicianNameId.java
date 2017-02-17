@@ -8,17 +8,17 @@ import java.util.List;
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 
-public class TecnicianModel extends RealmObject
+public class TecnicianNameId extends RealmObject
 {
     @PrimaryKey
     private int id;
     private String full_name_tehnic;
 
-    public TecnicianModel()
+    public TecnicianNameId()
     {
     }
 
-    public TecnicianModel(int id, String full_name_tehnic)
+    public TecnicianNameId(int id, String full_name_tehnic)
     {
         this.id = id;
         this.full_name_tehnic = full_name_tehnic;

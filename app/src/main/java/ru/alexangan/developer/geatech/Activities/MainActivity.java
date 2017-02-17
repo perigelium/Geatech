@@ -100,14 +100,14 @@ public class MainActivity extends Activity implements Communicator
 
         if (visitItems.size() == 0)
         {
-            Toast.makeText(this, "Database e vuoto", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "DatabaseUtils e vuoto", Toast.LENGTH_LONG).show();
 
             this.finish();
         }
 
         for (VisitItem realmVisitItem : visitItems)
         {
-            int idSopralluogo = realmVisitItem.getVisitStates().getId_sopralluogo();
+            int idSopralluogo = realmVisitItem.getGeaSopralluogo().getId_sopralluogo();
 
             Boolean addressAndProductPresent = false;
             realm.beginTransaction();
@@ -117,7 +117,7 @@ public class MainActivity extends Activity implements Communicator
             for (ReportStates reportStates : reportStatesList)
             {
                 realm.beginTransaction();
-                int idSopralluogoRep = reportStates.getIdSopralluogo();
+                int idSopralluogoRep = reportStates.getId_sopralluogo();
 
                 if (idSopralluogo == idSopralluogoRep)
                 {
@@ -132,7 +132,7 @@ public class MainActivity extends Activity implements Communicator
             {
                 realm.beginTransaction();
                 ReportStates newReportStates = new ReportStates(reportStatesList.size(), realmVisitItem.getId());
-                newReportStates.setIdSopralluogo(idSopralluogo);
+                newReportStates.setId_sopralluogo(idSopralluogo);
                 realm.copyToRealm(newReportStates);
                 realm.commitTransaction();
             }

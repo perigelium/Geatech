@@ -3,7 +3,7 @@ package ru.alexangan.developer.geatech.Models;
 
 import io.realm.RealmObject;
 
-public class GeaModelloRapportoSopralluogo extends RealmObject
+public class GeaModelloRapporto extends RealmObject
 {
 
     private int id_modello;

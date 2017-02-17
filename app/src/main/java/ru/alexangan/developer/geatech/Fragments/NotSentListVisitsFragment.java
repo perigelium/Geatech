@@ -40,7 +40,7 @@ public class NotSentListVisitsFragment extends ListFragment// implements View.On
         {
             for(ReportStates reportStates : reportStatesList)
             {
-                if (visitItem.getVisitStates().getId_sopralluogo() == reportStates.getIdSopralluogo()
+                if (visitItem.getGeaSopralluogo().getId_sopralluogo() == reportStates.getId_sopralluogo()
                         && (reportStates.getGeneralInfoCompletionState()==2 && reportStates.getReportCompletionState() ==3 )
                         && reportStates.getPhotoAddedNumber() >= 3 && reportStates.getDataOraRaportoInviato()==null)
                 {

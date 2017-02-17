@@ -17,12 +17,12 @@ import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
-import ru.alexangan.developer.geatech.Models.ImageReport;
+import ru.alexangan.developer.geatech.Models.GeaImagineRapporto;
 import ru.alexangan.developer.geatech.Utils.ImageUtils;
 
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.LOGIN_URL_SUFFIX;
+import static ru.alexangan.developer.geatech.Models.GlobalConstants.REST_URL;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.SEND_IMAGE_URL;
-import static ru.alexangan.developer.geatech.Models.GlobalConstants.tokenStr;
 
 /**
  * Created by user on 12/20/2016.
@@ -31,7 +31,6 @@ import static ru.alexangan.developer.geatech.Models.GlobalConstants.tokenStr;
 public class NetworkUtils
 {
     private final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
-    private final String REST_URL = "http://www.bludelego.com/dev/geatech/gea.php";
 
     public static boolean isNetworkAvailable(Context context)
     {
@@ -111,7 +110,7 @@ public class NetworkUtils
         return call;
     }
 
-    public Call setData(Callback callback, String urlSuffix, String gsonStr)
+    public Call setData(Callback callback, String urlSuffix, String tokenStr, String gsonStr)
     {
         OkHttpClient.Builder defaultHttpClient = new OkHttpClient.Builder();
         OkHttpClient okHttpClient = defaultHttpClient.build();
@@ -146,43 +145,11 @@ public class NetworkUtils
         return callData;
     }
 
-/*    public Call sendReport(Callback callback, String gsonStr)
+    public Call sendImage(Callback callback, Context context, GeaImagineRapporto geaImagineRapporto)
     {
-        OkHttpClient.Builder defaultHttpClient = new OkHttpClient.Builder();
-        OkHttpClient okHttpClient = defaultHttpClient.build();
+        String fileName = geaImagineRapporto.getNome_file();
 
-        JSONObject jsonObject = new JSONObject();
-        try
-        {
-            jsonObject.put("token", tokenStr);
-            jsonObject.put("report_data", gsonStr);
-
-        } catch (JSONException e)
-        {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-            return null;
-        }
-
-        RequestBody body = RequestBody.create(JSON, String.valueOf(jsonObject));
-
-        Request request = new Request.Builder()
-                .url(REST_URL + SEND_DATA_URL_SUFFIX)
-                .post(body)
-                .build();
-
-        Call callData = okHttpClient.newCall(request);
-        callData.enqueue(callback);
-
-        return callData;
-    }*/
-
-
-    public Call sendImage(Callback callback, Context context, ImageReport imageReport)
-    {
-        String fileName = imageReport.getNome_file();
-
-        File imageFile = new File(imageReport.getFilePath());
+        File imageFile = new File(geaImagineRapporto.getFilePath());
         String strMediaType = ImageUtils.getMimeTypeOfUri(context, Uri.fromFile(imageFile));
 
         OkHttpClient.Builder defaultHttpClient = new OkHttpClient.Builder();
@@ -192,8 +159,8 @@ public class NetworkUtils
                 .setType(MultipartBody.FORM)
 
                 .addFormDataPart("file", fileName, RequestBody.create(MediaType.parse(strMediaType), imageFile))
-                .addFormDataPart("id_immagine_rapporto", String.valueOf(imageReport.getId_immagine_rapporto()))
-                .addFormDataPart("id_rapporto_sopralluogo", String.valueOf(imageReport.getId_rapporto_sopralluogo()))
+                .addFormDataPart("id_immagine_rapporto", String.valueOf(geaImagineRapporto.getId_immagine_rapporto()))
+                .addFormDataPart("id_rapporto_sopralluogo", String.valueOf(geaImagineRapporto.getId_rapporto_sopralluogo()))
                 .addFormDataPart("file_nome", fileName)
                 .build();
 

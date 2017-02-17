@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -20,14 +21,16 @@ import okhttp3.Request;
 import okhttp3.Response;
 import ru.alexangan.developer.geatech.Interfaces.LocationRetrievedEvents;
 import ru.alexangan.developer.geatech.Models.ClientData;
+import ru.alexangan.developer.geatech.Models.GeaSopralluogo;
 import ru.alexangan.developer.geatech.Models.ReportStates;
+import ru.alexangan.developer.geatech.Models.TecnicianNameId;
 import ru.alexangan.developer.geatech.Models.VisitItem;
-import ru.alexangan.developer.geatech.Models.VisitStates;
 import ru.alexangan.developer.geatech.Network.LocationRetriever;
 import ru.alexangan.developer.geatech.Network.NetworkUtils;
 import ru.alexangan.developer.geatech.R;
 
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.realm;
+import static ru.alexangan.developer.geatech.Models.GlobalConstants.selectedTech;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.visitItems;
 
 public class CTLinfoFragment extends Fragment implements View.OnClickListener, LocationRetrievedEvents, Callback
@@ -97,16 +100,24 @@ public class CTLinfoFragment extends Fragment implements View.OnClickListener, L
         View rootView = inflater.inflate(R.layout.ctl_info_fragment, container, false);
 
         mSetCurrentCoordsButton = (Button) rootView.findViewById(R.id.btnSetCurrentCoords);
-        etCoordNord = (TextView) rootView.findViewById(R.id.etCoordNord);
-        etCoordEst = (TextView) rootView.findViewById(R.id.etCoordEst);
-        etAltitude = (TextView) rootView.findViewById(R.id.etAltitude);
-
         mSetCurrentCoordsButton.setOnClickListener(this);
 
         VisitItem visitItem = visitItems.get(selectedIndex);
         ClientData clientData = visitItem.getClientData();
-        VisitStates visitStates = visitItem.getVisitStates();
-        int idSopralluogo = visitStates.getId_sopralluogo();
+        GeaSopralluogo geaSopralluogo = visitItem.getGeaSopralluogo();
+        int idSopralluogo = geaSopralluogo.getId_sopralluogo();
+
+        realm.beginTransaction();
+        reportStates = realm.where(ReportStates.class).equalTo("id_sopralluogo", idSopralluogo).findFirst();
+        realm.commitTransaction();
+
+        etCoordNord = (TextView) rootView.findViewById(R.id.etCoordNord);
+        etCoordNord.setText(String.valueOf(clientData.coordNord));
+        
+        etCoordEst = (TextView) rootView.findViewById(R.id.etCoordEst);
+        etCoordEst.setText(String.valueOf(clientData.coordEst));
+
+        etAltitude = (TextView) rootView.findViewById(R.id.etAltitude);
 
         TextView clientNameTextView = (TextView) rootView.findViewById(R.id.tvClientName);
         clientNameTextView.setText(clientData.getName());
@@ -117,15 +128,15 @@ public class CTLinfoFragment extends Fragment implements View.OnClickListener, L
         TextView clientAddressTextView = (TextView) rootView.findViewById(R.id.tvClientAddress);
         clientAddressTextView.setText(clientData.getAddress());
 
-        realm.beginTransaction();
-        reportStates = realm.where(ReportStates.class).equalTo("idSopralluogo", idSopralluogo).findFirst();
-        realm.commitTransaction();
+        TextView tvTechnicianName = (TextView) rootView.findViewById(R.id.tvTechnicianName);
+        tvTechnicianName.setText(selectedTech.getFullNameTehnic(), TextView.BufferType.EDITABLE);
 
-        if(reportStates != null && reportStates.getLatitude()!=0.0 && reportStates.getLongitude()!=0.0 && reportStates.getAltitude()!=0.0)
+        if(reportStates != null && reportStates.getLatitudine()!=0.0
+                && reportStates.getLongitudine()!=0.0 && reportStates.getAltitudine()!=0.0)
         {
-            etCoordNord.setText(String.valueOf(reportStates.getLatitude()), TextView.BufferType.EDITABLE);
-            etCoordEst.setText(String.valueOf(reportStates.getLongitude()), TextView.BufferType.EDITABLE);
-            etAltitude.setText(String.valueOf(reportStates.getAltitude()), TextView.BufferType.EDITABLE);
+            etCoordNord.setText(String.valueOf(reportStates.getLatitudine()), TextView.BufferType.EDITABLE);
+            etCoordEst.setText(String.valueOf(reportStates.getLongitudine()), TextView.BufferType.EDITABLE);
+            etAltitude.setText(String.valueOf(reportStates.getAltitudine()), TextView.BufferType.EDITABLE);
         }
 
         return rootView;
@@ -159,8 +170,8 @@ public class CTLinfoFragment extends Fragment implements View.OnClickListener, L
             if(reportStates!=null)
             {
                 realm.beginTransaction();
-                reportStates.setLatitude(mLastLocation.getLatitude());
-                reportStates.setLongitude(mLastLocation.getLongitude());
+                reportStates.setLatitudine(mLastLocation.getLatitude());
+                reportStates.setLongitudine(mLastLocation.getLongitude());
                 reportStates.setGeneralInfoCompletionState(2);
                 realm.commitTransaction();
             }
@@ -238,7 +249,7 @@ public class CTLinfoFragment extends Fragment implements View.OnClickListener, L
                 if(reportStates!=null)
                 {
                     realm.beginTransaction();
-                    reportStates.setAltitude(altitude);
+                    reportStates.setAltitudine(altitude);
                     realm.commitTransaction();
                 }
 

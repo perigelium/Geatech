@@ -1,23 +1,19 @@
 package ru.alexangan.developer.geatech.Models;
 
 
-public class Gea_rapporto_sopralluogo
+public class GeaRapporto
 {
     private int id_rapporto_sopralluogo;
     private int id_sopralluogo;
-
     private String data_ora_compilazione_rapporto; // data_ora_compilazione_rapporto
     private String data_ora_invio_rapporto; // data_ora_invio_rapporto
-
     private String nome_tecnico;
-
     private int altitudine; // altitudine
     private double latitudine; // latitudine
     private double longitudine; // longitudine
-
     private String note_tecnico;
 
-    public Gea_rapporto_sopralluogo() {}
+    public GeaRapporto() {}
 
     public String getDataOraRaportoCompletato()
     {
@@ -77,5 +73,25 @@ public class Gea_rapporto_sopralluogo
     public void setAltitudine(int altitudine)
     {
         this.altitudine = altitudine;
+    }
+
+    public String getNome_tecnico()
+    {
+        return nome_tecnico;
+    }
+
+    public void setNome_tecnico(String nome_tecnico)
+    {
+        this.nome_tecnico = nome_tecnico;
+    }
+
+    public int getId_rapporto_sopralluogo()
+    {
+        return id_rapporto_sopralluogo;
+    }
+
+    public void setId_rapporto_sopralluogo(int id_rapporto_sopralluogo)
+    {
+        this.id_rapporto_sopralluogo = id_rapporto_sopralluogo;
     }
 }

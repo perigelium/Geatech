@@ -17,13 +17,15 @@ public class ClientData extends RealmObject
 
     public ClientData() {}
 
-    public ClientData(int id, String name, String address, String phone, String mobile)
+    public ClientData(int id, String name, String address, String phone, String mobile, double coordNord, double coordEst)
     {
         this.id = id;
         this.name = name;
         this.address = address;
         this.phone = phone;
         this.mobile = mobile;
+        this.coordNord = coordNord;
+        this.coordEst = coordEst;
     }
 
 

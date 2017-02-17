@@ -9,29 +9,27 @@ public class VisitItem extends RealmObject
 {
     @PrimaryKey
     private int id;
-    private VisitStates visitStates;
+    private GeaSopralluogo geaSopralluogo;
     private ClientData clientData;
     private ProductData productData;
-    //private ReportStates reportStates;
 
     public VisitItem() {
     }
 
-    public VisitItem(int id, VisitStates visitStates, ClientData clientData, ProductData productData)
+    public VisitItem(int id, GeaSopralluogo geaSopralluogo, ClientData clientData, ProductData productData)
     {
         this.id = id;
-        this.visitStates = visitStates;
+        this.geaSopralluogo = geaSopralluogo;
         this.clientData = clientData;
         this.productData = productData;
-        //this.reportStates = reportStates;
     }
 
-    public VisitStates getVisitStates() {
-        return visitStates;
+    public GeaSopralluogo getGeaSopralluogo() {
+        return geaSopralluogo;
     }
 
-    public void setVisitStates(VisitStates visitStates) {
-        this.visitStates = visitStates;
+    public void setGeaSopralluogo(GeaSopralluogo geaSopralluogo) {
+        this.geaSopralluogo = geaSopralluogo;
     }
 
     public ClientData getClientData() {
@@ -49,17 +47,6 @@ public class VisitItem extends RealmObject
     public void setProductData(ProductData productData) {
         this.productData = productData;
     }
-
-
-/*    public ReportStates getReportStates()
-    {
-        return reportStates;
-    }
-
-    public void setReportStates(ReportStates reportStates)
-    {
-        this.reportStates = reportStates;
-    }*/
 
     public int getId()
     {

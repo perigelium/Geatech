@@ -7,7 +7,7 @@ import io.realm.annotations.PrimaryKey;
  * Created by user on 14.02.2017.
  */
 
-public class GeaItemRapportoSopralluogo extends RealmObject
+public class GeaItemRapporto extends RealmObject
 {
     @PrimaryKey
     private int id_item_modello;
@@ -15,14 +15,14 @@ public class GeaItemRapportoSopralluogo extends RealmObject
     private int id_rapporto_sopralluogo;
     private String valore;
 
-    public GeaItemRapportoSopralluogo(int id_rapporto_sopralluogo, int id_item_modello, String valore)
+    public GeaItemRapporto(int id_rapporto_sopralluogo, int id_item_modello, String valore)
     {
         this.id_rapporto_sopralluogo = id_rapporto_sopralluogo;
         this.id_item_modello = id_item_modello;
         this.valore = valore;
     }
 
-    public GeaItemRapportoSopralluogo()
+    public GeaItemRapporto()
     {
     }
 

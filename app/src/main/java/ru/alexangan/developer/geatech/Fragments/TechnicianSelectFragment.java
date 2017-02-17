@@ -36,11 +36,12 @@ import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
 import ru.alexangan.developer.geatech.Interfaces.LoginCommunicator;
-import ru.alexangan.developer.geatech.Models.GeaItemModelliRapportoSopralluogo;
-import ru.alexangan.developer.geatech.Models.GeaModelloRapportoSopralluogo;
-import ru.alexangan.developer.geatech.Models.GeaSezioneModelliRapportoSopralluogo;
+import ru.alexangan.developer.geatech.Models.GeaItemModelliRapporto;
+import ru.alexangan.developer.geatech.Models.GeaModelloRapporto;
+import ru.alexangan.developer.geatech.Models.GeaSezioneModelliRapporto;
 import ru.alexangan.developer.geatech.Models.GlobalConstants;
-import ru.alexangan.developer.geatech.Models.TecnicianModel;
+import ru.alexangan.developer.geatech.Models.ReportStates;
+import ru.alexangan.developer.geatech.Models.TecnicianNameId;
 import ru.alexangan.developer.geatech.Models.VisitItem;
 import ru.alexangan.developer.geatech.Network.NetworkUtils;
 import ru.alexangan.developer.geatech.R;
@@ -51,6 +52,7 @@ import static ru.alexangan.developer.geatech.Models.GlobalConstants.GET_VISITS_U
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.inVisitItems;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.mSettings;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.realm;
+import static ru.alexangan.developer.geatech.Models.GlobalConstants.tokenStr;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.visitItems;
 
 public class TechnicianSelectFragment extends Fragment implements View.OnClickListener, Callback
@@ -68,7 +70,7 @@ public class TechnicianSelectFragment extends Fragment implements View.OnClickLi
     FrameLayout flTechnicianAdded;
     EditText etTechCognome, etTechNome;
     boolean bNewTechAdded;
-    TecnicianModel selectedTech;
+    TecnicianNameId selectedTech;
     private CheckBox chkboxRememberTech;
 
     Spinner spTecnicianList;
@@ -130,7 +132,7 @@ public class TechnicianSelectFragment extends Fragment implements View.OnClickLi
 
                     String selectedItem = parent.getItemAtPosition(position).toString();
                     realm.beginTransaction();
-                    selectedTech = realm.where(TecnicianModel.class).equalTo("full_name_tehnic", selectedItem).findFirst();
+                    selectedTech = realm.where(TecnicianNameId.class).equalTo("full_name_tehnic", selectedItem).findFirst();
                     realm.commitTransaction();
 
                     spinnerCurItem = position;
@@ -199,11 +201,11 @@ public class TechnicianSelectFragment extends Fragment implements View.OnClickLi
         if (technician_list != null)
         {
             Gson gson = new Gson();
-            Type type = new TypeToken<List<TecnicianModel>>()
+            Type type = new TypeToken<List<TecnicianNameId>>()
             {
             }.getType();
 
-            final List<TecnicianModel> techModelList = gson.fromJson(technician_list, type);
+            final List<TecnicianNameId> techModelList = gson.fromJson(technician_list, type);
 
             activity.runOnUiThread(new Runnable()
             {
@@ -211,16 +213,16 @@ public class TechnicianSelectFragment extends Fragment implements View.OnClickLi
                 {
                     //saTecnicianList.clear();
                     realm.beginTransaction();
-                    RealmResults<TecnicianModel> techModelListOld = realm.where(TecnicianModel.class).findAll();
+                    RealmResults<TecnicianNameId> techModelListOld = realm.where(TecnicianNameId.class).findAll();
                     techModelListOld.deleteAllFromRealm();
                     realm.commitTransaction();
 
                     //saTecnicianList.add("");
-                    for (TecnicianModel technicianItem : techModelList)
+                    for (TecnicianNameId technicianItem : techModelList)
                     {
                         realm.beginTransaction();
                         //saTecnicianList.add(technicianItem.getFullNameTehnic());
-                        //TecnicianModel tecnicianModelR = realm.where(TecnicianModel.class).equalTo("id", technicianItem.getId()).findFirst();
+                        //TecnicianNameId tecnicianModelR = realm.where(TecnicianNameId.class).equalTo("id", technicianItem.getId()).findFirst();
 
                         //if (tecnicianModelR == null)
                         {
@@ -237,7 +239,7 @@ public class TechnicianSelectFragment extends Fragment implements View.OnClickLi
                     }
 
                     realm.beginTransaction();
-                    RealmResults<TecnicianModel> techModelList = realm.where(TecnicianModel.class).findAll();
+                    RealmResults<TecnicianNameId> techModelList = realm.where(TecnicianNameId.class).findAll();
                     realm.commitTransaction();
 
                     if (techModelList.size() != 0)
@@ -409,7 +411,6 @@ public class TechnicianSelectFragment extends Fragment implements View.OnClickLi
         if (call == callLoginToken)
         {
             String loginResponse = response.body().string();
-            String tokenStr;
 
             response.body().close();
 
@@ -436,6 +437,7 @@ public class TechnicianSelectFragment extends Fragment implements View.OnClickLi
                 try
                 {
                     tokenStr = jsonObject.getString("token");
+
 
                     if (tokenStr.length() != 0)
                     {
@@ -545,20 +547,20 @@ public class TechnicianSelectFragment extends Fragment implements View.OnClickLi
 
                     Gson gson = new Gson();
 
-                    Type typeGeaModelli = new TypeToken<List<GeaModelloRapportoSopralluogo>>()
+                    Type typeGeaModelli = new TypeToken<List<GeaModelloRapporto>>()
                     {
                     }.getType();
-                    final List<GeaModelloRapportoSopralluogo> l_geaModelli = gson.fromJson(str_gea_modelli, typeGeaModelli);
+                    final List<GeaModelloRapporto> l_geaModelli = gson.fromJson(str_gea_modelli, typeGeaModelli);
 
-                    Type typeGeaSezioniModelli = new TypeToken<List<GeaSezioneModelliRapportoSopralluogo>>()
+                    Type typeGeaSezioniModelli = new TypeToken<List<GeaSezioneModelliRapporto>>()
                     {
                     }.getType();
-                    final List<GeaSezioneModelliRapportoSopralluogo> l_geaSezioniModelli = gson.fromJson(str_gea_sezioni_modelli, typeGeaSezioniModelli);
+                    final List<GeaSezioneModelliRapporto> l_geaSezioniModelli = gson.fromJson(str_gea_sezioni_modelli, typeGeaSezioniModelli);
 
-                    Type typeGeaItemsModelli = new TypeToken<List<GeaItemModelliRapportoSopralluogo>>()
+                    Type typeGeaItemsModelli = new TypeToken<List<GeaItemModelliRapporto>>()
                     {
                     }.getType();
-                    final List<GeaItemModelliRapportoSopralluogo> l_geaItemsModelli = gson.fromJson(str_gea_items_modelli, typeGeaItemsModelli);
+                    final List<GeaItemModelliRapporto> l_geaItemsModelli = gson.fromJson(str_gea_items_modelli, typeGeaItemsModelli);
 
 
                     activity.runOnUiThread(new Runnable()
@@ -566,11 +568,11 @@ public class TechnicianSelectFragment extends Fragment implements View.OnClickLi
                         public void run()
                         {
                             realm.beginTransaction();
-                            RealmResults<GeaModelloRapportoSopralluogo> geaModelli = realm.where(GeaModelloRapportoSopralluogo.class).findAll();
+                            RealmResults<GeaModelloRapporto> geaModelli = realm.where(GeaModelloRapporto.class).findAll();
                             geaModelli.deleteAllFromRealm();
                             realm.commitTransaction();
 
-                            for (GeaModelloRapportoSopralluogo gm : l_geaModelli)
+                            for (GeaModelloRapporto gm : l_geaModelli)
                             {
                                 realm.beginTransaction();
                                 realm.copyToRealm(gm);
@@ -578,11 +580,11 @@ public class TechnicianSelectFragment extends Fragment implements View.OnClickLi
                             }
 
                             realm.beginTransaction();
-                            RealmResults<GeaSezioneModelliRapportoSopralluogo> geaSezioniModelli = realm.where(GeaSezioneModelliRapportoSopralluogo.class).findAll();
+                            RealmResults<GeaSezioneModelliRapporto> geaSezioniModelli = realm.where(GeaSezioneModelliRapporto.class).findAll();
                             geaSezioniModelli.deleteAllFromRealm();
                             realm.commitTransaction();
 
-                            for (GeaSezioneModelliRapportoSopralluogo gs : l_geaSezioniModelli)
+                            for (GeaSezioneModelliRapporto gs : l_geaSezioniModelli)
                             {
                                 realm.beginTransaction();
                                 realm.copyToRealm(gs);
@@ -590,11 +592,11 @@ public class TechnicianSelectFragment extends Fragment implements View.OnClickLi
                             }
 
                             realm.beginTransaction();
-                            RealmResults<GeaItemModelliRapportoSopralluogo> geaItemModelli = realm.where(GeaItemModelliRapportoSopralluogo.class).findAll();
+                            RealmResults<GeaItemModelliRapporto> geaItemModelli = realm.where(GeaItemModelliRapporto.class).findAll();
                             geaItemModelli.deleteAllFromRealm();
                             realm.commitTransaction();
 
-                            for (GeaItemModelliRapportoSopralluogo gi : l_geaItemsModelli)
+                            for (GeaItemModelliRapporto gi : l_geaItemsModelli)
                             {
                                 realm.beginTransaction();
                                 realm.copyToRealm(gi);

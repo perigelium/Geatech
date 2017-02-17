@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 
 import ru.alexangan.developer.geatech.Models.ReportStates;
 import ru.alexangan.developer.geatech.Models.VisitItem;
-import ru.alexangan.developer.geatech.Models.VisitStates;
+import ru.alexangan.developer.geatech.Models.GeaSopralluogo;
 import ru.alexangan.developer.geatech.R;
 
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.realm;
@@ -68,20 +68,20 @@ public class PompaDiCaloreReportFragment extends Fragment
 
         realm.beginTransaction();
         VisitItem visitItem = visitItems.get(selectedIndex);
-        VisitStates visitStates = visitItem.getVisitStates();
-        idSopralluogo = visitStates.getId_sopralluogo();
+        GeaSopralluogo geaSopralluogo = visitItem.getGeaSopralluogo();
+        idSopralluogo = geaSopralluogo.getId_sopralluogo();
 
-        reportStates = realm.where(ReportStates.class).equalTo("idSopralluogo", idSopralluogo).findFirst();
-        //caldaiaReportModel = realm.where(CaldaiaReportModel.class).equalTo("idSopralluogo", idSopralluogo).findFirst();
-        //RealmResults<CaldaiaReportModel> caldaieModels = realm.where(CaldaiaReportModel.class).findAll();
+        reportStates = realm.where(ReportStates.class).equalTo("id_sopralluogo", idSopralluogo).findFirst();
+        //reportModelCaldaia = realm.where(ReportModelCaldaia.class).equalTo("id_sopralluogo", idSopralluogo).findFirst();
+        //RealmResults<ReportModelCaldaia> caldaieModels = realm.where(ReportModelCaldaia.class).findAll();
 
         if (reportStates != null)
         {
-/*            if (caldaiaReportModel == null)
+/*            if (reportModelCaldaia == null)
             {
-                caldaiaReportModel = new CaldaiaReportModel(caldaieModels.size());
-                caldaiaReportModel.setId_sopralluogo(idSopralluogo);
-                realm.copyToRealmOrUpdate(caldaiaReportModel);
+                reportModelCaldaia = new ReportModelCaldaia(caldaieModels.size());
+                reportModelCaldaia.setId_sopralluogo(idSopralluogo);
+                realm.copyToRealmOrUpdate(reportModelCaldaia);
             }*/
         }
         realm.commitTransaction();

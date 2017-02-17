@@ -30,10 +30,11 @@ import ru.alexangan.developer.geatech.Models.ProductData;
 import ru.alexangan.developer.geatech.Models.ReportStates;
 import ru.alexangan.developer.geatech.Models.SubproductItem;
 import ru.alexangan.developer.geatech.Models.VisitItem;
-import ru.alexangan.developer.geatech.Models.VisitStates;
+import ru.alexangan.developer.geatech.Models.GeaSopralluogo;
 import ru.alexangan.developer.geatech.R;
 
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.realm;
+import static ru.alexangan.developer.geatech.Models.GlobalConstants.selectedTech;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.visitItems;
 
 public class SetDateTimeFragment extends Fragment implements View.OnClickListener
@@ -153,14 +154,13 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
         VisitItem visitItem = visitItems.get(selectedIndex);
         ClientData clientData = visitItem.getClientData();
         ProductData productData = visitItem.getProductData();
-        VisitStates visitStates = visitItem.getVisitStates();
-        int idSopralluogo = visitStates.getId_sopralluogo();
+        GeaSopralluogo geaSopralluogo = visitItem.getGeaSopralluogo();
+        int idSopralluogo = geaSopralluogo.getId_sopralluogo();
         List<SubproductItem> list = productData.getSubItem();
 
         realm.beginTransaction();
-        reportStates = realm.where(ReportStates.class).equalTo("idSopralluogo", idSopralluogo).findFirst();
+        reportStates = realm.where(ReportStates.class).equalTo("id_sopralluogo", idSopralluogo).findFirst();
         realm.commitTransaction();
-
 
             SetVisitDateTimeListAdapter adapter = new SetVisitDateTimeListAdapter(getActivity(),  list);
 
@@ -187,10 +187,10 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
         mDateSetTextView = (TextView) rootView.findViewById(R.id.tvDateSet);
         mTimeSetTextView = (TextView) rootView.findViewById(R.id.tvTimeSet);
 
-        String visitDateTime = reportStates.getDataOraSopralluogo();
+        String visitDateTime = reportStates.getData_ora_sopralluogo();
         if(visitDateTime == null)
         {
-            visitDateTime = visitStates.getData_sollecito_appuntamento();
+            visitDateTime = geaSopralluogo.getData_sollecito_appuntamento();
         }
 
         calendarNow = Calendar.getInstance();
@@ -302,8 +302,8 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
 
 
             VisitItem visitItem = visitItems.get(selectedIndex);
-            VisitStates visitStates = visitItem.getVisitStates();
-            int idSopralluogo = visitStates.getId_sopralluogo();
+            GeaSopralluogo geaSopralluogo = visitItem.getGeaSopralluogo();
+            int idSopralluogo = geaSopralluogo.getId_sopralluogo();
 
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
             strDateTime = sdf.format(calendar.getTime());
@@ -311,7 +311,8 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
             if(reportStates!=null)
             {
                 realm.beginTransaction();
-                reportStates.setDataOraSopralluogo(strDateTime);
+                reportStates.setData_ora_sopralluogo(strDateTime);
+                reportStates.setNome_tecnico(selectedTech.getFullNameTehnic());
                 realm.commitTransaction();
             }
 

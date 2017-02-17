@@ -11,7 +11,7 @@ import ru.alexangan.developer.geatech.Models.ClientData;
 import ru.alexangan.developer.geatech.Models.ProductData;
 import ru.alexangan.developer.geatech.Models.ReportStates;
 import ru.alexangan.developer.geatech.Models.VisitItem;
-import ru.alexangan.developer.geatech.Models.VisitStates;
+import ru.alexangan.developer.geatech.Models.GeaSopralluogo;
 import ru.alexangan.developer.geatech.R;
 
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.realm;
@@ -39,20 +39,20 @@ public class ReportSentDetailedFragment extends Fragment
         VisitItem visitItem = visitItems.get(selectedIndex);
         ClientData clientData = visitItem.getClientData();
         ProductData productData = visitItem.getProductData();
-        VisitStates visitStates = visitItem.getVisitStates();
-        int idSopralluogo = visitStates.getId_sopralluogo();
+        GeaSopralluogo geaSopralluogo = visitItem.getGeaSopralluogo();
+        int idSopralluogo = geaSopralluogo.getId_sopralluogo();
 
         TextView tvdataOraSopralluogo = (TextView) rootView.findViewById(R.id.tvdataOraSopralluogo);
         TextView tvdataOraRaportoCompletato = (TextView) rootView.findViewById(R.id.tvdataOraRaportoCompletato);
         TextView tvdataOraRaportoInviato = (TextView) rootView.findViewById(R.id.tvdataOraRaportoInviato);
 
         realm.beginTransaction();
-        ReportStates reportStates = realm.where(ReportStates.class).equalTo("idSopralluogo", idSopralluogo).findFirst();
+        ReportStates reportStates = realm.where(ReportStates.class).equalTo("id_sopralluogo", idSopralluogo).findFirst();
         realm.commitTransaction();
 
         if(reportStates != null)
         {
-            tvdataOraSopralluogo.setText(reportStates.getDataOraSopralluogo());
+            tvdataOraSopralluogo.setText(reportStates.getData_ora_sopralluogo());
 
             tvdataOraRaportoCompletato.setText(reportStates.getDataOraRaportoCompletato());
 
@@ -72,11 +72,11 @@ public class ReportSentDetailedFragment extends Fragment
         TextView etCoordEst = (TextView)rootView.findViewById(R.id.etCoordEst);
         TextView etAltitude = (TextView)rootView.findViewById(R.id.etAltitude);
 
-        if(reportStates != null && reportStates.getLatitude()!=0.0 && reportStates.getLongitude()!=0.0 && reportStates.getAltitude()!=0.0)
+        if(reportStates != null && reportStates.getLatitudine()!=0.0 && reportStates.getLongitudine()!=0.0 && reportStates.getAltitudine()!=0.0)
         {
-            double latitude = reportStates.getLatitude();
-            double longitude = reportStates.getLongitude();
-            double altitude = reportStates.getAltitude();
+            double latitude = reportStates.getLatitudine();
+            double longitude = reportStates.getLongitudine();
+            double altitude = reportStates.getAltitudine();
 
             etCoordNord.setText(String.valueOf(latitude));
             etCoordEst.setText(String.valueOf(longitude));

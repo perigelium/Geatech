@@ -7,18 +7,18 @@ import io.realm.annotations.PrimaryKey;
  * Created by user on 26.01.2017.
  */
 
-public class FotovoltaicoReportModel extends RealmObject
+public class ReportModelSTermodinamico extends RealmObject
 {
         @PrimaryKey
         int id;
         int idSopralluogo;
 
-        public FotovoltaicoReportModel(int id)
+        public ReportModelSTermodinamico(int id)
         {
                 this.id = id;
         }
 
-        public FotovoltaicoReportModel()
+        public ReportModelSTermodinamico()
         {
         }
 

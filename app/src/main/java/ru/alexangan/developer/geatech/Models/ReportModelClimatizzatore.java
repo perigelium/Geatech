@@ -7,10 +7,9 @@ import io.realm.annotations.PrimaryKey;
  * Created by user on 12/8/2016.
  */
 
-public class ClimaReportModel extends RealmObject
+public class ReportModelClimatizzatore extends RealmObject
 {
     @PrimaryKey
-    int id;
     int idSopralluogo;
 
     private String id_item_72;
@@ -21,11 +20,10 @@ public class ClimaReportModel extends RealmObject
     private String id_item_77;
     private String id_item_78;
 
-    public ClimaReportModel(){};
+    public ReportModelClimatizzatore(){};
 
-    public ClimaReportModel(int id, int idSopralluogo)
+    public ReportModelClimatizzatore(int idSopralluogo)
     {
-        this.id = id;
         this.idSopralluogo = idSopralluogo;
     }
 
@@ -87,11 +85,6 @@ public class ClimaReportModel extends RealmObject
     public void setId_item_77(String id_item_77)
     {
         this.id_item_77 = id_item_77;
-    }
-
-    public int getId()
-    {
-        return id;
     }
 
     public int getIdSopralluogo()

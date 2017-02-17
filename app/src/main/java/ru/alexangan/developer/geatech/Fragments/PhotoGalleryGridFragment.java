@@ -25,10 +25,10 @@ import java.util.Collections;
 
 import io.realm.RealmResults;
 import ru.alexangan.developer.geatech.Adapters.GridViewAdapter;
-import ru.alexangan.developer.geatech.Models.ImageReport;
+import ru.alexangan.developer.geatech.Models.GeaImagineRapporto;
 import ru.alexangan.developer.geatech.Models.ReportStates;
 import ru.alexangan.developer.geatech.Models.VisitItem;
-import ru.alexangan.developer.geatech.Models.VisitStates;
+import ru.alexangan.developer.geatech.Models.GeaSopralluogo;
 import ru.alexangan.developer.geatech.R;
 import ru.alexangan.developer.geatech.Utils.ImageUtils;
 
@@ -53,7 +53,7 @@ public class PhotoGalleryGridFragment extends Fragment
     Bitmap photoAddButton;
     Context context;
     private int selectedIndex;
-    ImageReport gea_immagine;
+    GeaImagineRapporto gea_immagine;
 
 
     public PhotoGalleryGridFragment()
@@ -188,10 +188,10 @@ public class PhotoGalleryGridFragment extends Fragment
         realm.beginTransaction();
 
         VisitItem visitItem = visitItems.get(selectedIndex);
-        VisitStates visitStates = visitItem.getVisitStates();
-        int idSopralluogo = visitStates.getId_sopralluogo();
-        ReportStates reportStates = realm.where(ReportStates.class).equalTo("idSopralluogo", idSopralluogo).findFirst();
-        RealmResults<ImageReport> reportImages = realm.where(ImageReport.class).equalTo("id_rapporto_sopralluogo", idSopralluogo).findAll();
+        GeaSopralluogo geaSopralluogo = visitItem.getGeaSopralluogo();
+        int idSopralluogo = geaSopralluogo.getId_sopralluogo();
+        ReportStates reportStates = realm.where(ReportStates.class).equalTo("id_sopralluogo", idSopralluogo).findFirst();
+        RealmResults<GeaImagineRapporto> reportImages = realm.where(GeaImagineRapporto.class).equalTo("id_rapporto_sopralluogo", idSopralluogo).findAll();
         reportImages.deleteAllFromRealm();
 
         if(reportStates!=null)
@@ -227,7 +227,7 @@ public class PhotoGalleryGridFragment extends Fragment
                 }
                 realm.beginTransaction();
 
-                    ImageReport gea_immagine = new ImageReport( idSopralluogo, reportImagesSize++, imageFile.getAbsolutePath(), fileName);
+                    GeaImagineRapporto gea_immagine = new GeaImagineRapporto( idSopralluogo, reportImagesSize++, imageFile.getAbsolutePath(), fileName);
                     realm.copyToRealmOrUpdate(gea_immagine);
 
                 realm.commitTransaction();

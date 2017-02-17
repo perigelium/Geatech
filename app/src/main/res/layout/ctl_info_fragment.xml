@@ -201,13 +201,13 @@
                         android:layout_marginLeft="6dp"
                         android:src="@drawable/transparent24px" />
 
-                    <EditText
-                        android:id="@+id/etTechnicianName"
+                    <TextView
+                        android:id="@+id/tvTechnicianName"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:background="@android:color/transparent"
                         android:maxLines="1"
-                        android:ems="10"
+                        android:textSize="17sp"
                         android:inputType="textPersonName"
                         android:text="Nome di tecnico" />
 

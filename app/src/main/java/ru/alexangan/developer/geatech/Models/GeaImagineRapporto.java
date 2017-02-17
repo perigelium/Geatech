@@ -9,7 +9,7 @@ import io.realm.annotations.PrimaryKey;
 
 // gea_imagine_rapporto_sopralluogo
 
-public class ImageReport extends RealmObject
+public class GeaImagineRapporto extends RealmObject
 {
     @PrimaryKey
     private int id_immagine_rapporto;
@@ -18,7 +18,7 @@ public class ImageReport extends RealmObject
 
     private String filePath;
 
-    public ImageReport(int id_rapporto_sopralluogo, int id_immagine_rapporto, String filePath, String nome_file)
+    public GeaImagineRapporto(int id_rapporto_sopralluogo, int id_immagine_rapporto, String filePath, String nome_file)
     {
         this.id_rapporto_sopralluogo = id_rapporto_sopralluogo;
         this.id_immagine_rapporto = id_immagine_rapporto;
@@ -26,7 +26,7 @@ public class ImageReport extends RealmObject
         this.nome_file = nome_file;
     }
 
-    public ImageReport()
+    public GeaImagineRapporto()
     {
     }
 

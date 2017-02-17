@@ -37,8 +37,8 @@ public class ComingListVisitsFragment extends ListFragment
         {
             for(ReportStates reportStates : reportStatesList)
             {
-                if (visitItem.getVisitStates().getId_sopralluogo() == reportStates.getIdSopralluogo()
-                        && reportStates.getDataOraSopralluogo()!=null)
+                if (visitItem.getGeaSopralluogo().getId_sopralluogo() == reportStates.getId_sopralluogo()
+                        && reportStates.getData_ora_sopralluogo()!=null)
                 {
                     visitItemsDateTimeSet.add(visitItem);
                     break;

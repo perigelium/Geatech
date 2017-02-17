@@ -7,7 +7,7 @@ import io.realm.annotations.PrimaryKey;
  * Created by user on 26.01.2017.
  */
 
-public class DomoticaReportModel extends RealmObject
+public class ReportModelDomotica extends RealmObject
 {
         @PrimaryKey
         int id;
@@ -168,13 +168,13 @@ public class DomoticaReportModel extends RealmObject
                 this.id_item_152 = id_item_152;
         }
 
-        public DomoticaReportModel(int id, int idSopralluogo)
+        public ReportModelDomotica(int id, int idSopralluogo)
         {
             this.id = id;
             this.idSopralluogo = idSopralluogo;
         }
 
-        public DomoticaReportModel()
+        public ReportModelDomotica()
         {
         }
 
