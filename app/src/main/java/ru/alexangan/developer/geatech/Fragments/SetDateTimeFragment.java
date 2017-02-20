@@ -1,5 +1,6 @@
 package ru.alexangan.developer.geatech.Fragments;
 
+import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Fragment;
 import android.app.TimePickerDialog;
@@ -17,12 +18,19 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.Response;
 import ru.alexangan.developer.geatech.Adapters.SetVisitDateTimeListAdapter;
 import ru.alexangan.developer.geatech.Interfaces.Communicator;
 import ru.alexangan.developer.geatech.Models.ClientData;
@@ -31,31 +39,33 @@ import ru.alexangan.developer.geatech.Models.ReportStates;
 import ru.alexangan.developer.geatech.Models.SubproductItem;
 import ru.alexangan.developer.geatech.Models.VisitItem;
 import ru.alexangan.developer.geatech.Models.GeaSopralluogo;
+import ru.alexangan.developer.geatech.Network.NetworkUtils;
 import ru.alexangan.developer.geatech.R;
 
+import static ru.alexangan.developer.geatech.Models.GlobalConstants.SET_DATA_URL_SUFFIX;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.realm;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.selectedTech;
+import static ru.alexangan.developer.geatech.Models.GlobalConstants.tokenStr;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.visitItems;
 
-public class SetDateTimeFragment extends Fragment implements View.OnClickListener
+public class SetDateTimeFragment extends Fragment implements View.OnClickListener, Callback
 {
     Calendar calendarNow;
     Calendar calendar;
     long elapsedDays;
     String strDateTime;
     ReportStates reportStates;
+    Call setDateTimeCall;
+    String strVisitDateTimeResponse;
+    Activity activity;
+    int idSopralluogo, stakedOut;
 
     private TextView mDateSetTextView, mTimeSetTextView, mSetDateButton, mAnnullaSetDateTimeButton, mSetDateTimeSubmitButton,
             btnApriMappa, btnChiama;
 
     private int mYear, mMonth, mDay, mHour, mMinute;
 
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
     private int selectedIndex;
-    private String mParam2;
     View rootView;
 
     private Communicator mCommunicator;
@@ -63,17 +73,6 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
 
     public SetDateTimeFragment()
     {
-    }
-
-    // TODO: Rename and change types and number of parameters
-    public static SetDateTimeFragment newInstance(String param1, String param2)
-    {
-        SetDateTimeFragment fragment = new SetDateTimeFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
     }
 
     @Override
@@ -86,6 +85,9 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        activity = getActivity();
+
         if (getArguments() != null)
         {
             selectedIndex = getArguments().getInt("selectedIndex");
@@ -142,7 +144,6 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState)
     {
-        // Inflate the layout for this fragment
         rootView =  inflater.inflate(R.layout.set_date_time_fragment, container, false);
 
         mSetDateButton = (TextView) rootView.findViewById(R.id.btnSetDate);
@@ -155,7 +156,7 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
         ClientData clientData = visitItem.getClientData();
         ProductData productData = visitItem.getProductData();
         GeaSopralluogo geaSopralluogo = visitItem.getGeaSopralluogo();
-        int idSopralluogo = geaSopralluogo.getId_sopralluogo();
+        idSopralluogo = geaSopralluogo.getId_sopralluogo();
         List<SubproductItem> list = productData.getSubItem();
 
         realm.beginTransaction();
@@ -187,16 +188,15 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
         mDateSetTextView = (TextView) rootView.findViewById(R.id.tvDateSet);
         mTimeSetTextView = (TextView) rootView.findViewById(R.id.tvTimeSet);
 
-        String visitDateTime = reportStates.getData_ora_sopralluogo();
+        String visitDateTime = reportStates.getData_ora_presa_appuntamento();
         if(visitDateTime == null)
         {
-            visitDateTime = geaSopralluogo.getData_sollecito_appuntamento();
+            visitDateTime = geaSopralluogo.getData_ora_sopralluogo();
         }
 
         calendarNow = Calendar.getInstance();
         calendar = Calendar.getInstance();
 
-        //Calendar calendar = Calendar.getInstance();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ITALIAN);
 
         try
@@ -275,73 +275,182 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
         {
             TimePickerDialog dialogTimePicker = new TimePickerDialog(getActivity(), timePickerListener,
                     mHour, mMinute, DateFormat.is24HourFormat(getActivity()));
-            //dialog.getTimePicker().setMaxDate(new Date().getTime());
             dialogTimePicker.show();
 
             DatePickerDialog dialogDatePicker = new DatePickerDialog(getActivity(), datePickerListener,
                     mYear, mMonth - 1, mDay);
-            //dialog.getDatePicker().setMaxDate(new Date().getTime());
             dialogDatePicker.show();
         }
 
         if(v.getId() == R.id.btnAnnullaSetDateTime)
         {
-            //getActivity().getFragmentManager().beginTransaction().remove(this).commit();
-            mCommunicator.onDateTimeSetReturned(false);
+            stakedOut = 0;
+            notifyServerDataOraSopralluogo(idSopralluogo, stakedOut);
+
+            //mCommunicator.onDateTimeSetReturned(false);
         }
 
         if(v.getId() == R.id.btnSetDateTimeSubmit)
         {
-/*            visitsList.get(selectedIndex).setVisitYear(mYear);
-
-            Pair date = new Pair(mDay, mMonth );
-            visitsList.get(selectedIndex).setVisitDate(date);
-
-            Pair time = new Pair(mHour, mMinute);
-            visitsList.get(selectedIndex).setVisitTime(time);*/
-
-
-            VisitItem visitItem = visitItems.get(selectedIndex);
-            GeaSopralluogo geaSopralluogo = visitItem.getGeaSopralluogo();
-            int idSopralluogo = geaSopralluogo.getId_sopralluogo();
-
+            stakedOut = 1;
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
             strDateTime = sdf.format(calendar.getTime());
 
-            if(reportStates!=null)
-            {
-                realm.beginTransaction();
-                reportStates.setData_ora_sopralluogo(strDateTime);
-                reportStates.setNome_tecnico(selectedTech.getFullNameTehnic());
-                realm.commitTransaction();
-            }
+            notifyServerDataOraSopralluogo(idSopralluogo, stakedOut);
 
-            //getActivity().getFragmentManager().beginTransaction().remove(this).commit();
-            mCommunicator.onDateTimeSetReturned(true);
+            // send date-time and id_sopralluogo
+            //mCommunicator.onDateTimeSetReturned(true);
         }
+    }
+
+    private void notifyServerDataOraSopralluogo(int idSopralluogo, int stakedOut)
+    {
+        JSONObject jsonObject = new JSONObject();
+        try
+        {
+            jsonObject.put("token", tokenStr);
+            jsonObject.put("id_sopralluogo", idSopralluogo);
+            jsonObject.put("data_ora_presa_appuntamento", strDateTime);
+            jsonObject.put("inizializzazione", stakedOut);
+
+        } catch (JSONException e)
+        {
+            e.printStackTrace();
+        }
+
+        NetworkUtils networkUtils = new NetworkUtils();
+        setDateTimeCall = networkUtils.setData(this, SET_DATA_URL_SUFFIX, String.valueOf(jsonObject));
     }
 
     public void updateDisplay()
     {
-/*        mDateSetTextView.setText(new StringBuilder().append(mDay).append(".")
-                .append(mMonth).append(".").append(mYear));*/
-
         SimpleDateFormat sdfDate = new SimpleDateFormat("dd.MM", Locale.ITALIAN);
         String shortDateStr = sdfDate.format(calendar.getTime());
         mDateSetTextView.setText(shortDateStr);
         SimpleDateFormat sdfTime = new SimpleDateFormat("HH:mm", Locale.ITALIAN);
         String shortTimeStr = sdfTime.format(calendar.getTime());
         mTimeSetTextView.setText(shortTimeStr);
-
-/*        String minuteStr = Integer.toString(mMinute);
-        if (minuteStr.length() == 1)
-        {
-            minuteStr = "0" + minuteStr;
-        }
-
-        mTimeSetTextView.setText(new StringBuilder().append(mHour).append(":")
-                .append(minuteStr));
-    }*/
     }
 
+    @Override
+    public void onFailure(Call call, IOException e)
+    {
+        showToastMessage("Dato e ora inviato, risposta non ha ricevuto");
+    }
+
+    @Override
+    public void onResponse(Call call, Response response) throws IOException
+    {
+        if (call == setDateTimeCall)
+        {
+            strVisitDateTimeResponse = response.body().string();
+
+            if (strVisitDateTimeResponse == null)
+            {
+                showToastMessage("Dato e ora inviato, risposta non ha ricevuto");
+
+                return;
+            } else
+            {
+                final JSONObject jsonObject;
+
+                try
+                {
+                    jsonObject = new JSONObject(strVisitDateTimeResponse);
+                } catch (JSONException e)
+                {
+                    e.printStackTrace();
+                    return;
+                }
+
+                if (jsonObject.has("error"))
+                {
+                    final String errorStr;
+
+                    try
+                    {
+                        errorStr = jsonObject.getString("error");
+                        if (errorStr.length() != 0)
+                        {
+                            showToastMessage(errorStr);
+                        }
+
+                    } catch (JSONException e)
+                    {
+                        e.printStackTrace();
+                        return;
+                    }
+                }
+                else
+                {
+                    showToastMessage("Dato e ora inviato, server ritorna: " + strVisitDateTimeResponse);
+
+                    if (jsonObject.has("success"))
+                    {
+                        try
+                        {
+                            final String strSuccess = jsonObject.getString("success");
+
+                            if(strSuccess.equals("1"))
+                            {
+                                activity.runOnUiThread(new Runnable()
+                                {
+                                    public void run()
+                                    {
+                                        if (jsonObject.has("id_rapporto_sopralluogo"))
+                                        {
+                                            try
+                                            {
+                                                final String str_id_rapporto_sopralluogo = jsonObject.getString("id_rapporto_sopralluogo");
+
+                                                realm.beginTransaction();
+                                                int id_rapporto_sopralluogo = Integer.valueOf(str_id_rapporto_sopralluogo);
+                                                reportStates.setId_rapporto_sopralluogo(id_rapporto_sopralluogo);
+
+                                                if (stakedOut == 1)
+                                                {
+                                                    reportStates.setData_ora_presa_appuntamento(strDateTime);
+                                                    reportStates.setNome_tecnico(selectedTech.getFullNameTehnic());
+                                                }
+                                                realm.commitTransaction();
+
+                                            } catch (JSONException e)
+                                            {
+                                                e.printStackTrace();
+                                            }
+                                        }
+
+                                        if (stakedOut == 0)
+                                        {
+                                            realm.beginTransaction();
+                                            reportStates.setData_ora_presa_appuntamento(null);
+                                            reportStates.setNome_tecnico(null);
+                                            realm.commitTransaction();
+                                        }
+
+                                        mCommunicator.onDateTimeSetReturned(false);
+                                    }
+                                });
+                            }
+
+                        } catch (JSONException e)
+                        {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private void showToastMessage(final String msg)
+    {
+        activity.runOnUiThread(new Runnable()
+        {
+            public void run()
+            {
+                Toast.makeText(activity, msg, Toast.LENGTH_LONG).show();
+            }
+        });
+    }
 }

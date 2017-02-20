@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Locale;
 
+import io.realm.RealmResults;
 import ru.alexangan.developer.geatech.Models.ClientData;
 import ru.alexangan.developer.geatech.Models.ItalianMonths;
 import ru.alexangan.developer.geatech.Models.ProductData;
@@ -112,23 +113,32 @@ public class MyListVisitsAdapter extends BaseAdapter
         ClientData clientData = visitItem.getClientData();
         ProductData productData = visitItem.getProductData();
         GeaSopralluogo geaSopralluogo = visitItem.getGeaSopralluogo();
+
         int idSopralluogo = geaSopralluogo.getId_sopralluogo();
+        boolean initialized = geaSopralluogo.getInizializzazione();
 
         clientNameTextView.setText(clientData.getName());
         serviceTypeTextView.setText(productData.getProductType());
         clientAddressTextView.setText(clientData.getAddress());
 
         realm.beginTransaction();
-
-        ReportStates reportStates = realm.where(ReportStates.class).equalTo("id_sopralluogo", idSopralluogo).findFirst();
-
+        ReportStates reportStates = realm.where(ReportStates.class)
+                .equalTo("id_sopralluogo", idSopralluogo).greaterThan("id_rapporto_sopralluogo", 0).findFirst();
         realm.commitTransaction();
 
-        String visitDateTime = reportStates.getData_ora_sopralluogo();
-/*        if(visitDateTime == null)
+        String visitDateTime = null;
+
+        if(reportStates!=null)
         {
-            visitDateTime = geaSopralluogo.getData_sollecito_appuntamento();
-        }*/
+            visitDateTime = reportStates.getData_ora_presa_appuntamento();
+        }
+        boolean ownReport = true;
+
+        if(visitDateTime == null && initialized)
+        {
+            visitDateTime = geaSopralluogo.getData_ora_sopralluogo();
+            ownReport = false;
+        }
 
         if(visitDateTime != null)
         {
@@ -146,7 +156,15 @@ public class MyListVisitsAdapter extends BaseAdapter
 
             if (calendar.DAY_OF_MONTH != 0)
             {
-                vVisitDateView.setBackgroundColor(Color.parseColor("#009922"));
+                if(!ownReport)
+                {
+                    vVisitDateView.setBackgroundColor(Color.parseColor("#999999"));
+                }
+                else
+                {
+                    vVisitDateView.setBackgroundColor(Color.parseColor("#009922"));
+                }
+
                 tvVisitDay.setVisibility(View.VISIBLE);
                 tvVisitMonth.setVisibility(View.VISIBLE);
                 ivPersonTimeSet.setVisibility(View.VISIBLE);

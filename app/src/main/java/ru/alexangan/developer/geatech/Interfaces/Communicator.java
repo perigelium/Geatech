@@ -25,4 +25,6 @@ public interface Communicator
 
     public void onNotificationReportReturned(View view);
 
+    void disableCtrlButtons2(boolean enable);
+
 }

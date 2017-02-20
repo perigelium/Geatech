@@ -142,7 +142,7 @@ public class NotSentListVisitsAdapter extends BaseAdapter
             }
         });
 
-        String visitDateTime = reportStates.getData_ora_sopralluogo();
+        String visitDateTime = reportStates.getData_ora_presa_appuntamento();
 
         if(visitDateTime != null)
         {

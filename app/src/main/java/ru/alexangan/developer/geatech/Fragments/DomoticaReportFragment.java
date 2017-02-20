@@ -409,7 +409,7 @@ public class DomoticaReportFragment extends Fragment implements View.OnClickList
         idSopralluogo = geaSopralluogo.getId_sopralluogo();
 
         reportStates = realm.where(ReportStates.class).equalTo("id_sopralluogo", idSopralluogo).findFirst();
-        reportModelDomotica = realm.where(ReportModelDomotica.class).equalTo("id_sopralluogo", idSopralluogo).findFirst();
+        reportModelDomotica = realm.where(ReportModelDomotica.class).equalTo("id_rapporto_sopralluogo", idSopralluogo).findFirst();
         RealmResults<ReportModelDomotica> reportModelDomoticas = realm.where(ReportModelDomotica.class).findAll();
 
         if (reportStates != null)

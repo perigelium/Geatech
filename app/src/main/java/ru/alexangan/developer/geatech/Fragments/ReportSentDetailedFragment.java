@@ -52,7 +52,7 @@ public class ReportSentDetailedFragment extends Fragment
 
         if(reportStates != null)
         {
-            tvdataOraSopralluogo.setText(reportStates.getData_ora_sopralluogo());
+            tvdataOraSopralluogo.setText(reportStates.getData_ora_presa_appuntamento());
 
             tvdataOraRaportoCompletato.setText(reportStates.getDataOraRaportoCompletato());
 

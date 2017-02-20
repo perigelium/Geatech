@@ -8,9 +8,10 @@ public class ReportStates extends RealmObject
 {
     int id;
     int visitId;
+
     private int id_rapporto_sopralluogo;
     private int id_sopralluogo;
-    private String data_ora_sopralluogo;
+    private String data_ora_presa_appuntamento;
 
     private double latitudine; // latitudine
     private double longitudine; // longitudine
@@ -69,6 +70,9 @@ public class ReportStates extends RealmObject
         dataOraUltimoTentativo = "19:00";
         dataOraProssimoTentativo = "21:00";
         nome_tecnico = "";
+        latitudine = 0;
+        longitudine = 0;
+        altitudine = -999;
     }
 
     public void setId(int id)
@@ -148,14 +152,14 @@ public class ReportStates extends RealmObject
         return id;
     }
 
-    public String getData_ora_sopralluogo()
+    public String getData_ora_presa_appuntamento()
     {
-        return data_ora_sopralluogo;
+        return data_ora_presa_appuntamento;
     }
 
-    public void setData_ora_sopralluogo(String data_ora_sopralluogo)
+    public void setData_ora_presa_appuntamento(String data_ora_presa_appuntamento)
     {
-        this.data_ora_sopralluogo = data_ora_sopralluogo;
+        this.data_ora_presa_appuntamento = data_ora_presa_appuntamento;
     }
 
     public int getVisitId()
@@ -198,7 +202,7 @@ public class ReportStates extends RealmObject
         this.latitudine = latitudine;
     }
 
-    public double getAltitudine()
+    public int getAltitudine()
     {
         return altitudine;
     }
@@ -246,5 +250,15 @@ public class ReportStates extends RealmObject
     public void setNome_tecnico(String nome_tecnico)
     {
         this.nome_tecnico = nome_tecnico;
+    }
+
+    public int getId_rapporto_sopralluogo()
+    {
+        return id_rapporto_sopralluogo;
+    }
+
+    public void setId_rapporto_sopralluogo(int id_rapporto_sopralluogo)
+    {
+        this.id_rapporto_sopralluogo = id_rapporto_sopralluogo;
     }
 }

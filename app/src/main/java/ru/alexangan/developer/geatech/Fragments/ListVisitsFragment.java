@@ -26,7 +26,7 @@ public class ListVisitsFragment extends ListFragment
 {
     private Communicator mCommunicator;
     SwipeDetector swipeDetector;
-    boolean visitTimeNotSetOnly;
+    boolean timeNotSetItemsOnly;
     ArrayList<VisitItem> visitItemsFiltered;
     MyListVisitsAdapter myListAdapter;
     ListView lv;
@@ -46,7 +46,7 @@ public class ListVisitsFragment extends ListFragment
                 VisitItem p1 = (VisitItem) o1;
                 VisitItem p2 = (VisitItem) o2;
                 // ## Ascending order
-                return p1.getGeaSopralluogo().getData_ora_sopralluogo().compareToIgnoreCase(p2.getGeaSopralluogo().getData_ora_sopralluogo()); // To compare string values
+                return p1.getGeaSopralluogo().getData_ora_presa_appuntamento().compareToIgnoreCase(p2.getGeaSopralluogo().getData_ora_presa_appuntamento()); // To compare string values
                 // return Integer.valueOf(emp1.getId()).compareTo(emp2.getId()); // To compare integer values
 
                 // ## Descending order
@@ -63,37 +63,6 @@ public class ListVisitsFragment extends ListFragment
 
         mCommunicator = (Communicator)getActivity();
         swipeDetector = new SwipeDetector();
-        visitTimeNotSetOnly = false;
-
-        if (getArguments() != null)
-        {
-            visitTimeNotSetOnly = getArguments().getBoolean("visitTimeNotSetOnly");
-        }
-
-        visitItemsFiltered = new ArrayList<>();
-
-        realm.beginTransaction();
-        RealmResults<ReportStates> reportStatesList = realm.where(ReportStates.class).findAll();
-        realm.commitTransaction();
-
-
-        for (VisitItem visitItem : visitItems)
-        {
-            for(ReportStates reportStates : reportStatesList)
-            {
-                if (visitItem.getGeaSopralluogo().getId_sopralluogo() == reportStates.getId_sopralluogo())
-                {
-                    if (!visitTimeNotSetOnly || (visitTimeNotSetOnly && reportStates.getData_ora_sopralluogo() == null))
-                    {
-                        visitItemsFiltered.add(visitItem);
-                        break;
-                    }
-                }
-            }
-        }
-
-        myListAdapter = new MyListVisitsAdapter(getActivity(), R.layout.list_visits_fragment_row, visitItemsFiltered);
-        setListAdapter(myListAdapter);
     }
 
 /*    public void updateView(boolean filterTimeSetItems)
@@ -110,7 +79,7 @@ public class ListVisitsFragment extends ListFragment
             {
                 if (visitItem.getGeaSopralluogo().getId_sopralluogo() == reportStates.getId_sopralluogo())
                 {
-                    if (filterTimeSetItems && reportStates.getData_ora_sopralluogo() != null)
+                    if (filterTimeSetItems && reportStates.getData_ora_presa_appuntamento() != null)
                     {
                         visitItemsFiltered.remove(visitItem);
                         myListAdapter.notifyDataSetChanged();
@@ -126,10 +95,41 @@ public class ListVisitsFragment extends ListFragment
     }*/
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState)
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
         View rootView =  inflater.inflate(R.layout.list_visits_fragment, container, false);
+
+        timeNotSetItemsOnly = false;
+
+        if (getArguments() != null)
+        {
+            timeNotSetItemsOnly = getArguments().getBoolean("timeNotSetItemsOnly");
+        }
+
+        visitItemsFiltered = new ArrayList<>();
+
+        realm.beginTransaction();
+        RealmResults<ReportStates> reportStatesList = realm.where(ReportStates.class).findAll();
+        realm.commitTransaction();
+
+
+        for (VisitItem visitItem : visitItems)
+        {
+            for(ReportStates reportStates : reportStatesList)
+            {
+                if (visitItem.getGeaSopralluogo().getId_sopralluogo() == reportStates.getId_sopralluogo())
+                {
+                    if (!timeNotSetItemsOnly || (timeNotSetItemsOnly && reportStates.getData_ora_presa_appuntamento() == null))
+                    {
+                        visitItemsFiltered.add(visitItem);
+                        break;
+                    }
+                }
+            }
+        }
+
+        myListAdapter = new MyListVisitsAdapter(getActivity(), R.layout.list_visits_fragment_row, visitItemsFiltered);
+        setListAdapter(myListAdapter);
 
         return rootView;
     }
@@ -140,7 +140,6 @@ public class ListVisitsFragment extends ListFragment
         super.onViewCreated(view, savedInstanceState);
 
         lv = getListView();
-        swipeDetector = new SwipeDetector();
         lv.setOnTouchListener(swipeDetector);
 
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener()
@@ -148,31 +147,37 @@ public class ListVisitsFragment extends ListFragment
             public void onItemClick(AdapterView<?> parent, View view, int position, long id)
             {
                 int idSopralluogo = visitItemsFiltered.get(position).getGeaSopralluogo().getId_sopralluogo();
+
                 int idVisit = visitItemsFiltered.get(position).getId();
                 realm.beginTransaction();
-                ReportStates reportStates = realm.where(ReportStates.class)
-                        .equalTo("id_sopralluogo", idSopralluogo).findFirst();
+                ReportStates reportStates = realm.where(ReportStates.class).equalTo("id_sopralluogo", idSopralluogo).findFirst();
                 realm.commitTransaction();
+
+                boolean initialized = visitItemsFiltered.get(position).getGeaSopralluogo().getInizializzazione();
+
+                if (!initialized)
+                {
+                    initialized = reportStates.getData_ora_presa_appuntamento() != null;
+                }
 
                 if (swipeDetector.swipeDetected())
                 {
                     if(swipeDetector.getAction() == SwipeDetector.Action.LR)
                     {
-                        mCommunicator.OnListItemSwiped(idVisit, reportStates.getData_ora_sopralluogo() != null);
+                        mCommunicator.OnListItemSwiped(idVisit, initialized);
                     }
-
-                    if(swipeDetector.getAction() == SwipeDetector.Action.RL)
+                    else if(swipeDetector.getAction() == SwipeDetector.Action.RL)
                     {
                         mCommunicator.OnListItemSwiped(idVisit, false);
                     }
                 } else
                 {
-                    mCommunicator.OnListItemSelected(idVisit, reportStates.getData_ora_sopralluogo() != null);
+                    mCommunicator.OnListItemSelected(idVisit, initialized);
                 }
             }
         });
 
-        lv.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener()
+/*        lv.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener()
         {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view,int position, long id)
@@ -180,8 +185,7 @@ public class ListVisitsFragment extends ListFragment
                 int idSopralluogo = visitItemsFiltered.get(position).getGeaSopralluogo().getId_sopralluogo();
                 int idVisit = visitItemsFiltered.get(position).getId();
                 realm.beginTransaction();
-                ReportStates reportStates = realm.where(ReportStates.class)
-                        .equalTo("id_sopralluogo", idSopralluogo).findFirst();
+                ReportStates reportStates = realm.where(ReportStates.class).equalTo("id_sopralluogo", idSopralluogo).findFirst();
                 realm.commitTransaction();
 
                 if (swipeDetector.swipeDetected())
@@ -189,7 +193,7 @@ public class ListVisitsFragment extends ListFragment
                     // do the onSwipe action
                 } else
                 {
-                    if(reportStates.getData_ora_sopralluogo() != null)
+                    if(reportStates.getData_ora_presa_appuntamento() != null)
                     {
                         mCommunicator.OnListItemSelected(idVisit, false);
                     }
@@ -197,7 +201,7 @@ public class ListVisitsFragment extends ListFragment
 
                 return false;
             }
-        });
+        });*/
     }
 }
 

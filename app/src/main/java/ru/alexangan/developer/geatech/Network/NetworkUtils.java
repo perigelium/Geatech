@@ -110,7 +110,7 @@ public class NetworkUtils
         return call;
     }
 
-    public Call setData(Callback callback, String urlSuffix, String tokenStr, String gsonStr)
+    public Call sendData(Callback callback, String urlSuffix, String tokenStr, String gsonStr)
     {
         OkHttpClient.Builder defaultHttpClient = new OkHttpClient.Builder();
         OkHttpClient okHttpClient = defaultHttpClient.build();
@@ -124,6 +124,36 @@ public class NetworkUtils
             {
                 jsonObject.put("report_data", gsonStr);
             }
+
+        } catch (JSONException e)
+        {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            return null;
+        }
+
+        RequestBody body = RequestBody.create(JSON, String.valueOf(jsonObject));
+
+        Request request = new Request.Builder()
+                .url(REST_URL + urlSuffix)
+                .post(body)
+                .build();
+
+        Call callData = okHttpClient.newCall(request);
+        callData.enqueue(callback);
+
+        return callData;
+    }
+
+    public Call setData(Callback callback, String urlSuffix, String jsonStr)
+    {
+        OkHttpClient.Builder defaultHttpClient = new OkHttpClient.Builder();
+        OkHttpClient okHttpClient = defaultHttpClient.build();
+
+        JSONObject jsonObject;
+        try
+        {
+            jsonObject = new JSONObject(jsonStr);
 
         } catch (JSONException e)
         {
@@ -173,5 +203,20 @@ public class NetworkUtils
         callData.enqueue(callback);
 
         return callData;
+    }
+
+    public Call downloadURL(Callback callback, String url)
+    {
+        OkHttpClient.Builder defaultHttpClient = new OkHttpClient.Builder();
+        OkHttpClient okHttpClient = defaultHttpClient.build();
+
+        Request request = new Request.Builder()
+                .url(url)
+                .build();
+
+        Call callDownloadURL = okHttpClient.newCall(request);
+        callDownloadURL.enqueue(callback);
+
+        return callDownloadURL;
     }
 }

@@ -216,7 +216,7 @@ public class MainActivity extends Activity implements Communicator
             listVisits = new ListVisitsFragment();
 
             Bundle args = new Bundle();
-            args.putBoolean("visitTimeNotSetOnly", false);
+            args.putBoolean("timeNotSetItemsOnly", false);
             listVisits.setArguments(args);
 
             setVisitsListContent(listVisits);
@@ -658,6 +658,12 @@ public class MainActivity extends Activity implements Communicator
     }
 
     @Override
+    public void disableCtrlButtons2(boolean enable)
+    {
+        ctrlBtnsFragment2.enableButtons(enable);
+    }
+
+    @Override
     public void OnListItemSwiped(int itemIndex, Boolean dateTimeHasSet)
     {
         if (!dateTimeHasSet)
@@ -693,5 +699,10 @@ public class MainActivity extends Activity implements Communicator
             default:
                 return emptyReportFragment;
         }
+    }
+
+    public void showToastMessage(final String msg)
+    {
+        Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
     }
 }

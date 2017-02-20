@@ -38,7 +38,6 @@ public class CtrlBtnsFragment2 extends Fragment{
             @Override
             public void onCheckedChanged(final RadioGroup radioGroup, final int i)
             {
-
                 if(previousCheckedId == i) return;
 
                 previousCheckedId = i;
@@ -81,5 +80,18 @@ public class CtrlBtnsFragment2 extends Fragment{
     public void setCheckedBtnId(int checkedBtnId)
     {
         this.checkedBtnId = checkedBtnId;
+    }
+
+    public void enableButtons(boolean enable)
+    {
+        for (int j = 0; j < rGroup.getChildCount(); j++)
+        {
+            final RadioButton view = (RadioButton) rGroup.getChildAt(j);
+
+            if(view.getId() != R.id.btnReturn)
+            {
+                view.setChecked(enable);
+            }
+        }
     }
 }

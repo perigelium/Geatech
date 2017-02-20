@@ -90,7 +90,7 @@ public class InWorkListVisitsAdapter extends BaseAdapter
         TextView clientAddressTextView = (TextView) row.findViewById(R.id.tvClientAddress);
         clientAddressTextView.setText(clientData.getAddress());
 
-        String visitDateTime = reportStates.getData_ora_sopralluogo();
+        String visitDateTime = reportStates.getData_ora_presa_appuntamento();
 
         if(visitDateTime != null)
         {

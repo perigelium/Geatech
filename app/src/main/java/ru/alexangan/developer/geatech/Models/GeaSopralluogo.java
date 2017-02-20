@@ -7,9 +7,9 @@ import io.realm.RealmObject;
 public class GeaSopralluogo extends RealmObject
 {
     private int id_sopralluogo;
-    private String inizializzazione;
-    private int id_fornitore;
-    private int id_practice;
+    private boolean inizializzazione;
+    //private int id_fornitore;
+    //private int id_practice;
     private String data_ora_assegnazione;
     private String data_sollecito_appuntamento;
     private String data_ora_presa_appuntamento;
@@ -23,17 +23,17 @@ public class GeaSopralluogo extends RealmObject
 
     public GeaSopralluogo(){};
 
-    public GeaSopralluogo(int id_sopralluogo, String inizializzazione, String data_sollecito_appuntamento)
+    public GeaSopralluogo(int id_sopralluogo, int initialized, String data_ora_sopralluogo)
     {
         this.id_sopralluogo = id_sopralluogo;
-        this.inizializzazione = inizializzazione;
+        this.inizializzazione = initialized == 1 ? true : false;
 /*
         this.id_fornitore = id_fornitore;
         this.id_practice = id_practice;
         this.data_ora_assegnazione = data_ora_assegnazione;*/
-        this.data_sollecito_appuntamento = data_sollecito_appuntamento;
-//        this.data_ora_presa_appuntamento = data_ora_presa_appuntamento;
-        //this.data_ora_sopralluogo = data_ora_sopralluogo;
+        //this.data_sollecito_appuntamento = data_sollecito_appuntamento;
+        this.data_ora_presa_appuntamento = data_ora_presa_appuntamento;
+        this.data_ora_sopralluogo = data_ora_sopralluogo;
 /*        this.data_sollecito_rapporto = data_sollecito_rapporto;
         this.data_inizio_rimodulazione = data_inizio_rimodulazione;
         this.data_fine_rimodulazione = data_fine_rimodulazione;
@@ -47,7 +47,7 @@ public class GeaSopralluogo extends RealmObject
         return id_sopralluogo;
     }
 
-    public String getInizializzazione()
+    public boolean getInizializzazione()
     {
         return inizializzazione;
     }
@@ -57,8 +57,13 @@ public class GeaSopralluogo extends RealmObject
         return data_ora_sopralluogo;
     }
 
-    public String getData_sollecito_appuntamento()
+    public String getData_ora_presa_appuntamento()
     {
-        return data_sollecito_appuntamento;
+        return data_ora_presa_appuntamento;
+    }
+
+    public void setData_ora_presa_appuntamento(String data_ora_presa_appuntamento)
+    {
+        this.data_ora_presa_appuntamento = data_ora_presa_appuntamento;
     }
 }

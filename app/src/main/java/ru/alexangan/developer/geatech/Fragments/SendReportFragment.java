@@ -100,14 +100,12 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
         String productType = productData.getProductType();
         //int idProductType = productData.getIdProductType();
         idSopralluogo = geaSopralluogo.getId_sopralluogo();
-        idRapportoSopralluogo = idSopralluogo;
+        //idRapportoSopralluogo = idSopralluogo;
 
         Class modelClass = ModelsMapping.assignClassModel(productType);
 
         realm.beginTransaction();
         reportStates = realm.where(ReportStates.class).equalTo("id_sopralluogo", idSopralluogo).findFirst();
-        //modelReport = (RealmObject) realm.where(modelClass).equalTo("id_sopralluogo", idSopralluogo).findFirst();
-        //reportImages = realm.where(GeaImagineRapporto.class).equalTo("id_rapporto_sopralluogo", idSopralluogo).findAll();
         realm.commitTransaction();
 
         if (reportStates != null)
@@ -162,48 +160,6 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
                 sendReport.setAlpha(.4f);
                 sendReport.setEnabled(false);
 
-/*                ReportStates reportStatesUnmanaged = realm.copyFromRealm(reportStates);
-                GeaSopralluogo geaSopralluogoUnmanaged = realm.copyFromRealm(geaSopralluogo);
-                Object modelReportUnmanaged = realm.copyFromRealm(modelReport);
-
-                Gson gsonTmp = new Gson();
-                String strReportStatesUnmanaged = gsonTmp.toJson(reportStatesUnmanaged);
-                GeaRapporto gea_rapporto = gsonTmp.fromJson(tmp, GeaRapporto.class);
-
-                Gson gson = new Gson();
-                String gea_rapporto_sopralluogo_json = gson.toJson(gea_rapporto);
-                String visitStatesUnmanaged_json = gson.toJson(geaSopralluogoUnmanaged);
-                String modelReportUnmanaged_json = gson.toJson(modelReportUnmanaged);
-
-                JSONObject jsonObject = new JSONObject();
-                try
-                {
-                    jsonObject.put("gea_rapporto", gea_rapporto_sopralluogo_json);
-                    jsonObject.put("gea_sopralluoghi", visitStatesUnmanaged_json);
-                    jsonObject.put("gea_rapporto_modello", modelReportUnmanaged_json);
-
-                    List<GeaImagineRapporto> imagesArray = new ArrayList<>();
-
-                    for (GeaImagineRapporto geaImagineRapporto : reportImages)
-                    {
-                        GeaImagineRapporto geaImagineRapportoUnmanaged = realm.copyFromRealm(geaImagineRapporto);
-                        geaImagineRapportoUnmanaged.setFilePath(null);
-                        imagesArray.add(geaImagineRapportoUnmanaged);
-                    }
-
-                    String imagesReport_json = gson.toJson(imagesArray);
-
-                    jsonObject.put("gea_immagini_rapporto_sopralluogo", imagesReport_json);
-
-                } catch (JSONException e)
-                {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                }*/
-
-                //Log.d("DEBUG", String.valueOf(jsonObject));
-
-
                 realm.beginTransaction();
                 ReportItem reportItem = new ReportItem();
                 Gson gson = new Gson();
@@ -251,7 +207,7 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
                 Log.d("DEBUG", str_ReportItem_json);
 
                 NetworkUtils networkUtils = new NetworkUtils();
-                callSendReport = networkUtils.setData(this, SEND_DATA_URL_SUFFIX, tokenStr, str_ReportItem_json);
+                callSendReport = networkUtils.sendData(this, SEND_DATA_URL_SUFFIX, tokenStr, str_ReportItem_json);
 
                 for (GeaImagineRapporto geaImagineRapporto : listReportImages)
                 {
@@ -269,55 +225,30 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
     {
         if (call == callSendReport)
         {
-            activity.runOnUiThread(new Runnable()
-            {
-                public void run()
-                {
-                    Toast.makeText(activity, "Invio rapporto fallito", Toast.LENGTH_LONG).show();
-                }
-            });
+            showToastMessage("Invio rapporto fallito");
         }
 
         if (call == callSendImage)
         {
-            activity.runOnUiThread(new Runnable()
-            {
-                public void run()
-                {
-                    Toast.makeText(activity, "Invio immagine fallito", Toast.LENGTH_LONG).show();
-                }
-            });
+            showToastMessage("Invio immagine fallito");
         }
     }
 
     @Override
     public void onResponse(Call call, Response response) throws IOException
     {
-
         if (call == callSendImage)
         {
             reportSendResponse = response.body().string();
 
             if (reportSendResponse == null)
             {
-                activity.runOnUiThread(new Runnable()
-                {
-                    public void run()
-                    {
-                        Toast.makeText(activity, "Immagine inviato, risposta non ha ricevuto", Toast.LENGTH_LONG).show();
-                    }
-                });
+                showToastMessage("Immagine inviato, risposta non ha ricevuto");
 
                 return;
             } else
             {
-                activity.runOnUiThread(new Runnable()
-                {
-                    public void run()
-                    {
-                        Toast.makeText(activity, "Immagine inviato, server ritorna: " + reportSendResponse, Toast.LENGTH_LONG).show();
-                    }
-                });
+                showToastMessage("Immagine inviato, server ritorna: " + reportSendResponse);
             }
         }
 
@@ -327,13 +258,7 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
 
             if (reportSendResponse == null)
             {
-                activity.runOnUiThread(new Runnable()
-                {
-                    public void run()
-                    {
-                        Toast.makeText(activity, "Rapporto inviato, risposta non ha ricevuto", Toast.LENGTH_LONG).show();
-                    }
-                });
+                showToastMessage("Rapporto inviato, risposta non ha ricevuto");
 
                 return;
             } else
@@ -357,5 +282,16 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
 
             mCommunicator.onSendReportReturned();
         }
+    }
+
+    private void showToastMessage(final String msg)
+    {
+        activity.runOnUiThread(new Runnable()
+        {
+            public void run()
+            {
+                Toast.makeText(activity, msg, Toast.LENGTH_LONG).show();
+            }
+        });
     }
 }

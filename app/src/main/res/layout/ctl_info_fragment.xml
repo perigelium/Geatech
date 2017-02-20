@@ -284,7 +284,6 @@
                         android:src="@drawable/coords" />
 
                     <TextView
-                        android:id="@+id/tvLocalizzazione"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="start|center_vertical"
@@ -292,7 +291,7 @@
                         android:text="Coord.Nord*" />
 
                     <TextView
-                        android:id="@+id/etCoordNord"
+                        android:id="@+id/tvCoordNord"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="6dp"
@@ -319,7 +318,6 @@
                         android:src="@drawable/transparent24px" />
 
                     <TextView
-                        android:id="@+id/tvCoordEst"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="start|center_vertical"
@@ -327,7 +325,7 @@
                         android:text="Coord.Est*" />
 
                     <TextView
-                        android:id="@+id/etCoordEst"
+                        android:id="@+id/tvCoordEst"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="6dp"
@@ -354,7 +352,6 @@
                         android:src="@drawable/transparent24px" />
 
                     <TextView
-                        android:id="@+id/tvAltitude"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="start|center_vertical"
@@ -362,7 +359,7 @@
                         android:text="Altitudine*" />
 
                     <TextView
-                        android:id="@+id/etAltitude"
+                        android:id="@+id/tvAltitude"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="6dp"
@@ -417,14 +414,42 @@
             android:layout_marginLeft="6dp"
             android:src="@drawable/transparent24px" />
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="horizontal">
+
+<!--        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">-->
+
         <Button
             android:id="@+id/btnSetCurrentCoords"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical|center"
+            android:layout_gravity="left"
+            android:layout_margin="9dp"
+            android:layout_weight="1"
             android:background="#00ff33"
             android:onClick="onClick"
             android:text="Recupera da gps" />
+
+            <Button
+                android:id="@+id/btnSaveCurrentCoords"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:layout_margin="9dp"
+                android:layout_weight="1"
+                android:background="#00ff33"
+                android:onClick="onClick"
+                android:text="Salva" />
+
+        <!--</FrameLayout>-->
+
+        </LinearLayout>
 
     </LinearLayout>
 

@@ -40,15 +40,15 @@ public class JSON_to_model
                 JSONArray subproducts = visit_item.getJSONArray(2);
 
                 Integer id_sopralluogo = visit_data.getInt("id_sopralluogo");
-                String inizializzazione = visit_data.getString("inizializzazione");
+                int initialized = visit_data.getInt("inizializzazione");
                 String data_ora_assegnazione = visit_data.getString("data_ora_assegnazione");
-                String data_ora_presa_appuntamento = visit_data.getString("data_ora_presa_appuntamento");
+                //String data_ora_presa_appuntamento = visit_data.getString("data_ora_presa_appuntamento");
                 String data_sollecito_appuntamento = visit_data.getString("data_sollecito_appuntamento");
-                //String data_ora_sopralluogo = visit_data.getString("data_ora_sopralluogo");
+                String data_ora_sopralluogo = visit_data.getString("data_ora_sopralluogo");
                 String note_sopralluogo = visit_data.getString("note_sopralluogo");
                 String tipo_gestione_sopralluogo = visit_data.getString("tipo_gestione_sopralluogo");
 
-                GeaSopralluogo geaSopralluogo = new GeaSopralluogo(id_sopralluogo, inizializzazione, data_sollecito_appuntamento);
+                GeaSopralluogo geaSopralluogo = new GeaSopralluogo(id_sopralluogo, initialized, data_sollecito_appuntamento);
 
                 JSONObject client_dataJSONObject = client_data.getJSONObject(0);
 
