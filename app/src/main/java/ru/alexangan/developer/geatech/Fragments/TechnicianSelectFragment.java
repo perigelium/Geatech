@@ -40,8 +40,7 @@ import ru.alexangan.developer.geatech.Models.GeaItemModelliRapporto;
 import ru.alexangan.developer.geatech.Models.GeaModelloRapporto;
 import ru.alexangan.developer.geatech.Models.GeaSezioneModelliRapporto;
 import ru.alexangan.developer.geatech.Models.GlobalConstants;
-import ru.alexangan.developer.geatech.Models.ReportStates;
-import ru.alexangan.developer.geatech.Models.TecnicianNameId;
+import ru.alexangan.developer.geatech.Models.TechnicianItem;
 import ru.alexangan.developer.geatech.Models.VisitItem;
 import ru.alexangan.developer.geatech.Network.NetworkUtils;
 import ru.alexangan.developer.geatech.R;
@@ -49,6 +48,7 @@ import ru.alexangan.developer.geatech.Utils.JSON_to_model;
 
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.GET_MODELS_URL_SUFFIX;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.GET_VISITS_URL_SUFFIX;
+import static ru.alexangan.developer.geatech.Models.GlobalConstants.company_id;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.inVisitItems;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.mSettings;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.realm;
@@ -70,7 +70,7 @@ public class TechnicianSelectFragment extends Fragment implements View.OnClickLi
     FrameLayout flTechnicianAdded;
     EditText etTechCognome, etTechNome;
     boolean bNewTechAdded;
-    TecnicianNameId selectedTech;
+    TechnicianItem selectedTech;
     private CheckBox chkboxRememberTech;
 
     Spinner spTecnicianList;
@@ -78,6 +78,7 @@ public class TechnicianSelectFragment extends Fragment implements View.OnClickLi
 
     ArrayList<String> saTecnicianList;
     private String modelsJSONData;
+    int geaItemModelliSize;
 
     public TechnicianSelectFragment()
     {
@@ -132,7 +133,7 @@ public class TechnicianSelectFragment extends Fragment implements View.OnClickLi
 
                     String selectedItem = parent.getItemAtPosition(position).toString();
                     realm.beginTransaction();
-                    selectedTech = realm.where(TecnicianNameId.class).equalTo("full_name_tehnic", selectedItem).findFirst();
+                    selectedTech = realm.where(TechnicianItem.class).equalTo("full_name_tehnic", selectedItem).findFirst();
                     realm.commitTransaction();
 
                     spinnerCurItem = position;
@@ -189,6 +190,11 @@ public class TechnicianSelectFragment extends Fragment implements View.OnClickLi
 
         spTecnicianList = (Spinner) rootView.findViewById(R.id.spTecnicianList);
 
+        realm.beginTransaction();
+        RealmResults<GeaItemModelliRapporto> geaItemModelli = realm.where(GeaItemModelliRapporto.class).findAll();
+        geaItemModelliSize = geaItemModelli.size();
+        realm.commitTransaction();
+
         String technician_list = mSettings.getString("technician_list_json", null);
 
         FillTechnicianList(technician_list);
@@ -201,24 +207,24 @@ public class TechnicianSelectFragment extends Fragment implements View.OnClickLi
         if (technician_list != null)
         {
             Gson gson = new Gson();
-            Type type = new TypeToken<List<TecnicianNameId>>()
+            Type type = new TypeToken<List<TechnicianItem>>()
             {
             }.getType();
 
-            final List<TecnicianNameId> techModelList = gson.fromJson(technician_list, type);
+            final List<TechnicianItem> techModelList = gson.fromJson(technician_list, type);
 
             activity.runOnUiThread(new Runnable()
             {
                 public void run()
                 {
-                    //saTecnicianList.clear();
+
                     realm.beginTransaction();
-                    RealmResults<TecnicianNameId> techModelListOld = realm.where(TecnicianNameId.class).findAll();
+                    RealmResults<TechnicianItem> techModelListOld = realm.where(TechnicianItem.class).equalTo("company_id", company_id).findAll();
                     techModelListOld.deleteAllFromRealm();
                     realm.commitTransaction();
 
                     //saTecnicianList.add("");
-                    for (TecnicianNameId technicianItem : techModelList)
+                    for (TechnicianItem technicianItem : techModelList)
                     {
                         realm.beginTransaction();
                         //saTecnicianList.add(technicianItem.getFullNameTehnic());
@@ -226,6 +232,7 @@ public class TechnicianSelectFragment extends Fragment implements View.OnClickLi
 
                         //if (tecnicianModelR == null)
                         {
+                            technicianItem.setCompanyId(company_id);
                             realm.copyToRealm(technicianItem);
                         }
                         realm.commitTransaction();
@@ -239,7 +246,7 @@ public class TechnicianSelectFragment extends Fragment implements View.OnClickLi
                     }
 
                     realm.beginTransaction();
-                    RealmResults<TecnicianNameId> techModelList = realm.where(TecnicianNameId.class).findAll();
+                    RealmResults<TechnicianItem> techModelList = realm.where(TechnicianItem.class).equalTo("company_id", company_id).findAll();
                     realm.commitTransaction();
 
                     if (techModelList.size() != 0)
@@ -443,7 +450,7 @@ public class TechnicianSelectFragment extends Fragment implements View.OnClickLi
                     {
                         callVisits = networkUtils.getData(this, GET_VISITS_URL_SUFFIX, tokenStr);
 
-                        //if(listModelli == null || listSezioniModelli == null || listItemsModelli == null)
+                        if(geaItemModelliSize == 0)
                         {
                             callModels = networkUtils.getData(this, GET_MODELS_URL_SUFFIX, tokenStr);
                         }
@@ -508,6 +515,11 @@ public class TechnicianSelectFragment extends Fragment implements View.OnClickLi
                         }
                     }
                     realm.commitTransaction();
+
+                    if(geaItemModelliSize != 0)
+                    {
+                        loginCommunicator.onTechSelectedAndApplied();
+                    }
                 }
             });
         }
@@ -602,8 +614,11 @@ public class TechnicianSelectFragment extends Fragment implements View.OnClickLi
                                 realm.copyToRealm(gi);
                                 realm.commitTransaction();
                             }
+
+                            loginCommunicator.onTechSelectedAndApplied();
                         }
                     });
+
                 } catch (Exception e)
                 {
                     e.printStackTrace();
@@ -611,19 +626,7 @@ public class TechnicianSelectFragment extends Fragment implements View.OnClickLi
                 }
             }
 
-            activity.runOnUiThread(new Runnable()
-            {
-                public void run()
-                {
-                    realm.beginTransaction();
-
-                    realm.commitTransaction();
-
-                    loginCommunicator.onTechSelectedAndApplied();
-                }
-            });
         }
-
     }
 
     private void showToastMessage(final String msg)

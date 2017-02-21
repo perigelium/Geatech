@@ -14,7 +14,9 @@ import ru.alexangan.developer.geatech.Models.VisitItem;
 import ru.alexangan.developer.geatech.Models.GeaSopralluogo;
 import ru.alexangan.developer.geatech.R;
 
+import static ru.alexangan.developer.geatech.Models.GlobalConstants.company_id;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.realm;
+import static ru.alexangan.developer.geatech.Models.GlobalConstants.selectedTech;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.visitItems;
 
 /**
@@ -47,12 +49,13 @@ public class ReportSentDetailedFragment extends Fragment
         TextView tvdataOraRaportoInviato = (TextView) rootView.findViewById(R.id.tvdataOraRaportoInviato);
 
         realm.beginTransaction();
-        ReportStates reportStates = realm.where(ReportStates.class).equalTo("id_sopralluogo", idSopralluogo).findFirst();
+        ReportStates reportStates = realm.where(ReportStates.class).equalTo("company_id", company_id).equalTo("tech_id", selectedTech.getId())
+                .equalTo("id_sopralluogo", idSopralluogo).findFirst();
         realm.commitTransaction();
 
         if(reportStates != null)
         {
-            tvdataOraSopralluogo.setText(reportStates.getData_ora_presa_appuntamento());
+            tvdataOraSopralluogo.setText(reportStates.getData_ora_sopralluogo());
 
             tvdataOraRaportoCompletato.setText(reportStates.getDataOraRaportoCompletato());
 
@@ -72,7 +75,7 @@ public class ReportSentDetailedFragment extends Fragment
         TextView etCoordEst = (TextView)rootView.findViewById(R.id.etCoordEst);
         TextView etAltitude = (TextView)rootView.findViewById(R.id.etAltitude);
 
-        if(reportStates != null && reportStates.getLatitudine()!=0.0 && reportStates.getLongitudine()!=0.0 && reportStates.getAltitudine()!=0.0)
+        if(reportStates != null)
         {
             double latitude = reportStates.getLatitudine();
             double longitude = reportStates.getLongitudine();
@@ -80,7 +83,11 @@ public class ReportSentDetailedFragment extends Fragment
 
             etCoordNord.setText(String.valueOf(latitude));
             etCoordEst.setText(String.valueOf(longitude));
-            etAltitude.setText(String.valueOf((int) altitude));
+
+            if(altitude!=0)
+            {
+                etAltitude.setText(String.valueOf((int) altitude));
+            }
         }
 
         return rootView;

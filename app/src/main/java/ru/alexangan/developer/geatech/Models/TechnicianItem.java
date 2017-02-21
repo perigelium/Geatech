@@ -8,19 +8,20 @@ import java.util.List;
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 
-public class TecnicianNameId extends RealmObject
+public class TechnicianItem extends RealmObject
 {
-    @PrimaryKey
+    private int company_id;
     private int id;
     private String full_name_tehnic;
 
-    public TecnicianNameId()
+    public TechnicianItem()
     {
     }
 
-    public TecnicianNameId(int id, String full_name_tehnic)
+    public TechnicianItem(int company_id, int tech_id, String full_name_tehnic)
     {
-        this.id = id;
+        this.company_id = company_id;
+        this.id = tech_id;
         this.full_name_tehnic = full_name_tehnic;
     }
 
@@ -32,5 +33,15 @@ public class TecnicianNameId extends RealmObject
     public String getFullNameTehnic()
     {
         return full_name_tehnic;
+    }
+
+    public int getCompany_id()
+    {
+        return company_id;
+    }
+
+    public void setCompanyId(int company_id)
+    {
+        this.company_id = company_id;
     }
 }

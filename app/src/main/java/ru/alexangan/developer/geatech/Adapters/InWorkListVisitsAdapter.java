@@ -21,7 +21,9 @@ import ru.alexangan.developer.geatech.Models.ReportStates;
 import ru.alexangan.developer.geatech.Models.VisitItem;
 import ru.alexangan.developer.geatech.R;
 
+import static ru.alexangan.developer.geatech.Models.GlobalConstants.company_id;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.realm;
+import static ru.alexangan.developer.geatech.Models.GlobalConstants.selectedTech;
 
 /**
  * Created by user on 11/21/2016.
@@ -74,7 +76,8 @@ public class InWorkListVisitsAdapter extends BaseAdapter
         int idSopralluogo = geaSopralluogo.getId_sopralluogo();
 
         realm.beginTransaction();
-        ReportStates reportStates = realm.where(ReportStates.class).equalTo("id_sopralluogo", idSopralluogo).findFirst();
+        ReportStates reportStates = realm.where(ReportStates.class).equalTo("company_id", company_id).equalTo("tech_id", selectedTech.getId())
+                .equalTo("id_sopralluogo", idSopralluogo).findFirst();
         realm.commitTransaction();
 
         TextView tvVisitDay = (TextView)row.findViewById(R.id.tvVisitDay);
@@ -90,7 +93,7 @@ public class InWorkListVisitsAdapter extends BaseAdapter
         TextView clientAddressTextView = (TextView) row.findViewById(R.id.tvClientAddress);
         clientAddressTextView.setText(clientData.getAddress());
 
-        String visitDateTime = reportStates.getData_ora_presa_appuntamento();
+        String visitDateTime = reportStates.getData_ora_sopralluogo();
 
         if(visitDateTime != null)
         {

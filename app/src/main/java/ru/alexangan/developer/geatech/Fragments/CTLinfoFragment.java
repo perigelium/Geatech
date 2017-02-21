@@ -26,6 +26,7 @@ import ru.alexangan.developer.geatech.Network.LocationRetriever;
 import ru.alexangan.developer.geatech.Network.NetworkUtils;
 import ru.alexangan.developer.geatech.R;
 
+import static ru.alexangan.developer.geatech.Models.GlobalConstants.company_id;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.realm;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.selectedTech;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.visitItems;
@@ -117,45 +118,47 @@ public class CTLinfoFragment extends Fragment implements View.OnClickListener, L
         int idSopralluogo = geaSopralluogo.getId_sopralluogo();
 
         realm.beginTransaction();
-        reportStates = realm.where(ReportStates.class).equalTo("id_sopralluogo", idSopralluogo).findFirst();
+        reportStates = realm.where(ReportStates.class).equalTo("company_id", company_id).equalTo("tech_id", selectedTech.getId())
+                .equalTo("id_sopralluogo", idSopralluogo).findFirst();
         realm.commitTransaction();
 
-        if(reportStates.getLatitudine() == 0)
+        if(reportStates!=null)
         {
-            latitude = clientData.getCoordNord();
-        }
-        else
-        {
-            latitude = reportStates.getLatitudine();
-        }
+            if (reportStates.getLatitudine() == 0)
+            {
+                latitude = clientData.getCoordNord();
+            } else
+            {
+                latitude = reportStates.getLatitudine();
+            }
 
-        if(reportStates.getLongitudine() == 0)
-        {
-            longitude = clientData.getCoordEst();
-        }
-        else
-        {
-            longitude = reportStates.getLongitudine();
-        }
+            if (reportStates.getLongitudine() == 0)
+            {
+                longitude = clientData.getCoordEst();
+            } else
+            {
+                longitude = reportStates.getLongitudine();
+            }
 
-        if(reportStates.getAltitudine() != 0)
-        {
+            if (reportStates.getAltitudine() != 0)
+            {
+                altitude = reportStates.getAltitudine();
+            }
+
             altitude = reportStates.getAltitudine();
-        }
 
-        altitude = reportStates.getAltitudine();
+            tvCoordNord = (TextView) rootView.findViewById(R.id.tvCoordNord);
+            tvCoordNord.setText(String.valueOf(latitude));
 
-        tvCoordNord = (TextView) rootView.findViewById(R.id.tvCoordNord);
-        tvCoordNord.setText(String.valueOf(latitude));
+            tvCoordEst = (TextView) rootView.findViewById(R.id.tvCoordEst);
+            tvCoordEst.setText(String.valueOf(longitude));
 
-        tvCoordEst = (TextView) rootView.findViewById(R.id.tvCoordEst);
-        tvCoordEst.setText(String.valueOf(longitude));
+            tvAltitude = (TextView) rootView.findViewById(R.id.tvAltitude);
 
-        tvAltitude = (TextView) rootView.findViewById(R.id.tvAltitude);
-
-        if(altitude != -999)
-        {
-            tvAltitude.setText(String.valueOf(altitude));
+            if (altitude != -999)
+            {
+                tvAltitude.setText(String.valueOf(altitude));
+            }
         }
 
         TextView clientNameTextView = (TextView) rootView.findViewById(R.id.tvClientName);
@@ -236,8 +239,8 @@ public class CTLinfoFragment extends Fragment implements View.OnClickListener, L
             latitude = mLastLocation.getLatitude();
             longitude = mLastLocation.getLongitude();
 
-            tvCoordNord.setText(String.valueOf(latitude), TextView.BufferType.EDITABLE);
-            tvCoordEst.setText(String.valueOf(longitude), TextView.BufferType.EDITABLE);
+            tvCoordNord.setText(String.valueOf(latitude));
+            tvCoordEst.setText(String.valueOf(longitude));
 
             if(reportStates!=null)
             {

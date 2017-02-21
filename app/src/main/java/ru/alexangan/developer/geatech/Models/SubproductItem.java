@@ -3,15 +3,19 @@ package ru.alexangan.developer.geatech.Models;
 
 
 import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
 
-public class SubproductItem  extends RealmObject
+public class SubproductItem extends RealmObject
 {
+    @PrimaryKey
     private int id;
     private String subproduct;
     private String productType;
     private Integer piecesNr;
 
-    public SubproductItem() {}
+    public SubproductItem()
+    {
+    }
 
     public SubproductItem(int id, String subproduct, String productType, Integer piecesNr)
     {
@@ -21,17 +25,18 @@ public class SubproductItem  extends RealmObject
         this.piecesNr = piecesNr;
     }
 
-    public String getSubproduct() {
+    public String getSubproduct()
+    {
         return subproduct;
     }
 
-
-    public String getProductType() {
+    public String getProductType()
+    {
         return productType;
     }
 
-
-    public Integer getPiecesNr() {
+    public Integer getPiecesNr()
+    {
         return piecesNr;
     }
 

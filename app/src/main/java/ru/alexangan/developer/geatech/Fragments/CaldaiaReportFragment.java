@@ -8,19 +8,19 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import io.realm.RealmResults;
-import ru.alexangan.developer.geatech.Models.ReportModelCaldaia;
 import ru.alexangan.developer.geatech.Models.GeaSopralluogo;
 import ru.alexangan.developer.geatech.Models.ReportStates;
 import ru.alexangan.developer.geatech.Models.VisitItem;
 import ru.alexangan.developer.geatech.R;
 
+import static ru.alexangan.developer.geatech.Models.GlobalConstants.company_id;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.realm;
+import static ru.alexangan.developer.geatech.Models.GlobalConstants.selectedTech;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.visitItems;
 
 public class CaldaiaReportFragment extends Fragment
 {
     View rootView;
-    ReportModelCaldaia reportModelCaldaia;
     private int selectedIndex;
     int idSopralluogo;
     ReportStates reportStates;
@@ -73,8 +73,10 @@ public class CaldaiaReportFragment extends Fragment
         GeaSopralluogo geaSopralluogo = visitItem.getGeaSopralluogo();
         idSopralluogo = geaSopralluogo.getId_sopralluogo();
 
-        reportStates = realm.where(ReportStates.class).equalTo("id_sopralluogo", idSopralluogo).findFirst();
-        reportModelCaldaia = realm.where(ReportModelCaldaia.class).equalTo("id_sopralluogo", idSopralluogo).findFirst();
+        reportStates = realm.where(ReportStates.class).equalTo("company_id", company_id).equalTo("tech_id", selectedTech.getId())
+                .equalTo("id_sopralluogo", idSopralluogo).findFirst();
+
+/*        reportModelCaldaia = realm.where(ReportModelCaldaia.class).equalTo("id_sopralluogo", idSopralluogo).findFirst();
         RealmResults<ReportModelCaldaia> caldaieModels = realm.where(ReportModelCaldaia.class).findAll();
 
         if (reportStates != null)
@@ -85,7 +87,7 @@ public class CaldaiaReportFragment extends Fragment
                 reportModelCaldaia.setIdSopralluogo(idSopralluogo);
                 realm.copyToRealmOrUpdate(reportModelCaldaia);
             }
-        }
+        }*/
         realm.commitTransaction();
 
         return rootView;

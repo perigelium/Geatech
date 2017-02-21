@@ -30,13 +30,16 @@ import ru.alexangan.developer.geatech.Models.VisitItem;
 import ru.alexangan.developer.geatech.Models.GeaSopralluogo;
 import ru.alexangan.developer.geatech.R;
 
+import static ru.alexangan.developer.geatech.Models.GlobalConstants.company_id;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.realm;
+import static ru.alexangan.developer.geatech.Models.GlobalConstants.selectedTech;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.visitItems;
 
 public class ClimatizzazioneReportFragment extends Fragment implements View.OnClickListener
 {
     private int selectedIndex;
     int idSopralluogo;
+    int id_rapporto_sopralluogo;
     ReportStates reportStates;
     View rootView;
     Context context;
@@ -95,49 +98,48 @@ public class ClimatizzazioneReportFragment extends Fragment implements View.OnCl
         if (reportStates != null)
         {
                 // ThreeRadiosAndEdit1
-                String strId_item_72 = "";
+                String str_Id_item = "";
                 int checkedBtnId = rg1ThreeRadiosAndEdit1.getCheckedRadioButtonId();
                 if (checkedBtnId != -1)
                 {
                     RadioButton radioButton = (RadioButton) rg1ThreeRadiosAndEdit1.findViewById(checkedBtnId);
-                    strId_item_72 = radioButton.getText().toString();
+                    str_Id_item = radioButton.getText().toString();
                 }
                 else
                 {
-                    strId_item_72 = et1ThreeRadiosAndEdit1.getText().toString();
+                    str_Id_item = et1ThreeRadiosAndEdit1.getText().toString();
                 }
-                insertStringInReportItem(72, strId_item_72);
+                insertStringInReportItem(72, str_Id_item);
 
                 // FourRadiosAndEdit1
-                String strId_item_73 = "";
+                str_Id_item = "";
                 checkedBtnId = rg1FourRadiosAndEdit1.getCheckedRadioButtonId();
                 if (checkedBtnId != -1)
                 {
                     RadioButton radioButton = (RadioButton) rg1FourRadiosAndEdit1.findViewById(checkedBtnId);
-                    strId_item_73 = radioButton.getText().toString();
+                    str_Id_item = radioButton.getText().toString();
                 }
                 else
                 {
-                    strId_item_73 = et1FourRadiosAndEdit1.getText().toString();
+                    str_Id_item = et1FourRadiosAndEdit1.getText().toString();
                 }
-                //climaReportModel.setId_item_73(strId_item_73);
-            insertStringInReportItem(73, strId_item_73);
+            insertStringInReportItem(73, str_Id_item);
 
             // TwoRadios1
-            String strId_item_74 = "";
+            str_Id_item = "";
             checkedBtnId = rg1TwoRadios1.getCheckedRadioButtonId();
             if (checkedBtnId != -1)
             {
                 RadioButton radioButton = (RadioButton) rg1TwoRadios1.findViewById(checkedBtnId);
-                strId_item_74 = radioButton.getText().toString();
+                str_Id_item = radioButton.getText().toString();
 
-                insertStringInReportItem(74, strId_item_74);
+                insertStringInReportItem(74, str_Id_item);
             }
 
             // ThreeChkboxesAndEdit1
-            String strId_item_75 = et1ThreeChkboxesAndEdit1.getText().toString();
+            str_Id_item = et1ThreeChkboxesAndEdit1.getText().toString();
 
-            if(strId_item_75 == null || strId_item_75.length() < 4)
+            if(str_Id_item == null || str_Id_item.length() < 4)
             {
                 String strChk1 = chk1ThreeChkboxesAndEdit1.isChecked() ? chk1ThreeChkboxesAndEdit1.getText().toString() : "";
                 String strChk2 = chk2ThreeChkboxesAndEdit1.isChecked() ? chk2ThreeChkboxesAndEdit1.getText().toString() : "";
@@ -146,33 +148,33 @@ public class ClimatizzazioneReportFragment extends Fragment implements View.OnCl
             }
             else
             {
-                insertStringInReportItem(75, strId_item_75);
+                insertStringInReportItem(75, str_Id_item);
             }
 
             // ThreeTextThreeEdit1
-            String strId_item_76 = et1ThreeTextThreeEdit1.getText().toString();
-            insertStringInReportItem(76, strId_item_76);
+            str_Id_item = et1ThreeTextThreeEdit1.getText().toString();
+            insertStringInReportItem(76, str_Id_item);
 
 
-            String strId_item_77 = et2ThreeTextThreeEdit1.getText().toString();
-            insertStringInReportItem(77, strId_item_77);
+            str_Id_item = et2ThreeTextThreeEdit1.getText().toString();
+            insertStringInReportItem(77, str_Id_item);
 
 
-            String str_Id_item_78 = et3ThreeTextThreeEdit1.getText().toString();
-            insertStringInReportItem(78, str_Id_item_78);
+            str_Id_item = et3ThreeTextThreeEdit1.getText().toString();
+            insertStringInReportItem(78, str_Id_item);
 
 
             realm.beginTransaction();
             // Completion state
-            if(strId_item_72.length() != 0)
+            if(getValueFromReportItem(72).length() != 0)
             {
                 reportStates.setReportCompletionState(1);
 
-                if (strId_item_74.length() != 0 || strId_item_73.length() != 0)
+                if (getValueFromReportItem(74).length() != 0 || getValueFromReportItem(73).length() != 0)
                 {
                     reportStates.setReportCompletionState(2);
 
-                    if (strId_item_72.length() != 0 && strId_item_74.length() != 0 && strId_item_73.length() != 0)
+                    if (getValueFromReportItem(72).length() != 0 && getValueFromReportItem(74).length() != 0 && getValueFromReportItem(73).length() != 0)
                     {
                         reportStates.setReportCompletionState(3);
 
@@ -209,13 +211,18 @@ public class ClimatizzazioneReportFragment extends Fragment implements View.OnCl
         super.onViewCreated(view, savedInstanceState);
 
         realm.beginTransaction();
+
         VisitItem visitItem = visitItems.get(selectedIndex);
         GeaSopralluogo geaSopralluogo = visitItem.getGeaSopralluogo();
         idSopralluogo = geaSopralluogo.getId_sopralluogo();
 
-        reportStates = realm.where(ReportStates.class).equalTo("id_sopralluogo", idSopralluogo).findFirst();
+        reportStates = realm.where(ReportStates.class).equalTo("company_id", company_id).equalTo("tech_id", selectedTech.getId())
+                .equalTo("id_sopralluogo", idSopralluogo).findFirst();
+        id_rapporto_sopralluogo = reportStates.getId_rapporto_sopralluogo();
 
         realm.commitTransaction();
+
+
 
             int i;
 
@@ -356,10 +363,11 @@ public class ClimatizzazioneReportFragment extends Fragment implements View.OnCl
         tvReportTitle = (TextView) rootView.findViewById(R.id.tvReportTitle);
         tvReportTitle.setText(geaModello.getNome_modello());
 
-        flSectionHeader1 = (FrameLayout) rootView.findViewById(R.id.flSectionHeader1);
+        LinearLayout header1 = (LinearLayout) rootView.findViewById(R.id.headerClima1);
+        flSectionHeader1 = (FrameLayout) header1.findViewById(R.id.flSectionHeader1);
         flSectionHeader1.setOnClickListener(this);
 
-        tvSectionHeader1 = (TextView) rootView.findViewById(R.id.tvSectionHeader1);
+        tvSectionHeader1 = (TextView) header1.findViewById(R.id.tvSectionHeader1);
         tvSectionHeader1.setText(geaSezioniModelli.get(headerNumber++).getDescrizione_sezione());
 
         // ThreeRadiosAndEdit1
@@ -480,10 +488,11 @@ public class ClimatizzazioneReportFragment extends Fragment implements View.OnCl
 
 
         // SectionHeader2
-        flSectionHeader2 = (FrameLayout) rootView.findViewById(R.id.flSectionHeader2);
+        LinearLayout header2 = (LinearLayout) rootView.findViewById(R.id.headerClima2);
+        flSectionHeader2 = (FrameLayout) header2.findViewById(R.id.flSectionHeader1);
         flSectionHeader2.setOnClickListener(this);
 
-        tvSectionHeader2 = (TextView) rootView.findViewById(R.id.tvSectionHeader2);
+        tvSectionHeader2 = (TextView) header2.findViewById(R.id.tvSectionHeader1);
         tvSectionHeader2.setText(geaSezioniModelli.get(headerNumber++).getDescrizione_sezione());
 
 
@@ -560,14 +569,13 @@ public class ClimatizzazioneReportFragment extends Fragment implements View.OnCl
     {
         realm.beginTransaction();
         GeaItemRapporto geaItemRapporto =
-         realm.where(GeaItemRapporto.class).equalTo("id_rapporto_sopralluogo", idSopralluogo).equalTo("id_item_modello", idItem).findFirst();
+         realm.where(GeaItemRapporto.class).equalTo("id_rapporto_sopralluogo", id_rapporto_sopralluogo).equalTo("id_item_modello", idItem).findFirst();
         realm.commitTransaction();
 
         realm.beginTransaction();
         if(geaItemRapporto == null)
         {
-
-            GeaItemRapporto geaItem = new GeaItemRapporto(idSopralluogo, idItem, strData);
+            GeaItemRapporto geaItem = new GeaItemRapporto(company_id, selectedTech.getId(), id_rapporto_sopralluogo, idItem, strData);
             realm.copyToRealm(geaItem);
         }
         else
@@ -581,7 +589,7 @@ public class ClimatizzazioneReportFragment extends Fragment implements View.OnCl
     {
         realm.beginTransaction();
         GeaItemRapporto geaItemRapporto =
-         realm.where(GeaItemRapporto.class).equalTo("id_rapporto_sopralluogo", idSopralluogo).equalTo("id_item_modello", idItem).findFirst();
+         realm.where(GeaItemRapporto.class).equalTo("id_rapporto_sopralluogo", id_rapporto_sopralluogo).equalTo("id_item_modello", idItem).findFirst();
         realm.commitTransaction();
 
         if(geaItemRapporto !=null)

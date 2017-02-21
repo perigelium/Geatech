@@ -33,33 +33,21 @@ public class ClientData extends RealmObject
         return name;
     }
 
-
-
     public String getAddress() {
         return address;
     }
-
-
 
     public String getPhone() {
         return phone;
     }
 
-
-
     public String getMobile() {
         return mobile;
     }
 
-
     public double getCoordNord()
     {
         return coordNord;
-    }
-
-    public void setCoordNord(double coordNord)
-    {
-        this.coordNord = coordNord;
     }
 
     public double getCoordEst()
@@ -67,19 +55,9 @@ public class ClientData extends RealmObject
         return coordEst;
     }
 
-    public void setCoordEst(double coordEst)
-    {
-        this.coordEst = coordEst;
-    }
-
     public double getAltitude()
     {
         return altitude;
-    }
-
-    public void setAltitude(int altitude)
-    {
-        this.altitude = altitude;
     }
 
     public int getId()

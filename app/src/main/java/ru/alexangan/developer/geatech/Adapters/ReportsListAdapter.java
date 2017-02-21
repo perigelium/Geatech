@@ -21,7 +21,9 @@ import ru.alexangan.developer.geatech.Models.VisitItem;
 import ru.alexangan.developer.geatech.Models.GeaSopralluogo;
 import ru.alexangan.developer.geatech.R;
 
+import static ru.alexangan.developer.geatech.Models.GlobalConstants.company_id;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.realm;
+import static ru.alexangan.developer.geatech.Models.GlobalConstants.selectedTech;
 
 /**
  * Created by user on 11/21/2016.
@@ -89,11 +91,12 @@ public class ReportsListAdapter extends BaseAdapter
 
         realm.beginTransaction();
 
-        ReportStates reportStates = realm.where(ReportStates.class).equalTo("id_sopralluogo", idSopralluogo).findFirst();
+        ReportStates reportStates = realm.where(ReportStates.class).equalTo("company_id", company_id).equalTo("tech_id", selectedTech.getId())
+                .equalTo("id_sopralluogo", idSopralluogo).findFirst();
 
         realm.commitTransaction();
 
-        String visitDateTime = reportStates.getData_ora_presa_appuntamento();
+        String visitDateTime = reportStates.getData_ora_sopralluogo();
 
         if(visitDateTime != null)
         {

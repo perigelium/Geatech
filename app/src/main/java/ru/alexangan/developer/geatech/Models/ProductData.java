@@ -3,12 +3,14 @@ package ru.alexangan.developer.geatech.Models;
 
 import io.realm.RealmList;
 import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
 
 
 public class ProductData extends RealmObject
 {
-
+    @PrimaryKey
     private int id;
+
     private String productType;
     private int idProductType;
     private String product;
@@ -50,11 +52,6 @@ public class ProductData extends RealmObject
         return subItem;
     }
 
-
-    public void setSubItem(RealmList<SubproductItem> subItem)
-    {
-        this.subItem = subItem;
-    }
 
     public int getId()
     {

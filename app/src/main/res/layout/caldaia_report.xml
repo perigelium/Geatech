@@ -12,20 +12,17 @@
 
         <include layout="@layout/report_header"/>
 
-        <include layout="@layout/section_header1"/>
+        <include android:id="@+id/header1" layout="@layout/section_header1"/>
 
+        <include android:id="@+id/two_radios_and_edit1" layout="@layout/two_radios_and_edit1"/>
 
-        <include layout="@layout/two_radios_and_edit1"/>
+        <include android:id="@+id/three_radios_and_edit1" layout="@layout/three_radios_and_edit1"/>
 
-        <include layout="@layout/three_radios_and_edit1"/>
+        <include android:id="@+id/two_radios_and_edit2" layout="@layout/two_radios_and_edit1"/>
 
+        <include android:id="@+id/three_radios_and_edit2" layout="@layout/three_radios_and_edit1"/>
 
-
-        <include layout="@layout/two_radios_and_edit2"/>
-
-        <include layout="@layout/three_radios_and_edit2"/>
-
-        <include layout="@layout/switch_and_edit1"/>
+        <include android:id="@+id/switch_and_edit1" layout="@layout/switch_and_edit1"/>
 
         <include layout="@layout/four_radios1"/>
 
@@ -35,11 +32,11 @@
 
         <include layout="@layout/three_radios1"/>
 
-        <include layout="@layout/switch_and_edit2"/>
+        <include android:id="@+id/switch_and_edit2" layout="@layout/switch_and_edit1"/>
 
-        <include layout="@layout/two_radios_and_edit3"/>
+        <include android:id="@+id/two_radios_and_edit3" layout="@layout/two_radios_and_edit1"/>
 
-        <include layout="@layout/section_header2"/>
+        <include android:id="@+id/header2" layout="@layout/section_header1"/>
 
         <include layout="@layout/two_texts_two_edits1"/>
 

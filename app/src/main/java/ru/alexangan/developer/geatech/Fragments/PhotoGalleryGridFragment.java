@@ -33,7 +33,9 @@ import ru.alexangan.developer.geatech.R;
 import ru.alexangan.developer.geatech.Utils.ImageUtils;
 
 import static android.app.Activity.RESULT_OK;
+import static ru.alexangan.developer.geatech.Models.GlobalConstants.company_id;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.realm;
+import static ru.alexangan.developer.geatech.Models.GlobalConstants.selectedTech;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.visitItems;
 
 public class PhotoGalleryGridFragment extends Fragment
@@ -190,8 +192,10 @@ public class PhotoGalleryGridFragment extends Fragment
         VisitItem visitItem = visitItems.get(selectedIndex);
         GeaSopralluogo geaSopralluogo = visitItem.getGeaSopralluogo();
         int idSopralluogo = geaSopralluogo.getId_sopralluogo();
-        ReportStates reportStates = realm.where(ReportStates.class).equalTo("id_sopralluogo", idSopralluogo).findFirst();
-        RealmResults<GeaImagineRapporto> reportImages = realm.where(GeaImagineRapporto.class).equalTo("id_rapporto_sopralluogo", idSopralluogo).findAll();
+        ReportStates reportStates = realm.where(ReportStates.class).equalTo("company_id", company_id).equalTo("tech_id", selectedTech.getId())
+                .equalTo("id_sopralluogo", idSopralluogo).findFirst();
+        RealmResults<GeaImagineRapporto> reportImages = realm.where(GeaImagineRapporto.class).equalTo("company_id", company_id)
+                .equalTo("tech_id", selectedTech.getId()).equalTo("id_rapporto_sopralluogo", idSopralluogo).findAll();
         reportImages.deleteAllFromRealm();
 
         if(reportStates!=null)

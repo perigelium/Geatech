@@ -12,13 +12,13 @@
 
         <include layout="@layout/report_header"/>
 
-        <include layout="@layout/section_header1"/>
+        <include android:id="@+id/headerDomotica1" layout="@layout/section_header1"/>
 
-        <include layout="@layout/two_radios1"/>
+        <include android:id="@+id/two_radiosDomotica1" layout="@layout/two_radios1"/>
 
-        <include layout="@layout/two_radios2"/>
+        <include android:id="@+id/two_radiosDomotica2" layout="@layout/two_radios1"/>
 
-        <include layout="@layout/edit1"/>
+        <include android:id="@+id/editDomotica1" layout="@layout/edit1"/>
 
         <include layout="@layout/two_switches1"/>
 
@@ -26,11 +26,11 @@
 
         <include layout="@layout/two_edits1"/>
 
-        <include layout="@layout/edit2"/>
+        <include android:id="@+id/editDomotica2" layout="@layout/edit1"/>
 
         <include layout="@layout/switch_and_edit1"/>
 
-        <include layout="@layout/section_header2"/>
+        <include android:id="@+id/headerDomotica2" layout="@layout/section_header1"/>
 
         <include layout="@layout/three_texts_three_edits1"/>
 

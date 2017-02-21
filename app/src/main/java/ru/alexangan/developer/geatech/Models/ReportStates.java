@@ -3,15 +3,17 @@ package ru.alexangan.developer.geatech.Models;
 
 import io.realm.RealmList;
 import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
 
 public class ReportStates extends RealmObject
 {
-    int id;
-    int visitId;
+    int company_id;
+    int tech_id;
 
-    private int id_rapporto_sopralluogo;
     private int id_sopralluogo;
+    private int id_rapporto_sopralluogo;
     private String data_ora_presa_appuntamento;
+    private String data_ora_sopralluogo;
 
     private double latitudine; // latitudine
     private double longitudine; // longitudine
@@ -38,11 +40,14 @@ public class ReportStates extends RealmObject
 
     public ReportStates() {}
 
-    public ReportStates(int id, int visitId)
+    public ReportStates(int company_id, int tech_id, int id_sopralluogo, int id_rapporto_sopralluogo)
     {
-        this.id = id;
-        id_rapporto_sopralluogo = id;
-        this.visitId = visitId;
+        this.company_id = company_id;
+        this.tech_id = tech_id;
+        this.id_sopralluogo = id_sopralluogo;
+        this.id_rapporto_sopralluogo = id_rapporto_sopralluogo;
+
+
         reportCompletionStatuses = new RealmList<>();
         reportCompletionStatuses.add(new RealmString( "Non iniziato") );
         reportCompletionStatuses.add(new RealmString( "Iniziato") );
@@ -73,11 +78,6 @@ public class ReportStates extends RealmObject
         latitudine = 0;
         longitudine = 0;
         altitudine = -999;
-    }
-
-    public void setId(int id)
-    {
-        this.id = id;
     }
 
     public RealmString getReportCompletionStateString(int reportCompletionState)
@@ -147,11 +147,6 @@ public class ReportStates extends RealmObject
         this.dataOraProssimoTentativo = dataOraProssimoTentativo;
     }
 
-    public int getId()
-    {
-        return id;
-    }
-
     public String getData_ora_presa_appuntamento()
     {
         return data_ora_presa_appuntamento;
@@ -160,16 +155,6 @@ public class ReportStates extends RealmObject
     public void setData_ora_presa_appuntamento(String data_ora_presa_appuntamento)
     {
         this.data_ora_presa_appuntamento = data_ora_presa_appuntamento;
-    }
-
-    public int getVisitId()
-    {
-        return visitId;
-    }
-
-    public void setVisitId(int visitId)
-    {
-        this.visitId = visitId;
     }
 
     public int getId_sopralluogo()
@@ -260,5 +245,20 @@ public class ReportStates extends RealmObject
     public void setId_rapporto_sopralluogo(int id_rapporto_sopralluogo)
     {
         this.id_rapporto_sopralluogo = id_rapporto_sopralluogo;
+    }
+
+    public String getData_ora_sopralluogo()
+    {
+        return data_ora_sopralluogo;
+    }
+
+    public void setData_ora_sopralluogo(String data_ora_sopralluogo)
+    {
+        this.data_ora_sopralluogo = data_ora_sopralluogo;
+    }
+
+    public int getTech_id()
+    {
+        return tech_id;
     }
 }

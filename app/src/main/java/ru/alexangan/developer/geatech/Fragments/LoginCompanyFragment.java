@@ -28,6 +28,7 @@ import ru.alexangan.developer.geatech.Models.LoginCredentials;
 import ru.alexangan.developer.geatech.Network.NetworkUtils;
 import ru.alexangan.developer.geatech.R;
 
+import static ru.alexangan.developer.geatech.Models.GlobalConstants.company_id;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.mSettings;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.realm;
 
@@ -179,6 +180,7 @@ public class LoginCompanyFragment extends Fragment implements View.OnClickListen
                         && strPassword.equals(loginCredentials.getPassword()))
                 {
                     credentialsesFound = true;
+                    company_id = loginCredentials.getCompany_id();
                     break;
                 }
             }
@@ -256,7 +258,8 @@ public class LoginCompanyFragment extends Fragment implements View.OnClickListen
                             realm.beginTransaction();
                             RealmResults<LoginCredentials> loginCredentialses = realm.where(LoginCredentials.class).findAll();
                             loginCredentialses.deleteAllFromRealm();
-                            LoginCredentials loginCredentials = new LoginCredentials(strLogin, strPassword);
+                            company_id = loginCredentialses.size();
+                            LoginCredentials loginCredentials = new LoginCredentials(company_id, strLogin, strPassword);
                             realm.copyToRealm(loginCredentials);
                             realm.commitTransaction();
                         }

@@ -24,7 +24,9 @@ import ru.alexangan.developer.geatech.Models.VisitItem;
 import ru.alexangan.developer.geatech.Models.GeaSopralluogo;
 import ru.alexangan.developer.geatech.R;
 
+import static ru.alexangan.developer.geatech.Models.GlobalConstants.company_id;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.realm;
+import static ru.alexangan.developer.geatech.Models.GlobalConstants.selectedTech;
 
 /**
  * Created by user on 11/21/2016.
@@ -122,22 +124,22 @@ public class MyListVisitsAdapter extends BaseAdapter
         clientAddressTextView.setText(clientData.getAddress());
 
         realm.beginTransaction();
-        ReportStates reportStates = realm.where(ReportStates.class)
-                .equalTo("id_sopralluogo", idSopralluogo).greaterThan("id_rapporto_sopralluogo", 0).findFirst();
+        ReportStates reportStates = realm.where(ReportStates.class).equalTo("company_id", company_id).equalTo("tech_id", selectedTech.getId())
+                .equalTo("id_sopralluogo", idSopralluogo).findFirst(); //.greaterThan("id_rapporto_sopralluogo", -1)
         realm.commitTransaction();
 
         String visitDateTime = null;
+        boolean ownReport = false;
 
         if(reportStates!=null)
         {
-            visitDateTime = reportStates.getData_ora_presa_appuntamento();
-        }
-        boolean ownReport = true;
+            visitDateTime = reportStates.getData_ora_sopralluogo();
+            int techOfReport = reportStates.getTech_id();
 
-        if(visitDateTime == null && initialized)
-        {
-            visitDateTime = geaSopralluogo.getData_ora_sopralluogo();
-            ownReport = false;
+            if(techOfReport == selectedTech.getId() && initialized)
+            {
+                ownReport = true;
+            }
         }
 
         if(visitDateTime != null)
@@ -154,7 +156,7 @@ public class MyListVisitsAdapter extends BaseAdapter
                 e.printStackTrace();
             }
 
-            if (calendar.DAY_OF_MONTH != 0)
+            if (initialized)
             {
                 if(!ownReport)
                 {

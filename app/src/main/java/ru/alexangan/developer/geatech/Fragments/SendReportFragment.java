@@ -29,7 +29,6 @@ import ru.alexangan.developer.geatech.Models.GeaImagineRapporto;
 import ru.alexangan.developer.geatech.Models.GeaItemRapporto;
 import ru.alexangan.developer.geatech.Models.GeaRapporto;
 import ru.alexangan.developer.geatech.Models.GeaSopralluogo;
-import ru.alexangan.developer.geatech.Adapters.ModelsMapping;
 import ru.alexangan.developer.geatech.Models.ProductData;
 import ru.alexangan.developer.geatech.Models.ReportItem;
 import ru.alexangan.developer.geatech.Models.ReportStates;
@@ -38,7 +37,9 @@ import ru.alexangan.developer.geatech.Network.NetworkUtils;
 import ru.alexangan.developer.geatech.R;
 
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.SEND_DATA_URL_SUFFIX;
+import static ru.alexangan.developer.geatech.Models.GlobalConstants.company_id;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.realm;
+import static ru.alexangan.developer.geatech.Models.GlobalConstants.selectedTech;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.tokenStr;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.visitItems;
 
@@ -49,12 +50,8 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
 
     private Button sendReport;
     private int selectedIndex;
-    int idSopralluogo;
-    int idRapportoSopralluogo;
 
     ReportStates reportStates;
-    VisitItem visitItem;
-    GeaSopralluogo geaSopralluogo;
 
     String reportSendResponse;
     Call callSendReport, callSendImage;
@@ -86,26 +83,26 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState)
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
         rootView = inflater.inflate(R.layout.send_report_fragment, container, false);
 
         sendReport = (Button) rootView.findViewById(R.id.btnSendReport);
         sendReport.setOnClickListener(this);
 
-        visitItem = visitItems.get(selectedIndex);
-        geaSopralluogo = visitItem.getGeaSopralluogo();
+        VisitItem visitItem = visitItems.get(selectedIndex);
+        GeaSopralluogo geaSopralluogo = visitItem.getGeaSopralluogo();
         ProductData productData = visitItem.getProductData();
         String productType = productData.getProductType();
         //int idProductType = productData.getIdProductType();
-        idSopralluogo = geaSopralluogo.getId_sopralluogo();
+        int idSopralluogo = geaSopralluogo.getId_sopralluogo();
         //idRapportoSopralluogo = idSopralluogo;
 
-        Class modelClass = ModelsMapping.assignClassModel(productType);
+        //Class modelClass = ModelsMapping.assignClassModel(productType);
 
         realm.beginTransaction();
-        reportStates = realm.where(ReportStates.class).equalTo("id_sopralluogo", idSopralluogo).findFirst();
+        reportStates = realm.where(ReportStates.class).equalTo("company_id", company_id).equalTo("tech_id", selectedTech.getId())
+                .equalTo("id_sopralluogo", idSopralluogo).findFirst();
         realm.commitTransaction();
 
         if (reportStates != null)
@@ -160,63 +157,78 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
                 sendReport.setAlpha(.4f);
                 sendReport.setEnabled(false);
 
-                realm.beginTransaction();
-                ReportItem reportItem = new ReportItem();
-                Gson gson = new Gson();
-
-                GeaSopralluogo geaSopralluogo = realm.where(GeaSopralluogo.class).equalTo("id_sopralluogo", idSopralluogo).findFirst();
-                GeaSopralluogo geaSopralluogoUnmanaged = realm.copyFromRealm(geaSopralluogo);
-                reportItem.setGeaSopralluogo(geaSopralluogoUnmanaged);
-
-
-                ReportStates reportStatesUnmanaged = realm.copyFromRealm(reportStates);
-                String strReportStatesUnmanaged = gson.toJson(reportStatesUnmanaged);
-                GeaRapporto gea_rapporto = gson.fromJson(strReportStatesUnmanaged, GeaRapporto.class);
-                reportItem.setGea_rapporto_sopralluogo(gea_rapporto);
-
-
-                RealmResults geaItemsRapporto = realm.where(GeaItemRapporto.class).equalTo("id_rapporto_sopralluogo", idSopralluogo).findAll();
-                List<GeaItemRapporto> listGeaItemRapporto = new ArrayList<>();
-
-                for(Object gi : geaItemsRapporto)
-                {
-                    GeaItemRapporto gi_unmanaged = realm.copyFromRealm((GeaItemRapporto)gi);
-                    listGeaItemRapporto.add(gi_unmanaged);
-                }
-                reportItem.setGea_items_rapporto_sopralluogo(listGeaItemRapporto);
-
-
-                RealmResults<GeaImagineRapporto> listReportImages = realm.where(GeaImagineRapporto.class).equalTo("id_rapporto_sopralluogo", idSopralluogo).findAll();
-
-                List<GeaImagineRapporto> imagesArray = new ArrayList<>();
-
-                for (GeaImagineRapporto geaImagineRapporto : listReportImages)
-                {
-                    GeaImagineRapporto geaImagineRapportoUnmanaged = realm.copyFromRealm(geaImagineRapporto);
-                    geaImagineRapportoUnmanaged.setFilePath(null);
-                    imagesArray.add(geaImagineRapportoUnmanaged);
-                }
-                reportItem.setGea_immagini_rapporto_sopralluogo(imagesArray);
-
-
-                realm.commitTransaction();
-
-
-                String str_ReportItem_json = gson.toJson(reportItem);
-
-                Log.d("DEBUG", str_ReportItem_json);
-
-                NetworkUtils networkUtils = new NetworkUtils();
-                callSendReport = networkUtils.sendData(this, SEND_DATA_URL_SUFFIX, tokenStr, str_ReportItem_json);
-
-                for (GeaImagineRapporto geaImagineRapporto : listReportImages)
-                {
-                    callSendImage = networkUtils.sendImage(this, activity, geaImagineRapporto);
-                }
+                sendReportItem(selectedIndex);
             }
 
             mCommunicator.onSendReportReturned();
 
+        }
+    }
+
+    private void sendReportItem(int selectedIndex)
+    {
+        realm.beginTransaction();
+
+        ReportItem reportItem = new ReportItem();
+        Gson gson = new Gson();
+
+        VisitItem visitItem = visitItems.get(selectedIndex);
+        GeaSopralluogo geaSopralluogo = visitItem.getGeaSopralluogo();
+        ProductData productData = visitItem.getProductData();
+        String productType = productData.getProductType();
+        //int idProductType = productData.getIdProductType();
+        int idSopralluogo = geaSopralluogo.getId_sopralluogo();
+
+        GeaSopralluogo geaSopralluogoUnmanaged = realm.copyFromRealm(geaSopralluogo);
+        reportItem.setGeaSopralluogo(geaSopralluogoUnmanaged);
+
+        ReportStates reportStates = realm.where(ReportStates.class).equalTo("company_id", company_id).equalTo("tech_id", selectedTech.getId())
+                .equalTo("id_sopralluogo", idSopralluogo).findFirst();
+
+        ReportStates reportStatesUnmanaged = realm.copyFromRealm(reportStates);
+        String strReportStatesUnmanaged = gson.toJson(reportStatesUnmanaged);
+        GeaRapporto gea_rapporto = gson.fromJson(strReportStatesUnmanaged, GeaRapporto.class);
+        reportItem.setGea_rapporto_sopralluogo(gea_rapporto);
+
+        RealmResults geaItemsRapporto = realm.where(GeaItemRapporto.class).equalTo("company_id", company_id)
+                .equalTo("tech_id", selectedTech.getId()).equalTo("id_rapporto_sopralluogo", idSopralluogo).findAll();
+        List<GeaItemRapporto> listGeaItemRapporto = new ArrayList<>();
+
+        for(Object gi : geaItemsRapporto)
+        {
+            GeaItemRapporto gi_unmanaged = realm.copyFromRealm((GeaItemRapporto)gi);
+            listGeaItemRapporto.add(gi_unmanaged);
+        }
+        reportItem.setGea_items_rapporto_sopralluogo(listGeaItemRapporto);
+
+
+        RealmResults<GeaImagineRapporto> listReportImages = realm.where(GeaImagineRapporto.class)
+                .equalTo("company_id", company_id).equalTo("tech_id", selectedTech.getId())
+                .equalTo("id_rapporto_sopralluogo", idSopralluogo).findAll();
+
+        List<GeaImagineRapporto> imagesArray = new ArrayList<>();
+
+        for (GeaImagineRapporto geaImagineRapporto : listReportImages)
+        {
+            GeaImagineRapporto geaImagineRapportoUnmanaged = realm.copyFromRealm(geaImagineRapporto);
+            geaImagineRapportoUnmanaged.setFilePath(null);
+            imagesArray.add(geaImagineRapportoUnmanaged);
+        }
+        reportItem.setGea_immagini_rapporto_sopralluogo(imagesArray);
+
+
+        realm.commitTransaction();
+
+        String str_ReportItem_json = gson.toJson(reportItem);
+
+        Log.d("DEBUG", str_ReportItem_json);
+
+        NetworkUtils networkUtils = new NetworkUtils();
+        callSendReport = networkUtils.sendData(this, SEND_DATA_URL_SUFFIX, tokenStr, str_ReportItem_json);
+
+        for (GeaImagineRapporto geaImagineRapporto : listReportImages)
+        {
+            callSendImage = networkUtils.sendImage(this, activity, geaImagineRapporto);
         }
     }
 

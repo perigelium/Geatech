@@ -16,7 +16,9 @@ import ru.alexangan.developer.geatech.Models.ReportStates;
 import ru.alexangan.developer.geatech.Models.VisitItem;
 import ru.alexangan.developer.geatech.R;
 
+import static ru.alexangan.developer.geatech.Models.GlobalConstants.company_id;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.realm;
+import static ru.alexangan.developer.geatech.Models.GlobalConstants.selectedTech;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.visitItems;
 
 public class NotSentListVisitsFragment extends ListFragment// implements View.OnClickListener
@@ -33,7 +35,8 @@ public class NotSentListVisitsFragment extends ListFragment// implements View.On
         ArrayList<VisitItem> visitItemsDateTimeSet = new ArrayList<>();
 
         realm.beginTransaction();
-        RealmResults<ReportStates> reportStatesList = realm.where(ReportStates.class).findAll();
+        RealmResults<ReportStates> reportStatesList = realm.where(ReportStates.class).equalTo("company_id", company_id)
+                .equalTo("tech_id", selectedTech.getId()).findAll();
         realm.commitTransaction();
 
         for (VisitItem visitItem : visitItems)

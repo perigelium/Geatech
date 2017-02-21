@@ -43,6 +43,7 @@ import ru.alexangan.developer.geatech.Network.NetworkUtils;
 import ru.alexangan.developer.geatech.R;
 
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.SET_DATA_URL_SUFFIX;
+import static ru.alexangan.developer.geatech.Models.GlobalConstants.company_id;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.realm;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.selectedTech;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.tokenStr;
@@ -76,14 +77,16 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
     }
 
     @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
+    public void onActivityCreated(Bundle savedInstanceState)
+    {
         super.onActivityCreated(savedInstanceState);
 
-        mCommunicator = (Communicator)getActivity();
+        mCommunicator = (Communicator) getActivity();
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
 
         activity = getActivity();
@@ -127,8 +130,7 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
             if (millsDiff <= 0)
             {
                 elapsedDays = 0;
-            }
-            else
+            } else
             {
                 long milliSeconds = calendar.getTimeInMillis();
                 long milliSecondsNow = calendarNow.getTimeInMillis();
@@ -144,7 +146,7 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState)
     {
-        rootView =  inflater.inflate(R.layout.set_date_time_fragment, container, false);
+        rootView = inflater.inflate(R.layout.set_date_time_fragment, container, false);
 
         mSetDateButton = (TextView) rootView.findViewById(R.id.btnSetDate);
         mAnnullaSetDateTimeButton = (TextView) rootView.findViewById(R.id.btnAnnullaSetDateTime);
@@ -160,15 +162,14 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
         List<SubproductItem> list = productData.getSubItem();
 
         realm.beginTransaction();
-        reportStates = realm.where(ReportStates.class).equalTo("id_sopralluogo", idSopralluogo).findFirst();
+        reportStates = realm.where(ReportStates.class).equalTo("company_id", company_id).equalTo("tech_id", selectedTech.getId())
+                .equalTo("id_sopralluogo", idSopralluogo).findFirst();
         realm.commitTransaction();
 
-            SetVisitDateTimeListAdapter adapter = new SetVisitDateTimeListAdapter(getActivity(),  list);
+        SetVisitDateTimeListAdapter adapter = new SetVisitDateTimeListAdapter(getActivity(), list);
 
-        ListView listView =(ListView)rootView.findViewById(R.id.list);
-
-            listView.setAdapter(adapter);
-
+        ListView listView = (ListView) rootView.findViewById(R.id.list);
+        listView.setAdapter(adapter);
 
         TextView clientNameTextView = (TextView) rootView.findViewById(R.id.tvClientName);
         clientNameTextView.setText(clientData.getName());
@@ -188,11 +189,7 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
         mDateSetTextView = (TextView) rootView.findViewById(R.id.tvDateSet);
         mTimeSetTextView = (TextView) rootView.findViewById(R.id.tvTimeSet);
 
-        String visitDateTime = reportStates.getData_ora_presa_appuntamento();
-        if(visitDateTime == null)
-        {
-            visitDateTime = geaSopralluogo.getData_ora_sopralluogo();
-        }
+        String visitDateTime = reportStates!=null ? reportStates.getData_ora_sopralluogo() : " ";
 
         calendarNow = Calendar.getInstance();
         calendar = Calendar.getInstance();
@@ -205,7 +202,7 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
 
             int millsDiff = calendar.compareTo(calendarNow);
 
-            if(millsDiff < 0)
+            if (millsDiff < 0)
             {
                 calendar = calendarNow;
             }
@@ -231,7 +228,7 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
         btnApriMappa.setOnClickListener(this);
         btnChiama.setOnClickListener(this);
 
-        return  rootView;
+        return rootView;
     }
 
     public void onClick(View v)
@@ -241,22 +238,20 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
             double latitude = visitItems.get(selectedIndex).getClientData().getCoordNord();
             double longitude = visitItems.get(selectedIndex).getClientData().getCoordEst();
 
-            String uri = String.format(Locale.ENGLISH, "http://maps.google.com/maps?daddr=%f,%f (%s)", (float)latitude, (float)longitude, "Where the party is at");
+            String uri = String.format(Locale.ENGLISH, "http://maps.google.com/maps?daddr=%f,%f (%s)", (float) latitude, (float) longitude, "Where the party is at");
             Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
             intent.setClassName("com.google.android.apps.maps", "com.google.android.maps.MapsActivity");
 
             try
             {
                 startActivity(intent);
-            }
-            catch(ActivityNotFoundException ex)
+            } catch (ActivityNotFoundException ex)
             {
                 try
                 {
                     Intent unrestrictedIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
                     startActivity(unrestrictedIntent);
-                }
-                catch(ActivityNotFoundException innerEx)
+                } catch (ActivityNotFoundException innerEx)
                 {
                     Toast.makeText(getActivity(), "installare un'applicazione mappe", Toast.LENGTH_LONG).show();
                 }
@@ -271,7 +266,7 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
             startActivity(intent);
         }
 
-        if(v.getId() == R.id.btnSetDate)
+        if (v.getId() == R.id.btnSetDate)
         {
             TimePickerDialog dialogTimePicker = new TimePickerDialog(getActivity(), timePickerListener,
                     mHour, mMinute, DateFormat.is24HourFormat(getActivity()));
@@ -282,7 +277,7 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
             dialogDatePicker.show();
         }
 
-        if(v.getId() == R.id.btnAnnullaSetDateTime)
+        if (v.getId() == R.id.btnAnnullaSetDateTime)
         {
             stakedOut = 0;
             notifyServerDataOraSopralluogo(idSopralluogo, stakedOut);
@@ -290,7 +285,7 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
             //mCommunicator.onDateTimeSetReturned(false);
         }
 
-        if(v.getId() == R.id.btnSetDateTimeSubmit)
+        if (v.getId() == R.id.btnSetDateTimeSubmit)
         {
             stakedOut = 1;
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
@@ -380,8 +375,7 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
                         e.printStackTrace();
                         return;
                     }
-                }
-                else
+                } else
                 {
                     showToastMessage("Dato e ora inviato, server ritorna: " + strVisitDateTimeResponse);
 
@@ -391,7 +385,7 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
                         {
                             final String strSuccess = jsonObject.getString("success");
 
-                            if(strSuccess.equals("1"))
+                            if (strSuccess.equals("1"))
                             {
                                 activity.runOnUiThread(new Runnable()
                                 {
@@ -402,18 +396,30 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
                                             try
                                             {
                                                 final String str_id_rapporto_sopralluogo = jsonObject.getString("id_rapporto_sopralluogo");
-
-                                                realm.beginTransaction();
                                                 int id_rapporto_sopralluogo = Integer.valueOf(str_id_rapporto_sopralluogo);
-                                                reportStates.setId_rapporto_sopralluogo(id_rapporto_sopralluogo);
+
+
+                                                if (reportStates == null)
+                                                {
+                                                    realm.beginTransaction();
+                                                    ReportStates newReportStates = new ReportStates(company_id, selectedTech.getId(), idSopralluogo, id_rapporto_sopralluogo);
+                                                    realm.copyToRealm(newReportStates);
+                                                    realm.commitTransaction();
+                                                }
 
                                                 if (stakedOut == 1)
                                                 {
-                                                    reportStates.setData_ora_presa_appuntamento(strDateTime);
-                                                    reportStates.setNome_tecnico(selectedTech.getFullNameTehnic());
-                                                }
-                                                realm.commitTransaction();
+                                                    realm.beginTransaction();
+                                                    reportStates.setData_ora_sopralluogo(strDateTime);
+                                                    reportStates.setId_rapporto_sopralluogo(id_rapporto_sopralluogo);
 
+                                                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ITALIAN);
+                                                    String shortDateStr = sdf.format(calendarNow.getTime());
+                                                    reportStates.setData_ora_presa_appuntamento(shortDateStr);
+
+                                                    reportStates.setNome_tecnico(selectedTech.getFullNameTehnic());
+                                                    realm.commitTransaction();
+                                                }
                                             } catch (JSONException e)
                                             {
                                                 e.printStackTrace();
@@ -423,7 +429,7 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
                                         if (stakedOut == 0)
                                         {
                                             realm.beginTransaction();
-                                            reportStates.setData_ora_presa_appuntamento(null);
+                                            reportStates.setData_ora_sopralluogo(null);
                                             reportStates.setNome_tecnico(null);
                                             realm.commitTransaction();
                                         }

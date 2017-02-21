@@ -19,7 +19,9 @@ import ru.alexangan.developer.geatech.Models.VisitItem;
 import ru.alexangan.developer.geatech.R;
 import ru.alexangan.developer.geatech.Utils.SwipeDetector;
 
+import static ru.alexangan.developer.geatech.Models.GlobalConstants.company_id;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.realm;
+import static ru.alexangan.developer.geatech.Models.GlobalConstants.selectedTech;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.visitItems;
 
 public class ListVisitsFragment extends ListFragment
@@ -107,26 +109,28 @@ public class ListVisitsFragment extends ListFragment
         }
 
         visitItemsFiltered = new ArrayList<>();
+        visitItemsFiltered.addAll(visitItems);
 
         realm.beginTransaction();
-        RealmResults<ReportStates> reportStatesList = realm.where(ReportStates.class).findAll();
+        RealmResults<ReportStates> reportStatesList = realm.where(ReportStates.class).equalTo("company_id", company_id)
+                .equalTo("tech_id", selectedTech.getId()).findAll();
         realm.commitTransaction();
 
 
-        for (VisitItem visitItem : visitItems)
+/*        for (VisitItem visitItem : visitItems)
         {
             for(ReportStates reportStates : reportStatesList)
             {
                 if (visitItem.getGeaSopralluogo().getId_sopralluogo() == reportStates.getId_sopralluogo())
                 {
-                    if (!timeNotSetItemsOnly || (timeNotSetItemsOnly && reportStates.getData_ora_presa_appuntamento() == null))
+                    if (!timeNotSetItemsOnly || (timeNotSetItemsOnly && reportStates.getData_ora_sopralluogo() == null))
                     {
                         visitItemsFiltered.add(visitItem);
                         break;
                     }
                 }
             }
-        }
+        }*/
 
         myListAdapter = new MyListVisitsAdapter(getActivity(), R.layout.list_visits_fragment_row, visitItemsFiltered);
         setListAdapter(myListAdapter);
@@ -150,14 +154,15 @@ public class ListVisitsFragment extends ListFragment
 
                 int idVisit = visitItemsFiltered.get(position).getId();
                 realm.beginTransaction();
-                ReportStates reportStates = realm.where(ReportStates.class).equalTo("id_sopralluogo", idSopralluogo).findFirst();
+                ReportStates reportStates = realm.where(ReportStates.class).equalTo("company_id", company_id)
+                        .equalTo("tech_id", selectedTech.getId()).equalTo("id_sopralluogo", idSopralluogo).findFirst();
                 realm.commitTransaction();
 
                 boolean initialized = visitItemsFiltered.get(position).getGeaSopralluogo().getInizializzazione();
 
-                if (!initialized)
+                if (reportStates!=null && !initialized)
                 {
-                    initialized = reportStates.getData_ora_presa_appuntamento() != null;
+                    initialized = reportStates.getData_ora_sopralluogo() != null;
                 }
 
                 if (swipeDetector.swipeDetected())

@@ -23,7 +23,7 @@ public class GeaSopralluogo extends RealmObject
 
     public GeaSopralluogo(){};
 
-    public GeaSopralluogo(int id_sopralluogo, int initialized, String data_ora_sopralluogo)
+    public GeaSopralluogo(int id_sopralluogo, int initialized, String data_ora_presa_appuntamento, String data_ora_sopralluogo)
     {
         this.id_sopralluogo = id_sopralluogo;
         this.inizializzazione = initialized == 1 ? true : false;
@@ -60,10 +60,5 @@ public class GeaSopralluogo extends RealmObject
     public String getData_ora_presa_appuntamento()
     {
         return data_ora_presa_appuntamento;
-    }
-
-    public void setData_ora_presa_appuntamento(String data_ora_presa_appuntamento)
-    {
-        this.data_ora_presa_appuntamento = data_ora_presa_appuntamento;
     }
 }

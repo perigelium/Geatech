@@ -8,6 +8,9 @@ import java.util.List;
 
 public class ReportItem
 {
+    private int company_id;
+    private int tech_id;
+
     private GeaSopralluogo gea_sopralluoghi;
     private GeaRapporto gea_rapporto_sopralluogo;
 

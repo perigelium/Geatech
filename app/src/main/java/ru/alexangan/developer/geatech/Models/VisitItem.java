@@ -9,6 +9,7 @@ public class VisitItem extends RealmObject
 {
     @PrimaryKey
     private int id;
+
     private GeaSopralluogo geaSopralluogo;
     private ClientData clientData;
     private ProductData productData;

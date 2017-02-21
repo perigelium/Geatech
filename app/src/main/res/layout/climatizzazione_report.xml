@@ -12,7 +12,7 @@
 
         <include layout="@layout/report_header"/>
 
-        <include layout="@layout/section_header1"/>
+        <include android:id="@+id/headerClima1" layout="@layout/section_header1"/>
 
         <include layout="@layout/three_radios_and_edit1"/>
 
@@ -22,7 +22,7 @@
 
         <include layout="@layout/three_chkboxes_and_edit1"/>
 
-        <include layout="@layout/section_header2"/>
+        <include android:id="@+id/headerClima2" layout="@layout/section_header1"/>
 
         <include layout="@layout/three_texts_three_edits1"/>
 

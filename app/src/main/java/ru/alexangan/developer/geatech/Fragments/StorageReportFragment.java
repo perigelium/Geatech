@@ -7,7 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import ru.alexangan.developer.geatech.Models.ReportModelStorage;
 import ru.alexangan.developer.geatech.Models.ReportStates;
 import ru.alexangan.developer.geatech.Models.VisitItem;
 import ru.alexangan.developer.geatech.Models.GeaSopralluogo;
@@ -19,7 +18,6 @@ import static ru.alexangan.developer.geatech.Models.GlobalConstants.visitItems;
 public class StorageReportFragment extends Fragment
 {
     View rootView;
-    ReportModelStorage reportModelStorage;
     private int selectedIndex;
     int idSopralluogo;
     ReportStates reportStates;

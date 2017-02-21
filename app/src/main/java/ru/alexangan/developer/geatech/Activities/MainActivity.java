@@ -14,7 +14,6 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import io.realm.RealmResults;
 import ru.alexangan.developer.geatech.Fragments.CTLinfoFragment;
 import ru.alexangan.developer.geatech.Fragments.CaldaiaReportFragment;
 import ru.alexangan.developer.geatech.Fragments.ClimatizzazioneReportFragment;
@@ -44,7 +43,9 @@ import ru.alexangan.developer.geatech.Models.VisitItem;
 import ru.alexangan.developer.geatech.R;
 import ru.alexangan.developer.geatech.Utils.SwipeDetector;
 
+import static ru.alexangan.developer.geatech.Models.GlobalConstants.company_id;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.realm;
+import static ru.alexangan.developer.geatech.Models.GlobalConstants.selectedTech;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.visitItems;
 
 public class MainActivity extends Activity implements Communicator
@@ -105,7 +106,7 @@ public class MainActivity extends Activity implements Communicator
             this.finish();
         }
 
-        for (VisitItem realmVisitItem : visitItems)
+/*        for (VisitItem realmVisitItem : visitItems)
         {
             int idSopralluogo = realmVisitItem.getGeaSopralluogo().getId_sopralluogo();
 
@@ -131,12 +132,12 @@ public class MainActivity extends Activity implements Communicator
             if (addressAndProductPresent == false)
             {
                 realm.beginTransaction();
-                ReportStates newReportStates = new ReportStates(reportStatesList.size(), realmVisitItem.getId());
+                ReportStates newReportStates = new ReportStates(company_id, selectedTech.getId(), reportStatesList.size(), realmVisitItem.getId());
                 newReportStates.setId_sopralluogo(idSopralluogo);
                 realm.copyToRealm(newReportStates);
                 realm.commitTransaction();
             }
-        }
+        }*/
 
         swipeDetector = new SwipeDetector();
 
