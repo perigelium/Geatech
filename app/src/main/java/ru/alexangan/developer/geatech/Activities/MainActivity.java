@@ -7,6 +7,7 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
@@ -14,6 +15,12 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import java.io.IOException;
+import java.util.ArrayList;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.Response;
 import ru.alexangan.developer.geatech.Fragments.CTLinfoFragment;
 import ru.alexangan.developer.geatech.Fragments.CaldaiaReportFragment;
 import ru.alexangan.developer.geatech.Fragments.ClimatizzazioneReportFragment;
@@ -40,15 +47,20 @@ import ru.alexangan.developer.geatech.Interfaces.Communicator;
 import ru.alexangan.developer.geatech.Models.ProductData;
 import ru.alexangan.developer.geatech.Models.ReportStates;
 import ru.alexangan.developer.geatech.Models.VisitItem;
+import ru.alexangan.developer.geatech.Network.NetworkUtils;
 import ru.alexangan.developer.geatech.R;
+import ru.alexangan.developer.geatech.Utils.JSON_to_model;
 import ru.alexangan.developer.geatech.Utils.SwipeDetector;
 
+import static ru.alexangan.developer.geatech.Models.GlobalConstants.GET_VISITS_URL_SUFFIX;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.company_id;
+import static ru.alexangan.developer.geatech.Models.GlobalConstants.inVisitItems;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.realm;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.selectedTech;
+import static ru.alexangan.developer.geatech.Models.GlobalConstants.tokenStr;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.visitItems;
 
-public class MainActivity extends Activity implements Communicator
+public class MainActivity extends Activity implements Communicator, Callback
 {
     private FragmentManager mFragmentManager;
     SwipeDetector swipeDetector;
@@ -79,6 +91,8 @@ public class MainActivity extends Activity implements Communicator
     NotificationBarFragment notificationBarFragment;
     int currentSelIndex;
     boolean ctrlBtnChkChanged;
+    private Call callVisits;
+    NetworkUtils networkUtils;
 
     @Override
     protected void onDestroy()
@@ -191,6 +205,8 @@ public class MainActivity extends Activity implements Communicator
         mFragmentTransaction.show(ctrlBtnsFragment1);
 
         mFragmentTransaction.commit();
+
+        networkUtils = new NetworkUtils();
     }
 
     @Override
@@ -258,7 +274,6 @@ public class MainActivity extends Activity implements Communicator
             mFragmentTransaction.commit();
 
 
-
             removeAllLists();
             currentSelIndex = -1;
             listVisits = new ListVisitsFragment();
@@ -285,7 +300,7 @@ public class MainActivity extends Activity implements Communicator
 
         if (view == findViewById(R.id.btnFillReport))
         {
-            if(currentSelIndex == -1)
+            if (currentSelIndex == -1)
             {
                 return;
             }
@@ -298,7 +313,7 @@ public class MainActivity extends Activity implements Communicator
 
             removeAllLists();
 
-            if(frag != null)
+            if (frag != null)
             {
                 Bundle args = new Bundle();
                 args.putInt("selectedIndex", currentSelIndex);
@@ -373,7 +388,7 @@ public class MainActivity extends Activity implements Communicator
     {
         FragmentTransaction mFragmentTransaction = mFragmentManager.beginTransaction();
 
-        if(currentSelIndex != -1)
+        if (currentSelIndex != -1)
         {
             VisitItem visitItem = visitItems.get(currentSelIndex);
             ProductData productData = visitItem.getProductData();
@@ -502,20 +517,26 @@ public class MainActivity extends Activity implements Communicator
     @Override
     public void onDateTimeSetReturned(Boolean mDatetimeAlreadySet)
     {
-        removeAllLists();
+        if (!mDatetimeAlreadySet && networkUtils.isNetworkAvailable(this))
+        {
+            callVisits = networkUtils.getData(this, GET_VISITS_URL_SUFFIX, tokenStr);
+        } else
+        {
+            removeAllLists();
 
-        ctrlBtnChkChanged = false;
-        ctrlBtnsFragment1.setCheckedBtnId(R.id.btnVisits);
-        ctrlBtnsFragment1.onHiddenChanged(true);
-        ctrlBtnChkChanged = true;
+            ctrlBtnChkChanged = false;
+            ctrlBtnsFragment1.setCheckedBtnId(R.id.btnVisits);
+            ctrlBtnsFragment1.onHiddenChanged(true);
+            ctrlBtnChkChanged = true;
 
-        listVisits = new ListVisitsFragment();
+            listVisits = new ListVisitsFragment();
 
-        Bundle args = new Bundle();
-        args.putBoolean("visitTimeNotSetOnly", false);
-        listVisits.setArguments(args);
+            Bundle args = new Bundle();
+            args.putBoolean("visitTimeNotSetOnly", false);
+            listVisits.setArguments(args);
 
-        setVisitsListContent(listVisits);
+            setVisitsListContent(listVisits);
+        }
     }
 
     @Override
@@ -570,7 +591,7 @@ public class MainActivity extends Activity implements Communicator
             listVisits = new ListVisitsFragment();
 
             Bundle args = new Bundle();
-            args.putBoolean("visitTimeNotSetOnly", true);
+            args.putBoolean("timeNotSetItemsOnly", true);
             listVisits.setArguments(args);
 
             setVisitsListContent(listVisits);
@@ -592,7 +613,7 @@ public class MainActivity extends Activity implements Communicator
             View layout = inflater.inflate(R.layout.alert_dialog_custom, null);
 
             ListView listView = (ListView) layout.findViewById(R.id.alertList);
-            ArrayAdapter <String> listAdapter = new ArrayAdapter<>(this, R.layout.alert_dialog_item_custom, listItemsArray);
+            ArrayAdapter<String> listAdapter = new ArrayAdapter<>(this, R.layout.alert_dialog_item_custom, listItemsArray);
             listView.setAdapter(listAdapter);
 
             listView.setOnItemClickListener(new AdapterView.OnItemClickListener()
@@ -600,7 +621,7 @@ public class MainActivity extends Activity implements Communicator
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int which, long id)
                 {
-                    if(which == 1)  // exit app
+                    if (which == 1)  // exit app
                     {
                         Intent intent = new Intent(MainActivity.this, LoginActivity.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -609,7 +630,7 @@ public class MainActivity extends Activity implements Communicator
                         finish();
                     }
 
-                    if(which == 0) // password recover
+                    if (which == 0) // password recover
                     {
                         Intent intent = new Intent(MainActivity.this, LoginActivity.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -705,5 +726,72 @@ public class MainActivity extends Activity implements Communicator
     public void showToastMessage(final String msg)
     {
         Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onFailure(Call call, IOException e)
+    {
+        if (call == callVisits)
+        {
+            showToastMessage("Visite data non ricevuto");
+        }
+    }
+
+    @Override
+    public void onResponse(Call call, Response response) throws IOException
+    {
+        if (call == callVisits)
+        {
+            final String visitsJSONData = response.body().string();
+
+            if (visitsJSONData == null)
+            {
+                showToastMessage("Data di visite non è stato ricevuto");
+                return;
+            }
+
+            Log.d("DEBUG", visitsJSONData);
+
+            runOnUiThread(new Runnable()
+            {
+                public void run()
+                {
+                    realm.beginTransaction();
+
+                    inVisitItems = JSON_to_model.getVisitTtemsList(visitsJSONData);
+
+                    visitItems = realm.where(VisitItem.class).findAll();
+                    visitItems.deleteAllFromRealm();
+
+                    if (inVisitItems != null && inVisitItems.size() > 0)
+                    {
+                        for (VisitItem visitItem : inVisitItems)
+                        {
+                            realm.copyToRealmOrUpdate(visitItem);
+                        }
+                    }
+                    realm.commitTransaction();
+
+                    realm.beginTransaction();
+                    visitItems = realm.where(VisitItem.class).findAll();
+                    realm.commitTransaction();
+
+                    removeAllLists();
+
+                    ctrlBtnChkChanged = false;
+                    ctrlBtnsFragment1.setCheckedBtnId(R.id.btnVisits);
+                    ctrlBtnsFragment1.onHiddenChanged(true);
+                    ctrlBtnChkChanged = true;
+
+                    listVisits = new ListVisitsFragment();
+
+                    Bundle args = new Bundle();
+                    args.putBoolean("visitTimeNotSetOnly", false);
+                    listVisits.setArguments(args);
+
+                    setVisitsListContent(listVisits);
+                }
+            });
+        }
     }
 }

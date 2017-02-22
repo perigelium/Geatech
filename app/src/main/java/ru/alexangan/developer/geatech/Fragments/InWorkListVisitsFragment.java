@@ -31,6 +31,19 @@ public class InWorkListVisitsFragment extends ListFragment
         super.onActivityCreated(savedInstanceState);
 
         Context context = getActivity();
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState)
+    {
+        super.onCreate(savedInstanceState);
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState)
+    {
+        View rootView = inflater.inflate(R.layout.list_visits_fragment, container, false);
 
         ArrayList<VisitItem> visitItemsDateTimeSet = new ArrayList<>();
 
@@ -63,19 +76,7 @@ public class InWorkListVisitsFragment extends ListFragment
                 new InWorkListVisitsAdapter(getActivity(), R.layout.in_work_list_visits_fragment_row, visitItemsDateTimeSet);
         setListAdapter(myListAdapter);
 
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState)
-    {
-        super.onCreate(savedInstanceState);
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState)
-    {
-        return inflater.inflate(R.layout.list_visits_fragment, container, false);
+        return rootView;
     }
 }
 

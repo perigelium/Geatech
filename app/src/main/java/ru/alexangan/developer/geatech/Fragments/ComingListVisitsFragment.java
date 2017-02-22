@@ -28,9 +28,7 @@ public class ComingListVisitsFragment extends ListFragment
 
         Context context = getActivity();
 
-        ArrayList<VisitItem> visitItemsDateTimeSet = new ArrayList<>();
-
-        realm.beginTransaction();
+/*        realm.beginTransaction();
         RealmResults <ReportStates> reportStatesList = realm.where(ReportStates.class).equalTo("company_id", company_id)
                 .equalTo("tech_id", selectedTech.getId()).findAll();
         realm.commitTransaction();
@@ -46,12 +44,9 @@ public class ComingListVisitsFragment extends ListFragment
                     break;
                 }
             }
-        }
+        }*/
 
-        ComingListVisitsAdapter myListAdapter =
-                new ComingListVisitsAdapter(getActivity(), R.layout.coming_list_visits_fragment_row, visitItemsDateTimeSet);
 
-        setListAdapter(myListAdapter);
     }
 
     @Override
@@ -64,7 +59,35 @@ public class ComingListVisitsFragment extends ListFragment
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState)
     {
-        return inflater.inflate(R.layout.list_visits_fragment, container, false);
+        View rootView =  inflater.inflate(R.layout.list_visits_fragment, container, false);
+
+        ArrayList<VisitItem> visitItemsDateTimeSet = new ArrayList<>();
+
+
+        realm.beginTransaction();
+
+        RealmResults <ReportStates> reportStatesResults = realm.where(ReportStates.class)
+                .equalTo("company_id", company_id).equalTo("tech_id", selectedTech.getId()).findAll();
+
+        realm.commitTransaction();
+        for (VisitItem visitItem : visitItems)
+        {
+            for(ReportStates reportStates : reportStatesResults)
+            {
+                if (visitItem.getGeaSopralluogo().getId_sopralluogo() == reportStates.getId_sopralluogo())
+                {
+                    visitItemsDateTimeSet.add(visitItem);
+                }
+            }
+        }
+
+        ComingListVisitsAdapter myListAdapter =
+                new ComingListVisitsAdapter(getActivity(), R.layout.coming_list_visits_fragment_row, visitItemsDateTimeSet);
+
+        setListAdapter(myListAdapter);
+
+
+        return rootView;
     }
 
 /*    @Override

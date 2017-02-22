@@ -445,7 +445,6 @@ public class TechnicianSelectFragment extends Fragment implements View.OnClickLi
                 {
                     tokenStr = jsonObject.getString("token");
 
-
                     if (tokenStr.length() != 0)
                     {
                         callVisits = networkUtils.getData(this, GET_VISITS_URL_SUFFIX, tokenStr);
@@ -454,6 +453,8 @@ public class TechnicianSelectFragment extends Fragment implements View.OnClickLi
                         {
                             callModels = networkUtils.getData(this, GET_MODELS_URL_SUFFIX, tokenStr);
                         }
+
+                        //loginCommunicator.onTechSelectedAndApplied();
                     }
 
                 } catch (JSONException e)

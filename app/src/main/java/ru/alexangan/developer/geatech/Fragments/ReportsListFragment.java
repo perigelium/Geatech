@@ -32,6 +32,22 @@ public class ReportsListFragment extends ListFragment
         super.onActivityCreated(savedInstanceState);
 
         Context context = getActivity();
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState)
+    {
+        super.onCreate(savedInstanceState);
+
+        mCommunicator = (Communicator)getActivity();
+
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState)
+    {
+        View rootView =  inflater.inflate(R.layout.list_visits_fragment, container, false);
 
         ArrayList<VisitItem> visitItemsReportSent = new ArrayList<>();
         visitItemsPositions = new ArrayList<>();
@@ -62,22 +78,7 @@ public class ReportsListFragment extends ListFragment
                 new ReportsListAdapter(getActivity(), R.layout.reports_list_fragment_row, visitItemsReportSent);
         setListAdapter(myListAdapter);
 
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState)
-    {
-        super.onCreate(savedInstanceState);
-
-        mCommunicator = (Communicator)getActivity();
-
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState)
-    {
-        return inflater.inflate(R.layout.list_visits_fragment, container, false);
+        return rootView;
     }
 
     @Override

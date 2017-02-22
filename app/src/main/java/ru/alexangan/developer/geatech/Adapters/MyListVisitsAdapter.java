@@ -101,9 +101,9 @@ public class MyListVisitsAdapter extends BaseAdapter
 
         ImageView calendarioIcon = (ImageView) row.findViewById(R.id.calendario);
         View vVisitDateView = row.findViewById(R.id.vVisitDateCell);
-        TextView tvVisitDay = (TextView)row.findViewById(R.id.tvVisitDay);
-        TextView tvVisitMonth = (TextView)row.findViewById(R.id.tvVisitMonth);
-        TextView tvVisitTime = (TextView)row.findViewById(R.id.tvVisitTime);
+        TextView tvVisitDay = (TextView) row.findViewById(R.id.tvVisitDay);
+        TextView tvVisitMonth = (TextView) row.findViewById(R.id.tvVisitMonth);
+        TextView tvVisitTime = (TextView) row.findViewById(R.id.tvVisitTime);
         ImageView ivPersonTimeSet = (ImageView) row.findViewById(R.id.ivPersonTimeSet);
         ImageView ivPersonTimeUnset = (ImageView) row.findViewById(R.id.ivPersonTimeUnset);
 
@@ -115,7 +115,7 @@ public class MyListVisitsAdapter extends BaseAdapter
         ClientData clientData = visitItem.getClientData();
         ProductData productData = visitItem.getProductData();
         GeaSopralluogo geaSopralluogo = visitItem.getGeaSopralluogo();
-
+        String dataOraSopralluogo = geaSopralluogo.getData_ora_sopralluogo();
         int idSopralluogo = geaSopralluogo.getId_sopralluogo();
         boolean initialized = geaSopralluogo.getInizializzazione();
 
@@ -123,76 +123,67 @@ public class MyListVisitsAdapter extends BaseAdapter
         serviceTypeTextView.setText(productData.getProductType());
         clientAddressTextView.setText(clientData.getAddress());
 
-        realm.beginTransaction();
+        boolean ownReport = false;
+
+
+/*        realm.beginTransaction();
         ReportStates reportStates = realm.where(ReportStates.class).equalTo("company_id", company_id).equalTo("tech_id", selectedTech.getId())
                 .equalTo("id_sopralluogo", idSopralluogo).findFirst(); //.greaterThan("id_rapporto_sopralluogo", -1)
         realm.commitTransaction();
 
-        String visitDateTime = null;
-        boolean ownReport = false;
-
-        if(reportStates!=null)
+        if (reportStates != null)
         {
-            visitDateTime = reportStates.getData_ora_sopralluogo();
             int techOfReport = reportStates.getTech_id();
 
-            if(techOfReport == selectedTech.getId() && initialized)
+            if (techOfReport == selectedTech.getId() && initialized)
             {
                 ownReport = true;
             }
-        }
+        }*/
 
-        if(visitDateTime != null)
+
+        if (initialized)
         {
             Calendar calendar = Calendar.getInstance();
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
 
             try
             {
-                calendar.setTime(sdf.parse(visitDateTime));
+                calendar.setTime(sdf.parse(dataOraSopralluogo));
 
             } catch (ParseException e)
             {
                 e.printStackTrace();
             }
 
-            if (initialized)
+            if (ownReport)
             {
-                if(!ownReport)
-                {
-                    vVisitDateView.setBackgroundColor(Color.parseColor("#999999"));
-                }
-                else
-                {
-                    vVisitDateView.setBackgroundColor(Color.parseColor("#009922"));
-                }
+                vVisitDateView.setBackgroundColor(Color.parseColor("#009922"));
 
-                tvVisitDay.setVisibility(View.VISIBLE);
-                tvVisitMonth.setVisibility(View.VISIBLE);
-                ivPersonTimeSet.setVisibility(View.VISIBLE);
-
-                tvVisitDay.setText(Integer.toString(calendar.get(calendar.DAY_OF_MONTH)));
-                tvVisitMonth.setText(ItalianMonths.numToString(calendar.get(calendar.MONTH) + 1));
-
-                String minuteStr = Integer.toString(calendar.get(calendar.MINUTE));
-                if (minuteStr.length() == 1)
-                {
-                    minuteStr = "0" + minuteStr;
-                }
-
-                tvVisitTime.setText(Integer.toString(calendar.get(calendar.HOUR_OF_DAY)) + ":" + minuteStr);
             } else
             {
-                calendarioIcon.setVisibility(View.VISIBLE);
-                ivPersonTimeUnset.setVisibility(View.VISIBLE);
+                vVisitDateView.setBackgroundColor(Color.parseColor("#999999"));
             }
-        }
-        else
+
+            tvVisitDay.setVisibility(View.VISIBLE);
+            tvVisitMonth.setVisibility(View.VISIBLE);
+            ivPersonTimeSet.setVisibility(View.VISIBLE);
+
+            tvVisitDay.setText(Integer.toString(calendar.get(calendar.DAY_OF_MONTH)));
+            tvVisitMonth.setText(ItalianMonths.numToString(calendar.get(calendar.MONTH) + 1));
+
+            String minuteStr = Integer.toString(calendar.get(calendar.MINUTE));
+            if (minuteStr.length() == 1)
+            {
+                minuteStr = "0" + minuteStr;
+            }
+
+            tvVisitTime.setText(Integer.toString(calendar.get(calendar.HOUR_OF_DAY)) + ":" + minuteStr);
+        } else
         {
             calendarioIcon.setVisibility(View.VISIBLE);
             ivPersonTimeUnset.setVisibility(View.VISIBLE);
         }
-
 
         return row;
     }

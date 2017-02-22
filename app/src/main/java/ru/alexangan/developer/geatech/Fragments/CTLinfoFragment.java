@@ -33,6 +33,7 @@ import static ru.alexangan.developer.geatech.Models.GlobalConstants.visitItems;
 
 public class CTLinfoFragment extends Fragment implements View.OnClickListener, LocationRetrievedEvents, Callback
 {
+    Button btnSetCurrentCoords, btnSaveCurrentCoords;
     TextView tvCoordNord, tvCoordEst, tvAltitude;
     Call callDownloadURL;
     double latitude, longitude;
@@ -64,14 +65,6 @@ public class CTLinfoFragment extends Fragment implements View.OnClickListener, L
     public void onDestroy()
     {
         super.onDestroy();
-
-        realm.beginTransaction();
-
-        if(latitude != 0 && longitude != 0 && altitude != -999)
-        {
-            reportStates.setGeneralInfoCompletionState(2);
-        }
-        realm.commitTransaction();
     }
 
     @Override
@@ -106,11 +99,16 @@ public class CTLinfoFragment extends Fragment implements View.OnClickListener, L
 
         View rootView = inflater.inflate(R.layout.ctl_info_fragment, container, false);
 
-        Button btnSetCurrentCoords = (Button) rootView.findViewById(R.id.btnSetCurrentCoords);
-        Button btnSaveCurrentCoords = (Button) rootView.findViewById(R.id.btnSaveCurrentCoords);
+        btnSetCurrentCoords = (Button) rootView.findViewById(R.id.btnSetCurrentCoords);
+        btnSaveCurrentCoords = (Button) rootView.findViewById(R.id.btnSaveCurrentCoords);
 
         btnSetCurrentCoords.setOnClickListener(this);
         btnSaveCurrentCoords.setOnClickListener(this);
+
+        tvCoordNord = (TextView) rootView.findViewById(R.id.tvCoordNord);
+        tvCoordEst = (TextView) rootView.findViewById(R.id.tvCoordEst);
+        tvAltitude = (TextView) rootView.findViewById(R.id.tvAltitude);
+
 
         VisitItem visitItem = visitItems.get(selectedIndex);
         ClientData clientData = visitItem.getClientData();
@@ -121,6 +119,18 @@ public class CTLinfoFragment extends Fragment implements View.OnClickListener, L
         reportStates = realm.where(ReportStates.class).equalTo("company_id", company_id).equalTo("tech_id", selectedTech.getId())
                 .equalTo("id_sopralluogo", idSopralluogo).findFirst();
         realm.commitTransaction();
+
+        TextView clientNameTextView = (TextView) rootView.findViewById(R.id.tvClientName);
+        clientNameTextView.setText(clientData.getName());
+
+        TextView clientPhoneTextView = (TextView) rootView.findViewById(R.id.tvClientPhone);
+        clientPhoneTextView.setText(clientData.getMobile());
+
+        TextView clientAddressTextView = (TextView) rootView.findViewById(R.id.tvClientAddress);
+        clientAddressTextView.setText(clientData.getAddress());
+
+        TextView tvTechnicianName = (TextView) rootView.findViewById(R.id.tvTechnicianName);
+        tvTechnicianName.setText(selectedTech.getFullNameTehnic());
 
         if(reportStates!=null)
         {
@@ -145,33 +155,16 @@ public class CTLinfoFragment extends Fragment implements View.OnClickListener, L
                 altitude = reportStates.getAltitudine();
             }
 
-            altitude = reportStates.getAltitudine();
-
-            tvCoordNord = (TextView) rootView.findViewById(R.id.tvCoordNord);
             tvCoordNord.setText(String.valueOf(latitude));
-
-            tvCoordEst = (TextView) rootView.findViewById(R.id.tvCoordEst);
             tvCoordEst.setText(String.valueOf(longitude));
 
-            tvAltitude = (TextView) rootView.findViewById(R.id.tvAltitude);
+            altitude = reportStates.getAltitudine();
 
             if (altitude != -999)
             {
                 tvAltitude.setText(String.valueOf(altitude));
             }
         }
-
-        TextView clientNameTextView = (TextView) rootView.findViewById(R.id.tvClientName);
-        clientNameTextView.setText(clientData.getName());
-
-        TextView clientPhoneTextView = (TextView) rootView.findViewById(R.id.tvClientPhone);
-        clientPhoneTextView.setText(clientData.getMobile());
-
-        TextView clientAddressTextView = (TextView) rootView.findViewById(R.id.tvClientAddress);
-        clientAddressTextView.setText(clientData.getAddress());
-
-        TextView tvTechnicianName = (TextView) rootView.findViewById(R.id.tvTechnicianName);
-        tvTechnicianName.setText(selectedTech.getFullNameTehnic(), TextView.BufferType.EDITABLE);
 
 /*        if(reportStates.getData_ora_presa_appuntamento() == null && geaSopralluogo.getInizializzazione())
         {
@@ -201,11 +194,19 @@ public class CTLinfoFragment extends Fragment implements View.OnClickListener, L
                 return;
             }
 
+            btnSetCurrentCoords.setEnabled(false);
+            btnSetCurrentCoords.setAlpha(.4f);
+            btnSaveCurrentCoords.setEnabled(false);
+            btnSaveCurrentCoords.setAlpha(.4f);
+
                 locationRetriever = new LocationRetriever(context, this);
         }
 
         if(view.getId() == R.id.btnSaveCurrentCoords)
         {
+            btnSaveCurrentCoords.setEnabled(false);
+            btnSaveCurrentCoords.setAlpha(0.4f);
+
             if(reportStates!=null)
             {
                 realm.beginTransaction();
@@ -222,6 +223,11 @@ public class CTLinfoFragment extends Fragment implements View.OnClickListener, L
                 if(altitude!= -999)
                 {
                     reportStates.setAltitudine(altitude);
+                }
+
+                if(reportStates!=null && reportStates.getLatitudine() != 0 && reportStates.getLongitudine() != 0) // && altitude != -999
+                {
+                    reportStates.setGeneralInfoCompletionState(2);
                 }
 
                 realm.commitTransaction();
@@ -241,15 +247,6 @@ public class CTLinfoFragment extends Fragment implements View.OnClickListener, L
 
             tvCoordNord.setText(String.valueOf(latitude));
             tvCoordEst.setText(String.valueOf(longitude));
-
-            if(reportStates!=null)
-            {
-                realm.beginTransaction();
-                reportStates.setLatitudine(mLastLocation.getLatitude());
-                reportStates.setLongitudine(mLastLocation.getLongitude());
-                reportStates.setGeneralInfoCompletionState(2);
-                realm.commitTransaction();
-            }
 
             if (mLastLocation.hasAltitude())
             {
@@ -317,6 +314,11 @@ public class CTLinfoFragment extends Fragment implements View.OnClickListener, L
                 }
 
                 tvAltitude.setText(String.valueOf(altitude), TextView.BufferType.EDITABLE);
+
+                btnSetCurrentCoords.setEnabled(true);
+                btnSetCurrentCoords.setAlpha(1.0f);
+                btnSaveCurrentCoords.setEnabled(true);
+                btnSaveCurrentCoords.setAlpha(1.0f);
             }
         });
     }

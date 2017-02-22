@@ -288,7 +288,7 @@
                 android:layout_gravity="center_vertical|center"
                 android:background="#00ff33"
                 android:onClick="onClick"
-                android:text="Fisso il sopraluogho"/>
+                android:text="Fisso il sopralluogo"/>
 
             <Button
                 android:id="@+id/btnAnnullaSetDateTime"

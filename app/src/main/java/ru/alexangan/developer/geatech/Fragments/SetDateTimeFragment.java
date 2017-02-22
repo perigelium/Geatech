@@ -35,6 +35,7 @@ import ru.alexangan.developer.geatech.Adapters.SetVisitDateTimeListAdapter;
 import ru.alexangan.developer.geatech.Interfaces.Communicator;
 import ru.alexangan.developer.geatech.Models.ClientData;
 import ru.alexangan.developer.geatech.Models.ProductData;
+import ru.alexangan.developer.geatech.Models.RealmString;
 import ru.alexangan.developer.geatech.Models.ReportStates;
 import ru.alexangan.developer.geatech.Models.SubproductItem;
 import ru.alexangan.developer.geatech.Models.VisitItem;
@@ -158,6 +159,7 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
         ClientData clientData = visitItem.getClientData();
         ProductData productData = visitItem.getProductData();
         GeaSopralluogo geaSopralluogo = visitItem.getGeaSopralluogo();
+        String dataOraSopralluogo = geaSopralluogo.getData_ora_sopralluogo();
         idSopralluogo = geaSopralluogo.getId_sopralluogo();
         List<SubproductItem> list = productData.getSubItem();
 
@@ -189,7 +191,7 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
         mDateSetTextView = (TextView) rootView.findViewById(R.id.tvDateSet);
         mTimeSetTextView = (TextView) rootView.findViewById(R.id.tvTimeSet);
 
-        String visitDateTime = reportStates!=null ? reportStates.getData_ora_sopralluogo() : " ";
+        //String visitDateTime = reportStates!=null ? reportStates.getData_ora_sopralluogo() : " ";
 
         calendarNow = Calendar.getInstance();
         calendar = Calendar.getInstance();
@@ -198,7 +200,7 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
 
         try
         {
-            calendar.setTime(sdf.parse(visitDateTime));
+            calendar.setTime(sdf.parse(dataOraSopralluogo));
 
             int millsDiff = calendar.compareTo(calendarNow);
 
@@ -223,7 +225,17 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
         updateDisplay();
 
         mSetDateButton.setOnClickListener(this);
-        mAnnullaSetDateTimeButton.setOnClickListener(this);
+
+        //if(reportStates!=null)
+        {
+            mAnnullaSetDateTimeButton.setOnClickListener(this);
+        }
+/*        else
+        {
+            mAnnullaSetDateTimeButton.setAlpha(.4f);
+            mAnnullaSetDateTimeButton.setEnabled(false);
+        }*/
+
         mSetDateTimeSubmitButton.setOnClickListener(this);
         btnApriMappa.setOnClickListener(this);
         btnChiama.setOnClickListener(this);
@@ -395,30 +407,37 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
                                         {
                                             try
                                             {
-                                                final String str_id_rapporto_sopralluogo = jsonObject.getString("id_rapporto_sopralluogo");
+                                                String str_id_rapporto_sopralluogo = jsonObject.getString("id_rapporto_sopralluogo");
                                                 int id_rapporto_sopralluogo = Integer.valueOf(str_id_rapporto_sopralluogo);
 
 
                                                 if (reportStates == null)
                                                 {
                                                     realm.beginTransaction();
-                                                    ReportStates newReportStates = new ReportStates(company_id, selectedTech.getId(), idSopralluogo, id_rapporto_sopralluogo);
-                                                    realm.copyToRealm(newReportStates);
+                                                    reportStates = new ReportStates(company_id, selectedTech.getId(), idSopralluogo, id_rapporto_sopralluogo);
+                                                    realm.copyToRealm(reportStates);
                                                     realm.commitTransaction();
                                                 }
 
                                                 if (stakedOut == 1)
                                                 {
                                                     realm.beginTransaction();
-                                                    reportStates.setData_ora_sopralluogo(strDateTime);
-                                                    reportStates.setId_rapporto_sopralluogo(id_rapporto_sopralluogo);
 
-                                                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ITALIAN);
-                                                    String shortDateStr = sdf.format(calendarNow.getTime());
-                                                    reportStates.setData_ora_presa_appuntamento(shortDateStr);
+                                                    reportStates = realm.where(ReportStates.class).equalTo("company_id", company_id).equalTo("tech_id", selectedTech.getId())
+                                                            .equalTo("id_sopralluogo", idSopralluogo).findFirst();
+                                                    if (reportStates != null)
+                                                    {
 
-                                                    reportStates.setNome_tecnico(selectedTech.getFullNameTehnic());
-                                                    realm.commitTransaction();
+                                                        reportStates.setData_ora_sopralluogo(strDateTime);
+                                                        reportStates.setId_rapporto_sopralluogo(id_rapporto_sopralluogo);
+
+                                                        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ITALIAN);
+                                                        String shortDateStr = sdf.format(calendarNow.getTime());
+                                                        reportStates.setData_ora_presa_appuntamento(shortDateStr);
+
+                                                        reportStates.setNome_tecnico(selectedTech.getFullNameTehnic());
+                                                        realm.commitTransaction();
+                                                    }
                                                 }
                                             } catch (JSONException e)
                                             {
@@ -428,10 +447,12 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
 
                                         if (stakedOut == 0)
                                         {
-                                            realm.beginTransaction();
-                                            reportStates.setData_ora_sopralluogo(null);
-                                            reportStates.setNome_tecnico(null);
-                                            realm.commitTransaction();
+                                            if (reportStates != null)
+                                            {
+                                                realm.beginTransaction();
+                                                reportStates.deleteFromRealm();
+                                                realm.commitTransaction();
+                                            }
                                         }
 
                                         mCommunicator.onDateTimeSetReturned(false);

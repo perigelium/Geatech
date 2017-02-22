@@ -129,8 +129,6 @@ public class DomoticaReportFragment extends Fragment implements View.OnClickList
 
         if (reportStates != null)
         {
-            realm.beginTransaction();
-
             int checkedBtnId;
             
             // TwoRadios1
@@ -235,35 +233,37 @@ public class DomoticaReportFragment extends Fragment implements View.OnClickList
             // Completion state
             if(getValueFromReportItem(139).length() != 0)
             {
+                realm.beginTransaction();
                 reportStates.setReportCompletionState(1);
+                realm.commitTransaction();
 
                 if (getValueFromReportItem(140).length() != 0 || getValueFromReportItem(141).length() != 0)
                 {
+                    realm.beginTransaction();
                     reportStates.setReportCompletionState(2);
+                    realm.commitTransaction();
 
                     if (getValueFromReportItem(139).length() != 0 && getValueFromReportItem(141).length() != 0
                             && getValueFromReportItem(146).length() != 0)
                     {
+                        realm.beginTransaction();
                         reportStates.setReportCompletionState(3);
 
                         Calendar calendarNow = Calendar.getInstance();
                         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
                         String strDateTime = sdf.format(calendarNow.getTime());
                         reportStates.setDataOraRaportoCompletato(strDateTime);
+                        realm.commitTransaction();
                     }
                 }
             }
             else
             {
+                realm.beginTransaction();
                 reportStates.setReportCompletionState(0);
                 reportStates.setDataOraRaportoCompletato(null);
+                realm.commitTransaction();
             }
-        }
-        realm.commitTransaction();
-
-        if (reportStates == null)
-        {
-            getActivity().getFragmentManager().beginTransaction().remove(this).commit();
         }
     }
 
@@ -278,16 +278,12 @@ public class DomoticaReportFragment extends Fragment implements View.OnClickList
         idSopralluogo = geaSopralluogo.getId_sopralluogo();
 
         reportStates = realm.where(ReportStates.class).equalTo("id_sopralluogo", idSopralluogo).findFirst();
-        //reportModelDomotica = realm.where(ReportModelDomotica.class).equalTo("id_sopralluogo", idSopralluogo).findFirst();
-        //RealmResults <ReportModelDomotica> reportModelDomoticas = realm.where(ReportModelDomotica.class).findAll();
 
         reportStates = realm.where(ReportStates.class).equalTo("company_id", company_id).equalTo("tech_id", selectedTech.getId())
                 .equalTo("id_sopralluogo", idSopralluogo).findFirst();
         id_rapporto_sopralluogo = reportStates.getId_rapporto_sopralluogo();
 
         realm.commitTransaction();
-
-        realm.beginTransaction();
 
         //if (reportModelDomotica != null)
         {
@@ -397,8 +393,6 @@ public class DomoticaReportFragment extends Fragment implements View.OnClickList
             et3ThreeTextThreeEdit1.setText(getValueFromReportItem(152));
         }
 
-        realm.commitTransaction();
-
         realm.beginTransaction();
 
         if (reportStates != null)
@@ -425,17 +419,7 @@ public class DomoticaReportFragment extends Fragment implements View.OnClickList
 
         reportStates = realm.where(ReportStates.class).equalTo("company_id", company_id).equalTo("tech_id", selectedTech.getId())
                 .equalTo("id_sopralluogo", idSopralluogo).findFirst();
-/*        reportModelDomotica = realm.where(ReportModelDomotica.class).equalTo("id_sopralluogo", idSopralluogo).findFirst();
-        RealmResults<ReportModelDomotica> reportModelDomoticas = realm.where(ReportModelDomotica.class).findAll();
 
-        if (reportStates != null)
-        {
-            if (reportModelDomotica == null)
-            {
-                reportModelDomotica = new ReportModelDomotica(reportModelDomoticas.size(), idSopralluogo);
-                realm.copyToRealmOrUpdate(reportModelDomotica);
-            }
-        }*/
         realm.commitTransaction();
         
         int i;
@@ -785,7 +769,7 @@ public class DomoticaReportFragment extends Fragment implements View.OnClickList
         }
         else
         {
-            return null;
+            return "";
         }
     }
 }

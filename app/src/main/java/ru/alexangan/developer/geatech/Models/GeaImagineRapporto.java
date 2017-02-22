@@ -13,12 +13,16 @@ public class GeaImagineRapporto extends RealmObject
 {
     @PrimaryKey
     private int id_immagine_rapporto;
+
+    private int company_id;
+    private int tech_id;
+
     private int id_rapporto_sopralluogo;
     private String nome_file;
 
     private String filePath;
 
-    public GeaImagineRapporto(int id_rapporto_sopralluogo, int id_immagine_rapporto, String filePath, String nome_file)
+    public GeaImagineRapporto(int company_id, int tech_id, int id_rapporto_sopralluogo, int id_immagine_rapporto, String filePath, String nome_file)
     {
         this.id_rapporto_sopralluogo = id_rapporto_sopralluogo;
         this.id_immagine_rapporto = id_immagine_rapporto;

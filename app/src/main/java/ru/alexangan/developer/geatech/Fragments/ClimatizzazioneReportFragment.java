@@ -163,34 +163,39 @@ public class ClimatizzazioneReportFragment extends Fragment implements View.OnCl
             str_Id_item = et3ThreeTextThreeEdit1.getText().toString();
             insertStringInReportItem(78, str_Id_item);
 
-
-            realm.beginTransaction();
             // Completion state
             if(getValueFromReportItem(72).length() != 0)
             {
+                realm.beginTransaction();
                 reportStates.setReportCompletionState(1);
+                realm.commitTransaction();
 
                 if (getValueFromReportItem(74).length() != 0 || getValueFromReportItem(73).length() != 0)
                 {
+                    realm.beginTransaction();
                     reportStates.setReportCompletionState(2);
+                    realm.commitTransaction();
 
                     if (getValueFromReportItem(72).length() != 0 && getValueFromReportItem(74).length() != 0 && getValueFromReportItem(73).length() != 0)
                     {
+                        realm.beginTransaction();
                         reportStates.setReportCompletionState(3);
 
                         Calendar calendarNow = Calendar.getInstance();
                         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
                         String strDateTime = sdf.format(calendarNow.getTime());
                         reportStates.setDataOraRaportoCompletato(strDateTime);
+                        realm.commitTransaction();
                     }
                 }
             }
             else
             {
+                realm.beginTransaction();
                 reportStates.setReportCompletionState(0);
                 reportStates.setDataOraRaportoCompletato(null);
+                realm.commitTransaction();
             }
-            realm.commitTransaction();
         }
 
         if (reportStates == null)
@@ -221,8 +226,6 @@ public class ClimatizzazioneReportFragment extends Fragment implements View.OnCl
         id_rapporto_sopralluogo = reportStates.getId_rapporto_sopralluogo();
 
         realm.commitTransaction();
-
-
 
             int i;
 
@@ -598,7 +601,7 @@ public class ClimatizzazioneReportFragment extends Fragment implements View.OnCl
         }
         else
         {
-            return null;
+            return "";
         }
     }
 }

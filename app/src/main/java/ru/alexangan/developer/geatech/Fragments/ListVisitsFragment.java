@@ -1,27 +1,39 @@
 package ru.alexangan.developer.geatech.Fragments;
 
+import android.app.Activity;
 import android.app.ListFragment;
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 import io.realm.RealmResults;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.Response;
 import ru.alexangan.developer.geatech.Adapters.MyListVisitsAdapter;
 import ru.alexangan.developer.geatech.Interfaces.Communicator;
 import ru.alexangan.developer.geatech.Models.ReportStates;
 import ru.alexangan.developer.geatech.Models.VisitItem;
+import ru.alexangan.developer.geatech.Network.NetworkUtils;
 import ru.alexangan.developer.geatech.R;
+import ru.alexangan.developer.geatech.Utils.JSON_to_model;
 import ru.alexangan.developer.geatech.Utils.SwipeDetector;
 
+import static ru.alexangan.developer.geatech.Models.GlobalConstants.GET_VISITS_URL_SUFFIX;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.company_id;
+import static ru.alexangan.developer.geatech.Models.GlobalConstants.inVisitItems;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.realm;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.selectedTech;
+import static ru.alexangan.developer.geatech.Models.GlobalConstants.tokenStr;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.visitItems;
 
 public class ListVisitsFragment extends ListFragment
@@ -32,14 +44,14 @@ public class ListVisitsFragment extends ListFragment
     ArrayList<VisitItem> visitItemsFiltered;
     MyListVisitsAdapter myListAdapter;
     ListView lv;
+    Activity activity;
 
     @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
+    public void onActivityCreated(Bundle savedInstanceState)
+    {
         super.onActivityCreated(savedInstanceState);
 
-
-
-        Context context = getActivity();
+        activity = getActivity();
 
 /*        Collections.sort(visitItemsFiltered, new Comparator()
         {
@@ -63,8 +75,15 @@ public class ListVisitsFragment extends ListFragment
     {
         super.onCreate(savedInstanceState);
 
-        mCommunicator = (Communicator)getActivity();
+        mCommunicator = (Communicator) getActivity();
         swipeDetector = new SwipeDetector();
+
+        timeNotSetItemsOnly = false;
+
+        if (getArguments() != null)
+        {
+            timeNotSetItemsOnly = getArguments().getBoolean("timeNotSetItemsOnly", false);
+        }
     }
 
 /*    public void updateView(boolean filterTimeSetItems)
@@ -99,38 +118,23 @@ public class ListVisitsFragment extends ListFragment
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
-        View rootView =  inflater.inflate(R.layout.list_visits_fragment, container, false);
-
-        timeNotSetItemsOnly = false;
-
-        if (getArguments() != null)
-        {
-            timeNotSetItemsOnly = getArguments().getBoolean("timeNotSetItemsOnly");
-        }
+        View rootView = inflater.inflate(R.layout.list_visits_fragment, container, false);
 
         visitItemsFiltered = new ArrayList<>();
-        visitItemsFiltered.addAll(visitItems);
+        //visitItemsFiltered.addAll(visitItems);
 
-        realm.beginTransaction();
+/*        realm.beginTransaction();
         RealmResults<ReportStates> reportStatesList = realm.where(ReportStates.class).equalTo("company_id", company_id)
                 .equalTo("tech_id", selectedTech.getId()).findAll();
-        realm.commitTransaction();
+        realm.commitTransaction();*/
 
-
-/*        for (VisitItem visitItem : visitItems)
+        for (VisitItem visitItem : visitItems)
         {
-            for(ReportStates reportStates : reportStatesList)
+            if (!timeNotSetItemsOnly || (timeNotSetItemsOnly && visitItem.getGeaSopralluogo().getInizializzazione() == false))
             {
-                if (visitItem.getGeaSopralluogo().getId_sopralluogo() == reportStates.getId_sopralluogo())
-                {
-                    if (!timeNotSetItemsOnly || (timeNotSetItemsOnly && reportStates.getData_ora_sopralluogo() == null))
-                    {
-                        visitItemsFiltered.add(visitItem);
-                        break;
-                    }
-                }
+                visitItemsFiltered.add(visitItem);
             }
-        }*/
+        }
 
         myListAdapter = new MyListVisitsAdapter(getActivity(), R.layout.list_visits_fragment_row, visitItemsFiltered);
         setListAdapter(myListAdapter);
@@ -153,31 +157,24 @@ public class ListVisitsFragment extends ListFragment
                 int idSopralluogo = visitItemsFiltered.get(position).getGeaSopralluogo().getId_sopralluogo();
 
                 int idVisit = visitItemsFiltered.get(position).getId();
-                realm.beginTransaction();
-                ReportStates reportStates = realm.where(ReportStates.class).equalTo("company_id", company_id)
-                        .equalTo("tech_id", selectedTech.getId()).equalTo("id_sopralluogo", idSopralluogo).findFirst();
-                realm.commitTransaction();
 
                 boolean initialized = visitItemsFiltered.get(position).getGeaSopralluogo().getInizializzazione();
 
-                if (reportStates!=null && !initialized)
+                if (true) //reportStates!= null || !initialized
                 {
-                    initialized = reportStates.getData_ora_sopralluogo() != null;
-                }
-
-                if (swipeDetector.swipeDetected())
-                {
-                    if(swipeDetector.getAction() == SwipeDetector.Action.LR)
+                    if (swipeDetector.swipeDetected())
                     {
-                        mCommunicator.OnListItemSwiped(idVisit, initialized);
-                    }
-                    else if(swipeDetector.getAction() == SwipeDetector.Action.RL)
+                        if (swipeDetector.getAction() == SwipeDetector.Action.LR)
+                        {
+                            mCommunicator.OnListItemSwiped(idVisit, initialized);
+                        } else if (swipeDetector.getAction() == SwipeDetector.Action.RL)
+                        {
+                            mCommunicator.OnListItemSwiped(idVisit, false);
+                        }
+                    } else
                     {
-                        mCommunicator.OnListItemSwiped(idVisit, false);
+                        mCommunicator.OnListItemSelected(idVisit, initialized);
                     }
-                } else
-                {
-                    mCommunicator.OnListItemSelected(idVisit, initialized);
                 }
             }
         });
@@ -207,6 +204,17 @@ public class ListVisitsFragment extends ListFragment
                 return false;
             }
         });*/
+    }
+
+    private void showToastMessage(final String msg)
+    {
+        activity.runOnUiThread(new Runnable()
+        {
+            public void run()
+            {
+                Toast.makeText(activity, msg, Toast.LENGTH_LONG).show();
+            }
+        });
     }
 }
 
