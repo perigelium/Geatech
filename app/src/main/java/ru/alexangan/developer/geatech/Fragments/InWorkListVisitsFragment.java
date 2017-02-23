@@ -6,11 +6,13 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 
 import java.util.ArrayList;
 
 import io.realm.RealmResults;
 import ru.alexangan.developer.geatech.Adapters.InWorkListVisitsAdapter;
+import ru.alexangan.developer.geatech.Interfaces.Communicator;
 import ru.alexangan.developer.geatech.Models.ReportStates;
 import ru.alexangan.developer.geatech.Models.VisitItem;
 import ru.alexangan.developer.geatech.R;
@@ -22,8 +24,8 @@ import static ru.alexangan.developer.geatech.Models.GlobalConstants.visitItems;
 
 public class InWorkListVisitsFragment extends ListFragment
 {
-    //GeneralInfoReceiver generalInfoReceiver;
-    //private Communicator mCommunicator;
+    ArrayList<Integer> visitItemsPositions;
+    private Communicator mCommunicator;
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState)
@@ -37,6 +39,8 @@ public class InWorkListVisitsFragment extends ListFragment
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
+
+        mCommunicator = (Communicator)getActivity();
     }
 
     @Override
@@ -46,6 +50,7 @@ public class InWorkListVisitsFragment extends ListFragment
         View rootView = inflater.inflate(R.layout.list_visits_fragment, container, false);
 
         ArrayList<VisitItem> visitItemsDateTimeSet = new ArrayList<>();
+        visitItemsPositions = new ArrayList<>();
 
         realm.beginTransaction();
         RealmResults<ReportStates> reportStatesList = realm.where(ReportStates.class).equalTo("company_id", company_id)
@@ -67,6 +72,7 @@ public class InWorkListVisitsFragment extends ListFragment
                         )
                 {
                     visitItemsDateTimeSet.add(visitItem);
+                    visitItemsPositions.add(visitItem.getId());
                     break;
                 }
             }
@@ -77,6 +83,14 @@ public class InWorkListVisitsFragment extends ListFragment
         setListAdapter(myListAdapter);
 
         return rootView;
+    }
+
+    @Override
+    public void onListItemClick(ListView l, View v, int position, long id)
+    {
+        super.onListItemClick(l, v, position, id);
+
+        mCommunicator.OnInWorkListItemSelected(visitItemsPositions.get(position));
     }
 }
 

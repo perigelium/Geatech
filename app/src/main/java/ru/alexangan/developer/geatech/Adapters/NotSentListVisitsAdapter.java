@@ -89,7 +89,7 @@ public class NotSentListVisitsAdapter extends BaseAdapter implements Callback
     public View getView(final int position, View convertView, ViewGroup parent) {
         // return super.getView(position, convertView, parent);
 
-        LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        LayoutInflater inflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View row = inflater.inflate(layout_id, parent, false);
 
         VisitItem visitItem = visitItemsDateTimeSet.get(position);
@@ -122,11 +122,11 @@ public class NotSentListVisitsAdapter extends BaseAdapter implements Callback
             TextView tvReportCompletionState = (TextView) row.findViewById(R.id.tvReportCompletionState);
             tvReportCompletionState.setText(reportStates.getDataOraRaportoCompletato());
 
-            TextView tvNotSentReason = (TextView) row.findViewById(R.id.tvNotSentReason);
+/*            TextView tvNotSentReason = (TextView) row.findViewById(R.id.tvNotSentReason);
             tvNotSentReason.setText(reportStates.getSendingReportTriesStateString(reportStates.getSendingReportTriesState()).Value());
 
             TextView tvNextTimeTryToSendReport = (TextView) row.findViewById(R.id.tvNextTimeTryToSendReport);
-            tvNextTimeTryToSendReport.setText(reportStates.getDataOraProssimoTentativo());
+            tvNextTimeTryToSendReport.setText(reportStates.getDataOraProssimoTentativo());*/
         }
 
         Button btnSendReportNow = (Button) row.findViewById(R.id.btnSendReportNow);

@@ -60,7 +60,7 @@ public class NotSentListVisitsFragment extends ListFragment// implements View.On
             {
                 if (visitItem.getGeaSopralluogo().getId_sopralluogo() == reportStates.getId_sopralluogo()
                         && (reportStates.getGeneralInfoCompletionState()==2 && reportStates.getReportCompletionState() ==3 )
-                        && reportStates.getPhotoAddedNumber() >= 3 && reportStates.getDataOraRaportoInviato()==null)
+                        && reportStates.getPhotoAddedNumber() >= 2 && reportStates.getDataOraRaportoInviato()==null)
                 {
                     visitItemsDateTimeSet.add(visitItem);
                     break;

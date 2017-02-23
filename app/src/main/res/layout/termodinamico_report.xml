@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version=".0" encoding="utf-8"?>
 <ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
@@ -12,37 +12,37 @@
 
         <include layout="@layout/report_header"/>
 
-        <include android:id="@+id/header1" layout="@layout/section_header1"/>
+        <include android:id="@+id/section_header1" layout="@layout/section_header"/>
 
-        <include layout="@layout/three_radios_and_edit1"/>
+        <include layout="@layout/three_radios_and_edit"/>
 
-        <include android:id="@+id/two_radios1" layout="@layout/two_radios1"/>
+        <include android:id="@+id/two_radios1" layout="@layout/two_radios"/>
 
-        <include android:id="@+id/two_radios2" layout="@layout/two_radios1"/>
+        <include android:id="@+id/two_radios2" layout="@layout/two_radios"/>
 
-        <include android:id="@+id/three_edits1" layout="@layout/three_edits1"/>
+        <include android:id="@+id/three_edits1" layout="@layout/three_edits"/>
 
-        <include android:id="@+id/three_edits2" layout="@layout/three_edits1"/>
+        <include android:id="@+id/three_edits2" layout="@layout/three_edits"/>
 
-        <include layout="@layout/three_radios_and_edit1"/>
+        <include layout="@layout/three_radios_and_edit"/>
 
-        <include android:id="@+id/header2" layout="@layout/section_header1"/>
+        <include android:id="@+id/header2" layout="@layout/section_header"/>
 
-        <include layout="@layout/three_radios1"/>
+        <include layout="@layout/three_radios"/>
 
-        <include layout="@layout/four_chkboxes1"/>
+        <include layout="@layout/four_chkboxes"/>
 
-        <include layout="@layout/three_radios_and_switch1"/>
+        <include layout="@layout/three_radios_and_switch"/>
 
-        <include layout="@layout/five_radios1"/>
+        <include layout="@layout/five_radios"/>
 
-        <include android:id="@+id/two_radios_and_switch1" layout="@layout/two_radios_and_switch1"/>
+        <include android:id="@+id/two_radios_and_switch1" layout="@layout/two_radios_and_switch"/>
 
-        <include android:id="@+id/two_radios_and_switch2" layout="@layout/two_radios_and_switch1"/>
+        <include android:id="@+id/two_radios_and_switch2" layout="@layout/two_radios_and_switch"/>
 
-        <include android:id="@+id/header3" layout="@layout/section_header1"/>
+        <include android:id="@+id/header3" layout="@layout/section_header"/>
 
-        <include layout="@layout/two_texts_two_edits1"/>
+        <include layout="@layout/two_texts_two_edits"/>
 
     </LinearLayout>
 

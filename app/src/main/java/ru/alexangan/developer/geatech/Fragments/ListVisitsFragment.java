@@ -130,7 +130,7 @@ public class ListVisitsFragment extends ListFragment
 
         for (VisitItem visitItem : visitItems)
         {
-            if (!timeNotSetItemsOnly || (timeNotSetItemsOnly && visitItem.getGeaSopralluogo().getInizializzazione() == false))
+            if (!timeNotSetItemsOnly || (timeNotSetItemsOnly && visitItem.getGeaSopralluogo().getId_tecnico() == 0))
             {
                 visitItemsFiltered.add(visitItem);
             }
@@ -158,22 +158,25 @@ public class ListVisitsFragment extends ListFragment
 
                 int idVisit = visitItemsFiltered.get(position).getId();
 
-                boolean initialized = visitItemsFiltered.get(position).getGeaSopralluogo().getInizializzazione();
+                int id_tecnico = visitItemsFiltered.get(position).getGeaSopralluogo().getId_tecnico();
 
-                if (true) //reportStates!= null || !initialized
+                boolean ownVisit = selectedTech.getId() == id_tecnico;
+                boolean freeVisit = id_tecnico == 0;
+
+                if (ownVisit || freeVisit) //
                 {
                     if (swipeDetector.swipeDetected())
                     {
                         if (swipeDetector.getAction() == SwipeDetector.Action.LR)
                         {
-                            mCommunicator.OnListItemSwiped(idVisit, initialized);
+                            mCommunicator.OnListItemSwiped(idVisit, ownVisit);
                         } else if (swipeDetector.getAction() == SwipeDetector.Action.RL)
                         {
                             mCommunicator.OnListItemSwiped(idVisit, false);
                         }
                     } else
                     {
-                        mCommunicator.OnListItemSelected(idVisit, initialized);
+                        mCommunicator.OnListItemSelected(idVisit, ownVisit);
                     }
                 }
             }

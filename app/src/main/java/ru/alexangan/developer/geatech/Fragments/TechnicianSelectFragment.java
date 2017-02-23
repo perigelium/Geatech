@@ -295,6 +295,9 @@ public class TechnicianSelectFragment extends Fragment implements View.OnClickLi
 
         if (view.getId() == R.id.ibAddTechnician)
         {
+            btnNewTechnician.setAlpha(.4f);
+            btnNewTechnician.setEnabled(false);
+
             String strTechNome = etTechNome.getText().toString();
             String strTechCognome = etTechCognome.getText().toString();
             String strNomeCognome = strTechNome + " " + strTechCognome;
@@ -308,6 +311,9 @@ public class TechnicianSelectFragment extends Fragment implements View.OnClickLi
 
         if (view.getId() == R.id.btnApplyAndEnterApp)
         {
+            btnApplyAndEnterApp.setAlpha(.4f);
+            btnApplyAndEnterApp.setEnabled(false);
+
             GlobalConstants.selectedTech = selectedTech;
 
             if (selectedTech == null)
@@ -363,56 +369,58 @@ public class TechnicianSelectFragment extends Fragment implements View.OnClickLi
 
             response.body().close();
 
-            if (technListResponse == null)
-            {
-                showToastMessage("Ricevere lista tecnici non è riuscito");
-                return;
-            }
-
             JSONObject jsonObject;
 
             try
             {
                 jsonObject = new JSONObject(technListResponse);
-            } catch (JSONException e)
-            {
-                e.printStackTrace();
-                return;
-            }
 
-            if (jsonObject.has("data_tehnic"))
-            {
-                try
+                if (jsonObject.has("data_tehnic"))
                 {
-                    String technician_list = jsonObject.getString("data_tehnic");
-
-                    FillTechnicianList(technician_list);
-
-                } catch (JSONException e)
-                {
-                    e.printStackTrace();
-                    showToastMessage("Parse lista tecnici non è riuscito");
-                }
-            } else
-            {
-                if (jsonObject.has("error"))
-                {
-                    final String errorStr;
-
                     try
                     {
-                        errorStr = jsonObject.getString("error");
-                        if (errorStr.length() != 0)
-                        {
-                            showToastMessage(errorStr);
-                        }
+                        String technician_list = jsonObject.getString("data_tehnic");
+
+                        FillTechnicianList(technician_list);
+
                     } catch (JSONException e)
                     {
                         e.printStackTrace();
-                        return;
+                        showToastMessage("Parse lista tecnici non è riuscito");
+                    }
+                } else
+                {
+                    if (jsonObject.has("error"))
+                    {
+                        final String errorStr;
+
+                        try
+                        {
+                            errorStr = jsonObject.getString("error");
+                            if (errorStr.length() != 0)
+                            {
+                                showToastMessage(errorStr);
+                            }
+                        } catch (JSONException e)
+                        {
+                            e.printStackTrace();
+                        }
                     }
                 }
+            } catch (JSONException e)
+            {
+                e.printStackTrace();
+                showToastMessage("JSON parse error");
             }
+
+            activity.runOnUiThread(new Runnable()
+            {
+                public void run()
+                {
+                    btnNewTechnician.setAlpha(1.0f);
+                    btnNewTechnician.setEnabled(true);
+                }
+            });
         }
 
         if (call == callLoginToken)
@@ -421,59 +429,28 @@ public class TechnicianSelectFragment extends Fragment implements View.OnClickLi
 
             response.body().close();
 
-            if (loginResponse == null)
-            {
-                showToastMessage("Token non ricevuto");
-
-                return;
-            }
-
             JSONObject jsonObject;
 
             try
             {
                 jsonObject = new JSONObject(loginResponse);
-            } catch (JSONException e)
-            {
-                e.printStackTrace();
-                return;
-            }
 
-            if (jsonObject.has("token"))
-            {
-                try
+                if (jsonObject.has("token"))
                 {
-                    tokenStr = jsonObject.getString("token");
-
-                    if (tokenStr.length() != 0)
-                    {
-                        callVisits = networkUtils.getData(this, GET_VISITS_URL_SUFFIX, tokenStr);
-
-                        if(geaItemModelliSize == 0)
-                        {
-                            callModels = networkUtils.getData(this, GET_MODELS_URL_SUFFIX, tokenStr);
-                        }
-
-                        //loginCommunicator.onTechSelectedAndApplied();
-                    }
-
-                } catch (JSONException e)
-                {
-                    e.printStackTrace();
-                    return;
-                }
-            } else
-            {
-                if (jsonObject.has("error"))
-                {
-                    final String errorStr;
-
                     try
                     {
-                        errorStr = jsonObject.getString("error");
-                        if (errorStr.length() != 0)
+                        tokenStr = jsonObject.getString("token");
+
+                        if (tokenStr.length() != 0)
                         {
-                            showToastMessage(errorStr);
+                            callVisits = networkUtils.getData(this, GET_VISITS_URL_SUFFIX, tokenStr);
+
+                            if(geaItemModelliSize == 0)
+                            {
+                                callModels = networkUtils.getData(this, GET_MODELS_URL_SUFFIX, tokenStr);
+                            }
+
+                            //loginCommunicator.onTechSelectedAndApplied();
                         }
 
                     } catch (JSONException e)
@@ -481,19 +458,45 @@ public class TechnicianSelectFragment extends Fragment implements View.OnClickLi
                         e.printStackTrace();
                         return;
                     }
+                } else
+                {
+                    if (jsonObject.has("error"))
+                    {
+                        final String errorStr;
+
+                        try
+                        {
+                            errorStr = jsonObject.getString("error");
+                            if (errorStr.length() != 0)
+                            {
+                                showToastMessage(errorStr);
+                            }
+
+                        } catch (JSONException e)
+                        {
+                            e.printStackTrace();
+                        }
+                    }
                 }
+            } catch (JSONException e)
+            {
+                e.printStackTrace();
+                showToastMessage("JSON parse error");
             }
+
+            activity.runOnUiThread(new Runnable()
+            {
+                public void run()
+                {
+                    btnApplyAndEnterApp.setAlpha(1.0f);
+                    btnApplyAndEnterApp.setEnabled(true);
+                }
+            });
         }
 
         if (call == callVisits)
         {
             visitsJSONData = response.body().string();
-
-            if (visitsJSONData == null)
-            {
-                showToastMessage("Data di visite non è stato ricevuto");
-                return;
-            }
 
             Log.d("DEBUG", visitsJSONData);
 
@@ -528,12 +531,6 @@ public class TechnicianSelectFragment extends Fragment implements View.OnClickLi
         if (call == callModels)
         {
             modelsJSONData = response.body().string();
-
-            if (modelsJSONData == null)
-            {
-                showToastMessage("Data di modelli non è stato ricevuto");
-                return;
-            }
 
             Log.d("DEBUG", modelsJSONData);
 

@@ -35,7 +35,6 @@ import ru.alexangan.developer.geatech.Adapters.SetVisitDateTimeListAdapter;
 import ru.alexangan.developer.geatech.Interfaces.Communicator;
 import ru.alexangan.developer.geatech.Models.ClientData;
 import ru.alexangan.developer.geatech.Models.ProductData;
-import ru.alexangan.developer.geatech.Models.RealmString;
 import ru.alexangan.developer.geatech.Models.ReportStates;
 import ru.alexangan.developer.geatech.Models.SubproductItem;
 import ru.alexangan.developer.geatech.Models.VisitItem;
@@ -55,7 +54,7 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
     Calendar calendarNow;
     Calendar calendar;
     long elapsedDays;
-    String strDateTime;
+    String strDateTimeSet, strDateTimeNow;
     ReportStates reportStates;
     Call setDateTimeCall;
     String strVisitDateTimeResponse;
@@ -198,6 +197,8 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ITALIAN);
 
+        strDateTimeNow = sdf.format(calendarNow.getTime());
+
         try
         {
             calendar.setTime(sdf.parse(dataOraSopralluogo));
@@ -301,7 +302,7 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
         {
             stakedOut = 1;
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
-            strDateTime = sdf.format(calendar.getTime());
+            strDateTimeSet = sdf.format(calendar.getTime());
 
             notifyServerDataOraSopralluogo(idSopralluogo, stakedOut);
 
@@ -317,8 +318,16 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
         {
             jsonObject.put("token", tokenStr);
             jsonObject.put("id_sopralluogo", idSopralluogo);
-            jsonObject.put("data_ora_presa_appuntamento", strDateTime);
-            jsonObject.put("inizializzazione", stakedOut);
+            jsonObject.put("data_ora_sopralluogo", strDateTimeSet);
+            jsonObject.put("data_ora_presa_appuntamento", strDateTimeNow);
+
+            if (stakedOut == 1)
+            {
+                jsonObject.put("id_tecnico", selectedTech.getId());
+            } else
+            {
+                jsonObject.put("id_tecnico", 0);
+            }
 
         } catch (JSONException e)
         {
@@ -352,121 +361,113 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
         {
             strVisitDateTimeResponse = response.body().string();
 
-            if (strVisitDateTimeResponse == null)
-            {
-                showToastMessage("Dato e ora inviato, risposta non ha ricevuto");
+            final JSONObject jsonObject;
 
-                return;
-            } else
+            try
             {
-                final JSONObject jsonObject;
+                jsonObject = new JSONObject(strVisitDateTimeResponse);
+            } catch (JSONException e)
+            {
+                e.printStackTrace();
+                showToastMessage("JSON parse error");
+                return;
+            }
+
+            if (jsonObject.has("error"))
+            {
+                final String errorStr;
 
                 try
                 {
-                    jsonObject = new JSONObject(strVisitDateTimeResponse);
+                    errorStr = jsonObject.getString("error");
+                    if (errorStr.length() != 0)
+                    {
+                        showToastMessage(errorStr);
+                    }
+
                 } catch (JSONException e)
                 {
                     e.printStackTrace();
                     return;
                 }
+            } else
+            {
+                showToastMessage("Dato e ora inviato, server ritorna: " + strVisitDateTimeResponse);
 
-                if (jsonObject.has("error"))
+                if (jsonObject.has("success"))
                 {
-                    final String errorStr;
-
                     try
                     {
-                        errorStr = jsonObject.getString("error");
-                        if (errorStr.length() != 0)
+                        final String strSuccess = jsonObject.getString("success");
+
+                        if (strSuccess.equals("1"))
                         {
-                            showToastMessage(errorStr);
+                            activity.runOnUiThread(new Runnable()
+                            {
+                                public void run()
+                                {
+                                    if (jsonObject.has("id_rapporto_sopralluogo"))
+                                    {
+                                        try
+                                        {
+                                            String str_id_rapporto_sopralluogo = jsonObject.getString("id_rapporto_sopralluogo");
+                                            int id_rapporto_sopralluogo = Integer.valueOf(str_id_rapporto_sopralluogo);
+
+
+                                            if (reportStates == null)
+                                            {
+                                                realm.beginTransaction();
+                                                reportStates = new ReportStates(company_id, selectedTech.getId(), idSopralluogo, id_rapporto_sopralluogo);
+                                                realm.copyToRealm(reportStates);
+                                                realm.commitTransaction();
+                                            }
+
+                                            if (stakedOut == 1)
+                                            {
+                                                realm.beginTransaction();
+                                                reportStates = realm.where(ReportStates.class)
+                                                        .equalTo("company_id", company_id).equalTo("tech_id", selectedTech.getId())
+                                                        .equalTo("id_sopralluogo", idSopralluogo).findFirst();
+                                                realm.commitTransaction();
+
+                                                if (reportStates != null)
+                                                {
+                                                    realm.beginTransaction();
+                                                    reportStates.setData_ora_sopralluogo(strDateTimeSet);
+                                                    reportStates.setId_rapporto_sopralluogo(id_rapporto_sopralluogo);
+                                                    reportStates.setData_ora_presa_appuntamento(strDateTimeNow);
+                                                    reportStates.setNome_tecnico(selectedTech.getFullNameTehnic());
+                                                    realm.commitTransaction();
+                                                }
+                                            }
+                                        } catch (JSONException e)
+                                        {
+                                            e.printStackTrace();
+                                        }
+                                    }
+
+                                    if (stakedOut == 0)
+                                    {
+                                        if (reportStates != null)
+                                        {
+                                            realm.beginTransaction();
+                                            reportStates.deleteFromRealm();
+                                            realm.commitTransaction();
+                                        }
+                                    }
+
+                                    mCommunicator.onDateTimeSetReturned(false);
+                                }
+                            });
                         }
 
                     } catch (JSONException e)
                     {
                         e.printStackTrace();
-                        return;
-                    }
-                } else
-                {
-                    showToastMessage("Dato e ora inviato, server ritorna: " + strVisitDateTimeResponse);
-
-                    if (jsonObject.has("success"))
-                    {
-                        try
-                        {
-                            final String strSuccess = jsonObject.getString("success");
-
-                            if (strSuccess.equals("1"))
-                            {
-                                activity.runOnUiThread(new Runnable()
-                                {
-                                    public void run()
-                                    {
-                                        if (jsonObject.has("id_rapporto_sopralluogo"))
-                                        {
-                                            try
-                                            {
-                                                String str_id_rapporto_sopralluogo = jsonObject.getString("id_rapporto_sopralluogo");
-                                                int id_rapporto_sopralluogo = Integer.valueOf(str_id_rapporto_sopralluogo);
-
-
-                                                if (reportStates == null)
-                                                {
-                                                    realm.beginTransaction();
-                                                    reportStates = new ReportStates(company_id, selectedTech.getId(), idSopralluogo, id_rapporto_sopralluogo);
-                                                    realm.copyToRealm(reportStates);
-                                                    realm.commitTransaction();
-                                                }
-
-                                                if (stakedOut == 1)
-                                                {
-                                                    realm.beginTransaction();
-
-                                                    reportStates = realm.where(ReportStates.class).equalTo("company_id", company_id).equalTo("tech_id", selectedTech.getId())
-                                                            .equalTo("id_sopralluogo", idSopralluogo).findFirst();
-                                                    if (reportStates != null)
-                                                    {
-
-                                                        reportStates.setData_ora_sopralluogo(strDateTime);
-                                                        reportStates.setId_rapporto_sopralluogo(id_rapporto_sopralluogo);
-
-                                                        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ITALIAN);
-                                                        String shortDateStr = sdf.format(calendarNow.getTime());
-                                                        reportStates.setData_ora_presa_appuntamento(shortDateStr);
-
-                                                        reportStates.setNome_tecnico(selectedTech.getFullNameTehnic());
-                                                        realm.commitTransaction();
-                                                    }
-                                                }
-                                            } catch (JSONException e)
-                                            {
-                                                e.printStackTrace();
-                                            }
-                                        }
-
-                                        if (stakedOut == 0)
-                                        {
-                                            if (reportStates != null)
-                                            {
-                                                realm.beginTransaction();
-                                                reportStates.deleteFromRealm();
-                                                realm.commitTransaction();
-                                            }
-                                        }
-
-                                        mCommunicator.onDateTimeSetReturned(false);
-                                    }
-                                });
-                            }
-
-                        } catch (JSONException e)
-                        {
-                            e.printStackTrace();
-                        }
                     }
                 }
             }
+
         }
     }
 

@@ -16,7 +16,6 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import java.io.IOException;
-import java.util.ArrayList;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -115,7 +114,7 @@ public class MainActivity extends Activity implements Communicator, Callback
 
         if (visitItems.size() == 0)
         {
-            Toast.makeText(this, "DatabaseUtils e vuoto", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Elenco sopralluoghi e vuoto", Toast.LENGTH_LONG).show();
 
             this.finish();
         }
@@ -309,9 +308,9 @@ public class MainActivity extends Activity implements Communicator, Callback
             ProductData productData = visitItem.getProductData();
             String productType = productData.getProductType();
 
-            Fragment frag = assignFragmentModel(productType);
-
             removeAllLists();
+
+            Fragment frag = assignFragmentModel(productType);
 
             if (frag != null)
             {
@@ -411,6 +410,11 @@ public class MainActivity extends Activity implements Communicator, Callback
         {
             mFragmentTransaction.remove(climatizzazioneReportFragment);
         }*/
+
+        if (emptyReportFragment.isAdded())
+        {
+            mFragmentTransaction.remove(emptyReportFragment);
+        }
 
         if (photoGalleryGridFragment.isAdded())
         {
@@ -552,7 +556,7 @@ public class MainActivity extends Activity implements Communicator, Callback
     }
 
     @Override
-    public void OnListItemSelected(int itemIndex)
+    public void OnReportListItemSelected(int itemIndex)
     {
         currentSelIndex = itemIndex;
         FragmentTransaction mFragmentTransaction = mFragmentManager.beginTransaction();
@@ -573,6 +577,35 @@ public class MainActivity extends Activity implements Communicator, Callback
         setVisitsListContent(reportDetailedFragment);
 
         ctrlBtnsFragment1.setCheckedBtnId(R.id.btnReports);
+    }
+
+    @Override
+    public void OnInWorkListItemSelected(int itemIndex)
+    {
+        currentSelIndex = itemIndex;
+        FragmentTransaction mFragmentTransaction = mFragmentManager.beginTransaction();
+
+        mFragmentTransaction.hide(ctrlBtnsFragment1);
+        mFragmentTransaction.show(ctrlBtnsFragment2);
+
+        mFragmentTransaction.commit();
+
+        VisitItem visitItem = visitItems.get(itemIndex);
+        ProductData productData = visitItem.getProductData();
+        String productType = productData.getProductType();
+
+        Fragment frag = assignFragmentModel(productType);
+
+        removeAllLists();
+
+        Bundle args = frag.getArguments() != null ? frag.getArguments() : new Bundle();
+
+        args.putInt("selectedIndex", itemIndex);
+        frag.setArguments(args);
+
+        setVisitsListContent(frag);
+
+        //ctrlBtnsFragment2.setCheckedBtnId(R.id.btnFillReport);
     }
 
     @Override
@@ -743,12 +776,6 @@ public class MainActivity extends Activity implements Communicator, Callback
         if (call == callVisits)
         {
             final String visitsJSONData = response.body().string();
-
-            if (visitsJSONData == null)
-            {
-                showToastMessage("Data di visite non è stato ricevuto");
-                return;
-            }
 
             Log.d("DEBUG", visitsJSONData);
 

@@ -86,7 +86,7 @@ public class ReportsListFragment extends ListFragment
     {
         super.onListItemClick(l, v, position, id);
 
-        mCommunicator.OnListItemSelected(visitItemsPositions.get(position));
+        mCommunicator.OnReportListItemSelected(visitItemsPositions.get(position));
     }
 }
 

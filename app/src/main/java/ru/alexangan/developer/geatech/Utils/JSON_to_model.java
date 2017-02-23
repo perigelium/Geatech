@@ -1,9 +1,5 @@
 package ru.alexangan.developer.geatech.Utils;
 
-import android.util.Log;
-
-import com.google.gson.Gson;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -40,7 +36,7 @@ public class JSON_to_model
                 JSONArray subproducts = visit_item.getJSONArray(2);
 
                 Integer id_sopralluogo = visit_data.getInt("id_sopralluogo");
-                int initialized = visit_data.getInt("inizializzazione");
+                int id_tecnico = visit_data.getInt("id_tecnico");
                 String data_ora_assegnazione = visit_data.getString("data_ora_assegnazione");
                 String data_ora_presa_appuntamento = visit_data.getString("data_ora_presa_appuntamento");
                 //String data_sollecito_appuntamento = visit_data.getString("data_sollecito_appuntamento");
@@ -48,7 +44,7 @@ public class JSON_to_model
                 String note_sopralluogo = visit_data.getString("note_sopralluogo");
                 String tipo_gestione_sopralluogo = visit_data.getString("tipo_gestione_sopralluogo");
 
-                GeaSopralluogo geaSopralluogo = new GeaSopralluogo(id_sopralluogo, initialized, data_ora_presa_appuntamento, data_ora_sopralluogo);
+                GeaSopralluogo geaSopralluogo = new GeaSopralluogo(id_sopralluogo, id_tecnico, data_ora_presa_appuntamento, data_ora_sopralluogo);
 
                 JSONObject client_dataJSONObject = client_data.getJSONObject(0);
 

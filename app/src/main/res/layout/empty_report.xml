@@ -12,9 +12,9 @@
 
         <include layout="@layout/report_header"/>
 
-        <include android:id="@+id/header1" layout="@layout/section_header1"/>
+        <include android:id="@+id/section_header1" layout="@layout/section_header"/>
 
-        <include android:id="@+id/section_header2" layout="@layout/section_header1"/>
+        <include android:id="@+id/section_header2" layout="@layout/section_header"/>
 
     </LinearLayout>
 

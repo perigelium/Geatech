@@ -150,6 +150,9 @@ public class LoginCompanyFragment extends Fragment implements View.OnClickListen
     {
         if (view.getId() == R.id.btnLogin)
         {
+            btnLogin.setAlpha(.4f);
+            btnLogin.setEnabled(false);
+
             realm.beginTransaction();
             RealmResults<LoginCredentials> loginCredentialses = realm.where(LoginCredentials.class).findAll();
 
@@ -304,6 +307,15 @@ public class LoginCompanyFragment extends Fragment implements View.OnClickListen
                     showToastMessage("Login o password non è valido");
                 }
             }
+
+            activity.runOnUiThread(new Runnable()
+            {
+                public void run()
+                {
+            btnLogin.setAlpha(1.0f);
+            btnLogin.setEnabled(true);
+                }
+            });
         }
     }
 

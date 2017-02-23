@@ -117,13 +117,13 @@ public class MyListVisitsAdapter extends BaseAdapter
         GeaSopralluogo geaSopralluogo = visitItem.getGeaSopralluogo();
         String dataOraSopralluogo = geaSopralluogo.getData_ora_sopralluogo();
         int idSopralluogo = geaSopralluogo.getId_sopralluogo();
-        boolean initialized = geaSopralluogo.getInizializzazione();
+        int id_tecnico = geaSopralluogo.getId_tecnico();
 
         clientNameTextView.setText(clientData.getName());
         serviceTypeTextView.setText(productData.getProductType());
         clientAddressTextView.setText(clientData.getAddress());
 
-        boolean ownReport = false;
+        boolean ownReport = selectedTech.getId() == id_tecnico;
 
 
 /*        realm.beginTransaction();
@@ -142,7 +142,7 @@ public class MyListVisitsAdapter extends BaseAdapter
         }*/
 
 
-        if (initialized)
+        if (id_tecnico != 0)
         {
             Calendar calendar = Calendar.getInstance();
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
