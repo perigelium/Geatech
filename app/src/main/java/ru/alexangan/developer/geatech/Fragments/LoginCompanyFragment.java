@@ -143,6 +143,15 @@ public class LoginCompanyFragment extends Fragment implements View.OnClickListen
         SharedPreferences.Editor editor = mSettings.edit();
         editor.putBoolean(CHKBOX_REMEMBER_ME_STATE, chkboxRememberMeState);
         editor.apply();
+
+        activity.runOnUiThread(new Runnable()
+        {
+            public void run()
+            {
+                btnLogin.setAlpha(1.0f);
+                btnLogin.setEnabled(true);
+            }
+        });
     }
 
     @Override

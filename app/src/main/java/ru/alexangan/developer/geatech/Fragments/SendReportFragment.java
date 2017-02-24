@@ -160,7 +160,7 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
                 sendReportItem(selectedIndex);
             }
 
-            mCommunicator.onSendReportReturned();
+            //mCommunicator.onSendReportReturned();
 
         }
     }
@@ -224,6 +224,13 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
         Log.d("DEBUG", str_ReportItem_json);
 
         NetworkUtils networkUtils = new NetworkUtils();
+
+        if(!NetworkUtils.isNetworkAvailable(activity))
+        {
+            showToastMessage("Connessione ad internet non presente");
+            return;
+        }
+
         callSendReport = networkUtils.sendData(this, SEND_DATA_URL_SUFFIX, tokenStr, str_ReportItem_json);
 
         for (GeaImagineRapporto geaImagineRapporto : listReportImages)
@@ -292,7 +299,7 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
                 });
             }
 
-            mCommunicator.onSendReportReturned();
+            //mCommunicator.onSendReportReturned();
         }
     }
 

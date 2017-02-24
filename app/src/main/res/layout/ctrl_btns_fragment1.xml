@@ -1,4 +1,4 @@
-<FrameLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/ctrlBtnsFragment1"
@@ -7,67 +7,107 @@
     android:layout_gravity="center"
     android:background="#9e9e9e"
     android:orientation="horizontal"
+    android:weightSum="5"
     tools:context="ru.alexangan.developer.geatech.Fragments.CtrlBtnsFragment1">
 
-    <RadioGroup
-        android:id="@+id/toggleGroup"
-        android:layout_width="match_parent"
+    <LinearLayout
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:gravity="center"
         android:layout_gravity="center"
-        android:orientation="horizontal">
+        android:layout_weight="1">
 
-            <RadioButton
-                android:id="@+id/btnVisits"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:layout_margin="5dp"
-                android:layout_gravity="center"
-                android:background="@drawable/toggle_btn1_selector"
-                android:button="@null"
-                android:textOff=""
-                android:textOn=""/>
+        <Button
+            android:id="@+id/btnVisits"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_gravity="center"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:background="@drawable/toggle_btn1_selector"
+            android:button="@null"
+            android:onClick="onClick"
+            android:textOff=""
+            android:textOn=""/>
+    </LinearLayout>
 
-            <RadioButton
-                android:id="@+id/btnComingVisits"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:layout_margin="5dp"
-                android:background="@drawable/toggle_btn2_selector"
-                android:button="@null"
-                android:textOff=""
-                android:textOn=""/>
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_weight="1">
 
-            <RadioButton
-                android:id="@+id/btnInWorkVisits"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:layout_margin="5dp"
-                android:background="@drawable/toggle_btn3_selector"
-                android:button="@null"
-                android:textOff=""
-                android:textOn=""/>
+        <Button
+            android:id="@+id/btnComingVisits"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_gravity="center"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:background="@drawable/toggle_btn2_selector"
+            android:button="@null"
+            android:onClick="onClick"
+            android:textOff=""
+            android:textOn=""/>
+    </LinearLayout>
 
-            <RadioButton
-                android:id="@+id/btnNotSentReports"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:layout_margin="5dp"
-                android:background="@drawable/toggle_btn4_selector"
-                android:button="@null"
-                android:textOff=""
-                android:textOn=""/>
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_weight="1">
 
-            <RadioButton
-                android:id="@+id/btnReports"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:layout_margin="5dp"
-                android:background="@drawable/toggle_btn5_selector"
-                android:button="@null"
-                android:textOff=""
-                android:textOn=""/>
+        <Button
+            android:id="@+id/btnInWorkVisits"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_gravity="center"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:background="@drawable/toggle_btn3_selector"
+            android:button="@null"
+            android:onClick="onClick"
+            android:textOff=""
+            android:textOn=""/>
+    </LinearLayout>
 
-    </RadioGroup>
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_weight="1">
 
-</FrameLayout>
+        <Button
+            android:id="@+id/btnNotSentReports"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_gravity="center"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:background="@drawable/toggle_btn4_selector"
+            android:button="@null"
+            android:onClick="onClick"
+            android:textOff=""
+            android:textOn=""/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_weight="1">
+
+        <Button
+            android:id="@+id/btnSentReports"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_gravity="center"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:background="@drawable/toggle_btn5_selector"
+            android:button="@null"
+            android:onClick="onClick"
+            android:textOff=""
+            android:textOn=""/>
+    </LinearLayout>
+
+</LinearLayout>

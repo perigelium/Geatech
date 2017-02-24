@@ -3,10 +3,16 @@ package ru.alexangan.developer.geatech.Fragments;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.RadioButton;
+import android.widget.Button;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.RadioGroup;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import ru.alexangan.developer.geatech.Interfaces.Communicator;
 import ru.alexangan.developer.geatech.R;
@@ -15,26 +21,47 @@ import ru.alexangan.developer.geatech.R;
  * Created by user on 11/10/2016.
  */
 
-public class CtrlBtnsFragment1 extends Fragment{
+public class CtrlBtnsFragment1 extends Fragment implements View.OnClickListener
+{
 
     private Communicator mCommunicator;
     RadioGroup rGroup;
     int checkedBtnId = 0;
     int previousCheckedId = 0;
+    List<Button> btnArray;
+    View rootView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
-        final View rootView = inflater.inflate(R.layout.ctrl_btns_fragment1, container, false);
+        rootView = inflater.inflate(R.layout.ctrl_btns_fragment1, container, false);
 
         //final OnClickedListener listener = (OnClickedListener) getActivity();
 
-        mCommunicator = (Communicator)getActivity();
+        mCommunicator = (Communicator) getActivity();
 
-        rGroup = ((RadioGroup) rootView.findViewById(R.id.toggleGroup));
-        rGroup.check(checkedBtnId);
+        //rGroup = ((RadioGroup) rootView.findViewById(R.id.toggleGroup));
+        //rGroup.check(checkedBtnId);
 
-        final RadioGroup.OnCheckedChangeListener ToggleListener =
+        Button btnVisits = (Button)rootView.findViewById(R.id.btnVisits);
+        Button btnComingVisits = (Button)rootView.findViewById(R.id.btnComingVisits);
+        Button btnInWorkVisits = (Button)rootView.findViewById(R.id.btnInWorkVisits);
+        Button btnNotSentReports = (Button)rootView.findViewById(R.id.btnNotSentReports);
+        Button btnSentReports = (Button)rootView.findViewById(R.id.btnSentReports);
+
+        btnArray = new ArrayList<>();
+        btnArray.add(btnVisits);
+        btnArray.add(btnComingVisits);
+        btnArray.add(btnInWorkVisits);
+        btnArray.add(btnNotSentReports);
+        btnArray.add(btnSentReports);
+
+        for(Button btn : btnArray)
+        {
+            btn.setOnClickListener(this);
+        }
+
+/*        final RadioGroup.OnCheckedChangeListener ToggleListener =
                 new RadioGroup.OnCheckedChangeListener()
         {
             @Override
@@ -47,7 +74,7 @@ public class CtrlBtnsFragment1 extends Fragment{
 
                 for (int j = 0; j < radioGroup.getChildCount(); j++)
                 {
-                    final RadioButton view = (RadioButton) radioGroup.getChildAt(j);
+                    final Button view = (Button) radioGroup.getChildAt(j);
 
                     if(view.getId() == i)
                     {
@@ -58,21 +85,21 @@ public class CtrlBtnsFragment1 extends Fragment{
             }
         };
 
-        rGroup.setOnCheckedChangeListener(ToggleListener);
+        rGroup.setOnCheckedChangeListener(ToggleListener);*/
 
         return rootView;
     }
 
-    @Override
+/*    @Override
     public void onHiddenChanged(boolean hidden)
     {
         super.onHiddenChanged(hidden);
 
-        if(rGroup!= null && hidden)
+        if (rGroup != null && hidden)
         {
             rGroup.check(checkedBtnId);
         }
-    }
+    }*/
 
     @Override
     public void onResume()
@@ -87,6 +114,27 @@ public class CtrlBtnsFragment1 extends Fragment{
 
     public void setCheckedBtnId(int checkedBtnId)
     {
-        this.checkedBtnId = checkedBtnId;
+        //this.checkedBtnId = checkedBtnId;
+
+        Button rBtn = (Button) rootView.findViewById(checkedBtnId);
+        selectButton(rBtn);
+    }
+
+    @Override
+    public void onClick(View view)
+    {
+        Button rBtn = (Button)view;
+        selectButton(rBtn);
+    }
+
+    private void selectButton(Button btnSelected)
+    {
+        for(Button btn : btnArray)
+        {
+            btn.setSelected(false);
+        }
+
+        btnSelected.setSelected(true);
+        mCommunicator.onCtrlButtons1Clicked(btnSelected);
     }
 }

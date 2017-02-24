@@ -6,26 +6,19 @@ import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
-import android.widget.Toast;
 
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
 import io.realm.exceptions.RealmMigrationNeededException;
-import ru.alexangan.developer.geatech.Fragments.TechnicianSelectFragment;
+import ru.alexangan.developer.geatech.Fragments.LoginTechSelectionFragment;
 import ru.alexangan.developer.geatech.Fragments.LoginCompanyFragment;
 import ru.alexangan.developer.geatech.Fragments.LoginPasswordRecoverFragment;
 import ru.alexangan.developer.geatech.Interfaces.LoginCommunicator;
-import ru.alexangan.developer.geatech.Models.VisitItem;
 import ru.alexangan.developer.geatech.R;
-import ru.alexangan.developer.geatech.Utils.JSON_to_model;
 
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.APP_PREFERENCES;
-import static ru.alexangan.developer.geatech.Models.GlobalConstants.inVisitItems;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.mSettings;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.realm;
-import static ru.alexangan.developer.geatech.Models.GlobalConstants.visitItems;
 
 
 public class LoginActivity extends Activity implements LoginCommunicator
@@ -34,7 +27,7 @@ public class LoginActivity extends Activity implements LoginCommunicator
 
     LoginPasswordRecoverFragment loginPasswordRecoverFragment;
     LoginCompanyFragment loginCompanyFragment;
-    TechnicianSelectFragment technicianSelectFragment;
+    LoginTechSelectionFragment loginTechSelectionFragment;
 
     @Override
     protected void onDestroy()
@@ -74,7 +67,7 @@ public class LoginActivity extends Activity implements LoginCommunicator
 
         loginCompanyFragment = new LoginCompanyFragment();
         loginPasswordRecoverFragment = new LoginPasswordRecoverFragment();
-        technicianSelectFragment = new TechnicianSelectFragment();
+        loginTechSelectionFragment = new LoginTechSelectionFragment();
 
         mFragmentManager = getFragmentManager();
 
@@ -119,7 +112,7 @@ public class LoginActivity extends Activity implements LoginCommunicator
     public void onLoginSucceeded()
     {
         FragmentTransaction mFragmentTransaction = mFragmentManager.beginTransaction();
-        mFragmentTransaction.replace(R.id.loginFragContainer, technicianSelectFragment);
+        mFragmentTransaction.replace(R.id.loginFragContainer, loginTechSelectionFragment);
         mFragmentTransaction.commit();
     }
 
@@ -158,7 +151,7 @@ public class LoginActivity extends Activity implements LoginCommunicator
     @Override
     public void onBackPressed()
     {
-        if (technicianSelectFragment.isAdded())
+        if (loginTechSelectionFragment.isAdded())
         {
             FragmentTransaction mFragmentTransaction = mFragmentManager.beginTransaction();
             mFragmentTransaction.replace(R.id.loginFragContainer, loginCompanyFragment);

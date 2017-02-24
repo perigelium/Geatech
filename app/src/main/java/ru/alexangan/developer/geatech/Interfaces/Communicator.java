@@ -15,7 +15,8 @@ public interface Communicator
 
     public void onSendReportReturned();
 
-    public void onCtrlButtonClicked(View view);
+    public void onCtrlButtons1Clicked(View view);
+    public void onCtrlButtons2Clicked(View view);
 
     public void OnListItemSwiped(int itemIndex, Boolean dateTimeHasSet);
 
@@ -26,7 +27,5 @@ public interface Communicator
     public void OnInWorkListItemSelected(int itemIndex);
 
     public void onNotificationReportReturned(View view);
-
-    void disableCtrlButtons2(boolean enable);
 
 }

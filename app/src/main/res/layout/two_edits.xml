@@ -67,7 +67,7 @@
                 android:layout_marginLeft="16dp"
                 android:background="#f0f0f0"
                 android:ems="10"
-                android:inputType="none"
+                android:inputType="number"
                 android:text=""
                 android:textColor="#c0c0c0"/>
 
@@ -91,6 +91,7 @@
                 android:id="@+id/et2TwoEdits1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:maxWidth="99dp"
                 android:layout_alignParentLeft="true"
                 android:layout_gravity="start|center_vertical"
                 android:layout_marginLeft="16dp"

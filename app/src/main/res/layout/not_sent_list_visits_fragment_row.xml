@@ -184,14 +184,14 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="start|center_vertical"
                 android:layout_marginLeft="6dp"
-                android:text="Report completato il " />
+                android:text="Rapporto completato il " />
 
             <TextView
                 android:id="@+id/tvReportCompletionState"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start|center_vertical"
-                android:text="Dato di completamente al report" />
+                android:text="Dato di completamente al rapporto" />
 
         </LinearLayout>
 
