@@ -5,9 +5,20 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import io.realm.RealmResults;
 import ru.alexangan.developer.geatech.Models.ClientData;
+import ru.alexangan.developer.geatech.Models.GeaItemModelliRapporto;
+import ru.alexangan.developer.geatech.Models.GeaItemRapporto;
+import ru.alexangan.developer.geatech.Models.GeaModelloRapporto;
+import ru.alexangan.developer.geatech.Models.GeaSezioneModelliRapporto;
 import ru.alexangan.developer.geatech.Models.ProductData;
 import ru.alexangan.developer.geatech.Models.ReportStates;
 import ru.alexangan.developer.geatech.Models.VisitItem;
@@ -26,6 +37,7 @@ import static ru.alexangan.developer.geatech.Models.GlobalConstants.visitItems;
 public class ReportSentDetailedFragment extends Fragment
 {
     private int selectedIndex;
+    List<String> reportItems;
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState)
@@ -43,10 +55,15 @@ public class ReportSentDetailedFragment extends Fragment
         ProductData productData = visitItem.getProductData();
         GeaSopralluogo geaSopralluogo = visitItem.getGeaSopralluogo();
         int idSopralluogo = geaSopralluogo.getId_sopralluogo();
+        String productType = productData.getProductType();
 
         TextView tvdataOraSopralluogo = (TextView) rootView.findViewById(R.id.tvdataOraSopralluogo);
         TextView tvdataOraRaportoCompletato = (TextView) rootView.findViewById(R.id.tvdataOraRaportoCompletato);
         TextView tvdataOraRaportoInviato = (TextView) rootView.findViewById(R.id.tvdataOraRaportoInviato);
+
+        TextView tvTechName = (TextView) rootView.findViewById(R.id.tvTechName);
+        tvTechName.setText(selectedTech.getFullNameTehnic());
+
 
         realm.beginTransaction();
         ReportStates reportStates = realm.where(ReportStates.class).equalTo("company_id", company_id).equalTo("tech_id", selectedTech.getId())
@@ -55,11 +72,33 @@ public class ReportSentDetailedFragment extends Fragment
 
         if(reportStates != null)
         {
+            int id_rapporto_sopralluogo = reportStates.getId_rapporto_sopralluogo();
+
+            List <GeaItemRapporto> geaItemsRapporto = realm.where(GeaItemRapporto.class).equalTo("company_id", company_id)
+                    .equalTo("tech_id", selectedTech.getId()).equalTo("id_rapporto_sopralluogo", id_rapporto_sopralluogo).findAll();
+
+/*            realm.beginTransaction();
+            GeaModelloRapporto geaModello = realm.where(GeaModelloRapporto.class).equalTo("nome_modello", productType).findFirst();
+            realm.commitTransaction();
+
+            realm.beginTransaction();
+            RealmResults <GeaSezioneModelliRapporto> geaSezioniModelli = realm.where(GeaSezioneModelliRapporto.class)
+                    .equalTo("id_modello", geaModello.getId_modello()).findAll();
+            realm.commitTransaction();*/
+
+            realm.beginTransaction();
+            RealmResults <GeaItemModelliRapporto> geaItemModelli = realm.where(GeaItemModelliRapporto.class)
+             .between("id_item_modello", geaItemsRapporto.get(0).getId_item_modello(), geaItemsRapporto.get(geaItemsRapporto.size()-1).getId_item_modello()).findAll();
+            realm.commitTransaction();
+
+            for(int i = 0; i < geaItemsRapporto.size(); i++)
+            {
+                reportItems.add(String.valueOf(geaItemModelli.get(i).getDescrizione_item()) + " : " + geaItemsRapporto.get(i).getValore());
+            }
+
             tvdataOraSopralluogo.setText(reportStates.getData_ora_sopralluogo());
-
             tvdataOraRaportoCompletato.setText(reportStates.getDataOraRaportoCompletato());
-
-            tvdataOraRaportoInviato.setText(reportStates.getDataOraRaportoInviato());
+            tvdataOraRaportoInviato.setText(reportStates.getData_ora_invio_rapporto());
         }
 
         TextView clientNameTextView = (TextView) rootView.findViewById(R.id.tvClientName);
@@ -84,11 +123,17 @@ public class ReportSentDetailedFragment extends Fragment
             etCoordNord.setText(String.valueOf(latitude));
             etCoordEst.setText(String.valueOf(longitude));
 
-            if(altitude!=0)
+            if(altitude!=-999)
             {
                 etAltitude.setText(String.valueOf((int) altitude));
             }
         }
+
+        ListView listView = (ListView) rootView.findViewById(R.id.listItemsSentReport);
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1,  reportItems);
+
+        listView.setAdapter(adapter);
 
         return rootView;
     }
@@ -114,6 +159,8 @@ public class ReportSentDetailedFragment extends Fragment
         {
             selectedIndex = getArguments().getInt("selectedIndex");
         }
+
+        reportItems = new ArrayList<>();
     }
 
     @Override

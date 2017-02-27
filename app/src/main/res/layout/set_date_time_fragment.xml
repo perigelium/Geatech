@@ -190,7 +190,7 @@
 
 
         <ListView
-            android:id="@+id/list"
+            android:id="@+id/listSubproducts"
             android:layout_width="match_parent"
             android:layout_height="100dp"
             android:layout="@layout/visits_day_time_set_list_row">

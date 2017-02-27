@@ -77,8 +77,6 @@ public class MainActivity extends Activity implements Communicator, Callback
     protected void onStart()
     {
         super.onStart();
-
-        ctrlBtnsFragment1.setCheckedBtnId(R.id.btnVisits);
     }
 
     CTLinfoFragment ctlInfo;
@@ -210,6 +208,8 @@ public class MainActivity extends Activity implements Communicator, Callback
         mFragmentTransaction.hide(ctrlBtnsReportDetailed);
         mFragmentTransaction.hide(ctrlBtnsFragment2);
         mFragmentTransaction.show(ctrlBtnsFragment1);
+
+        //mFragmentManager.executePendingTransactions();
 
         mFragmentTransaction.commit();
 
@@ -511,9 +511,14 @@ public class MainActivity extends Activity implements Communicator, Callback
             ctrlBtnsFragment2.setCheckedBtnId(R.id.btnInfo);
         } else
         {
-            Bundle args = new Bundle();
-            args.putInt("selectedIndex", itemIndex);
-            dateTimeSetFragment.setArguments(args);
+            removeAllLists();
+
+            if (!dateTimeSetFragment.isAdded())
+            {
+                Bundle args = new Bundle();
+                args.putInt("selectedIndex", itemIndex);
+                dateTimeSetFragment.setArguments(args);
+            }
 
             setVisitsListContent(dateTimeSetFragment);
         }
@@ -563,22 +568,22 @@ public class MainActivity extends Activity implements Communicator, Callback
     {
         currentSelIndex = itemIndex;
 
-/*        FragmentTransaction mFragmentTransaction = mFragmentManager.beginTransaction();
+        FragmentTransaction mFragmentTransaction = mFragmentManager.beginTransaction();
         mFragmentTransaction.hide(ctrlBtnsFragment2);
         mFragmentTransaction.hide(ctrlBtnsFragment1);
         mFragmentTransaction.show(ctrlBtnsReportDetailed);
-        mFragmentTransaction.commit();*/
+        mFragmentTransaction.commit();
 
-/*        removeAllLists();
+        removeAllLists();
 
         Bundle args = reportDetailedFragment.getArguments() != null ? reportDetailedFragment.getArguments() : new Bundle();
 
         args.putInt("selectedIndex", itemIndex);
         reportDetailedFragment.setArguments(args);
 
-        setVisitsListContent(reportDetailedFragment);*/
+        setVisitsListContent(reportDetailedFragment);
 
-        ctrlBtnsFragment1.setCheckedBtnId(R.id.btnSentReports);
+        //ctrlBtnsFragment1.setCheckedBtnId(R.id.btnSentReports);
     }
 
     @Override
@@ -799,7 +804,7 @@ public class MainActivity extends Activity implements Communicator, Callback
                     visitItems = realm.where(VisitItem.class).findAll();
                     realm.commitTransaction();
 
-                    removeAllLists();
+                    //removeAllLists();
 
                     ctrlBtnsFragment1.setCheckedBtnId(R.id.btnVisits);
 
@@ -808,13 +813,13 @@ public class MainActivity extends Activity implements Communicator, Callback
                     ctrlBtnsFragment1.onHiddenChanged(true);
                     ctrlBtnChkChanged = true;*/
 
-                    listVisits = new ListVisitsFragment();
+/*                    listVisits = new ListVisitsFragment();
 
                     Bundle args = new Bundle();
                     args.putBoolean("visitTimeNotSetOnly", false);
                     listVisits.setArguments(args);
 
-                    setVisitsListContent(listVisits);
+                    setVisitsListContent(listVisits);*/
                 }
             });
         }

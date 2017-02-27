@@ -55,7 +55,10 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
 
     String reportSendResponse;
     Call callSendReport, callSendImage;
+    List <Call> callSendImagesList;
     Activity activity;
+    NetworkUtils networkUtils;
+    List<GeaImagineRapporto> imagesArray;
 
     public SendReportFragment()
     {
@@ -80,6 +83,9 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
         {
             selectedIndex = getArguments().getInt("selectedIndex");
         }
+
+        callSendImagesList = new ArrayList<>();
+        networkUtils = new NetworkUtils();
     }
 
     @Override
@@ -152,7 +158,7 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
     {
         if (view.getId() == R.id.btnSendReport)
         {
-            if (reportStates != null)
+            //if (reportStates != null)
             {
                 sendReport.setAlpha(.4f);
                 sendReport.setEnabled(false);
@@ -184,6 +190,7 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
 
         ReportStates reportStates = realm.where(ReportStates.class).equalTo("company_id", company_id).equalTo("tech_id", selectedTech.getId())
                 .equalTo("id_sopralluogo", idSopralluogo).findFirst();
+        int id_rapporto_sopralluogo = reportStates.getId_rapporto_sopralluogo();
 
         ReportStates reportStatesUnmanaged = realm.copyFromRealm(reportStates);
         String strReportStatesUnmanaged = gson.toJson(reportStatesUnmanaged);
@@ -191,31 +198,32 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
         reportItem.setGea_rapporto_sopralluogo(gea_rapporto);
 
         RealmResults geaItemsRapporto = realm.where(GeaItemRapporto.class).equalTo("company_id", company_id)
-                .equalTo("tech_id", selectedTech.getId()).equalTo("id_rapporto_sopralluogo", idSopralluogo).findAll();
+                .equalTo("tech_id", selectedTech.getId()).equalTo("id_rapporto_sopralluogo", id_rapporto_sopralluogo).findAll();
         List<GeaItemRapporto> listGeaItemRapporto = new ArrayList<>();
 
-        for(Object gi : geaItemsRapporto)
+        for (Object gi : geaItemsRapporto)
         {
-            GeaItemRapporto gi_unmanaged = realm.copyFromRealm((GeaItemRapporto)gi);
+            GeaItemRapporto gi_unmanaged = realm.copyFromRealm((GeaItemRapporto) gi);
             listGeaItemRapporto.add(gi_unmanaged);
         }
         reportItem.setGea_items_rapporto_sopralluogo(listGeaItemRapporto);
 
 
-        RealmResults<GeaImagineRapporto> listReportImages = realm.where(GeaImagineRapporto.class)
-                .equalTo("company_id", company_id).equalTo("tech_id", selectedTech.getId())
-                .equalTo("id_rapporto_sopralluogo", idSopralluogo).findAll();
 
-        List<GeaImagineRapporto> imagesArray = new ArrayList<>();
+        RealmResults <GeaImagineRapporto> listReportImages = realm.where(GeaImagineRapporto.class)
+                .equalTo("company_id", company_id).equalTo("tech_id", selectedTech.getId())
+                .equalTo("id_rapporto_sopralluogo", id_rapporto_sopralluogo).findAll();
+
+        imagesArray = new ArrayList<>();
 
         for (GeaImagineRapporto geaImagineRapporto : listReportImages)
         {
             GeaImagineRapporto geaImagineRapportoUnmanaged = realm.copyFromRealm(geaImagineRapporto);
-            geaImagineRapportoUnmanaged.setFilePath(null);
+            //geaImagineRapportoUnmanaged.setFilePath(null);
+            geaImagineRapportoUnmanaged.setId_immagine_rapporto(0);
             imagesArray.add(geaImagineRapportoUnmanaged);
         }
         reportItem.setGea_immagini_rapporto_sopralluogo(imagesArray);
-
 
         realm.commitTransaction();
 
@@ -223,20 +231,13 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
 
         Log.d("DEBUG", str_ReportItem_json);
 
-        NetworkUtils networkUtils = new NetworkUtils();
-
-        if(!NetworkUtils.isNetworkAvailable(activity))
+        if (!NetworkUtils.isNetworkAvailable(activity))
         {
             showToastMessage("Connessione ad internet non presente");
             return;
         }
 
         callSendReport = networkUtils.sendData(this, SEND_DATA_URL_SUFFIX, tokenStr, str_ReportItem_json);
-
-        for (GeaImagineRapporto geaImagineRapporto : listReportImages)
-        {
-            callSendImage = networkUtils.sendImage(this, activity, geaImagineRapporto);
-        }
     }
 
     @Override
@@ -250,24 +251,21 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
         if (call == callSendImage)
         {
             showToastMessage("Invio immagine fallito");
+            Log.d("DEBUG", "Invio immagine fallito");
         }
     }
 
     @Override
     public void onResponse(Call call, Response response) throws IOException
     {
-        if (call == callSendImage)
+        for (int i = 0; i < callSendImagesList.size(); i++)
         {
-            reportSendResponse = response.body().string();
-
-            if (reportSendResponse == null)
+            if (call == callSendImagesList.get(i))
             {
-                showToastMessage("Immagine inviato, risposta non ha ricevuto");
+                reportSendResponse = response.body().string();
 
-                return;
-            } else
-            {
-                showToastMessage("Immagine inviato, server ritorna: " + reportSendResponse);
+                showToastMessage("Immagine " + i + " inviato, server ritorna: " + reportSendResponse);
+                Log.d("DEBUG", "image " + i + ", server returned:" + reportSendResponse);
             }
         }
 
@@ -293,10 +291,15 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
                         String strDateTime = sdf.format(calendarNow.getTime());
 
                         realm.beginTransaction();
-                        reportStates.setDataOraRaportoInviato(strDateTime);
+                        reportStates.setData_ora_invio_rapporto(strDateTime);
                         realm.commitTransaction();
                     }
                 });
+
+                for (GeaImagineRapporto geaImagineRapporto : imagesArray)
+                {
+                    callSendImagesList.add(networkUtils.sendImage(this, activity, geaImagineRapporto));
+                }
             }
 
             //mCommunicator.onSendReportReturned();

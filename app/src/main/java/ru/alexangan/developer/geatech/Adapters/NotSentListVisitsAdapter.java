@@ -43,7 +43,6 @@ import static ru.alexangan.developer.geatech.Models.GlobalConstants.company_id;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.realm;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.selectedTech;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.tokenStr;
-import static ru.alexangan.developer.geatech.Models.GlobalConstants.visitItems;
 
 /**
  * Created by user on 11/21/2016.
@@ -299,7 +298,7 @@ public class NotSentListVisitsAdapter extends BaseAdapter implements Callback
                         String strDateTime = sdf.format(calendarNow.getTime());
 
                         realm.beginTransaction();
-                        reportStates.setDataOraRaportoInviato(strDateTime);
+                        reportStates.setData_ora_invio_rapporto(strDateTime);
                         realm.commitTransaction();
 
                         Toast.makeText(mContext, "Rapporto inviato", Toast.LENGTH_LONG).show();

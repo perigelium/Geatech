@@ -1,17 +1,22 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
               xmlns:tools="http://schemas.android.com/tools"
               android:id="@+id/ctrlBtnsReportDetailed"
               android:layout_width="match_parent"
-              android:layout_height="wrap_content"
+              android:layout_height="match_parent"
               android:orientation="vertical"
               tools:context="ru.alexangan.developer.geatech.Fragments.ReportSentDetailedFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <LinearLayout
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
@@ -29,15 +34,16 @@
                 android:id="@+id/tvdataOraSopralluogo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="left|center_vertical"
+                android:layout_gravity="right|center_vertical"
                 android:layout_marginLeft="40dp"
+                android:layout_marginRight="40dp"
                 android:layout_marginTop="4dp"
                 android:text="dato e ora:"
                 android:textSize="15dp"/>
 
-        </LinearLayout>
+        </FrameLayout>
 
-        <LinearLayout
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
@@ -55,15 +61,16 @@
                 android:id="@+id/tvdataOraRaportoCompletato"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="left|center_vertical"
+                android:layout_gravity="right|center_vertical"
                 android:layout_marginLeft="40dp"
+                android:layout_marginRight="40dp"
                 android:layout_marginTop="4dp"
                 android:text="dato e ora:"
                 android:textSize="15dp"/>
 
-        </LinearLayout>
+        </FrameLayout>
 
-        <LinearLayout
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
@@ -81,12 +88,13 @@
                 android:id="@+id/tvdataOraRaportoInviato"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="left|center_vertical"
+                android:layout_gravity="right|center_vertical"
                 android:layout_marginLeft="40dp"
+                android:layout_marginRight="40dp"
                 android:layout_marginTop="4dp"
                 android:text="dato e ora:"
                 android:textSize="15dp"/>
-        </LinearLayout>
+        </FrameLayout>
 
     </LinearLayout>
 
@@ -107,7 +115,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start|center_vertical"
-                android:layout_marginLeft="6dp"
+                android:layout_marginLeft="4dp"
                 android:src="@drawable/person_green" />
 
             <TextView
@@ -175,7 +183,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="6dp"
-        android:orientation="vertical">
+        android:orientation="horizontal">
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -186,7 +194,7 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="start|center_vertical"
+            android:layout_gravity="start|center"
             android:layout_marginLeft="6dp"
             android:src="@drawable/stack_green" />
 
@@ -197,16 +205,17 @@
             android:layout_marginLeft="6dp"
             android:text="Tecnico*" />
 
-            </LinearLayout>
+
 
         <TextView
-            android:id="@+id/tvTechnician"
+            android:id="@+id/tvTechName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_marginLeft="40dp"
-            android:layout_marginBottom="4dp"
             android:text="Nome di Tecnico" />
+
+        </LinearLayout>
 
     </LinearLayout>
 
@@ -326,50 +335,14 @@
 
     <View android:layout_height="1px" android:layout_gravity="bottom" android:layout_marginLeft="40dp" android:layout_width="match_parent" android:background="#999999"/>
 
-    <LinearLayout
-        android:layout_width="wrap_content"
+    <ListView
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="6dp"
-        android:orientation="horizontal">
-
-        <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="start|center_vertical"
-        android:layout_marginLeft="6dp"
-        android:src="@drawable/service_green" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="start|center_vertical"
-            android:layout_marginLeft="6dp"
-            android:text="Tipo di installazione*" />
-
-    </LinearLayout>
+        android:id="@+id/listItemsSentReport">
+    </ListView>
 
     <View android:layout_height="1px" android:layout_gravity="bottom" android:layout_marginLeft="40dp" android:layout_width="match_parent" android:background="#999999"/>
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="6dp"
-        android:orientation="horizontal">
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="start|center_vertical"
-            android:layout_marginLeft="6dp"
-            android:src="@drawable/transparent24px" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="start|center_vertical"
-            android:layout_marginLeft="6dp"
-            android:text="Impianto" />
-
     </LinearLayout>
 
-</LinearLayout>
+</ScrollView>

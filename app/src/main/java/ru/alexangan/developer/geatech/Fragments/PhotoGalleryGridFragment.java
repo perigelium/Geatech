@@ -194,14 +194,19 @@ public class PhotoGalleryGridFragment extends Fragment
         int idSopralluogo = geaSopralluogo.getId_sopralluogo();
         ReportStates reportStates = realm.where(ReportStates.class).equalTo("company_id", company_id).equalTo("tech_id", selectedTech.getId())
                 .equalTo("id_sopralluogo", idSopralluogo).findFirst();
+
+        if(reportStates==null)
+        {
+            return;
+        }
+
+        int id_rapporto_sopralluogo = reportStates.getId_rapporto_sopralluogo();
+
         RealmResults<GeaImagineRapporto> reportImages = realm.where(GeaImagineRapporto.class).equalTo("company_id", company_id)
-                .equalTo("tech_id", selectedTech.getId()).equalTo("id_rapporto_sopralluogo", idSopralluogo).findAll();
+                .equalTo("tech_id", selectedTech.getId()).equalTo("id_rapporto_sopralluogo", id_rapporto_sopralluogo).findAll();
         reportImages.deleteAllFromRealm();
 
-        if(reportStates!=null)
-        {
-            reportStates.setPhotoAddedNumber(imageItems.size() - 1);
-        }
+        reportStates.setPhotoAddedNumber(imageItems.size() - 1);
 
         realm.commitTransaction();
 
@@ -213,7 +218,7 @@ public class PhotoGalleryGridFragment extends Fragment
             {
 
                 String fileName = imageFile.getName();
-                String fileExtension = "";
+/*                String fileExtension = "";
                 int extensionPtr = fileName.lastIndexOf(".");
 
                 if(extensionPtr!=-1)
@@ -228,16 +233,23 @@ public class PhotoGalleryGridFragment extends Fragment
                     fileExtension = strMediaType.substring(strMediaType.lastIndexOf("/") + 1);
                     fileExtension = "." + fileExtension;
                     fileName+=fileExtension;
-                }
+                }*/
+
                 realm.beginTransaction();
 
                     GeaImagineRapporto gea_immagine = new GeaImagineRapporto(
-                            company_id, selectedTech.getId(), idSopralluogo, reportImagesSize++, imageFile.getAbsolutePath(), fileName);
+                            company_id, selectedTech.getId(), id_rapporto_sopralluogo, reportImagesSize++, imageFile.getAbsolutePath(), fileName);
                     realm.copyToRealmOrUpdate(gea_immagine);
 
                 realm.commitTransaction();
             }
         }
+
+/*        realm.beginTransaction();
+        RealmResults<GeaImagineRapporto> listReportImages = realm.where(GeaImagineRapporto.class)
+                .equalTo("company_id", company_id).equalTo("tech_id", selectedTech.getId())
+                .equalTo("id_rapporto_sopralluogo", id_rapporto_sopralluogo).findAll();
+        realm.commitTransaction();*/
     }
 
     @Override
@@ -269,7 +281,25 @@ public class PhotoGalleryGridFragment extends Fragment
 
                 //Bitmap yourSelectedImage = BitmapFactory.decodeStream(imageStream);
 
-                final String fileName = selectedImage.getLastPathSegment() + String.valueOf(pathItems.size());
+                String fileName = selectedImage.getLastPathSegment() + String.valueOf(pathItems.size());
+
+                String fileExtension = "";
+                int extensionPtr = fileName.lastIndexOf(".");
+
+                if(extensionPtr!=-1)
+                {
+                    fileExtension = fileName.substring(extensionPtr);
+                }
+
+                String strMediaType = ImageUtils.getMimeTypeOfUri(context, selectedImage);
+
+                if(fileExtension.length() < 3)
+                {
+                    fileExtension = strMediaType.substring(strMediaType.lastIndexOf("/") + 1);
+                    fileExtension = "." + fileExtension;
+                    fileName+=fileExtension;
+                }
+
                 File file = new File(context.getFilesDir(), photosFolderName + "/" + fileName);
 
                 FileOutputStream out = null;

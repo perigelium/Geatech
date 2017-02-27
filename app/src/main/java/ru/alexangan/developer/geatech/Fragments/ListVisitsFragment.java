@@ -160,6 +160,12 @@ public class ListVisitsFragment extends ListFragment
 
                 int id_tecnico = visitItemsFiltered.get(position).getGeaSopralluogo().getId_tecnico();
 
+                realm.beginTransaction();
+                ReportStates reportStates = realm.where(ReportStates.class)
+                        .equalTo("company_id", company_id).equalTo("tech_id", selectedTech.getId())
+                        .equalTo("id_sopralluogo", idSopralluogo).findFirst();
+                realm.commitTransaction();
+
                 boolean ownVisit = selectedTech.getId() == id_tecnico;
                 boolean freeVisit = id_tecnico == 0;
 
@@ -169,14 +175,14 @@ public class ListVisitsFragment extends ListFragment
                     {
                         if (swipeDetector.getAction() == SwipeDetector.Action.LR)
                         {
-                            mCommunicator.OnListItemSwiped(idVisit, ownVisit);
+                            mCommunicator.OnListItemSwiped(idVisit, ownVisit && reportStates!=null);
                         } else if (swipeDetector.getAction() == SwipeDetector.Action.RL)
                         {
                             mCommunicator.OnListItemSwiped(idVisit, false);
                         }
                     } else
                     {
-                        mCommunicator.OnListItemSelected(idVisit, ownVisit);
+                        mCommunicator.OnListItemSelected(idVisit, ownVisit && reportStates!=null);
                     }
                 }
             }

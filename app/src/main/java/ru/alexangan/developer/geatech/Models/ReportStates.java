@@ -3,7 +3,6 @@ package ru.alexangan.developer.geatech.Models;
 
 import io.realm.RealmList;
 import io.realm.RealmObject;
-import io.realm.annotations.PrimaryKey;
 
 public class ReportStates extends RealmObject
 {
@@ -26,8 +25,8 @@ public class ReportStates extends RealmObject
 
     private String dataOraProssimoTentativo;
     private String dataOraUltimoTentativo;
-    private String dataOraRaportoCompilato; // data_ora_compilazione_rapporto
-    private String dataOraRaportoInviato; // data_ora_invio_rapporto
+    private String data_ora_compilazione_rapporto; // data_ora_compilazione_rapporto
+    private String data_ora_invio_rapporto; // data_ora_invio_rapporto
 
     private String nome_tecnico;
     private String note_tecnico;
@@ -119,22 +118,22 @@ public class ReportStates extends RealmObject
 
     public String getDataOraRaportoCompletato()
     {
-        return dataOraRaportoCompilato;
+        return data_ora_compilazione_rapporto;
     }
 
     public void setDataOraRaportoCompletato(String dataOraRaportoCompletato)
     {
-        this.dataOraRaportoCompilato = dataOraRaportoCompletato;
+        this.data_ora_compilazione_rapporto = dataOraRaportoCompletato;
     }
 
-    public String getDataOraRaportoInviato()
+    public String getData_ora_invio_rapporto()
     {
-        return dataOraRaportoInviato;
+        return data_ora_invio_rapporto;
     }
 
-    public void setDataOraRaportoInviato(String dataOraRaportoInviato)
+    public void setData_ora_invio_rapporto(String data_ora_invio_rapporto)
     {
-        this.dataOraRaportoInviato = dataOraRaportoInviato;
+        this.data_ora_invio_rapporto = data_ora_invio_rapporto;
     }
 
     public String getDataOraProssimoTentativo()

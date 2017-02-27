@@ -160,16 +160,16 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
         GeaSopralluogo geaSopralluogo = visitItem.getGeaSopralluogo();
         String dataOraSopralluogo = geaSopralluogo.getData_ora_sopralluogo();
         idSopralluogo = geaSopralluogo.getId_sopralluogo();
-        List<SubproductItem> list = productData.getSubItem();
+        List<SubproductItem> listSubproducts = productData.getSubItem();
 
         realm.beginTransaction();
         reportStates = realm.where(ReportStates.class).equalTo("company_id", company_id).equalTo("tech_id", selectedTech.getId())
                 .equalTo("id_sopralluogo", idSopralluogo).findFirst();
         realm.commitTransaction();
 
-        SetVisitDateTimeListAdapter adapter = new SetVisitDateTimeListAdapter(getActivity(), list);
+        SetVisitDateTimeListAdapter adapter = new SetVisitDateTimeListAdapter(getActivity(), listSubproducts);
 
-        ListView listView = (ListView) rootView.findViewById(R.id.list);
+        ListView listView = (ListView) rootView.findViewById(R.id.listSubproducts);
         listView.setAdapter(adapter);
 
         TextView clientNameTextView = (TextView) rootView.findViewById(R.id.tvClientName);
@@ -413,7 +413,6 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
                                             String str_id_rapporto_sopralluogo = jsonObject.getString("id_rapporto_sopralluogo");
                                             int id_rapporto_sopralluogo = Integer.valueOf(str_id_rapporto_sopralluogo);
 
-
                                             if (reportStates == null)
                                             {
                                                 realm.beginTransaction();
@@ -433,8 +432,8 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
                                                 if (reportStates != null)
                                                 {
                                                     realm.beginTransaction();
-                                                    reportStates.setData_ora_sopralluogo(strDateTimeSet);
                                                     reportStates.setId_rapporto_sopralluogo(id_rapporto_sopralluogo);
+                                                    reportStates.setData_ora_sopralluogo(strDateTimeSet);
                                                     reportStates.setData_ora_presa_appuntamento(strDateTimeNow);
                                                     reportStates.setNome_tecnico(selectedTech.getFullNameTehnic());
                                                     realm.commitTransaction();
