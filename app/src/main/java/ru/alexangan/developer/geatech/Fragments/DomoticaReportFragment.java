@@ -226,6 +226,18 @@ public class DomoticaReportFragment extends Fragment implements View.OnClickList
         tv1SwitchAndEdit1.setText(geaItemModelli.get(sectionNumber++).getDescrizione_item());
 
         sw1SwitchAndEdit1 = (Switch) rootView.findViewById(R.id.sw1SwitchAndEdit1);
+        sw1SwitchAndEdit1.setOnTouchListener(new View.OnTouchListener()
+        {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent)
+            {
+                if(!sw1SwitchAndEdit1.isChecked())
+                {
+                    et1SwitchAndEdit1.setText("1");
+                }
+                return false;
+            }
+        });
 
         tv2SwitchAndEdit1 = (TextView) rootView.findViewById(R.id.tv2SwitchAndEdit1);
         tv2SwitchAndEdit1.setText(str_id_item_149);
@@ -321,7 +333,6 @@ public class DomoticaReportFragment extends Fragment implements View.OnClickList
         tv1Edit2.setText(str_id_item_147);
 
         et1Edit2 = (EditText) ll_edit2.findViewById(R.id.et1Edit1);
-        et1Edit2.setInputType(InputType.TYPE_CLASS_NUMBER);
     }
 
     private void createViewFourRadiosAndEdit1(int sectionNumber)
@@ -375,12 +386,12 @@ public class DomoticaReportFragment extends Fragment implements View.OnClickList
         tv1Edit1.setText(str_id_item_141);
 
         et1Edit1 = (EditText) ll_edit1.findViewById(R.id.et1Edit1);
-        et1Edit1.setInputType(InputType.TYPE_CLASS_NUMBER);
     }
 
     private void createViewTwoRadios2(int sectionNumber)
     {
-        int i;LinearLayout ll_two_radios2 = (LinearLayout) rootView.findViewById(R.id.two_radiosDomotica2);
+        int i;
+        LinearLayout ll_two_radios2 = (LinearLayout) rootView.findViewById(R.id.two_radiosDomotica2);
         llHeaderTwoRadios2 = (LinearLayout) ll_two_radios2.findViewById(R.id.llHeaderTwoRadios1);
         llHeaderTwoRadios2.setOnClickListener(this);
 
@@ -508,14 +519,15 @@ public class DomoticaReportFragment extends Fragment implements View.OnClickList
         String str_id_item = "";
         if (sw1SwitchAndEdit1.isChecked())
         {
-            DatabaseUtils.insertStringInReportItem(id_rapporto_sopralluogo, id_item, str_id_item);
+            DatabaseUtils.insertStringInReportItem(id_rapporto_sopralluogo, id_item, "SI");
         } else
         {
             DatabaseUtils.insertStringInReportItem(id_rapporto_sopralluogo, id_item, "NO");
-            str_id_item = et1SwitchAndEdit1.getText().toString();
-            DatabaseUtils.insertStringInReportItem(id_rapporto_sopralluogo, id_item++, str_id_item);
         }
         id_item++;
+
+        str_id_item = et1SwitchAndEdit1.getText().toString();
+        DatabaseUtils.insertStringInReportItem(id_rapporto_sopralluogo, id_item++, str_id_item);
 
         return id_item;
     }
@@ -643,13 +655,13 @@ public class DomoticaReportFragment extends Fragment implements View.OnClickList
         idItem = fillTwoSwitches1(idItem);
 
         // FourRadiosAndEdit1
-        fillFourRadiosAndEdit1(idItem);
+        fillFourRadiosAndEdit1(idItem++);
 
         // TwoEdits1
         idItem = fillTwoEdits1(idItem);
 
         // Edit2
-        fillEdit2(idItem);
+        fillEdit2(idItem++);
 
         // SwitchAndEdit1
         idItem = fillSwitchAndEdit1(idItem);
@@ -663,15 +675,16 @@ public class DomoticaReportFragment extends Fragment implements View.OnClickList
     private int fillSwitchAndEdit1(int idItem)
     {
         String str_id_item = DatabaseUtils.getValueFromReportItem(id_rapporto_sopralluogo, idItem++);
-        if (str_id_item != null && str_id_item.contains("SI"))
+
+        if (str_id_item.equals("SI"))
         {
             sw1SwitchAndEdit1.setChecked(true);
         }
-        else
-        {
-            str_id_item = DatabaseUtils.getValueFromReportItem(id_rapporto_sopralluogo, idItem++);
-            et1SwitchAndEdit1.setText(str_id_item);
-        }
+
+        str_id_item = DatabaseUtils.getValueFromReportItem(id_rapporto_sopralluogo, idItem++);
+
+        et1SwitchAndEdit1.setText(str_id_item);
+
         return idItem;
     }
 

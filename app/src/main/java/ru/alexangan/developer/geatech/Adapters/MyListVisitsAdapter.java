@@ -120,7 +120,15 @@ public class MyListVisitsAdapter extends BaseAdapter
         int id_tecnico = geaSopralluogo.getId_tecnico();
 
         clientNameTextView.setText(clientData.getName());
-        serviceTypeTextView.setText(productData.getProductType());
+
+        String productType = productData.getProductType();
+
+        if(productType.length() > 17)
+        {
+            productType = productType.substring(0, 17);
+        }
+
+        serviceTypeTextView.setText(productType);
         clientAddressTextView.setText(clientData.getAddress());
 
         boolean ownReport = selectedTech.getId() == id_tecnico;

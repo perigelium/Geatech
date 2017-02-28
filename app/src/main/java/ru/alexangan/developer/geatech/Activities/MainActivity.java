@@ -227,6 +227,8 @@ public class MainActivity extends Activity implements Communicator, Callback
             mFragmentTransaction.show(ctrlBtnsFragment1);
             mFragmentTransaction.commit();*/
 
+            removeAllLists();
+
             ctrlBtnsFragment1.setCheckedBtnId(R.id.btnVisits);
 
 /*            FragmentTransaction mFragmentTransaction1 = mFragmentManager.beginTransaction();

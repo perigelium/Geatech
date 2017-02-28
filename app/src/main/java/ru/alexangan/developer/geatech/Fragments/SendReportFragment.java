@@ -258,14 +258,17 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
     @Override
     public void onResponse(Call call, Response response) throws IOException
     {
-        for (int i = 0; i < callSendImagesList.size(); i++)
+        if(callSendImagesList!=null)
         {
-            if (call == callSendImagesList.get(i))
+            for (int i = 0; i < callSendImagesList.size(); i++)
             {
-                reportSendResponse = response.body().string();
+                if (call == callSendImagesList.get(i))
+                {
+                    reportSendResponse = response.body().string();
 
-                showToastMessage("Immagine " + i + " inviato, server ritorna: " + reportSendResponse);
-                Log.d("DEBUG", "image " + i + ", server returned:" + reportSendResponse);
+                    showToastMessage("Immagine " + i + " inviato, server ritorna: " + reportSendResponse);
+                    Log.d("DEBUG", "image " + i + ", server returned:" + reportSendResponse);
+                }
             }
         }
 

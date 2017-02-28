@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
@@ -55,11 +56,13 @@ public class ReportSentDetailedFragment extends Fragment
         ProductData productData = visitItem.getProductData();
         GeaSopralluogo geaSopralluogo = visitItem.getGeaSopralluogo();
         int idSopralluogo = geaSopralluogo.getId_sopralluogo();
-        String productType = productData.getProductType();
+        //String productType = productData.getProductType();
+        int id_product_type = productData.getIdProductType();
 
         TextView tvdataOraSopralluogo = (TextView) rootView.findViewById(R.id.tvdataOraSopralluogo);
         TextView tvdataOraRaportoCompletato = (TextView) rootView.findViewById(R.id.tvdataOraRaportoCompletato);
         TextView tvdataOraRaportoInviato = (TextView) rootView.findViewById(R.id.tvdataOraRaportoInviato);
+        TextView tvReportName = (TextView) rootView.findViewById(R.id.tvReportName);
 
         TextView tvTechName = (TextView) rootView.findViewById(R.id.tvTechName);
         tvTechName.setText(selectedTech.getFullNameTehnic());
@@ -70,35 +73,66 @@ public class ReportSentDetailedFragment extends Fragment
                 .equalTo("id_sopralluogo", idSopralluogo).findFirst();
         realm.commitTransaction();
 
-        if(reportStates != null)
+        if (reportStates != null)
         {
             int id_rapporto_sopralluogo = reportStates.getId_rapporto_sopralluogo();
 
-            List <GeaItemRapporto> geaItemsRapporto = realm.where(GeaItemRapporto.class).equalTo("company_id", company_id)
+            List<GeaItemRapporto> geaItemsRapporto = realm.where(GeaItemRapporto.class).equalTo("company_id", company_id)
                     .equalTo("tech_id", selectedTech.getId()).equalTo("id_rapporto_sopralluogo", id_rapporto_sopralluogo).findAll();
 
-/*            realm.beginTransaction();
-            GeaModelloRapporto geaModello = realm.where(GeaModelloRapporto.class).equalTo("nome_modello", productType).findFirst();
-            realm.commitTransaction();
+            if (geaItemsRapporto.size() != 0)
+            {
+                realm.beginTransaction();
+                GeaModelloRapporto geaModello = realm.where(GeaModelloRapporto.class).equalTo("id_product_type", id_product_type).findFirst();
+                realm.commitTransaction();
 
-            realm.beginTransaction();
+                String modelloName = geaModello != null ? geaModello.getNome_modello() : "";
+                tvReportName.setText(modelloName);
+
+/*            realm.beginTransaction();
             RealmResults <GeaSezioneModelliRapporto> geaSezioniModelli = realm.where(GeaSezioneModelliRapporto.class)
                     .equalTo("id_modello", geaModello.getId_modello()).findAll();
             realm.commitTransaction();*/
 
-            realm.beginTransaction();
-            RealmResults <GeaItemModelliRapporto> geaItemModelli = realm.where(GeaItemModelliRapporto.class)
-             .between("id_item_modello", geaItemsRapporto.get(0).getId_item_modello(), geaItemsRapporto.get(geaItemsRapporto.size()-1).getId_item_modello()).findAll();
-            realm.commitTransaction();
+                int idItem = geaItemsRapporto.get(0).getId_item_modello();
+                int idItemStart = idItem;
+                int idItemEnd = idItem;
 
-            for(int i = 0; i < geaItemsRapporto.size(); i++)
-            {
-                reportItems.add(String.valueOf(geaItemModelli.get(i).getDescrizione_item()) + " : " + geaItemsRapporto.get(i).getValore());
+                for (GeaItemRapporto geaItemRapporto : geaItemsRapporto)
+                {
+                    idItem = geaItemRapporto.getId_item_modello();
+
+                    if (idItem > idItemEnd)
+                    {
+                        idItemEnd = idItem;
+                    }
+
+                    if (idItem < idItemStart)
+                    {
+                        idItemStart = idItem;
+                    }
+                }
+
+                realm.beginTransaction();
+                RealmResults<GeaItemModelliRapporto> geaItemModelli = realm.where(GeaItemModelliRapporto.class)
+                        .between("id_item_modello", idItemStart, idItemEnd + 1).findAll();
+                realm.commitTransaction();
+
+                for (int i = 0; i < geaItemModelli.size(); i++)
+                {
+                    for (int j = 0; j < geaItemsRapporto.size(); j++)
+                    {
+                        if (geaItemModelli.get(i).getId_item_modello() == geaItemsRapporto.get(j).getId_item_modello())
+                        {
+                            reportItems.add(String.valueOf(geaItemModelli.get(i).getDescrizione_item()) + " : " + geaItemsRapporto.get(j).getValore());
+                        }
+                    }
+                }
+
+                tvdataOraSopralluogo.setText(reportStates.getData_ora_sopralluogo());
+                tvdataOraRaportoCompletato.setText(reportStates.getDataOraRaportoCompletato());
+                tvdataOraRaportoInviato.setText(reportStates.getData_ora_invio_rapporto());
             }
-
-            tvdataOraSopralluogo.setText(reportStates.getData_ora_sopralluogo());
-            tvdataOraRaportoCompletato.setText(reportStates.getDataOraRaportoCompletato());
-            tvdataOraRaportoInviato.setText(reportStates.getData_ora_invio_rapporto());
         }
 
         TextView clientNameTextView = (TextView) rootView.findViewById(R.id.tvClientName);
@@ -110,11 +144,11 @@ public class ReportSentDetailedFragment extends Fragment
         TextView clientAddressTextView = (TextView) rootView.findViewById(R.id.tvClientAddress);
         clientAddressTextView.setText(clientData.getAddress());
 
-        TextView etCoordNord = (TextView)rootView.findViewById(R.id.etCoordNord);
-        TextView etCoordEst = (TextView)rootView.findViewById(R.id.etCoordEst);
-        TextView etAltitude = (TextView)rootView.findViewById(R.id.etAltitude);
+        TextView etCoordNord = (TextView) rootView.findViewById(R.id.etCoordNord);
+        TextView etCoordEst = (TextView) rootView.findViewById(R.id.etCoordEst);
+        TextView etAltitude = (TextView) rootView.findViewById(R.id.etAltitude);
 
-        if(reportStates != null)
+        if (reportStates != null)
         {
             double latitude = reportStates.getLatitudine();
             double longitude = reportStates.getLongitudine();
@@ -123,7 +157,7 @@ public class ReportSentDetailedFragment extends Fragment
             etCoordNord.setText(String.valueOf(latitude));
             etCoordEst.setText(String.valueOf(longitude));
 
-            if(altitude!=-999)
+            if (altitude != -999)
             {
                 etAltitude.setText(String.valueOf((int) altitude));
             }
@@ -131,11 +165,36 @@ public class ReportSentDetailedFragment extends Fragment
 
         ListView listView = (ListView) rootView.findViewById(R.id.listItemsSentReport);
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1,  reportItems);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, reportItems);
 
         listView.setAdapter(adapter);
 
+        setListViewHeightBasedOnChildren(listView);
+
         return rootView;
+    }
+
+    private void setListViewHeightBasedOnChildren(ListView listView)
+    {
+        ListAdapter listAdapter = listView.getAdapter();
+        if (listAdapter == null)
+            return;
+
+        int desiredWidth = View.MeasureSpec.makeMeasureSpec(listView.getWidth(), View.MeasureSpec.UNSPECIFIED);
+        int totalHeight = 0;
+        View view = null;
+        for (int i = 0; i < listAdapter.getCount(); i++)
+        {
+            view = listAdapter.getView(i, view, listView);
+            if (i == 0)
+                view.setLayoutParams(new ViewGroup.LayoutParams(desiredWidth, ViewGroup.LayoutParams.WRAP_CONTENT));
+
+            view.measure(desiredWidth, View.MeasureSpec.UNSPECIFIED);
+            totalHeight += view.getMeasuredHeight();
+        }
+        ViewGroup.LayoutParams params = listView.getLayoutParams();
+        params.height = totalHeight + (listView.getDividerHeight() * (listAdapter.getCount() - 1));
+        listView.setLayoutParams(params);
     }
 
     @Override

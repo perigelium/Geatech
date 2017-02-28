@@ -21,7 +21,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start|center_vertical"
-                android:layout_marginLeft="6dp"
+                android:layout_margin="5dp"
                 android:src="@drawable/person_dark_orange" />
 
             <TextView
@@ -46,7 +46,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start|center_vertical"
-                android:layout_marginLeft="6dp"
+                android:layout_margin="5dp"
                 android:src="@drawable/service_dark_orange" />
 
             <TextView
@@ -70,7 +70,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start|center_vertical"
-                android:layout_marginLeft="6dp"
+                android:layout_margin="5dp"
                 android:src="@drawable/location_dark_orange" />
 
             <TextView
@@ -121,7 +121,7 @@
                     android:textSize="70dp" />
 
                 <TextView
-                    android:id="@+id/tvVisitMonth"
+                    android:id="@+id/tvVisitDaysOrHoursRemain"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal|bottom"

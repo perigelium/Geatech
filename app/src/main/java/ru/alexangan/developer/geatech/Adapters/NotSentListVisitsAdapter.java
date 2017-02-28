@@ -43,6 +43,7 @@ import static ru.alexangan.developer.geatech.Models.GlobalConstants.company_id;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.realm;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.selectedTech;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.tokenStr;
+import static ru.alexangan.developer.geatech.Models.GlobalConstants.visitItems;
 
 /**
  * Created by user on 11/21/2016.
@@ -50,13 +51,15 @@ import static ru.alexangan.developer.geatech.Models.GlobalConstants.tokenStr;
 
 public class NotSentListVisitsAdapter extends BaseAdapter implements Callback
 {
-    private Activity mContext;
     ArrayList<VisitItem> visitItemsDateTimeSet;
     int layout_id;
     ReportStates reportStates;
     Call callSendReport, callSendImage;
     Activity activity;
     String reportSendResponse;
+    NetworkUtils networkUtils;
+    List<GeaImagineRapporto> imagesArray;
+    List <Call> callSendImagesList;
 
     public NotSentListVisitsAdapter(Activity activity, int layout_id, ArrayList<VisitItem> objects)
     {
@@ -64,6 +67,8 @@ public class NotSentListVisitsAdapter extends BaseAdapter implements Callback
         this.activity = activity;
         visitItemsDateTimeSet = objects;
         this.layout_id = layout_id;
+        callSendImagesList = new ArrayList<>();
+        networkUtils = new NetworkUtils();
     }
 
     @Override
@@ -128,7 +133,7 @@ public class NotSentListVisitsAdapter extends BaseAdapter implements Callback
             tvNextTimeTryToSendReport.setText(reportStates.getDataOraProssimoTentativo());*/
         }
 
-        Button btnSendReportNow = (Button) row.findViewById(R.id.btnSendReportNow);
+        final Button btnSendReportNow = (Button) row.findViewById(R.id.btnSendReportNow);
 
         btnSendReportNow.setOnClickListener(new View.OnClickListener()
         {
@@ -139,8 +144,10 @@ public class NotSentListVisitsAdapter extends BaseAdapter implements Callback
                 {
                     sendReportItem(position);
 
-                    visitItemsDateTimeSet.remove(position);
-                    notifyDataSetChanged();
+                    btnSendReportNow.setAlpha(.4f);
+                    btnSendReportNow.setEnabled(false);
+
+                    //notifyDataSetChanged();
                 }
             }
         });
@@ -177,17 +184,17 @@ public class NotSentListVisitsAdapter extends BaseAdapter implements Callback
         return row;
     }
 
-    private void sendReportItem(int position)
+    private void sendReportItem(int selectedIndex)
     {
         realm.beginTransaction();
 
         ReportItem reportItem = new ReportItem();
         Gson gson = new Gson();
 
-        VisitItem visitItem = visitItemsDateTimeSet.get(position);
+        VisitItem visitItem = visitItemsDateTimeSet.get(selectedIndex);
         GeaSopralluogo geaSopralluogo = visitItem.getGeaSopralluogo();
         ProductData productData = visitItem.getProductData();
-        //String productType = productData.getProductType();
+        String productType = productData.getProductType();
         //int idProductType = productData.getIdProductType();
         int idSopralluogo = geaSopralluogo.getId_sopralluogo();
 
@@ -197,37 +204,46 @@ public class NotSentListVisitsAdapter extends BaseAdapter implements Callback
         ReportStates reportStates = realm.where(ReportStates.class).equalTo("company_id", company_id).equalTo("tech_id", selectedTech.getId())
                 .equalTo("id_sopralluogo", idSopralluogo).findFirst();
 
+        if(reportStates == null)
+        {
+            showToastMessage("Invio rapporto fallito");
+            return;
+        }
+
+        int id_rapporto_sopralluogo = reportStates.getId_rapporto_sopralluogo();
+
         ReportStates reportStatesUnmanaged = realm.copyFromRealm(reportStates);
         String strReportStatesUnmanaged = gson.toJson(reportStatesUnmanaged);
         GeaRapporto gea_rapporto = gson.fromJson(strReportStatesUnmanaged, GeaRapporto.class);
         reportItem.setGea_rapporto_sopralluogo(gea_rapporto);
 
         RealmResults geaItemsRapporto = realm.where(GeaItemRapporto.class).equalTo("company_id", company_id)
-                .equalTo("tech_id", selectedTech.getId()).equalTo("id_rapporto_sopralluogo", idSopralluogo).findAll();
+                .equalTo("tech_id", selectedTech.getId()).equalTo("id_rapporto_sopralluogo", id_rapporto_sopralluogo).findAll();
         List<GeaItemRapporto> listGeaItemRapporto = new ArrayList<>();
 
-        for(Object gi : geaItemsRapporto)
+        for (Object gi : geaItemsRapporto)
         {
-            GeaItemRapporto gi_unmanaged = realm.copyFromRealm((GeaItemRapporto)gi);
+            GeaItemRapporto gi_unmanaged = realm.copyFromRealm((GeaItemRapporto) gi);
             listGeaItemRapporto.add(gi_unmanaged);
         }
         reportItem.setGea_items_rapporto_sopralluogo(listGeaItemRapporto);
 
 
-        RealmResults<GeaImagineRapporto> listReportImages = realm.where(GeaImagineRapporto.class)
-                .equalTo("company_id", company_id).equalTo("tech_id", selectedTech.getId())
-                .equalTo("id_rapporto_sopralluogo", idSopralluogo).findAll();
 
-        List<GeaImagineRapporto> imagesArray = new ArrayList<>();
+        RealmResults <GeaImagineRapporto> listReportImages = realm.where(GeaImagineRapporto.class)
+                .equalTo("company_id", company_id).equalTo("tech_id", selectedTech.getId())
+                .equalTo("id_rapporto_sopralluogo", id_rapporto_sopralluogo).findAll();
+
+        imagesArray = new ArrayList<>();
 
         for (GeaImagineRapporto geaImagineRapporto : listReportImages)
         {
             GeaImagineRapporto geaImagineRapportoUnmanaged = realm.copyFromRealm(geaImagineRapporto);
-            geaImagineRapportoUnmanaged.setFilePath(null);
+            //geaImagineRapportoUnmanaged.setFilePath(null);
+            geaImagineRapportoUnmanaged.setId_immagine_rapporto(0);
             imagesArray.add(geaImagineRapportoUnmanaged);
         }
         reportItem.setGea_immagini_rapporto_sopralluogo(imagesArray);
-
 
         realm.commitTransaction();
 
@@ -235,13 +251,13 @@ public class NotSentListVisitsAdapter extends BaseAdapter implements Callback
 
         Log.d("DEBUG", str_ReportItem_json);
 
-        NetworkUtils networkUtils = new NetworkUtils();
-        callSendReport = networkUtils.sendData(this, SEND_DATA_URL_SUFFIX, tokenStr, str_ReportItem_json);
-
-        for (GeaImagineRapporto geaImagineRapporto : listReportImages)
+        if (!NetworkUtils.isNetworkAvailable(activity))
         {
-            callSendImage = networkUtils.sendImage(this, activity, geaImagineRapporto);
+            showToastMessage("Connessione ad internet non presente");
+            return;
         }
+
+        callSendReport = networkUtils.sendData(this, SEND_DATA_URL_SUFFIX, tokenStr, str_ReportItem_json);
     }
 
     @Override
@@ -255,24 +271,24 @@ public class NotSentListVisitsAdapter extends BaseAdapter implements Callback
         if (call == callSendImage)
         {
             showToastMessage("Invio immagine fallito");
+            Log.d("DEBUG", "Invio immagine fallito");
         }
     }
 
     @Override
     public void onResponse(Call call, Response response) throws IOException
     {
-        if (call == callSendImage)
+        if(callSendImagesList!=null)
         {
-            reportSendResponse = response.body().string();
-
-            if (reportSendResponse == null)
+            for (int i = 0; i < callSendImagesList.size(); i++)
             {
-                showToastMessage("Immagine inviato, risposta non ha ricevuto");
+                if (call == callSendImagesList.get(i))
+                {
+                    reportSendResponse = response.body().string();
 
-                return;
-            } else
-            {
-                showToastMessage("Immagine inviato, server ritorna: " + reportSendResponse);
+                    showToastMessage("Immagine " + i + " inviato, server ritorna: " + reportSendResponse);
+                    Log.d("DEBUG", "image " + i + ", server returned:" + reportSendResponse);
+                }
             }
         }
 
@@ -280,13 +296,7 @@ public class NotSentListVisitsAdapter extends BaseAdapter implements Callback
         {
             reportSendResponse = response.body().string();
 
-            if (reportSendResponse == null)
-            {
-                showToastMessage("Rapporto inviato, risposta non ha ricevuto");
 
-                return;
-            } else
-            {
                 activity.runOnUiThread(new Runnable()
                 {
                     public void run()
@@ -300,11 +310,16 @@ public class NotSentListVisitsAdapter extends BaseAdapter implements Callback
                         realm.beginTransaction();
                         reportStates.setData_ora_invio_rapporto(strDateTime);
                         realm.commitTransaction();
-
-                        Toast.makeText(mContext, "Rapporto inviato", Toast.LENGTH_LONG).show();
                     }
                 });
-            }
+
+                for (GeaImagineRapporto geaImagineRapporto : imagesArray)
+                {
+                    callSendImagesList.add(networkUtils.sendImage(this, activity, geaImagineRapporto));
+                }
+
+
+            //mCommunicator.onSendReportReturned();
         }
     }
 

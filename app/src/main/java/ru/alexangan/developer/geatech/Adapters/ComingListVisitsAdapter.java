@@ -35,7 +35,7 @@ public class ComingListVisitsAdapter extends BaseAdapter
     int layout_id;
     final Calendar calendarNow;
     Calendar calendar;
-    long elapsedDays;
+    long elapsedHours, elapsedDays;
 
     public ComingListVisitsAdapter(Context context, int layout_id, ArrayList<VisitItem> visitItemsDateTimeSet)
     {
@@ -89,7 +89,7 @@ public class ComingListVisitsAdapter extends BaseAdapter
         realm.commitTransaction();
 
         TextView tvVisitDay = (TextView)row.findViewById(R.id.tvVisitDay);
-        //TextView tvVisitMonth = (TextView)row.findViewById(R.id.tvVisitMonth);
+        TextView tvVisitDaysOrHoursRemain = (TextView)row.findViewById(R.id.tvVisitDaysOrHoursRemain);
 
         TextView clientNameTextView = (TextView) row.findViewById(R.id.tvClientName);
         clientNameTextView.setText(clientData.getName());
@@ -121,13 +121,15 @@ public class ComingListVisitsAdapter extends BaseAdapter
             if (millsDiff <= 0)
             {
                 elapsedDays = 0;
+                elapsedHours = 0;
             }
             else
             {
                 long milliSeconds = calendar.getTimeInMillis();
                 long milliSecondsNow = calendarNow.getTimeInMillis();
                 long periodMilliSeconds = (milliSeconds - milliSecondsNow);
-                elapsedDays = periodMilliSeconds / 1000 / 60 / 60 / 24;
+                elapsedHours = periodMilliSeconds / 1000 / 60 / 60;
+                elapsedDays = elapsedHours / 24;
             }
 
             if (elapsedDays > 99)
@@ -135,7 +137,15 @@ public class ComingListVisitsAdapter extends BaseAdapter
                 tvVisitDay.setTextSize(50);
             }
 
-            tvVisitDay.setText(Long.toString(elapsedDays));
+            if(elapsedDays > 0)
+            {
+                tvVisitDay.setText(Long.toString(elapsedDays));
+            }
+            else
+            {
+                tvVisitDay.setText(Long.toString(elapsedHours));
+                tvVisitDaysOrHoursRemain.setText("ore");
+            }
         }
 
         return row;

@@ -1,233 +1,361 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:tools="http://schemas.android.com/tools"
-              android:id="@+id/ctrlBtnsReportDetailed"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:orientation="vertical"
-              tools:context="ru.alexangan.developer.geatech.Fragments.ReportSentDetailedFragment">
+            xmlns:tools="http://schemas.android.com/tools"
+            android:id="@+id/ctrlBtnsReportDetailed"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            tools:context="ru.alexangan.developer.geatech.Fragments.ReportSentDetailedFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="left|center_vertical"
-                android:layout_marginLeft="40dp"
-                android:layout_marginTop="4dp"
-                android:text="Sopralluogo:"
-                android:textSize="15dp"/>
-
-            <TextView
-                android:id="@+id/tvdataOraSopralluogo"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="right|center_vertical"
-                android:layout_marginLeft="40dp"
-                android:layout_marginRight="40dp"
-                android:layout_marginTop="4dp"
-                android:text="dato e ora:"
-                android:textSize="15dp"/>
-
-        </FrameLayout>
-
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="left|center_vertical"
-                android:layout_marginLeft="40dp"
-                android:layout_marginTop="4dp"
-                android:text="Rapporto commiato:"
-                android:textSize="15dp"/>
-
-            <TextView
-                android:id="@+id/tvdataOraRaportoCompletato"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="right|center_vertical"
-                android:layout_marginLeft="40dp"
-                android:layout_marginRight="40dp"
-                android:layout_marginTop="4dp"
-                android:text="dato e ora:"
-                android:textSize="15dp"/>
-
-        </FrameLayout>
-
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="left|center_vertical"
-                android:layout_marginLeft="40dp"
-                android:layout_marginTop="4dp"
-                android:text="Rapporto inviato il:"
-                android:textSize="15dp"/>
-
-            <TextView
-                android:id="@+id/tvdataOraRaportoInviato"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="right|center_vertical"
-                android:layout_marginLeft="40dp"
-                android:layout_marginRight="40dp"
-                android:layout_marginTop="4dp"
-                android:text="dato e ora:"
-                android:textSize="15dp"/>
-        </FrameLayout>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="15dp"
-        android:orientation="vertical">
-
-
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="6dp"
-            android:orientation="horizontal">
+            android:orientation="vertical">
 
-            <ImageView
-                android:layout_width="wrap_content"
+            <FrameLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="start|center_vertical"
-                android:layout_marginLeft="4dp"
-                android:src="@drawable/person_green" />
+                android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/tvClientName"
-                android:layout_width="wrap_content"
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left|center_vertical"
+                    android:layout_marginLeft="40dp"
+                    android:layout_marginTop="4dp"
+                    android:text="Sopralluogo:"
+                    android:textSize="15dp"/>
+
+                <TextView
+                    android:id="@+id/tvdataOraSopralluogo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right|center_vertical"
+                    android:layout_marginLeft="40dp"
+                    android:layout_marginRight="40dp"
+                    android:layout_marginTop="4dp"
+                    android:text="dato e ora:"
+                    android:textStyle="bold"
+                    android:textSize="15dp"/>
+
+            </FrameLayout>
+
+            <FrameLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="start|center_vertical"
-                android:layout_marginLeft="6dp"
-                android:text="Nome del cliente" />
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left|center_vertical"
+                    android:layout_marginLeft="40dp"
+                    android:layout_marginTop="4dp"
+                    android:text="Rapporto commiato:"
+                    android:textSize="15dp"/>
+
+                <TextView
+                    android:id="@+id/tvdataOraRaportoCompletato"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right|center_vertical"
+                    android:layout_marginLeft="40dp"
+                    android:layout_marginRight="40dp"
+                    android:layout_marginTop="4dp"
+                    android:text="dato e ora:"
+                    android:textStyle="bold"
+                    android:textSize="15dp"/>
+
+            </FrameLayout>
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left|center_vertical"
+                    android:layout_marginLeft="40dp"
+                    android:layout_marginTop="4dp"
+                    android:text="Rapporto inviato il:"
+                    android:textSize="15dp"/>
+
+                <TextView
+                    android:id="@+id/tvdataOraRaportoInviato"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right|center_vertical"
+                    android:layout_marginLeft="40dp"
+                    android:layout_marginRight="40dp"
+                    android:layout_marginTop="4dp"
+                    android:text="dato e ora:"
+                    android:textStyle="bold"
+                    android:textSize="15dp"/>
+            </FrameLayout>
 
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_marginLeft="6dp"
-            android:orientation="horizontal">
+            android:layout_margin="15dp"
+            android:orientation="vertical">
 
-            <ImageView
+
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="start|center_vertical"
                 android:layout_marginLeft="6dp"
-                android:src="@drawable/location_dark_green" />
+                android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/tvClientAddress"
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start|center_vertical"
+                    android:layout_marginLeft="4dp"
+                    android:src="@drawable/person_green"/>
+
+                <TextView
+                    android:id="@+id/tvClientName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start|center_vertical"
+                    android:layout_marginLeft="6dp"
+                    android:textStyle="bold"
+                    android:text="Nome del cliente"/>
+
+            </LinearLayout>
+
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="start|center_vertical"
+                android:layout_gravity="center_vertical"
                 android:layout_marginLeft="6dp"
-                android:text="Indirizzo del cliente" />
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start|center_vertical"
+                    android:layout_marginLeft="6dp"
+                    android:src="@drawable/location_dark_green"/>
+
+                <TextView
+                    android:id="@+id/tvClientAddress"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start|center_vertical"
+                    android:layout_marginLeft="6dp"
+                    android:textStyle="bold"
+                    android:text="Indirizzo del cliente"/>
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_margin="9dp"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start|center_vertical"
+                    android:layout_marginLeft="6dp"
+                    android:src="@drawable/phone_green"/>
+
+                <TextView
+                    android:id="@+id/tvClientPhone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start|center_vertical"
+                    android:layout_marginLeft="6dp"
+                    android:textStyle="bold"
+                    android:text="telefono del cliente"/>
+            </LinearLayout>
 
         </LinearLayout>
 
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_margin="9dp"
-            android:orientation="horizontal">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="start|center_vertical"
-                android:layout_marginLeft="6dp"
-                android:src="@drawable/phone_green" />
-
-            <TextView
-                android:id="@+id/tvClientPhone"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="start|center_vertical"
-                android:layout_marginLeft="6dp"
-                android:text="telefono del cliente" />
-        </LinearLayout>
-
-    </LinearLayout>
-    <View android:layout_height="1px" android:layout_gravity="bottom" android:layout_marginLeft="40dp" android:layout_width="match_parent" android:background="#999999"/>
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="6dp"
-        android:orientation="horizontal">
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="6dp"
-            android:orientation="horizontal">
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="start|center"
-            android:layout_marginLeft="6dp"
-            android:src="@drawable/stack_green" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="start|center_vertical"
-            android:layout_marginLeft="6dp"
-            android:text="Tecnico*" />
-
-
-
-        <TextView
-            android:id="@+id/tvTechName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:layout_gravity="bottom"
             android:layout_marginLeft="40dp"
-            android:text="Nome di Tecnico" />
+            android:background="#999999"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="6dp"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="6dp"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start|center"
+                    android:layout_marginLeft="6dp"
+                    android:src="@drawable/stack_green"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start|center_vertical"
+                    android:layout_marginLeft="6dp"
+                    android:text="Tecnico*"/>
+
+
+                <TextView
+                    android:id="@+id/tvTechName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="40dp"
+                    android:textStyle="bold"
+                    android:text="Nome di Tecnico"/>
+
+            </LinearLayout>
 
         </LinearLayout>
 
-    </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:layout_gravity="bottom"
+            android:layout_marginLeft="40dp"
+            android:background="#999999"/>
 
-    <View android:layout_height="1px" android:layout_gravity="bottom" android:layout_marginLeft="40dp" android:layout_width="match_parent" android:background="#999999"/>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="6dp"
+            android:layout_weight="3"
+            android:orientation="vertical">
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="6dp"
-        android:layout_weight="3"
-        android:orientation="vertical">
 
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="6dp"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start|center_vertical"
+                    android:layout_marginLeft="6dp"
+                    android:src="@drawable/coords"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start|center_vertical"
+                    android:layout_marginLeft="6dp"
+                    android:text="Coord.Nord*"/>
+
+                <TextView
+                    android:id="@+id/etCoordNord"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start|center_vertical"
+                    android:layout_marginLeft="6dp"
+                    android:background="@android:color/transparent"
+                    android:inputType="number"
+                    android:text="Sconoscuto"
+                    android:textSize="19dp"
+                    android:textStyle="bold"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="6dp"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start|center_vertical"
+                    android:layout_marginLeft="6dp"
+                    android:src="@drawable/transparent24px"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start|center_vertical"
+                    android:layout_marginLeft="6dp"
+                    android:text="Coord.Est*"/>
+
+                <TextView
+                    android:id="@+id/etCoordEst"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start|center_vertical"
+                    android:layout_marginLeft="6dp"
+                    android:background="@android:color/transparent"
+                    android:maxLines="1"
+                    android:text="Sconoscuto"
+                    android:textSize="19dp"
+                    android:textStyle="bold"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="6dp"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start|center_vertical"
+                    android:layout_marginLeft="6dp"
+                    android:src="@drawable/transparent24px"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start|center_vertical"
+                    android:layout_marginLeft="6dp"
+                    android:text="Altitudine*"/>
+
+                <TextView
+                    android:id="@+id/etAltitude"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start|center_vertical"
+                    android:layout_marginLeft="6dp"
+                    android:background="@android:color/transparent"
+                    android:maxLines="1"
+                    android:text="Sconoscuto"
+                    android:textSize="19dp"
+                    android:textStyle="bold"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:layout_gravity="bottom"
+            android:layout_marginLeft="40dp"
+            android:background="#999999"/>
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -240,108 +368,48 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="start|center_vertical"
                 android:layout_marginLeft="6dp"
-                android:src="@drawable/coords" />
+                android:src="@drawable/transparent24px"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start|center_vertical"
                 android:layout_marginLeft="6dp"
-                android:text="Coord.Nord*" />
+                android:text="Report tecnico"/>
 
             <TextView
-                android:id="@+id/etCoordNord"
+                android:id="@+id/tvReportName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="6dp"
                 android:layout_gravity="start|center_vertical"
+                android:layout_marginLeft="6dp"
                 android:background="@android:color/transparent"
-                android:inputType="number"
-                android:textSize="19dp"
-                android:textStyle="bold"
-                android:text="Sconoscuto" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="6dp"
-            android:orientation="horizontal">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="start|center_vertical"
-                android:layout_marginLeft="6dp"
-                android:src="@drawable/transparent24px" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="start|center_vertical"
-                android:layout_marginLeft="6dp"
-                android:text="Coord.Est*" />
-
-            <TextView
-                android:id="@+id/etCoordEst"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="6dp"
-                android:layout_gravity="start|center_vertical"
-                android:background="@android:color/transparent"
-                android:textSize="19dp"
-                android:textStyle="bold"
                 android:maxLines="1"
-                android:text="Sconoscuto" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="6dp"
-            android:orientation="horizontal">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="start|center_vertical"
-                android:layout_marginLeft="6dp"
-                android:src="@drawable/transparent24px" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="start|center_vertical"
-                android:layout_marginLeft="6dp"
-                android:text="Altitudine*" />
-
-            <TextView
-                android:id="@+id/etAltitude"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="6dp"
-                android:layout_gravity="start|center_vertical"
-                android:background="@android:color/transparent"
+                android:text="REPORT TECNICO"
                 android:textSize="19dp"
-                android:textStyle="bold"
-                android:maxLines="1"
-                android:text="Sconoscuto" />
+                android:textStyle="bold"/>
 
         </LinearLayout>
 
-    </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:layout_gravity="bottom"
+            android:layout_marginLeft="40dp"
+            android:background="#999999"/>
 
-    <View android:layout_height="1px" android:layout_gravity="bottom" android:layout_marginLeft="40dp" android:layout_width="match_parent" android:background="#999999"/>
+        <ListView
+            android:id="@+id/listItemsSentReport"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        </ListView>
 
-    <ListView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/listItemsSentReport">
-    </ListView>
-
-    <View android:layout_height="1px" android:layout_gravity="bottom" android:layout_marginLeft="40dp" android:layout_width="match_parent" android:background="#999999"/>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:layout_gravity="bottom"
+            android:layout_marginLeft="40dp"
+            android:background="#999999"/>
 
     </LinearLayout>
 

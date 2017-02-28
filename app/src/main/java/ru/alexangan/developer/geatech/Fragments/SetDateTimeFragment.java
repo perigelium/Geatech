@@ -68,6 +68,7 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
 
     private int selectedIndex;
     View rootView;
+    NetworkUtils networkUtils;
 
     private Communicator mCommunicator;
 
@@ -95,6 +96,8 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
         {
             selectedIndex = getArguments().getInt("selectedIndex");
         }
+
+        networkUtils = new NetworkUtils();
     }
 
     private DatePickerDialog.OnDateSetListener datePickerListener = new DatePickerDialog.OnDateSetListener()
@@ -266,7 +269,7 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
                     startActivity(unrestrictedIntent);
                 } catch (ActivityNotFoundException innerEx)
                 {
-                    Toast.makeText(getActivity(), "installare un'applicazione mappe", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getActivity(), "installa un'applicazione mappe", Toast.LENGTH_LONG).show();
                 }
             }
         }
@@ -313,6 +316,11 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
 
     private void notifyServerDataOraSopralluogo(int idSopralluogo, int stakedOut)
     {
+        if(!networkUtils.isNetworkAvailable(activity))
+        {
+            showToastMessage("Connesione ad internet non presente");
+        }
+
         JSONObject jsonObject = new JSONObject();
         try
         {
@@ -334,7 +342,6 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
             e.printStackTrace();
         }
 
-        NetworkUtils networkUtils = new NetworkUtils();
         setDateTimeCall = networkUtils.setData(this, SET_DATA_URL_SUFFIX, String.valueOf(jsonObject));
     }
 
