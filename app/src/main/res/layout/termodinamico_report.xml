@@ -12,15 +12,15 @@
 
         <include layout="@layout/report_header"/>
 
-        <include android:id="@+id/section_header1" layout="@layout/section_header"/>
+        <include android:id="@+id/section_header" layout="@layout/section_header"/>
 
         <include layout="@layout/three_radios_and_edit"/>
 
-        <include android:id="@+id/two_radios1" layout="@layout/two_radios"/>
+        <include android:id="@+id/two_radios" layout="@layout/two_radios"/>
 
         <include android:id="@+id/two_radios2" layout="@layout/two_radios"/>
 
-        <include android:id="@+id/three_edits1" layout="@layout/three_edits"/>
+        <include android:id="@+id/three_edits" layout="@layout/three_edits"/>
 
         <include android:id="@+id/three_edits2" layout="@layout/three_edits"/>
 
@@ -36,7 +36,7 @@
 
         <include layout="@layout/five_radios"/>
 
-        <include android:id="@+id/two_radios_and_switch1" layout="@layout/two_radios_and_switch"/>
+        <include android:id="@+id/two_radios_and_switch" layout="@layout/two_radios_and_switch"/>
 
         <include android:id="@+id/two_radios_and_switch2" layout="@layout/two_radios_and_switch"/>
 

@@ -6,7 +6,7 @@
               android:orientation="vertical">
 
     <LinearLayout
-        android:id="@+id/llHeaderEdit1"
+        android:id="@+id/llHeaderEdit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#eeeeee"
@@ -18,7 +18,7 @@
             android:layout_height="wrap_content">
 
             <TextView
-                android:id="@+id/tvHeaderEdit1"
+                android:id="@+id/tvHeaderEdit"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start|center_vertical"
@@ -27,7 +27,7 @@
                 android:textSize="13sp"/>
 
             <ImageView
-                android:id="@+id/ivArrowEdit1"
+                android:id="@+id/ivArrowEdit"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical|end"
@@ -39,7 +39,7 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/llSectionEdit1"
+        android:id="@+id/llSectionEdit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
@@ -51,7 +51,7 @@
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/tv1Edit1"
+                android:id="@+id/tv1Edit"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start|center_vertical"
@@ -60,7 +60,7 @@
                 android:textSize="13sp"/>
 
             <EditText
-                android:id="@+id/et1Edit1"
+                android:id="@+id/et1Edit"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"

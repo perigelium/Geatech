@@ -11,9 +11,8 @@ import io.realm.annotations.PrimaryKey;
 
 public class GeaImagineRapporto extends RealmObject
 {
-    @PrimaryKey
-    private int id_immagine_rapporto;
 
+    private int id_immagine_rapporto;
     private int company_id;
     private int tech_id;
 

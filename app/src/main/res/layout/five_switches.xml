@@ -6,7 +6,7 @@
               android:orientation="vertical">
 
     <LinearLayout
-        android:id="@+id/llHeaderFiveSwitches1"
+        android:id="@+id/llHeaderFiveSwitches"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#eeeeee"
@@ -18,7 +18,7 @@
             android:layout_height="wrap_content">
 
             <TextView
-                android:id="@+id/tvHeaderFiveSwitches1"
+                android:id="@+id/tvHeaderFiveSwitches"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start|center_vertical"
@@ -27,7 +27,7 @@
                 android:textSize="13sp"/>
 
             <ImageView
-                android:id="@+id/ivArrowFiveSwitches1"
+                android:id="@+id/ivArrowFiveSwitches"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical|end"
@@ -39,7 +39,7 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/llSectionFiveSwitches1"
+        android:id="@+id/llSectionFiveSwitches"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
@@ -51,7 +51,7 @@
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/tv1FiveSwitches1"
+                android:id="@+id/tv1FiveSwitches"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start|center_vertical"
@@ -60,7 +60,7 @@
                 android:textSize="13sp"/>
 
             <Switch
-                android:id="@+id/sw1FiveSwitches1"
+                android:id="@+id/sw1FiveSwitches"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end|center_vertical"
@@ -75,7 +75,7 @@
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/tv2FiveSwitches1"
+                android:id="@+id/tv2FiveSwitches"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start|center_vertical"
@@ -84,7 +84,7 @@
                 android:textSize="13sp"/>
 
             <Switch
-                android:id="@+id/sw2FiveSwitches1"
+                android:id="@+id/sw2FiveSwitches"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end|center_vertical"
@@ -99,7 +99,7 @@
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/tv3FiveSwitches1"
+                android:id="@+id/tv3FiveSwitches"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start|center_vertical"
@@ -108,7 +108,7 @@
                 android:textSize="13sp"/>
 
             <Switch
-                android:id="@+id/sw3FiveSwitches1"
+                android:id="@+id/sw3FiveSwitches"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end|center_vertical"
@@ -123,7 +123,7 @@
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/tv4FiveSwitches1"
+                android:id="@+id/tv4FiveSwitches"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start|center_vertical"
@@ -132,7 +132,7 @@
                 android:textSize="13sp"/>
 
             <Switch
-                android:id="@+id/sw4FiveSwitches1"
+                android:id="@+id/sw4FiveSwitches"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end|center_vertical"
@@ -147,7 +147,7 @@
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/tv5FiveSwitches1"
+                android:id="@+id/tv5FiveSwitches"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start|center_vertical"
@@ -156,7 +156,7 @@
                 android:textSize="13sp"/>
 
             <Switch
-                android:id="@+id/sw5FiveSwitches1"
+                android:id="@+id/sw5FiveSwitches"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end|center_vertical"

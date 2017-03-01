@@ -12,27 +12,27 @@
 
         <include layout="@layout/report_header"/>
 
-        <include android:id="@+id/headerDomotica1" layout="@layout/section_header"/>
+        <include android:id="@+id/header1" layout="@layout/section_header"/>
 
-        <include android:id="@+id/two_radiosDomotica1" layout="@layout/two_radios"/>
+        <include android:id="@+id/two_radios1" layout="@layout/two_radios"/>
 
-        <include android:id="@+id/two_radiosDomotica2" layout="@layout/two_radios"/>
+        <include android:id="@+id/two_radios2" layout="@layout/two_radios"/>
 
-        <include android:id="@+id/editDomotica1" layout="@layout/edit"/>
+        <include android:id="@+id/edit1" layout="@layout/edit"/>
 
-        <include layout="@layout/two_switches"/>
+        <include android:id="@+id/two_switches1" layout="@layout/two_switches"/>
 
-        <include layout="@layout/four_radios_and_edit"/>
+        <include android:id="@+id/four_radios_and_edit1" layout="@layout/four_radios_and_edit"/>
 
-        <include layout="@layout/two_edits"/>
+        <include android:id="@+id/two_edits1" layout="@layout/two_edits"/>
 
-        <include android:id="@+id/editDomotica2" layout="@layout/edit"/>
+        <include android:id="@+id/edit2" layout="@layout/edit"/>
 
-        <include layout="@layout/switch_and_edit"/>
+        <include android:id="@+id/switch_and_edit1" layout="@layout/switch_and_edit"/>
 
-        <include android:id="@+id/headerDomotica2" layout="@layout/section_header"/>
+        <include android:id="@+id/header2" layout="@layout/section_header"/>
 
-        <include layout="@layout/three_texts_three_edits"/>
+        <include android:id="@+id/three_texts_three_edits1" layout="@layout/three_texts_three_edits"/>
 
     </LinearLayout>
 

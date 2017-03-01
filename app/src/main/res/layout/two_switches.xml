@@ -6,7 +6,7 @@
               android:orientation="vertical">
 
     <LinearLayout
-        android:id="@+id/llHeaderTwoSwitches1"
+        android:id="@+id/llHeaderTwoSwitches"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#eeeeee"
@@ -18,7 +18,7 @@
             android:layout_height="wrap_content">
 
             <TextView
-                android:id="@+id/tvHeaderTwoSwitches1"
+                android:id="@+id/tvHeaderTwoSwitches"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start|center_vertical"
@@ -27,7 +27,7 @@
                 android:textSize="13sp"/>
 
             <ImageView
-                android:id="@+id/ivArrowTwoSwitches1"
+                android:id="@+id/ivArrowTwoSwitches"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical|end"
@@ -39,7 +39,7 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/llSectionTwoSwitches1"
+        android:id="@+id/llSectionTwoSwitches"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
@@ -51,7 +51,7 @@
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/tv1TwoSwitches1"
+                android:id="@+id/tv1TwoSwitches"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start|center_vertical"
@@ -60,7 +60,7 @@
                 android:textSize="13sp"/>
 
             <Switch
-                android:id="@+id/sw1TwoSwitches1"
+                android:id="@+id/sw1TwoSwitches"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end|center_vertical"
@@ -75,7 +75,7 @@
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/tv2TwoSwitches1"
+                android:id="@+id/tv2TwoSwitches"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start|center_vertical"
@@ -84,7 +84,7 @@
                 android:textSize="13sp"/>
 
             <Switch
-                android:id="@+id/sw2TwoSwitches1"
+                android:id="@+id/sw2TwoSwitches"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end|center_vertical"

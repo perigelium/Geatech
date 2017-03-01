@@ -6,7 +6,7 @@
               android:orientation="vertical">
 
     <LinearLayout
-        android:id="@+id/llHeaderFourEditsAndSwitch1"
+        android:id="@+id/llHeaderFourEditsAndSwitch"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#eeeeee"
@@ -18,7 +18,7 @@
             android:layout_height="wrap_content">
 
             <TextView
-                android:id="@+id/tvHeaderFourEditsAndSwitch1"
+                android:id="@+id/tvHeaderFourEditsAndSwitch"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start|center_vertical"
@@ -27,7 +27,7 @@
                 android:textSize="13sp"/>
 
             <ImageView
-                android:id="@+id/ivArrowFourEditsAndSwitch1"
+                android:id="@+id/ivArrowFourEditsAndSwitch"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical|end"
@@ -39,7 +39,7 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/llSectionFourEditsAndSwitch1"
+        android:id="@+id/llSectionFourEditsAndSwitch"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
@@ -50,7 +50,7 @@
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/tv1FourEditsAndSwitch1"
+                android:id="@+id/tv1FourEditsAndSwitch"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start|center_vertical"
@@ -59,7 +59,7 @@
                 android:textSize="13sp"/>
 
             <EditText
-                android:id="@+id/et1FourEditsAndSwitch1"
+                android:id="@+id/et1FourEditsAndSwitch"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
@@ -79,7 +79,7 @@
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/tv2FourEditsAndSwitch1"
+                android:id="@+id/tv2FourEditsAndSwitch"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start|center_vertical"
@@ -88,7 +88,7 @@
                 android:textSize="13sp"/>
 
             <EditText
-                android:id="@+id/et2FourEditsAndSwitch1"
+                android:id="@+id/et2FourEditsAndSwitch"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
@@ -108,7 +108,7 @@
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/tv3FourEditsAndSwitch1"
+                android:id="@+id/tv3FourEditsAndSwitch"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start|center_vertical"
@@ -117,7 +117,7 @@
                 android:textSize="13sp"/>
 
             <EditText
-                android:id="@+id/et3FourEditsAndSwitch1"
+                android:id="@+id/et3FourEditsAndSwitch"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
@@ -137,7 +137,7 @@
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/tv4FourEditsAndSwitch1"
+                android:id="@+id/tv4FourEditsAndSwitch"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start|center_vertical"
@@ -146,7 +146,7 @@
                 android:textSize="13sp"/>
 
             <EditText
-                android:id="@+id/et4FourEditsAndSwitch1"
+                android:id="@+id/et4FourEditsAndSwitch"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
@@ -166,7 +166,7 @@
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/tv1FourEditsAndSwitch1"
+                android:id="@+id/tv1FourEditsAndSwitch"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start|center_vertical"
@@ -175,7 +175,7 @@
                 android:textSize="13sp"/>
 
             <Switch
-                android:id="@+id/FourEditsAndSwitch1"
+                android:id="@+id/FourEditsAndSwitch"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end|center_vertical"

@@ -6,7 +6,7 @@
               android:orientation="vertical">
 
     <LinearLayout
-        android:id="@+id/llHeaderThreeChkboxesAndEdit1"
+        android:id="@+id/llHeaderThreeChkboxesAndEdit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#eeeeee"
@@ -18,7 +18,7 @@
             android:layout_height="wrap_content">
 
             <TextView
-                android:id="@+id/tvHeaderThreeChkboxesAndEdit1"
+                android:id="@+id/tvHeaderThreeChkboxesAndEdit"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start|center_vertical"
@@ -27,7 +27,7 @@
                 android:textSize="13sp"/>
 
             <ImageView
-                android:id="@+id/ivArrowThreeChkboxesAndEdit1"
+                android:id="@+id/ivArrowThreeChkboxesAndEdit"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical|end"
@@ -39,7 +39,7 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/llSectionThreeChkboxesAndEdit1"
+        android:id="@+id/llSectionThreeChkboxesAndEdit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
@@ -47,7 +47,7 @@
 
 
         <CheckBox
-            android:id="@+id/chk1ThreeChkboxesAndEdit1"
+            android:id="@+id/chk1ThreeChkboxesAndEdit"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="9dp"
@@ -55,10 +55,10 @@
             android:layout_marginRight="16dp"
             android:button="@null"
             android:drawableRight="@drawable/checkbox_selector"
-            android:text="chkbox 1"/>
+            android:text="chkbox "/>
 
         <CheckBox
-            android:id="@+id/chk2ThreeChkboxesAndEdit1"
+            android:id="@+id/chk2ThreeChkboxesAndEdit"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="9dp"
@@ -69,7 +69,7 @@
             android:text="chkbox 2"/>
 
         <CheckBox
-            android:id="@+id/chk3ThreeChkboxesAndEdit1"
+            android:id="@+id/chk3ThreeChkboxesAndEdit"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="9dp"
@@ -85,7 +85,7 @@
         android:layout_height="wrap_content">
 
         <TextView
-            android:id="@+id/tv1ThreeChkboxesAndEdit1"
+            android:id="@+id/tv1ThreeChkboxesAndEdit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="start|center_vertical"
@@ -94,7 +94,7 @@
             android:textSize="13sp"/>
 
         <EditText
-            android:id="@+id/et1ThreeChkboxesAndEdit1"
+            android:id="@+id/et1ThreeChkboxesAndEdit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"

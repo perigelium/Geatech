@@ -9,9 +9,7 @@ import io.realm.annotations.PrimaryKey;
 
 public class GeaItemRapporto extends RealmObject
 {
-    @PrimaryKey
     private int id_item_modello;
-
     private int company_id;
     private int tech_id;
 

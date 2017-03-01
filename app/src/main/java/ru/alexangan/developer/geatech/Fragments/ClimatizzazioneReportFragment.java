@@ -50,12 +50,16 @@ public class ClimatizzazioneReportFragment extends Fragment implements View.OnCl
 
     private FrameLayout flSectionHeader1, flSectionHeader2;
     private LinearLayout llHeaderThreeRadiosAndEdit1, llSectionThreeRadiosAndEdit1, llHeaderTwoRadios1, llSectionTwoRadios1,
-            llHeaderFourRadiosAndEdit1, llSectionFourRadiosAndEdit1, llHeaderThreeChkboxesAndEdit1, llSectionThreeChkboxesAndEdit1, llSectionThreeTextThreeEdit1;
-    private TextView tvReportTitle, tv1ThreeTextThreeEdit1, tv2ThreeTextThreeEdit1, tv3ThreeTextThreeEdit1, tvSectionHeader1,
-            tvSectionHeader2, tvHeaderThreeRadiosAndEdit1, tvHeaderTwoRadios1, tvHeaderFourRadiosAndEdit1, tvHeaderThreeChkboxesAndEdit1;
+            llHeaderFourRadiosAndEdit1, llSectionFourRadiosAndEdit1, llHeaderThreeChkboxesAndEdit1, llSectionThreeChkboxesAndEdit1,
+            llSectionThreeTextThreeEdit1;
+
     private RadioGroup rg1ThreeRadiosAndEdit1, rg1TwoRadios1, rg1FourRadiosAndEdit1;
-    private EditText et1ThreeRadiosAndEdit1, et1FourRadiosAndEdit1, et1ThreeChkboxesAndEdit1, et1ThreeTextThreeEdit1, et2ThreeTextThreeEdit1, et3ThreeTextThreeEdit1;
+
+    private EditText et1ThreeRadiosAndEdit1, et1FourRadiosAndEdit1, et1ThreeChkboxesAndEdit1, et1ThreeTextThreeEdit1,
+            et2ThreeTextThreeEdit1, et3ThreeTextThreeEdit1;
+
     CheckBox chk1ThreeChkboxesAndEdit1, chk2ThreeChkboxesAndEdit1, chk3ThreeChkboxesAndEdit1;
+
     ImageView ivArrowTwoRadios1, ivArrowThreeRadiosAndEdit1, ivArrowFourRadiosAndEdit1, ivArrowThreeChkboxesAndEdit1;
 
 /*    private final String strReportTitle = "Climatizzatore";
@@ -131,7 +135,7 @@ public class ClimatizzazioneReportFragment extends Fragment implements View.OnCl
         int headerNumber = 0;
         int sectionNumber = 0;
 
-        tvReportTitle = (TextView) rootView.findViewById(R.id.tvReportTitle);
+        TextView tvReportTitle = (TextView) rootView.findViewById(R.id.tvReportTitle);
         tvReportTitle.setText(geaModello.getNome_modello());
 
         createViewSectionHeader1(headerNumber++);
@@ -152,64 +156,75 @@ public class ClimatizzazioneReportFragment extends Fragment implements View.OnCl
         createViewSectionHeader2(headerNumber++);
 
         // ThreeTextThreeEdit1
-        llSectionThreeTextThreeEdit1 = (LinearLayout) rootView.findViewById(R.id.llSectionThreeTextThreeEdit1);
+        sectionNumber = createViewThreeTextsThreeEdits1(sectionNumber);
 
-        tv1ThreeTextThreeEdit1 = (TextView) rootView.findViewById(R.id.tv1ThreeTextThreeEdit1);
-        tv1ThreeTextThreeEdit1.setText(geaItemModelli.get(sectionNumber++).getDescrizione_item());
-
-        tv2ThreeTextThreeEdit1 = (TextView) rootView.findViewById(R.id.tv2ThreeTextThreeEdit1);
-        tv2ThreeTextThreeEdit1.setText(geaItemModelli.get(sectionNumber++).getDescrizione_item());
-
-        tv3ThreeTextThreeEdit1 = (TextView) rootView.findViewById(R.id.tv3ThreeTextThreeEdit1);
-        tv3ThreeTextThreeEdit1.setText(geaItemModelli.get(sectionNumber++).getDescrizione_item());
-
-        et1ThreeTextThreeEdit1 = (EditText) rootView.findViewById(R.id.et1ThreeTextThreeEdit1);
-        et2ThreeTextThreeEdit1 = (EditText) rootView.findViewById(R.id.et2ThreeTextThreeEdit1);
-        et3ThreeTextThreeEdit1 = (EditText) rootView.findViewById(R.id.et3ThreeTextThreeEdit1);
+        sectionNumber++;
 
         return rootView;
     }
 
+    private int createViewThreeTextsThreeEdits1(int sectionNumber)
+    {
+        LinearLayout three_texts_three_edits1 = (LinearLayout) rootView.findViewById(R.id.three_texts_three_edits1);
+        llSectionThreeTextThreeEdit1 = (LinearLayout) three_texts_three_edits1.findViewById(R.id.llSectionThreeTextThreeEdit);
+
+        TextView tv1ThreeTextThreeEdit1 = (TextView) three_texts_three_edits1.findViewById(R.id.tv1ThreeTextThreeEdit);
+        tv1ThreeTextThreeEdit1.setText(geaItemModelli.get(sectionNumber++).getDescrizione_item());
+
+        TextView tv2ThreeTextThreeEdit1 = (TextView) three_texts_three_edits1.findViewById(R.id.tv2ThreeTextThreeEdit);
+        tv2ThreeTextThreeEdit1.setText(geaItemModelli.get(sectionNumber++).getDescrizione_item());
+
+        TextView tv3ThreeTextThreeEdit1 = (TextView) three_texts_three_edits1.findViewById(R.id.tv3ThreeTextThreeEdit);
+        tv3ThreeTextThreeEdit1.setText(geaItemModelli.get(sectionNumber++).getDescrizione_item());
+
+        et1ThreeTextThreeEdit1 = (EditText) three_texts_three_edits1.findViewById(R.id.et1ThreeTextThreeEdit);
+        et2ThreeTextThreeEdit1 = (EditText) three_texts_three_edits1.findViewById(R.id.et2ThreeTextThreeEdit);
+        et3ThreeTextThreeEdit1 = (EditText) three_texts_three_edits1.findViewById(R.id.et3ThreeTextThreeEdit);
+
+        return sectionNumber;
+    }
+
     private void createViewSectionHeader1(int headerNumber)
     {
-        LinearLayout header1 = (LinearLayout) rootView.findViewById(R.id.headerClima1);
-        flSectionHeader1 = (FrameLayout) header1.findViewById(R.id.flSectionHeader1);
+        LinearLayout header1 = (LinearLayout) rootView.findViewById(R.id.header1);
+        flSectionHeader1 = (FrameLayout) header1.findViewById(R.id.flSectionHeader);
         flSectionHeader1.setOnClickListener(this);
 
-        tvSectionHeader1 = (TextView) header1.findViewById(R.id.tvSectionHeader1);
+        TextView tvSectionHeader1 = (TextView) header1.findViewById(R.id.tvSectionHeader);
         tvSectionHeader1.setText(geaSezioniModelli.get(headerNumber).getDescrizione_sezione());
     }
 
     private void createViewSectionHeader2(int headerNumber)
     {
-        LinearLayout header2 = (LinearLayout) rootView.findViewById(R.id.headerClima2);
-        flSectionHeader2 = (FrameLayout) header2.findViewById(R.id.flSectionHeader1);
+        LinearLayout header2 = (LinearLayout) rootView.findViewById(R.id.header2);
+        flSectionHeader2 = (FrameLayout) header2.findViewById(R.id.flSectionHeader);
         flSectionHeader2.setOnClickListener(this);
 
-        tvSectionHeader2 = (TextView) header2.findViewById(R.id.tvSectionHeader1);
+        TextView tvSectionHeader2 = (TextView) header2.findViewById(R.id.tvSectionHeader);
         tvSectionHeader2.setText(geaSezioniModelli.get(headerNumber).getDescrizione_sezione());
     }
 
     private void createViewThreeChkboxesAndEdit1(int sectionNumber)
     {
-        llHeaderThreeChkboxesAndEdit1 = (LinearLayout) rootView.findViewById(R.id.llHeaderThreeChkboxesAndEdit1);
+        LinearLayout three_chkboxes_and_edit1 = (LinearLayout) rootView.findViewById(R.id.three_chkboxes_and_edit1);
+        llHeaderThreeChkboxesAndEdit1 = (LinearLayout) three_chkboxes_and_edit1.findViewById(R.id.llHeaderThreeChkboxesAndEdit);
         llHeaderThreeChkboxesAndEdit1.setOnClickListener(this);
 
-        ivArrowThreeChkboxesAndEdit1 = (ImageView) rootView.findViewById(R.id.ivArrowThreeChkboxesAndEdit1);
+        ivArrowThreeChkboxesAndEdit1 = (ImageView) three_chkboxes_and_edit1.findViewById(R.id.ivArrowThreeChkboxesAndEdit);
 
-        tvHeaderThreeChkboxesAndEdit1 = (TextView) rootView.findViewById(R.id.tvHeaderThreeChkboxesAndEdit1);
+        TextView tvHeaderThreeChkboxesAndEdit1 = (TextView) three_chkboxes_and_edit1.findViewById(R.id.tvHeaderThreeChkboxesAndEdit);
         tvHeaderThreeChkboxesAndEdit1.setText(geaItemModelli.get(sectionNumber).getDescrizione_item());
 
-        llSectionThreeChkboxesAndEdit1 = (LinearLayout) rootView.findViewById(R.id.llSectionThreeChkboxesAndEdit1);
+        llSectionThreeChkboxesAndEdit1 = (LinearLayout) three_chkboxes_and_edit1.findViewById(R.id.llSectionThreeChkboxesAndEdit);
 
-        chk1ThreeChkboxesAndEdit1 = (CheckBox) rootView.findViewById(R.id.chk1ThreeChkboxesAndEdit1);
+        chk1ThreeChkboxesAndEdit1 = (CheckBox) three_chkboxes_and_edit1.findViewById(R.id.chk1ThreeChkboxesAndEdit);
         chk1ThreeChkboxesAndEdit1.setText(sa_id_item_75[0]);
-        chk2ThreeChkboxesAndEdit1 = (CheckBox) rootView.findViewById(R.id.chk2ThreeChkboxesAndEdit1);
+        chk2ThreeChkboxesAndEdit1 = (CheckBox) three_chkboxes_and_edit1.findViewById(R.id.chk2ThreeChkboxesAndEdit);
         chk2ThreeChkboxesAndEdit1.setText(sa_id_item_75[1]);
-        chk3ThreeChkboxesAndEdit1 = (CheckBox) rootView.findViewById(R.id.chk3ThreeChkboxesAndEdit1);
+        chk3ThreeChkboxesAndEdit1 = (CheckBox) three_chkboxes_and_edit1.findViewById(R.id.chk3ThreeChkboxesAndEdit);
         chk3ThreeChkboxesAndEdit1.setText(sa_id_item_75[2]);
 
-        et1ThreeChkboxesAndEdit1 = (EditText) rootView.findViewById(R.id.et1ThreeChkboxesAndEdit1);
+        et1ThreeChkboxesAndEdit1 = (EditText) three_chkboxes_and_edit1.findViewById(R.id.et1ThreeChkboxesAndEdit);
         et1ThreeChkboxesAndEdit1.setOnTouchListener(new View.OnTouchListener()
         {
             @Override
@@ -225,17 +240,18 @@ public class ClimatizzazioneReportFragment extends Fragment implements View.OnCl
 
     private void createViewTwoRadios1(int sectionNumber)
     {
-        llHeaderTwoRadios1 = (LinearLayout) rootView.findViewById(R.id.llHeaderTwoRadios1);
+        LinearLayout two_radios1 = (LinearLayout) rootView.findViewById(R.id.two_radios1);
+        llHeaderTwoRadios1 = (LinearLayout) two_radios1.findViewById(R.id.llHeaderTwoRadios);
         llHeaderTwoRadios1.setOnClickListener(this);
 
-        tvHeaderTwoRadios1 = (TextView) rootView.findViewById(R.id.tvHeaderTwoRadios1);
+        TextView tvHeaderTwoRadios1 = (TextView) two_radios1.findViewById(R.id.tvHeaderTwoRadios);
         tvHeaderTwoRadios1.setText(geaItemModelli.get(sectionNumber).getDescrizione_item());
 
-        ivArrowTwoRadios1 = (ImageView) rootView.findViewById(R.id.ivArrowTwoRadios1);
+        ivArrowTwoRadios1 = (ImageView) two_radios1.findViewById(R.id.ivArrowTwoRadios);
 
-        llSectionTwoRadios1 = (LinearLayout) rootView.findViewById(R.id.llSectionTwoRadios1);
+        llSectionTwoRadios1 = (LinearLayout) two_radios1.findViewById(R.id.llSectionTwoRadios);
 
-        rg1TwoRadios1 = (RadioGroup) rootView.findViewById(R.id.rg1TwoRadios1);
+        rg1TwoRadios1 = (RadioGroup) two_radios1.findViewById(R.id.rg1TwoRadios);
 
         for (int i = 0; i < rg1TwoRadios1.getChildCount(); i++)
         {
@@ -247,17 +263,18 @@ public class ClimatizzazioneReportFragment extends Fragment implements View.OnCl
 
     private void createViewFourRadiosAndEdit1(int sectionNumber)
     {
-        llHeaderFourRadiosAndEdit1 = (LinearLayout) rootView.findViewById(R.id.llHeaderFourRadiosAndEdit1);
+        LinearLayout four_radios_and_edit1 = (LinearLayout) rootView.findViewById(R.id.four_radios_and_edit1);
+        llHeaderFourRadiosAndEdit1 = (LinearLayout) four_radios_and_edit1.findViewById(R.id.llHeaderFourRadiosAndEdit);
         llHeaderFourRadiosAndEdit1.setOnClickListener(this);
 
-        ivArrowFourRadiosAndEdit1 = (ImageView) rootView.findViewById(R.id.ivArrowFourRadiosAndEdit1);
+        ivArrowFourRadiosAndEdit1 = (ImageView) four_radios_and_edit1.findViewById(R.id.ivArrowFourRadiosAndEdit);
 
-        tvHeaderFourRadiosAndEdit1 = (TextView) rootView.findViewById(R.id.tvHeaderFourRadiosAndEdit1);
+        TextView tvHeaderFourRadiosAndEdit1 = (TextView) four_radios_and_edit1.findViewById(R.id.tvHeaderFourRadiosAndEdit);
         tvHeaderFourRadiosAndEdit1.setText(geaItemModelli.get(sectionNumber).getDescrizione_item());
 
-        llSectionFourRadiosAndEdit1 = (LinearLayout) rootView.findViewById(R.id.llSectionFourRadiosAndEdit1);
+        llSectionFourRadiosAndEdit1 = (LinearLayout) four_radios_and_edit1.findViewById(R.id.llSectionFourRadiosAndEdit);
 
-        rg1FourRadiosAndEdit1 = (RadioGroup) rootView.findViewById(R.id.rg1FourRadiosAndEdit1);
+        rg1FourRadiosAndEdit1 = (RadioGroup) four_radios_and_edit1.findViewById(R.id.rg1FourRadiosAndEdit);
 
         for (int i = 0; i < rg1FourRadiosAndEdit1.getChildCount(); i++)
         {
@@ -266,7 +283,7 @@ public class ClimatizzazioneReportFragment extends Fragment implements View.OnCl
             rb.setText(sa_id_item_73[i]);
         }
 
-        et1FourRadiosAndEdit1 = (EditText) rootView.findViewById(R.id.et1FourRadiosAndEdit1);
+        et1FourRadiosAndEdit1 = (EditText) four_radios_and_edit1.findViewById(R.id.et1FourRadiosAndEdit);
         et1FourRadiosAndEdit1.setOnTouchListener(new View.OnTouchListener()
         {
             @Override
@@ -280,17 +297,19 @@ public class ClimatizzazioneReportFragment extends Fragment implements View.OnCl
 
     private void createViewThreeRadiosAndEdit1(int sectionNumber)
     {
-        llHeaderThreeRadiosAndEdit1 = (LinearLayout) rootView.findViewById(R.id.llHeaderThreeRadiosAndEdit1);
+        LinearLayout three_radios_and_edit1 = (LinearLayout) rootView.findViewById(R.id.three_radios_and_edit1);
+
+        llHeaderThreeRadiosAndEdit1 = (LinearLayout) three_radios_and_edit1.findViewById(R.id.llHeaderThreeRadiosAndEdit);
         llHeaderThreeRadiosAndEdit1.setOnClickListener(this);
 
-        ivArrowThreeRadiosAndEdit1 = (ImageView) rootView.findViewById(R.id.ivArrowThreeRadiosAndEdit1);
+        ivArrowThreeRadiosAndEdit1 = (ImageView) three_radios_and_edit1.findViewById(R.id.ivArrowThreeRadiosAndEdit);
 
-        tvHeaderThreeRadiosAndEdit1 = (TextView) rootView.findViewById(R.id.tvHeaderThreeRadiosAndEdit1);
+        TextView tvHeaderThreeRadiosAndEdit1 = (TextView) three_radios_and_edit1.findViewById(R.id.tvHeaderThreeRadiosAndEdit);
         tvHeaderThreeRadiosAndEdit1.setText(geaItemModelli.get(sectionNumber).getDescrizione_item());
 
-        llSectionThreeRadiosAndEdit1 = (LinearLayout) rootView.findViewById(R.id.llSectionThreeRadiosAndEdit1);
+        llSectionThreeRadiosAndEdit1 = (LinearLayout) three_radios_and_edit1.findViewById(R.id.llSectionThreeRadiosAndEdit);
 
-        rg1ThreeRadiosAndEdit1 = (RadioGroup) rootView.findViewById(R.id.rg1ThreeRadiosAndEdit1);
+        rg1ThreeRadiosAndEdit1 = (RadioGroup) three_radios_and_edit1.findViewById(R.id.rg1ThreeRadiosAndEdit);
 
         for (int i = 0; i < rg1ThreeRadiosAndEdit1.getChildCount(); i++)
         {
@@ -299,7 +318,7 @@ public class ClimatizzazioneReportFragment extends Fragment implements View.OnCl
             rb.setText(sa_id_item_72[i]);
         }
 
-        et1ThreeRadiosAndEdit1 = (EditText) rootView.findViewById(R.id.et1ThreeRadiosAndEdit1);
+        et1ThreeRadiosAndEdit1 = (EditText) three_radios_and_edit1.findViewById(R.id.et1ThreeRadiosAndEdit);
         et1ThreeRadiosAndEdit1.setOnTouchListener(new View.OnTouchListener()
         {
             @Override

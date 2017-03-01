@@ -6,7 +6,7 @@
               android:orientation="vertical">
 
     <LinearLayout
-        android:id="@+id/llHeaderSwitchAndEdit1"
+        android:id="@+id/llHeaderSwitchAndEdit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#eeeeee"
@@ -18,7 +18,7 @@
             android:layout_height="wrap_content">
 
             <TextView
-                android:id="@+id/tvHeaderSwitchAndEdit1"
+                android:id="@+id/tvHeaderSwitchAndEdit"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start|center_vertical"
@@ -27,7 +27,7 @@
                 android:textSize="13sp"/>
 
             <ImageView
-                android:id="@+id/ivArrowSwitchAndEdit1"
+                android:id="@+id/ivArrowSwitchAndEdit"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical|end"
@@ -39,7 +39,7 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/llSectionSwitchAndEdit1"
+        android:id="@+id/llSectionSwitchAndEdit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
@@ -51,7 +51,7 @@
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/tv1SwitchAndEdit1"
+                android:id="@+id/tv1SwitchAndEdit"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start|center_vertical"
@@ -60,7 +60,7 @@
                 android:textSize="13sp"/>
 
             <Switch
-                android:id="@+id/sw1SwitchAndEdit1"
+                android:id="@+id/sw1SwitchAndEdit"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end|center_vertical"
@@ -75,7 +75,7 @@
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/tv2SwitchAndEdit1"
+                android:id="@+id/tv2SwitchAndEdit"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start|center_vertical"
@@ -84,7 +84,7 @@
                 android:textSize="13sp"/>
 
             <EditText
-                android:id="@+id/et1SwitchAndEdit1"
+                android:id="@+id/et1SwitchAndEdit"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:maxWidth="99dp"

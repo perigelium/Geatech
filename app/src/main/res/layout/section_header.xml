@@ -6,28 +6,28 @@
               android:orientation="vertical">
 
         <FrameLayout
-            android:id="@+id/flSectionHeader1"
+            android:id="@+id/flSectionHeader"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="#ff6633"
             android:clickable="true">
 
             <TextView
-                android:id="@+id/tvSectionHeader1"
+                android:id="@+id/tvSectionHeader"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start|center_vertical"
                 android:layout_margin="9dp"
-                android:text="1. Section title"
+                android:text="Section title"
                 android:textColor="#ffffff"
                 android:textSize="17sp"/>
 
             <ImageView
-                android:id="@+id/ivArrowSectionHeader1"
+                android:id="@+id/ivArrowSectionHeader"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical|end"
-                android:layout_marginRight="50dp"
+                android:layout_marginRight="30dp"
                 android:src="@android:drawable/arrow_down_float"/>
 
         </FrameLayout>

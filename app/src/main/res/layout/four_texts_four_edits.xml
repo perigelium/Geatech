@@ -5,23 +5,23 @@
               android:orientation="vertical">
 
     <LinearLayout
-        android:id="@+id/llSectionFourTextsFourEdits1"
+        android:id="@+id/llSectionFourTextsFourEdits"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="#eeeeee"
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/tv1FourTextsFourEdits1"
+            android:id="@+id/tv1FourTextsFourEdits"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="start|center_vertical"
             android:layout_marginLeft="6dp"
-            android:text="2.1"
+            android:text="2."
             android:textColor="#555555"/>
 
         <EditText
-            android:id="@+id/et1FourTextsFourEdits1"
+            android:id="@+id/et1FourTextsFourEdits"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
@@ -32,7 +32,7 @@
             android:text=""/>
 
         <TextView
-            android:id="@+id/tv2FourTextsFourEdits1"
+            android:id="@+id/tv2FourTextsFourEdits"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="start|center_vertical"
@@ -41,7 +41,7 @@
             android:textColor="#555555"/>
 
         <EditText
-            android:id="@+id/et2FourTextsFourEdits1"
+            android:id="@+id/et2FourTextsFourEdits"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
@@ -54,7 +54,7 @@
 
 
         <TextView
-            android:id="@+id/tv4FourTextsFourEdits1"
+            android:id="@+id/tv4FourTextsFourEdits"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="start|center_vertical"
@@ -63,7 +63,7 @@
             android:textColor="#555555"/>
 
         <EditText
-            android:id="@+id/et4FourTextsFourEdits1"
+            android:id="@+id/et4FourTextsFourEdits"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"

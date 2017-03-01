@@ -6,7 +6,7 @@
               android:orientation="vertical">
 
     <LinearLayout
-        android:id="@+id/llHeaderThreeEdits1"
+        android:id="@+id/llHeaderThreeEdits"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#eeeeee"
@@ -18,7 +18,7 @@
             android:layout_height="wrap_content">
 
             <TextView
-                android:id="@+id/tvHeaderThreeEdits1"
+                android:id="@+id/tvHeaderThreeEdits"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start|center_vertical"
@@ -27,7 +27,7 @@
                 android:textSize="13sp"/>
 
             <ImageView
-                android:id="@+id/ivArrowThreeEdits1"
+                android:id="@+id/ivArrowThreeEdits"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical|end"
@@ -39,7 +39,7 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/llSectionThreeEdits1"
+        android:id="@+id/llSectionThreeEdits"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
@@ -50,7 +50,7 @@
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/tv1ThreeEdits1"
+                android:id="@+id/tv1ThreeEdits"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start|center_vertical"
@@ -59,7 +59,7 @@
                 android:textSize="13sp"/>
 
             <EditText
-                android:id="@+id/et1ThreeEdits1"
+                android:id="@+id/et1ThreeEdits"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
@@ -79,7 +79,7 @@
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/tv2ThreeEdits1"
+                android:id="@+id/tv2ThreeEdits"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start|center_vertical"
@@ -88,7 +88,7 @@
                 android:textSize="13sp"/>
 
             <EditText
-                android:id="@+id/et2ThreeEdits1"
+                android:id="@+id/et2ThreeEdits"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
@@ -108,7 +108,7 @@
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/tv3ThreeEdits1"
+                android:id="@+id/tv3ThreeEdits"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start|center_vertical"
@@ -117,7 +117,7 @@
                 android:textSize="13sp"/>
 
             <EditText
-                android:id="@+id/et3ThreeEdits1"
+                android:id="@+id/et3ThreeEdits"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"

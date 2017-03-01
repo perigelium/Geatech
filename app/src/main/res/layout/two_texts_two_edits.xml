@@ -5,7 +5,7 @@
               android:orientation="vertical">
 
     <LinearLayout
-        android:id="@+id/llSectionTwoTextTwoEdit1"
+        android:id="@+id/llSectionTwoTextTwoEdit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="#eeeeee"
@@ -13,16 +13,16 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/tv1TwoTextTwoEdit1"
+            android:id="@+id/tv1TwoTextTwoEdit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="start|center_vertical"
             android:layout_marginLeft="6dp"
-            android:text="2.1"
+            android:text=""
             android:textColor="#555555"/>
 
         <EditText
-            android:id="@+id/et1TwoTextTwoEdit1"
+            android:id="@+id/et1TwoTextTwoEdit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
@@ -33,7 +33,7 @@
             android:text=""/>
 
         <TextView
-            android:id="@+id/tv2TwoTextTwoEdit1"
+            android:id="@+id/tv2TwoTextTwoEdit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="start|center_vertical"
@@ -42,7 +42,7 @@
             android:textColor="#555555"/>
 
         <EditText
-            android:id="@+id/et2TwoTextTwoEdit1"
+            android:id="@+id/et2TwoTextTwoEdit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"

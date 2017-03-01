@@ -239,7 +239,7 @@ public class PhotoGalleryGridFragment extends Fragment
 
                     GeaImagineRapporto gea_immagine = new GeaImagineRapporto(
                             company_id, selectedTech.getId(), id_rapporto_sopralluogo, reportImagesSize++, imageFile.getAbsolutePath(), fileName);
-                    realm.copyToRealmOrUpdate(gea_immagine);
+                    realm.copyToRealm(gea_immagine);
 
                 realm.commitTransaction();
             }

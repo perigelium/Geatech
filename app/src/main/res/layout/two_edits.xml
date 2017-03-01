@@ -6,7 +6,7 @@
               android:orientation="vertical">
 
     <LinearLayout
-        android:id="@+id/llHeaderTwoEdits1"
+        android:id="@+id/llHeaderTwoEdits"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#eeeeee"
@@ -18,7 +18,7 @@
             android:layout_height="wrap_content">
 
             <TextView
-                android:id="@+id/tvHeaderTwoEdits1"
+                android:id="@+id/tvHeaderTwoEdits"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start|center_vertical"
@@ -27,7 +27,7 @@
                 android:textSize="13sp"/>
 
             <ImageView
-                android:id="@+id/ivArrowTwoEdits1"
+                android:id="@+id/ivArrowTwoEdits"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical|end"
@@ -39,7 +39,7 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/llSectionTwoEdits1"
+        android:id="@+id/llSectionTwoEdits"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
@@ -50,7 +50,7 @@
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/tv1TwoEdits1"
+                android:id="@+id/tv1TwoEdits"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start|center_vertical"
@@ -59,7 +59,7 @@
                 android:textSize="13sp"/>
 
             <EditText
-                android:id="@+id/et1TwoEdits1"
+                android:id="@+id/et1TwoEdits"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
@@ -79,7 +79,7 @@
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/tv2TwoEdits1"
+                android:id="@+id/tv2TwoEdits"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start|center_vertical"
@@ -88,7 +88,7 @@
                 android:textSize="13sp"/>
 
             <EditText
-                android:id="@+id/et2TwoEdits1"
+                android:id="@+id/et2TwoEdits"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:maxWidth="99dp"

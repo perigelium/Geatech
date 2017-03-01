@@ -133,21 +133,21 @@ public class ReportFragment extends Fragment implements View.OnClickListener
 
     private void createViewSectionHeader1(int headerNumber)
     {
-        LinearLayout header1 = (LinearLayout) rootView.findViewById(R.id.headerClima1);
-        flSectionHeader1 = (FrameLayout) header1.findViewById(R.id.flSectionHeader1);
+        LinearLayout header1 = (LinearLayout) rootView.findViewById(R.id.header1);
+        flSectionHeader1 = (FrameLayout) header1.findViewById(R.id.flSectionHeader);
         flSectionHeader1.setOnClickListener(this);
 
-        tvSectionHeader1 = (TextView) header1.findViewById(R.id.tvSectionHeader1);
+        tvSectionHeader1 = (TextView) header1.findViewById(R.id.tvSectionHeader);
         tvSectionHeader1.setText(geaSezioniModelli.get(headerNumber).getDescrizione_sezione());
     }
 
     private void createViewSectionHeader2(int headerNumber)
     {
-        LinearLayout header2 = (LinearLayout) rootView.findViewById(R.id.headerClima2);
-        flSectionHeader2 = (FrameLayout) header2.findViewById(R.id.flSectionHeader1);
+        LinearLayout header2 = (LinearLayout) rootView.findViewById(R.id.header2);
+        flSectionHeader2 = (FrameLayout) header2.findViewById(R.id.flSectionHeader);
         flSectionHeader2.setOnClickListener(this);
 
-        tvSectionHeader2 = (TextView) header2.findViewById(R.id.tvSectionHeader1);
+        tvSectionHeader2 = (TextView) header2.findViewById(R.id.tvSectionHeader);
         tvSectionHeader2.setText(geaSezioniModelli.get(headerNumber).getDescrizione_sezione());
     }
 

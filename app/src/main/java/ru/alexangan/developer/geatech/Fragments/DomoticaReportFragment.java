@@ -53,24 +53,20 @@ public class DomoticaReportFragment extends Fragment implements View.OnClickList
     private boolean allSections1Collapsed, allSections2Collapsed;
 
     private FrameLayout flSectionHeader1, flSectionHeader2;
-    private LinearLayout llHeaderThreeRadiosAndEdit1, llSectionThreeRadiosAndEdit1, llHeaderTwoRadios1, llSectionTwoRadios1, llHeaderTwoRadios2, llSectionTwoRadios2,
-            llHeaderFourRadiosAndEdit1, llSectionFourRadiosAndEdit1, llHeaderThreeChkboxesAndEdit1, llSectionThreeChkboxesAndEdit1,
+
+    private LinearLayout llHeaderTwoRadios1, llSectionTwoRadios1, llHeaderTwoRadios2, llSectionTwoRadios2,
+            llHeaderFourRadiosAndEdit1, llSectionFourRadiosAndEdit1,
             llSectionThreeTextThreeEdit1, llHeaderTwoEdits1, llHeaderEdit1, llHeaderTwoSwitches1, llHeaderEdit2, llHeaderSwitchAndEdit1,
             llSectionEdit1, llSectionEdit2, llSectionTwoSwitches1, llSectionTwoEdits1, llSectionSwitchAndEdit1;
 
-    private TextView tvReportTitle, tv1ThreeTextThreeEdit1, tv2ThreeTextThreeEdit1, tv3ThreeTextThreeEdit1, tvSectionHeader1, tv1Edit1,
-            tvSectionHeader2, tvHeaderThreeRadiosAndEdit1, tvHeaderTwoRadios1, tvHeaderTwoRadios2, tvHeaderFourRadiosAndEdit1,
-            tvHeaderSwitchAndEdit1, tvHeaderEdit2, tvHeaderTwoEdits1, tvHeaderTwoSwitches1, tvHeaderEdit1, tv2SwitchAndEdit1,
-            tvHeaderThreeChkboxesAndEdit1, tv1TwoSwitches1, tv2TwoSwitches1, tv1TwoEdits1, tv2TwoEdits1, tv1SwitchAndEdit1, tv1Edit2;
+    private RadioGroup rg1TwoRadios1, rg1TwoRadios2, rg1FourRadiosAndEdit1;
 
-    private RadioGroup rg1ThreeRadiosAndEdit1, rg1TwoRadios1, rg1TwoRadios2, rg1FourRadiosAndEdit1;
-
-    private EditText et1ThreeRadiosAndEdit1, et1FourRadiosAndEdit1, et1ThreeChkboxesAndEdit1, et1ThreeTextThreeEdit1, et2ThreeTextThreeEdit1,
+    private EditText et1FourRadiosAndEdit1, et1ThreeTextThreeEdit1, et2ThreeTextThreeEdit1,
             et3ThreeTextThreeEdit1, et1Edit1, et1Edit2, et1SwitchAndEdit1, et1TwoEdits1, et2TwoEdits1;
 
     Switch sw1TwoSwitches1, sw2TwoSwitches1, sw1SwitchAndEdit1;
 
-    ImageView ivArrowTwoRadios1, ivArrowTwoRadios2, ivArrowThreeRadiosAndEdit1, ivArrowFourRadiosAndEdit1, ivArrowThreeChkboxesAndEdit1,
+    ImageView ivArrowTwoRadios1, ivArrowTwoRadios2, ivArrowFourRadiosAndEdit1,
             ivArrowEdit1, ivArrowEdit2, ivArrowTwoSwitches1, ivArrowTwoEdits1, ivArrowSwitchAndEdit1;
 
 /*    private final String strReportTitle = "Domotica componenti";
@@ -158,7 +154,7 @@ public class DomoticaReportFragment extends Fragment implements View.OnClickList
         int headerNumber = 0;
         int sectionNumber = 0;
 
-        tvReportTitle = (TextView) rootView.findViewById(R.id.tvReportTitle);
+        TextView tvReportTitle = (TextView) rootView.findViewById(R.id.tvReportTitle);
         tvReportTitle.setText(geaModello.getNome_modello());
 
         // SectionHeader1
@@ -192,40 +188,51 @@ public class DomoticaReportFragment extends Fragment implements View.OnClickList
         createViewSectionHeader2(headerNumber++);
 
         // ThreeTextThreeEdit1
-        llSectionThreeTextThreeEdit1 = (LinearLayout) rootView.findViewById(R.id.llSectionThreeTextThreeEdit1);
+        sectionNumber = createViewThreeTextsThreeEdits1(sectionNumber);
 
-        tv1ThreeTextThreeEdit1 = (TextView) rootView.findViewById(R.id.tv1ThreeTextThreeEdit1);
-        tv1ThreeTextThreeEdit1.setText(geaItemModelli.get(sectionNumber++).getDescrizione_item());
-
-        tv2ThreeTextThreeEdit1 = (TextView) rootView.findViewById(R.id.tv2ThreeTextThreeEdit1);
-        tv2ThreeTextThreeEdit1.setText(geaItemModelli.get(sectionNumber++).getDescrizione_item());
-
-        tv3ThreeTextThreeEdit1 = (TextView) rootView.findViewById(R.id.tv3ThreeTextThreeEdit1);
-        tv3ThreeTextThreeEdit1.setText(geaItemModelli.get(sectionNumber++).getDescrizione_item());
-
-        et1ThreeTextThreeEdit1 = (EditText) rootView.findViewById(R.id.et1ThreeTextThreeEdit1);
-        et2ThreeTextThreeEdit1 = (EditText) rootView.findViewById(R.id.et2ThreeTextThreeEdit1);
-        et3ThreeTextThreeEdit1 = (EditText) rootView.findViewById(R.id.et3ThreeTextThreeEdit1);
+        sectionNumber++;
 
         return rootView;
     }
 
+    private int createViewThreeTextsThreeEdits1(int sectionNumber)
+    {
+        LinearLayout three_texts_three_edits1 = (LinearLayout) rootView.findViewById(R.id.three_texts_three_edits1);
+        llSectionThreeTextThreeEdit1 = (LinearLayout) three_texts_three_edits1.findViewById(R.id.llSectionThreeTextThreeEdit);
+
+        TextView tv1ThreeTextThreeEdit1 = (TextView) three_texts_three_edits1.findViewById(R.id.tv1ThreeTextThreeEdit);
+        tv1ThreeTextThreeEdit1.setText(geaItemModelli.get(sectionNumber++).getDescrizione_item());
+
+        TextView tv2ThreeTextThreeEdit1 = (TextView) three_texts_three_edits1.findViewById(R.id.tv2ThreeTextThreeEdit);
+        tv2ThreeTextThreeEdit1.setText(geaItemModelli.get(sectionNumber++).getDescrizione_item());
+
+        TextView tv3ThreeTextThreeEdit1 = (TextView) three_texts_three_edits1.findViewById(R.id.tv3ThreeTextThreeEdit);
+        tv3ThreeTextThreeEdit1.setText(geaItemModelli.get(sectionNumber++).getDescrizione_item());
+
+        et1ThreeTextThreeEdit1 = (EditText) three_texts_three_edits1.findViewById(R.id.et1ThreeTextThreeEdit);
+        et2ThreeTextThreeEdit1 = (EditText) three_texts_three_edits1.findViewById(R.id.et2ThreeTextThreeEdit);
+        et3ThreeTextThreeEdit1 = (EditText) three_texts_three_edits1.findViewById(R.id.et3ThreeTextThreeEdit);
+
+        return sectionNumber;
+    }
+
     private int createViewSwitchAndEdit1(int sectionNumber)
     {
-        llHeaderSwitchAndEdit1 = (LinearLayout) rootView.findViewById(R.id.llHeaderSwitchAndEdit1);
+        LinearLayout switch_and_edit1 = (LinearLayout) rootView.findViewById(R.id.switch_and_edit1);
+        llHeaderSwitchAndEdit1 = (LinearLayout) switch_and_edit1.findViewById(R.id.llHeaderSwitchAndEdit);
         llHeaderSwitchAndEdit1.setOnClickListener(this);
 
-        tvHeaderSwitchAndEdit1 = (TextView) rootView.findViewById(R.id.tvHeaderSwitchAndEdit1);
+        TextView tvHeaderSwitchAndEdit1 = (TextView) switch_and_edit1.findViewById(R.id.tvHeaderSwitchAndEdit);
         tvHeaderSwitchAndEdit1.setText(str_id_item_148_header);
 
-        llSectionSwitchAndEdit1 = (LinearLayout) rootView.findViewById(R.id.llSectionSwitchAndEdit1);
+        llSectionSwitchAndEdit1 = (LinearLayout) switch_and_edit1.findViewById(R.id.llSectionSwitchAndEdit);
 
-        ivArrowSwitchAndEdit1 = (ImageView) rootView.findViewById(R.id.ivArrowSwitchAndEdit1);
+        ivArrowSwitchAndEdit1 = (ImageView) switch_and_edit1.findViewById(R.id.ivArrowSwitchAndEdit);
 
-        tv1SwitchAndEdit1 = (TextView) rootView.findViewById(R.id.tv1SwitchAndEdit1);
+        TextView tv1SwitchAndEdit1 = (TextView) switch_and_edit1.findViewById(R.id.tv1SwitchAndEdit);
         tv1SwitchAndEdit1.setText(geaItemModelli.get(sectionNumber++).getDescrizione_item());
 
-        sw1SwitchAndEdit1 = (Switch) rootView.findViewById(R.id.sw1SwitchAndEdit1);
+        sw1SwitchAndEdit1 = (Switch) switch_and_edit1.findViewById(R.id.sw1SwitchAndEdit);
         sw1SwitchAndEdit1.setOnTouchListener(new View.OnTouchListener()
         {
             @Override
@@ -239,11 +246,11 @@ public class DomoticaReportFragment extends Fragment implements View.OnClickList
             }
         });
 
-        tv2SwitchAndEdit1 = (TextView) rootView.findViewById(R.id.tv2SwitchAndEdit1);
+        TextView tv2SwitchAndEdit1 = (TextView) switch_and_edit1.findViewById(R.id.tv2SwitchAndEdit);
         tv2SwitchAndEdit1.setText(str_id_item_149);
         sectionNumber++;
 
-        et1SwitchAndEdit1 = (EditText) rootView.findViewById(R.id.et1SwitchAndEdit1);
+        et1SwitchAndEdit1 = (EditText) switch_and_edit1.findViewById(R.id.et1SwitchAndEdit);
         et1SwitchAndEdit1.setInputType(InputType.TYPE_CLASS_NUMBER);
         et1SwitchAndEdit1.setOnTouchListener(new View.OnTouchListener()
         {
@@ -260,95 +267,100 @@ public class DomoticaReportFragment extends Fragment implements View.OnClickList
 
     private int createViewTwoEdits1(int sectionNumber)
     {
-        llHeaderTwoEdits1 = (LinearLayout) rootView.findViewById(R.id.llHeaderTwoEdits1);
+        LinearLayout two_edits1 = (LinearLayout) rootView.findViewById(R.id.two_edits1);
+        llHeaderTwoEdits1 = (LinearLayout) two_edits1.findViewById(R.id.llHeaderTwoEdits);
         llHeaderTwoEdits1.setOnClickListener(this);
 
-        tvHeaderTwoEdits1 = (TextView) rootView.findViewById(R.id.tvHeaderTwoEdits1);
+        TextView tvHeaderTwoEdits1 = (TextView) two_edits1.findViewById(R.id.tvHeaderTwoEdits);
         tvHeaderTwoEdits1.setText(str_id_item_145_header);
 
-        llSectionTwoEdits1 = (LinearLayout) rootView.findViewById(R.id.llSectionTwoEdits1);
+        llSectionTwoEdits1 = (LinearLayout) two_edits1.findViewById(R.id.llSectionTwoEdits);
 
-        ivArrowTwoEdits1 = (ImageView) rootView.findViewById(R.id.ivArrowTwoEdits1);
+        ivArrowTwoEdits1 = (ImageView) two_edits1.findViewById(R.id.ivArrowTwoEdits);
 
-        tv1TwoEdits1 = (TextView) rootView.findViewById(R.id.tv1TwoEdits1);
+        TextView tv1TwoEdits1 = (TextView) two_edits1.findViewById(R.id.tv1TwoEdits);
         tv1TwoEdits1.setText(geaItemModelli.get(sectionNumber++).getDescrizione_item());
 
-        et1TwoEdits1 = (EditText) rootView.findViewById(R.id.et1TwoEdits1);
+        et1TwoEdits1 = (EditText) two_edits1.findViewById(R.id.et1TwoEdits);
         et1TwoEdits1.setInputType(InputType.TYPE_CLASS_NUMBER);
 
-        tv2TwoEdits1 = (TextView) rootView.findViewById(R.id.tv2TwoEdits1);
+        TextView tv2TwoEdits1 = (TextView) two_edits1.findViewById(R.id.tv2TwoEdits);
         tv2TwoEdits1.setText(geaItemModelli.get(sectionNumber++).getDescrizione_item());
 
-        et2TwoEdits1 = (EditText) rootView.findViewById(R.id.et2TwoEdits1);
+        et2TwoEdits1 = (EditText) two_edits1.findViewById(R.id.et2TwoEdits);
         et2TwoEdits1.setInputType(InputType.TYPE_CLASS_NUMBER);
         return sectionNumber;
     }
 
     private int createViewTwoSwitches1(int sectionNumber)
     {
-        llHeaderTwoSwitches1 = (LinearLayout) rootView.findViewById(R.id.llHeaderTwoSwitches1);
+        LinearLayout two_switches1 = (LinearLayout) rootView.findViewById(R.id.two_switches1);
+        llHeaderTwoSwitches1 = (LinearLayout) two_switches1.findViewById(R.id.llHeaderTwoSwitches);
         llHeaderTwoSwitches1.setOnClickListener(this);
 
-        tvHeaderTwoSwitches1 = (TextView) rootView.findViewById(R.id.tvHeaderTwoSwitches1);
+        TextView tvHeaderTwoSwitches1 = (TextView) two_switches1.findViewById(R.id.tvHeaderTwoSwitches);
         tvHeaderTwoSwitches1.setText(str_id_item_142_header);
 
-        llSectionTwoSwitches1 = (LinearLayout) rootView.findViewById(R.id.llSectionTwoSwitches1);
+        llSectionTwoSwitches1 = (LinearLayout) two_switches1.findViewById(R.id.llSectionTwoSwitches);
 
-        ivArrowTwoSwitches1 = (ImageView) rootView.findViewById(R.id.ivArrowTwoSwitches1);
+        ivArrowTwoSwitches1 = (ImageView) two_switches1.findViewById(R.id.ivArrowTwoSwitches);
 
-        tv1TwoSwitches1 = (TextView) rootView.findViewById(R.id.tv1TwoSwitches1);
+        TextView tv1TwoSwitches1 = (TextView) two_switches1.findViewById(R.id.tv1TwoSwitches);
         tv1TwoSwitches1.setText(geaItemModelli.get(sectionNumber++).getDescrizione_item());
 
-        sw1TwoSwitches1 = (Switch) rootView.findViewById(R.id.sw1TwoSwitches1);
-        tv2TwoSwitches1 = (TextView) rootView.findViewById(R.id.tv2TwoSwitches1);
+        sw1TwoSwitches1 = (Switch) two_switches1.findViewById(R.id.sw1TwoSwitches);
+
+        TextView tv2TwoSwitches1 = (TextView) two_switches1.findViewById(R.id.tv2TwoSwitches);
         tv2TwoSwitches1.setText(geaItemModelli.get(sectionNumber++).getDescrizione_item());
-        sw2TwoSwitches1 = (Switch) rootView.findViewById(R.id.sw2TwoSwitches1);
+
+        sw2TwoSwitches1 = (Switch) two_switches1.findViewById(R.id.sw2TwoSwitches);
         return sectionNumber;
     }
 
     private void createViewSectionHeader2(int headerNumber)
     {
-        LinearLayout header2 = (LinearLayout) rootView.findViewById(R.id.headerDomotica2);
-        flSectionHeader2 = (FrameLayout) header2.findViewById(R.id.flSectionHeader1);
+        LinearLayout header2 = (LinearLayout) rootView.findViewById(R.id.header2);
+        flSectionHeader2 = (FrameLayout) header2.findViewById(R.id.flSectionHeader);
         flSectionHeader2.setOnClickListener(this);
 
-        tvSectionHeader2 = (TextView) header2.findViewById(R.id.tvSectionHeader1);
+        TextView tvSectionHeader2 = (TextView) header2.findViewById(R.id.tvSectionHeader);
         tvSectionHeader2.setText(geaSezioniModelli.get(headerNumber).getDescrizione_sezione());
     }
 
     private void createViewEdit2(int sectionNumber)
     {
-        LinearLayout ll_edit2 = (LinearLayout) rootView.findViewById(R.id.editDomotica2);
-        llHeaderEdit2 = (LinearLayout) ll_edit2.findViewById(R.id.llHeaderEdit1);
+        LinearLayout ll_edit2 = (LinearLayout) rootView.findViewById(R.id.edit2);
+        llHeaderEdit2 = (LinearLayout) ll_edit2.findViewById(R.id.llHeaderEdit);
         llHeaderEdit2.setOnClickListener(this);
 
-        tvHeaderEdit2 = (TextView) ll_edit2.findViewById(R.id.tvHeaderEdit1);
+        TextView tvHeaderEdit2 = (TextView) ll_edit2.findViewById(R.id.tvHeaderEdit);
         tvHeaderEdit2.setText(geaItemModelli.get(sectionNumber).getDescrizione_item());
 
-        llSectionEdit2 = (LinearLayout) ll_edit2.findViewById(R.id.llSectionEdit1);
+        llSectionEdit2 = (LinearLayout) ll_edit2.findViewById(R.id.llSectionEdit);
 
-        ivArrowEdit2 = (ImageView) ll_edit2.findViewById(R.id.ivArrowEdit1);
+        ivArrowEdit2 = (ImageView) ll_edit2.findViewById(R.id.ivArrowEdit);
 
-        tv1Edit2 = (TextView) ll_edit2.findViewById(R.id.tv1Edit1);
+        TextView tv1Edit2 = (TextView) ll_edit2.findViewById(R.id.tv1Edit);
         tv1Edit2.setText(str_id_item_147);
 
-        et1Edit2 = (EditText) ll_edit2.findViewById(R.id.et1Edit1);
+        et1Edit2 = (EditText) ll_edit2.findViewById(R.id.et1Edit);
     }
 
     private void createViewFourRadiosAndEdit1(int sectionNumber)
     {
         int i;
-        llHeaderFourRadiosAndEdit1 = (LinearLayout) rootView.findViewById(R.id.llHeaderFourRadiosAndEdit1);
+        LinearLayout four_radios_and_edit1 = (LinearLayout) rootView.findViewById(R.id.four_radios_and_edit1);
+        llHeaderFourRadiosAndEdit1 = (LinearLayout) four_radios_and_edit1.findViewById(R.id.llHeaderFourRadiosAndEdit);
         llHeaderFourRadiosAndEdit1.setOnClickListener(this);
 
-        tvHeaderFourRadiosAndEdit1 = (TextView) rootView.findViewById(R.id.tvHeaderFourRadiosAndEdit1);
+        TextView tvHeaderFourRadiosAndEdit1 = (TextView) four_radios_and_edit1.findViewById(R.id.tvHeaderFourRadiosAndEdit);
         tvHeaderFourRadiosAndEdit1.setText(geaItemModelli.get(sectionNumber).getDescrizione_item());
 
-        ivArrowFourRadiosAndEdit1 = (ImageView) rootView.findViewById(R.id.ivArrowFourRadiosAndEdit1);
+        ivArrowFourRadiosAndEdit1 = (ImageView) four_radios_and_edit1.findViewById(R.id.ivArrowFourRadiosAndEdit);
 
-        llSectionFourRadiosAndEdit1 = (LinearLayout) rootView.findViewById(R.id.llSectionFourRadiosAndEdit1);
+        llSectionFourRadiosAndEdit1 = (LinearLayout) four_radios_and_edit1.findViewById(R.id.llSectionFourRadiosAndEdit);
 
-        rg1FourRadiosAndEdit1 = (RadioGroup) rootView.findViewById(R.id.rg1FourRadiosAndEdit1);
+        rg1FourRadiosAndEdit1 = (RadioGroup) four_radios_and_edit1.findViewById(R.id.rg1FourRadiosAndEdit);
 
         for (i = 0; i < rg1FourRadiosAndEdit1.getChildCount(); i++)
         {
@@ -357,7 +369,7 @@ public class DomoticaReportFragment extends Fragment implements View.OnClickList
             rb.setText(sa_id_item_144[i]);
         }
 
-        et1FourRadiosAndEdit1 = (EditText) rootView.findViewById(R.id.et1FourRadiosAndEdit1);
+        et1FourRadiosAndEdit1 = (EditText) four_radios_and_edit1.findViewById(R.id.et1FourRadiosAndEdit);
         et1FourRadiosAndEdit1.setOnTouchListener(new View.OnTouchListener()
         {
             @Override
@@ -371,38 +383,38 @@ public class DomoticaReportFragment extends Fragment implements View.OnClickList
 
     private void createViewEdit1(int sectionNumber)
     {
-        LinearLayout ll_edit1 = (LinearLayout) rootView.findViewById(R.id.editDomotica1);
-        llHeaderEdit1 = (LinearLayout) ll_edit1.findViewById(R.id.llHeaderEdit1);
+        LinearLayout ll_edit1 = (LinearLayout) rootView.findViewById(R.id.edit1);
+        llHeaderEdit1 = (LinearLayout) ll_edit1.findViewById(R.id.llHeaderEdit);
         llHeaderEdit1.setOnClickListener(this);
 
-        tvHeaderEdit1 = (TextView) ll_edit1.findViewById(R.id.tvHeaderEdit1);
+        TextView tvHeaderEdit1 = (TextView) ll_edit1.findViewById(R.id.tvHeaderEdit);
         tvHeaderEdit1.setText(geaItemModelli.get(sectionNumber).getDescrizione_item());
 
-        llSectionEdit1 = (LinearLayout) ll_edit1.findViewById(R.id.llSectionEdit1);
+        llSectionEdit1 = (LinearLayout) ll_edit1.findViewById(R.id.llSectionEdit);
 
-        ivArrowEdit1 = (ImageView) ll_edit1.findViewById(R.id.ivArrowEdit1);
+        ivArrowEdit1 = (ImageView) ll_edit1.findViewById(R.id.ivArrowEdit);
 
-        tv1Edit1 = (TextView) ll_edit1.findViewById(R.id.tv1Edit1);
+        TextView tv1Edit1 = (TextView) ll_edit1.findViewById(R.id.tv1Edit);
         tv1Edit1.setText(str_id_item_141);
 
-        et1Edit1 = (EditText) ll_edit1.findViewById(R.id.et1Edit1);
+        et1Edit1 = (EditText) ll_edit1.findViewById(R.id.et1Edit);
     }
 
     private void createViewTwoRadios2(int sectionNumber)
     {
         int i;
-        LinearLayout ll_two_radios2 = (LinearLayout) rootView.findViewById(R.id.two_radiosDomotica2);
-        llHeaderTwoRadios2 = (LinearLayout) ll_two_radios2.findViewById(R.id.llHeaderTwoRadios1);
+        LinearLayout ll_two_radios2 = (LinearLayout) rootView.findViewById(R.id.two_radios2);
+        llHeaderTwoRadios2 = (LinearLayout) ll_two_radios2.findViewById(R.id.llHeaderTwoRadios);
         llHeaderTwoRadios2.setOnClickListener(this);
 
-        tvHeaderTwoRadios2 = (TextView) ll_two_radios2.findViewById(R.id.tvHeaderTwoRadios1);
+        TextView tvHeaderTwoRadios2 = (TextView) ll_two_radios2.findViewById(R.id.tvHeaderTwoRadios);
         tvHeaderTwoRadios2.setText(geaItemModelli.get(sectionNumber).getDescrizione_item());
 
-        ivArrowTwoRadios2 = (ImageView) ll_two_radios2.findViewById(R.id.ivArrowTwoRadios1);
+        ivArrowTwoRadios2 = (ImageView) ll_two_radios2.findViewById(R.id.ivArrowTwoRadios);
 
-        llSectionTwoRadios2 = (LinearLayout) ll_two_radios2.findViewById(R.id.llSectionTwoRadios1);
+        llSectionTwoRadios2 = (LinearLayout) ll_two_radios2.findViewById(R.id.llSectionTwoRadios);
 
-        rg1TwoRadios2 = (RadioGroup) ll_two_radios2.findViewById(R.id.rg1TwoRadios1);
+        rg1TwoRadios2 = (RadioGroup) ll_two_radios2.findViewById(R.id.rg1TwoRadios);
 
         for (i = 0; i < rg1TwoRadios2.getChildCount(); i++)
         {
@@ -414,18 +426,18 @@ public class DomoticaReportFragment extends Fragment implements View.OnClickList
 
     private void createViewTwoRadios1(int sectionNumber)
     {
-        int i;LinearLayout ll_two_radios1 = (LinearLayout) rootView.findViewById(R.id.two_radiosDomotica1);
-        llHeaderTwoRadios1 = (LinearLayout) ll_two_radios1.findViewById(R.id.llHeaderTwoRadios1);
+        int i;LinearLayout ll_two_radios1 = (LinearLayout) rootView.findViewById(R.id.two_radios1);
+        llHeaderTwoRadios1 = (LinearLayout) ll_two_radios1.findViewById(R.id.llHeaderTwoRadios);
         llHeaderTwoRadios1.setOnClickListener(this);
 
-        tvHeaderTwoRadios1 = (TextView) ll_two_radios1.findViewById(R.id.tvHeaderTwoRadios1);
+        TextView tvHeaderTwoRadios1 = (TextView) ll_two_radios1.findViewById(R.id.tvHeaderTwoRadios);
         tvHeaderTwoRadios1.setText(geaItemModelli.get(sectionNumber).getDescrizione_item());
 
-        ivArrowTwoRadios1 = (ImageView) ll_two_radios1.findViewById(R.id.ivArrowTwoRadios1);
+        ivArrowTwoRadios1 = (ImageView) ll_two_radios1.findViewById(R.id.ivArrowTwoRadios);
 
-        llSectionTwoRadios1 = (LinearLayout) ll_two_radios1.findViewById(R.id.llSectionTwoRadios1);
+        llSectionTwoRadios1 = (LinearLayout) ll_two_radios1.findViewById(R.id.llSectionTwoRadios);
 
-        rg1TwoRadios1 = (RadioGroup) ll_two_radios1.findViewById(R.id.rg1TwoRadios1);
+        rg1TwoRadios1 = (RadioGroup) ll_two_radios1.findViewById(R.id.rg1TwoRadios);
 
         for (i = 0; i < rg1TwoRadios1.getChildCount(); i++)
         {
@@ -437,11 +449,11 @@ public class DomoticaReportFragment extends Fragment implements View.OnClickList
 
     private void createViewSectionHeader1(int headerNumber)
     {
-        LinearLayout headerDomotica1 = (LinearLayout) rootView.findViewById(R.id.headerDomotica1);
-        flSectionHeader1 = (FrameLayout) headerDomotica1.findViewById(R.id.flSectionHeader1);
+        LinearLayout headerDomotica1 = (LinearLayout) rootView.findViewById(R.id.header1);
+        flSectionHeader1 = (FrameLayout) headerDomotica1.findViewById(R.id.flSectionHeader);
         flSectionHeader1.setOnClickListener(this);
 
-        tvSectionHeader1 = (TextView) headerDomotica1.findViewById(R.id.tvSectionHeader1);
+        TextView tvSectionHeader1 = (TextView) headerDomotica1.findViewById(R.id.tvSectionHeader);
         tvSectionHeader1.setText(geaSezioniModelli.get(headerNumber).getDescrizione_sezione());
     }
 

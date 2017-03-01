@@ -6,7 +6,7 @@
               android:orientation="vertical">
 
     <LinearLayout
-        android:id="@+id/llHeaderFourRadiosAndEdit1"
+        android:id="@+id/llHeaderFourRadiosAndEdit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#eeeeee"
@@ -18,7 +18,7 @@
             android:layout_height="wrap_content">
 
             <TextView
-                android:id="@+id/tvHeaderFourRadiosAndEdit1"
+                android:id="@+id/tvHeaderFourRadiosAndEdit"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start|center_vertical"
@@ -27,7 +27,7 @@
                 android:textSize="13sp"/>
 
             <ImageView
-                android:id="@+id/ivArrowFourRadiosAndEdit1"
+                android:id="@+id/ivArrowFourRadiosAndEdit"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical|end"
@@ -39,29 +39,29 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/llSectionFourRadiosAndEdit1"
+        android:id="@+id/llSectionFourRadiosAndEdit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         ><!--android:visibility="gone">-->
 
         <RadioGroup
-            android:id="@+id/rg1FourRadiosAndEdit1"
+            android:id="@+id/rg1FourRadiosAndEdit"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
             <RadioButton
-                android:id="@+id/rb1FourRadiosAndEdit1"
+                android:id="@+id/rb1FourRadiosAndEdit"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
                 android:button="@null"
                 android:drawableRight="@android:drawable/btn_radio"
-                android:text="Radio 1"/>
+                android:text="Radio "/>
 
             <RadioButton
-                android:id="@+id/rb2FourRadiosAndEdit1"
+                android:id="@+id/rb2FourRadiosAndEdit"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="16dp"
@@ -71,7 +71,7 @@
                 android:text="Radio 2"/>
 
             <RadioButton
-                android:id="@+id/rb3FourRadiosAndEdit1"
+                android:id="@+id/rb3FourRadiosAndEdit"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="16dp"
@@ -81,7 +81,7 @@
                 android:text="Radio 3"/>
 
             <RadioButton
-                android:id="@+id/rb4FourRadiosAndEdit1"
+                android:id="@+id/rb4FourRadiosAndEdit"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="16dp"
@@ -99,7 +99,7 @@
         android:layout_height="wrap_content">
 
         <TextView
-            android:id="@+id/tv1FourRadiosAndEdit1"
+            android:id="@+id/tv1FourRadiosAndEdit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="start|center_vertical"
@@ -108,7 +108,7 @@
             android:textSize="13sp"/>
 
         <EditText
-            android:id="@+id/et1FourRadiosAndEdit1"
+            android:id="@+id/et1FourRadiosAndEdit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"

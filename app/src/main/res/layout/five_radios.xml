@@ -6,7 +6,7 @@
               android:orientation="vertical">
 
     <LinearLayout
-        android:id="@+id/llHeaderFiveRadios1"
+        android:id="@+id/llHeaderFiveRadios"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#eeeeee"
@@ -18,7 +18,7 @@
             android:layout_height="wrap_content">
 
             <TextView
-                android:id="@+id/tvHeaderFiveRadios1"
+                android:id="@+id/tvHeaderFiveRadios"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start|center_vertical"
@@ -27,7 +27,7 @@
                 android:textSize="13sp"/>
 
             <ImageView
-                android:id="@+id/ivArrowFiveRadios1"
+                android:id="@+id/ivArrowFiveRadios"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical|end"
@@ -39,29 +39,29 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/llSectionFiveRadios1"
+        android:id="@+id/llSectionFiveRadios"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
 ><!--android:visibility="gone">-->
 
         <RadioGroup
-            android:id="@+id/rg1FiveRadios1"
+            android:id="@+id/rg1FiveRadios"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
             <RadioButton
-                android:id="@+id/rb1FiveRadios1"
+                android:id="@+id/rb1FiveRadios"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
                 android:button="@null"
                 android:drawableRight="@android:drawable/btn_radio"
-                android:text="Radio 1"/>
+                android:text="Radio "/>
 
             <RadioButton
-                android:id="@+id/rb2FiveRadios1"
+                android:id="@+id/rb2FiveRadios"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="16dp"
@@ -71,7 +71,7 @@
                 android:text="Radio 2"/>
 
             <RadioButton
-                android:id="@+id/rb3FiveRadios1"
+                android:id="@+id/rb3FiveRadios"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="16dp"
@@ -81,7 +81,7 @@
                 android:text="Radio 3"/>
 
             <RadioButton
-                android:id="@+id/rb4FiveRadios1"
+                android:id="@+id/rb4FiveRadios"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="16dp"
@@ -91,7 +91,7 @@
                 android:text="Radio 4   "/>
 
             <RadioButton
-                android:id="@+id/rb5FiveRadios1"
+                android:id="@+id/rb5FiveRadios"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="16dp"
