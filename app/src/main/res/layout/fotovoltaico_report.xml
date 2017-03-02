@@ -16,7 +16,9 @@
 
         <include android:id="@+id/two_radios_and_edit1" layout="@layout/two_radios_and_edit"/>
 
-        <include android:id="@+id/edit_and_five_chkboxes1" layout="@layout/edit_and_five_chkboxes"/>
+        <include android:id="@+id/edit1" layout="@layout/edit"/>
+
+        <include android:id="@+id/five_chkboxes1" layout="@layout/five_chkboxes"/>
 
         <include android:id="@+id/four_radios_and_edit1" layout="@layout/four_radios_and_edit"/>
 

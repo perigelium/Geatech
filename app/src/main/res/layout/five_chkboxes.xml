@@ -6,7 +6,7 @@
               android:orientation="vertical">
 
     <LinearLayout
-        android:id="@+id/llHeaderEditAndFiveChkboxes"
+        android:id="@+id/llHeaderFiveChkboxes"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#eeeeee"
@@ -18,7 +18,7 @@
             android:layout_height="wrap_content">
 
             <TextView
-                android:id="@+id/tvHeaderEditAndFiveChkboxes"
+                android:id="@+id/tvHeaderFiveChkboxes"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start|center_vertical"
@@ -27,7 +27,7 @@
                 android:textSize="13sp"/>
 
             <ImageView
-                android:id="@+id/ivArrowEditAndFiveChkboxes"
+                android:id="@+id/ivArrowFiveChkboxes"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical|end"
@@ -39,43 +39,14 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/llSectionEditAndFiveChkboxes"
+        android:id="@+id/llSectionFiveChkboxes"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         ><!--android:visibility="gone">-->
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <TextView
-            android:id="@+id/tv1EditAndFiveChkboxes"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="start|center_vertical"
-            android:layout_margin="9dp"
-            android:text="Altro: "
-            android:textSize="13sp"/>
-
-        <EditText
-            android:id="@+id/et1EditAndFiveChkboxes"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_gravity="start|center_vertical"
-            android:layout_marginLeft="16dp"
-            android:background="#f0f0f0"
-            android:ems="10"
-            android:inputType="none"
-            android:text=""
-            android:textColor="#c0c0c0"/>
-
-    </LinearLayout>
-
-
         <CheckBox
-            android:id="@+id/chk1EditAndFiveChkboxes"
+            android:id="@+id/chk1FiveChkboxes"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="9dp"
@@ -86,7 +57,7 @@
             android:text="chkbox "/>
 
         <CheckBox
-            android:id="@+id/chk2EditAndFiveChkboxes"
+            android:id="@+id/chk2FiveChkboxes"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="9dp"
@@ -97,7 +68,7 @@
             android:text="chkbox 2"/>
 
         <CheckBox
-            android:id="@+id/chk3EditAndFiveChkboxes"
+            android:id="@+id/chk3FiveChkboxes"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="9dp"
@@ -108,7 +79,7 @@
             android:text="chkbox 3"/>
 
         <CheckBox
-            android:id="@+id/chk4EditAndFiveChkboxes"
+            android:id="@+id/chk4FiveChkboxes"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="9dp"
@@ -119,7 +90,7 @@
             android:text="chkbox 4"/>
 
         <CheckBox
-            android:id="@+id/chk5EditAndFiveChkboxes"
+            android:id="@+id/chk5FiveChkboxes"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="9dp"

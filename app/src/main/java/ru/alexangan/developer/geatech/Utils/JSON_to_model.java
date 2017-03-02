@@ -25,41 +25,47 @@ public class JSON_to_model
         {
             JSONObject jsonObject = new JSONObject(visits_downloaded_data);
             JSONArray arr_caseArray = jsonObject.getJSONArray("arr_case");
-            JSONArray visits_array = arr_caseArray.getJSONArray(0);
+            //JSONArray visits_array = arr_caseArray.getJSONArray(0);
 
-            for (int i = 0; i < visits_array.length(); i++)
+            for (int i = 0; i < arr_caseArray.length(); i++)
             {
-                JSONArray visit_item = visits_array.getJSONArray(i);
+                JSONObject visit_items = arr_caseArray.getJSONObject(i);
 
-                JSONObject visit_data = visit_item.getJSONObject(0);
-                JSONArray client_data = visit_item.getJSONArray(1);
-                JSONArray subproducts = visit_item.getJSONArray(2);
+                JSONObject visit_data = (JSONObject) visit_items.get("gea_sopralluoghi");
+                JSONObject client_data = (JSONObject) visit_items.get("gea_client");
+                JSONArray subproducts = (JSONArray) visit_items.get("gea_products");
+
+
+                //JSONArray gea_supplier = (JSONArray) visit_items.get("gea_supplier");
+//                JSONArray gea_rapporto_soppralluogo = (JSONArray) visit_items.get("gea_rapporto_soppralluogo");
+//                JSONArray gea_immagini_rapporto_sopralluogo = (JSONArray) visit_items.get("gea_immagini_rapporto_sopralluogo");
+//                JSONArray gea_items_rapporto_soppralluogo = (JSONArray) visit_items.get("gea_items_rapporto_soppralluogo");
 
                 Integer id_sopralluogo = visit_data.getInt("id_sopralluogo");
                 int id_tecnico = visit_data.getInt("id_tecnico");
-                String data_ora_assegnazione = visit_data.getString("data_ora_assegnazione");
+                //String data_ora_assegnazione = visit_data.getString("data_ora_assegnazione");
                 String data_ora_presa_appuntamento = visit_data.getString("data_ora_presa_appuntamento");
                 //String data_sollecito_appuntamento = visit_data.getString("data_sollecito_appuntamento");
                 String data_ora_sopralluogo = visit_data.getString("data_ora_sopralluogo");
-                String note_sopralluogo = visit_data.getString("note_sopralluogo");
-                String tipo_gestione_sopralluogo = visit_data.getString("tipo_gestione_sopralluogo");
+                //String note_sopralluogo = visit_data.getString("note_sopralluogo");
+                //String tipo_gestione_sopralluogo = visit_data.getString("tipo_gestione_sopralluogo");
 
                 GeaSopralluogo geaSopralluogo = new GeaSopralluogo(id_sopralluogo, id_tecnico, data_ora_presa_appuntamento, data_ora_sopralluogo);
 
-                JSONObject client_dataJSONObject = client_data.getJSONObject(0);
+                //JSONObject client_dataJSONObject = client_data.getJSONObject();
 
-                String name = client_dataJSONObject.getString("name");
-                String address = client_dataJSONObject.getString("address");
-                String phone = client_dataJSONObject.getString("phone");
-                String mobile = client_dataJSONObject.getString("mobile");
-                double coordNord = client_dataJSONObject.getDouble("lat");
-                double coordEst = client_dataJSONObject.getDouble("lng");
+                String name = client_data.getString("name");
+                String address = client_data.getString("address");
+                String phone = client_data.getString("phone");
+                String mobile = client_data.getString("mobile");
+                double coordNord = client_data.getDouble("lat");
+                double coordEst = client_data.getDouble("lng");
 
                 ClientData clientData = new ClientData(i, name,  address,  phone,  mobile, coordNord, coordEst);
 
-                String productType = client_dataJSONObject.getString("product_type");
-                int idProductType = client_dataJSONObject.getInt("id_product_type");
-                String product = client_dataJSONObject.getString("product");
+                String productType = client_data.getString("product_type");
+                int idProductType = client_data.getInt("id_product_type");
+                String product = client_data.getString("product");
 
 
                 RealmList<SubproductItem> subproductsList = new RealmList<SubproductItem>();
