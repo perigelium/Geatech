@@ -1,6 +1,5 @@
 package ru.alexangan.developer.geatech.Utils;
 
-import android.content.Context;
 import android.util.Pair;
 import android.view.MotionEvent;
 import android.view.View;
@@ -33,38 +32,43 @@ import static ru.alexangan.developer.geatech.Models.GlobalConstants.visitItems;
 public class ViewUtils
 {
     public int selectedIndex;
+    int idItemStart;
     int headerNumber;
     int idModello;
     int idSopralluogo;
+    int id_rapporto_sopralluogo;
     View rootView;
-    Context context;
+
+    boolean[] allSectionsCollapsed;
     GeaModelloRapporto geaModello;
     List<GeaSezioneModelliRapporto> geaSezioniModelli;
     List<GeaItemModelliRapporto> geaItemModelli;
+    ArrayList<ArrayList<LinearLayout>> al_llSectionHeaders;
+    ArrayList<LinearLayout> llSectionHeaders;
 
-    ArrayList <FrameLayout> FrameLayouts;
-    Map <String, ArrayList<ImageView>> ImageViews;
-    Map <String, ArrayList <Pair<LinearLayout, LinearLayout>>> LinearLayouts;
-    Map <String, ArrayList<Pair<RadioGroup, RadioGroup>>> RadioGroups;
-    Map <String, ArrayList<ArrayList<EditText>>> EditTexts;
-    Map <String, ArrayList<ArrayList<Switch>>> Switches;
-    Map <String, ArrayList<ArrayList<CheckBox>>> CheckBoxes;
+    Map<Integer, ImageView> ImageViews;
+    Map<Integer, Pair<LinearLayout, LinearLayout>> LinearLayouts;
+    Map<Integer, Pair<RadioGroup, RadioGroup>> RadioGroups;
+    Map<Integer, ArrayList<EditText>> EditTexts;
+    Map<Integer, ArrayList<Switch>> Switches;
+    Map<Integer, ArrayList<CheckBox>> CheckBoxes;
 
-    ArrayList <Pair<LinearLayout, LinearLayout>> al_llPair;
-    ArrayList <Pair<RadioGroup, RadioGroup>> al_rgPair;
-    ArrayList<ArrayList<EditText>> al_al_Edits;
-    ArrayList<ArrayList<Switch>> al_al_Switches;
-    ArrayList<ImageView> al_al_ImageViews;
-    ArrayList<ArrayList<CheckBox>> al_al_CheckBoxes;
+/*    ArrayList<Pair<LinearLayout, LinearLayout>> al_llPair;
+    ArrayList<Pair<RadioGroup, RadioGroup>> al_rgPair;*/
+    //ArrayList<ArrayList<EditText>> al_al_Edits;
+    //ArrayList<ArrayList<Switch>> al_al_Switches;
+    //ArrayList<ImageView> al_al_ImageViews;
+    //ArrayList<ArrayList<CheckBox>> al_al_CheckBoxes;
 
-    public ViewUtils(View rootView, int selectedIndex)
+    public ViewUtils(View rootView, int id_rapporto_sopralluogo, int selectedIndex)
     {
         this.rootView = rootView;
+        this.id_rapporto_sopralluogo = id_rapporto_sopralluogo;
         this.selectedIndex = selectedIndex;
         headerNumber = 0;
         idModello = 0;
+        idItemStart = 99999;
 
-        FrameLayouts = new ArrayList<>();
         LinearLayouts = new HashMap<>();
         RadioGroups = new HashMap<>();
         EditTexts = new HashMap<>();
@@ -72,12 +76,16 @@ public class ViewUtils
         ImageViews = new HashMap<>();
         CheckBoxes = new HashMap<>();
 
-        al_llPair = new ArrayList<>();
-        al_rgPair = new ArrayList<>();
-        al_al_Edits = new ArrayList<>();
-        al_al_Switches = new ArrayList<>();
-        al_al_ImageViews = new ArrayList<>();
-        al_al_CheckBoxes = new ArrayList<>();
+/*        al_llPair = new ArrayList<>();
+        al_rgPair = new ArrayList<>();*/
+        //al_al_Edits = new ArrayList<>();
+        //al_al_Switches = new ArrayList<>();
+        //al_al_ImageViews = new ArrayList<>();
+        //al_al_CheckBoxes = new ArrayList<>();
+
+        al_llSectionHeaders = new ArrayList<>();
+        llSectionHeaders = new ArrayList<>();
+        allSectionsCollapsed = new boolean[]{false, false, false, false, false, false, false};
 
         VisitItem visitItem = visitItems.get(selectedIndex);
         GeaSopralluogo geaSopralluogo = visitItem.getGeaSopralluogo();
@@ -89,7 +97,7 @@ public class ViewUtils
         geaModello = realm.where(GeaModelloRapporto.class).equalTo("id_product_type", id_product_type).findFirst();
         realm.commitTransaction();
 
-        if(geaModello == null)
+        if (geaModello == null)
         {
             return;
         }
@@ -102,8 +110,17 @@ public class ViewUtils
         realm.beginTransaction();
         geaItemModelli = realm.where(GeaItemModelliRapporto.class)
         .between("id_sezione", geaSezioniModelli.get(0).getId_sezione(), geaSezioniModelli.get(geaSezioniModelli.size() - 1).getId_sezione()).findAll();
-        //.between("id_item_modello", idItemStart, idItemEnd)
         realm.commitTransaction();
+
+        for (int i = 0; i < geaItemModelli.size(); i++)
+        {
+            int curItemModello = geaItemModelli.get(i).getId_item_modello();
+
+            if (curItemModello < idItemStart)
+            {
+                idItemStart = curItemModello;
+            }
+        }
     }
 
     public View getRootView()
@@ -111,29 +128,37 @@ public class ViewUtils
         return rootView;
     }
 
+
     public void createViewFiveChkboxes(int sectionNumber, int idRes)
     {
         LinearLayout five_chkboxes = (LinearLayout) rootView.findViewById(idRes);
         LinearLayout llHeaderFiveChkboxes = (LinearLayout) five_chkboxes.findViewById(R.id.llHeaderFiveChkboxes);
-        //llHeaderFiveChkboxes.setOnClickListener(this);
 
-        ImageView ivArrowFiveChkboxes = (ImageView) five_chkboxes.findViewById(R.id.ivArrowFiveChkboxes);
-
-        al_al_ImageViews.add(ivArrowFiveChkboxes);
-        ImageViews.put("FiveChkboxes", al_al_ImageViews);
+        final ImageView ivArrowFiveChkboxes = (ImageView) five_chkboxes.findViewById(R.id.ivArrowFiveChkboxes);
+        
+        ImageViews.put(idRes, ivArrowFiveChkboxes);
 
         TextView tvHeaderFiveChkboxes = (TextView) five_chkboxes.findViewById(R.id.tvHeaderFiveChkboxes);
         tvHeaderFiveChkboxes.setText(geaItemModelli.get(sectionNumber).getDescrizione_item());
 
-        LinearLayout llSectionFiveChkboxes = (LinearLayout) five_chkboxes.findViewById(R.id.llSectionFiveChkboxes);
+        final LinearLayout llSectionFiveChkboxes = (LinearLayout) five_chkboxes.findViewById(R.id.llSectionFiveChkboxes);
+        
+        LinearLayouts.put(idRes, new Pair<>(llHeaderFiveChkboxes, llSectionFiveChkboxes));
 
-        al_llPair.add(new Pair<>(llHeaderFiveChkboxes, llSectionFiveChkboxes));
-        LinearLayouts.put("FiveChkboxes", al_llPair);
+        llSectionHeaders.add(llSectionFiveChkboxes);
 
-/*        ArrayList <Pair<LinearLayout,LinearLayout>> al = LinearLayouts.get("FiveChkboxes");
-        LinearLayout l = al.get(serialNumber).first;*/
+        llHeaderFiveChkboxes.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                llSectionFiveChkboxes.setVisibility(llSectionFiveChkboxes.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
+                ivArrowFiveChkboxes.setImageResource(llSectionFiveChkboxes.getVisibility() == View.VISIBLE
+                        ? android.R.drawable.arrow_up_float : android.R.drawable.arrow_down_float);
+            }
+        });
 
-        ArrayList <CheckBox> al_chkBoxes = new ArrayList<>();
+        ArrayList<CheckBox> al_chkBoxes = new ArrayList<>();
 
         CheckBox chk1FiveChkboxes = (CheckBox) five_chkboxes.findViewById(R.id.chk1FiveChkboxes);
         al_chkBoxes.add(chk1FiveChkboxes);
@@ -145,42 +170,41 @@ public class ViewUtils
         al_chkBoxes.add(chk4FiveChkboxes);
         CheckBox chk5FiveChkboxes = (CheckBox) five_chkboxes.findViewById(R.id.chk5FiveChkboxes);
         al_chkBoxes.add(chk5FiveChkboxes);
-
-        al_al_CheckBoxes.add(al_chkBoxes);
-        CheckBoxes.put("FiveChkboxes", al_al_CheckBoxes);
+        
+        CheckBoxes.put(idRes, al_chkBoxes);
 
         String valore = geaItemModelli.get(sectionNumber).getValore();
-        String [] fields = valore.split("\\|\\|");
+        String[] fields = valore.split("\\|\\|");
 
         for (int i = 0; i < fields.length; i++)
         {
             al_chkBoxes.get(i).setText(fields[i]);
         }
     }
-    
+
     public int createViewTwoTextsTwoEdits(int sectionNumber, int idRes)
     {
-        LinearLayout two_texts_two_edits1 = (LinearLayout) rootView.findViewById(idRes);
-        LinearLayout llSectionTwoTextsTwoEdits1 = (LinearLayout) two_texts_two_edits1.findViewById(R.id.llSectionTwoTextTwoEdit);
+        LinearLayout two_texts_two_edits = (LinearLayout) rootView.findViewById(idRes);
+        LinearLayout llSectionTwoTextsTwoEdits = (LinearLayout) two_texts_two_edits.findViewById(R.id.llSectionTwoTextTwoEdit);
+        
+        LinearLayouts.put(idRes, new Pair<>(llSectionTwoTextsTwoEdits, llSectionTwoTextsTwoEdits));
 
-        al_llPair.add(new Pair<>(llSectionTwoTextsTwoEdits1, llSectionTwoTextsTwoEdits1));
-        LinearLayouts.put("TwoTextsTwoEdits", al_llPair);
+        llSectionHeaders.add(llSectionTwoTextsTwoEdits);
 
-        TextView tv1TwoTextsTwoEdits = (TextView) two_texts_two_edits1.findViewById(R.id.tv1TwoTextTwoEdit);
-        tv1TwoTextsTwoEdits.setText(geaItemModelli.get(sectionNumber++).getValore()); // .getDescrizione_item() !
+        TextView tv1TwoTextsTwoEdits = (TextView) two_texts_two_edits.findViewById(R.id.tv1TwoTextTwoEdit);
+        tv1TwoTextsTwoEdits.setText(geaItemModelli.get(sectionNumber++).getDescrizione_item());
 
-        TextView tv2TwoTextsTwoEdits = (TextView) two_texts_two_edits1.findViewById(R.id.tv2TwoTextTwoEdit);
-        tv2TwoTextsTwoEdits.setText(geaItemModelli.get(sectionNumber++).getValore()); // .getDescrizione_item()
+        TextView tv2TwoTextsTwoEdits = (TextView) two_texts_two_edits.findViewById(R.id.tv2TwoTextTwoEdit);
+        tv2TwoTextsTwoEdits.setText(geaItemModelli.get(sectionNumber++).getDescrizione_item());
 
-        EditText et1TwoTextsTwoEdits = (EditText) two_texts_two_edits1.findViewById(R.id.et1TwoTextTwoEdit);
+        EditText et1TwoTextsTwoEdits = (EditText) two_texts_two_edits.findViewById(R.id.et1TwoTextTwoEdit);
 
-        EditText et2TwoTextsTwoEdits = (EditText) two_texts_two_edits1.findViewById(R.id.et2TwoTextTwoEdit);
+        EditText et2TwoTextsTwoEdits = (EditText) two_texts_two_edits.findViewById(R.id.et2TwoTextTwoEdit);
 
-        ArrayList <EditText> al_Edits = new ArrayList<>();
+        ArrayList<EditText> al_Edits = new ArrayList<>();
         al_Edits.add(et1TwoTextsTwoEdits);
         al_Edits.add(et2TwoTextsTwoEdits);
-        al_al_Edits.add(al_Edits);
-        EditTexts.put("TwoTextsTwoEdits", al_al_Edits);
+        EditTexts.put(idRes, al_Edits);
 
         return sectionNumber;
     }
@@ -189,20 +213,30 @@ public class ViewUtils
     {
         LinearLayout two_switches_and_edit = (LinearLayout) rootView.findViewById(idRes);
         LinearLayout llHeaderTwoSwitchesAndEdit = (LinearLayout) two_switches_and_edit.findViewById(R.id.llHeaderTwoSwitchesAndEdit);
-        //llHeaderTwoSwitchesAndEdit.setOnClickListener(this);
 
         TextView tvHeaderTwoSwitchesAndEdit = (TextView) two_switches_and_edit.findViewById(R.id.tvHeaderTwoSwitchesAndEdit);
         tvHeaderTwoSwitchesAndEdit.setText(geaItemModelli.get(sectionNumber).getValore());
 
-        LinearLayout llSectionTwoSwitchesAndEdit = (LinearLayout) two_switches_and_edit.findViewById(R.id.llSectionTwoSwitchesAndEdit);
+        final LinearLayout llSectionTwoSwitchesAndEdit = (LinearLayout) two_switches_and_edit.findViewById(R.id.llSectionTwoSwitchesAndEdit);
+        
+        LinearLayouts.put(idRes, new Pair<>(llHeaderTwoSwitchesAndEdit, llSectionTwoSwitchesAndEdit));
 
-        al_llPair.add(new Pair<>(llHeaderTwoSwitchesAndEdit, llSectionTwoSwitchesAndEdit));
-        LinearLayouts.put("TwoSwitchesAndEditAndEdit", al_llPair);
+        llSectionHeaders.add(llSectionTwoSwitchesAndEdit);
 
-        ImageView ivArrowTwoSwitchesAndEdit = (ImageView) two_switches_and_edit.findViewById(R.id.ivArrowTwoSwitchesAndEdit);
+        final ImageView ivArrowTwoSwitchesAndEdit = (ImageView) two_switches_and_edit.findViewById(R.id.ivArrowTwoSwitchesAndEdit);
+        
+        ImageViews.put(idRes, ivArrowTwoSwitchesAndEdit);
 
-        al_al_ImageViews.add(ivArrowTwoSwitchesAndEdit);
-        ImageViews.put("TwoSwitchesAndEditAndEdit", al_al_ImageViews);
+        llHeaderTwoSwitchesAndEdit.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                llSectionTwoSwitchesAndEdit.setVisibility(llSectionTwoSwitchesAndEdit.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
+                ivArrowTwoSwitchesAndEdit.setImageResource(llSectionTwoSwitchesAndEdit.getVisibility() == View.VISIBLE
+                        ? android.R.drawable.arrow_up_float : android.R.drawable.arrow_down_float);
+            }
+        });
 
         TextView tv1TwoSwitchesAndEdit = (TextView) two_switches_and_edit.findViewById(R.id.tv1TwoSwitchesAndEdit);
         tv1TwoSwitchesAndEdit.setText(geaItemModelli.get(sectionNumber++).getDescrizione_item());
@@ -214,21 +248,19 @@ public class ViewUtils
 
         Switch sw2TwoSwitchesAndEdit = (Switch) two_switches_and_edit.findViewById(R.id.sw2TwoSwitchesAndEdit);
 
-        ArrayList <Switch> al_Switches = new ArrayList<>();
+        ArrayList<Switch> al_Switches = new ArrayList<>();
         al_Switches.add(sw1TwoSwitchesAndEdit);
         al_Switches.add(sw2TwoSwitchesAndEdit);
-        al_al_Switches.add(al_Switches);
-        Switches.put("TwoSwitchesAndEditAndEdit", al_al_Switches);
+        Switches.put(idRes, al_Switches);
 
-        TextView tv3TwoSwitchesAndEditAndEdit = (TextView) two_switches_and_edit.findViewById(R.id.tv3TwoSwitchesAndEdit);
-        tv3TwoSwitchesAndEditAndEdit.setText(geaItemModelli.get(sectionNumber++).getDescrizione_item());
+        TextView tv3TwoSwitchesAndEdit = (TextView) two_switches_and_edit.findViewById(R.id.tv3TwoSwitchesAndEdit);
+        tv3TwoSwitchesAndEdit.setText(geaItemModelli.get(sectionNumber++).getDescrizione_item());
 
-        EditText et1TwoSwitchesAndEditAndEdit = (EditText) two_switches_and_edit.findViewById(R.id.et1TwoSwitchesAndEdit);
+        EditText et1TwoSwitchesAndEdit = (EditText) two_switches_and_edit.findViewById(R.id.et1TwoSwitchesAndEdit);
 
-        ArrayList <EditText> al_Edits = new ArrayList<>();
-        al_Edits.add(et1TwoSwitchesAndEditAndEdit);
-        al_al_Edits.add(al_Edits);
-        EditTexts.put("TwoSwitchesAndEditAndEdit", al_al_Edits);
+        ArrayList<EditText> al_Edits = new ArrayList<>();
+        al_Edits.add(et1TwoSwitchesAndEdit);
+        EditTexts.put(idRes, al_Edits);
 
         return sectionNumber;
     }
@@ -237,20 +269,30 @@ public class ViewUtils
     {
         LinearLayout five_switches = (LinearLayout) rootView.findViewById(idRes);
         LinearLayout llHeaderFiveSwitches = (LinearLayout) five_switches.findViewById(R.id.llHeaderFiveSwitches);
-        //llHeaderFiveSwitches.setOnClickListener(this);
 
         TextView tvHeaderFiveSwitches = (TextView) five_switches.findViewById(R.id.tvHeaderFiveSwitches);
         tvHeaderFiveSwitches.setText("Two switches header");
 
-        LinearLayout llSectionFiveSwitches = (LinearLayout) five_switches.findViewById(R.id.llSectionFiveSwitches);
+        final LinearLayout llSectionFiveSwitches = (LinearLayout) five_switches.findViewById(R.id.llSectionFiveSwitches);
+        
+        LinearLayouts.put(idRes, new Pair<>(llHeaderFiveSwitches, llSectionFiveSwitches));
 
-        al_llPair.add(new Pair<>(llHeaderFiveSwitches, llSectionFiveSwitches));
-        LinearLayouts.put("TwoTextsTwoEdits", al_llPair);
+        llSectionHeaders.add(llSectionFiveSwitches);
 
-        ImageView ivArrowFiveSwitches = (ImageView) five_switches.findViewById(R.id.ivArrowFiveSwitches);
+        final ImageView ivArrowFiveSwitches = (ImageView) five_switches.findViewById(R.id.ivArrowFiveSwitches);
+        
+        ImageViews.put(idRes, ivArrowFiveSwitches);
 
-        al_al_ImageViews.add(ivArrowFiveSwitches);
-        ImageViews.put("TwoTextsTwoEdits", al_al_ImageViews);
+        llHeaderFiveSwitches.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                llSectionFiveSwitches.setVisibility(llSectionFiveSwitches.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
+                ivArrowFiveSwitches.setImageResource(llSectionFiveSwitches.getVisibility() == View.VISIBLE
+                        ? android.R.drawable.arrow_up_float : android.R.drawable.arrow_down_float);
+            }
+        });
 
         TextView tv1FiveSwitches = (TextView) five_switches.findViewById(R.id.tv1FiveSwitches);
         tv1FiveSwitches.setText(geaItemModelli.get(sectionNumber++).getDescrizione_item());
@@ -277,44 +319,55 @@ public class ViewUtils
 
         Switch sw5FiveSwitches = (Switch) five_switches.findViewById(R.id.sw5FiveSwitches);
 
-        ArrayList <Switch> al_Switches = new ArrayList<>();
+        ArrayList<Switch> al_Switches = new ArrayList<>();
         al_Switches.add(sw1FiveSwitches);
         al_Switches.add(sw2FiveSwitches);
         al_Switches.add(sw3FiveSwitches);
         al_Switches.add(sw4FiveSwitches);
         al_Switches.add(sw5FiveSwitches);
-        al_al_Switches.add(al_Switches);
-        Switches.put("TwoTextsTwoEdits", al_al_Switches);
+        Switches.put(idRes, al_Switches);
 
         return sectionNumber;
     }
-    
+
     public void createViewFourRadios(int sectionNumber, int idRes)
     {
         int i;
         LinearLayout four_radios = (LinearLayout) rootView.findViewById(idRes);
         LinearLayout llHeaderFourRadios = (LinearLayout) four_radios.findViewById(R.id.llHeaderFourRadios);
-        //llHeaderFourRadios.setOnClickListener(this);
 
         TextView tvHeaderFourRadios = (TextView) four_radios.findViewById(R.id.tvHeaderFourRadios);
         tvHeaderFourRadios.setText(geaItemModelli.get(sectionNumber).getDescrizione_item());
 
-        ImageView ivArrowFourRadios = (ImageView) four_radios.findViewById(R.id.ivArrowFourRadios);
+        final ImageView ivArrowFourRadios = (ImageView) four_radios.findViewById(R.id.ivArrowFourRadios);
+        
+        ImageViews.put(idRes, ivArrowFourRadios);
 
-        al_al_ImageViews.add(ivArrowFourRadios);
-        ImageViews.put("FourRadios", al_al_ImageViews);
+        final LinearLayout llSectionFourRadios = (LinearLayout) four_radios.findViewById(R.id.llSectionFourRadios);
+        
+        LinearLayouts.put(idRes, new Pair<>(llHeaderFourRadios, llSectionFourRadios));
 
-        LinearLayout llSectionFourRadios = (LinearLayout) four_radios.findViewById(R.id.llSectionFourRadios);
+        llSectionHeaders.add(llSectionFourRadios);
 
-        al_llPair.add(new Pair<>(llHeaderFourRadios, llSectionFourRadios));
-        LinearLayouts.put("FourRadios", al_llPair);
+        llHeaderFourRadios.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                llSectionFourRadios.setVisibility(llSectionFourRadios.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
+                ivArrowFourRadios.setImageResource(llSectionFourRadios.getVisibility() == View.VISIBLE
+                        ? android.R.drawable.arrow_up_float : android.R.drawable.arrow_down_float);
+            }
+        });
 
         RadioGroup rg1FourRadios = (RadioGroup) four_radios.findViewById(R.id.rg1FourRadios);
+        
+        RadioGroups.put(idRes, new Pair<>(rg1FourRadios, rg1FourRadios));
 
         String valore = geaItemModelli.get(sectionNumber).getValore();
-        String [] fields = valore.split("\\|\\|");
+        String[] fields = valore.split("\\|\\|");
 
-        if(fields.length >= rg1FourRadios.getChildCount())
+        if (fields.length >= rg1FourRadios.getChildCount())
         {
             for (i = 0; i < rg1FourRadios.getChildCount(); i++)
             {
@@ -324,36 +377,45 @@ public class ViewUtils
             }
         }
     }
-    
+
     public void createViewTwoRadiosAndEdit(int sectionNumber, int idRes)
     {
         LinearLayout two_radios_and_edit = (LinearLayout) rootView.findViewById(idRes);
 
         LinearLayout llHeaderTwoRadiosAndEdit = (LinearLayout) two_radios_and_edit.findViewById(R.id.llHeaderTwoRadiosAndEdit);
-        //llHeaderTwoRadiosAndEdit.setOnClickListener(this);
 
-        ImageView ivArrowTwoRadiosAndEdit = (ImageView) two_radios_and_edit.findViewById(R.id.ivArrowTwoRadiosAndEdit);
-
-        al_al_ImageViews.add(ivArrowTwoRadiosAndEdit);
-        ImageViews.put("TwoRadiosAndEdit", al_al_ImageViews);
+        final ImageView ivArrowTwoRadiosAndEdit = (ImageView) two_radios_and_edit.findViewById(R.id.ivArrowTwoRadiosAndEdit);
+        
+        ImageViews.put(idRes, ivArrowTwoRadiosAndEdit);
 
         TextView tvHeaderTwoRadiosAndEdit = (TextView) two_radios_and_edit.findViewById(R.id.tvHeaderTwoRadiosAndEdit);
         tvHeaderTwoRadiosAndEdit.setText(geaItemModelli.get(sectionNumber).getDescrizione_item());
 
-        LinearLayout llSectionTwoRadiosAndEdit = (LinearLayout) two_radios_and_edit.findViewById(R.id.llSectionTwoRadiosAndEdit);
+        final LinearLayout llSectionTwoRadiosAndEdit = (LinearLayout) two_radios_and_edit.findViewById(R.id.llSectionTwoRadiosAndEdit);
+        
+        LinearLayouts.put(idRes, new Pair<>(llHeaderTwoRadiosAndEdit, llSectionTwoRadiosAndEdit));
 
-        al_llPair.add(new Pair<>(llHeaderTwoRadiosAndEdit, llSectionTwoRadiosAndEdit));
-        LinearLayouts.put("TwoRadiosAndEdit", al_llPair);
+        llSectionHeaders.add(llSectionTwoRadiosAndEdit);
+
+        llHeaderTwoRadiosAndEdit.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                llSectionTwoRadiosAndEdit.setVisibility(llSectionTwoRadiosAndEdit.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
+                ivArrowTwoRadiosAndEdit.setImageResource(llSectionTwoRadiosAndEdit.getVisibility() == View.VISIBLE
+                        ? android.R.drawable.arrow_up_float : android.R.drawable.arrow_down_float);
+            }
+        });
 
         final RadioGroup rg1TwoRadiosAndEdit = (RadioGroup) two_radios_and_edit.findViewById(R.id.rg1TwoRadiosAndEdit);
-
-        al_rgPair.add(new Pair<>(rg1TwoRadiosAndEdit, rg1TwoRadiosAndEdit));
-        RadioGroups.put("TwoRadiosAndEdit", al_rgPair);
+        
+        RadioGroups.put(idRes, new Pair<>(rg1TwoRadiosAndEdit, rg1TwoRadiosAndEdit));
 
         String valore = geaItemModelli.get(sectionNumber).getValore();
-        String [] fields = valore.split("\\|\\|");
+        String[] fields = valore.split("\\|\\|");
 
-        if(fields.length >= rg1TwoRadiosAndEdit.getChildCount())
+        if (fields.length >= rg1TwoRadiosAndEdit.getChildCount())
         {
             for (int i = 0; i < rg1TwoRadiosAndEdit.getChildCount(); i++)
             {
@@ -363,14 +425,13 @@ public class ViewUtils
             }
         }
 
-
+        //TextView tv1TwoRadiosAndEdit = (TextView) two_radios_and_edit.findViewById(R.id.tv1TwoRadiosAndEdit);
 
         EditText et1TwoRadiosAndEdit = (EditText) two_radios_and_edit.findViewById(R.id.et1TwoRadiosAndEdit);
 
-        ArrayList <EditText> al_Edits = new ArrayList<>();
+        ArrayList<EditText> al_Edits = new ArrayList<>();
         al_Edits.add(et1TwoRadiosAndEdit);
-        al_al_Edits.add(al_Edits);
-        EditTexts.put("TwoRadiosAndEdit", al_al_Edits);
+        EditTexts.put(idRes, al_Edits);
 
         et1TwoRadiosAndEdit.setOnTouchListener(new View.OnTouchListener()
         {
@@ -388,30 +449,39 @@ public class ViewUtils
         int i;
         LinearLayout ll_two_radios = (LinearLayout) rootView.findViewById(idRes);
         LinearLayout llHeaderTwoRadios = (LinearLayout) ll_two_radios.findViewById(R.id.llHeaderTwoRadios);
-        //llHeaderTwoRadios.setOnClickListener(this);
 
         TextView tvHeaderTwoRadios = (TextView) ll_two_radios.findViewById(R.id.tvHeaderTwoRadios);
         tvHeaderTwoRadios.setText(geaItemModelli.get(sectionNumber).getDescrizione_item());
 
-        ImageView ivArrowTwoRadios = (ImageView) ll_two_radios.findViewById(R.id.ivArrowTwoRadios);
+        final ImageView ivArrowTwoRadios = (ImageView) ll_two_radios.findViewById(R.id.ivArrowTwoRadios);
+        
+        ImageViews.put(idRes, ivArrowTwoRadios);
 
-        al_al_ImageViews.add(ivArrowTwoRadios);
-        ImageViews.put("TwoRadios", al_al_ImageViews);
+        final LinearLayout llSectionTwoRadios = (LinearLayout) ll_two_radios.findViewById(R.id.llSectionTwoRadios);
+        
+        LinearLayouts.put(idRes, new Pair<>(llHeaderTwoRadios, llSectionTwoRadios));
 
-        LinearLayout llSectionTwoRadios = (LinearLayout) ll_two_radios.findViewById(R.id.llSectionTwoRadios);
+        llSectionHeaders.add(llSectionTwoRadios);
 
-        al_llPair.add(new Pair<>(llHeaderTwoRadios, llSectionTwoRadios));
-        LinearLayouts.put("TwoRadios", al_llPair);
+        llHeaderTwoRadios.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                llSectionTwoRadios.setVisibility(llSectionTwoRadios.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
+                ivArrowTwoRadios.setImageResource(llSectionTwoRadios.getVisibility() == View.VISIBLE
+                        ? android.R.drawable.arrow_up_float : android.R.drawable.arrow_down_float);
+            }
+        });
 
         RadioGroup rg1TwoRadios = (RadioGroup) ll_two_radios.findViewById(R.id.rg1TwoRadios);
-
-        al_rgPair.add(new Pair<>(rg1TwoRadios, rg1TwoRadios));
-        RadioGroups.put("TwoRadios", al_rgPair);
+        
+        RadioGroups.put(idRes, new Pair<>(rg1TwoRadios, rg1TwoRadios));
 
         String valore = geaItemModelli.get(sectionNumber).getValore();
-        String [] fields = valore.split("\\|\\|");
+        String[] fields = valore.split("\\|\\|");
 
-        if(fields.length >= rg1TwoRadios.getChildCount())
+        if (fields.length >= rg1TwoRadios.getChildCount())
         {
             for (i = 0; i < rg1TwoRadios.getChildCount(); i++)
             {
@@ -427,30 +497,39 @@ public class ViewUtils
         int i;
         LinearLayout four_radios_and_edit = (LinearLayout) rootView.findViewById(idRes);
         LinearLayout llHeaderFourRadiosAndEdit = (LinearLayout) four_radios_and_edit.findViewById(R.id.llHeaderFourRadiosAndEdit);
-        //llHeaderFourRadiosAndEdit.setOnClickListener(this);
 
         TextView tvHeaderFourRadiosAndEdit = (TextView) four_radios_and_edit.findViewById(R.id.tvHeaderFourRadiosAndEdit);
         tvHeaderFourRadiosAndEdit.setText(geaItemModelli.get(sectionNumber).getDescrizione_item());
 
-        ImageView ivArrowFourRadiosAndEdit = (ImageView) four_radios_and_edit.findViewById(R.id.ivArrowFourRadiosAndEdit);
+        final ImageView ivArrowFourRadiosAndEdit = (ImageView) four_radios_and_edit.findViewById(R.id.ivArrowFourRadiosAndEdit);
 
-        al_al_ImageViews.add(ivArrowFourRadiosAndEdit);
-        ImageViews.put("FourRadiosAndEdit", al_al_ImageViews);
+        ImageViews.put(idRes, ivArrowFourRadiosAndEdit);
 
-        LinearLayout llSectionFourRadiosAndEdit = (LinearLayout) four_radios_and_edit.findViewById(R.id.llSectionFourRadiosAndEdit);
+        final LinearLayout llSectionFourRadiosAndEdit = (LinearLayout) four_radios_and_edit.findViewById(R.id.llSectionFourRadiosAndEdit);
 
-        al_llPair.add(new Pair<>(llHeaderFourRadiosAndEdit, llSectionFourRadiosAndEdit));
-        LinearLayouts.put("FourRadiosAndEdit", al_llPair);
+        LinearLayouts.put(idRes, new Pair<>(llHeaderFourRadiosAndEdit, llSectionFourRadiosAndEdit));
+
+        llSectionHeaders.add(llSectionFourRadiosAndEdit);
+
+        llHeaderFourRadiosAndEdit.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                llSectionFourRadiosAndEdit.setVisibility(llSectionFourRadiosAndEdit.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
+                ivArrowFourRadiosAndEdit.setImageResource(llSectionFourRadiosAndEdit.getVisibility() == View.VISIBLE
+                        ? android.R.drawable.arrow_up_float : android.R.drawable.arrow_down_float);
+            }
+        });
 
         final RadioGroup rg1FourRadiosAndEdit = (RadioGroup) four_radios_and_edit.findViewById(R.id.rg1FourRadiosAndEdit);
-
-        al_rgPair.add(new Pair<>(rg1FourRadiosAndEdit, rg1FourRadiosAndEdit));
-        RadioGroups.put("FourRadiosAndEdit", al_rgPair);
+        
+        RadioGroups.put(idRes, new Pair<>(rg1FourRadiosAndEdit, rg1FourRadiosAndEdit));
 
         String valore = geaItemModelli.get(sectionNumber).getValore();
-        String [] fields = valore.split("\\|\\|");
+        String[] fields = valore.split("\\|\\|");
 
-        if(fields.length >= rg1FourRadiosAndEdit.getChildCount())
+        if (fields.length >= rg1FourRadiosAndEdit.getChildCount())
         {
             if (fields.length >= rg1FourRadiosAndEdit.getChildCount())
             {
@@ -463,16 +542,13 @@ public class ViewUtils
             }
         }
 
-
-
-
+        //TextView tv1FourRadiosAndEdit = (TextView) four_radios_and_edit.findViewById(R.id.tv1FourRadiosAndEdit);
 
         EditText et1FourRadiosAndEdit = (EditText) four_radios_and_edit.findViewById(R.id.et1FourRadiosAndEdit);
 
-        ArrayList <EditText> al_Edits = new ArrayList<>();
+        ArrayList<EditText> al_Edits = new ArrayList<>();
         al_Edits.add(et1FourRadiosAndEdit);
-        al_al_Edits.add(al_Edits);
-        EditTexts.put("FourRadiosAndEdit", al_al_Edits);
+        EditTexts.put(idRes, al_Edits);
 
         et1FourRadiosAndEdit.setOnTouchListener(new View.OnTouchListener()
         {
@@ -489,50 +565,58 @@ public class ViewUtils
     {
         LinearLayout four_edits_and_switch = (LinearLayout) rootView.findViewById(idRes);
         LinearLayout llHeaderFourEditsAndSwitch = (LinearLayout) four_edits_and_switch.findViewById(R.id.llHeaderFourEditsAndSwitch);
-        //llHeaderFourEditsAndSwitch.setOnClickListener(this);
 
         TextView tvHeaderFourEditsAndSwitch = (TextView) four_edits_and_switch.findViewById(R.id.tvHeaderFourEditsAndSwitch);
         tvHeaderFourEditsAndSwitch.setText(geaItemModelli.get(sectionNumber).getValore());
 
-        LinearLayout llSectionFourEditsAndSwitch = (LinearLayout) four_edits_and_switch.findViewById(R.id.llSectionFourEditsAndSwitch);
-
-        al_llPair.add(new Pair<>(llHeaderFourEditsAndSwitch, llSectionFourEditsAndSwitch));
-        LinearLayouts.put("FourEditsAndSwitch", al_llPair);
+        final LinearLayout llSectionFourEditsAndSwitch = (LinearLayout) four_edits_and_switch.findViewById(R.id.llSectionFourEditsAndSwitch);
         
+        LinearLayouts.put(idRes, new Pair<>(llHeaderFourEditsAndSwitch, llSectionFourEditsAndSwitch));
 
-        ImageView ivArrowFourEditsAndSwitch = (ImageView) four_edits_and_switch.findViewById(R.id.ivArrowFourEditsAndSwitch);
+        llSectionHeaders.add(llSectionFourEditsAndSwitch);
 
-        al_al_ImageViews.add(ivArrowFourEditsAndSwitch);
-        ImageViews.put("FourEditsAndSwitch", al_al_ImageViews);
+        final ImageView ivArrowFourEditsAndSwitch = (ImageView) four_edits_and_switch.findViewById(R.id.ivArrowFourEditsAndSwitch);
+        
+        ImageViews.put(idRes, ivArrowFourEditsAndSwitch);
+
+        llHeaderFourEditsAndSwitch.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                llSectionFourEditsAndSwitch.setVisibility(llSectionFourEditsAndSwitch.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
+                ivArrowFourEditsAndSwitch.setImageResource(llSectionFourEditsAndSwitch.getVisibility() == View.VISIBLE
+                        ? android.R.drawable.arrow_up_float : android.R.drawable.arrow_down_float);
+            }
+        });
+
+        ArrayList<TextView> al_tvs = new ArrayList<>();
 
         TextView tv1FourEditsAndSwitch = (TextView) four_edits_and_switch.findViewById(R.id.tv1FourEditsAndSwitch);
-        //tv1FourEditsAndSwitch.setText(fields[i++]);
         EditText et1FourEditsAndSwitch = (EditText) four_edits_and_switch.findViewById(R.id.et1FourEditsAndSwitch);
         TextView tv2FourEditsAndSwitch = (TextView) four_edits_and_switch.findViewById(R.id.tv2FourEditsAndSwitch);
-        //tv2FourEditsAndSwitch.setText(fields[i++]);
         EditText et2FourEditsAndSwitch = (EditText) four_edits_and_switch.findViewById(R.id.et2FourEditsAndSwitch);
         TextView tv3FourEditsAndSwitch = (TextView) four_edits_and_switch.findViewById(R.id.tv3FourEditsAndSwitch);
-        //tv3FourEditsAndSwitch.setText(fields[i++]);
         EditText et3FourEditsAndSwitch = (EditText) four_edits_and_switch.findViewById(R.id.et3FourEditsAndSwitch);
         TextView tv4FourEditsAndSwitch = (TextView) four_edits_and_switch.findViewById(R.id.tv4FourEditsAndSwitch);
-        //tv4FourEditsAndSwitch.setText(fields[i++]);
         EditText et4FourEditsAndSwitch = (EditText) four_edits_and_switch.findViewById(R.id.et4FourEditsAndSwitch);
 
-        ArrayList <EditText> al_Edits = new ArrayList<>();
+
+        al_tvs.add(tv1FourEditsAndSwitch);
+        al_tvs.add(tv2FourEditsAndSwitch);
+        al_tvs.add(tv3FourEditsAndSwitch);
+        al_tvs.add(tv4FourEditsAndSwitch);
+
+        ArrayList<EditText> al_Edits = new ArrayList<>();
         al_Edits.add(et1FourEditsAndSwitch);
         al_Edits.add(et2FourEditsAndSwitch);
         al_Edits.add(et3FourEditsAndSwitch);
         al_Edits.add(et4FourEditsAndSwitch);
-        al_al_Edits.add(al_Edits);
-        EditTexts.put("FourEditsAndSwitch", al_al_Edits);
+        EditTexts.put(idRes, al_Edits);
 
-
-/*        String valore = geaItemModelli.get(sectionNumber++).getValore();
-        String [] fields = valore.split("\\|\\|");*/
-
-        for (int i = 0; i < al_Edits.size(); i++)
+        for (int i = 0; i < al_tvs.size(); i++)
         {
-            al_Edits.get(i).setText(geaItemModelli.get(sectionNumber++).getDescrizione_item());
+            al_tvs.get(i).setText(geaItemModelli.get(sectionNumber++).getDescrizione_item());
         }
 
         TextView tv5FourEditsAndSwitch = (TextView) four_edits_and_switch.findViewById(R.id.tv5FourEditsAndSwitch);
@@ -540,10 +624,9 @@ public class ViewUtils
 
         Switch sw1FourEditsAndSwitch = (Switch) four_edits_and_switch.findViewById(R.id.sw1FourEditsAndSwitch);
 
-        ArrayList <Switch> al_Switches = new ArrayList<>();
+        ArrayList<Switch> al_Switches = new ArrayList<>();
         al_Switches.add(sw1FourEditsAndSwitch);
-        al_al_Switches.add(al_Switches);
-        Switches.put("FourEditsAndSwitch", al_al_Switches);
+        Switches.put(idRes, al_Switches);
 
         return sectionNumber;
     }
@@ -552,43 +635,149 @@ public class ViewUtils
     {
         LinearLayout ll_edit = (LinearLayout) rootView.findViewById(idRes);
         LinearLayout llHeaderEdit = (LinearLayout) ll_edit.findViewById(R.id.llHeaderEdit);
-        //llHeaderEdit.setOnClickListener(this);
 
         TextView tvHeaderEdit = (TextView) ll_edit.findViewById(R.id.tvHeaderEdit);
         tvHeaderEdit.setText(geaItemModelli.get(sectionNumber).getDescrizione_item());
 
-        LinearLayout llSectionEdit = (LinearLayout) ll_edit.findViewById(R.id.llSectionEdit);
+        final LinearLayout llSectionEdit = (LinearLayout) ll_edit.findViewById(R.id.llSectionEdit);
 
-        al_llPair.add(new Pair<>(llHeaderEdit, llSectionEdit));
-        LinearLayouts.put("Edit", al_llPair);
+        llSectionHeaders.add(llSectionEdit);
+        
+        LinearLayouts.put(idRes, new Pair<>(llHeaderEdit, llSectionEdit));
 
-        ImageView ivArrowEdit = (ImageView) ll_edit.findViewById(R.id.ivArrowEdit);
+        final ImageView ivArrowEdit = (ImageView) ll_edit.findViewById(R.id.ivArrowEdit);
+        
+        ImageViews.put(idRes, ivArrowEdit);
 
-        al_al_ImageViews.add(ivArrowEdit);
-        ImageViews.put("Edit", al_al_ImageViews);
+        llHeaderEdit.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                llSectionEdit.setVisibility(llSectionEdit.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
+                ivArrowEdit.setImageResource(llSectionEdit.getVisibility() == View.VISIBLE
+                        ? android.R.drawable.arrow_up_float : android.R.drawable.arrow_down_float);
+            }
+        });
 
         TextView tv1Edit = (TextView) ll_edit.findViewById(R.id.tv1Edit);
         tv1Edit.setText(geaItemModelli.get(sectionNumber).getDescrizione_item());
 
         EditText et1Edit = (EditText) ll_edit.findViewById(R.id.et1Edit);
 
-        ArrayList <EditText> al_Edits = new ArrayList<>();
+        ArrayList<EditText> al_Edits = new ArrayList<>();
         al_Edits.add(et1Edit);
-        al_al_Edits.add(al_Edits);
-        EditTexts.put("Edit", al_al_Edits);
+        EditTexts.put(idRes, al_Edits);
     }
 
-    public void createViewSectionHeader(int headerNumber, int idRes)
+    public void createViewSectionHeader(int idRes)
     {
         LinearLayout header = (LinearLayout) rootView.findViewById(idRes);
         FrameLayout flSectionHeader = (FrameLayout) header.findViewById(R.id.flSectionHeader);
-        //flSectionHeader1.setOnClickListener(this);
+        final int curHeader = headerNumber;
 
-        FrameLayouts.add(flSectionHeader);
+        flSectionHeader.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                for (LinearLayout ll : al_llSectionHeaders.get(curHeader))
+                {
+                    ll.setVisibility(!allSectionsCollapsed[curHeader] ? View.GONE : View.VISIBLE);
+                }
+
+                allSectionsCollapsed[curHeader] = !allSectionsCollapsed[curHeader];
+            }
+        });
 
         TextView tvSectionHeader = (TextView) header.findViewById(R.id.tvSectionHeader);
         tvSectionHeader.setText(geaSezioniModelli.get(headerNumber).getDescrizione_sezione());
+
+        ArrayList<LinearLayout> llSecHeaders = new ArrayList<>();
+        llSecHeaders.addAll(llSectionHeaders);
+        al_llSectionHeaders.add(llSecHeaders);
+        llSectionHeaders.clear();
+        headerNumber++;
     }
 
 
+
+/*    public void saveSeveralRadiosAndEdit(int idRes, int sectionNumber)
+    {
+        String str_Id_item;
+        RadioGroup rg = RadioGroups.get(groupName).get(groupNumber).first;
+        int checkedBtnId = rg.getCheckedRadioButtonId();
+
+        if (checkedBtnId != -1)
+        {
+            RadioButton radioButton = (RadioButton) rg.findViewById(checkedBtnId);
+            str_Id_item = radioButton.getText().toString();
+        } else
+        {
+            EditText et = EditTexts.get(groupName).get(groupNumber).get(0);
+            str_Id_item = et.getText().toString();
+        }
+        DatabaseUtils.insertStringInReportItem(id_rapporto_sopralluogo, idItemStart + sectionNumber, str_Id_item);
+    }*/
+
+    public void saveSeveralRadios(int idRes, int sectionNumber)
+    {
+        String str_Id_item="";
+        RadioGroup rg = RadioGroups.get(idRes).first;
+        int checkedBtnId = rg.getCheckedRadioButtonId();
+
+        if (checkedBtnId != -1)
+        {
+            RadioButton radioButton = (RadioButton) rg.findViewById(checkedBtnId);
+            str_Id_item = radioButton.getText().toString();
+        }
+        DatabaseUtils.insertStringInReportItem(id_rapporto_sopralluogo, idItemStart + sectionNumber, str_Id_item);
+    }
+
+    public int saveSeveralChkboxes(int idRes, int sectionNumber)
+    {
+        ArrayList<CheckBox> alChks = CheckBoxes.get(idRes);
+        String str_Id_item = "";
+
+        for (int i = 0; i < alChks.size(); i++)
+        {
+            str_Id_item += alChks.get(i).isChecked() ? alChks.get(i).getText().toString() : "";
+            DatabaseUtils.insertStringInReportItem(id_rapporto_sopralluogo, idItemStart + sectionNumber + i, str_Id_item);
+        }
+
+        sectionNumber = sectionNumber + alChks.size();
+
+        return sectionNumber;
+    }
+
+    public int saveSeveralSwitches(int idRes, int sectionNumber)
+    {
+        ArrayList<Switch> alSw = Switches.get(idRes);
+        String str_Id_item = "";
+
+        for (int i = 0; i < alSw.size(); i++)
+        {
+            str_Id_item += alSw.get(i).isChecked() ? alSw.get(i).getText().toString() : "";
+            DatabaseUtils.insertStringInReportItem(id_rapporto_sopralluogo, idItemStart + sectionNumber + i, str_Id_item);
+        }
+
+        sectionNumber = sectionNumber + alSw.size();
+
+        return sectionNumber;
+    }
+
+    public int saveSeveralEdits(int idRes, int sectionNumber)
+    {
+        ArrayList <EditText> alEt = EditTexts.get(idRes);
+
+        for (int i = 0; i < alEt.size(); i++)
+        {
+            String str_id_item = alEt.get(i).getText().toString();
+            DatabaseUtils.insertStringInReportItem(id_rapporto_sopralluogo, idItemStart + sectionNumber + i, str_id_item);
+        }
+
+        sectionNumber = sectionNumber + alEt.size();
+
+        return sectionNumber;
+    }
 }
