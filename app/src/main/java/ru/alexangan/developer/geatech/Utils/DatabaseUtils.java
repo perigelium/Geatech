@@ -1,6 +1,10 @@
 package ru.alexangan.developer.geatech.Utils;
 
+import java.util.Iterator;
+import java.util.Map;
+
 import io.realm.RealmResults;
+import ru.alexangan.developer.geatech.Models.GeaItemModelliRapporto;
 import ru.alexangan.developer.geatech.Models.GeaItemRapporto;
 
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.company_id;
@@ -13,12 +17,11 @@ import static ru.alexangan.developer.geatech.Models.GlobalConstants.selectedTech
 
 public class DatabaseUtils
 {
-    public static int getReportInitializationState(int id_rapporto_sopralluogo, int idItemStart, int idItemEnd)
+    public static int getReportInitializationState(int id_rapporto_sopralluogo)
     {
         realm.beginTransaction();
         RealmResults<GeaItemRapporto> geaItemRapportoResults =
-                realm.where(GeaItemRapporto.class).equalTo("id_rapporto_sopralluogo", id_rapporto_sopralluogo)
-                        .between("id_item_modello", idItemStart, idItemEnd).findAll();
+                realm.where(GeaItemRapporto.class).equalTo("id_rapporto_sopralluogo", id_rapporto_sopralluogo).findAll();
         realm.commitTransaction();
 
         boolean reportComplete = true;
@@ -26,6 +29,7 @@ public class DatabaseUtils
 
         for (GeaItemRapporto geaItemRapporto : geaItemRapportoResults)
         {
+
             if (geaItemRapporto.getValore() == null || geaItemRapporto.getValore().trim().length() == 0)
             {
                 reportComplete = false;
@@ -40,7 +44,7 @@ public class DatabaseUtils
             return 3;
         }
 
-        if(partiallyComplete >= (idItemEnd - idItemStart)/2)
+        if(partiallyComplete >= (geaItemRapportoResults.size())/2)
         {
             return 2;
         }

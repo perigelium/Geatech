@@ -3,6 +3,7 @@ package ru.alexangan.developer.geatech.Fragments;
 import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
+import android.text.InputType;
 import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -44,7 +45,7 @@ import static ru.alexangan.developer.geatech.Models.GlobalConstants.visitItems;
 
 public class FotovoltaicoReportFragment extends Fragment
 {
-    private int selectedIndex, idItemStart, idItemEnd;
+    private int selectedIndex;
     int idSopralluogo;
     int id_rapporto_sopralluogo;
     ReportStates reportStates;
@@ -53,8 +54,6 @@ public class FotovoltaicoReportFragment extends Fragment
     ViewUtils viewUtils;
 
     GeaModelloRapporto geaModello;
-/*    List<GeaSezioneModelliRapporto> geaSezioniModelli;
-    List<GeaItemModelliRapporto> geaItemModelli;*/
 
     public FotovoltaicoReportFragment()
     {
@@ -82,7 +81,7 @@ public class FotovoltaicoReportFragment extends Fragment
         geaModello = realm.where(GeaModelloRapporto.class).equalTo("id_product_type", id_product_type).findFirst();
         realm.commitTransaction();
 
-        if(geaModello == null)
+        if (geaModello == null)
         {
             return;
         }
@@ -92,20 +91,9 @@ public class FotovoltaicoReportFragment extends Fragment
         reportStates = realm.where(ReportStates.class).equalTo("company_id", company_id).equalTo("tech_id", selectedTech.getId())
                 .equalTo("id_sopralluogo", idSopralluogo).findFirst();
 
-        id_rapporto_sopralluogo = reportStates!=null ? reportStates.getId_rapporto_sopralluogo() : -1;
+        id_rapporto_sopralluogo = reportStates != null ? reportStates.getId_rapporto_sopralluogo() : -1;
 
         realm.commitTransaction();
-
-/*        realm.beginTransaction();
-        geaSezioniModelli = realm.where(GeaSezioneModelliRapporto.class)
-                .equalTo("id_modello", geaModello.getId_modello()).findAll();
-        realm.commitTransaction();
-
-        realm.beginTransaction();
-        geaItemModelli = realm.where(GeaItemModelliRapporto.class)
-                .between("id_sezione", geaSezioniModelli.get(0).getId_sezione(), geaSezioniModelli.get(geaSezioniModelli.size() - 1).getId_sezione())
-                .findAll();
-        realm.commitTransaction();*/
     }
 
     @Override
@@ -115,42 +103,43 @@ public class FotovoltaicoReportFragment extends Fragment
 
         viewUtils = new ViewUtils(rootView, id_rapporto_sopralluogo, selectedIndex);
 
-        int sectionNumber = 0;
-
         TextView tvReportTitle = (TextView) rootView.findViewById(R.id.tvReportTitle);
         tvReportTitle.setText(geaModello.getNome_modello());
 
+        int idItem = viewUtils.getIdItemStart();
 
-        viewUtils.createViewTwoRadiosAndEdit(sectionNumber++, R.id.two_radios_and_edit1);
 
-        viewUtils.createViewEdit(sectionNumber++, R.id.edit1);
+        idItem = viewUtils.createViewTwoRadiosAndEdit(idItem, R.id.two_radios_and_edit1);
 
-        viewUtils.createViewFiveChkboxes(sectionNumber++, R.id.five_chkboxes1);
+        idItem = viewUtils.createViewEdit(idItem, R.id.edit1);
+        EditText et = viewUtils.getEditTexts().get(idItem-1);
+        et.setInputType(InputType.TYPE_CLASS_NUMBER);
 
-        viewUtils.createViewFourRadiosAndEdit(sectionNumber++, R.id.four_radios_and_edit1);
+        idItem = viewUtils.createViewFiveChkboxes(idItem, R.id.five_chkboxes1);
 
-        viewUtils.createViewFourRadiosAndEdit(sectionNumber++, R.id.four_radios_and_edit2);
+        idItem = viewUtils.createViewFourRadiosAndEdit(idItem, R.id.four_radios_and_edit1);
 
-        sectionNumber = viewUtils.createViewFourEditsAndSwitch(sectionNumber, R.id.four_edits_and_switch1);
+        idItem = viewUtils.createViewFourRadiosAndEdit(idItem, R.id.four_radios_and_edit2);
 
-        viewUtils.createViewTwoRadios(sectionNumber++, R.id.two_radios1);
+        idItem = viewUtils.createViewFourEditsAndSwitch(idItem, R.id.four_edits_and_switch1);
 
-        sectionNumber++;
-        sectionNumber++;
+        idItem = viewUtils.createViewTwoRadios(idItem, R.id.two_radios1);
 
-        viewUtils.createViewFourRadios(sectionNumber++, R.id.four_radios1);
+        idItem = viewUtils.createViewThreeRadiosAndEdit(idItem, R.id.three_radios_and_edit1);
 
-        sectionNumber = viewUtils.createViewTwoSwitchesAndEdit(sectionNumber, R.id.two_switches_and_edit1);
+        idItem = viewUtils.createViewFourRadios(idItem, R.id.four_radios1);
+
+        idItem = viewUtils.createViewTwoSwitchesAndEdit(idItem, R.id.two_switches_and_edit1);
 
         // SectionHeader1
         viewUtils.createViewSectionHeader(R.id.header1);
 
-        sectionNumber = viewUtils.createViewTwoTextsTwoEdits(sectionNumber, R.id.two_texts_two_edits1);
+        idItem = viewUtils.createViewTwoTextsTwoEdits(idItem, R.id.two_texts_two_edits1);
 
         // SectionHeader2
         viewUtils.createViewSectionHeader(R.id.header2);
 
-        sectionNumber = viewUtils.createViewFiveSwitches(sectionNumber, R.id.five_switches1);
+        idItem = viewUtils.createViewFiveSwitches(idItem, R.id.five_switches1);
 
         // SectionHeader3
         viewUtils.createViewSectionHeader(R.id.header3);
@@ -165,46 +154,42 @@ public class FotovoltaicoReportFragment extends Fragment
 
         if (reportStates != null)
         {
-            int sectionNumber = 0;
+            int idItem = viewUtils.getIdItemStart();
 
-            viewUtils.saveSeveralRadios(R.id.two_radios_and_edit1, sectionNumber++);
+            idItem = viewUtils.saveSeveralRadiosAndEdit(idItem);
 
-            sectionNumber = viewUtils.saveSeveralEdits(R.id.two_radios_and_edit1, sectionNumber);
+            idItem = viewUtils.saveSeveralEdits(idItem, 1);
 
-            sectionNumber = viewUtils.saveSeveralEdits(R.id.edit1, sectionNumber);
+            idItem = viewUtils.saveSeveralChkboxes(idItem);
 
-            sectionNumber = viewUtils.saveSeveralChkboxes(R.id.five_chkboxes1, sectionNumber);
+            idItem = viewUtils.saveSeveralRadiosAndEdit(idItem);
 
-            viewUtils.saveSeveralRadios(R.id.four_radios_and_edit1, sectionNumber++);
+            idItem = viewUtils.saveSeveralRadiosAndEdit(idItem);
 
-            sectionNumber = viewUtils.saveSeveralEdits(R.id.four_radios_and_edit1, sectionNumber);
+            idItem = viewUtils.saveSeveralEdits(idItem, 4);
 
-            viewUtils.saveSeveralRadios(R.id.four_radios_and_edit2, sectionNumber++);
+            idItem = viewUtils.saveSeveralSwitches(idItem, 1);
 
-            sectionNumber = viewUtils.saveSeveralEdits(R.id.four_radios_and_edit2, sectionNumber);
+            idItem = viewUtils.saveSeveralRadios(idItem);
 
-            sectionNumber = viewUtils.saveSeveralEdits(R.id.four_edits_and_switch1, sectionNumber);
+            idItem = viewUtils.saveSeveralRadios(idItem);
 
-            sectionNumber = viewUtils.saveSeveralSwitches(R.id.four_edits_and_switch1, sectionNumber);
+            idItem = viewUtils.saveSeveralEdits(idItem, 1);
 
-            viewUtils.saveSeveralRadios(R.id.two_radios, sectionNumber++);
+            idItem = viewUtils.saveSeveralRadios(idItem);
 
-            sectionNumber++;
-            sectionNumber++;
+            idItem = viewUtils.saveSeveralSwitches(idItem, 2);
 
-            viewUtils.saveSeveralRadios(R.id.four_radios1, sectionNumber++);
+            idItem = viewUtils.saveSeveralEdits(idItem, 1);
 
-            sectionNumber = viewUtils.saveSeveralSwitches(R.id.two_switches_and_edit1, sectionNumber);
+            idItem = viewUtils.saveSeveralEdits(idItem, 2);
 
-            sectionNumber = viewUtils.saveSeveralEdits(R.id.two_switches_and_edit1, sectionNumber);
-
-            sectionNumber = viewUtils.saveSeveralEdits(R.id.two_texts_two_edits1, sectionNumber);
-
-            sectionNumber = viewUtils.saveSeveralSwitches(R.id.five_switches1, sectionNumber);
+            idItem = viewUtils.saveSeveralSwitches(idItem, 5);
 
 
             // Completion state
-            int completionState = DatabaseUtils.getReportInitializationState(id_rapporto_sopralluogo, idItemStart, idItemEnd);
+
+            int completionState = DatabaseUtils.getReportInitializationState(id_rapporto_sopralluogo);
 
             if (completionState == 3)
             {
@@ -230,16 +215,39 @@ public class FotovoltaicoReportFragment extends Fragment
     {
         super.onViewCreated(view, savedInstanceState);
 
-        int idItem = idItemStart;
+        int idItem = viewUtils.getIdItemStart();
 
-        if(id_rapporto_sopralluogo != -1)
+        if (id_rapporto_sopralluogo != -1)
         {
+            idItem = viewUtils.fillSeveralRadiosAndEdit(idItem);
 
+            idItem = viewUtils.fillSeveralEdits(idItem, 1);
 
+            idItem = viewUtils.fillSeveralChkboxes(idItem);
 
+            idItem = viewUtils.fillSeveralRadiosAndEdit(idItem);
 
+            idItem = viewUtils.fillSeveralRadiosAndEdit(idItem);
 
+            idItem = viewUtils.fillSeveralEdits(idItem, 4);
 
+            idItem = viewUtils.fillSeveralSwitches(idItem, 1);
+
+            idItem = viewUtils.fillSeveralRadios(idItem);
+
+            idItem = viewUtils.fillSeveralRadios(idItem);
+
+            idItem = viewUtils.fillSeveralEdits(idItem, 1);
+
+            idItem = viewUtils.fillSeveralRadios(idItem);
+
+            idItem = viewUtils.fillSeveralSwitches(idItem, 2);
+
+            idItem = viewUtils.fillSeveralEdits(idItem, 1);
+
+            idItem = viewUtils.fillSeveralEdits(idItem, 2);
+
+            idItem = viewUtils.fillSeveralSwitches(idItem, 5);
         }
     }
 }

@@ -32,6 +32,7 @@ import ru.alexangan.developer.geatech.Models.ReportStates;
 import ru.alexangan.developer.geatech.Models.VisitItem;
 import ru.alexangan.developer.geatech.R;
 import ru.alexangan.developer.geatech.Utils.DatabaseUtils;
+import ru.alexangan.developer.geatech.Utils.ViewUtils;
 
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.company_id;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.realm;
@@ -493,8 +494,9 @@ public class DomoticaReportFragment extends Fragment implements View.OnClickList
             // ThreeTextThreeEdit1
             saveThreeTextThreeEdit1(id_item);
 
+            //ViewUtils viewUtils = new ViewUtils(rootView, id_rapporto_sopralluogo, selectedIndex);
             // Completion state
-            int completionState = DatabaseUtils.getReportInitializationState(id_rapporto_sopralluogo, idItemStart, idItemEnd);
+            int completionState = DatabaseUtils.getReportInitializationState(id_rapporto_sopralluogo);
 
             if (completionState == 3)
             {
