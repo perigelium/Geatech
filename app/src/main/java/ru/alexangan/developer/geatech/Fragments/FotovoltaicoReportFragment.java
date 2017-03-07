@@ -125,7 +125,7 @@ public class FotovoltaicoReportFragment extends Fragment
 
         idItem = viewUtils.createViewTwoRadios(idItem, R.id.two_radios1);
 
-        idItem = viewUtils.createViewThreeRadiosAndEdit(idItem, R.id.three_radios_and_edit1);
+        idItem = viewUtils.createViewThreeRadiosAndEditEx(idItem, R.id.three_radios_and_edit1);
 
         idItem = viewUtils.createViewFourRadios(idItem, R.id.four_radios1);
 
@@ -156,7 +156,7 @@ public class FotovoltaicoReportFragment extends Fragment
         {
             int idItem = viewUtils.getIdItemStart();
 
-            idItem = viewUtils.saveSeveralRadiosAndEdit(idItem);
+/*            idItem = viewUtils.saveSeveralRadiosAndEdit(idItem);
 
             idItem = viewUtils.saveSeveralEdits(idItem, 1);
 
@@ -184,7 +184,7 @@ public class FotovoltaicoReportFragment extends Fragment
 
             idItem = viewUtils.saveSeveralEdits(idItem, 2);
 
-            idItem = viewUtils.saveSeveralSwitches(idItem, 5);
+            idItem = viewUtils.saveSeveralSwitches(idItem, 5);*/
 
 
             // Completion state
@@ -219,7 +219,7 @@ public class FotovoltaicoReportFragment extends Fragment
 
         if (id_rapporto_sopralluogo != -1)
         {
-            idItem = viewUtils.fillSeveralRadiosAndEdit(idItem);
+/*            idItem = viewUtils.fillSeveralRadiosAndEdit(idItem);
 
             idItem = viewUtils.fillSeveralEdits(idItem, 1);
 
@@ -247,7 +247,7 @@ public class FotovoltaicoReportFragment extends Fragment
 
             idItem = viewUtils.fillSeveralEdits(idItem, 2);
 
-            idItem = viewUtils.fillSeveralSwitches(idItem, 5);
+            idItem = viewUtils.fillSeveralSwitches(idItem, 5);*/
         }
     }
 }

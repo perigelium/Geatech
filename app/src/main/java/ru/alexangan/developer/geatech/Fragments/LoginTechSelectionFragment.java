@@ -4,7 +4,9 @@ package ru.alexangan.developer.geatech.Fragments;
 import android.app.Activity;
 import android.app.Fragment;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
+import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -541,6 +543,20 @@ public class LoginTechSelectionFragment extends Fragment implements View.OnClick
                         String str_gea_modelli = type_report_data.getString("gea_modelli_rapporto_sopralluogo");
                         String str_gea_sezioni_modelli = type_report_data.getString("gea_sezioni_modelli_rapporto_sopralluogo");
                         String str_gea_items_modelli = type_report_data.getString("gea_items_modelli_rapporto_sopralluogo");
+
+
+                        if (Build.VERSION.SDK_INT >= 24)
+                        {
+                            //str_gea_modelli = String.valueOf(Html.fromHtml(str_gea_modelli, Html.FROM_HTML_MODE_LEGACY));
+                            str_gea_sezioni_modelli = String.valueOf(Html.fromHtml(str_gea_sezioni_modelli, Html.FROM_HTML_MODE_LEGACY));
+                            str_gea_items_modelli = String.valueOf(Html.fromHtml(str_gea_items_modelli, Html.FROM_HTML_MODE_LEGACY));
+                        }
+                        else
+                        {
+                            //str_gea_modelli = String.valueOf(Html.fromHtml(str_gea_modelli));
+                            str_gea_sezioni_modelli = String.valueOf(Html.fromHtml(str_gea_sezioni_modelli));
+                            str_gea_items_modelli = String.valueOf(Html.fromHtml(str_gea_items_modelli));
+                        }
 
                         Gson gson = new Gson();
 

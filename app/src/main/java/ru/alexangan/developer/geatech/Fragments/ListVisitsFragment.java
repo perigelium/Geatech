@@ -13,7 +13,13 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
+import java.util.Map;
+import java.util.TreeMap;
 
 import io.realm.RealmResults;
 import okhttp3.Call;
@@ -128,9 +134,53 @@ public class ListVisitsFragment extends ListFragment
                 .equalTo("tech_id", selectedTech.getId()).findAll();
         realm.commitTransaction();*/
 
+        TreeMap<Long, VisitItem> unsortedVisits = new TreeMap<>();
+
         for (VisitItem visitItem : visitItems)
         {
-            if (!timeNotSetItemsOnly || (timeNotSetItemsOnly && visitItem.getGeaSopralluogo().getId_tecnico() == 0))
+            String data_ora_sopralluogo = visitItem.getGeaSopralluogo().getData_ora_sopralluogo();
+            int id_tecnico = visitItem.getGeaSopralluogo().getId_tecnico();
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ITALIAN);
+
+            if ((!timeNotSetItemsOnly) || (timeNotSetItemsOnly && id_tecnico == 0))
+            {
+                try
+                {
+                    Date date = sdf.parse(data_ora_sopralluogo);
+                    long time = date.getTime();
+                    Log.d("DEBUG", String.valueOf(time));
+                    unsortedVisits.put(time, visitItem);
+
+                } catch (ParseException e)
+                {
+                    e.printStackTrace();
+                }
+
+                //visitItemsFiltered.add(visitItem);
+            }
+        }
+
+        for (Map.Entry entry : unsortedVisits.entrySet())
+        {
+                VisitItem visitItem = (VisitItem) entry.getValue();
+                int id_tecnico = visitItem.getGeaSopralluogo().getId_tecnico();
+                boolean ownReport = selectedTech.getId() == id_tecnico;
+
+            if(ownReport)
+            {
+                visitItemsFiltered.add(visitItem);
+            }
+
+            //visitItemsPositions.add(visitItem.getId());
+        }
+
+        for (Map.Entry entry : unsortedVisits.entrySet())
+        {
+            VisitItem visitItem = (VisitItem) entry.getValue();
+            int id_tecnico = visitItem.getGeaSopralluogo().getId_tecnico();
+            boolean ownReport = selectedTech.getId() == id_tecnico;
+
+            if(!ownReport && id_tecnico == 0)
             {
                 visitItemsFiltered.add(visitItem);
             }

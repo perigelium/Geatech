@@ -29,7 +29,6 @@ import ru.alexangan.developer.geatech.Fragments.CtrlBtnsFragment1;
 import ru.alexangan.developer.geatech.Fragments.CtrlBtnsFragment2;
 import ru.alexangan.developer.geatech.Fragments.DomoticaReportFragment;
 import ru.alexangan.developer.geatech.Fragments.EmptyReportFragment;
-import ru.alexangan.developer.geatech.Fragments.FotovoltaicoReportFragment;
 import ru.alexangan.developer.geatech.Fragments.InWorkListVisitsFragment;
 import ru.alexangan.developer.geatech.Fragments.ListVisitsFragment;
 import ru.alexangan.developer.geatech.Fragments.NotSentListVisitsFragment;
@@ -44,7 +43,6 @@ import ru.alexangan.developer.geatech.Fragments.StorageReportFragment;
 import ru.alexangan.developer.geatech.Fragments.TermodinamicoReportFragment;
 import ru.alexangan.developer.geatech.Interfaces.Communicator;
 import ru.alexangan.developer.geatech.Models.ProductData;
-import ru.alexangan.developer.geatech.Models.ReportStates;
 import ru.alexangan.developer.geatech.Models.VisitItem;
 import ru.alexangan.developer.geatech.Network.NetworkUtils;
 import ru.alexangan.developer.geatech.R;
@@ -52,10 +50,8 @@ import ru.alexangan.developer.geatech.Utils.JSON_to_model;
 import ru.alexangan.developer.geatech.Utils.SwipeDetector;
 
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.GET_VISITS_URL_SUFFIX;
-import static ru.alexangan.developer.geatech.Models.GlobalConstants.company_id;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.inVisitItems;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.realm;
-import static ru.alexangan.developer.geatech.Models.GlobalConstants.selectedTech;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.tokenStr;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.visitItems;
 
@@ -88,7 +84,7 @@ public class MainActivity extends Activity implements Communicator, Callback
     TermodinamicoReportFragment termodinamicoReportFragment;
     CaldaiaReportFragment caldaieReportFragment;
     ClimatizzazioneReportFragment climatizzazioneReportFragment;
-    FotovoltaicoReportFragment fotovoltaicoReportFragment;
+    CaldaiaReportFragment fotovoltaicoReportFragment;
     DomoticaReportFragment domoticaReportFragment;
     PompaDiCaloreReportFragment pompaDiCaloreReportFragment;
     StorageReportFragment storageReportFragment;
@@ -179,7 +175,7 @@ public class MainActivity extends Activity implements Communicator, Callback
         termodinamicoReportFragment = new TermodinamicoReportFragment();
         caldaieReportFragment = new CaldaiaReportFragment();
         climatizzazioneReportFragment = new ClimatizzazioneReportFragment();
-        fotovoltaicoReportFragment = new FotovoltaicoReportFragment();
+        fotovoltaicoReportFragment = new CaldaiaReportFragment();
         domoticaReportFragment = new DomoticaReportFragment();
         pompaDiCaloreReportFragment = new PompaDiCaloreReportFragment();
         storageReportFragment = new StorageReportFragment();
@@ -719,6 +715,13 @@ public class MainActivity extends Activity implements Communicator, Callback
             AlertDialog alert = builder.create();
             alert.show();
         }
+    }
+
+    @Override
+    public void OnComingListItemSelected(int itemIndex)
+    {
+        currentSelIndex = itemIndex;
+        ctrlBtnsFragment2.setCheckedBtnId(R.id.btnInfo);
     }
 
     @Override

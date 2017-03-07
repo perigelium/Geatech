@@ -12,33 +12,35 @@
 
         <include layout="@layout/report_header"/>
 
-        <include android:id="@+id/header" layout="@layout/section_header"/>
+        <include android:id="@+id/headerCald1" layout="@layout/section_header"/>
 
-        <include android:id="@+id/two_radios_and_edit1" layout="@layout/two_radios_and_edit"/>
+        <include android:id="@+id/two_radios_and_editCald1" layout="@layout/two_radios_and_edit"/>
 
-        <include android:id="@+id/three_radios_and_edit1" layout="@layout/three_radios_and_edit"/>
+        <include android:id="@+id/three_radios_and_editCald1" layout="@layout/three_radios_and_edit"/>
 
-        <include android:id="@+id/two_radios_and_edit2" layout="@layout/two_radios_and_edit"/>
+        <include android:id="@+id/three_editsCald1" layout="@layout/three_edits"/>
 
-        <include android:id="@+id/three_radios_and_edit2" layout="@layout/three_radios_and_edit"/>
+        <include android:id="@+id/two_radios_and_editCald2" layout="@layout/two_radios_and_edit"/>
 
-        <include android:id="@+id/switch_and_edit1" layout="@layout/switch_and_edit"/>
+        <include android:id="@+id/three_radios_and_editCald2" layout="@layout/three_radios_and_edit"/>
 
-        <include layout="@layout/four_radios"/>
+        <include android:id="@+id/switch_and_editCald1" layout="@layout/switch_and_edit"/>
 
-        <include layout="@layout/four_radios_and_two_edits"/>
+        <include android:id="@+id/four_radiosCald1" layout="@layout/four_radios"/>
 
-        <include layout="@layout/two_radios"/>
+        <include android:id="@+id/four_radios_and_two_editsCald1" layout="@layout/four_radios_and_two_edits"/>
 
-        <include layout="@layout/three_radios"/>
+        <include android:id="@+id/two_radiosCald1" layout="@layout/two_radios"/>
 
-        <include android:id="@+id/switch_and_edit2" layout="@layout/switch_and_edit"/>
+        <include android:id="@+id/three_radiosCald1" layout="@layout/three_radios"/>
 
-        <include android:id="@+id/two_radios_and_edit3" layout="@layout/two_radios_and_edit"/>
+        <include android:id="@+id/switch_and_editCald2" layout="@layout/switch_and_edit"/>
 
-        <include android:id="@+id/header2" layout="@layout/section_header"/>
+        <include android:id="@+id/two_radios_and_editCald3" layout="@layout/two_radios_and_edit"/>
 
-        <include layout="@layout/two_texts_two_edits"/>
+        <include android:id="@+id/headerCald2" layout="@layout/section_header"/>
+
+        <include android:id="@+id/two_texts_two_editsCald1" layout="@layout/two_texts_two_edits"/>
 
     </LinearLayout>
 

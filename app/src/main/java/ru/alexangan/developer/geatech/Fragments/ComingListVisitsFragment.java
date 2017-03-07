@@ -3,14 +3,24 @@ package ru.alexangan.developer.geatech.Fragments;
 import android.app.ListFragment;
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
+import java.util.TreeMap;
 
 import io.realm.RealmResults;
 import ru.alexangan.developer.geatech.Adapters.ComingListVisitsAdapter;
+import ru.alexangan.developer.geatech.Interfaces.Communicator;
 import ru.alexangan.developer.geatech.Models.ReportStates;
 import ru.alexangan.developer.geatech.Models.VisitItem;
 import ru.alexangan.developer.geatech.R;
@@ -22,11 +32,15 @@ import static ru.alexangan.developer.geatech.Models.GlobalConstants.visitItems;
 
 public class ComingListVisitsFragment extends ListFragment
 {
+    private Communicator mCommunicator;
+    ArrayList<Integer> visitItemsPositions;
+
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
         Context context = getActivity();
+
 
 /*        realm.beginTransaction();
         RealmResults <ReportStates> reportStatesList = realm.where(ReportStates.class).equalTo("company_id", company_id)
@@ -53,6 +67,8 @@ public class ComingListVisitsFragment extends ListFragment
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
+
+        mCommunicator = (Communicator)getActivity();
     }
 
     @Override
@@ -62,6 +78,7 @@ public class ComingListVisitsFragment extends ListFragment
         View rootView =  inflater.inflate(R.layout.list_visits_fragment, container, false);
 
         ArrayList<VisitItem> visitItemsDateTimeSet = new ArrayList<>();
+        visitItemsPositions = new ArrayList<>();
 
 
         realm.beginTransaction();
@@ -70,16 +87,43 @@ public class ComingListVisitsFragment extends ListFragment
                 .equalTo("company_id", company_id).equalTo("tech_id", selectedTech.getId()).findAll();
 
         realm.commitTransaction();
+
+        TreeMap <Long, VisitItem> unsortedVisits = new TreeMap<>();
+
         for (VisitItem visitItem : visitItems)
         {
+
             for(ReportStates reportStates : reportStatesResults)
             {
                 if (visitItem.getGeaSopralluogo().getId_sopralluogo() == reportStates.getId_sopralluogo())
                 {
-                    visitItemsDateTimeSet.add(visitItem);
+                    //visitItemsDateTimeSet.add(visitItem);
+
+                    String data_ora_sopralluogo = visitItem.getGeaSopralluogo().getData_ora_sopralluogo();
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ITALIAN);
+
+                    try
+                    {
+                        Date date = sdf.parse(data_ora_sopralluogo);
+                        long time = date.getTime();
+                        Log.d("DEBUG", String.valueOf(time));
+                        unsortedVisits.put(time, visitItem);
+                    } catch (ParseException e)
+                    {
+                        e.printStackTrace();
+                    }
                 }
             }
         }
+
+        for (Map.Entry entry : unsortedVisits.entrySet())
+        {
+            VisitItem visitItem = (VisitItem)entry.getValue();
+            visitItemsDateTimeSet.add(visitItem);
+
+            visitItemsPositions.add(visitItem.getId());
+        }
+
 
         ComingListVisitsAdapter myListAdapter =
                 new ComingListVisitsAdapter(getActivity(), R.layout.coming_list_visits_fragment_row, visitItemsDateTimeSet);
@@ -88,6 +132,14 @@ public class ComingListVisitsFragment extends ListFragment
 
 
         return rootView;
+    }
+
+    @Override
+    public void onListItemClick(ListView l, View v, int position, long id)
+    {
+        super.onListItemClick(l, v, position, id);
+
+        mCommunicator.OnComingListItemSelected(visitItemsPositions.get(position));
     }
 
 /*    @Override

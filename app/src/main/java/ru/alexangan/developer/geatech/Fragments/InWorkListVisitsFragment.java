@@ -3,12 +3,19 @@ package ru.alexangan.developer.geatech.Fragments;
 import android.app.ListFragment;
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
+import java.util.Map;
+import java.util.TreeMap;
 
 import io.realm.RealmResults;
 import ru.alexangan.developer.geatech.Adapters.InWorkListVisitsAdapter;
@@ -57,6 +64,8 @@ public class InWorkListVisitsFragment extends ListFragment
                 .equalTo("tech_id", selectedTech.getId()).findAll();
         realm.commitTransaction();
 
+        TreeMap<Long, VisitItem> unsortedVisits = new TreeMap<>();
+
         for (VisitItem visitItem : visitItems)
         {
             for(ReportStates reportStates : reportStatesList)
@@ -64,6 +73,8 @@ public class InWorkListVisitsFragment extends ListFragment
                 int photoAddedStatus = reportStates.getPhotoAddedNumber();
                 int generalInfoCompletionState = reportStates.getGeneralInfoCompletionState();
                 int reportCompletionState = reportStates.getReportCompletionState();
+                String data_ora_sopralluogo = visitItem.getGeaSopralluogo().getData_ora_sopralluogo();
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ITALIAN);
 
                 if (visitItem.getGeaSopralluogo().getId_sopralluogo() == reportStates.getId_sopralluogo()
 
@@ -71,12 +82,33 @@ public class InWorkListVisitsFragment extends ListFragment
                         && !(photoAddedStatus!=0 && generalInfoCompletionState==2 && reportCompletionState==3) // report not complete
                         )
                 {
-                    visitItemsDateTimeSet.add(visitItem);
-                    visitItemsPositions.add(visitItem.getId());
+
+                    try
+                    {
+                        Date date = sdf.parse(data_ora_sopralluogo);
+                        long time = date.getTime();
+                        Log.d("DEBUG", String.valueOf(time));
+                        unsortedVisits.put(time, visitItem);
+                    } catch (ParseException e)
+                    {
+                        e.printStackTrace();
+                    }
+
+                    //visitItemsDateTimeSet.add(visitItem);
+
                     break;
                 }
             }
         }
+
+        for (Map.Entry entry : unsortedVisits.entrySet())
+        {
+            VisitItem visitItem = (VisitItem)entry.getValue();
+            visitItemsDateTimeSet.add(visitItem);
+
+            visitItemsPositions.add(visitItem.getId());
+        }
+
 
         InWorkListVisitsAdapter myListAdapter =
                 new InWorkListVisitsAdapter(getActivity(), R.layout.in_work_list_visits_fragment_row, visitItemsDateTimeSet);

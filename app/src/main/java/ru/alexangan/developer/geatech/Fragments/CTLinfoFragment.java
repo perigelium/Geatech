@@ -184,6 +184,14 @@ public class CTLinfoFragment extends Fragment implements View.OnClickListener, L
     }
 
     @Override
+    public void onPause()
+    {
+        super.onPause();
+
+
+    }
+
+    @Override
     public void onClick(View view)
     {
         if (view.getId() == R.id.btnSetCurrentCoords)

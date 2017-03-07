@@ -6,7 +6,7 @@
               android:orientation="vertical">
 
     <LinearLayout
-        android:id="@+id/llHeaderFourRadiosAndEdit"
+        android:id="@+id/llHeaderFourRadiosAndTwoEdits"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#eeeeee"
@@ -18,7 +18,7 @@
             android:layout_height="wrap_content">
 
             <TextView
-                android:id="@+id/tvHeaderFourRadiosAndEdit"
+                android:id="@+id/tvHeaderFourRadiosAndTwoEdits"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start|center_vertical"
@@ -27,7 +27,7 @@
                 android:textSize="13sp"/>
 
             <ImageView
-                android:id="@+id/ivArrowFourRadiosAndEdit"
+                android:id="@+id/ivArrowFourRadiosAndTwoEdits"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical|end"
@@ -39,19 +39,19 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/llSectionFourRadiosAndEdit"
+        android:id="@+id/llSectionFourRadiosAndTwoEdits"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         ><!--android:visibility="gone">-->
 
         <RadioGroup
-            android:id="@+id/rg1FourRadiosAndEdit"
+            android:id="@+id/rg1FourRadiosAndTwoEdits"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
             <RadioButton
-                android:id="@+id/rb1FourRadiosAndEdit"
+                android:id="@+id/rb1FourRadiosAndTwoEdits"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="16dp"
@@ -61,7 +61,7 @@
                 android:text="Radio "/>
 
             <RadioButton
-                android:id="@+id/rb2FourRadiosAndEdit"
+                android:id="@+id/rb2FourRadiosAndTwoEdits"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="16dp"
@@ -71,7 +71,7 @@
                 android:text="Radio 2"/>
 
             <RadioButton
-                android:id="@+id/rb3FourRadiosAndEdit"
+                android:id="@+id/rb3FourRadiosAndTwoEdits"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="16dp"
@@ -81,7 +81,7 @@
                 android:text="Radio 3"/>
 
             <RadioButton
-                android:id="@+id/rb4FourRadiosAndEdit"
+                android:id="@+id/rb4FourRadiosAndTwoEdits"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="16dp"
@@ -99,7 +99,7 @@
         android:layout_height="wrap_content">
 
         <TextView
-            android:id="@+id/tv1FourRadiosAndEdit"
+            android:id="@+id/tv1FourRadiosAndTwoEdits"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="start|center_vertical"
@@ -108,7 +108,7 @@
             android:textSize="13sp"/>
 
         <EditText
-            android:id="@+id/et1FourRadiosAndEdit"
+            android:id="@+id/et1FourRadiosAndTwoEdits"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
@@ -126,7 +126,7 @@
         android:layout_height="wrap_content">
 
         <TextView
-            android:id="@+id/tv2FourRadiosAndEdit"
+            android:id="@+id/tv2FourRadiosAndTwoEdits"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="start|center_vertical"
@@ -135,7 +135,7 @@
             android:textSize="13sp"/>
 
         <EditText
-            android:id="@+id/et2FourRadiosAndEdit"
+            android:id="@+id/et2FourRadiosAndTwoEdits"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"

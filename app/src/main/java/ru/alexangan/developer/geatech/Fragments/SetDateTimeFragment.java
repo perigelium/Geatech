@@ -319,6 +319,13 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
         if(!networkUtils.isNetworkAvailable(activity))
         {
             showToastMessage("Connesione ad internet non presente");
+            return;
+        }
+
+        if(tokenStr == null)
+        {
+            showToastMessage("Nodalità offline, si prega di logout e login di nuovo");
+            return;
         }
 
         JSONObject jsonObject = new JSONObject();
