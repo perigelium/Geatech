@@ -43,7 +43,7 @@ import static ru.alexangan.developer.geatech.Models.GlobalConstants.realm;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.selectedTech;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.visitItems;
 
-public class CaldaiaReportFragment extends Fragment
+public class STermodinamicoReportFragment extends Fragment
 {
     private int selectedIndex;
     int idSopralluogo;
@@ -55,7 +55,7 @@ public class CaldaiaReportFragment extends Fragment
 
     GeaModelloRapporto geaModello;
 
-    public CaldaiaReportFragment()
+    public STermodinamicoReportFragment()
     {
     }
 
@@ -107,7 +107,7 @@ public class CaldaiaReportFragment extends Fragment
     @Override
     public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState)
     {
-        rootView = inflater.inflate(R.layout.caldaia_report, container, false);
+        rootView = inflater.inflate(R.layout.termodinamico_report, container, false);
 
         viewUtils = new ViewUtils(rootView, id_rapporto_sopralluogo, selectedIndex);
 
@@ -116,52 +116,83 @@ public class CaldaiaReportFragment extends Fragment
 
         int idItem = viewUtils.getIdItemStart();
 
-
-        idItem = viewUtils.createViewTwoRadiosAndEdit(idItem, R.id.two_radios_and_editCald1);
-
-/*        idItem = viewUtils.createViewEdit(idItem, R.id.CaldEdit1);
-        EditText et = viewUtils.getEditTexts().get(idItem-1);
-        et.setInputType(InputType.TYPE_CLASS_NUMBER);*/
-
-        idItem = viewUtils.createViewThreeRadiosAndEdit(idItem, R.id.three_radios_and_editCald1);
-
-        idItem = viewUtils.createViewThreeEdits(idItem, R.id.three_editsCald1);
-
+        /*
         EditText et1 = viewUtils.getEditTexts().get(idItem-2);
-        et1.setInputType(InputType.TYPE_CLASS_NUMBER);
+        et1.setInputType(InputType.TYPE_CLASS_NUMBER);*/
 
-        idItem = viewUtils.createViewTwoRadiosAndEdit(idItem, R.id.two_radios_and_editCald2);
+        idItem = viewUtils.createViewThreeRadiosAndEdit(idItem, R.id.three_radios_and_edit1);
 
-        idItem = viewUtils.createViewThreeRadiosAndEditTwo(idItem, R.id.three_radios_and_editCald2);
+        idItem = viewUtils.createViewTwoRadios(idItem, R.id.two_radios1);
 
-        EditText et2 = viewUtils.getEditTexts().get(idItem-1);
-        et2.setInputType(InputType.TYPE_CLASS_NUMBER);
+        idItem = viewUtils.createViewTwoRadios(idItem, R.id.two_radios2);
 
-        idItem = viewUtils.createViewSwitchAndEdit(idItem, R.id.switch_and_editCald1);
-        EditText et3 = viewUtils.getEditTexts().get(idItem-1);
-        et3.setInputType(InputType.TYPE_CLASS_NUMBER);
+        idItem = viewUtils.createViewThreeEdits(idItem, R.id.three_edits1);
 
-        idItem = viewUtils.createViewFourRadios(idItem, R.id.four_radiosCald1);
+        idItem = viewUtils.createViewThreeEdits(idItem, R.id.three_edits2);
 
-        idItem = viewUtils.createViewFourRadiosAndTwoEdits(idItem, R.id.four_radios_and_two_editsCald1);
-        EditText et4 = viewUtils.getEditTexts().get(idItem-1);
-        et4.setInputType(InputType.TYPE_CLASS_NUMBER);
+        EditText et1 = viewUtils.getEditTexts().get(idItem-1);
+        et1.setInputType(InputType.TYPE_CLASS_TEXT);
 
-        idItem = viewUtils.createViewTwoRadios(idItem, R.id.two_radiosCald1);
+        EditText et2 = viewUtils.getEditTexts().get(idItem-2);
+        et2.setInputType(InputType.TYPE_CLASS_TEXT);
 
-        idItem = viewUtils.createViewThreeRadios(idItem, R.id.three_radiosCald1);
+        idItem = viewUtils.createViewThreeRadios(idItem, R.id.three_radios1);
 
-        idItem = viewUtils.createViewSwitchAndEdit(idItem, R.id.switch_and_editCald2);
-
-        idItem = viewUtils.createViewTwoRadiosAndEdit(idItem, R.id.two_radios_and_editCald3);
+        idItem = viewUtils.createViewEdit(idItem, R.id.edit1);
 
         // SectionHeader1
-        viewUtils.createViewSectionHeader(R.id.headerCald1);
+        viewUtils.createViewSectionHeader(R.id.header1);
 
-        idItem = viewUtils.createViewTwoTextsTwoEdits(idItem, R.id.two_texts_two_editsCald1);
+        idItem = viewUtils.createViewThreeRadios(idItem, R.id.three_radios2);
+
+        idItem = viewUtils.createViewFourCheckboxes(idItem, R.id.four_chkboxes1);
+
+        idItem = viewUtils.createViewThreeRadios(idItem, R.id.three_radios3);
+
+        idItem = viewUtils.createViewSwitch(idItem, R.id.switch_1);
+
+        idItem = viewUtils.createViewFiveRadios(idItem, R.id.five_radios1);
+
+        idItem = viewUtils.createViewTwoRadios(idItem, R.id.two_radios3);
+
+        idItem = viewUtils.createViewSwitch(idItem, R.id.switch_2);
+
+        idItem = viewUtils.createViewTwoRadiosAndSwitch(idItem, R.id.two_radios_and_switch1);
+
+        final Switch sw1TwoRadiosAndSwitch = viewUtils.getSwitches().get(idItem - 3);
+        final Pair <LinearLayout, LinearLayout> llPair = viewUtils.getLinearLayouts().get(idItem - 2);
+        //final RadioGroup rg = viewUtils.getRadioGroups().get(idItem - 2);
+
+        sw1TwoRadiosAndSwitch.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                if(sw1TwoRadiosAndSwitch.isChecked())
+                {
+                    llPair.first.setVisibility(View.VISIBLE);
+                    llPair.second.setVisibility(View.VISIBLE);
+                }
+                else
+                {
+                    llPair.first.setVisibility(View.GONE);
+                    llPair.second.setVisibility(View.GONE);
+                }
+            }
+        });
 
         // SectionHeader2
-        viewUtils.createViewSectionHeader(R.id.headerCald2);
+        viewUtils.createViewSectionHeader(R.id.header2);
+
+        idItem = viewUtils.createViewTwoTextsTwoEdits(idItem, R.id.two_texts_two_edits1);
+
+        // SectionHeader3
+        viewUtils.createViewSectionHeader(R.id.header3);
+
+        idItem = viewUtils.createViewFiveSwitches(idItem, R.id.five_switches1);
+
+        // SectionHeader4
+        viewUtils.createViewSectionHeader(R.id.header4);
 
         return viewUtils.getRootView();
     }
@@ -177,39 +208,41 @@ public class CaldaiaReportFragment extends Fragment
             
             idItem = viewUtils.saveSeveralRadiosAndEdit(idItem);
 
-            idItem = viewUtils.saveSeveralRadiosAndEdit(idItem);
+            idItem = viewUtils.saveSeveralRadios(idItem);
+
+            idItem = viewUtils.saveSeveralRadios(idItem);
 
             idItem = viewUtils.saveSeveralEdits(idItem, 3);
 
-            idItem = viewUtils.saveSeveralRadiosAndEdit(idItem);
+            idItem = viewUtils.saveSeveralEdits(idItem, 3);
 
             idItem = viewUtils.saveSeveralRadios(idItem);
 
             idItem = viewUtils.saveSeveralEdits(idItem, 1);
 
-            idItem = viewUtils.saveSeveralSwitches(idItem, 1);
-
-            idItem = viewUtils.saveSeveralEdits(idItem, 1);
-
             idItem = viewUtils.saveSeveralRadios(idItem);
 
-            idItem = viewUtils.saveSeveralRadiosAndEdit(idItem);
-
-            idItem = viewUtils.saveSeveralEdits(idItem, 1);
-
-            idItem = viewUtils.saveSeveralRadios(idItem);
+            idItem = viewUtils.saveSeveralChkboxes(idItem);
 
             idItem = viewUtils.saveSeveralRadios(idItem);
 
             idItem = viewUtils.saveSeveralSwitches(idItem, 1);
 
-            idItem = viewUtils.saveSeveralEdits(idItem, 1);
+            idItem = viewUtils.saveSeveralRadios(idItem);
 
-            idItem = viewUtils.saveSeveralRadiosAndEdit(idItem);
+            idItem = viewUtils.saveSeveralRadios(idItem);
+
+            idItem = viewUtils.saveSeveralSwitches(idItem, 1);
+
+            idItem = viewUtils.saveSeveralRadios(idItem);
+
+            idItem = viewUtils.saveSeveralSwitches(idItem, 1);
 
             idItem = viewUtils.saveSeveralEdits(idItem, 2);
-            
 
+            idItem = viewUtils.saveSeveralSwitches(idItem, 5);
+            
+            
             // Completion state
 
             int completionState = DatabaseUtils.getReportInitializationState(id_rapporto_sopralluogo);
@@ -241,37 +274,53 @@ public class CaldaiaReportFragment extends Fragment
         {
             idItem = viewUtils.fillSeveralRadiosAndEdit(idItem);
 
-            idItem = viewUtils.fillSeveralRadiosAndEdit(idItem);
+            idItem = viewUtils.fillSeveralRadios(idItem);
+
+            idItem = viewUtils.fillSeveralRadios(idItem);
 
             idItem = viewUtils.fillSeveralEdits(idItem, 3);
 
-            idItem = viewUtils.fillSeveralRadiosAndEdit(idItem);
+            idItem = viewUtils.fillSeveralEdits(idItem, 3);
 
             idItem = viewUtils.fillSeveralRadios(idItem);
 
             idItem = viewUtils.fillSeveralEdits(idItem, 1);
 
-            idItem = viewUtils.fillSeveralSwitches(idItem, 1);
-
-            idItem = viewUtils.fillSeveralEdits(idItem, 1);
-
             idItem = viewUtils.fillSeveralRadios(idItem);
 
-            idItem = viewUtils.fillSeveralRadiosAndEdit(idItem);
-
-            idItem = viewUtils.fillSeveralEdits(idItem, 1);
-
-            idItem = viewUtils.fillSeveralRadios(idItem);
+            idItem = viewUtils.fillSeveralChkboxes(idItem);
 
             idItem = viewUtils.fillSeveralRadios(idItem);
 
             idItem = viewUtils.fillSeveralSwitches(idItem, 1);
 
-            idItem = viewUtils.fillSeveralEdits(idItem, 1);
+            idItem = viewUtils.fillSeveralRadios(idItem);
 
-            idItem = viewUtils.fillSeveralRadiosAndEdit(idItem);
+            idItem = viewUtils.fillSeveralRadios(idItem);
+
+            idItem = viewUtils.fillSeveralSwitches(idItem, 1);
+
+            idItem = viewUtils.fillSeveralRadios(idItem);
+
+            idItem = viewUtils.fillSeveralSwitches(idItem, 1);
+
+            Switch sw1TwoRadiosAndSwitch = viewUtils.getSwitches().get(idItem - 3);
+            Pair <LinearLayout, LinearLayout> llPair = viewUtils.getLinearLayouts().get(idItem - 2);
+
+            if(sw1TwoRadiosAndSwitch.isChecked())
+            {
+                llPair.first.setVisibility(View.VISIBLE);
+                llPair.second.setVisibility(View.VISIBLE);
+            }
+            else
+            {
+                llPair.first.setVisibility(View.GONE);
+                llPair.second.setVisibility(View.GONE);
+            }
 
             idItem = viewUtils.fillSeveralEdits(idItem, 2);
+
+            idItem = viewUtils.fillSeveralSwitches(idItem, 5);
         }
     }
 }

@@ -61,7 +61,7 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
     Activity activity;
     int idSopralluogo, stakedOut;
 
-    private TextView mDateSetTextView, mTimeSetTextView, mSetDateButton, mAnnullaSetDateTimeButton, mSetDateTimeSubmitButton,
+    private TextView mDateSetTextView, mTimeSetTextView, btnSetDate, btnAnnullaSetDateTime, btnSetDateTimeSubmit,
             btnApriMappa, btnChiama;
 
     private int mYear, mMonth, mDay, mHour, mMinute;
@@ -151,9 +151,9 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
     {
         rootView = inflater.inflate(R.layout.set_date_time_fragment, container, false);
 
-        mSetDateButton = (TextView) rootView.findViewById(R.id.btnSetDate);
-        mAnnullaSetDateTimeButton = (TextView) rootView.findViewById(R.id.btnAnnullaSetDateTime);
-        mSetDateTimeSubmitButton = (TextView) rootView.findViewById(R.id.btnSetDateTimeSubmit);
+        btnSetDate = (TextView) rootView.findViewById(R.id.btnSetDate);
+        btnAnnullaSetDateTime = (TextView) rootView.findViewById(R.id.btnAnnullaSetDateTime);
+        btnSetDateTimeSubmit = (TextView) rootView.findViewById(R.id.btnSetDateTimeSubmit);
         btnApriMappa = (TextView) rootView.findViewById(R.id.btnApriMappa);
         btnChiama = (TextView) rootView.findViewById(R.id.btnChiama);
 
@@ -228,19 +228,19 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
 
         updateDisplay();
 
-        mSetDateButton.setOnClickListener(this);
+        btnSetDate.setOnClickListener(this);
 
         //if(reportStates!=null)
         {
-            mAnnullaSetDateTimeButton.setOnClickListener(this);
+            btnAnnullaSetDateTime.setOnClickListener(this);
         }
 /*        else
         {
-            mAnnullaSetDateTimeButton.setAlpha(.4f);
-            mAnnullaSetDateTimeButton.setEnabled(false);
+            btnAnnullaSetDateTime.setAlpha(.4f);
+            btnAnnullaSetDateTime.setEnabled(false);
         }*/
 
-        mSetDateTimeSubmitButton.setOnClickListener(this);
+        btnSetDateTimeSubmit.setOnClickListener(this);
         btnApriMappa.setOnClickListener(this);
         btnChiama.setOnClickListener(this);
 
@@ -296,6 +296,10 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
         if (v.getId() == R.id.btnAnnullaSetDateTime)
         {
             stakedOut = 0;
+
+            btnAnnullaSetDateTime.setAlpha(.4f);
+            btnAnnullaSetDateTime.setEnabled(false);
+
             notifyServerDataOraSopralluogo(idSopralluogo, stakedOut);
 
             //mCommunicator.onDateTimeSetReturned(false);
@@ -306,6 +310,9 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
             stakedOut = 1;
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
             strDateTimeSet = sdf.format(calendar.getTime());
+
+            btnSetDateTimeSubmit.setAlpha(.4f);
+            btnSetDateTimeSubmit.setEnabled(false);
 
             notifyServerDataOraSopralluogo(idSopralluogo, stakedOut);
 

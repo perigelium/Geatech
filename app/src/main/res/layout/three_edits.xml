@@ -67,7 +67,7 @@
                 android:layout_marginLeft="16dp"
                 android:background="#f0f0f0"
                 android:ems="10"
-                android:inputType="none"
+                android:inputType="number"
                 android:text=""
                 android:textColor="#c0c0c0"/>
 
@@ -96,7 +96,7 @@
                 android:layout_marginLeft="16dp"
                 android:background="#f0f0f0"
                 android:ems="10"
-                android:inputType="none"
+                android:inputType="number"
                 android:text=""
                 android:textColor="#c0c0c0"/>
 
@@ -125,7 +125,7 @@
                 android:layout_marginLeft="16dp"
                 android:background="#f0f0f0"
                 android:ems="10"
-                android:inputType="none"
+                android:inputType="number"
                 android:text=""
                 android:textColor="#c0c0c0"/>
 

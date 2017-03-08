@@ -22,6 +22,7 @@ import okhttp3.Callback;
 import okhttp3.Response;
 import ru.alexangan.developer.geatech.Fragments.CTLinfoFragment;
 import ru.alexangan.developer.geatech.Fragments.CaldaiaReportFragment;
+import ru.alexangan.developer.geatech.Fragments.STermodinamicoReportFragment;
 import ru.alexangan.developer.geatech.Fragments.ClimatizzazioneReportFragment;
 import ru.alexangan.developer.geatech.Fragments.ComingListVisitsFragment;
 import ru.alexangan.developer.geatech.Fragments.CtrlBtnReportDetailed;
@@ -29,6 +30,7 @@ import ru.alexangan.developer.geatech.Fragments.CtrlBtnsFragment1;
 import ru.alexangan.developer.geatech.Fragments.CtrlBtnsFragment2;
 import ru.alexangan.developer.geatech.Fragments.DomoticaReportFragment;
 import ru.alexangan.developer.geatech.Fragments.EmptyReportFragment;
+import ru.alexangan.developer.geatech.Fragments.FotovoltaicoReportFragment;
 import ru.alexangan.developer.geatech.Fragments.InWorkListVisitsFragment;
 import ru.alexangan.developer.geatech.Fragments.ListVisitsFragment;
 import ru.alexangan.developer.geatech.Fragments.NotSentListVisitsFragment;
@@ -81,10 +83,10 @@ public class MainActivity extends Activity implements Communicator, Callback
     SendReportFragment sendReportFragment;
     PhotoGalleryGridFragment photoGalleryGridFragment;
 
-    TermodinamicoReportFragment termodinamicoReportFragment;
+    STermodinamicoReportFragment termodinamicoReportFragment;
     CaldaiaReportFragment caldaieReportFragment;
     ClimatizzazioneReportFragment climatizzazioneReportFragment;
-    CaldaiaReportFragment fotovoltaicoReportFragment;
+    FotovoltaicoReportFragment fotovoltaicoReportFragment;
     DomoticaReportFragment domoticaReportFragment;
     PompaDiCaloreReportFragment pompaDiCaloreReportFragment;
     StorageReportFragment storageReportFragment;
@@ -172,10 +174,10 @@ public class MainActivity extends Activity implements Communicator, Callback
         sendReportFragment = new SendReportFragment();
         photoGalleryGridFragment = new PhotoGalleryGridFragment();
 
-        termodinamicoReportFragment = new TermodinamicoReportFragment();
+        termodinamicoReportFragment = new STermodinamicoReportFragment();
         caldaieReportFragment = new CaldaiaReportFragment();
         climatizzazioneReportFragment = new ClimatizzazioneReportFragment();
-        fotovoltaicoReportFragment = new CaldaiaReportFragment();
+        fotovoltaicoReportFragment = new FotovoltaicoReportFragment();
         domoticaReportFragment = new DomoticaReportFragment();
         pompaDiCaloreReportFragment = new PompaDiCaloreReportFragment();
         storageReportFragment = new StorageReportFragment();

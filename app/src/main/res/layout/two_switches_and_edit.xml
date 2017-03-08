@@ -105,6 +105,7 @@
                 android:layout_gravity="start|center_vertical"
                 android:layout_margin="9dp"
                 android:text="Edit 1: "
+                android:visibility="gone"
                 android:textSize="13sp"/>
 
             <EditText
@@ -117,7 +118,8 @@
                 android:background="#f0f0f0"
                 android:ems="10"
                 android:inputType="none"
-                android:text=""
+                android:text="Non applicabile"
+                android:visibility="gone"
                 android:textColor="#c0c0c0"/>
 
         </LinearLayout>

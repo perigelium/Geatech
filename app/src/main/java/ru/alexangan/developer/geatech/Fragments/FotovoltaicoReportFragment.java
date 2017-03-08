@@ -109,54 +109,58 @@ public class FotovoltaicoReportFragment extends Fragment
         int idItem = viewUtils.getIdItemStart();
 
 
-        idItem = viewUtils.createViewTwoRadiosAndEdit(idItem, R.id.two_radios_and_edit1);
+        idItem = viewUtils.createViewTwoRadiosAndEdit(idItem, R.id.two_radios_and_editFoto1);
 
-        idItem = viewUtils.createViewEdit(idItem, R.id.edit1);
-        EditText et = viewUtils.getEditTexts().get(idItem-1);
+        idItem = viewUtils.createViewEdit(idItem, R.id.editFoto1);
+
+        EditText et = viewUtils.getEditTexts().get(idItem - 1);
         et.setInputType(InputType.TYPE_CLASS_NUMBER);
 
-        idItem = viewUtils.createViewFiveChkboxes(idItem, R.id.five_chkboxes1);
+        idItem = viewUtils.createViewFiveChkboxes(idItem, R.id.five_chkboxesFoto1);
 
-        idItem = viewUtils.createViewFourRadiosAndEdit(idItem, R.id.four_radios_and_edit1);
+        idItem = viewUtils.createViewFourRadiosAndEdit(idItem, R.id.four_radios_and_editFoto1);
 
-        idItem = viewUtils.createViewFourRadiosAndEdit(idItem, R.id.four_radios_and_edit2);
+        idItem = viewUtils.createViewFourRadiosAndEdit(idItem, R.id.four_radios_and_editFoto2);
 
-        idItem = viewUtils.createViewFourEditsAndSwitch(idItem, R.id.four_edits_and_switch1);
+        idItem = viewUtils.createViewFourEditsAndSwitch(idItem, R.id.four_edits_and_switchFoto1);
 
-        idItem = viewUtils.createViewTwoRadios(idItem, R.id.two_radios1);
+        idItem = viewUtils.createViewTwoRadios(idItem, R.id.two_radiosFoto1);
 
-        idItem = viewUtils.createViewThreeRadiosAndEditEx(idItem, R.id.three_radios_and_edit1);
+        idItem = viewUtils.createViewThreeRadiosAndEditEx(idItem, R.id.three_radios_and_editFoto1);
 
-        idItem = viewUtils.createViewFourRadios(idItem, R.id.four_radios1);
+        idItem = viewUtils.createViewFourRadios(idItem, R.id.four_radiosFoto1);
 
-        idItem = viewUtils.createViewTwoSwitchesAndEdit(idItem, R.id.two_switches_and_edit1);
+        idItem = viewUtils.createViewTwoSwitchesAndEdit(idItem, R.id.two_switches_and_editFoto1);
 
-        // SectionHeader1
-        viewUtils.createViewSectionHeader(R.id.header1);
+/*        EditText et2 = viewUtils.getEditTexts().get(idItem-1);
+        et2.setVisibility(View.INVISIBLE);*/
 
-        idItem = viewUtils.createViewTwoTextsTwoEdits(idItem, R.id.two_texts_two_edits1);
+        // SectionHeaderFoto1
+        viewUtils.createViewSectionHeader(R.id.headerFoto1);
 
-        // SectionHeader2
-        viewUtils.createViewSectionHeader(R.id.header2);
+        idItem = viewUtils.createViewTwoTextsTwoEdits(idItem, R.id.two_texts_two_editsFoto1);
 
-        idItem = viewUtils.createViewFiveSwitches(idItem, R.id.five_switches1);
+        // SectionHeaderFoto2
+        viewUtils.createViewSectionHeader(R.id.headerFoto2);
 
-        // SectionHeader3
-        viewUtils.createViewSectionHeader(R.id.header3);
+        idItem = viewUtils.createViewFiveSwitches(idItem, R.id.five_switchesFoto1);
+
+        // SectionHeaderFoto3
+        viewUtils.createViewSectionHeader(R.id.headerFoto3);
 
         return viewUtils.getRootView();
     }
 
     @Override
-    public void onPause()
+    public void onDestroy()
     {
-        super.onPause();
+        super.onDestroy();
 
         if (reportStates != null)
         {
             int idItem = viewUtils.getIdItemStart();
 
-/*            idItem = viewUtils.saveSeveralRadiosAndEdit(idItem);
+            idItem = viewUtils.saveSeveralRadiosAndEdit(idItem);
 
             idItem = viewUtils.saveSeveralEdits(idItem, 1);
 
@@ -184,7 +188,7 @@ public class FotovoltaicoReportFragment extends Fragment
 
             idItem = viewUtils.saveSeveralEdits(idItem, 2);
 
-            idItem = viewUtils.saveSeveralSwitches(idItem, 5);*/
+            idItem = viewUtils.saveSeveralSwitches(idItem, 5);
 
 
             // Completion state
@@ -211,15 +215,20 @@ public class FotovoltaicoReportFragment extends Fragment
     }
 
     @Override
-    public void onViewCreated(View view, Bundle savedInstanceState)
+    public void onResume()
     {
-        super.onViewCreated(view, savedInstanceState);
+        super.onResume();
 
+        fillViewItems();
+    }
+
+    private void fillViewItems()
+    {
         int idItem = viewUtils.getIdItemStart();
 
         if (id_rapporto_sopralluogo != -1)
         {
-/*            idItem = viewUtils.fillSeveralRadiosAndEdit(idItem);
+            idItem = viewUtils.fillSeveralRadiosAndEdit(idItem);
 
             idItem = viewUtils.fillSeveralEdits(idItem, 1);
 
@@ -247,7 +256,8 @@ public class FotovoltaicoReportFragment extends Fragment
 
             idItem = viewUtils.fillSeveralEdits(idItem, 2);
 
-            idItem = viewUtils.fillSeveralSwitches(idItem, 5);*/
+            idItem = viewUtils.fillSeveralSwitches(idItem, 5);
         }
     }
+
 }
