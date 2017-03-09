@@ -109,44 +109,44 @@ public class FotovoltaicoReportFragment extends Fragment
         int idItem = viewUtils.getIdItemStart();
 
 
-        idItem = viewUtils.createViewTwoRadiosAndEdit(idItem, R.id.two_radios_and_editFoto1);
+        idItem = viewUtils.createViewTwoRadiosAndEdit(idItem, R.id.two_radios_and_edit1);
 
-        idItem = viewUtils.createViewEdit(idItem, R.id.editFoto1);
+        idItem = viewUtils.createViewEdit(idItem, R.id.edit1);
 
         EditText et = viewUtils.getEditTexts().get(idItem - 1);
         et.setInputType(InputType.TYPE_CLASS_NUMBER);
 
-        idItem = viewUtils.createViewFiveChkboxes(idItem, R.id.five_chkboxesFoto1);
+        idItem = viewUtils.createViewFiveChkboxes(idItem, R.id.five_chkboxes1);
 
-        idItem = viewUtils.createViewFourRadiosAndEdit(idItem, R.id.four_radios_and_editFoto1);
+        idItem = viewUtils.createViewFourRadiosAndEdit(idItem, R.id.four_radios_and_edit1);
 
-        idItem = viewUtils.createViewFourRadiosAndEdit(idItem, R.id.four_radios_and_editFoto2);
+        idItem = viewUtils.createViewFourRadiosAndEdit(idItem, R.id.four_radios_and_edit2);
 
-        idItem = viewUtils.createViewFourEditsAndSwitch(idItem, R.id.four_edits_and_switchFoto1);
+        idItem = viewUtils.createViewFourEditsAndSwitch(idItem, R.id.four_edits_and_switch1);
 
-        idItem = viewUtils.createViewTwoRadios(idItem, R.id.two_radiosFoto1);
+        idItem = viewUtils.createViewTwoRadios(idItem, R.id.two_radios1);
 
-        idItem = viewUtils.createViewThreeRadiosAndEditEx(idItem, R.id.three_radios_and_editFoto1);
+        idItem = viewUtils.createViewThreeRadiosAndEditEx(idItem, R.id.three_radios_and_edit1);
 
-        idItem = viewUtils.createViewFourRadios(idItem, R.id.four_radiosFoto1);
+        idItem = viewUtils.createViewFourRadios(idItem, R.id.four_radios1);
 
-        idItem = viewUtils.createViewTwoSwitchesAndEdit(idItem, R.id.two_switches_and_editFoto1);
+        idItem = viewUtils.createViewTwoSwitchesAndEdit(idItem, R.id.two_switches_and_edit1);
 
 /*        EditText et2 = viewUtils.getEditTexts().get(idItem-1);
         et2.setVisibility(View.INVISIBLE);*/
 
-        // SectionHeaderFoto1
-        viewUtils.createViewSectionHeader(R.id.headerFoto1);
+        // SectionHeader1
+        viewUtils.createViewSectionHeader(R.id.header1);
 
-        idItem = viewUtils.createViewTwoTextsTwoEdits(idItem, R.id.two_texts_two_editsFoto1);
+        idItem = viewUtils.createViewTwoTextsTwoEdits(idItem, R.id.two_texts_two_edits1);
 
-        // SectionHeaderFoto2
-        viewUtils.createViewSectionHeader(R.id.headerFoto2);
+        // SectionHeader2
+        viewUtils.createViewSectionHeader(R.id.header2);
 
-        idItem = viewUtils.createViewFiveSwitches(idItem, R.id.five_switchesFoto1);
+        idItem = viewUtils.createViewFiveSwitches(idItem, R.id.five_switches1);
 
-        // SectionHeaderFoto3
-        viewUtils.createViewSectionHeader(R.id.headerFoto3);
+        // SectionHeader3
+        viewUtils.createViewSectionHeader(R.id.header3);
 
         return viewUtils.getRootView();
     }

@@ -137,6 +137,7 @@ public class ListVisitsFragment extends ListFragment
         TreeMap<Long, VisitItem> unsortedVisits = new TreeMap<>();
 
         for (VisitItem visitItem : visitItems)
+        //for (int i = 0; i < visitItems.size(); i++)
         {
             String data_ora_sopralluogo = visitItem.getGeaSopralluogo().getData_ora_sopralluogo();
             int id_tecnico = visitItem.getGeaSopralluogo().getId_tecnico();
@@ -149,18 +150,21 @@ public class ListVisitsFragment extends ListFragment
                     Date date = sdf.parse(data_ora_sopralluogo);
                     long time = date.getTime();
                     Log.d("DEBUG", String.valueOf(time));
+
+                    while(unsortedVisits.get(time) != null)
+                    {
+                        time++;
+                    }
                     unsortedVisits.put(time, visitItem);
 
                 } catch (ParseException e)
                 {
                     e.printStackTrace();
                 }
-
-                //visitItemsFiltered.add(visitItem);
             }
         }
 
-        for (Map.Entry entry : unsortedVisits.entrySet())
+        for (Map.Entry entry : unsortedVisits.entrySet()) // add own visits first
         {
                 VisitItem visitItem = (VisitItem) entry.getValue();
                 int id_tecnico = visitItem.getGeaSopralluogo().getId_tecnico();
@@ -170,17 +174,27 @@ public class ListVisitsFragment extends ListFragment
             {
                 visitItemsFiltered.add(visitItem);
             }
-
-            //visitItemsPositions.add(visitItem.getId());
         }
 
-        for (Map.Entry entry : unsortedVisits.entrySet())
+        for (Map.Entry entry : unsortedVisits.entrySet()) // add free visits
         {
             VisitItem visitItem = (VisitItem) entry.getValue();
             int id_tecnico = visitItem.getGeaSopralluogo().getId_tecnico();
             boolean ownReport = selectedTech.getId() == id_tecnico;
 
             if(!ownReport && id_tecnico == 0)
+            {
+                visitItemsFiltered.add(visitItem);
+            }
+        }
+
+        for (Map.Entry entry : unsortedVisits.entrySet()) // add other visits
+        {
+            VisitItem visitItem = (VisitItem) entry.getValue();
+            int id_tecnico = visitItem.getGeaSopralluogo().getId_tecnico();
+            boolean ownReport = selectedTech.getId() == id_tecnico;
+
+            if(!ownReport && id_tecnico != 0)
             {
                 visitItemsFiltered.add(visitItem);
             }

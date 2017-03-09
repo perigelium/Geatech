@@ -117,51 +117,51 @@ public class CaldaiaReportFragment extends Fragment
         int idItem = viewUtils.getIdItemStart();
 
 
-        idItem = viewUtils.createViewTwoRadiosAndEdit(idItem, R.id.two_radios_and_editCald1);
+        idItem = viewUtils.createViewTwoRadiosAndEdit(idItem, R.id.two_radios_and_edit1);
 
-/*        idItem = viewUtils.createViewEdit(idItem, R.id.CaldEdit1);
+/*        idItem = viewUtils.createViewEdit(idItem, R.id.Edit1);
         EditText et = viewUtils.getEditTexts().get(idItem-1);
         et.setInputType(InputType.TYPE_CLASS_NUMBER);*/
 
-        idItem = viewUtils.createViewThreeRadiosAndEdit(idItem, R.id.three_radios_and_editCald1);
+        idItem = viewUtils.createViewThreeRadiosAndEdit(idItem, R.id.three_radios_and_edit1);
 
-        idItem = viewUtils.createViewThreeEdits(idItem, R.id.three_editsCald1);
+        idItem = viewUtils.createViewThreeEdits(idItem, R.id.three_edits1);
 
         EditText et1 = viewUtils.getEditTexts().get(idItem-2);
         et1.setInputType(InputType.TYPE_CLASS_NUMBER);
 
-        idItem = viewUtils.createViewTwoRadiosAndEdit(idItem, R.id.two_radios_and_editCald2);
+        idItem = viewUtils.createViewTwoRadiosAndEdit(idItem, R.id.two_radios_and_edit2);
 
-        idItem = viewUtils.createViewThreeRadiosAndEditTwo(idItem, R.id.three_radios_and_editCald2);
+        idItem = viewUtils.createViewThreeRadiosAndEditTwo(idItem, R.id.three_radios_and_edit2);
 
         EditText et2 = viewUtils.getEditTexts().get(idItem-1);
         et2.setInputType(InputType.TYPE_CLASS_NUMBER);
 
-        idItem = viewUtils.createViewSwitchAndEdit(idItem, R.id.switch_and_editCald1);
+        idItem = viewUtils.createViewSwitchAndEdit(idItem, R.id.switch_and_edit1);
         EditText et3 = viewUtils.getEditTexts().get(idItem-1);
         et3.setInputType(InputType.TYPE_CLASS_NUMBER);
 
-        idItem = viewUtils.createViewFourRadios(idItem, R.id.four_radiosCald1);
+        idItem = viewUtils.createViewFourRadios(idItem, R.id.four_radios1);
 
-        idItem = viewUtils.createViewFourRadiosAndTwoEdits(idItem, R.id.four_radios_and_two_editsCald1);
+        idItem = viewUtils.createViewFourRadiosAndTwoEdits(idItem, R.id.four_radios_and_two_edits1);
         EditText et4 = viewUtils.getEditTexts().get(idItem-1);
         et4.setInputType(InputType.TYPE_CLASS_NUMBER);
 
-        idItem = viewUtils.createViewTwoRadios(idItem, R.id.two_radiosCald1);
+        idItem = viewUtils.createViewTwoRadios(idItem, R.id.two_radios1);
 
-        idItem = viewUtils.createViewThreeRadios(idItem, R.id.three_radiosCald1);
+        idItem = viewUtils.createViewThreeRadios(idItem, R.id.three_radios1);
 
-        idItem = viewUtils.createViewSwitchAndEdit(idItem, R.id.switch_and_editCald2);
+        idItem = viewUtils.createViewSwitchAndEdit(idItem, R.id.switch_and_edit2);
 
-        idItem = viewUtils.createViewTwoRadiosAndEdit(idItem, R.id.two_radios_and_editCald3);
+        idItem = viewUtils.createViewTwoRadiosAndEdit(idItem, R.id.two_radios_and_edit3);
 
         // SectionHeader1
-        viewUtils.createViewSectionHeader(R.id.headerCald1);
+        viewUtils.createViewSectionHeader(R.id.header1);
 
-        idItem = viewUtils.createViewTwoTextsTwoEdits(idItem, R.id.two_texts_two_editsCald1);
+        idItem = viewUtils.createViewTwoTextsTwoEdits(idItem, R.id.two_texts_two_edits1);
 
         // SectionHeader2
-        viewUtils.createViewSectionHeader(R.id.headerCald2);
+        viewUtils.createViewSectionHeader(R.id.header2);
 
         return viewUtils.getRootView();
     }

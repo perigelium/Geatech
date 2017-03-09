@@ -50,38 +50,41 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <TextView
+<!--            <TextView
                 android:id="@+id/tv1SwitchAndEdit"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start|center_vertical"
                 android:layout_margin="9dp"
                 android:text="Switch 1: "
-                android:textSize="13sp"/>
+                android:textSize="13sp"/>-->
 
             <Switch
                 android:id="@+id/sw1SwitchAndEdit"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end|center_vertical"
-                android:layout_marginRight="50dp"
-                android:textColor="#c0c0c0"/>
+                android:layout_margin="9dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:text="switch"/>
 
         </FrameLayout>
 
         <LinearLayout
+            android:id="@+id/llEditSwitchAndEdit"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:visibility="gone">
 
             <TextView
-                android:id="@+id/tv2SwitchAndEdit"
+                android:id="@+id/tv1SwitchAndEdit"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start|center_vertical"
                 android:layout_margin="9dp"
                 android:text="Edit 1: "
-                android:visibility="gone"
                 android:textSize="13sp"/>
 
             <EditText
@@ -96,7 +99,6 @@
                 android:ems="10"
                 android:inputType="none"
                 android:text=""
-                android:visibility="gone"
                 android:textColor="#c0c0c0"/>
 
         </LinearLayout>

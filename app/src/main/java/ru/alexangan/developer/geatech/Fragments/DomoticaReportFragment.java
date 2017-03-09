@@ -230,8 +230,8 @@ public class DomoticaReportFragment extends Fragment implements View.OnClickList
 
         ivArrowSwitchAndEdit1 = (ImageView) switch_and_edit1.findViewById(R.id.ivArrowSwitchAndEdit);
 
-        TextView tv1SwitchAndEdit1 = (TextView) switch_and_edit1.findViewById(R.id.tv1SwitchAndEdit);
-        tv1SwitchAndEdit1.setText(geaItemModelli.get(sectionNumber++).getDescrizione_item());
+/*        TextView tv1SwitchAndEdit1 = (TextView) switch_and_edit1.findViewById(R.id.tv1SwitchAndEdit);
+        tv1SwitchAndEdit1.setText(geaItemModelli.get(sectionNumber++).getDescrizione_item());*/
 
         sw1SwitchAndEdit1 = (Switch) switch_and_edit1.findViewById(R.id.sw1SwitchAndEdit);
         sw1SwitchAndEdit1.setOnTouchListener(new View.OnTouchListener()
@@ -247,8 +247,8 @@ public class DomoticaReportFragment extends Fragment implements View.OnClickList
             }
         });
 
-        TextView tv2SwitchAndEdit1 = (TextView) switch_and_edit1.findViewById(R.id.tv2SwitchAndEdit);
-        tv2SwitchAndEdit1.setText(str_id_item_149);
+        TextView tv1SwitchAndEdit1 = (TextView) switch_and_edit1.findViewById(R.id.tv1SwitchAndEdit);
+        tv1SwitchAndEdit1.setText(str_id_item_149);
         sectionNumber++;
 
         et1SwitchAndEdit1 = (EditText) switch_and_edit1.findViewById(R.id.et1SwitchAndEdit);

@@ -12,35 +12,35 @@
 
         <include layout="@layout/report_header"/>
 
-        <include android:id="@+id/headerFoto1" layout="@layout/section_header"/>
+        <include android:id="@+id/header1" layout="@layout/section_header"/>
 
-        <include android:id="@+id/two_radios_and_editFoto1" layout="@layout/two_radios_and_edit"/>
+        <include android:id="@+id/two_radios_and_edit1" layout="@layout/two_radios_and_edit"/>
 
-        <include android:id="@+id/editFoto1" layout="@layout/edit"/>
+        <include android:id="@+id/edit1" layout="@layout/edit"/>
 
-        <include android:id="@+id/five_chkboxesFoto1" layout="@layout/five_chkboxes"/>
+        <include android:id="@+id/five_chkboxes1" layout="@layout/five_chkboxes"/>
 
-        <include android:id="@+id/four_radios_and_editFoto1" layout="@layout/four_radios_and_edit"/>
+        <include android:id="@+id/four_radios_and_edit1" layout="@layout/four_radios_and_edit"/>
 
-        <include android:id="@+id/four_radios_and_editFoto2" layout="@layout/four_radios_and_edit"/>
+        <include android:id="@+id/four_radios_and_edit2" layout="@layout/four_radios_and_edit"/>
 
-        <include android:id="@+id/four_edits_and_switchFoto1" layout="@layout/four_edits_and_switch"/>
+        <include android:id="@+id/four_edits_and_switch1" layout="@layout/four_edits_and_switch"/>
 
-        <include android:id="@+id/two_radiosFoto1" layout="@layout/two_radios"/>
+        <include android:id="@+id/two_radios1" layout="@layout/two_radios"/>
 
-        <include android:id="@+id/three_radios_and_editFoto1" layout="@layout/three_radios_and_edit"/>
+        <include android:id="@+id/three_radios_and_edit1" layout="@layout/three_radios_and_edit"/>
 
-        <include android:id="@+id/four_radiosFoto1" layout="@layout/four_radios"/>
+        <include android:id="@+id/four_radios1" layout="@layout/four_radios"/>
 
-        <include android:id="@+id/two_switches_and_editFoto1" layout="@layout/two_switches_and_edit"/>
+        <include android:id="@+id/two_switches_and_edit1" layout="@layout/two_switches_and_edit"/>
 
-        <include android:id="@+id/headerFoto2" layout="@layout/section_header"/>
+        <include android:id="@+id/header2" layout="@layout/section_header"/>
 
-        <include android:id="@+id/two_texts_two_editsFoto1" layout="@layout/two_texts_two_edits"/>
+        <include android:id="@+id/two_texts_two_edits1" layout="@layout/two_texts_two_edits"/>
 
-        <include android:id="@+id/headerFoto3" layout="@layout/section_header"/>
+        <include android:id="@+id/header3" layout="@layout/section_header"/>
 
-        <include android:id="@+id/five_switchesFoto1" layout="@layout/five_switches"/>
+        <include android:id="@+id/five_switches1" layout="@layout/five_switches"/>
 
     </LinearLayout>
 

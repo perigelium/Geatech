@@ -159,8 +159,8 @@ public class STermodinamicoReportFragment extends Fragment
 
         idItem = viewUtils.createViewTwoRadiosAndSwitch(idItem, R.id.two_radios_and_switch1);
 
-        final Switch sw1TwoRadiosAndSwitch = viewUtils.getSwitches().get(idItem - 3);
-        final Pair <LinearLayout, LinearLayout> llPair = viewUtils.getLinearLayouts().get(idItem - 2);
+        final Switch sw1TwoRadiosAndSwitch = viewUtils.getSwitches().get(idItem-3);
+        final Pair <LinearLayout, LinearLayout> llPair = viewUtils.getLinearLayouts().get(idItem-2);
         //final RadioGroup rg = viewUtils.getRadioGroups().get(idItem - 2);
 
         sw1TwoRadiosAndSwitch.setOnClickListener(new View.OnClickListener()
