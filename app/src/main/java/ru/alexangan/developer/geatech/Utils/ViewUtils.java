@@ -354,6 +354,33 @@ public class ViewUtils
         return idItem;
     }
 
+    public int createViewThreeTextsThreeEdits(int idItem, int idRes)
+    {
+        LinearLayout three_texts_three_edits = (LinearLayout) rootView.findViewById(idRes);
+        LinearLayout llSectionTwoTextsTwoEdits = (LinearLayout) three_texts_three_edits.findViewById(R.id.llSectionThreeTextsThreeEdits);
+
+        LinearLayouts.put(idItem, new Pair<>(llSectionTwoTextsTwoEdits, llSectionTwoTextsTwoEdits));
+
+        llSectionHeaders.add(llSectionTwoTextsTwoEdits);
+
+        TextView tv1TwoTextsTwoEdits = (TextView) three_texts_three_edits.findViewById(R.id.tv1ThreeTextsThreeEdits);
+        TextView tv2TwoTextsTwoEdits = (TextView) three_texts_three_edits.findViewById(R.id.tv2ThreeTextsThreeEdits);
+        TextView tv3TwoTextsTwoEdits = (TextView) three_texts_three_edits.findViewById(R.id.tv3ThreeTextsThreeEdits);
+
+        EditText et1TwoTextsTwoEdits = (EditText) three_texts_three_edits.findViewById(R.id.et1ThreeTextsThreeEdits);
+        EditText et2TwoTextsTwoEdits = (EditText) three_texts_three_edits.findViewById(R.id.et2ThreeTextsThreeEdits);
+        EditText et3TwoTextsTwoEdits = (EditText) three_texts_three_edits.findViewById(R.id.et3ThreeTextsThreeEdits);
+
+        EditTexts.put(idItem, et1TwoTextsTwoEdits);
+        tv1TwoTextsTwoEdits.setText(itemModelli.get(idItem++).getDescrizione_item());
+        EditTexts.put(idItem, et2TwoTextsTwoEdits);
+        tv2TwoTextsTwoEdits.setText(itemModelli.get(idItem++).getDescrizione_item());
+        EditTexts.put(idItem, et3TwoTextsTwoEdits);
+        tv3TwoTextsTwoEdits.setText(itemModelli.get(idItem++).getDescrizione_item());
+
+        return idItem;
+    }
+    
     public int createViewTwoTextsTwoEdits(int idItem, int idRes)
     {
         LinearLayout two_texts_two_edits = (LinearLayout) rootView.findViewById(idRes);
@@ -379,6 +406,86 @@ public class ViewUtils
         return idItem;
     }
 
+    public int createViewThreeChkboxesAndEdit(int idItem, int idRes)
+    {
+        LinearLayout three_chkboxes_and_edit = (LinearLayout) rootView.findViewById(idRes);
+        LinearLayout llHeaderThreeChkboxesAndEdit = (LinearLayout) three_chkboxes_and_edit.findViewById(R.id.llHeaderThreeChkboxesAndEdit);
+
+        TextView tvHeaderThreeChkboxesAndEdit = (TextView) three_chkboxes_and_edit.findViewById(R.id.tvHeaderThreeChkboxesAndEdit);
+        tvHeaderThreeChkboxesAndEdit.setText(itemModelli.get(idItem).getDescrizione_item());
+
+        final LinearLayout llSectionThreeChkboxesAndEdit = (LinearLayout) three_chkboxes_and_edit.findViewById(R.id.llSectionThreeChkboxesAndEdit);
+
+        LinearLayouts.put(idItem, new Pair<>(llHeaderThreeChkboxesAndEdit, llSectionThreeChkboxesAndEdit));
+
+        llSectionHeaders.add(llSectionThreeChkboxesAndEdit);
+
+        final ImageView ivArrowThreeChkboxesAndEdit = (ImageView) three_chkboxes_and_edit.findViewById(R.id.ivArrowThreeChkboxesAndEdit);
+
+        ImageViews.put(idItem, ivArrowThreeChkboxesAndEdit);
+
+        llHeaderThreeChkboxesAndEdit.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                llSectionThreeChkboxesAndEdit.setVisibility(llSectionThreeChkboxesAndEdit.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
+                ivArrowThreeChkboxesAndEdit.setImageResource(llSectionThreeChkboxesAndEdit.getVisibility() == View.VISIBLE
+                        ? android.R.drawable.arrow_up_float : android.R.drawable.arrow_down_float);
+            }
+        });
+
+        String valore = itemModelli.get(idItem).getValore();
+        final String[] fields = valore.split("\\|\\|");
+
+
+        final CheckBox chk1ThreeChkboxesAndEdit = (CheckBox) three_chkboxes_and_edit.findViewById(R.id.chk1ThreeChkboxesAndEdit);
+        final CheckBox chk2ThreeChkboxesAndEdit = (CheckBox) three_chkboxes_and_edit.findViewById(R.id.chk2ThreeChkboxesAndEdit);
+        final CheckBox chk3ThreeChkboxesAndEdit = (CheckBox) three_chkboxes_and_edit.findViewById(R.id.chk3ThreeChkboxesAndEdit);
+
+        ArrayList<CheckBox> al_Chkboxes = new ArrayList<>();
+        al_Chkboxes.add(chk1ThreeChkboxesAndEdit);
+        al_Chkboxes.add(chk2ThreeChkboxesAndEdit);
+        al_Chkboxes.add(chk3ThreeChkboxesAndEdit);
+
+        for (int i = 0; i < al_Chkboxes.size(); i++)
+        {
+            CheckBoxes.put(idItem, al_Chkboxes);
+            al_Chkboxes.get(i).setText(fields[i]);
+        }
+
+        TextView tv1ThreeChkboxesAndEdit = (TextView) three_chkboxes_and_edit.findViewById(R.id.tv1ThreeChkboxesAndEdit);
+        tv1ThreeChkboxesAndEdit.setText(fields[1]);
+
+        final EditText et1ThreeChkboxesAndEdit = (EditText) three_chkboxes_and_edit.findViewById(R.id.et1ThreeChkboxesAndEdit);
+
+        EditTexts.put(idItem, et1ThreeChkboxesAndEdit);
+
+        chk1ThreeChkboxesAndEdit.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                if(chk1ThreeChkboxesAndEdit.isChecked())
+                {
+                    et1ThreeChkboxesAndEdit.setText("");
+                    et1ThreeChkboxesAndEdit.clearFocus();
+                }
+            }
+        });
+
+        et1ThreeChkboxesAndEdit.setOnTouchListener(new View.OnTouchListener()
+        {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent)
+            {
+                chk1ThreeChkboxesAndEdit.setChecked(false);
+                return false;
+            }
+        });
+
+        return ++idItem;
+    }
 
     public int createViewChkboxAndEdit(int idItem, int idRes)
     {
@@ -516,27 +623,66 @@ public class ViewUtils
 
         LinearLayouts.put(idItem, new Pair<>(llEdit, llEdit));
 
-        sw1SwitchAndEdit.setOnClickListener(new View.OnClickListener()
+        EditTexts.put(idItem, et1SwitchAndEdit);
+        tv1SwitchAndEdit.setText(itemModelli.get(idItem).getDescrizione_item());
+        idItem++;
+
+        return idItem;
+    }
+
+    public int createViewTwoSwitches(int idItem, int idRes)
+    {
+        LinearLayout two_switches = (LinearLayout) rootView.findViewById(idRes);
+        LinearLayout llHeaderTwoSwitches = (LinearLayout) two_switches.findViewById(R.id.llHeaderTwoSwitches);
+
+        TextView tvHeaderTwoSwitches = (TextView) two_switches.findViewById(R.id.tvHeaderTwoSwitches);
+        tvHeaderTwoSwitches.setText(itemModelli.get(idItem).getValore());
+
+        final LinearLayout llSectionTwoSwitches = (LinearLayout) two_switches.findViewById(R.id.llSectionTwoSwitches);
+
+        LinearLayouts.put(idItem, new Pair<>(llHeaderTwoSwitches, llSectionTwoSwitches));
+
+        llSectionHeaders.add(llSectionTwoSwitches);
+
+        final ImageView ivArrowTwoSwitches = (ImageView) two_switches.findViewById(R.id.ivArrowTwoSwitches);
+
+        ImageViews.put(idItem, ivArrowTwoSwitches);
+
+        llHeaderTwoSwitches.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View view)
             {
-                if (sw1SwitchAndEdit.isChecked())
-                {
-                    llEdit.setVisibility(View.VISIBLE);
-                    et1SwitchAndEdit.setText("");
-                }
-                else
-                {
-                    llEdit.setVisibility(View.GONE);
-                    et1SwitchAndEdit.setText("Non applicabile");
-                }
+                llSectionTwoSwitches.setVisibility(llSectionTwoSwitches.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
+                ivArrowTwoSwitches.setImageResource(llSectionTwoSwitches.getVisibility() == View.VISIBLE
+                        ? android.R.drawable.arrow_up_float : android.R.drawable.arrow_down_float);
             }
         });
 
-        EditTexts.put(idItem, et1SwitchAndEdit);
-        tv1SwitchAndEdit.setText(itemModelli.get(idItem).getDescrizione_item());
-        idItem++;
+        ArrayList<TextView> al_TextViews = new ArrayList<>();
+
+        TextView tv1TwoSwitches = (TextView) two_switches.findViewById(R.id.tv1TwoSwitches);
+        al_TextViews.add(tv1TwoSwitches);
+
+        Switch sw1TwoSwitches = (Switch) two_switches.findViewById(R.id.sw1TwoSwitches);
+
+        TextView tv2TwoSwitches = (TextView) two_switches.findViewById(R.id.tv2TwoSwitches);
+        al_TextViews.add(tv2TwoSwitches);
+
+        final Switch sw2TwoSwitches = (Switch) two_switches.findViewById(R.id.sw2TwoSwitches);
+
+        ArrayList<Switch> al_Switches = new ArrayList<>();
+        al_Switches.add(sw1TwoSwitches);
+        al_Switches.add(sw2TwoSwitches);
+
+        Switches.put(idItem, sw2TwoSwitches);
+
+        for (int i = 0; i < al_Switches.size(); i++)
+        {
+            Switches.put(idItem, al_Switches.get(i));
+            al_TextViews.get(i).setText(itemModelli.get(idItem).getDescrizione_item());
+            idItem++;
+        }
 
         return idItem;
     }
@@ -1760,6 +1906,31 @@ public class ViewUtils
         return  ++idItem;
     }
 
+    public int saveSeveralChkboxesAndEdit(int idItem)
+    {
+        ArrayList<CheckBox> alChks = CheckBoxes.get(idItem);
+        String str_Id_item = "";
+        boolean checkedChkboxes = false;
+
+        for (int i = 0; i < alChks.size(); i++)
+        {
+            if(alChks.get(i).isChecked())
+            {
+                checkedChkboxes = true;
+            }
+            str_Id_item += alChks.get(i).isChecked() ? alChks.get(i).getText().toString() + "||" : "";
+        }
+        DatabaseUtils.insertStringInReportItem(id_rapporto_sopralluogo, idItem, str_Id_item);
+
+        if(!checkedChkboxes)
+        {
+            EditText et = EditTexts.get(idItem);
+            DatabaseUtils.insertStringInReportItem(id_rapporto_sopralluogo, idItem, et.getText().toString());
+        }
+
+        return ++idItem;
+    }
+
     public int saveChkboxAndEdit(int idItem)
     {
         CheckBox chk = CheckBoxes.get(idItem).get(0);
@@ -1943,6 +2114,36 @@ public class ViewUtils
         else
         {
             chkbox.setChecked(false);
+            et.setText(str_id_item);
+        }
+
+        return ++idItem;
+    }
+
+    public int fillSeveralChkboxesAndEdit(int idItem)
+    {
+        String str_id_item = DatabaseUtils.getValueFromReportItem(id_rapporto_sopralluogo, idItem);
+
+        boolean checkedChkboxes = false;
+
+        for (int i = 0; i < CheckBoxes.size(); i++)
+        {
+            CheckBox chkbox = CheckBoxes.get(idItem).get(i);
+
+            if(str_id_item.contains(chkbox.getText()))
+            {
+                chkbox.setChecked(true);
+                checkedChkboxes = true;
+            }
+            else
+            {
+                chkbox.setChecked(false);
+            }
+        }
+
+        if(!checkedChkboxes)
+        {
+            EditText et = EditTexts.get(idItem);
             et.setText(str_id_item);
         }
 
