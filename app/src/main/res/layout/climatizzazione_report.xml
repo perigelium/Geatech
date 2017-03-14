@@ -24,7 +24,7 @@
 
         <include android:id="@+id/header2" layout="@layout/section_header"/>
 
-        <include android:id="@+id/three_edits1" layout="@layout/three_edits"/>
+        <include android:id="@+id/three_texts_three_edits1" layout="@layout/three_texts_three_edits"/>
 
     </LinearLayout>
 

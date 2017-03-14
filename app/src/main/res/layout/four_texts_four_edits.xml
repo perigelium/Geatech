@@ -6,9 +6,10 @@
 
     <LinearLayout
         android:id="@+id/llSectionFourTextsFourEdits"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#eeeeee"
+        android:layout_marginBottom="9dp"
         android:orientation="vertical">
 
         <TextView
@@ -16,18 +17,21 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="start|center_vertical"
-            android:layout_marginLeft="6dp"
-            android:text="2."
+            android:layout_marginLeft="9dp"
+            android:layout_marginTop="9dp"
+            android:text="Note 1: "
             android:textColor="#555555"/>
 
         <EditText
             android:id="@+id/et1FourTextsFourEdits"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_marginLeft="6dp"
-            android:layout_marginTop="6dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:layout_marginTop="9dp"
+            android:layout_marginBottom="9dp"
             android:background="#ffffff"
+            android:inputType="textLongMessage"
             android:ems="15"
             android:text=""/>
 
@@ -36,18 +40,21 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="start|center_vertical"
-            android:layout_marginLeft="6dp"
-            android:text="2.2"
+            android:layout_marginLeft="9dp"
+            android:layout_marginTop="9dp"
+            android:text="Note 2: "
             android:textColor="#555555"/>
 
         <EditText
             android:id="@+id/et2FourTextsFourEdits"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_marginLeft="6dp"
-            android:layout_marginTop="6dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:layout_marginTop="9dp"
+            android:layout_marginBottom="9dp"
             android:background="#ffffff"
+            android:inputType="textLongMessage"
             android:ems="15"
             android:text=""/>
 
@@ -56,18 +63,21 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="start|center_vertical"
-            android:layout_marginLeft="6dp"
-            android:text="2.2"
+            android:layout_marginLeft="9dp"
+            android:layout_marginTop="9dp"
+            android:text="Note 3: "
             android:textColor="#555555"/>
 
         <EditText
             android:id="@+id/et3FourTextsFourEdits"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_marginLeft="6dp"
-            android:layout_marginTop="6dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:layout_marginTop="9dp"
+            android:layout_marginBottom="9dp"
             android:background="#ffffff"
+            android:inputType="textLongMessage"
             android:ems="15"
             android:text=""/>
 
@@ -76,18 +86,21 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="start|center_vertical"
-            android:layout_marginLeft="6dp"
-            android:text="2.2"
+            android:layout_marginLeft="9dp"
+            android:layout_marginTop="9dp"
+            android:text="Note 3: "
             android:textColor="#555555"/>
 
         <EditText
             android:id="@+id/et4FourTextsFourEdits"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_marginLeft="6dp"
-            android:layout_marginTop="6dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:layout_marginTop="9dp"
+            android:layout_marginBottom="9dp"
             android:background="#ffffff"
+            android:inputType="textLongMessage"
             android:ems="15"
             android:text=""/>
 

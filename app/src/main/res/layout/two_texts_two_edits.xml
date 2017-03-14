@@ -5,50 +5,56 @@
               android:orientation="vertical">
 
     <LinearLayout
-        android:id="@+id/llSectionTwoTextTwoEdit"
-        android:layout_width="wrap_content"
+        android:id="@+id/llSectionTwoTextsTwoEdits"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#eeeeee"
-        android:layout_marginBottom="6dp"
+        android:layout_marginBottom="9dp"
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/tv1TwoTextTwoEdit"
+            android:id="@+id/tv1TwoTextsTwoEdits"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="start|center_vertical"
-            android:layout_marginLeft="6dp"
-            android:text=""
+            android:layout_marginLeft="9dp"
+            android:layout_marginTop="9dp"
+            android:text="Note 1: "
             android:textColor="#555555"/>
 
         <EditText
-            android:id="@+id/et1TwoTextTwoEdit"
+            android:id="@+id/et1TwoTextsTwoEdits"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_marginLeft="6dp"
-            android:layout_marginTop="6dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:layout_marginTop="9dp"
+            android:layout_marginBottom="9dp"
             android:background="#ffffff"
+            android:inputType="textLongMessage"
             android:ems="15"
             android:text=""/>
 
         <TextView
-            android:id="@+id/tv2TwoTextTwoEdit"
+            android:id="@+id/tv2TwoTextsTwoEdits"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="start|center_vertical"
-            android:layout_marginLeft="6dp"
-            android:text="2.2"
+            android:layout_marginLeft="9dp"
+            android:layout_marginTop="9dp"
+            android:text="Note 2: "
             android:textColor="#555555"/>
 
         <EditText
-            android:id="@+id/et2TwoTextTwoEdit"
+            android:id="@+id/et2TwoTextsTwoEdits"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_marginLeft="6dp"
-            android:layout_marginTop="6dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:layout_marginTop="9dp"
+            android:layout_marginBottom="9dp"
             android:background="#ffffff"
+            android:inputType="textLongMessage"
             android:ems="15"
             android:text=""/>
 

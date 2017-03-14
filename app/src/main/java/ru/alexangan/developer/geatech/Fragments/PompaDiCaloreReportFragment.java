@@ -215,9 +215,9 @@ public class PompaDiCaloreReportFragment extends Fragment
     }
 
     @Override
-    public void onDestroy()
+    public void onPause()
     {
-        super.onDestroy();
+        super.onPause();
 
         if (reportStates != null)
         {
@@ -347,13 +347,37 @@ public class PompaDiCaloreReportFragment extends Fragment
             idItem = viewUtils.fillSeveralSwitches(idItem, 1);
             idItem = viewUtils.fillSeveralEdits(idItem, 1);
 
-            LinearLayout llEditSwitchAndEdit = viewUtils.getLinearLayouts().get(idItem-1).first;
-            Switch sw = viewUtils.getSwitches().get(idItem-2);
+            final EditText et3 = viewUtils.getEditTexts().get(idItem-1);
+            et3.setInputType(InputType.TYPE_CLASS_NUMBER);
+            final Switch sw1 = viewUtils.getSwitches().get(idItem-2);
+            final LinearLayout llEdit1 = viewUtils.getLinearLayouts().get(idItem-1).first;
 
-            if(sw.isChecked())
+            if(!sw1.isChecked())
             {
-                llEditSwitchAndEdit.setVisibility(View.VISIBLE);
+                llEdit1.setVisibility(View.GONE);
             }
+            else
+            {
+                llEdit1.setVisibility(View.VISIBLE);
+            }
+
+            sw1.setOnClickListener(new View.OnClickListener()
+            {
+                @Override
+                public void onClick(View view)
+                {
+                    if (sw1.isChecked())
+                    {
+                        llEdit1.setVisibility(View.VISIBLE);
+                        et3.setText("");
+                    }
+                    else
+                    {
+                        llEdit1.setVisibility(View.GONE);
+                        et3.setText("Non applicabile");
+                    }
+                }
+            });
 
 
             idItem = viewUtils.fillSeveralRadios(idItem);

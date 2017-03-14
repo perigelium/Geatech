@@ -177,7 +177,8 @@
             android:text=" Tecnico predefinito"
             android:button="@drawable/login_checkbox_selector"
             android:textColor="#93D8A8"
-            android:textSize="17sp"/>
+            android:textSize="17sp"
+            android:enabled="false"/>
 
         <LinearLayout
             android:layout_width="match_parent"

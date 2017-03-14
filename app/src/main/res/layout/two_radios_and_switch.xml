@@ -15,15 +15,17 @@
 
         <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_margin="9dp">
 
             <TextView
                 android:id="@+id/tvHeaderTwoRadiosAndSwitch"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start|center_vertical"
-                android:layout_margin="9dp"
                 android:text=" Section name"
+                android:maxWidth="250dp"
+
                 android:textSize="13sp"/>
 
             <ImageView
@@ -74,9 +76,10 @@
         </RadioGroup>
 
 
-        <LinearLayout
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_margin="9dp">
 
 
             <TextView
@@ -84,19 +87,19 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start|center_vertical"
-                android:layout_margin="9dp"
                 android:text="Switch text: "
-                android:textSize="13sp"/>
+                android:textSize="13sp"
+                android:textColor="#000000"/>
 
             <Switch
                 android:id="@+id/sw1TwoRadiosAndSwitch"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end|center_vertical"
-                android:layout_marginRight="25dp"
-                android:textColor="#c0c0c0"/>
+                android:layout_marginRight="16dp"
+                android:textColor="#000000"/>
 
-        </LinearLayout>
+        </FrameLayout>
     </LinearLayout>
 
 </LinearLayout>

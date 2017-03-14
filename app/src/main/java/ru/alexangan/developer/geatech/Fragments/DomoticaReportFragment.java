@@ -121,46 +121,15 @@ public class DomoticaReportFragment extends Fragment
 
         idItem = viewUtils.createViewTwoEdits(idItem, R.id.two_edits1);
 
-        EditText et0 = viewUtils.getEditTexts().get(idItem - 1);
+/*        EditText et0 = viewUtils.getEditTexts().get(idItem - 1);
         et0.setInputType(InputType.TYPE_CLASS_NUMBER);
 
         EditText et1 = viewUtils.getEditTexts().get(idItem - 2);
-        et1.setInputType(InputType.TYPE_CLASS_NUMBER);
+        et1.setInputType(InputType.TYPE_CLASS_NUMBER);*/
 
         idItem = viewUtils.createViewEdit(idItem, R.id.edit2);
 
         idItem = viewUtils.createViewSwitchAndEdit(idItem, R.id.switch_and_edit1);
-
-        final Switch sw = viewUtils.getSwitches().get(idItem-2);
-        final LinearLayout llEdit = viewUtils.getLinearLayouts().get(idItem-1).first;
-        final EditText et3 = viewUtils.getEditTexts().get(idItem-1);
-
-        if(sw.isChecked())
-        {
-            llEdit.setVisibility(View.GONE);
-        }
-        else
-        {
-            llEdit.setVisibility(View.VISIBLE);
-        }
-
-        sw.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View view)
-            {
-                if (!sw.isChecked())
-                {
-                    llEdit.setVisibility(View.VISIBLE);
-                    et3.setText("");
-                }
-                else
-                {
-                    llEdit.setVisibility(View.GONE);
-                    et3.setText("Non applicabile");
-                }
-            }
-        });
 
         // SectionHeader1
         viewUtils.createViewSectionHeader(R.id.header1);
@@ -175,9 +144,9 @@ public class DomoticaReportFragment extends Fragment
     }
 
     @Override
-    public void onDestroy()
+    public void onPause()
     {
-        super.onDestroy();
+        super.onPause();
 
         if (reportStates != null)
         {
@@ -254,6 +223,37 @@ public class DomoticaReportFragment extends Fragment
             idItem = viewUtils.fillSeveralSwitches(idItem, 1);
 
             idItem = viewUtils.fillSeveralEdits(idItem, 1);
+
+            final Switch sw = viewUtils.getSwitches().get(idItem-2);
+            final LinearLayout llEdit = viewUtils.getLinearLayouts().get(idItem-1).first;
+            final EditText et3 = viewUtils.getEditTexts().get(idItem-1);
+
+            if(sw.isChecked())
+            {
+                llEdit.setVisibility(View.GONE);
+            }
+            else
+            {
+                llEdit.setVisibility(View.VISIBLE);
+            }
+
+            sw.setOnClickListener(new View.OnClickListener()
+            {
+                @Override
+                public void onClick(View view)
+                {
+                    if (!sw.isChecked())
+                    {
+                        llEdit.setVisibility(View.VISIBLE);
+                        et3.setText("");
+                    }
+                    else
+                    {
+                        llEdit.setVisibility(View.GONE);
+                        et3.setText("Non applicabile");
+                    }
+                }
+            });
 
             idItem = viewUtils.fillSeveralEdits(idItem, 3);
         }

@@ -6,25 +6,171 @@
               android:orientation="vertical">
 
     <LinearLayout
+        android:id="@+id/llSectionFiveSwitches"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        ><!--android:visibility="gone">-->
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_margin="9dp">
+
+            <TextView
+                android:id="@+id/tv1FiveSwitches"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start|center_vertical"
+                android:maxWidth="250dp"
+                android:text="Switch 1: "
+                android:minLines="2"
+                android:textSize="13sp"
+                android:textColor="#000000"/>
+
+            <Switch
+                android:id="@+id/sw1FiveSwitches"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end|center_vertical"
+                android:layout_marginRight="16dp"
+                android:textColor="#c0c0c0"/>
+
+        </FrameLayout>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_margin="9dp">
+
+            <TextView
+                android:id="@+id/tv2FiveSwitches"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start|center_vertical"
+                android:maxWidth="250dp"
+                android:minLines="2"
+                android:text="Switch 2: "
+                android:textSize="13sp"
+                android:textColor="#000000"/>
+
+            <Switch
+                android:id="@+id/sw2FiveSwitches"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end|center_vertical"
+                android:layout_marginRight="16dp"
+                android:textColor="#c0c0c0"/>
+
+        </FrameLayout>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_margin="9dp">
+
+            <TextView
+                android:id="@+id/tv3FiveSwitches"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start|center_vertical"
+                android:maxWidth="250dp"
+                android:minLines="2"
+                android:text="Switch 3: "
+                android:textSize="13sp"
+                android:textColor="#000000"/>
+
+            <Switch
+                android:id="@+id/sw3FiveSwitches"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end|center_vertical"
+                android:layout_marginRight="16dp"
+                android:textColor="#c0c0c0"/>
+
+        </FrameLayout>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_margin="9dp">
+
+            <TextView
+                android:id="@+id/tv4FiveSwitches"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start|center_vertical"
+                android:maxWidth="250dp"
+                android:minLines="2"
+                android:text="Switch 4: "
+                android:textSize="13sp"
+                android:textColor="#000000"/>
+
+            <Switch
+                android:id="@+id/sw4FiveSwitches"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end|center_vertical"
+                android:layout_marginRight="16dp"
+                android:textColor="#c0c0c0"/>
+
+        </FrameLayout>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_margin="9dp">
+
+            <TextView
+                android:id="@+id/tv5FiveSwitches"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start|center_vertical"
+                android:maxWidth="250dp"
+                android:minLines="2"
+                android:text="Switch 5: "
+                android:textSize="13sp"
+                android:textColor="#000000"/>
+
+            <Switch
+                android:id="@+id/sw5FiveSwitches"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end|center_vertical"
+                android:layout_marginRight="16dp"
+                android:textColor="#c0c0c0"/>
+
+        </FrameLayout>
+
+
+    </LinearLayout>
+
+    <LinearLayout
         android:id="@+id/llHeaderFiveSwitches"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#eeeeee"
         android:clickable="true"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:visibility="gone">
 
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:visibility="gone">
+            android:layout_margin="9dp">
 
             <TextView
                 android:id="@+id/tvHeaderFiveSwitches"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start|center_vertical"
-                android:layout_margin="9dp"
                 android:text=" Section name"
+                android:maxWidth="250dp"
                 android:textSize="13sp"/>
 
             <ImageView
@@ -36,145 +182,6 @@
                 android:src="@android:drawable/arrow_down_float"/>
 
         </FrameLayout>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/llSectionFiveSwitches"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        ><!--android:visibility="gone">-->
-
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/tv1FiveSwitches"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="start|center_vertical"
-                android:layout_margin="9dp"
-                android:maxWidth="250dp"
-                android:text="Switch 1: "
-                android:textSize="13sp"/>
-
-            <Switch
-                android:id="@+id/sw1FiveSwitches"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="end|center_vertical"
-                android:layout_marginRight="30dp"
-                android:textColor="#c0c0c0"/>
-
-        </FrameLayout>
-
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/tv2FiveSwitches"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="start|center_vertical"
-                android:layout_margin="9dp"
-                android:maxWidth="250dp"
-                android:minLines="2"
-                android:text="Switch 2: "
-                android:textSize="13sp"/>
-
-            <Switch
-                android:id="@+id/sw2FiveSwitches"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="end|center_vertical"
-                android:layout_marginRight="30dp"
-                android:textColor="#c0c0c0"/>
-
-        </FrameLayout>
-
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/tv3FiveSwitches"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="start|center_vertical"
-                android:layout_margin="9dp"
-                android:maxWidth="250dp"
-                android:minLines="2"
-                android:text="Switch 3: "
-                android:textSize="13sp"/>
-
-            <Switch
-                android:id="@+id/sw3FiveSwitches"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="end|center_vertical"
-                android:layout_marginRight="30dp"
-                android:textColor="#c0c0c0"/>
-
-        </FrameLayout>
-
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/tv4FiveSwitches"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="start|center_vertical"
-                android:layout_margin="9dp"
-                android:maxWidth="250dp"
-                android:minLines="2"
-                android:text="Switch 4: "
-                android:textSize="13sp"/>
-
-            <Switch
-                android:id="@+id/sw4FiveSwitches"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="end|center_vertical"
-                android:layout_marginRight="30dp"
-                android:textColor="#c0c0c0"/>
-
-        </FrameLayout>
-
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/tv5FiveSwitches"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="start|center_vertical"
-                android:layout_margin="9dp"
-                android:maxWidth="250dp"
-                android:minLines="2"
-                android:text="Switch 5: "
-                android:textSize="13sp"/>
-
-            <Switch
-                android:id="@+id/sw5FiveSwitches"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="end|center_vertical"
-                android:layout_marginRight="30dp"
-                android:textColor="#c0c0c0"/>
-
-        </FrameLayout>
-
 
     </LinearLayout>
 

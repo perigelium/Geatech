@@ -15,15 +15,16 @@
 
         <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_margin="9dp">
 
             <TextView
                 android:id="@+id/tvHeaderSwitch"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start|center_vertical"
-                android:layout_margin="9dp"
                 android:text=" Section name"
+                android:maxWidth="250dp"
                 android:textSize="13sp"/>
 
             <ImageView
@@ -31,7 +32,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical|end"
-                android:layout_marginRight="25dp"
+                android:layout_marginRight="16dp"
                 android:src="@android:drawable/arrow_down_float"/>
 
         </FrameLayout>
@@ -57,15 +58,16 @@
                 android:layout_gravity="start|center_vertical"
                 android:layout_margin="9dp"
                 android:text="Switch 1: "
-                android:textSize="13sp"/>
+                android:textSize="13sp"
+                android:textColor="#000000"/>
 
             <Switch
                 android:id="@+id/sw1Switch"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end|center_vertical"
-                android:layout_marginRight="25dp"
-                android:textColor="#c0c0c0"/>
+                android:layout_marginRight="16dp"
+                android:textColor="#000000"/>
 
         </FrameLayout>
 

@@ -357,26 +357,26 @@ public class ViewUtils
     public int createViewThreeTextsThreeEdits(int idItem, int idRes)
     {
         LinearLayout three_texts_three_edits = (LinearLayout) rootView.findViewById(idRes);
-        LinearLayout llSectionTwoTextsTwoEdits = (LinearLayout) three_texts_three_edits.findViewById(R.id.llSectionThreeTextsThreeEdits);
+        LinearLayout llSectionThreeTextsThreeEdits = (LinearLayout) three_texts_three_edits.findViewById(R.id.llSectionThreeTextsThreeEdits);
 
-        LinearLayouts.put(idItem, new Pair<>(llSectionTwoTextsTwoEdits, llSectionTwoTextsTwoEdits));
+        LinearLayouts.put(idItem, new Pair<>(llSectionThreeTextsThreeEdits, llSectionThreeTextsThreeEdits));
 
-        llSectionHeaders.add(llSectionTwoTextsTwoEdits);
+        llSectionHeaders.add(llSectionThreeTextsThreeEdits);
 
-        TextView tv1TwoTextsTwoEdits = (TextView) three_texts_three_edits.findViewById(R.id.tv1ThreeTextsThreeEdits);
-        TextView tv2TwoTextsTwoEdits = (TextView) three_texts_three_edits.findViewById(R.id.tv2ThreeTextsThreeEdits);
-        TextView tv3TwoTextsTwoEdits = (TextView) three_texts_three_edits.findViewById(R.id.tv3ThreeTextsThreeEdits);
+        TextView tv1ThreeTextsThreeEdits = (TextView) three_texts_three_edits.findViewById(R.id.tv1ThreeTextsThreeEdits);
+        TextView tv2ThreeTextsThreeEdits = (TextView) three_texts_three_edits.findViewById(R.id.tv2ThreeTextsThreeEdits);
+        TextView tv3ThreeTextsThreeEdits = (TextView) three_texts_three_edits.findViewById(R.id.tv3ThreeTextsThreeEdits);
 
-        EditText et1TwoTextsTwoEdits = (EditText) three_texts_three_edits.findViewById(R.id.et1ThreeTextsThreeEdits);
-        EditText et2TwoTextsTwoEdits = (EditText) three_texts_three_edits.findViewById(R.id.et2ThreeTextsThreeEdits);
-        EditText et3TwoTextsTwoEdits = (EditText) three_texts_three_edits.findViewById(R.id.et3ThreeTextsThreeEdits);
+        EditText et1ThreeTextsThreeEdits = (EditText) three_texts_three_edits.findViewById(R.id.et1ThreeTextsThreeEdits);
+        EditText et2ThreeTextsThreeEdits = (EditText) three_texts_three_edits.findViewById(R.id.et2ThreeTextsThreeEdits);
+        EditText et3ThreeTextsThreeEdits = (EditText) three_texts_three_edits.findViewById(R.id.et3ThreeTextsThreeEdits);
 
-        EditTexts.put(idItem, et1TwoTextsTwoEdits);
-        tv1TwoTextsTwoEdits.setText(itemModelli.get(idItem++).getDescrizione_item());
-        EditTexts.put(idItem, et2TwoTextsTwoEdits);
-        tv2TwoTextsTwoEdits.setText(itemModelli.get(idItem++).getDescrizione_item());
-        EditTexts.put(idItem, et3TwoTextsTwoEdits);
-        tv3TwoTextsTwoEdits.setText(itemModelli.get(idItem++).getDescrizione_item());
+        EditTexts.put(idItem, et1ThreeTextsThreeEdits);
+        tv1ThreeTextsThreeEdits.setText(itemModelli.get(idItem++).getDescrizione_item());
+        EditTexts.put(idItem, et2ThreeTextsThreeEdits);
+        tv2ThreeTextsThreeEdits.setText(itemModelli.get(idItem++).getDescrizione_item());
+        EditTexts.put(idItem, et3ThreeTextsThreeEdits);
+        tv3ThreeTextsThreeEdits.setText(itemModelli.get(idItem++).getDescrizione_item());
 
         return idItem;
     }
@@ -384,19 +384,19 @@ public class ViewUtils
     public int createViewTwoTextsTwoEdits(int idItem, int idRes)
     {
         LinearLayout two_texts_two_edits = (LinearLayout) rootView.findViewById(idRes);
-        LinearLayout llSectionTwoTextsTwoEdits = (LinearLayout) two_texts_two_edits.findViewById(R.id.llSectionTwoTextTwoEdit);
+        LinearLayout llSectionTwoTextsTwoEdits = (LinearLayout) two_texts_two_edits.findViewById(R.id.llSectionTwoTextsTwoEdits);
         
         LinearLayouts.put(idItem, new Pair<>(llSectionTwoTextsTwoEdits, llSectionTwoTextsTwoEdits));
 
         llSectionHeaders.add(llSectionTwoTextsTwoEdits);
 
-        TextView tv1TwoTextsTwoEdits = (TextView) two_texts_two_edits.findViewById(R.id.tv1TwoTextTwoEdit);
+        TextView tv1TwoTextsTwoEdits = (TextView) two_texts_two_edits.findViewById(R.id.tv1TwoTextsTwoEdits);
 
-        TextView tv2TwoTextsTwoEdits = (TextView) two_texts_two_edits.findViewById(R.id.tv2TwoTextTwoEdit);
+        TextView tv2TwoTextsTwoEdits = (TextView) two_texts_two_edits.findViewById(R.id.tv2TwoTextsTwoEdits);
 
-        EditText et1TwoTextsTwoEdits = (EditText) two_texts_two_edits.findViewById(R.id.et1TwoTextTwoEdit);
+        EditText et1TwoTextsTwoEdits = (EditText) two_texts_two_edits.findViewById(R.id.et1TwoTextsTwoEdits);
 
-        EditText et2TwoTextsTwoEdits = (EditText) two_texts_two_edits.findViewById(R.id.et2TwoTextTwoEdit);
+        EditText et2TwoTextsTwoEdits = (EditText) two_texts_two_edits.findViewById(R.id.et2TwoTextsTwoEdits);
 
         EditTexts.put(idItem, et1TwoTextsTwoEdits);
         tv1TwoTextsTwoEdits.setText(itemModelli.get(idItem++).getDescrizione_item());
@@ -448,14 +448,16 @@ public class ViewUtils
         al_Chkboxes.add(chk2ThreeChkboxesAndEdit);
         al_Chkboxes.add(chk3ThreeChkboxesAndEdit);
 
-        for (int i = 0; i < al_Chkboxes.size(); i++)
+        int i;
+
+        for (i = 0; i < al_Chkboxes.size(); i++)
         {
             CheckBoxes.put(idItem, al_Chkboxes);
             al_Chkboxes.get(i).setText(fields[i]);
         }
 
         TextView tv1ThreeChkboxesAndEdit = (TextView) three_chkboxes_and_edit.findViewById(R.id.tv1ThreeChkboxesAndEdit);
-        tv1ThreeChkboxesAndEdit.setText(fields[1]);
+        tv1ThreeChkboxesAndEdit.setText(fields[i]);
 
         final EditText et1ThreeChkboxesAndEdit = (EditText) three_chkboxes_and_edit.findViewById(R.id.et1ThreeChkboxesAndEdit);
 
@@ -474,12 +476,40 @@ public class ViewUtils
             }
         });
 
+        chk2ThreeChkboxesAndEdit.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                if(chk2ThreeChkboxesAndEdit.isChecked())
+                {
+                    et1ThreeChkboxesAndEdit.setText("");
+                    et1ThreeChkboxesAndEdit.clearFocus();
+                }
+            }
+        });
+
+        chk3ThreeChkboxesAndEdit.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                if(chk3ThreeChkboxesAndEdit.isChecked())
+                {
+                    et1ThreeChkboxesAndEdit.setText("");
+                    et1ThreeChkboxesAndEdit.clearFocus();
+                }
+            }
+        });
+
         et1ThreeChkboxesAndEdit.setOnTouchListener(new View.OnTouchListener()
         {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent)
             {
                 chk1ThreeChkboxesAndEdit.setChecked(false);
+                chk2ThreeChkboxesAndEdit.setChecked(false);
+                chk3ThreeChkboxesAndEdit.setChecked(false);
                 return false;
             }
         });
@@ -745,7 +775,7 @@ public class ViewUtils
 
         final EditText et1TwoSwitchesAndEdit = (EditText) two_switches_and_edit.findViewById(R.id.et1TwoSwitchesAndEdit);
 
-        sw2TwoSwitchesAndEdit.setOnClickListener(new View.OnClickListener()
+/*        sw2TwoSwitchesAndEdit.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View view)
@@ -763,7 +793,11 @@ public class ViewUtils
                     et1TwoSwitchesAndEdit.setText("Non applicabile");
                 }
             }
-        });
+        });*/
+
+        final LinearLayout llEdit = (LinearLayout) two_switches_and_edit.findViewById(R.id.llEditTwoSwitchesAndEdit);
+
+        LinearLayouts.put(idItem, new Pair<>(llEdit, llEdit));
 
         EditTexts.put(idItem, et1TwoSwitchesAndEdit);
         tv3TwoSwitchesAndEdit.setText(itemModelli.get(idItem++).getDescrizione_item());
@@ -1022,6 +1056,8 @@ public class ViewUtils
 
         final EditText et1ThreeRadiosAndEdit = (EditText) three_radios_and_edit.findViewById(R.id.et1ThreeRadiosAndEdit);
 
+        final LinearLayout llEditThreeRadiosAndEdit = (LinearLayout) three_radios_and_edit.findViewById(R.id.llEditThreeRadiosAndEdit);
+
 /*        et1ThreeRadiosAndEdit.setOnTouchListener(new View.OnTouchListener()
         {
             @Override
@@ -1040,27 +1076,28 @@ public class ViewUtils
 
                 rb.setText(fields[i]);
 
-                rb.setOnClickListener(new View.OnClickListener()
+/*                rb.setOnClickListener(new View.OnClickListener()
                 {
                     @Override
                     public void onClick(View view)
                     {
-                        if(rg1ThreeRadiosAndEdit.getCheckedRadioButtonId() == rg1ThreeRadiosAndEdit.getChildAt(1).getId())
+                        if(rg1ThreeRadiosAndEdit.getCheckedRadioButtonId() == rg1ThreeRadiosAndEdit.getChildAt(1).getId()) //second radio
                         {
+                            llEditThreeRadiosAndEdit.setVisibility(View.VISIBLE);
                             et1ThreeRadiosAndEdit.setText("");
-                            et1ThreeRadiosAndEdit.setEnabled(true);
                         }
                         else
                         {
+                            llEditThreeRadiosAndEdit.setVisibility(View.GONE);
                             et1ThreeRadiosAndEdit.setText("Non applicabile");
-                            et1ThreeRadiosAndEdit.setEnabled(false);
                         }
                     }
-                });
+                });*/
             }
         }
 
         idItem++;
+        LinearLayouts.put(idItem, new Pair<>(llEditThreeRadiosAndEdit, llEditThreeRadiosAndEdit));
         tv1ThreeRadiosAndEdit.setText(itemModelli.get(idItem).getDescrizione_item());
         et1ThreeRadiosAndEdit.setInputType(InputType.TYPE_CLASS_NUMBER);
         et1ThreeRadiosAndEdit.setText("Non applicabile");
@@ -1874,12 +1911,13 @@ public class ViewUtils
     {
         String str_Id_item="";
         RadioGroup rg = RadioGroups.get(idItem);
+
         int checkedBtnId = rg.getCheckedRadioButtonId();
 
         if (checkedBtnId != -1)
         {
             RadioButton radioButton = (RadioButton) rg.findViewById(checkedBtnId);
-            str_Id_item = radioButton.getText().toString();
+            str_Id_item = radioButton.getVisibility() == View.VISIBLE ? radioButton.getText().toString() : "Not applicabile";
         } else
         {
             EditText et = EditTexts.get(idItem);
@@ -1894,6 +1932,14 @@ public class ViewUtils
     {
         String str_Id_item="";
         RadioGroup rg = RadioGroups.get(idItem);
+
+        LinearLayout ll = LinearLayouts.get(idItem).second;
+
+        if(ll.getVisibility() != View.VISIBLE)
+        {
+            str_Id_item = "Not applicabile";
+        }
+
         int checkedBtnId = rg.getCheckedRadioButtonId();
 
         if (checkedBtnId != -1)
@@ -1922,11 +1968,18 @@ public class ViewUtils
         }
         DatabaseUtils.insertStringInReportItem(id_rapporto_sopralluogo, idItem, str_Id_item);
 
+        EditText et = EditTexts.get(idItem);
+        String strEt = "";
+
         if(!checkedChkboxes)
         {
-            EditText et = EditTexts.get(idItem);
-            DatabaseUtils.insertStringInReportItem(id_rapporto_sopralluogo, idItem, et.getText().toString());
+            strEt = et.getText().toString();
         }
+        else
+        {
+            strEt = "";
+        }
+        DatabaseUtils.insertStringInReportItem(id_rapporto_sopralluogo, idItem, strEt);
 
         return ++idItem;
     }
@@ -1954,6 +2007,13 @@ public class ViewUtils
     {
         ArrayList<CheckBox> alChks = CheckBoxes.get(idItem);
         String str_Id_item = "";
+
+        LinearLayout ll = LinearLayouts.get(idItem).second;
+
+        if(ll.getVisibility() != View.VISIBLE)
+        {
+            str_Id_item = "Not applicabile";
+        }
 
         for (int i = 0; i < alChks.size(); i++)
         {
@@ -2141,10 +2201,15 @@ public class ViewUtils
             }
         }
 
+        EditText et = EditTexts.get(idItem);
+
         if(!checkedChkboxes)
         {
-            EditText et = EditTexts.get(idItem);
             et.setText(str_id_item);
+        }
+        else
+        {
+            et.setText("");
         }
 
         return ++idItem;

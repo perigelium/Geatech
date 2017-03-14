@@ -140,6 +140,9 @@ public class STermodinamicoReportFragment extends Fragment
 
         idItem = viewUtils.createViewEdit(idItem, R.id.edit1);
 
+        EditText et3 = viewUtils.getEditTexts().get(idItem-1);
+        et3.setInputType(InputType.TYPE_CLASS_TEXT);
+
         // SectionHeader1
         viewUtils.createViewSectionHeader(R.id.header1);
 
@@ -198,9 +201,9 @@ public class STermodinamicoReportFragment extends Fragment
     }
 
     @Override
-    public void onDestroy()
+    public void onPause()
     {
-        super.onDestroy();
+        super.onPause();
 
         if (reportStates != null)
         {

@@ -15,15 +15,16 @@
 
         <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_margin="9dp">
 
             <TextView
                 android:id="@+id/tvHeaderFiveChkboxes"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start|center_vertical"
-                android:layout_margin="9dp"
                 android:text=" Section name"
+                android:maxWidth="250dp"
                 android:textSize="13sp"/>
 
             <ImageView
@@ -31,7 +32,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical|end"
-                android:layout_marginRight="25dp"
+                android:layout_marginRight="16dp"
                 android:src="@android:drawable/arrow_down_float"/>
 
         </FrameLayout>
@@ -43,13 +44,15 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
+        android:layout_margin="9dp"
         ><!--android:visibility="gone">-->
 
         <CheckBox
             android:id="@+id/chk1FiveChkboxes"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="9dp"
+            android:layout_marginTop="9dp"
+            android:layout_marginBottom="9dp"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
             android:button="@null"
@@ -60,7 +63,8 @@
             android:id="@+id/chk2FiveChkboxes"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="9dp"
+            android:layout_marginTop="9dp"
+            android:layout_marginBottom="9dp"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
             android:button="@null"
@@ -71,7 +75,8 @@
             android:id="@+id/chk3FiveChkboxes"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="9dp"
+            android:layout_marginTop="9dp"
+            android:layout_marginBottom="9dp"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
             android:button="@null"
@@ -82,7 +87,8 @@
             android:id="@+id/chk4FiveChkboxes"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="9dp"
+            android:layout_marginTop="9dp"
+            android:layout_marginBottom="9dp"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
             android:button="@null"
@@ -93,7 +99,8 @@
             android:id="@+id/chk5FiveChkboxes"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="9dp"
+            android:layout_marginTop="9dp"
+            android:layout_marginBottom="9dp"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
             android:button="@null"

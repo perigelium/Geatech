@@ -133,9 +133,9 @@ public class ClimatizzazioneReportFragment extends Fragment
     }
 
     @Override
-    public void onDestroy()
+    public void onPause()
     {
-        super.onDestroy();
+        super.onPause();
 
         if (reportStates != null)
         {

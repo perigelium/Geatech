@@ -15,15 +15,17 @@
 
         <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_margin="9dp">
 
             <TextView
                 android:id="@+id/tvHeaderFiveRadios"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start|center_vertical"
-                android:layout_margin="9dp"
                 android:text=" Section name"
+                android:maxWidth="250dp"
+
                 android:textSize="13sp"/>
 
             <ImageView
@@ -31,7 +33,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical|end"
-                android:layout_marginRight="25dp"
+                android:layout_marginRight="16dp"
                 android:src="@android:drawable/arrow_down_float"/>
 
         </FrameLayout>

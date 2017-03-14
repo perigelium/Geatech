@@ -15,15 +15,17 @@
 
         <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_margin="9dp">
 
             <TextView
                 android:id="@+id/tvHeaderTwoSwitchesAndEdit"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start|center_vertical"
-                android:layout_margin="9dp"
                 android:text=" Section name"
+                android:maxWidth="250dp"
+
                 android:textSize="13sp"/>
 
             <ImageView
@@ -48,64 +50,67 @@
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:layout_margin="9dp">
 
             <TextView
                 android:id="@+id/tv1TwoSwitchesAndEdit"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start|center_vertical"
-                android:layout_margin="9dp"
                 android:text="Switch 1: "
-                android:textSize="13sp"/>
+                android:textSize="13sp"
+                android:textColor="#000000"/>
 
             <Switch
                 android:id="@+id/sw1TwoSwitchesAndEdit"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end|center_vertical"
-                android:layout_marginRight="25dp"
-                android:textColor="#c0c0c0"/>
+                android:layout_marginRight="16dp"
+                android:textColor="#000000"/>
 
         </FrameLayout>
 
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:layout_margin="9dp">
 
             <TextView
                 android:id="@+id/tv2TwoSwitchesAndEdit"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start|center_vertical"
-                android:layout_margin="9dp"
                 android:text="Switch 2: "
-                android:textSize="13sp"/>
+                android:textSize="13sp"
+                android:textColor="#000000"/>
 
             <Switch
                 android:id="@+id/sw2TwoSwitchesAndEdit"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end|center_vertical"
-                android:layout_marginRight="25dp"
-                android:textColor="#c0c0c0"/>
+                android:layout_marginRight="16dp"
+                android:textColor="#000000"/>
 
         </FrameLayout>
 
         <LinearLayout
+            android:id="@+id/llEditTwoSwitchesAndEdit"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:layout_margin="9dp">
 
             <TextView
                 android:id="@+id/tv3TwoSwitchesAndEdit"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start|center_vertical"
-                android:layout_margin="9dp"
                 android:text="Edit 1: "
-                android:visibility="gone"
+                android:textColor="#000000"
                 android:textSize="13sp"/>
 
             <EditText
@@ -115,12 +120,14 @@
                 android:layout_alignParentLeft="true"
                 android:layout_gravity="start|center_vertical"
                 android:layout_marginLeft="16dp"
-                android:background="#f0f0f0"
-                android:ems="10"
+                android:layout_marginRight="16dp"
+                android:hint="Inserire"
+                android:textColorHint="#cccccc"
+                android:background="@android:color/transparent"
+                android:ems="9"
                 android:inputType="none"
                 android:text="Non applicabile"
-                android:visibility="gone"
-                android:textColor="#c0c0c0"/>
+                android:textColor="#000000"/>
 
         </LinearLayout>
     </LinearLayout>

@@ -24,6 +24,8 @@
                 android:layout_gravity="start|center_vertical"
                 android:layout_margin="9dp"
                 android:text=" Section name"
+                android:maxWidth="250dp"
+
                 android:textSize="13sp"/>
 
             <ImageView
@@ -114,8 +116,11 @@
             android:layout_alignParentLeft="true"
             android:layout_gravity="start|center_vertical"
             android:layout_marginLeft="16dp"
-            android:background="#f0f0f0"
-            android:ems="10"
+            android:layout_marginRight="16dp"
+            android:hint="Inserire"
+            android:textColorHint="#cccccc"
+            android:background="@android:color/transparent"
+            android:ems="9"
             android:inputType="none"
             android:text=""
             android:textColor="#c0c0c0"/>
@@ -131,8 +136,9 @@
             android:layout_height="wrap_content"
             android:layout_gravity="start|center_vertical"
             android:layout_margin="9dp"
-            android:text="Altro: "
-            android:textSize="13sp"/>
+            android:text=""
+            android:textSize="13sp"
+            android:textColor="#000000"/>
 
         <EditText
             android:id="@+id/et2FourRadiosAndTwoEdits"
@@ -141,8 +147,11 @@
             android:layout_alignParentLeft="true"
             android:layout_gravity="start|center_vertical"
             android:layout_marginLeft="16dp"
-            android:background="#f0f0f0"
-            android:ems="10"
+            android:layout_marginRight="16dp"
+            android:hint="Inserire"
+            android:textColorHint="#cccccc"
+            android:background="@android:color/transparent"
+            android:ems="9"
             android:inputType="none"
             android:text=""
             android:textColor="#c0c0c0"/>

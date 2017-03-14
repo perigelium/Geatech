@@ -449,12 +449,14 @@ public class LoginTechSelectionFragment extends Fragment implements View.OnClick
                         {
                             callVisits = networkUtils.getData(this, GET_VISITS_URL_SUFFIX, tokenStr);
 
-                            if (geaItemModelliSize == 0)
+
+                            callModels = networkUtils.getData(this, GET_MODELS_URL_SUFFIX, tokenStr);
+
+
+/*                            if (geaItemModelliSize == 0)
                             {
                                 callModels = networkUtils.getData(this, GET_MODELS_URL_SUFFIX, tokenStr);
-                            }
-
-                            //loginCommunicator.onTechSelectedAndApplied();
+                            }*/
                         }
 
                     } catch (JSONException e)
