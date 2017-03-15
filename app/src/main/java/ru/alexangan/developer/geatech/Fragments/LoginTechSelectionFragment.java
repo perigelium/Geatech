@@ -3,6 +3,7 @@ package ru.alexangan.developer.geatech.Fragments;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.app.ProgressDialog;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
@@ -81,6 +82,7 @@ public class LoginTechSelectionFragment extends Fragment implements View.OnClick
     ArrayList<String> saTecnicianList;
     private String modelsJSONData;
     int geaItemModelliSize;
+    private ProgressDialog downloadingDialog, preparingListDialog;
 
     public LoginTechSelectionFragment()
     {
@@ -107,6 +109,11 @@ public class LoginTechSelectionFragment extends Fragment implements View.OnClick
         networkUtils = new NetworkUtils();
         saTecnicianList = new ArrayList<>();
         activity = getActivity();
+
+        downloadingDialog = new ProgressDialog(getActivity());
+        downloadingDialog.setTitle("");
+        downloadingDialog.setMessage("Download dei dati, si prega di attendere un po'...");
+        downloadingDialog.setIndeterminate(true);
     }
 
     @Override
@@ -221,7 +228,6 @@ public class LoginTechSelectionFragment extends Fragment implements View.OnClick
             {
                 public void run()
                 {
-
                     realm.beginTransaction();
                     RealmResults<TechnicianItem> techModelListOld = realm.where(TechnicianItem.class).equalTo("company_id", company_id).findAll();
                     techModelListOld.deleteAllFromRealm();
@@ -299,6 +305,12 @@ public class LoginTechSelectionFragment extends Fragment implements View.OnClick
 
         if (view.getId() == R.id.ibAddTechnician)
         {
+            if (!NetworkUtils.isNetworkAvailable(activity))
+            {
+                showToastMessage("Controlla la connessione a Internet");
+                return;
+            }
+
             btnNewTechnician.setAlpha(.4f);
             btnNewTechnician.setEnabled(false);
 
@@ -308,6 +320,8 @@ public class LoginTechSelectionFragment extends Fragment implements View.OnClick
 
             if (strNomeCognome.length() > 7)
             {
+                downloadingDialog.show();
+
                 bNewTechAdded = true;
                 callTechnicianList = networkUtils.loginRequest(this, login, password, strNomeCognome, -1);
             }
@@ -339,6 +353,8 @@ public class LoginTechSelectionFragment extends Fragment implements View.OnClick
 
             if (NetworkUtils.isNetworkAvailable(activity))
             {
+                downloadingDialog.show();
+
                 callLoginToken = networkUtils.loginRequest(LoginTechSelectionFragment.this, login, password,
                         selectedTech.getFullNameTehnic(), selectedTech.getId());
             } else
@@ -351,6 +367,8 @@ public class LoginTechSelectionFragment extends Fragment implements View.OnClick
     @Override
     public void onFailure(Call call, IOException e)
     {
+        downloadingDialog.dismiss();
+
         if (call == callLoginToken)
         {
             showToastMessage("Token non ricevuto");
@@ -425,6 +443,8 @@ public class LoginTechSelectionFragment extends Fragment implements View.OnClick
                 e.printStackTrace();
                 showToastMessage("JSON parse error");
             }
+
+            downloadingDialog.dismiss();
         }
 
         if (call == callLoginToken)
@@ -462,9 +482,13 @@ public class LoginTechSelectionFragment extends Fragment implements View.OnClick
                     } catch (JSONException e)
                     {
                         e.printStackTrace();
+
+                        downloadingDialog.dismiss();
                     }
                 } else
                 {
+                    downloadingDialog.dismiss();
+
                     if (jsonObject.has("error"))
                     {
                         final String errorStr;
@@ -487,6 +511,8 @@ public class LoginTechSelectionFragment extends Fragment implements View.OnClick
             {
                 e.printStackTrace();
                 showToastMessage("JSON parse error");
+
+                downloadingDialog.dismiss();
             }
         }
 
@@ -500,6 +526,9 @@ public class LoginTechSelectionFragment extends Fragment implements View.OnClick
             {
                 public void run()
                 {
+
+                    //preparingListDialog.show();
+
                     realm.beginTransaction();
 
                     inVisitItems = JSON_to_model.getVisitTtemsList(visitsJSONData);
@@ -516,10 +545,14 @@ public class LoginTechSelectionFragment extends Fragment implements View.OnClick
                     }
                     realm.commitTransaction();
 
+/*
+
                     if (geaItemModelliSize != 0)
                     {
                         loginCommunicator.onTechSelectedAndApplied();
-                    }
+
+                        downloadingDialog.dismiss();
+                    }*/
                 }
             });
         }
@@ -552,8 +585,7 @@ public class LoginTechSelectionFragment extends Fragment implements View.OnClick
                             //str_gea_modelli = String.valueOf(Html.fromHtml(str_gea_modelli, Html.FROM_HTML_MODE_LEGACY));
                             str_gea_sezioni_modelli = String.valueOf(Html.fromHtml(str_gea_sezioni_modelli, Html.FROM_HTML_MODE_LEGACY));
                             str_gea_items_modelli = String.valueOf(Html.fromHtml(str_gea_items_modelli, Html.FROM_HTML_MODE_LEGACY));
-                        }
-                        else
+                        } else
                         {
                             //str_gea_modelli = String.valueOf(Html.fromHtml(str_gea_modelli));
                             str_gea_sezioni_modelli = String.valueOf(Html.fromHtml(str_gea_sezioni_modelli));
@@ -576,7 +608,6 @@ public class LoginTechSelectionFragment extends Fragment implements View.OnClick
                         {
                         }.getType();
                         final List<GeaItemModelliRapporto> l_geaItemsModelli = gson.fromJson(str_gea_items_modelli, typeGeaItemsModelli);
-
 
                         activity.runOnUiThread(new Runnable()
                         {
@@ -619,17 +650,45 @@ public class LoginTechSelectionFragment extends Fragment implements View.OnClick
                                 }
 
                                 loginCommunicator.onTechSelectedAndApplied();
+
+                                downloadingDialog.dismiss();
                             }
                         });
 
                     } catch (Exception e)
                     {
                         e.printStackTrace();
+
+                        activity.runOnUiThread(new Runnable()
+                        {
+                            public void run()
+                            {
+                                downloadingDialog.dismiss();
+                            }
+                        });
                     }
+                }
+                else
+                {
+                    activity.runOnUiThread(new Runnable()
+                    {
+                        public void run()
+                        {
+                            downloadingDialog.dismiss();
+                        }
+                    });
                 }
             } catch (JSONException e)
             {
                 e.printStackTrace();
+
+                activity.runOnUiThread(new Runnable()
+                {
+                    public void run()
+                    {
+                        downloadingDialog.dismiss();
+                    }
+                });
             }
         }
     }

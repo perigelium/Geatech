@@ -23,7 +23,6 @@ import static ru.alexangan.developer.geatech.Models.GlobalConstants.visitItems;
 
 public class NotSentListVisitsFragment extends ListFragment// implements View.OnClickListener
 {
-
     private Communicator mCommunicator;
 
     @Override

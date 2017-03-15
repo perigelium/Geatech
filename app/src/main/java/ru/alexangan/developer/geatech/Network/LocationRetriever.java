@@ -137,7 +137,7 @@ public class LocationRetriever implements ConnectionCallbacks, OnConnectionFaile
             }
             mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
 
-            if (mLastLocation != null)
+            //if (mLastLocation != null)
             {
                 callback.onLocationReceived();
                 stopLocationUpdates();

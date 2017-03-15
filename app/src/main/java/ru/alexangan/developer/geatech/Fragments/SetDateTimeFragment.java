@@ -3,6 +3,7 @@ package ru.alexangan.developer.geatech.Fragments;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Fragment;
+import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
@@ -71,6 +72,7 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
     NetworkUtils networkUtils;
 
     private Communicator mCommunicator;
+    private ProgressDialog requestServerDialog;
 
 
     public SetDateTimeFragment()
@@ -98,6 +100,11 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
         }
 
         networkUtils = new NetworkUtils();
+
+        requestServerDialog = new ProgressDialog(getActivity());
+        requestServerDialog.setTitle("");
+        requestServerDialog.setMessage("Download dei dati, si prega di attendere un po'...");
+        requestServerDialog.setIndeterminate(true);
     }
 
     private DatePickerDialog.OnDateSetListener datePickerListener = new DatePickerDialog.OnDateSetListener()
@@ -300,6 +307,8 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
             btnAnnullaSetDateTime.setAlpha(.4f);
             btnAnnullaSetDateTime.setEnabled(false);
 
+            disableInputAndShowProgressDialog();
+
             notifyServerDataOraSopralluogo(idSopralluogo, stakedOut);
 
             //mCommunicator.onDateTimeSetReturned(false);
@@ -313,6 +322,8 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
 
             btnSetDateTimeSubmit.setAlpha(.4f);
             btnSetDateTimeSubmit.setEnabled(false);
+
+            disableInputAndShowProgressDialog();
 
             notifyServerDataOraSopralluogo(idSopralluogo, stakedOut);
 
@@ -373,11 +384,27 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
     public void onFailure(Call call, IOException e)
     {
         showToastMessage("Dato e ora inviato, risposta non ha ricevuto");
+
+        activity.runOnUiThread(new Runnable()
+        {
+            public void run()
+            {
+                enableInput();
+            }
+        });
     }
 
     @Override
     public void onResponse(Call call, Response response) throws IOException
     {
+        getActivity().runOnUiThread(new Runnable()
+        {
+            public void run()
+            {
+                enableInput();
+            }
+        });
+
         if (call == setDateTimeCall)
         {
             strVisitDateTimeResponse = response.body().string();
@@ -487,7 +514,6 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
                     }
                 }
             }
-
         }
     }
 
@@ -500,5 +526,25 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
                 Toast.makeText(activity, msg, Toast.LENGTH_LONG).show();
             }
         });
+    }
+
+    private void disableInputAndShowProgressDialog()
+    {
+        btnSetDateTimeSubmit.setEnabled(false);
+        btnSetDateTimeSubmit.setAlpha(.4f);
+        btnAnnullaSetDateTime.setEnabled(false);
+        btnAnnullaSetDateTime.setAlpha(.4f);
+
+        requestServerDialog.show();
+    }
+
+    private void enableInput()
+    {
+        btnSetDateTimeSubmit.setEnabled(true);
+        btnSetDateTimeSubmit.setAlpha(1.0f);
+        btnAnnullaSetDateTime.setEnabled(true);
+        btnAnnullaSetDateTime.setAlpha(1.0f);
+
+        requestServerDialog.dismiss();
     }
 }

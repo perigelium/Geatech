@@ -426,7 +426,7 @@
             android:layout_weight="1">-->
 
         <Button
-            android:id="@+id/btnSetCurrentCoords"
+            android:id="@+id/btnGetCurrentCoords"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="left"
@@ -437,7 +437,7 @@
             android:text="Recupera da gps" />
 
             <Button
-                android:id="@+id/btnSaveCurrentCoords"
+                android:id="@+id/btnSaveCoords"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="right"

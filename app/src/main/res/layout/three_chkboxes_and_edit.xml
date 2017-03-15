@@ -11,21 +11,21 @@
         android:layout_height="wrap_content"
         android:background="#eeeeee"
         android:clickable="true"
+
         android:orientation="horizontal">
 
         <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_margin="9dp">
 
             <TextView
                 android:id="@+id/tvHeaderThreeChkboxesAndEdit"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start|center_vertical"
-                android:layout_margin="9dp"
                 android:text=" Section name"
                 android:maxWidth="250dp"
-
                 android:textSize="13sp"/>
 
             <ImageView
@@ -33,7 +33,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical|end"
-                android:layout_marginRight="25dp"
+                android:layout_marginRight="16dp"
                 android:src="@android:drawable/arrow_down_float"/>
 
         </FrameLayout>
@@ -44,6 +44,7 @@
         android:id="@+id/llSectionThreeChkboxesAndEdit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="9dp"
         android:orientation="vertical"
         ><!--android:visibility="gone">-->
 
@@ -84,14 +85,14 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_margin="9dp">
 
         <TextView
             android:id="@+id/tv1ThreeChkboxesAndEdit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="start|center_vertical"
-            android:layout_margin="9dp"
             android:text="Altro: "
             android:textSize="13sp"/>
 

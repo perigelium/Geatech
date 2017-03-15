@@ -95,7 +95,11 @@ public class ComingListVisitsFragment extends ListFragment
 
             for(ReportStates reportStates : reportStatesResults)
             {
-                if (visitItem.getGeaSopralluogo().getId_sopralluogo() == reportStates.getId_sopralluogo())
+                if (visitItem.getGeaSopralluogo().getId_sopralluogo() == reportStates.getId_sopralluogo()
+                        && reportStates.getGeneralInfoCompletionState() == 0
+                        && reportStates.getDataOraRaportoCompletato() == null
+                        && reportStates.getData_ora_invio_rapporto() == null
+                        )
                 {
                     //visitItemsDateTimeSet.add(visitItem);
 

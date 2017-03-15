@@ -386,7 +386,7 @@
                 android:background="@android:color/transparent"
                 android:maxLines="1"
                 android:text="REPORT TECNICO"
-                android:textSize="19dp"
+                android:textSize="15sp"
                 android:textStyle="bold"/>
 
         </LinearLayout>

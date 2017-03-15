@@ -115,6 +115,9 @@ public class DomoticaReportFragment extends Fragment
 
         idItem = viewUtils.createViewEdit(idItem, R.id.edit1);
 
+        EditText et0 = viewUtils.getEditTexts().get(idItem - 1);
+        et0.setInputType(InputType.TYPE_CLASS_TEXT);
+
         idItem = viewUtils.createViewTwoSwitches(idItem, R.id.two_switches1);
 
         idItem = viewUtils.createViewFourRadiosAndEdit(idItem, R.id.four_radios_and_edit1);
@@ -128,6 +131,9 @@ public class DomoticaReportFragment extends Fragment
         et1.setInputType(InputType.TYPE_CLASS_NUMBER);*/
 
         idItem = viewUtils.createViewEdit(idItem, R.id.edit2);
+
+        EditText et1 = viewUtils.getEditTexts().get(idItem - 2);
+        et1.setInputType(InputType.TYPE_CLASS_TEXT);
 
         idItem = viewUtils.createViewSwitchAndEdit(idItem, R.id.switch_and_edit1);
 

@@ -123,11 +123,6 @@ public class MyListVisitsAdapter extends BaseAdapter
 
         String productType = productData.getProductType();
 
-        if(productType.length() > 17)
-        {
-            productType = productType.substring(0, 17);
-        }
-
         serviceTypeTextView.setText(productType);
         clientAddressTextView.setText(clientData.getAddress());
 

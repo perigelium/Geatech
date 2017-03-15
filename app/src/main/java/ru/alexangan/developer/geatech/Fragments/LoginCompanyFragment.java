@@ -3,6 +3,7 @@ package ru.alexangan.developer.geatech.Fragments;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.app.ProgressDialog;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -44,6 +45,7 @@ public class LoginCompanyFragment extends Fragment implements View.OnClickListen
     private Call callTechnicianList;
     NetworkUtils networkUtils;
     String strLogin, strPassword;
+    private ProgressDialog downloadingDialog;
 
     public LoginCompanyFragment()
     {
@@ -57,6 +59,11 @@ public class LoginCompanyFragment extends Fragment implements View.OnClickListen
 
         activity = getActivity();
         networkUtils = new NetworkUtils();
+
+        downloadingDialog = new ProgressDialog(getActivity());
+        downloadingDialog.setTitle("");
+        downloadingDialog.setMessage("Download dei dati, si prega di attendere un po'...");
+        downloadingDialog.setIndeterminate(true);
     }
 
     @Override
@@ -214,6 +221,8 @@ public class LoginCompanyFragment extends Fragment implements View.OnClickListen
                 }
             } else
             {
+                downloadingDialog.show();
+
                 callTechnicianList = networkUtils.loginRequest(this, strLogin, strPassword, null, -1);
             }
         }
@@ -326,6 +335,8 @@ public class LoginCompanyFragment extends Fragment implements View.OnClickListen
                 }
             });
         }
+
+        downloadingDialog.dismiss();
     }
 
     private void showToastMessage(final String msg)

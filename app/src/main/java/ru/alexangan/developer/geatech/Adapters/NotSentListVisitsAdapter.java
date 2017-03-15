@@ -1,6 +1,7 @@
 package ru.alexangan.developer.geatech.Adapters;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -51,6 +52,7 @@ import static ru.alexangan.developer.geatech.Models.GlobalConstants.visitItems;
 
 public class NotSentListVisitsAdapter extends BaseAdapter implements Callback
 {
+    private final ProgressDialog requestServerDialog;
     ArrayList<VisitItem> visitItemsDateTimeSet;
     int layout_id;
     ReportStates reportStates;
@@ -60,6 +62,7 @@ public class NotSentListVisitsAdapter extends BaseAdapter implements Callback
     NetworkUtils networkUtils;
     List<GeaImagineRapporto> imagesArray;
     List <Call> callSendImagesList;
+    Button btnSendReportNow;
 
     public NotSentListVisitsAdapter(Activity activity, int layout_id, ArrayList<VisitItem> objects)
     {
@@ -69,6 +72,11 @@ public class NotSentListVisitsAdapter extends BaseAdapter implements Callback
         this.layout_id = layout_id;
         callSendImagesList = new ArrayList<>();
         networkUtils = new NetworkUtils();
+
+        requestServerDialog = new ProgressDialog(activity);
+        requestServerDialog.setTitle("");
+        requestServerDialog.setMessage("Upload dei dati, si prega di attendere un po'...");
+        requestServerDialog.setIndeterminate(true);
     }
 
     @Override
@@ -133,7 +141,7 @@ public class NotSentListVisitsAdapter extends BaseAdapter implements Callback
             tvNextTimeTryToSendReport.setText(reportStates.getDataOraProssimoTentativo());*/
         }
 
-        final Button btnSendReportNow = (Button) row.findViewById(R.id.btnSendReportNow);
+        btnSendReportNow = (Button) row.findViewById(R.id.btnSendReportNow);
 
         btnSendReportNow.setOnClickListener(new View.OnClickListener()
         {
@@ -142,10 +150,9 @@ public class NotSentListVisitsAdapter extends BaseAdapter implements Callback
             {
                 if(reportStates != null)
                 {
-                    sendReportItem(position);
+                    disableInputAndShowProgressDialog();
 
-                    btnSendReportNow.setAlpha(.4f);
-                    btnSendReportNow.setEnabled(false);
+                    sendReportItem(position);
 
                     //notifyDataSetChanged();
                 }
@@ -263,6 +270,14 @@ public class NotSentListVisitsAdapter extends BaseAdapter implements Callback
     @Override
     public void onFailure(Call call, IOException e)
     {
+        activity.runOnUiThread(new Runnable()
+        {
+            public void run()
+            {
+                enableInput();
+            }
+        });
+
         if (call == callSendReport)
         {
             showToastMessage("Invio rapporto fallito");
@@ -318,9 +333,16 @@ public class NotSentListVisitsAdapter extends BaseAdapter implements Callback
                     callSendImagesList.add(networkUtils.sendImage(this, activity, geaImagineRapporto));
                 }
 
-
             //mCommunicator.onSendReportReturned();
         }
+
+        activity.runOnUiThread(new Runnable()
+        {
+            public void run()
+            {
+                requestServerDialog.dismiss();
+            }
+        });
     }
 
     private void showToastMessage(final String msg)
@@ -332,5 +354,21 @@ public class NotSentListVisitsAdapter extends BaseAdapter implements Callback
                 Toast.makeText(activity, msg, Toast.LENGTH_LONG).show();
             }
         });
+    }
+
+    private void disableInputAndShowProgressDialog()
+    {
+        btnSendReportNow.setEnabled(false);
+        btnSendReportNow.setAlpha(.4f);
+
+        requestServerDialog.show();
+    }
+
+    private void enableInput()
+    {
+        btnSendReportNow.setEnabled(true);
+        btnSendReportNow.setAlpha(1.0f);
+
+        requestServerDialog.dismiss();
     }
 }

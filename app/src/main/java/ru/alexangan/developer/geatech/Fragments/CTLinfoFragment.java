@@ -1,9 +1,14 @@
 package ru.alexangan.developer.geatech.Fragments;
 
+import android.app.Activity;
 import android.app.Fragment;
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,44 +38,21 @@ import static ru.alexangan.developer.geatech.Models.GlobalConstants.visitItems;
 
 public class CTLinfoFragment extends Fragment implements View.OnClickListener, LocationRetrievedEvents, Callback
 {
-    Button btnSetCurrentCoords, btnSaveCurrentCoords;
+    Button btnGetCurrentCoords, btnSaveCoords;
     TextView tvCoordNord, tvCoordEst, tvAltitude;
     Call callDownloadURL;
     double latitude, longitude;
     int altitude;
     private int selectedIndex;
     LocationRetriever locationRetriever;
-    Context context;
+    Activity activity;
     Location mLastLocation;
     ReportStates reportStates;
     Communicator communicator;
+    private ProgressDialog requestServerDialog;
 
     public CTLinfoFragment()
     {
-    }
-
-    @Override
-    public void onStart()
-    {
-        super.onStart();
-    }
-
-    @Override
-    public void onResume()
-    {
-        super.onResume();
-    }
-
-    @Override
-    public void onDestroy()
-    {
-        super.onDestroy();
-    }
-
-    @Override
-    public void onStop()
-    {
-        super.onStop();
     }
 
     @Override
@@ -78,7 +60,7 @@ public class CTLinfoFragment extends Fragment implements View.OnClickListener, L
     {
         super.onCreate(savedInstanceState);
 
-        context = getActivity();
+        activity = getActivity();
 
         if (getArguments() != null)
         {
@@ -89,21 +71,24 @@ public class CTLinfoFragment extends Fragment implements View.OnClickListener, L
         longitude = 0;
         latitude = 0;
 
-        communicator = (Communicator)getActivity();
+        communicator = (Communicator) getActivity();
+
+        requestServerDialog = new ProgressDialog(getActivity());
+        requestServerDialog.setTitle("");
+        requestServerDialog.setMessage("Download dei dati, si prega di attendere un po'...");
+        requestServerDialog.setIndeterminate(true);
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState)
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
-
         View rootView = inflater.inflate(R.layout.ctl_info_fragment, container, false);
 
-        btnSetCurrentCoords = (Button) rootView.findViewById(R.id.btnSetCurrentCoords);
-        btnSaveCurrentCoords = (Button) rootView.findViewById(R.id.btnSaveCurrentCoords);
+        btnGetCurrentCoords = (Button) rootView.findViewById(R.id.btnGetCurrentCoords);
+        btnSaveCoords = (Button) rootView.findViewById(R.id.btnSaveCoords);
 
-        btnSetCurrentCoords.setOnClickListener(this);
-        btnSaveCurrentCoords.setOnClickListener(this);
+        btnGetCurrentCoords.setOnClickListener(this);
+        btnSaveCoords.setOnClickListener(this);
 
         tvCoordNord = (TextView) rootView.findViewById(R.id.tvCoordNord);
         tvCoordEst = (TextView) rootView.findViewById(R.id.tvCoordEst);
@@ -132,7 +117,7 @@ public class CTLinfoFragment extends Fragment implements View.OnClickListener, L
         TextView tvTechnicianName = (TextView) rootView.findViewById(R.id.tvTechnicianName);
         tvTechnicianName.setText(selectedTech.getFullNameTehnic());
 
-        if(reportStates!=null)
+        if (reportStates != null)
         {
             if (reportStates.getLatitudine() == 0)
             {
@@ -166,79 +151,60 @@ public class CTLinfoFragment extends Fragment implements View.OnClickListener, L
             }
         }
 
-/*        if(reportStates.getData_ora_presa_appuntamento() == null && geaSopralluogo.getInizializzazione())
-        {
-            btnSetCurrentCoords.setEnabled(false);
-            btnSetCurrentCoords.setAlpha(.4f);
-            btnSaveCurrentCoords.setEnabled(false);
-            btnSaveCurrentCoords.setAlpha(.4f);
-
-            //communicator.disableCtrlButtons2(false);
-        }*/
-/*        else
-        {
-            communicator.disableCtrlButtons2(true);
-        }*/
-
         return rootView;
-    }
-
-    @Override
-    public void onPause()
-    {
-        super.onPause();
-
-
     }
 
     @Override
     public void onClick(View view)
     {
-        if (view.getId() == R.id.btnSetCurrentCoords)
+        if (view.getId() == R.id.btnGetCurrentCoords)
         {
-            if (!NetworkUtils.isNetworkAvailable(context))
+            if (!NetworkUtils.isNetworkAvailable(activity))
             {
-                Toast.makeText(context, "Controlla la connessione a Internet", Toast.LENGTH_LONG).show();
+                Toast.makeText(activity, "Controlla la connessione a Internet", Toast.LENGTH_LONG).show();
                 return;
             }
 
-            btnSetCurrentCoords.setEnabled(false);
-            btnSetCurrentCoords.setAlpha(.4f);
-            btnSaveCurrentCoords.setEnabled(false);
-            btnSaveCurrentCoords.setAlpha(.4f);
+            LocationManager locationManager = (LocationManager) activity.getSystemService(Context.LOCATION_SERVICE);
+            if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER))
+            {
+                activity.startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+                return;
+            }
 
-                locationRetriever = new LocationRetriever(context, this);
+            disableInputAndShowProgressDialog();
+
+            locationRetriever = new LocationRetriever(activity, this);
         }
 
-        if(view.getId() == R.id.btnSaveCurrentCoords)
+        if (view.getId() == R.id.btnSaveCoords)
         {
-            btnSaveCurrentCoords.setEnabled(false);
-            btnSaveCurrentCoords.setAlpha(0.4f);
-
-            if(reportStates!=null)
+            if (reportStates != null)
             {
                 realm.beginTransaction();
 
-                if(latitude != 0)
+                if (latitude != 0)
                 {
                     reportStates.setLatitudine(latitude);
                 }
-                if(longitude != 0)
+                if (longitude != 0)
                 {
                     reportStates.setLongitudine(longitude);
                 }
 
-                if(altitude!= -999)
+                if (altitude != -999)
                 {
                     reportStates.setAltitudine(altitude);
                 }
 
-                if(reportStates!=null && reportStates.getLatitudine() != 0 && reportStates.getLongitudine() != 0) // && altitude != -999
+                if (reportStates != null && reportStates.getLatitudine() != 0 && reportStates.getLongitudine() != 0) // && altitude != -999
                 {
                     reportStates.setGeneralInfoCompletionState(2);
                 }
 
                 realm.commitTransaction();
+
+                showToastMessage("Salvato");
             }
         }
     }
@@ -268,8 +234,14 @@ public class CTLinfoFragment extends Fragment implements View.OnClickListener, L
                         + "&sensor=true";
 
                 NetworkUtils networkUtils = new NetworkUtils();
+
                 callDownloadURL = networkUtils.downloadURL(this, elevationUrl);
             }
+        } else
+        {
+            showToastMessage("Non riuscito a ricevere coordinati");
+
+            enableInput();
         }
 
         //Log.d("new", "coords= " + String.valueOf(latitude) + " " + String.valueOf(longitude));
@@ -300,7 +272,15 @@ public class CTLinfoFragment extends Fragment implements View.OnClickListener, L
     @Override
     public void onFailure(Call call, IOException e)
     {
+        getActivity().runOnUiThread(new Runnable()
+        {
+            public void run()
+            {
+                enableInput();
+            }
+        });
 
+        showToastMessage("Non riuscito a ricevere altitudine");
     }
 
     @Override
@@ -314,7 +294,7 @@ public class CTLinfoFragment extends Fragment implements View.OnClickListener, L
         {
             public void run()
             {
-                if(reportStates!=null)
+                if (reportStates != null)
                 {
                     realm.beginTransaction();
                     reportStates.setAltitudine(altitude);
@@ -323,10 +303,38 @@ public class CTLinfoFragment extends Fragment implements View.OnClickListener, L
 
                 tvAltitude.setText(String.valueOf(altitude), TextView.BufferType.EDITABLE);
 
-                btnSetCurrentCoords.setEnabled(true);
-                btnSetCurrentCoords.setAlpha(1.0f);
-                btnSaveCurrentCoords.setEnabled(true);
-                btnSaveCurrentCoords.setAlpha(1.0f);
+                enableInput();
+            }
+        });
+    }
+
+    private void disableInputAndShowProgressDialog()
+    {
+        btnGetCurrentCoords.setEnabled(false);
+        btnGetCurrentCoords.setAlpha(.4f);
+        btnSaveCoords.setEnabled(false);
+        btnSaveCoords.setAlpha(.4f);
+
+        requestServerDialog.show();
+    }
+
+    private void enableInput()
+    {
+        btnGetCurrentCoords.setEnabled(true);
+        btnGetCurrentCoords.setAlpha(1.0f);
+        btnSaveCoords.setEnabled(true);
+        btnSaveCoords.setAlpha(1.0f);
+
+        requestServerDialog.dismiss();
+    }
+
+    private void showToastMessage(final String msg)
+    {
+        activity.runOnUiThread(new Runnable()
+        {
+            public void run()
+            {
+                Toast.makeText(activity, msg, Toast.LENGTH_LONG).show();
             }
         });
     }

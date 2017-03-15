@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -69,6 +70,7 @@ public class MainActivity extends Activity implements Communicator, Callback
     ComingListVisitsFragment comingListVisits;
     NotSentListVisitsFragment notSentListVisits;
     ReportsListFragment reportsList;
+    private ProgressDialog requestServerDialog;
 
     @Override
     protected void onStart()
@@ -211,6 +213,11 @@ public class MainActivity extends Activity implements Communicator, Callback
         mFragmentTransaction.commit();
 
         networkUtils = new NetworkUtils();
+
+        requestServerDialog = new ProgressDialog(this);
+        requestServerDialog.setTitle("");
+        requestServerDialog.setMessage("Download dei dati, si prega di attendere un po'...");
+        requestServerDialog.setIndeterminate(true);
     }
 
     @Override
@@ -528,6 +535,8 @@ public class MainActivity extends Activity implements Communicator, Callback
     {
         if (!mDatetimeAlreadySet && networkUtils.isNetworkAvailable(this))
         {
+            requestServerDialog.show();
+
             callVisits = networkUtils.getData(this, GET_VISITS_URL_SUFFIX, tokenStr);
         } else
         {
@@ -774,6 +783,8 @@ public class MainActivity extends Activity implements Communicator, Callback
         if (call == callVisits)
         {
             showToastMessage("Visite data non ricevuto");
+
+            requestServerDialog.dismiss();
         }
     }
 
@@ -829,5 +840,7 @@ public class MainActivity extends Activity implements Communicator, Callback
                 }
             });
         }
+
+        requestServerDialog.dismiss();
     }
 }

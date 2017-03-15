@@ -2,6 +2,7 @@ package ru.alexangan.developer.geatech.Fragments;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -48,7 +49,7 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
     View rootView;
     private Communicator mCommunicator;
 
-    private Button sendReport;
+    private Button btnSendReportNow;
     private int selectedIndex;
 
     ReportStates reportStates;
@@ -59,6 +60,7 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
     Activity activity;
     NetworkUtils networkUtils;
     List<GeaImagineRapporto> imagesArray;
+    private ProgressDialog requestServerDialog;
 
     public SendReportFragment()
     {
@@ -86,6 +88,11 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
 
         callSendImagesList = new ArrayList<>();
         networkUtils = new NetworkUtils();
+
+        requestServerDialog = new ProgressDialog(activity);
+        requestServerDialog.setTitle("");
+        requestServerDialog.setMessage("Upload dei dati, si prega di attendere un po'...");
+        requestServerDialog.setIndeterminate(true);
     }
 
     @Override
@@ -93,8 +100,8 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
     {
         rootView = inflater.inflate(R.layout.send_report_fragment, container, false);
 
-        sendReport = (Button) rootView.findViewById(R.id.btnSendReport);
-        sendReport.setOnClickListener(this);
+        btnSendReportNow = (Button) rootView.findViewById(R.id.btnSendReport);
+        btnSendReportNow.setOnClickListener(this);
 
         VisitItem visitItem = visitItems.get(selectedIndex);
         GeaSopralluogo geaSopralluogo = visitItem.getGeaSopralluogo();
@@ -117,12 +124,12 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
                     && (reportStates.getGeneralInfoCompletionState() == 2 && reportStates.getReportCompletionState() == 3)
                     && reportStates.getPhotoAddedNumber() >= 1) //  && reportStates.getData_ora_invio_rapporto() == null
             {
-                sendReport.setAlpha(1.0f);
-                sendReport.setEnabled(true);
+                btnSendReportNow.setAlpha(1.0f);
+                btnSendReportNow.setEnabled(true);
             } else
             {
-                sendReport.setAlpha(.4f);
-                sendReport.setEnabled(false);
+                btnSendReportNow.setAlpha(.4f);
+                btnSendReportNow.setEnabled(false);
             }
 
 
@@ -160,8 +167,7 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
         {
             //if (reportStates != null)
             {
-                sendReport.setAlpha(.4f);
-                sendReport.setEnabled(false);
+                disableInputAndShowProgressDialog();
 
                 sendReportItem(selectedIndex);
             }
@@ -251,8 +257,15 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
         if (call == callSendImage)
         {
             showToastMessage("Invio immagine fallito");
-            Log.d("DEBUG", "Invio immagine fallito");
         }
+
+        activity.runOnUiThread(new Runnable()
+        {
+            public void run()
+            {
+                enableInput();
+            }
+        });
     }
 
     @Override
@@ -307,6 +320,14 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
 
             //mCommunicator.onSendReportReturned();
         }
+
+        activity.runOnUiThread(new Runnable()
+        {
+            public void run()
+            {
+                requestServerDialog.dismiss();
+            }
+        });
     }
 
     private void showToastMessage(final String msg)
@@ -318,5 +339,21 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
                 Toast.makeText(activity, msg, Toast.LENGTH_LONG).show();
             }
         });
+    }
+
+    private void disableInputAndShowProgressDialog()
+    {
+        btnSendReportNow.setEnabled(false);
+        btnSendReportNow.setAlpha(.4f);
+
+        requestServerDialog.show();
+    }
+
+    private void enableInput()
+    {
+        btnSendReportNow.setEnabled(true);
+        btnSendReportNow.setAlpha(1.0f);
+
+        requestServerDialog.dismiss();
     }
 }
