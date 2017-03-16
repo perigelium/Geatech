@@ -2137,7 +2137,7 @@ public class ViewUtils
     {
         String str_id_item = DatabaseUtils.getValueFromReportItem(id_rapporto_sopralluogo, idItem);
 
-        String[] strChkArray = str_id_item.split("||");
+        String[] strChkArray = str_id_item.split("\\|\\|");
 
         ArrayList<CheckBox> al_Chks = CheckBoxes.get(idItem);
 
@@ -2185,7 +2185,7 @@ public class ViewUtils
     {
         String str_id_item = DatabaseUtils.getValueFromReportItem(id_rapporto_sopralluogo, idItem);
 
-        String[] strChkArray = str_id_item.split("||");
+        String[] strChkArray = str_id_item.split("\\|\\|");
 
         boolean checkedChkboxes = false;
 

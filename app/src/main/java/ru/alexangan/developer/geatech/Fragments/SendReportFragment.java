@@ -91,7 +91,7 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
 
         requestServerDialog = new ProgressDialog(activity);
         requestServerDialog.setTitle("");
-        requestServerDialog.setMessage("Upload dei dati, si prega di attendere un po'...");
+        requestServerDialog.setMessage("Trasmettere dei dati, si prega di attendere un po'...");
         requestServerDialog.setIndeterminate(true);
     }
 
@@ -235,7 +235,7 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
 
         String str_ReportItem_json = gson.toJson(reportItem);
 
-        Log.d("DEBUG", str_ReportItem_json);
+        //Log.d("DEBUG", str_ReportItem_json);
 
         if (!NetworkUtils.isNetworkAvailable(activity))
         {
@@ -279,8 +279,8 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
                 {
                     reportSendResponse = response.body().string();
 
-                    showToastMessage("Immagine " + i + " inviato, server ritorna: " + reportSendResponse);
-                    Log.d("DEBUG", "image " + i + ", server returned:" + reportSendResponse);
+                    showToastMessage("Immagine " + i + " inviato"); //, server ritorna: " + reportSendResponse
+                    //Log.d("DEBUG", "image " + i + ", server returned:" + reportSendResponse);
                 }
             }
         }
@@ -300,7 +300,7 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
                 {
                     public void run()
                     {
-                        Toast.makeText(activity, "Rapporto inviato, server ritorna: " + reportSendResponse, Toast.LENGTH_LONG).show();
+                        Toast.makeText(activity, "Rapporto inviato", Toast.LENGTH_LONG).show(); //, server ritorna: " + reportSendResponse
 
                         Calendar calendarNow = Calendar.getInstance();
                         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);

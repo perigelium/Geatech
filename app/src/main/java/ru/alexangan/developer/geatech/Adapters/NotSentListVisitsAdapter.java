@@ -9,6 +9,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -18,7 +20,9 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
@@ -62,7 +66,8 @@ public class NotSentListVisitsAdapter extends BaseAdapter implements Callback
     NetworkUtils networkUtils;
     List<GeaImagineRapporto> imagesArray;
     List <Call> callSendImagesList;
-    Button btnSendReportNow;
+    ViewHolder mViewHolder;
+    ArrayList <Boolean> alReportSent;
 
     public NotSentListVisitsAdapter(Activity activity, int layout_id, ArrayList<VisitItem> objects)
     {
@@ -75,8 +80,11 @@ public class NotSentListVisitsAdapter extends BaseAdapter implements Callback
 
         requestServerDialog = new ProgressDialog(activity);
         requestServerDialog.setTitle("");
-        requestServerDialog.setMessage("Upload dei dati, si prega di attendere un po'...");
+        requestServerDialog.setMessage("Trasmettere dei dati, si prega di attendere un po'...");
         requestServerDialog.setIndeterminate(true);
+
+        alReportSent = new ArrayList<>(Collections.nCopies(visitItemsDateTimeSet.size(), false));
+        //alReportSent = (ArrayList<Boolean>) Arrays.asList(false);
     }
 
     @Override
@@ -101,8 +109,35 @@ public class NotSentListVisitsAdapter extends BaseAdapter implements Callback
     public View getView(final int position, View convertView, ViewGroup parent) {
         // return super.getView(position, convertView, parent);
 
-        LayoutInflater inflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View row = inflater.inflate(layout_id, parent, false);
+        View row = convertView;
+
+        if (row == null)
+        {
+            LayoutInflater inflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            row = inflater.inflate(layout_id, parent, false);
+            mViewHolder = new ViewHolder();
+
+            mViewHolder.tvVisitDay = (TextView)row.findViewById(R.id.tvVisitDay);
+            mViewHolder.tvVisitMonth = (TextView)row.findViewById(R.id.tvVisitMonth);
+            mViewHolder.tvVisitTime = (TextView)row.findViewById(R.id.tvVisitTime);
+
+            mViewHolder.clientNameTextView = (TextView) row.findViewById(R.id.tvClientName);
+            mViewHolder.serviceTypeTextView = (TextView) row.findViewById(R.id.tvTypeOfService);
+            mViewHolder.clientAddressTextView = (TextView) row.findViewById(R.id.tvClientAddress);
+
+            mViewHolder.tvReportCompletionState = (TextView) row.findViewById(R.id.tvReportCompletionState);
+
+            mViewHolder.btnSendReportNow = (Button) row.findViewById(R.id.btnSendReportNow);
+
+            mViewHolder.tvDataOraReportSent = (TextView) row.findViewById(R.id.tvDataOraReportSent);
+            mViewHolder.tvDataOraReportSent.setText("Rapporto non è stato ancora inviato");
+
+            row.setTag(mViewHolder);
+
+        } else
+        {
+            mViewHolder = (ViewHolder) row.getTag();
+        }
 
         VisitItem visitItem = visitItemsDateTimeSet.get(position);
 
@@ -111,18 +146,18 @@ public class NotSentListVisitsAdapter extends BaseAdapter implements Callback
         GeaSopralluogo geaSopralluogo = visitItem.getGeaSopralluogo();
         final int idSopralluogo = geaSopralluogo.getId_sopralluogo();
 
-        TextView tvVisitDay = (TextView)row.findViewById(R.id.tvVisitDay);
+/*        TextView tvVisitDay = (TextView)row.findViewById(R.id.tvVisitDay);
         TextView tvVisitMonth = (TextView)row.findViewById(R.id.tvVisitMonth);
         TextView tvVisitTime = (TextView)row.findViewById(R.id.tvVisitTime);
 
-        TextView clientNameTextView = (TextView) row.findViewById(R.id.tvClientName);
-        clientNameTextView.setText(clientData.getName());
+        TextView clientNameTextView = (TextView) row.findViewById(R.id.tvClientName);*/
+        mViewHolder.clientNameTextView.setText(clientData.getName());
 
-        TextView serviceTypeTextView = (TextView) row.findViewById(R.id.tvTypeOfService);
-        serviceTypeTextView.setText(productData.getProductType());
+        //TextView serviceTypeTextView = (TextView) row.findViewById(R.id.tvTypeOfService);
+        mViewHolder.serviceTypeTextView.setText(productData.getProductType());
 
-        TextView clientAddressTextView = (TextView) row.findViewById(R.id.tvClientAddress);
-        clientAddressTextView.setText(clientData.getAddress());
+        //TextView clientAddressTextView = (TextView) row.findViewById(R.id.tvClientAddress);
+        mViewHolder.clientAddressTextView.setText(clientData.getAddress());
 
         realm.beginTransaction();
         reportStates = realm.where(ReportStates.class).equalTo("company_id", company_id).equalTo("tech_id", selectedTech.getId())
@@ -131,8 +166,7 @@ public class NotSentListVisitsAdapter extends BaseAdapter implements Callback
 
         if(reportStates != null)
         {
-            TextView tvReportCompletionState = (TextView) row.findViewById(R.id.tvReportCompletionState);
-            tvReportCompletionState.setText(reportStates.getDataOraRaportoCompletato());
+            mViewHolder.tvReportCompletionState.setText(reportStates.getDataOraRaportoCompletato());
 
 /*            TextView tvNotSentReason = (TextView) row.findViewById(R.id.tvNotSentReason);
             tvNotSentReason.setText(reportStates.getSendingReportTriesStateString(reportStates.getSendingReportTriesState()).Value());
@@ -141,21 +175,26 @@ public class NotSentListVisitsAdapter extends BaseAdapter implements Callback
             tvNextTimeTryToSendReport.setText(reportStates.getDataOraProssimoTentativo());*/
         }
 
-        btnSendReportNow = (Button) row.findViewById(R.id.btnSendReportNow);
+        Boolean reportSent = alReportSent.get(position);
 
-        btnSendReportNow.setOnClickListener(new View.OnClickListener()
+        if(reportSent)
+        {
+            mViewHolder.btnSendReportNow.setEnabled(false);
+            mViewHolder.btnSendReportNow.setAlpha(.4f);
+        }
+
+        mViewHolder.btnSendReportNow.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View view)
             {
-                if(reportStates != null)
-                {
-                    disableInputAndShowProgressDialog();
+                disableInputAndShowProgressDialog();
+
+                alReportSent.set(position, true);
+
+                    notifyDataSetChanged();
 
                     sendReportItem(position);
-
-                    //notifyDataSetChanged();
-                }
             }
         });
 
@@ -175,8 +214,8 @@ public class NotSentListVisitsAdapter extends BaseAdapter implements Callback
                 e.printStackTrace();
             }
 
-            tvVisitDay.setText(Integer.toString(calendar.get(Calendar.DAY_OF_MONTH)));
-            tvVisitMonth.setText(ItalianMonths.numToString(calendar.get(Calendar.MONTH)+1));
+            mViewHolder.tvVisitDay.setText(Integer.toString(calendar.get(Calendar.DAY_OF_MONTH)));
+            mViewHolder.tvVisitMonth.setText(ItalianMonths.numToString(calendar.get(Calendar.MONTH)+1));
 
             String minuteStr = Integer.toString(calendar.get(calendar.MINUTE));
             if (minuteStr.length() == 1)
@@ -184,7 +223,7 @@ public class NotSentListVisitsAdapter extends BaseAdapter implements Callback
                 minuteStr = "0" + minuteStr;
             }
 
-            tvVisitTime.setText(Integer.toString(calendar.get(calendar.HOUR_OF_DAY)) + ":" + minuteStr);
+            mViewHolder.tvVisitTime.setText(Integer.toString(calendar.get(calendar.HOUR_OF_DAY)) + ":" + minuteStr);
 
         }
 
@@ -256,7 +295,7 @@ public class NotSentListVisitsAdapter extends BaseAdapter implements Callback
 
         String str_ReportItem_json = gson.toJson(reportItem);
 
-        Log.d("DEBUG", str_ReportItem_json);
+        ////Log.d("DEBUG", str_ReportItem_json);
 
         if (!NetworkUtils.isNetworkAvailable(activity))
         {
@@ -286,7 +325,7 @@ public class NotSentListVisitsAdapter extends BaseAdapter implements Callback
         if (call == callSendImage)
         {
             showToastMessage("Invio immagine fallito");
-            Log.d("DEBUG", "Invio immagine fallito");
+            ////Log.d("DEBUG", "Invio immagine fallito");
         }
     }
 
@@ -301,8 +340,8 @@ public class NotSentListVisitsAdapter extends BaseAdapter implements Callback
                 {
                     reportSendResponse = response.body().string();
 
-                    showToastMessage("Immagine " + i + " inviato, server ritorna: " + reportSendResponse);
-                    Log.d("DEBUG", "image " + i + ", server returned:" + reportSendResponse);
+                    showToastMessage("Immagine " + i + " inviato"); //, server ritorna: " + reportSendResponse
+                    ////Log.d("DEBUG", "image " + i + ", server returned:" + reportSendResponse);
                 }
             }
         }
@@ -325,6 +364,9 @@ public class NotSentListVisitsAdapter extends BaseAdapter implements Callback
                         realm.beginTransaction();
                         reportStates.setData_ora_invio_rapporto(strDateTime);
                         realm.commitTransaction();
+
+                        mViewHolder.tvDataOraReportSent.setText("Rapporto inviato il: " + strDateTime);
+                        notifyDataSetChanged();
                     }
                 });
 
@@ -358,17 +400,30 @@ public class NotSentListVisitsAdapter extends BaseAdapter implements Callback
 
     private void disableInputAndShowProgressDialog()
     {
-        btnSendReportNow.setEnabled(false);
-        btnSendReportNow.setAlpha(.4f);
+        mViewHolder.btnSendReportNow.setEnabled(false);
+        mViewHolder.btnSendReportNow.setAlpha(.4f);
 
         requestServerDialog.show();
     }
 
     private void enableInput()
     {
-        btnSendReportNow.setEnabled(true);
-        btnSendReportNow.setAlpha(1.0f);
+        mViewHolder.btnSendReportNow.setEnabled(true);
+        mViewHolder.btnSendReportNow.setAlpha(1.0f);
 
         requestServerDialog.dismiss();
+    }
+
+    class ViewHolder
+    {
+        Button btnSendReportNow;
+        TextView tvVisitDay;
+        TextView tvVisitMonth;
+        TextView tvVisitTime;
+        TextView clientNameTextView;
+        TextView serviceTypeTextView;
+        TextView clientAddressTextView;
+        TextView tvReportCompletionState;
+        TextView tvDataOraReportSent;
     }
 }

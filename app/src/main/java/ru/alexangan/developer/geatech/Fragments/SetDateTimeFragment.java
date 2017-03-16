@@ -103,13 +103,13 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
 
         requestServerDialog = new ProgressDialog(getActivity());
         requestServerDialog.setTitle("");
-        requestServerDialog.setMessage("Download dei dati, si prega di attendere un po'...");
+        requestServerDialog.setMessage("Trasmettere dei dati, si prega di attendere un po'...");
         requestServerDialog.setIndeterminate(true);
     }
 
     private DatePickerDialog.OnDateSetListener datePickerListener = new DatePickerDialog.OnDateSetListener()
     {
-        // when dialog box is closed, below method will be called.
+        // when Dialog box is closed, below method will be called.
         @Override
         public void onDateSet(DatePicker view, int selectedYear, int selectedMonth, int selectedDay)
         {
@@ -291,13 +291,13 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
 
         if (v.getId() == R.id.btnSetDate)
         {
-            TimePickerDialog dialogTimePicker = new TimePickerDialog(getActivity(), timePickerListener,
+            TimePickerDialog DialogTimePicker = new TimePickerDialog(getActivity(), timePickerListener,
                     mHour, mMinute, DateFormat.is24HourFormat(getActivity()));
-            dialogTimePicker.show();
+            DialogTimePicker.show();
 
-            DatePickerDialog dialogDatePicker = new DatePickerDialog(getActivity(), datePickerListener,
+            DatePickerDialog DialogDatePicker = new DatePickerDialog(getActivity(), datePickerListener,
                     mYear, mMonth - 1, mDay);
-            dialogDatePicker.show();
+            DialogDatePicker.show();
         }
 
         if (v.getId() == R.id.btnAnnullaSetDateTime)
@@ -440,8 +440,6 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
                 }
             } else
             {
-                showToastMessage("Dato e ora inviato, server ritorna: " + strVisitDateTimeResponse);
-
                 if (jsonObject.has("success"))
                 {
                     try
@@ -486,6 +484,8 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
                                                     reportStates.setNome_tecnico(selectedTech.getFullNameTehnic());
                                                     realm.commitTransaction();
                                                 }
+
+                                                showToastMessage("Dato e ora impostato");//, server ritorna: " + strVisitDateTimeResponse
                                             }
                                         } catch (JSONException e)
                                         {
@@ -501,6 +501,8 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
                                             reportStates.deleteFromRealm();
                                             realm.commitTransaction();
                                         }
+
+                                        showToastMessage("Dato e ora annulato");
                                     }
 
                                     mCommunicator.onDateTimeSetReturned(false);

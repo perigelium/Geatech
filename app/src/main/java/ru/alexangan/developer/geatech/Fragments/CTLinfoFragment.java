@@ -181,6 +181,9 @@ public class CTLinfoFragment extends Fragment implements View.OnClickListener, L
         {
             if (reportStates != null)
             {
+                btnSaveCoords.setEnabled(false);
+                btnSaveCoords.setAlpha(.4f);
+
                 realm.beginTransaction();
 
                 if (latitude != 0)
@@ -244,7 +247,7 @@ public class CTLinfoFragment extends Fragment implements View.OnClickListener, L
             enableInput();
         }
 
-        //Log.d("new", "coords= " + String.valueOf(latitude) + " " + String.valueOf(longitude));
+        ////Log.d("new", "coords= " + String.valueOf(latitude) + " " + String.valueOf(longitude));
     }
 
     private double parseElevationFromGoogleMaps(String downloadedPage)

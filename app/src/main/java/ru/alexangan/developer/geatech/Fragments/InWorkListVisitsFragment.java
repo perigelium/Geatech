@@ -79,7 +79,9 @@ public class InWorkListVisitsFragment extends ListFragment
                 if (visitItem.getGeaSopralluogo().getId_sopralluogo() == reportStates.getId_sopralluogo()
 
                         && (photoAddedStatus!=0 || generalInfoCompletionState!=0 || reportCompletionState!=0) // report data not empty
-                        && !(photoAddedStatus!=0 && generalInfoCompletionState==2 && reportCompletionState==3) // report not complete
+                        && !(photoAddedStatus!=0 && generalInfoCompletionState==2) // data not complete
+                        && reportStates.getDataOraRaportoCompletato()==null
+                        && reportStates.getData_ora_invio_rapporto()==null
                         )
                 {
 
@@ -87,7 +89,7 @@ public class InWorkListVisitsFragment extends ListFragment
                     {
                         Date date = sdf.parse(data_ora_sopralluogo);
                         long time = date.getTime();
-                        Log.d("DEBUG", String.valueOf(time));
+                        //Log.d("DEBUG", String.valueOf(time));
                         unsortedVisits.put(time, visitItem);
                     } catch (ParseException e)
                     {

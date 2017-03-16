@@ -112,7 +112,7 @@ public class LoginTechSelectionFragment extends Fragment implements View.OnClick
 
         downloadingDialog = new ProgressDialog(getActivity());
         downloadingDialog.setTitle("");
-        downloadingDialog.setMessage("Download dei dati, si prega di attendere un po'...");
+        downloadingDialog.setMessage("Ricevere dei dati, si prega di attendere un po'...");
         downloadingDialog.setIndeterminate(true);
     }
 
@@ -158,8 +158,7 @@ public class LoginTechSelectionFragment extends Fragment implements View.OnClick
                     chkboxRememberTech.setTextColor(Color.parseColor("#93D8A8"));
                 }
 
-                btnNewTechnician.setAlpha(1.0f);
-                btnNewTechnician.setEnabled(true);
+                enableInput();
 
 /*                spTecnicianList.setBackgroundColor(Color.parseColor("#29B352"));
                 spTecnicianList.invalidate();*/
@@ -311,27 +310,25 @@ public class LoginTechSelectionFragment extends Fragment implements View.OnClick
                 return;
             }
 
-            btnNewTechnician.setAlpha(.4f);
-            btnNewTechnician.setEnabled(false);
-
             String strTechNome = etTechNome.getText().toString();
             String strTechCognome = etTechCognome.getText().toString();
             String strNomeCognome = strTechNome + " " + strTechCognome;
 
-            if (strNomeCognome.length() > 7)
+            if (strNomeCognome.length() > 6)
             {
-                downloadingDialog.show();
+                disableInputAndShowProgressDialog();
 
                 bNewTechAdded = true;
                 callTechnicianList = networkUtils.loginRequest(this, login, password, strNomeCognome, -1);
+            }
+            else
+            {
+                showToastMessage("inserire il nome e cognome prima");
             }
         }
 
         if (view.getId() == R.id.btnApplyAndEnterApp)
         {
-            btnApplyAndEnterApp.setAlpha(.4f);
-            btnApplyAndEnterApp.setEnabled(false);
-
             GlobalConstants.selectedTech = selectedTech;
 
             if (selectedTech == null)
@@ -353,7 +350,7 @@ public class LoginTechSelectionFragment extends Fragment implements View.OnClick
 
             if (NetworkUtils.isNetworkAvailable(activity))
             {
-                downloadingDialog.show();
+                disableInputAndShowProgressDialog();
 
                 callLoginToken = networkUtils.loginRequest(LoginTechSelectionFragment.this, login, password,
                         selectedTech.getFullNameTehnic(), selectedTech.getId());
@@ -367,7 +364,7 @@ public class LoginTechSelectionFragment extends Fragment implements View.OnClick
     @Override
     public void onFailure(Call call, IOException e)
     {
-        downloadingDialog.dismiss();
+        enableInput();
 
         if (call == callLoginToken)
         {
@@ -387,8 +384,8 @@ public class LoginTechSelectionFragment extends Fragment implements View.OnClick
     {
         super.onPause();
 
-        btnApplyAndEnterApp.setAlpha(1.0f);
-        btnApplyAndEnterApp.setEnabled(true);
+/*        btnApplyAndEnterApp.setAlpha(1.0f);
+        btnApplyAndEnterApp.setEnabled(true);*/
     }
 
     @Override
@@ -444,7 +441,7 @@ public class LoginTechSelectionFragment extends Fragment implements View.OnClick
                 showToastMessage("JSON parse error");
             }
 
-            downloadingDialog.dismiss();
+            enableInput();
         }
 
         if (call == callLoginToken)
@@ -483,11 +480,11 @@ public class LoginTechSelectionFragment extends Fragment implements View.OnClick
                     {
                         e.printStackTrace();
 
-                        downloadingDialog.dismiss();
+                        enableInput();
                     }
                 } else
                 {
-                    downloadingDialog.dismiss();
+                    enableInput();
 
                     if (jsonObject.has("error"))
                     {
@@ -512,7 +509,7 @@ public class LoginTechSelectionFragment extends Fragment implements View.OnClick
                 e.printStackTrace();
                 showToastMessage("JSON parse error");
 
-                downloadingDialog.dismiss();
+                enableInput();
             }
         }
 
@@ -520,7 +517,7 @@ public class LoginTechSelectionFragment extends Fragment implements View.OnClick
         {
             visitsJSONData = response.body().string();
 
-            Log.d("DEBUG", visitsJSONData);
+            //Log.d("DEBUG", visitsJSONData);
 
             activity.runOnUiThread(new Runnable()
             {
@@ -545,13 +542,12 @@ public class LoginTechSelectionFragment extends Fragment implements View.OnClick
                     }
                     realm.commitTransaction();
 
-/*
 
-                    if (geaItemModelliSize != 0)
+/*                    if (geaItemModelliSize != 0)
                     {
-                        loginCommunicator.onTechSelectedAndApplied();
-
                         downloadingDialog.dismiss();
+
+                        loginCommunicator.onTechSelectedAndApplied();
                     }*/
                 }
             });
@@ -561,7 +557,7 @@ public class LoginTechSelectionFragment extends Fragment implements View.OnClick
         {
             modelsJSONData = response.body().string();
 
-            Log.d("DEBUG", modelsJSONData);
+            //Log.d("DEBUG", modelsJSONData);
 
             JSONObject jsonObject;
 
@@ -649,9 +645,9 @@ public class LoginTechSelectionFragment extends Fragment implements View.OnClick
                                     realm.commitTransaction();
                                 }
 
-                                loginCommunicator.onTechSelectedAndApplied();
-
                                 downloadingDialog.dismiss();
+
+                                loginCommunicator.onTechSelectedAndApplied();
                             }
                         });
 
@@ -663,7 +659,7 @@ public class LoginTechSelectionFragment extends Fragment implements View.OnClick
                         {
                             public void run()
                             {
-                                downloadingDialog.dismiss();
+                                enableInput();
                             }
                         });
                     }
@@ -674,7 +670,7 @@ public class LoginTechSelectionFragment extends Fragment implements View.OnClick
                     {
                         public void run()
                         {
-                            downloadingDialog.dismiss();
+                            enableInput();
                         }
                     });
                 }
@@ -686,7 +682,7 @@ public class LoginTechSelectionFragment extends Fragment implements View.OnClick
                 {
                     public void run()
                     {
-                        downloadingDialog.dismiss();
+                        enableInput();
                     }
                 });
             }
@@ -702,5 +698,25 @@ public class LoginTechSelectionFragment extends Fragment implements View.OnClick
                 Toast.makeText(activity, msg, Toast.LENGTH_LONG).show();
             }
         });
+    }
+
+    private void disableInputAndShowProgressDialog()
+    {
+        btnNewTechnician.setAlpha(.4f);
+        btnNewTechnician.setEnabled(false);
+        btnApplyAndEnterApp.setAlpha(.4f);
+        btnApplyAndEnterApp.setEnabled(false);
+
+        downloadingDialog.show();
+    }
+
+    private void enableInput()
+    {
+        btnNewTechnician.setAlpha(1.0f);
+        btnNewTechnician.setEnabled(true);
+        btnApplyAndEnterApp.setAlpha(1.0f);
+        btnApplyAndEnterApp.setEnabled(true);
+
+        downloadingDialog.dismiss();
     }
 }

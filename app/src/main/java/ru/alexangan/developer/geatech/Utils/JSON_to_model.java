@@ -90,7 +90,7 @@ public class JSON_to_model
                 visitItems.add(visitItem);
             }
 
-            //Log.d("DEBUG", String.valueOf(visitItems.size()));
+            ////Log.d("DEBUG", String.valueOf(visitItems.size()));
 
         } catch (JSONException e)
         {

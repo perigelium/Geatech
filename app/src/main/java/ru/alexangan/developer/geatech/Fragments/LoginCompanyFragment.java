@@ -62,7 +62,7 @@ public class LoginCompanyFragment extends Fragment implements View.OnClickListen
 
         downloadingDialog = new ProgressDialog(getActivity());
         downloadingDialog.setTitle("");
-        downloadingDialog.setMessage("Download dei dati, si prega di attendere un po'...");
+        downloadingDialog.setMessage("Ricevere dei dati, si prega di attendere un po'...");
         downloadingDialog.setIndeterminate(true);
     }
 
@@ -187,7 +187,7 @@ public class LoginCompanyFragment extends Fragment implements View.OnClickListen
 
             strPassword = etPassword.getText().toString();
 
-            if (strPassword == null || strPassword.length() < 5)
+            if (strPassword.length() < 5)
             {
                 showToastMessage("Password non e valido.");
                 return;
@@ -209,7 +209,7 @@ public class LoginCompanyFragment extends Fragment implements View.OnClickListen
             editor.putString("password", strPassword);
             editor.apply();
 
-            if (!networkUtils.isNetworkAvailable(activity))
+            if (!NetworkUtils.isNetworkAvailable(activity))
             {
                 if(credentialsesFound)
                 {
@@ -221,7 +221,7 @@ public class LoginCompanyFragment extends Fragment implements View.OnClickListen
                 }
             } else
             {
-                downloadingDialog.show();
+                disableInputAndShowProgressDialog();
 
                 callTechnicianList = networkUtils.loginRequest(this, strLogin, strPassword, null, -1);
             }
@@ -236,6 +236,8 @@ public class LoginCompanyFragment extends Fragment implements View.OnClickListen
     @Override
     public void onFailure(Call call, IOException e)
     {
+        enableInput();
+
         if (call == callTechnicianList)
         {
             showToastMessage("Login fallito, controlla la connessione a Internet");
@@ -251,12 +253,6 @@ public class LoginCompanyFragment extends Fragment implements View.OnClickListen
 
             response.body().close();
 
-            if (technListResponse == null)
-            {
-                showToastMessage("Ricevere lista tecnici non è riuscito");
-                return;
-            }
-
             JSONObject jsonObject;
 
             try
@@ -265,6 +261,7 @@ public class LoginCompanyFragment extends Fragment implements View.OnClickListen
             } catch (JSONException e)
             {
                 e.printStackTrace();
+                enableInput();
                 return;
             }
 
@@ -293,6 +290,8 @@ public class LoginCompanyFragment extends Fragment implements View.OnClickListen
 
                     mSettings.edit().putString("technician_list_json", technicianStr).apply();
 
+                    downloadingDialog.dismiss();
+
                     loginCommunicator.onLoginSucceeded();
 
                 } catch (JSONException e)
@@ -317,7 +316,6 @@ public class LoginCompanyFragment extends Fragment implements View.OnClickListen
                     } catch (JSONException e)
                     {
                         e.printStackTrace();
-                        return;
                     }
                 }
                 else
@@ -325,18 +323,15 @@ public class LoginCompanyFragment extends Fragment implements View.OnClickListen
                     showToastMessage("Login o password non è valido");
                 }
             }
-
-            activity.runOnUiThread(new Runnable()
-            {
-                public void run()
-                {
-            btnLogin.setAlpha(1.0f);
-            btnLogin.setEnabled(true);
-                }
-            });
         }
 
-        downloadingDialog.dismiss();
+        activity.runOnUiThread(new Runnable()
+        {
+            public void run()
+            {
+                enableInput();
+            }
+        });
     }
 
     private void showToastMessage(final String msg)
@@ -348,5 +343,21 @@ public class LoginCompanyFragment extends Fragment implements View.OnClickListen
                 Toast.makeText(activity, msg, Toast.LENGTH_LONG).show();
             }
         });
+    }
+
+    private void disableInputAndShowProgressDialog()
+    {
+        btnLogin.setAlpha(0.4f);
+        btnLogin.setEnabled(false);
+
+        downloadingDialog.show();
+    }
+
+    private void enableInput()
+    {
+        btnLogin.setAlpha(1.0f);
+        btnLogin.setEnabled(true);
+
+        downloadingDialog.dismiss();
     }
 }

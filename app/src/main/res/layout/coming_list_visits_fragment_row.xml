@@ -13,7 +13,7 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="6dp"
+            android:layout_marginLeft="5dp"
             android:orientation="horizontal">
 
             <ImageView
@@ -30,7 +30,8 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="start|center_vertical"
                 android:layout_marginLeft="6dp"
-                android:text="Nome del cliente" />
+                android:text="Nome del cliente"
+                android:maxWidth="200dp"/>
 
         </LinearLayout>
 
@@ -38,7 +39,7 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="6dp"
+            android:layout_marginLeft="7dp"
             android:orientation="horizontal">
 
             <ImageView
@@ -54,15 +55,16 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start|center_vertical"
-                android:layout_marginLeft="6dp"
-                android:text="Tipo di servicio" />
+                android:layout_marginLeft="8dp"
+                android:text="Tipo di servicio"
+                android:maxWidth="200dp"/>
 
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="6dp"
+            android:layout_marginLeft="9dp"
             android:orientation="horizontal">
 
             <ImageView
@@ -78,8 +80,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start|center_vertical"
-                android:layout_marginLeft="6dp"
-                android:text="Client indirizzo" />
+                android:layout_marginLeft="9dp"
+                android:text="Client indirizzo"
+                android:maxWidth="200dp"/>
 
         </LinearLayout>
 

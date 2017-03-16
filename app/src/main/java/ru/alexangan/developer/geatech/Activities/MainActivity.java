@@ -216,7 +216,7 @@ public class MainActivity extends Activity implements Communicator, Callback
 
         requestServerDialog = new ProgressDialog(this);
         requestServerDialog.setTitle("");
-        requestServerDialog.setMessage("Download dei dati, si prega di attendere un po'...");
+        requestServerDialog.setMessage("Ricevere dei dati, si prega di attendere un po'...");
         requestServerDialog.setIndeterminate(true);
     }
 
@@ -652,7 +652,7 @@ public class MainActivity extends Activity implements Communicator, Callback
 
         if (view.getId() == R.id.btnAppSettings)
         {
-            String[] listItemsArray = {"Esci", "Cambia\npassword"};
+            String[] listItemsArray = {"Esci"}; //"Cambia\npassword"
 
             //ContextThemeWrapper themedContext = new ContextThemeWrapper(this, android.R.style.Theme_DeviceDefault_Light_Dialog_NoActionBar);
             AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
@@ -692,14 +692,14 @@ public class MainActivity extends Activity implements Communicator, Callback
 
             //ListView listView = (ListView) v.findViewById(R.id.notifBarlist);
 
-            //final ArrayAdapter <String> listAdapter = new ArrayAdapter<>(this, R.id.dialogTextView, listItemsArray);
+            //final ArrayAdapter <String> listAdapter = new ArrayAdapter<>(this, R.id.DialogTextView, listItemsArray);
             //listView.setAdapter(listAdapter);
             //listView.setBackgroundColor(Color.GRAY);
 
 /*            builder.setItems(listItemsArray, new DialogInterface.OnClickListener()
             {
                 @Override
-                public void onClick(DialogInterface dialog, int which)
+                public void onClick(DialogInterface Dialog, int which)
                 {
                     if(which == 1)  // exit app
                     {
@@ -795,7 +795,7 @@ public class MainActivity extends Activity implements Communicator, Callback
         {
             final String visitsJSONData = response.body().string();
 
-            Log.d("DEBUG", visitsJSONData);
+            //Log.d("DEBUG", visitsJSONData);
 
             runOnUiThread(new Runnable()
             {
