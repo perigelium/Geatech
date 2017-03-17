@@ -652,7 +652,7 @@ public class MainActivity extends Activity implements Communicator, Callback
 
         if (view.getId() == R.id.btnAppSettings)
         {
-            String[] listItemsArray = {"Esci"}; //"Cambia\npassword"
+            String[] listItemsArray = {"Logout", "Esci"};
 
             //ContextThemeWrapper themedContext = new ContextThemeWrapper(this, android.R.style.Theme_DeviceDefault_Light_Dialog_NoActionBar);
             AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
@@ -669,22 +669,23 @@ public class MainActivity extends Activity implements Communicator, Callback
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int which, long id)
                 {
-                    if (which == 1)  // exit app
+/*                    if (which == 1)
                     {
                         Intent intent = new Intent(MainActivity.this, LoginActivity.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         intent.putExtra("Password recover", true);
                         startActivity(intent);
                         finish();
+                    }*/
+
+                    if (which == 1)
+                    {
+                        exitApp();
                     }
 
-                    if (which == 0) // password recover
+                    if (which == 0)
                     {
-                        Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        intent.putExtra("Exit app", true);
-                        startActivity(intent);
-                        finish();
+                        logout();
                     }
 
                 }
@@ -732,6 +733,12 @@ public class MainActivity extends Activity implements Communicator, Callback
     {
         currentSelIndex = itemIndex;
         ctrlBtnsFragment2.setCheckedBtnId(R.id.btnInfo);
+    }
+
+    @Override
+    public void onLogoutCommand()
+    {
+        logout();
     }
 
     @Override
@@ -842,5 +849,22 @@ public class MainActivity extends Activity implements Communicator, Callback
         }
 
         requestServerDialog.dismiss();
+    }
+
+    private void logout()
+    {
+        Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
+        finish();
+    }
+
+    private void exitApp()
+    {
+        Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.putExtra("Exit app", true);
+        startActivity(intent);
+        finish();
     }
 }

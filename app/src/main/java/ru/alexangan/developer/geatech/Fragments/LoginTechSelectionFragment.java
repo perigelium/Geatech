@@ -67,7 +67,7 @@ public class LoginTechSelectionFragment extends Fragment implements View.OnClick
     String visitsJSONData, login, password;
     NetworkUtils networkUtils;
 
-    ImageButton ibAddTechnician;
+    ImageButton ibtnAddTechnician;
     Button btnSessionDisconnect, btnApplyAndEnterApp, btnNewTechnician;
     LinearLayout llTechnNameAndSurname;
     FrameLayout flTechnicianAdded;
@@ -187,8 +187,8 @@ public class LoginTechSelectionFragment extends Fragment implements View.OnClick
         etTechNome = (EditText) rootView.findViewById(R.id.etTechNome);
         etTechCognome = (EditText) rootView.findViewById(R.id.etTechCognome);
 
-        ibAddTechnician = (ImageButton) rootView.findViewById(R.id.ibAddTechnician);
-        ibAddTechnician.setOnClickListener(this);
+        ibtnAddTechnician = (ImageButton) rootView.findViewById(R.id.ibtnAddTechnician);
+        ibtnAddTechnician.setOnClickListener(this);
 
         chkboxRememberTech = (CheckBox) rootView.findViewById(R.id.chkboxRememberTech);
 
@@ -302,7 +302,7 @@ public class LoginTechSelectionFragment extends Fragment implements View.OnClick
             llTechnNameAndSurname.setVisibility(View.VISIBLE);
         }
 
-        if (view.getId() == R.id.ibAddTechnician)
+        if (view.getId() == R.id.ibtnAddTechnician)
         {
             if (!NetworkUtils.isNetworkAvailable(activity))
             {
@@ -467,13 +467,13 @@ public class LoginTechSelectionFragment extends Fragment implements View.OnClick
                             callVisits = networkUtils.getData(this, GET_VISITS_URL_SUFFIX, tokenStr);
 
 
-                            callModels = networkUtils.getData(this, GET_MODELS_URL_SUFFIX, tokenStr);
+                            //callModels = networkUtils.getData(this, GET_MODELS_URL_SUFFIX, tokenStr);
 
 
-/*                            if (geaItemModelliSize == 0)
+                            if (geaItemModelliSize == 0)
                             {
                                 callModels = networkUtils.getData(this, GET_MODELS_URL_SUFFIX, tokenStr);
-                            }*/
+                            }
                         }
 
                     } catch (JSONException e)
@@ -543,12 +543,12 @@ public class LoginTechSelectionFragment extends Fragment implements View.OnClick
                     realm.commitTransaction();
 
 
-/*                    if (geaItemModelliSize != 0)
+                    if (geaItemModelliSize != 0)
                     {
                         downloadingDialog.dismiss();
 
                         loginCommunicator.onTechSelectedAndApplied();
-                    }*/
+                    }
                 }
             });
         }

@@ -1,11 +1,13 @@
 package ru.alexangan.developer.geatech.Fragments;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Fragment;
 import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
 import android.content.ActivityNotFoundException;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -32,6 +34,7 @@ import java.util.Locale;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
+import ru.alexangan.developer.geatech.Activities.MainActivity;
 import ru.alexangan.developer.geatech.Adapters.SetVisitDateTimeListAdapter;
 import ru.alexangan.developer.geatech.Interfaces.Communicator;
 import ru.alexangan.developer.geatech.Models.ClientData;
@@ -73,6 +76,7 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
 
     private Communicator mCommunicator;
     private ProgressDialog requestServerDialog;
+    AlertDialog alert;
 
 
     public SetDateTimeFragment()
@@ -258,6 +262,12 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
     {
         if (v.getId() == R.id.btnApriMappa)
         {
+            if(!networkUtils.isNetworkAvailable(activity))
+            {
+                showToastMessage("Controlla la connessione a Internet");
+                return;
+            }
+
             double latitude = visitItems.get(selectedIndex).getClientData().getCoordNord();
             double longitude = visitItems.get(selectedIndex).getClientData().getCoordEst();
 
@@ -302,10 +312,20 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
 
         if (v.getId() == R.id.btnAnnullaSetDateTime)
         {
-            stakedOut = 0;
+            if(!networkUtils.isNetworkAvailable(activity))
+            {
+                showToastMessage("Controlla la connessione a Internet");
+                return;
+            }
 
-            btnAnnullaSetDateTime.setAlpha(.4f);
-            btnAnnullaSetDateTime.setEnabled(false);
+            if(tokenStr == null)
+            {
+                //showToastMessage("Modalità offline, si prega di logout e login di nuovo");
+                alertDialog("Info", "Modalità offline, si prega di logout e login di nuovo,\n mostra schermata di login ?");
+                return;
+            }
+
+            stakedOut = 0;
 
             disableInputAndShowProgressDialog();
 
@@ -316,12 +336,22 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
 
         if (v.getId() == R.id.btnSetDateTimeSubmit)
         {
+            if(!networkUtils.isNetworkAvailable(activity))
+            {
+                showToastMessage("Controlla connesione ad Internet");
+                return;
+            }
+
+            if(tokenStr == null)
+            {
+                //showToastMessage("Modalità offline, si prega di logout e login di nuovo");
+                alertDialog("Info", "Modalità offline, si prega di logout e login di nuovo,\n mostra schermata di login ?");
+                return;
+            }
+
             stakedOut = 1;
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
             strDateTimeSet = sdf.format(calendar.getTime());
-
-            btnSetDateTimeSubmit.setAlpha(.4f);
-            btnSetDateTimeSubmit.setEnabled(false);
 
             disableInputAndShowProgressDialog();
 
@@ -334,18 +364,6 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
 
     private void notifyServerDataOraSopralluogo(int idSopralluogo, int stakedOut)
     {
-        if(!networkUtils.isNetworkAvailable(activity))
-        {
-            showToastMessage("Connesione ad internet non presente");
-            return;
-        }
-
-        if(tokenStr == null)
-        {
-            showToastMessage("Nodalità offline, si prega di logout e login di nuovo");
-            return;
-        }
-
         JSONObject jsonObject = new JSONObject();
         try
         {
@@ -548,5 +566,34 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
         btnAnnullaSetDateTime.setAlpha(1.0f);
 
         requestServerDialog.dismiss();
+    }
+
+    private void alertDialog(String title, String message)
+    {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+
+        builder.setTitle(title)
+                .setMessage(message)
+                .setIcon(android.R.drawable.ic_dialog_info)
+                .setPositiveButton("Si",
+                        new DialogInterface.OnClickListener()
+                        {
+                            public void onClick(DialogInterface dialog, int id)
+                            {
+                                mCommunicator.onLogoutCommand();
+                            }
+                        })
+                .setNegativeButton("No",
+                        new DialogInterface.OnClickListener()
+                        {
+                            public void onClick(DialogInterface dialog, int id)
+                            {
+                                alert.dismiss();
+                            }
+                        });
+
+        alert = builder.create();
+
+        alert.show();
     }
 }

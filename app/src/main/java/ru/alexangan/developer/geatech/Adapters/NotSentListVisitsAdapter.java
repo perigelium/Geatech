@@ -65,9 +65,9 @@ public class NotSentListVisitsAdapter extends BaseAdapter implements Callback
     String reportSendResponse;
     NetworkUtils networkUtils;
     List<GeaImagineRapporto> imagesArray;
-    List <Call> callSendImagesList;
+    List<Call> callSendImagesList;
     ViewHolder mViewHolder;
-    ArrayList <Boolean> alReportSent;
+    ArrayList<Boolean> alReportSent;
 
     public NotSentListVisitsAdapter(Activity activity, int layout_id, ArrayList<VisitItem> objects)
     {
@@ -106,7 +106,8 @@ public class NotSentListVisitsAdapter extends BaseAdapter implements Callback
     }
 
     @Override
-    public View getView(final int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent)
+    {
         // return super.getView(position, convertView, parent);
 
         View row = convertView;
@@ -117,9 +118,9 @@ public class NotSentListVisitsAdapter extends BaseAdapter implements Callback
             row = inflater.inflate(layout_id, parent, false);
             mViewHolder = new ViewHolder();
 
-            mViewHolder.tvVisitDay = (TextView)row.findViewById(R.id.tvVisitDay);
-            mViewHolder.tvVisitMonth = (TextView)row.findViewById(R.id.tvVisitMonth);
-            mViewHolder.tvVisitTime = (TextView)row.findViewById(R.id.tvVisitTime);
+            mViewHolder.tvVisitDay = (TextView) row.findViewById(R.id.tvVisitDay);
+            mViewHolder.tvVisitMonth = (TextView) row.findViewById(R.id.tvVisitMonth);
+            mViewHolder.tvVisitTime = (TextView) row.findViewById(R.id.tvVisitTime);
 
             mViewHolder.clientNameTextView = (TextView) row.findViewById(R.id.tvClientName);
             mViewHolder.serviceTypeTextView = (TextView) row.findViewById(R.id.tvTypeOfService);
@@ -164,7 +165,7 @@ public class NotSentListVisitsAdapter extends BaseAdapter implements Callback
                 .equalTo("id_sopralluogo", idSopralluogo).findFirst();
         realm.commitTransaction();
 
-        if(reportStates != null)
+        if (reportStates != null)
         {
             mViewHolder.tvReportCompletionState.setText(reportStates.getDataOraRaportoCompletato());
 
@@ -177,7 +178,7 @@ public class NotSentListVisitsAdapter extends BaseAdapter implements Callback
 
         Boolean reportSent = alReportSent.get(position);
 
-        if(reportSent)
+        if (reportSent)
         {
             mViewHolder.btnSendReportNow.setEnabled(false);
             mViewHolder.btnSendReportNow.setAlpha(.4f);
@@ -188,19 +189,25 @@ public class NotSentListVisitsAdapter extends BaseAdapter implements Callback
             @Override
             public void onClick(View view)
             {
+                if (!NetworkUtils.isNetworkAvailable(activity))
+                {
+                    showToastMessage("Controlla la connessione a Internet");
+                    return;
+                }
+
                 disableInputAndShowProgressDialog();
 
                 alReportSent.set(position, true);
 
-                    notifyDataSetChanged();
+                notifyDataSetChanged();
 
-                    sendReportItem(position);
+                sendReportItem(position);
             }
         });
 
         String visitDateTime = reportStates.getData_ora_sopralluogo();
 
-        if(visitDateTime != null)
+        if (visitDateTime != null)
         {
             Calendar calendar = Calendar.getInstance();
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
@@ -215,7 +222,7 @@ public class NotSentListVisitsAdapter extends BaseAdapter implements Callback
             }
 
             mViewHolder.tvVisitDay.setText(Integer.toString(calendar.get(Calendar.DAY_OF_MONTH)));
-            mViewHolder.tvVisitMonth.setText(ItalianMonths.numToString(calendar.get(Calendar.MONTH)+1));
+            mViewHolder.tvVisitMonth.setText(ItalianMonths.numToString(calendar.get(Calendar.MONTH) + 1));
 
             String minuteStr = Integer.toString(calendar.get(calendar.MINUTE));
             if (minuteStr.length() == 1)
@@ -250,7 +257,7 @@ public class NotSentListVisitsAdapter extends BaseAdapter implements Callback
         ReportStates reportStates = realm.where(ReportStates.class).equalTo("company_id", company_id).equalTo("tech_id", selectedTech.getId())
                 .equalTo("id_sopralluogo", idSopralluogo).findFirst();
 
-        if(reportStates == null)
+        if (reportStates == null)
         {
             showToastMessage("Invio rapporto fallito");
             return;
@@ -275,8 +282,7 @@ public class NotSentListVisitsAdapter extends BaseAdapter implements Callback
         reportItem.setGea_items_rapporto_sopralluogo(listGeaItemRapporto);
 
 
-
-        RealmResults <GeaImagineRapporto> listReportImages = realm.where(GeaImagineRapporto.class)
+        RealmResults<GeaImagineRapporto> listReportImages = realm.where(GeaImagineRapporto.class)
                 .equalTo("company_id", company_id).equalTo("tech_id", selectedTech.getId())
                 .equalTo("id_rapporto_sopralluogo", id_rapporto_sopralluogo).findAll();
 
@@ -332,7 +338,7 @@ public class NotSentListVisitsAdapter extends BaseAdapter implements Callback
     @Override
     public void onResponse(Call call, Response response) throws IOException
     {
-        if(callSendImagesList!=null)
+        if (callSendImagesList != null)
         {
             for (int i = 0; i < callSendImagesList.size(); i++)
             {
@@ -351,29 +357,29 @@ public class NotSentListVisitsAdapter extends BaseAdapter implements Callback
             reportSendResponse = response.body().string();
 
 
-                activity.runOnUiThread(new Runnable()
+            activity.runOnUiThread(new Runnable()
+            {
+                public void run()
                 {
-                    public void run()
-                    {
-                        Toast.makeText(activity, "Rapporto inviato, server ritorna: " + reportSendResponse, Toast.LENGTH_LONG).show();
+                    Toast.makeText(activity, "Rapporto inviato, server ritorna: " + reportSendResponse, Toast.LENGTH_LONG).show();
 
-                        Calendar calendarNow = Calendar.getInstance();
-                        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
-                        String strDateTime = sdf.format(calendarNow.getTime());
+                    Calendar calendarNow = Calendar.getInstance();
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
+                    String strDateTime = sdf.format(calendarNow.getTime());
 
-                        realm.beginTransaction();
-                        reportStates.setData_ora_invio_rapporto(strDateTime);
-                        realm.commitTransaction();
+                    realm.beginTransaction();
+                    reportStates.setData_ora_invio_rapporto(strDateTime);
+                    realm.commitTransaction();
 
-                        mViewHolder.tvDataOraReportSent.setText("Rapporto inviato il: " + strDateTime);
-                        notifyDataSetChanged();
-                    }
-                });
-
-                for (GeaImagineRapporto geaImagineRapporto : imagesArray)
-                {
-                    callSendImagesList.add(networkUtils.sendImage(this, activity, geaImagineRapporto));
+                    mViewHolder.tvDataOraReportSent.setText("Rapporto inviato il: " + strDateTime);
+                    notifyDataSetChanged();
                 }
+            });
+
+            for (GeaImagineRapporto geaImagineRapporto : imagesArray)
+            {
+                callSendImagesList.add(networkUtils.sendImage(this, activity, geaImagineRapporto));
+            }
 
             //mCommunicator.onSendReportReturned();
         }

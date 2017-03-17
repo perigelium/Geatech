@@ -112,7 +112,7 @@
                 android:background="#ffffff"/>
 
             <ImageButton
-                android:id="@+id/ibAddTechnician"
+                android:id="@+id/ibtnAddTechnician"
                 android:layout_width="25dp"
                 android:layout_height="25dp"
                 android:layout_gravity="center_vertical|right"

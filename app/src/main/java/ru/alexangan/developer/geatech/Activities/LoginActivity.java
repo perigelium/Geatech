@@ -42,11 +42,11 @@ public class LoginActivity extends Activity implements LoginCommunicator
     {
         super.onResume();
 
-/*        if (getIntent().getBooleanExtra("Exit app", false))
+        if (getIntent().getBooleanExtra("Exit app", false))
         {
             finish();
             return;
-        }*/
+        }
 
 /*        if (getIntent().getBooleanExtra("Password recover", false))
         {

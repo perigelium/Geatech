@@ -9,6 +9,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.util.concurrent.TimeUnit;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -42,6 +43,9 @@ public class NetworkUtils
     public Call loginRequest(Callback callback, String login, String password, String techName, int techId)
     {
         OkHttpClient.Builder defaultHttpClient = new OkHttpClient.Builder();
+        //defaultHttpClient.connectTimeout(10, TimeUnit.SECONDS);
+        defaultHttpClient.readTimeout(15, TimeUnit.SECONDS);
+        defaultHttpClient.writeTimeout(15, TimeUnit.SECONDS);
         OkHttpClient okHttpClient = defaultHttpClient.build();
 
         JSONObject jsonObject = new JSONObject();

@@ -29,4 +29,6 @@ public interface Communicator
     public void onNotificationReportReturned(View view);
 
     void OnComingListItemSelected(int itemIndex);
+
+    void onLogoutCommand();
 }

@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 
@@ -35,9 +36,11 @@ public class LocationRetriever implements ConnectionCallbacks, OnConnectionFaile
     private LocationRequest mLocationRequest;
 
     // Location updates intervals in sec
-    private static int UPDATE_INTERVAL = 1000; // 10 sec
-    private static int FATEST_INTERVAL = 500; // 5 sec
-    private static int DISPLACEMENT = 10; // 10 meters
+    private static int UPDATE_INTERVAL = 5000; // 5 sec
+    private static int FASTEST_INTERVAL = 500; // 5 sec
+    //private static int DISPLACEMENT = 100; // 1 meter
+    private static int EXPIRATION_DURATION = 15000; // 15 sec
+    private static int MAXWAITTIME = 15000;
 
     Context context;
 
@@ -92,9 +95,12 @@ public class LocationRetriever implements ConnectionCallbacks, OnConnectionFaile
     {
         mLocationRequest = new LocationRequest();
         mLocationRequest.setInterval(UPDATE_INTERVAL);
-        mLocationRequest.setFastestInterval(FATEST_INTERVAL);
+        mLocationRequest.setFastestInterval(FASTEST_INTERVAL);
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-        mLocationRequest.setSmallestDisplacement(DISPLACEMENT);
+        //mLocationRequest.setSmallestDisplacement(DISPLACEMENT);
+        mLocationRequest.setExpirationDuration(EXPIRATION_DURATION);
+        mLocationRequest.setMaxWaitTime(MAXWAITTIME);
+        mLocationRequest.setNumUpdates(1);
     }
 
     protected void startLocationUpdates()
@@ -107,6 +113,33 @@ public class LocationRetriever implements ConnectionCallbacks, OnConnectionFaile
         }
 
         LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
+
+        if (callback != null)
+        {
+            if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                    && ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)
+            {
+                return;
+            }
+            mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+
+            if (mLastLocation != null)
+            {
+                callback.onLocationReceived();
+                stopLocationUpdates();
+            }
+        }
+
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                callback.onLocationReceived();
+                stopLocationUpdates();
+            }
+        }, 15000);
     }
 
     protected void stopLocationUpdates()
@@ -127,22 +160,6 @@ public class LocationRetriever implements ConnectionCallbacks, OnConnectionFaile
         {
             startLocationUpdates();
         }
-
-        if (callback != null)
-        {
-            if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                    && ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)
-            {
-                return;
-            }
-            mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-
-            //if (mLastLocation != null)
-            {
-                callback.onLocationReceived();
-                stopLocationUpdates();
-            }
-        }
     }
 
     @Override
@@ -155,6 +172,9 @@ public class LocationRetriever implements ConnectionCallbacks, OnConnectionFaile
     public void onLocationChanged(Location location)
     {
         mLastLocation = location;
+
+        callback.onLocationReceived();
+        stopLocationUpdates();
     }
 
     public Location getLastLocation()

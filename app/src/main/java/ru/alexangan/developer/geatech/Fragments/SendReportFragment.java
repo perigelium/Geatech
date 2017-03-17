@@ -165,12 +165,14 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
     {
         if (view.getId() == R.id.btnSendReport)
         {
-            //if (reportStates != null)
+            if (!NetworkUtils.isNetworkAvailable(activity))
             {
+                showToastMessage("Controlla la connessione a Internet");
+                return;
+            }
                 disableInputAndShowProgressDialog();
 
                 sendReportItem(selectedIndex);
-            }
 
             //mCommunicator.onSendReportReturned();
 

@@ -3,10 +3,12 @@ package ru.alexangan.developer.geatech.Fragments;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.ProgressDialog;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,6 +19,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.IOException;
+import java.util.Locale;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -50,6 +53,7 @@ public class CTLinfoFragment extends Fragment implements View.OnClickListener, L
     ReportStates reportStates;
     Communicator communicator;
     private ProgressDialog requestServerDialog;
+    ClientData clientData;
 
     public CTLinfoFragment()
     {
@@ -96,7 +100,7 @@ public class CTLinfoFragment extends Fragment implements View.OnClickListener, L
 
 
         VisitItem visitItem = visitItems.get(selectedIndex);
-        ClientData clientData = visitItem.getClientData();
+        clientData = visitItem.getClientData();
         GeaSopralluogo geaSopralluogo = visitItem.getGeaSopralluogo();
         int idSopralluogo = geaSopralluogo.getId_sopralluogo();
 
@@ -159,14 +163,15 @@ public class CTLinfoFragment extends Fragment implements View.OnClickListener, L
     {
         if (view.getId() == R.id.btnGetCurrentCoords)
         {
-            if (!NetworkUtils.isNetworkAvailable(activity))
+/*            if (!NetworkUtils.isNetworkAvailable(activity))
             {
                 Toast.makeText(activity, "Controlla la connessione a Internet", Toast.LENGTH_LONG).show();
                 return;
-            }
+            }*/
 
             LocationManager locationManager = (LocationManager) activity.getSystemService(Context.LOCATION_SERVICE);
-            if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER))
+            if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
+                    && !locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER))
             {
                 activity.startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
                 return;
@@ -231,23 +236,50 @@ public class CTLinfoFragment extends Fragment implements View.OnClickListener, L
                 tvAltitude.setText(String.valueOf(altitude), TextView.BufferType.EDITABLE);
             } else
             {
+                if(NetworkUtils.isNetworkAvailable(activity))
+                {
+
                 String elevationUrl = "http://maps.googleapis.com/maps/api/elevation/"
                         + "xml?locations=" + String.valueOf(latitude)
                         + "," + String.valueOf(longitude)
                         + "&sensor=true";
 
-                NetworkUtils networkUtils = new NetworkUtils();
+                    NetworkUtils networkUtils = new NetworkUtils();
 
-                callDownloadURL = networkUtils.downloadURL(this, elevationUrl);
+                    callDownloadURL = networkUtils.downloadURL(this, elevationUrl);
+                }
+                else
+                {
+                    showToastMessage("Non riuscito a ricevere altitudine, controlla connesione ad Internet");
+                }
             }
         } else
         {
-            showToastMessage("Non riuscito a ricevere coordinati");
+            String uri = String.format(Locale.ENGLISH, "http://maps.google.com/maps?daddr=%f,%f (%s)", (float) latitude, (float) longitude, "Where the party is at");
+            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
+            intent.setClassName("com.google.android.apps.maps", "com.google.android.maps.MapsActivity");
 
-            enableInput();
+            try
+            {
+                startActivity(intent);
+            } catch (ActivityNotFoundException ex)
+            {
+                try
+                {
+                    Intent unrestrictedIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
+                    startActivity(unrestrictedIntent);
+                } catch (ActivityNotFoundException innerEx)
+                {
+                    Toast.makeText(getActivity(), "installa un'applicazione mappe", Toast.LENGTH_LONG).show();
+                }
+            }
+
+            showToastMessage("Non riuscito a ricevere coordinati");
         }
 
         ////Log.d("new", "coords= " + String.valueOf(latitude) + " " + String.valueOf(longitude));
+
+        enableInput();
     }
 
     private double parseElevationFromGoogleMaps(String downloadedPage)
