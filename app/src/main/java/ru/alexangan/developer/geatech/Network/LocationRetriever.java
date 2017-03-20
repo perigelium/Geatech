@@ -1,11 +1,13 @@
 package ru.alexangan.developer.geatech.Network;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 
@@ -36,22 +38,24 @@ public class LocationRetriever implements ConnectionCallbacks, OnConnectionFaile
     private LocationRequest mLocationRequest;
 
     // Location updates intervals in sec
-    private static int UPDATE_INTERVAL = 5000; // 5 sec
-    private static int FASTEST_INTERVAL = 500; // 5 sec
-    //private static int DISPLACEMENT = 100; // 1 meter
-    private static int EXPIRATION_DURATION = 15000; // 15 sec
-    private static int MAXWAITTIME = 15000;
+    //private static int UPDATE_INTERVAL = 5000; // 5 sec
+    private static int FASTEST_INTERVAL = 1000; // 1 sec
+    private static int DISPLACEMENT = 0; // 1 meter
+    private static int EXPIRATION_DURATION = 60000;
+    private static int MAXWAITTIME = 60000;
 
-    Context context;
+    Activity activity;
 
     private LocationRetrievedEvents callback;
 
-    public LocationRetriever(Context context, LocationRetrievedEvents callback)
+    private int PERMISSION_REQUEST_CODE = 11;
+
+    public LocationRetriever(Activity activity, LocationRetrievedEvents callback)
     {
-        this.context = context;
+        this.activity = activity;
         this.callback = callback;
 
-        createLocationRequest();
+        buildLocationRequest();
 
         if (checkPlayServices())
         {
@@ -66,7 +70,7 @@ public class LocationRetriever implements ConnectionCallbacks, OnConnectionFaile
 
     protected synchronized void buildGoogleApiClient()
     {
-        mGoogleApiClient = new GoogleApiClient.Builder(context)
+        mGoogleApiClient = new GoogleApiClient.Builder(activity)
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
                 .addApi(LocationServices.API)
@@ -76,7 +80,7 @@ public class LocationRetriever implements ConnectionCallbacks, OnConnectionFaile
     private boolean checkPlayServices()
     {
         GoogleApiAvailability googleAPI = GoogleApiAvailability.getInstance();
-        int result = googleAPI.isGooglePlayServicesAvailable(context);
+        int result = googleAPI.isGooglePlayServicesAvailable(activity);
         if (result != ConnectionResult.SUCCESS)
         {
             if (googleAPI.isUserResolvableError(result))
@@ -91,44 +95,35 @@ public class LocationRetriever implements ConnectionCallbacks, OnConnectionFaile
         return true;
     }
 
-    protected void createLocationRequest()
+    protected void buildLocationRequest()
     {
         mLocationRequest = new LocationRequest();
-        mLocationRequest.setInterval(UPDATE_INTERVAL);
+        //mLocationRequest.setInterval(UPDATE_INTERVAL);
         mLocationRequest.setFastestInterval(FASTEST_INTERVAL);
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-        //mLocationRequest.setSmallestDisplacement(DISPLACEMENT);
+        mLocationRequest.setSmallestDisplacement(DISPLACEMENT);
         mLocationRequest.setExpirationDuration(EXPIRATION_DURATION);
         mLocationRequest.setMaxWaitTime(MAXWAITTIME);
         mLocationRequest.setNumUpdates(1);
     }
 
+    @Override
+    public void onConnected(Bundle arg0)
+    {
+        if (mRequestingLocationUpdates)
+        {
+            startLocationUpdates();
+        }
+    }
+
     protected void startLocationUpdates()
     {
-
-        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                && ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)
+        if (ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                || ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)
         {
             return;
         }
-
         LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
-
-        if (callback != null)
-        {
-            if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                    && ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)
-            {
-                return;
-            }
-            mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-
-            if (mLastLocation != null)
-            {
-                callback.onLocationReceived();
-                stopLocationUpdates();
-            }
-        }
 
         final Handler handler = new Handler();
         handler.postDelayed(new Runnable()
@@ -139,7 +134,7 @@ public class LocationRetriever implements ConnectionCallbacks, OnConnectionFaile
                 callback.onLocationReceived();
                 stopLocationUpdates();
             }
-        }, 15000);
+        }, 30000);
     }
 
     protected void stopLocationUpdates()
@@ -154,15 +149,6 @@ public class LocationRetriever implements ConnectionCallbacks, OnConnectionFaile
     }
 
     @Override
-    public void onConnected(Bundle arg0)
-    {
-        if (mRequestingLocationUpdates)
-        {
-            startLocationUpdates();
-        }
-    }
-
-    @Override
     public void onConnectionSuspended(int arg0)
     {
         mGoogleApiClient.connect();
@@ -171,10 +157,13 @@ public class LocationRetriever implements ConnectionCallbacks, OnConnectionFaile
     @Override
     public void onLocationChanged(Location location)
     {
-        mLastLocation = location;
+        if (location != null)
+        {
+            mLastLocation = location;
 
-        callback.onLocationReceived();
-        stopLocationUpdates();
+            callback.onLocationReceived();
+            stopLocationUpdates();
+        }
     }
 
     public Location getLastLocation()

@@ -122,7 +122,7 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
         {
             if (visitItem.getGeaSopralluogo().getId_sopralluogo() == reportStates.getId_sopralluogo()
                     && (reportStates.getGeneralInfoCompletionState() == 2 && reportStates.getReportCompletionState() == 3)
-                    && reportStates.getPhotoAddedNumber() >= 1) //  && reportStates.getData_ora_invio_rapporto() == null
+                    && reportStates.getPhotoAddedNumber() >= 3) //  && reportStates.getData_ora_invio_rapporto() == null
             {
                 btnSendReportNow.setAlpha(1.0f);
                 btnSendReportNow.setEnabled(true);
@@ -285,19 +285,20 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
                     //Log.d("DEBUG", "image " + i + ", server returned:" + reportSendResponse);
                 }
             }
+
+            activity.runOnUiThread(new Runnable()
+            {
+                public void run()
+                {
+                    requestServerDialog.dismiss();
+                }
+            });
         }
 
         if (call == callSendReport)
         {
             reportSendResponse = response.body().string();
 
-            if (reportSendResponse == null)
-            {
-                showToastMessage("Rapporto inviato, risposta non ha ricevuto");
-
-                return;
-            } else
-            {
                 activity.runOnUiThread(new Runnable()
                 {
                     public void run()
@@ -318,18 +319,9 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
                 {
                     callSendImagesList.add(networkUtils.sendImage(this, activity, geaImagineRapporto));
                 }
-            }
 
             //mCommunicator.onSendReportReturned();
         }
-
-        activity.runOnUiThread(new Runnable()
-        {
-            public void run()
-            {
-                requestServerDialog.dismiss();
-            }
-        });
     }
 
     private void showToastMessage(final String msg)
@@ -338,7 +330,7 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
         {
             public void run()
             {
-                Toast.makeText(activity, msg, Toast.LENGTH_LONG).show();
+                Toast.makeText(activity, msg, Toast.LENGTH_SHORT).show();
             }
         });
     }

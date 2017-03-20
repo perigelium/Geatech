@@ -1,15 +1,21 @@
 package ru.alexangan.developer.geatech.Fragments;
 
+import android.Manifest;
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.RequiresApi;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,6 +30,7 @@ import java.util.Locale;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
+import ru.alexangan.developer.geatech.BuildConfig;
 import ru.alexangan.developer.geatech.Interfaces.Communicator;
 import ru.alexangan.developer.geatech.Interfaces.LocationRetrievedEvents;
 import ru.alexangan.developer.geatech.Models.ClientData;
@@ -34,6 +41,7 @@ import ru.alexangan.developer.geatech.Network.LocationRetriever;
 import ru.alexangan.developer.geatech.Network.NetworkUtils;
 import ru.alexangan.developer.geatech.R;
 
+import static android.support.v4.content.PermissionChecker.checkSelfPermission;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.company_id;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.realm;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.selectedTech;
@@ -54,6 +62,7 @@ public class CTLinfoFragment extends Fragment implements View.OnClickListener, L
     Communicator communicator;
     private ProgressDialog requestServerDialog;
     ClientData clientData;
+    private int PERMISSION_REQUEST_CODE = 11;
 
     public CTLinfoFragment()
     {
@@ -158,6 +167,8 @@ public class CTLinfoFragment extends Fragment implements View.OnClickListener, L
         return rootView;
     }
 
+    /*    @TargetApi(Build.VERSION_CODES.M)
+        @RequiresApi(api = Build.VERSION_CODES.M)*/
     @Override
     public void onClick(View view)
     {
@@ -177,9 +188,27 @@ public class CTLinfoFragment extends Fragment implements View.OnClickListener, L
                 return;
             }
 
-            disableInputAndShowProgressDialog();
+            if (checkSelfPermission(activity, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                    || checkSelfPermission(activity, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)
+            {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+                {
 
-            locationRetriever = new LocationRetriever(activity, this);
+                    String[] permissions = new String[]
+                            {
+                                    Manifest.permission.ACCESS_COARSE_LOCATION,
+                                    Manifest.permission.ACCESS_FINE_LOCATION
+                            };
+
+                    requestMultiplePermissions(permissions);
+                }
+            } else
+            {
+
+                disableInputAndShowProgressDialog();
+
+                locationRetriever = new LocationRetriever(activity, this);
+            }
         }
 
         if (view.getId() == R.id.btnSaveCoords)
@@ -236,24 +265,23 @@ public class CTLinfoFragment extends Fragment implements View.OnClickListener, L
                 tvAltitude.setText(String.valueOf(altitude), TextView.BufferType.EDITABLE);
             } else
             {
-                if(NetworkUtils.isNetworkAvailable(activity))
+                if (NetworkUtils.isNetworkAvailable(activity))
                 {
 
-                String elevationUrl = "http://maps.googleapis.com/maps/api/elevation/"
-                        + "xml?locations=" + String.valueOf(latitude)
-                        + "," + String.valueOf(longitude)
-                        + "&sensor=true";
+                    String elevationUrl = "http://maps.googleapis.com/maps/api/elevation/"
+                            + "xml?locations=" + String.valueOf(latitude)
+                            + "," + String.valueOf(longitude)
+                            + "&sensor=true";
 
                     NetworkUtils networkUtils = new NetworkUtils();
 
                     callDownloadURL = networkUtils.downloadURL(this, elevationUrl);
-                }
-                else
+                } else
                 {
                     showToastMessage("Non riuscito a ricevere altitudine, controlla connesione ad Internet");
                 }
             }
-        } else
+        } /*else
         {
             String uri = String.format(Locale.ENGLISH, "http://maps.google.com/maps?daddr=%f,%f (%s)", (float) latitude, (float) longitude, "Where the party is at");
             Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
@@ -275,7 +303,7 @@ public class CTLinfoFragment extends Fragment implements View.OnClickListener, L
             }
 
             showToastMessage("Non riuscito a ricevere coordinati");
-        }
+        }*/
 
         ////Log.d("new", "coords= " + String.valueOf(latitude) + " " + String.valueOf(longitude));
 
@@ -307,7 +335,7 @@ public class CTLinfoFragment extends Fragment implements View.OnClickListener, L
     @Override
     public void onFailure(Call call, IOException e)
     {
-        getActivity().runOnUiThread(new Runnable()
+        activity.runOnUiThread(new Runnable()
         {
             public void run()
             {
@@ -325,7 +353,7 @@ public class CTLinfoFragment extends Fragment implements View.OnClickListener, L
 
         altitude = (int) parseElevationFromGoogleMaps(result);
 
-        getActivity().runOnUiThread(new Runnable()
+        activity.runOnUiThread(new Runnable()
         {
             public void run()
             {
@@ -372,5 +400,34 @@ public class CTLinfoFragment extends Fragment implements View.OnClickListener, L
                 Toast.makeText(activity, msg, Toast.LENGTH_LONG).show();
             }
         });
+    }
+
+    @TargetApi(Build.VERSION_CODES.M)
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    public void requestMultiplePermissions(String[] permissions)
+    {
+        requestPermissions(permissions, PERMISSION_REQUEST_CODE);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults)
+    {
+        if (requestCode == PERMISSION_REQUEST_CODE && grantResults.length >= 1)
+        {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED || grantResults[1] == PackageManager.PERMISSION_GRANTED)
+            {
+                disableInputAndShowProgressDialog();
+
+/*                try
+                {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e)
+                {
+                    e.printStackTrace();
+                }*/
+                locationRetriever = new LocationRetriever(activity, this);
+            }
+        }
+        //super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 }

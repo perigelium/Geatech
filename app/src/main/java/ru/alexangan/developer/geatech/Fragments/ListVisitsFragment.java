@@ -135,6 +135,8 @@ public class ListVisitsFragment extends ListFragment
         realm.commitTransaction();*/
 
         TreeMap<Long, VisitItem> unsortedVisits = new TreeMap<>();
+        long n = 0;
+
 
         for (VisitItem visitItem : visitItems)
         //for (int i = 0; i < visitItems.size(); i++)
@@ -159,6 +161,11 @@ public class ListVisitsFragment extends ListFragment
 
                 } catch (ParseException e)
                 {
+                    while(unsortedVisits.get(n) != null)
+                    {
+                        n++;
+                    }
+                    unsortedVisits.put(n++, visitItem);
                     e.printStackTrace();
                 }
             }

@@ -191,7 +191,7 @@ public class NotSentListVisitsAdapter extends BaseAdapter implements Callback
             {
                 if (!NetworkUtils.isNetworkAvailable(activity))
                 {
-                    showToastMessage("Controlla la connessione a Internet");
+                    showToastMessage("Controlla la connessione ad Internet");
                     return;
                 }
 
@@ -259,7 +259,7 @@ public class NotSentListVisitsAdapter extends BaseAdapter implements Callback
 
         if (reportStates == null)
         {
-            showToastMessage("Invio rapporto fallito");
+            showToastMessage("L'invio di rapporto fallito");
             return;
         }
 
@@ -301,11 +301,9 @@ public class NotSentListVisitsAdapter extends BaseAdapter implements Callback
 
         String str_ReportItem_json = gson.toJson(reportItem);
 
-        ////Log.d("DEBUG", str_ReportItem_json);
-
         if (!NetworkUtils.isNetworkAvailable(activity))
         {
-            showToastMessage("Connessione ad internet non presente");
+            showToastMessage("Controlla la conessione ad internet");
             return;
         }
 
@@ -325,12 +323,12 @@ public class NotSentListVisitsAdapter extends BaseAdapter implements Callback
 
         if (call == callSendReport)
         {
-            showToastMessage("Invio rapporto fallito");
+            showToastMessage("L'invio di rapporto fallito");
         }
 
         if (call == callSendImage)
         {
-            showToastMessage("Invio immagine fallito");
+            showToastMessage("L'invio di immagine fallito");
             ////Log.d("DEBUG", "Invio immagine fallito");
         }
     }
@@ -350,6 +348,14 @@ public class NotSentListVisitsAdapter extends BaseAdapter implements Callback
                     ////Log.d("DEBUG", "image " + i + ", server returned:" + reportSendResponse);
                 }
             }
+
+            activity.runOnUiThread(new Runnable()
+            {
+                public void run()
+                {
+                    requestServerDialog.dismiss();
+                }
+            });
         }
 
         if (call == callSendReport)
@@ -361,7 +367,7 @@ public class NotSentListVisitsAdapter extends BaseAdapter implements Callback
             {
                 public void run()
                 {
-                    Toast.makeText(activity, "Rapporto inviato, server ritorna: " + reportSendResponse, Toast.LENGTH_LONG).show();
+                    Toast.makeText(activity, "Rapporto inviato", Toast.LENGTH_LONG).show(); // , server ritorna: " + reportSendResponse
 
                     Calendar calendarNow = Calendar.getInstance();
                     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
@@ -380,17 +386,7 @@ public class NotSentListVisitsAdapter extends BaseAdapter implements Callback
             {
                 callSendImagesList.add(networkUtils.sendImage(this, activity, geaImagineRapporto));
             }
-
-            //mCommunicator.onSendReportReturned();
         }
-
-        activity.runOnUiThread(new Runnable()
-        {
-            public void run()
-            {
-                requestServerDialog.dismiss();
-            }
-        });
     }
 
     private void showToastMessage(final String msg)

@@ -11,6 +11,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -241,15 +242,7 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
 
         btnSetDate.setOnClickListener(this);
 
-        //if(reportStates!=null)
-        {
-            btnAnnullaSetDateTime.setOnClickListener(this);
-        }
-/*        else
-        {
-            btnAnnullaSetDateTime.setAlpha(.4f);
-            btnAnnullaSetDateTime.setEnabled(false);
-        }*/
+        btnAnnullaSetDateTime.setOnClickListener(this);
 
         btnSetDateTimeSubmit.setOnClickListener(this);
         btnApriMappa.setOnClickListener(this);
@@ -330,8 +323,6 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
             disableInputAndShowProgressDialog();
 
             notifyServerDataOraSopralluogo(idSopralluogo, stakedOut);
-
-            //mCommunicator.onDateTimeSetReturned(false);
         }
 
         if (v.getId() == R.id.btnSetDateTimeSubmit)
@@ -356,9 +347,6 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
             disableInputAndShowProgressDialog();
 
             notifyServerDataOraSopralluogo(idSopralluogo, stakedOut);
-
-            // send date-time and id_sopralluogo
-            //mCommunicator.onDateTimeSetReturned(true);
         }
     }
 
@@ -401,7 +389,7 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
     @Override
     public void onFailure(Call call, IOException e)
     {
-        showToastMessage("Dato e ora inviato, risposta non ha ricevuto");
+        showToastMessage("Impostazione del dato e ora non è riuscita");
 
         activity.runOnUiThread(new Runnable()
         {
@@ -503,7 +491,7 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
                                                     realm.commitTransaction();
                                                 }
 
-                                                showToastMessage("Dato e ora impostato");//, server ritorna: " + strVisitDateTimeResponse
+                                                showToastMessage("Dato e ora è stato impostato");//, server ritorna: " + strVisitDateTimeResponse
                                             }
                                         } catch (JSONException e)
                                         {
@@ -520,7 +508,7 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
                                             realm.commitTransaction();
                                         }
 
-                                        showToastMessage("Dato e ora annulato");
+                                        showToastMessage("Dato e ora è stato annulato");
                                     }
 
                                     mCommunicator.onDateTimeSetReturned(false);
@@ -555,7 +543,7 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
         btnAnnullaSetDateTime.setEnabled(false);
         btnAnnullaSetDateTime.setAlpha(.4f);
 
-        requestServerDialog.show();
+        //requestServerDialog.show();
     }
 
     private void enableInput()
@@ -565,7 +553,7 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
         btnAnnullaSetDateTime.setEnabled(true);
         btnAnnullaSetDateTime.setAlpha(1.0f);
 
-        requestServerDialog.dismiss();
+        //requestServerDialog.dismiss();
     }
 
     private void alertDialog(String title, String message)

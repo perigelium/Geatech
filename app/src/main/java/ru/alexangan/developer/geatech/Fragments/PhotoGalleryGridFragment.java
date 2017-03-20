@@ -5,10 +5,13 @@ import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,12 +19,17 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
+import java.util.Date;
 
 import io.realm.RealmResults;
 import ru.alexangan.developer.geatech.Adapters.GridViewAdapter;
@@ -45,6 +53,7 @@ public class PhotoGalleryGridFragment extends Fragment
 
     // variable for selection intent
     private final int PICKER = 1;
+    private final int PICK_Camera_IMAGE = 2;
     // variable to store the currently selected image
     int currentPicPos = 0;
     String photosFolderName;
@@ -55,7 +64,7 @@ public class PhotoGalleryGridFragment extends Fragment
     Bitmap photoAddButton;
     Context context;
     private int selectedIndex;
-    GeaImagineRapporto gea_immagine;
+    File destination;
 
 
     public PhotoGalleryGridFragment()
@@ -161,19 +170,40 @@ public class PhotoGalleryGridFragment extends Fragment
         {
             public boolean onItemLongClick(AdapterView<?> parent, View v, int position, long id)
             {
-
                 currentPicPos = position;
 
-                if(pathItems.get(currentPicPos).delete()==true)
+                if(currentPicPos == imageItems.size() -1)
                 {
-                    imageItems.remove(currentPicPos);
-                    pathItems.remove(currentPicPos);
+
+                    DateFormat df = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+                    Date today = Calendar.getInstance().getTime();
+                    String reportDate = df.format(today);
+                    String name = reportDate.replace("/", "_");
+                    name = name.replace(":", "_");
+                    name = name.replace(" ", "_");
+
+                    destination = new File(Environment.getExternalStorageDirectory(), name + ".jpg");
+                    Uri uri = Uri.fromFile(destination);
+
+                    Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                    intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
+                    startActivityForResult(intent, PICK_Camera_IMAGE);
                 }
+                else
+                {
+                    currentPicPos = position;
 
-                imageItems.removeAll(Collections.singleton(null)); // remove all null items
-                pathItems.removeAll(Collections.singleton(null)); // remove all null items
+                    if (pathItems.get(currentPicPos).delete() == true)
+                    {
+                        imageItems.remove(currentPicPos);
+                        pathItems.remove(currentPicPos);
+                    }
 
-                gridView.setAdapter(gridAdapter);
+                    imageItems.removeAll(Collections.singleton(null)); // remove all null items
+                    pathItems.removeAll(Collections.singleton(null)); // remove all null items
+
+                    gridView.setAdapter(gridAdapter);
+                }
 
                 return true;
             }
@@ -263,88 +293,138 @@ public class PhotoGalleryGridFragment extends Fragment
     {
         super.onActivityResult(requestCode, resultCode, imageReturnedIntent);
 
-        if (resultCode == RESULT_OK)
+        switch (requestCode)
         {
-            // check if we are returning from picture selection
-            if (requestCode == PICKER)
-            {
-                Uri selectedImage = imageReturnedIntent.getData();
+            case PICK_Camera_IMAGE:
+                if (resultCode == RESULT_OK)
+                {
+                    String filePath = getLastShotImagePath();
 
-                InputStream imageStream = null;
-                try
-                {
-                    imageStream = context.getContentResolver().openInputStream(selectedImage);
-                } catch (FileNotFoundException e)
-                {
-                    e.printStackTrace();
+                    Uri uri = Uri.parse(new File(filePath).toString());
+
+                    saveReturnedImage(uri);
+
+                     //Toast.makeText(getActivity(), "" + imagePath + "",Toast.LENGTH_LONG).show();
                 }
+                break;
 
-                //Bitmap yourSelectedImage = BitmapFactory.decodeStream(imageStream);
-
-                String fileName = selectedImage.getLastPathSegment() + String.valueOf(pathItems.size());
-
-                String fileExtension = "";
-                int extensionPtr = fileName.lastIndexOf(".");
-
-                if(extensionPtr!=-1)
+            case PICKER:
+                if (resultCode == RESULT_OK)
                 {
-                    fileExtension = fileName.substring(extensionPtr);
+                    Uri selectedImage = imageReturnedIntent.getData();
+
+                    String filePath = getRealPathFromURI(getActivity(), selectedImage);
+
+                    saveReturnedImage(Uri.parse(filePath));
                 }
-
-                String strMediaType = ImageUtils.getMimeTypeOfUri(context, selectedImage);
-
-                if(fileExtension.length() < 3)
-                {
-                    fileExtension = strMediaType.substring(strMediaType.lastIndexOf("/") + 1);
-                    fileExtension = "." + fileExtension;
-                    fileName+=fileExtension;
-                }
-
-                File file = new File(context.getFilesDir(), photosFolderName + "/" + fileName);
-
-                FileOutputStream out = null;
-                int read = 0;
-                byte[] bytes = new byte[1024];
-
-                try
-                {
-                    out = new FileOutputStream(file);
-
-                    while ((read = imageStream.read(bytes)) != -1)
-                    {
-                        out.write(bytes, 0, read);
-                    }
-                } catch (IOException e)
-                {
-                    e.printStackTrace();
-                } finally
-                {
-                    try
-                    {
-                        if (out != null)
-                        {
-                            out.close();
-                        }
-                    } catch (IOException e)
-                    {
-                        e.printStackTrace();
-                    }
-                }
-
-                if (file.length() != 0)
-                {
-                    Bitmap bm = ImageUtils.decodeSampledBitmapFromUri(file.getAbsolutePath(), imageHolderWidth, imageHolderHeight);
-
-                    imageItems.add(0, bm);
-                    pathItems.add(0, file);
-
-                    // redraw the gallery thumbnails to reflect the new addition
-                    gridView.setAdapter(gridAdapter);
-                }
-            }
+                break;
         }
 
         // superclass method
         super.onActivityResult(requestCode, resultCode, imageReturnedIntent);
+    }
+
+    private void saveReturnedImage(Uri selectedImage)
+    {
+        InputStream imageStream = null;
+        File imageFile = new File(selectedImage.toString());
+
+        try
+        {
+            imageStream = new FileInputStream(imageFile);
+        } catch (FileNotFoundException e)
+        {
+            e.printStackTrace();
+            return;
+        }
+
+        //Bitmap yourSelectedImage = BitmapFactory.decodeStream(imageStream);
+
+        String fileName = selectedImage.getLastPathSegment();
+
+        String fileExtension = "";
+        int extensionPtr = fileName.lastIndexOf(".");
+
+        if (extensionPtr != -1)
+        {
+            fileExtension = fileName.substring(extensionPtr);
+        }
+
+        if (fileExtension.length() < 3)
+        {
+            String strMediaType = ImageUtils.getMimeTypeOfUri(context, selectedImage);
+            fileExtension = strMediaType.substring(strMediaType.lastIndexOf("/") + 1);
+            fileExtension = "." + fileExtension;
+            fileName += fileExtension;
+        }
+
+        File file = new File(context.getFilesDir(), photosFolderName + "/" + fileName);
+
+        FileOutputStream out = null;
+        int read = 0;
+        byte[] bytes = new byte[1024];
+
+        try
+        {
+            out = new FileOutputStream(file);
+
+            while ((read = imageStream.read(bytes)) != -1)
+            {
+                out.write(bytes, 0, read);
+            }
+        } catch (IOException e)
+        {
+            e.printStackTrace();
+        } finally
+        {
+            try
+            {
+                if (out != null)
+                {
+                    out.close();
+                }
+            } catch (IOException e)
+            {
+                e.printStackTrace();
+            }
+        }
+
+        if (file.length() != 0)
+        {
+            Bitmap bm = ImageUtils.decodeSampledBitmapFromUri(file.getAbsolutePath(), imageHolderWidth, imageHolderHeight);
+
+            imageItems.add(0, bm);
+            pathItems.add(0, file);
+
+            // redraw the gallery thumbnails to reflect the new addition
+            gridView.setAdapter(gridAdapter);
+        }
+    }
+
+    public String getLastShotImagePath()
+    {
+        String[] projection = {MediaStore.Images.Media.DATA};
+        Cursor cursor = getActivity().managedQuery(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, projection, null, null, null);
+        int column_index_data = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+        cursor.moveToLast();
+
+        String filePath = cursor.getString(column_index_data);
+
+        return filePath;
+    }
+
+    public String getRealPathFromURI(Context context, Uri contentUri) {
+        Cursor cursor = null;
+        try {
+            String[] proj = { MediaStore.Images.Media.DATA };
+            cursor = context.getContentResolver().query(contentUri,  proj, null, null, null);
+            int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+            cursor.moveToFirst();
+            return cursor.getString(column_index);
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
     }
 }

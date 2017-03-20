@@ -8,6 +8,7 @@ import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -537,6 +538,17 @@ public class MainActivity extends Activity implements Communicator, Callback
         {
             requestServerDialog.show();
 
+            final Handler handler = new Handler();
+            handler.postDelayed(new Runnable()
+            {
+                @Override
+                public void run()
+                {
+                    showToastMessage("La risposta non è ricevuta");
+                    requestServerDialog.dismiss();
+                }
+            }, 15000);
+
             callVisits = networkUtils.getData(this, GET_VISITS_URL_SUFFIX, tokenStr);
         } else
         {
@@ -789,7 +801,7 @@ public class MainActivity extends Activity implements Communicator, Callback
     {
         if (call == callVisits)
         {
-            showToastMessage("Visite data non ricevuto");
+            showToastMessage("Sopralluoghi dato non è ricevuto");
 
             requestServerDialog.dismiss();
         }
