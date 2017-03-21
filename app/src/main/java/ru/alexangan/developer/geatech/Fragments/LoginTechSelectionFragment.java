@@ -364,7 +364,13 @@ public class LoginTechSelectionFragment extends Fragment implements View.OnClick
     @Override
     public void onFailure(Call call, IOException e)
     {
-        enableInput();
+        activity.runOnUiThread(new Runnable()
+        {
+            public void run()
+            {
+                enableInput();
+            }
+        });
 
         if (call == callLoginToken)
         {

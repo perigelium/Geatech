@@ -270,7 +270,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical|end"
                     android:onClick="onClick"
-                    android:text="Cambia"/>
+                    android:text="Imposta"/>
 
             </LinearLayout>
         </LinearLayout>

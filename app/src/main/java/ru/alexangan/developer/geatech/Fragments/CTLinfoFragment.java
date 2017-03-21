@@ -88,7 +88,7 @@ public class CTLinfoFragment extends Fragment implements View.OnClickListener, L
 
         requestServerDialog = new ProgressDialog(getActivity());
         requestServerDialog.setTitle("");
-        requestServerDialog.setMessage("Download dei dati, si prega di attendere un po'...");
+        requestServerDialog.setMessage(getString(R.string.DownloadingDataPleaseWait));
         requestServerDialog.setIndeterminate(true);
     }
 
@@ -167,8 +167,6 @@ public class CTLinfoFragment extends Fragment implements View.OnClickListener, L
         return rootView;
     }
 
-    /*    @TargetApi(Build.VERSION_CODES.M)
-        @RequiresApi(api = Build.VERSION_CODES.M)*/
     @Override
     public void onClick(View view)
     {
@@ -241,7 +239,7 @@ public class CTLinfoFragment extends Fragment implements View.OnClickListener, L
 
                 realm.commitTransaction();
 
-                showToastMessage("Salvato");
+                showToastMessage(getString(R.string.Saved));
             }
         }
     }
@@ -265,9 +263,8 @@ public class CTLinfoFragment extends Fragment implements View.OnClickListener, L
                 tvAltitude.setText(String.valueOf(altitude), TextView.BufferType.EDITABLE);
             } else
             {
-                if (NetworkUtils.isNetworkAvailable(activity))
+                if (NetworkUtils.isNetworkAvailable(activity))// && NetworkUtils.isOnline())
                 {
-
                     String elevationUrl = "http://maps.googleapis.com/maps/api/elevation/"
                             + "xml?locations=" + String.valueOf(latitude)
                             + "," + String.valueOf(longitude)
@@ -278,10 +275,10 @@ public class CTLinfoFragment extends Fragment implements View.OnClickListener, L
                     callDownloadURL = networkUtils.downloadURL(this, elevationUrl);
                 } else
                 {
-                    showToastMessage("Non riuscito a ricevere altitudine, controlla connesione ad Internet");
+                    showToastMessage(getString(R.string.GetAltitudeFailedCheckIfOnline));
                 }
             }
-        } /*else
+        } else
         {
             String uri = String.format(Locale.ENGLISH, "http://maps.google.com/maps?daddr=%f,%f (%s)", (float) latitude, (float) longitude, "Where the party is at");
             Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
@@ -298,12 +295,12 @@ public class CTLinfoFragment extends Fragment implements View.OnClickListener, L
                     startActivity(unrestrictedIntent);
                 } catch (ActivityNotFoundException innerEx)
                 {
-                    Toast.makeText(getActivity(), "installa un'applicazione mappe", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getActivity(), R.string.InstallMapApp, Toast.LENGTH_LONG).show();
                 }
             }
 
-            showToastMessage("Non riuscito a ricevere coordinati");
-        }*/
+            showToastMessage(getString(R.string.FailedToGetCoords));
+        }
 
         ////Log.d("new", "coords= " + String.valueOf(latitude) + " " + String.valueOf(longitude));
 
@@ -343,7 +340,7 @@ public class CTLinfoFragment extends Fragment implements View.OnClickListener, L
             }
         });
 
-        showToastMessage("Non riuscito a ricevere altitudine");
+        showToastMessage(String.valueOf(R.string.GetAltitudeFailedCheckIfOnline));
     }
 
     @Override
@@ -428,6 +425,5 @@ public class CTLinfoFragment extends Fragment implements View.OnClickListener, L
                 locationRetriever = new LocationRetriever(activity, this);
             }
         }
-        //super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 }

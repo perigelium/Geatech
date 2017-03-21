@@ -11,7 +11,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -66,8 +65,7 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
     Activity activity;
     int idSopralluogo, stakedOut;
 
-    private TextView mDateSetTextView, mTimeSetTextView, btnSetDate, btnAnnullaSetDateTime, btnSetDateTimeSubmit,
-            btnApriMappa, btnChiama;
+    private TextView mDateSetTextView, mTimeSetTextView, btnSetDate, btnAnnullaSetDateTime, btnSetDateTimeSubmit, btnApriMappa, btnChiama;
 
     private int mYear, mMonth, mDay, mHour, mMinute;
 
@@ -78,6 +76,7 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
     private Communicator mCommunicator;
     private ProgressDialog requestServerDialog;
     AlertDialog alert;
+    boolean dateSet, timeSet;
 
 
     public SetDateTimeFragment()
@@ -108,8 +107,11 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
 
         requestServerDialog = new ProgressDialog(getActivity());
         requestServerDialog.setTitle("");
-        requestServerDialog.setMessage("Trasmettere dei dati, si prega di attendere un po'...");
+        requestServerDialog.setMessage(getString(R.string.TransmittingDataPleaseWait));
         requestServerDialog.setIndeterminate(true);
+
+        dateSet = false;
+        timeSet = false;
     }
 
     private DatePickerDialog.OnDateSetListener datePickerListener = new DatePickerDialog.OnDateSetListener()
@@ -118,6 +120,8 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
         @Override
         public void onDateSet(DatePicker view, int selectedYear, int selectedMonth, int selectedDay)
         {
+            dateSet = true;
+
             mYear = selectedYear;
             calendar.set(Calendar.YEAR, mYear);
             mMonth = selectedMonth + 1;
@@ -134,6 +138,10 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
         @Override
         public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute)
         {
+            if(dateSet)
+            {
+                enableInput();
+            }
 
             mHour = selectedHour;
             calendar.set(Calendar.HOUR_OF_DAY, mHour);
@@ -214,22 +222,31 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
 
         strDateTimeNow = sdf.format(calendarNow.getTime());
 
-        try
+        if(dataOraSopralluogo.length() > 4)
         {
-            calendar.setTime(sdf.parse(dataOraSopralluogo));
-
-            int millsDiff = calendar.compareTo(calendarNow);
-
-            if (millsDiff < 0)
+            try
             {
+                calendar.setTime(sdf.parse(dataOraSopralluogo));
+
+                int millsDiff = calendar.compareTo(calendarNow);
+
+                if (millsDiff < 0)
+                {
+                    calendar = calendarNow;
+                }
+
+                updateDisplay();
+
+            } catch (ParseException e)
+            {
+                e.printStackTrace();
+
                 calendar = calendarNow;
             }
-
-        } catch (ParseException e)
+        }
+        else
         {
-            e.printStackTrace();
-
-            calendar = calendarNow;
+            disableInput();
         }
 
         mYear = calendar.get(Calendar.YEAR);
@@ -237,8 +254,6 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
         mDay = calendar.get(Calendar.DAY_OF_MONTH);
         mHour = calendar.get(Calendar.HOUR_OF_DAY);
         mMinute = calendar.get(Calendar.MINUTE);
-
-        updateDisplay();
 
         btnSetDate.setOnClickListener(this);
 
@@ -320,7 +335,7 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
 
             stakedOut = 0;
 
-            disableInputAndShowProgressDialog();
+            disableInput();
 
             notifyServerDataOraSopralluogo(idSopralluogo, stakedOut);
         }
@@ -344,7 +359,7 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
             strDateTimeSet = sdf.format(calendar.getTime());
 
-            disableInputAndShowProgressDialog();
+            disableInput();
 
             notifyServerDataOraSopralluogo(idSopralluogo, stakedOut);
         }
@@ -389,7 +404,7 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
     @Override
     public void onFailure(Call call, IOException e)
     {
-        showToastMessage("Impostazione del dato e ora non è riuscita");
+        showToastMessage(getString(R.string.SetDateTimeFailed));
 
         activity.runOnUiThread(new Runnable()
         {
@@ -536,7 +551,7 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
         });
     }
 
-    private void disableInputAndShowProgressDialog()
+    private void disableInput()
     {
         btnSetDateTimeSubmit.setEnabled(false);
         btnSetDateTimeSubmit.setAlpha(.4f);

@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.app.ProgressDialog;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -24,6 +25,7 @@ import io.realm.RealmResults;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
+import ru.alexangan.developer.geatech.Activities.MainActivity;
 import ru.alexangan.developer.geatech.Interfaces.LoginCommunicator;
 import ru.alexangan.developer.geatech.Models.LoginCredentials;
 import ru.alexangan.developer.geatech.Network.NetworkUtils;
@@ -166,8 +168,8 @@ public class LoginCompanyFragment extends Fragment implements View.OnClickListen
     {
         if (view.getId() == R.id.btnLogin)
         {
-            btnLogin.setAlpha(.4f);
-            btnLogin.setEnabled(false);
+/*            btnLogin.setAlpha(.4f);
+            btnLogin.setEnabled(false);*/
 
             realm.beginTransaction();
             RealmResults<LoginCredentials> loginCredentialses = realm.where(LoginCredentials.class).findAll();
@@ -236,11 +238,17 @@ public class LoginCompanyFragment extends Fragment implements View.OnClickListen
     @Override
     public void onFailure(Call call, IOException e)
     {
-        enableInput();
+        activity.runOnUiThread(new Runnable()
+        {
+            public void run()
+            {
+                enableInput();
+            }
+        });
 
         if (call == callTechnicianList)
         {
-            showToastMessage("Login fallito, controlla la connessione a Internet");
+            showToastMessage("Login fallito, controlla la connessione ad Internet");
         }
     }
 

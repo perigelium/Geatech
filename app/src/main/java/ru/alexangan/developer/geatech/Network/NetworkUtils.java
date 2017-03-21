@@ -9,6 +9,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.Call;
@@ -37,15 +38,37 @@ public class NetworkUtils
     {
         ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
-        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();// && isOnline();
     }
+
+/*    public static boolean isOnline()
+    {
+        try
+        {
+            Process process = Runtime.getRuntime().exec("/system/bin/ping -c 1 8.8.4.4");
+            ProcessWithTimeout processWithTimeout = new ProcessWithTimeout(process);
+            int exitCode = processWithTimeout.waitForProcess(1500);
+
+            if (exitCode == Integer.MIN_VALUE)
+            {
+                return false;
+            } else
+            {
+                return true;
+            }
+        } catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+        return false;
+    }*/
 
     public Call loginRequest(Callback callback, String login, String password, String techName, int techId)
     {
         OkHttpClient.Builder defaultHttpClient = new OkHttpClient.Builder();
-        //defaultHttpClient.connectTimeout(10, TimeUnit.SECONDS);
-        defaultHttpClient.readTimeout(15, TimeUnit.SECONDS);
-        defaultHttpClient.writeTimeout(15, TimeUnit.SECONDS);
+        defaultHttpClient.connectTimeout(4, TimeUnit.SECONDS);
+        defaultHttpClient.readTimeout(10, TimeUnit.SECONDS);
+        defaultHttpClient.writeTimeout(10, TimeUnit.SECONDS);
         OkHttpClient okHttpClient = defaultHttpClient.build();
 
         JSONObject jsonObject = new JSONObject();
@@ -86,6 +109,9 @@ public class NetworkUtils
     public Call getData(Callback callback, String urlSuffix, String tokenStr)
     {
         OkHttpClient.Builder defaultHttpClient = new OkHttpClient.Builder();
+        defaultHttpClient.connectTimeout(4, TimeUnit.SECONDS);
+        defaultHttpClient.readTimeout(10, TimeUnit.SECONDS);
+        defaultHttpClient.writeTimeout(10, TimeUnit.SECONDS);
         OkHttpClient okHttpClient = defaultHttpClient.build();
 
         JSONObject jsonToken = new JSONObject();
@@ -117,6 +143,9 @@ public class NetworkUtils
     public Call sendData(Callback callback, String urlSuffix, String tokenStr, String gsonStr)
     {
         OkHttpClient.Builder defaultHttpClient = new OkHttpClient.Builder();
+        defaultHttpClient.connectTimeout(4, TimeUnit.SECONDS);
+        defaultHttpClient.readTimeout(10, TimeUnit.SECONDS);
+        defaultHttpClient.writeTimeout(10, TimeUnit.SECONDS);
         OkHttpClient okHttpClient = defaultHttpClient.build();
 
         JSONObject jsonObject = new JSONObject();
@@ -152,6 +181,9 @@ public class NetworkUtils
     public Call setData(Callback callback, String urlSuffix, String jsonStr)
     {
         OkHttpClient.Builder defaultHttpClient = new OkHttpClient.Builder();
+        defaultHttpClient.connectTimeout(4, TimeUnit.SECONDS);
+        defaultHttpClient.readTimeout(10, TimeUnit.SECONDS);
+        defaultHttpClient.writeTimeout(10, TimeUnit.SECONDS);
         OkHttpClient okHttpClient = defaultHttpClient.build();
 
         JSONObject jsonObject;
@@ -187,6 +219,9 @@ public class NetworkUtils
         String strMediaType = ImageUtils.getMimeTypeOfUri(context, Uri.fromFile(imageFile));
 
         OkHttpClient.Builder defaultHttpClient = new OkHttpClient.Builder();
+        defaultHttpClient.connectTimeout(4, TimeUnit.SECONDS);
+        defaultHttpClient.readTimeout(10, TimeUnit.SECONDS);
+        defaultHttpClient.writeTimeout(10, TimeUnit.SECONDS);
         OkHttpClient okHttpClient = defaultHttpClient.build();
 
         RequestBody requestBody = new MultipartBody.Builder()
@@ -212,6 +247,9 @@ public class NetworkUtils
     public Call downloadURL(Callback callback, String url)
     {
         OkHttpClient.Builder defaultHttpClient = new OkHttpClient.Builder();
+        defaultHttpClient.connectTimeout(4, TimeUnit.SECONDS);
+        defaultHttpClient.readTimeout(10, TimeUnit.SECONDS);
+        defaultHttpClient.writeTimeout(10, TimeUnit.SECONDS);
         OkHttpClient okHttpClient = defaultHttpClient.build();
 
         Request request = new Request.Builder()

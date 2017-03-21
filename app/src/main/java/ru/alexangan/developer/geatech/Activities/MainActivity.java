@@ -72,6 +72,8 @@ public class MainActivity extends Activity implements Communicator, Callback
     NotSentListVisitsFragment notSentListVisits;
     ReportsListFragment reportsList;
     private ProgressDialog requestServerDialog;
+    Handler handler;
+    Runnable runnable;
 
     @Override
     protected void onStart()
@@ -126,39 +128,6 @@ public class MainActivity extends Activity implements Communicator, Callback
 
             this.finish();
         }
-
-/*        for (VisitItem realmVisitItem : visitItems)
-        {
-            int idSopralluogo = realmVisitItem.getGeaSopralluogo().getId_sopralluogo();
-
-            Boolean addressAndProductPresent = false;
-            realm.beginTransaction();
-            RealmResults<ReportStates> reportStatesList = realm.where(ReportStates.class).findAll();
-            realm.commitTransaction();
-
-            for (ReportStates reportStates : reportStatesList)
-            {
-                realm.beginTransaction();
-                int idSopralluogoRep = reportStates.getId_sopralluogo();
-
-                if (idSopralluogo == idSopralluogoRep)
-                {
-                    addressAndProductPresent = true;
-                    reportStates.setVisitId(realmVisitItem.getId());
-                }
-                realm.commitTransaction();
-            }
-
-            // possible reasonable to initialize each ReportStates object on first call.
-            if (addressAndProductPresent == false)
-            {
-                realm.beginTransaction();
-                ReportStates newReportStates = new ReportStates(company_id, selectedTech.getId(), reportStatesList.size(), realmVisitItem.getId());
-                newReportStates.setId_sopralluogo(idSopralluogo);
-                realm.copyToRealm(newReportStates);
-                realm.commitTransaction();
-            }
-        }*/
 
         swipeDetector = new SwipeDetector();
 
@@ -219,6 +188,18 @@ public class MainActivity extends Activity implements Communicator, Callback
         requestServerDialog.setTitle("");
         requestServerDialog.setMessage("Ricevere dei dati, si prega di attendere un po'...");
         requestServerDialog.setIndeterminate(true);
+
+        handler = new Handler();
+
+        runnable = new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                showToastMessage("La risposta non è ricevuta");
+                requestServerDialog.dismiss();
+            }
+        };
     }
 
     @Override
@@ -226,31 +207,13 @@ public class MainActivity extends Activity implements Communicator, Callback
     {
         if (!listVisits.isAdded())
         {
-/*            FragmentTransaction mFragmentTransaction = mFragmentManager.beginTransaction();
-            mFragmentTransaction.hide(ctrlBtnsReportDetailed);
-            mFragmentTransaction.hide(ctrlBtnsFragment2);
-            mFragmentTransaction.show(ctrlBtnsFragment1);
-            mFragmentTransaction.commit();*/
-
             removeAllLists();
 
             ctrlBtnsFragment1.setCheckedBtnId(R.id.btnVisits);
 
-/*            FragmentTransaction mFragmentTransaction1 = mFragmentManager.beginTransaction();
-            mFragmentTransaction1.show(ctrlBtnsFragment1);
-            mFragmentTransaction1.commit();*/
-
             //removeAllLists();
 
             //currentSelIndex = -1;
-
-/*            listVisits = new ListVisitsFragment();
-
-            Bundle args = new Bundle();
-            args.putBoolean("timeNotSetItemsOnly", false);
-            listVisits.setArguments(args);*/
-
-            //setVisitsListContent(listVisits);
 
         } else
         {
@@ -262,11 +225,6 @@ public class MainActivity extends Activity implements Communicator, Callback
     @Override
     public void onCtrlButtons1Clicked(View view)
     {
-/*        if (!view.isShown() || !ctrlBtnChkChanged)
-        {
-            return;
-        }*/
-
         FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
         fragmentTransaction.hide(ctrlBtnsFragment2);
         fragmentTransaction.show(ctrlBtnsFragment1);
@@ -336,23 +294,9 @@ public class MainActivity extends Activity implements Communicator, Callback
 
         if (view == findViewById(R.id.btnReturn))
         {
-/*            FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
-            fragmentTransaction.hide(ctrlBtnsFragment2);
-            fragmentTransaction.show(ctrlBtnsFragment1);
-            fragmentTransaction.commit();*/
-
             removeAllLists();
 
             ctrlBtnsFragment1.setCheckedBtnId(R.id.btnVisits);
-
-/*            removeAllLists();
-            listVisits = new ListVisitsFragment();
-
-            Bundle args = new Bundle();
-            args.putBoolean("visitTimeNotSetOnly", false);
-            listVisits.setArguments(args);
-
-            setVisitsListContent(listVisits);*/
         }
 
         if (view == findViewById(R.id.btnFillReport))
@@ -510,11 +454,6 @@ public class MainActivity extends Activity implements Communicator, Callback
 
         if (dateTimeHasSet) // if visit day is empty, show set datetime fragment, otherwise show CTL info.
         {
-/*            FragmentTransaction mFragmentTransaction = mFragmentManager.beginTransaction();
-            mFragmentTransaction.hide(ctrlBtnsFragment1);
-            mFragmentTransaction.show(ctrlBtnsFragment2);
-            mFragmentTransaction.commit();*/
-
             ctrlBtnsFragment2.setCheckedBtnId(R.id.btnInfo);
         } else
         {
@@ -538,36 +477,14 @@ public class MainActivity extends Activity implements Communicator, Callback
         {
             requestServerDialog.show();
 
-            final Handler handler = new Handler();
-            handler.postDelayed(new Runnable()
-            {
-                @Override
-                public void run()
-                {
-                    showToastMessage("La risposta non è ricevuta");
-                    requestServerDialog.dismiss();
-                }
-            }, 15000);
+            handler.postDelayed(runnable, 15000);
 
             callVisits = networkUtils.getData(this, GET_VISITS_URL_SUFFIX, tokenStr);
         } else
         {
             //removeAllLists();
 
-/*            FragmentTransaction mFragmentTransaction = mFragmentManager.beginTransaction();
-            mFragmentTransaction.hide(ctrlBtnsFragment2);
-            mFragmentTransaction.show(ctrlBtnsFragment1);
-            mFragmentTransaction.commit();*/
-
             ctrlBtnsFragment1.setCheckedBtnId(R.id.btnVisits);
-
-/*            listVisits = new ListVisitsFragment();
-
-            Bundle args = new Bundle();
-            args.putBoolean("visitTimeNotSetOnly", false);
-            listVisits.setArguments(args);
-
-            setVisitsListContent(listVisits);*/
         }
     }
 
@@ -602,24 +519,12 @@ public class MainActivity extends Activity implements Communicator, Callback
         reportDetailedFragment.setArguments(args);
 
         setVisitsListContent(reportDetailedFragment);
-
-        //ctrlBtnsFragment1.setCheckedBtnId(R.id.btnSentReports);
     }
 
     @Override
     public void OnInWorkListItemSelected(int itemIndex)
     {
         currentSelIndex = itemIndex;
-
-/*        FragmentTransaction mFragmentTransaction = mFragmentManager.beginTransaction();
-        mFragmentTransaction.hide(ctrlBtnsFragment1);
-        mFragmentTransaction.show(ctrlBtnsFragment2);
-        mFragmentTransaction.commit();*/
-
-/*        ctrlBtnChkChanged = false;
-        ctrlBtnsFragment1.setCheckedBtnId(R.id.btnFillReport);
-        ctrlBtnsFragment1.onHiddenChanged(true);
-        ctrlBtnChkChanged = true;*/
 
 /*        VisitItem visitItem = visitItems.get(itemIndex);
         ProductData productData = visitItem.getProductData();
@@ -647,14 +552,6 @@ public class MainActivity extends Activity implements Communicator, Callback
             //removeAllLists();
 
             ctrlBtnsFragment1.setCheckedBtnId(R.id.btnComingVisits);
-
-/*            listVisits = new ListVisitsFragment();
-
-            Bundle args = new Bundle();
-            args.putBoolean("timeNotSetItemsOnly", true);
-            listVisits.setArguments(args);
-
-            setVisitsListContent(listVisits);*/
         }
 
         if (view.getId() == R.id.btnNotifUrgentReports)
@@ -664,9 +561,11 @@ public class MainActivity extends Activity implements Communicator, Callback
 
         if (view.getId() == R.id.btnAppSettings)
         {
-            String[] listItemsArray = {"Logout", "Esci"};
+            String[] listItemsArray = {"Aggiorna la lista", "Logout", "Esci"};
 
-            //ContextThemeWrapper themedContext = new ContextThemeWrapper(this, android.R.style.Theme_DeviceDefault_Light_Dialog_NoActionBar);
+            //ContextThemeWrapper themedContext = new ContextThemeWrapper
+            // (this, android.R.style.Theme_DeviceDefault_Light_Dialog_NoActionBar);
+
             AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
 
             LayoutInflater inflater = getLayoutInflater();
@@ -690,14 +589,18 @@ public class MainActivity extends Activity implements Communicator, Callback
                         finish();
                     }*/
 
-                    if (which == 1)
+                    if (which == 2)
                     {
                         exitApp();
                     }
 
-                    if (which == 0)
+                    if (which == 1)
                     {
                         logout();
+                    }
+                    if (which == 0)
+                    {
+                        showToastMessage("Not implemented exception");
                     }
 
                 }
@@ -804,6 +707,8 @@ public class MainActivity extends Activity implements Communicator, Callback
             showToastMessage("Sopralluoghi dato non è ricevuto");
 
             requestServerDialog.dismiss();
+
+            handler.removeCallbacks(runnable);
         }
     }
 
@@ -812,9 +717,9 @@ public class MainActivity extends Activity implements Communicator, Callback
     {
         if (call == callVisits)
         {
-            final String visitsJSONData = response.body().string();
+            handler.removeCallbacks(runnable);
 
-            //Log.d("DEBUG", visitsJSONData);
+            final String visitsJSONData = response.body().string();
 
             runOnUiThread(new Runnable()
             {
@@ -843,19 +748,6 @@ public class MainActivity extends Activity implements Communicator, Callback
                     //removeAllLists();
 
                     ctrlBtnsFragment1.setCheckedBtnId(R.id.btnVisits);
-
-/*                    ctrlBtnChkChanged = false;
-                    ctrlBtnsFragment1.setCheckedBtnId(R.id.btnVisits);
-                    ctrlBtnsFragment1.onHiddenChanged(true);
-                    ctrlBtnChkChanged = true;*/
-
-/*                    listVisits = new ListVisitsFragment();
-
-                    Bundle args = new Bundle();
-                    args.putBoolean("visitTimeNotSetOnly", false);
-                    listVisits.setArguments(args);
-
-                    setVisitsListContent(listVisits);*/
                 }
             });
         }

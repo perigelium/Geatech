@@ -38,7 +38,7 @@ public class LocationRetriever implements ConnectionCallbacks, OnConnectionFaile
     private LocationRequest mLocationRequest;
 
     // Location updates intervals in sec
-    //private static int UPDATE_INTERVAL = 5000; // 5 sec
+    private static int UPDATE_INTERVAL = 60000; // 5 sec
     private static int FASTEST_INTERVAL = 1000; // 1 sec
     private static int DISPLACEMENT = 0; // 1 meter
     private static int EXPIRATION_DURATION = 60000;
@@ -98,9 +98,9 @@ public class LocationRetriever implements ConnectionCallbacks, OnConnectionFaile
     protected void buildLocationRequest()
     {
         mLocationRequest = new LocationRequest();
-        //mLocationRequest.setInterval(UPDATE_INTERVAL);
+        mLocationRequest.setInterval(UPDATE_INTERVAL);
         mLocationRequest.setFastestInterval(FASTEST_INTERVAL);
-        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        mLocationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
         mLocationRequest.setSmallestDisplacement(DISPLACEMENT);
         mLocationRequest.setExpirationDuration(EXPIRATION_DURATION);
         mLocationRequest.setMaxWaitTime(MAXWAITTIME);
@@ -161,8 +161,8 @@ public class LocationRetriever implements ConnectionCallbacks, OnConnectionFaile
         {
             mLastLocation = location;
 
-            callback.onLocationReceived();
             stopLocationUpdates();
+            callback.onLocationReceived();
         }
     }
 
