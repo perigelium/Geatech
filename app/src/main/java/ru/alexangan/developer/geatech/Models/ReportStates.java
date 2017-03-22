@@ -14,9 +14,9 @@ public class ReportStates extends RealmObject
     private String data_ora_presa_appuntamento;
     private String data_ora_sopralluogo;
 
-    private double latitudine; // latitudine
-    private double longitudine; // longitudine
-    private int altitudine; // altitudine
+    private double latitudine;
+    private double longitudine;
+    private int altitudine;
 
     private int reportCompletionState;
     private int generalInfoCompletionState; // data ora appuntamento era inserita
@@ -25,8 +25,8 @@ public class ReportStates extends RealmObject
 
     private String dataOraProssimoTentativo;
     private String dataOraUltimoTentativo;
-    private String data_ora_compilazione_rapporto; // data_ora_compilazione_rapporto
-    private String data_ora_invio_rapporto; // data_ora_invio_rapporto
+    private String data_ora_compilazione_rapporto;
+    private String data_ora_invio_rapporto;
 
     private String nome_tecnico;
     private String note_tecnico;

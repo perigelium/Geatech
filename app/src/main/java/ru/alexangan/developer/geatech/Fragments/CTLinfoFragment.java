@@ -16,11 +16,11 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,7 +30,6 @@ import java.util.Locale;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
-import ru.alexangan.developer.geatech.BuildConfig;
 import ru.alexangan.developer.geatech.Interfaces.Communicator;
 import ru.alexangan.developer.geatech.Interfaces.LocationRetrievedEvents;
 import ru.alexangan.developer.geatech.Models.ClientData;
@@ -50,7 +49,7 @@ import static ru.alexangan.developer.geatech.Models.GlobalConstants.visitItems;
 public class CTLinfoFragment extends Fragment implements View.OnClickListener, LocationRetrievedEvents, Callback
 {
     Button btnGetCurrentCoords, btnSaveCoords;
-    TextView tvCoordNord, tvCoordEst, tvAltitude;
+    EditText etCoordNord, etCoordEst, etAltitude;
     Call callDownloadURL;
     double latitude, longitude;
     int altitude;
@@ -103,9 +102,9 @@ public class CTLinfoFragment extends Fragment implements View.OnClickListener, L
         btnGetCurrentCoords.setOnClickListener(this);
         btnSaveCoords.setOnClickListener(this);
 
-        tvCoordNord = (TextView) rootView.findViewById(R.id.tvCoordNord);
-        tvCoordEst = (TextView) rootView.findViewById(R.id.tvCoordEst);
-        tvAltitude = (TextView) rootView.findViewById(R.id.tvAltitude);
+        etCoordNord = (EditText) rootView.findViewById(R.id.etCoordNord);
+        etCoordEst = (EditText) rootView.findViewById(R.id.etCoordEst);
+        etAltitude = (EditText) rootView.findViewById(R.id.etAltitude);
 
 
         VisitItem visitItem = visitItems.get(selectedIndex);
@@ -153,14 +152,14 @@ public class CTLinfoFragment extends Fragment implements View.OnClickListener, L
                 altitude = reportStates.getAltitudine();
             }
 
-            tvCoordNord.setText(String.valueOf(latitude));
-            tvCoordEst.setText(String.valueOf(longitude));
+            etCoordNord.setText(String.valueOf(latitude));
+            etCoordEst.setText(String.valueOf(longitude));
 
             altitude = reportStates.getAltitudine();
 
             if (altitude != -999)
             {
-                tvAltitude.setText(String.valueOf(altitude));
+                etAltitude.setText(String.valueOf(altitude));
             }
         }
 
@@ -220,16 +219,16 @@ public class CTLinfoFragment extends Fragment implements View.OnClickListener, L
 
                 if (latitude != 0)
                 {
-                    reportStates.setLatitudine(latitude);
+                    reportStates.setLatitudine(Double.valueOf(etCoordNord.getText().toString()));
                 }
                 if (longitude != 0)
                 {
-                    reportStates.setLongitudine(longitude);
+                    reportStates.setLongitudine(Double.valueOf(etCoordEst.getText().toString()));
                 }
 
                 if (altitude != -999)
                 {
-                    reportStates.setAltitudine(altitude);
+                    reportStates.setAltitudine(Integer.valueOf(etAltitude.getText().toString()));
                 }
 
                 if (reportStates != null && reportStates.getLatitudine() != 0 && reportStates.getLongitudine() != 0) // && altitude != -999
@@ -254,13 +253,13 @@ public class CTLinfoFragment extends Fragment implements View.OnClickListener, L
             latitude = mLastLocation.getLatitude();
             longitude = mLastLocation.getLongitude();
 
-            tvCoordNord.setText(String.valueOf(latitude));
-            tvCoordEst.setText(String.valueOf(longitude));
+            etCoordNord.setText(String.valueOf(latitude));
+            etCoordEst.setText(String.valueOf(longitude));
 
             if (mLastLocation.hasAltitude())
             {
                 altitude = (int) mLastLocation.getAltitude();
-                tvAltitude.setText(String.valueOf(altitude), TextView.BufferType.EDITABLE);
+                etAltitude.setText(String.valueOf(altitude), TextView.BufferType.EDITABLE);
             } else
             {
                 if (NetworkUtils.isNetworkAvailable(activity))// && NetworkUtils.isOnline())
@@ -361,7 +360,7 @@ public class CTLinfoFragment extends Fragment implements View.OnClickListener, L
                     realm.commitTransaction();
                 }
 
-                tvAltitude.setText(String.valueOf(altitude), TextView.BufferType.EDITABLE);
+                etAltitude.setText(String.valueOf(altitude), TextView.BufferType.EDITABLE);
 
                 enableInput();
             }

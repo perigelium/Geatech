@@ -31,6 +31,7 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
+import io.realm.RealmResults;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
@@ -38,6 +39,8 @@ import ru.alexangan.developer.geatech.Activities.MainActivity;
 import ru.alexangan.developer.geatech.Adapters.SetVisitDateTimeListAdapter;
 import ru.alexangan.developer.geatech.Interfaces.Communicator;
 import ru.alexangan.developer.geatech.Models.ClientData;
+import ru.alexangan.developer.geatech.Models.GeaImagineRapporto;
+import ru.alexangan.developer.geatech.Models.GeaItemRapporto;
 import ru.alexangan.developer.geatech.Models.ProductData;
 import ru.alexangan.developer.geatech.Models.ReportStates;
 import ru.alexangan.developer.geatech.Models.SubproductItem;
@@ -272,7 +275,7 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
         {
             if(!networkUtils.isNetworkAvailable(activity))
             {
-                showToastMessage("Controlla la connessione a Internet");
+                showToastMessage(getString(R.string.CheckInternetConnection));
                 return;
             }
 
@@ -294,7 +297,7 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
                     startActivity(unrestrictedIntent);
                 } catch (ActivityNotFoundException innerEx)
                 {
-                    Toast.makeText(getActivity(), "installa un'applicazione mappe", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getActivity(), R.string.InstallMapApp, Toast.LENGTH_LONG).show();
                 }
             }
         }
@@ -322,14 +325,14 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
         {
             if(!networkUtils.isNetworkAvailable(activity))
             {
-                showToastMessage("Controlla la connessione a Internet");
+                showToastMessage(getString(R.string.CheckInternetConnection));
                 return;
             }
 
             if(tokenStr == null)
             {
                 //showToastMessage("Modalità offline, si prega di logout e login di nuovo");
-                alertDialog("Info", "Modalità offline, si prega di logout e login di nuovo,\n mostra schermata di login ?");
+                alertDialog("Info", getString(R.string.OfflineModeShowLoginScreenQuestion));
                 return;
             }
 
@@ -344,14 +347,14 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
         {
             if(!networkUtils.isNetworkAvailable(activity))
             {
-                showToastMessage("Controlla connesione ad Internet");
+                showToastMessage(getString(R.string.CheckInternetConnection));
                 return;
             }
 
             if(tokenStr == null)
             {
                 //showToastMessage("Modalità offline, si prega di logout e login di nuovo");
-                alertDialog("Info", "Modalità offline, si prega di logout e login di nuovo,\n mostra schermata di login ?");
+                alertDialog("Info", getString(R.string.OfflineModeShowLoginScreenQuestion));
                 return;
             }
 
@@ -506,7 +509,7 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
                                                     realm.commitTransaction();
                                                 }
 
-                                                showToastMessage("Dato e ora è stato impostato");//, server ritorna: " + strVisitDateTimeResponse
+                                                showToastMessage(getString(R.string.DateTimeSetSuccessfully));//, server ritorna: " + strVisitDateTimeResponse
                                             }
                                         } catch (JSONException e)
                                         {
@@ -519,11 +522,24 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
                                         if (reportStates != null)
                                         {
                                             realm.beginTransaction();
+
+                                            RealmResults geaItemsRapporto = realm.where(GeaItemRapporto.class).equalTo("company_id", company_id)
+                                                    .equalTo("tech_id", selectedTech.getId()).equalTo("id_rapporto_sopralluogo", reportStates.getId_rapporto_sopralluogo()).findAll();
+
+                                            RealmResults <GeaImagineRapporto> listReportImages = realm.where(GeaImagineRapporto.class)
+                                                    .equalTo("company_id", company_id).equalTo("tech_id", selectedTech.getId())
+                                                    .equalTo("id_rapporto_sopralluogo", reportStates.getId_rapporto_sopralluogo()).findAll();
+
+                                            realm.commitTransaction();
+
+                                            realm.beginTransaction();
+                                            geaItemsRapporto.deleteAllFromRealm();
+                                            listReportImages.deleteAllFromRealm();
                                             reportStates.deleteFromRealm();
                                             realm.commitTransaction();
                                         }
 
-                                        showToastMessage("Dato e ora è stato annulato");
+                                        showToastMessage(getString(R.string.VisitHasCancelled));
                                     }
 
                                     mCommunicator.onDateTimeSetReturned(false);

@@ -237,11 +237,14 @@ public class MainActivity extends Activity implements Communicator, Callback
 
             listVisits = new ListVisitsFragment();
 
-            Bundle args = new Bundle();
-            args.putBoolean("visitTimeNotSetOnly", false);
-            listVisits.setArguments(args);
+            if (!listVisits.isAdded())
+            {
+                Bundle args = new Bundle();
+                args.putBoolean("visitTimeNotSetOnly", false);
+                listVisits.setArguments(args);
 
-            setVisitsListContent(listVisits);
+                setVisitsListContent(listVisits);
+            }
         }
 
         if (view == findViewById(R.id.btnReportsReturn))
@@ -310,7 +313,7 @@ public class MainActivity extends Activity implements Communicator, Callback
             frag = null;
             frag = assignFragmentModel(productType);
 
-            if (frag != null)
+            if (!frag.isAdded())
             {
                 Bundle args = frag.getArguments() != null ? frag.getArguments() : new Bundle();
                 args.putInt("selectedIndex", currentSelIndex);
@@ -325,33 +328,42 @@ public class MainActivity extends Activity implements Communicator, Callback
         {
             removeAllLists();
 
-            Bundle args = new Bundle();
-            args.putInt("selectedIndex", currentSelIndex);
-            photoGalleryGridFragment.setArguments(args);
+            if(!photoGalleryGridFragment.isAdded())
+            {
+                Bundle args = frag.getArguments() != null ? frag.getArguments() : new Bundle();
+                args.putInt("selectedIndex", currentSelIndex);
+                photoGalleryGridFragment.setArguments(args);
 
-            setVisitsListContent(photoGalleryGridFragment);
+                setVisitsListContent(photoGalleryGridFragment);
+            }
         }
 
         if (view == findViewById(R.id.btnInfo))
         {
             removeAllLists();
 
-            Bundle args = new Bundle();
-            args.putInt("selectedIndex", currentSelIndex);
-            ctlInfo.setArguments(args);
+            if(!ctlInfo.isAdded())
+            {
+                Bundle args = new Bundle();
+                args.putInt("selectedIndex", currentSelIndex);
+                ctlInfo.setArguments(args);
 
-            setVisitsListContent(ctlInfo);
+                setVisitsListContent(ctlInfo);
+            }
         }
 
         if (view == findViewById(R.id.btnSendReport))
         {
             removeAllLists();
 
-            Bundle args = new Bundle();
-            args.putInt("selectedIndex", currentSelIndex);
-            sendReportFragment.setArguments(args);
+            if(!sendReportFragment.isAdded())
+            {
+                Bundle args = new Bundle();
+                args.putInt("selectedIndex", currentSelIndex);
+                sendReportFragment.setArguments(args);
 
-            setVisitsListContent(sendReportFragment);
+                setVisitsListContent(sendReportFragment);
+            }
         }
     }
 
@@ -464,9 +476,9 @@ public class MainActivity extends Activity implements Communicator, Callback
                 Bundle args = new Bundle();
                 args.putInt("selectedIndex", itemIndex);
                 dateTimeSetFragment.setArguments(args);
-            }
 
-            setVisitsListContent(dateTimeSetFragment);
+                setVisitsListContent(dateTimeSetFragment);
+            }
         }
     }
 
@@ -513,33 +525,21 @@ public class MainActivity extends Activity implements Communicator, Callback
 
         removeAllLists();
 
-        Bundle args = reportDetailedFragment.getArguments() != null ? reportDetailedFragment.getArguments() : new Bundle();
+        if (!reportDetailedFragment.isAdded())
+        {
+            Bundle args = reportDetailedFragment.getArguments() != null ? reportDetailedFragment.getArguments() : new Bundle();
 
-        args.putInt("selectedIndex", itemIndex);
-        reportDetailedFragment.setArguments(args);
+            args.putInt("selectedIndex", itemIndex);
+            reportDetailedFragment.setArguments(args);
 
-        setVisitsListContent(reportDetailedFragment);
+            setVisitsListContent(reportDetailedFragment);
+        }
     }
 
     @Override
     public void OnInWorkListItemSelected(int itemIndex)
     {
         currentSelIndex = itemIndex;
-
-/*        VisitItem visitItem = visitItems.get(itemIndex);
-        ProductData productData = visitItem.getProductData();
-        String productType = productData.getProductType();
-
-        removeAllLists();
-
-        Fragment frag = assignFragmentModel(productType);
-
-        Bundle args = frag.getArguments() != null ? frag.getArguments() : new Bundle();
-
-        args.putInt("selectedIndex", itemIndex);
-        frag.setArguments(args);
-
-        setVisitsListContent(frag);*/
 
         ctrlBtnsFragment2.setCheckedBtnId(R.id.btnFillReport);
     }
@@ -549,9 +549,20 @@ public class MainActivity extends Activity implements Communicator, Callback
     {
         if (view.getId() == R.id.btnNotifTimeNotSetVisits)
         {
-            //removeAllLists();
+            removeAllLists();
 
-            ctrlBtnsFragment1.setCheckedBtnId(R.id.btnComingVisits);
+            listVisits = new ListVisitsFragment();
+
+            if (!listVisits.isAdded())
+            {
+                Bundle args = new Bundle();
+                args.putBoolean("timeNotSetItemsOnly", true);
+                listVisits.setArguments(args);
+
+                setVisitsListContent(listVisits);
+            }
+
+            //ctrlBtnsFragment1.setCheckedBtnId(R.id.btnVisits);
         }
 
         if (view.getId() == R.id.btnNotifUrgentReports)

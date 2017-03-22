@@ -551,7 +551,7 @@ public class LoginTechSelectionFragment extends Fragment implements View.OnClick
 
                     if (geaItemModelliSize != 0)
                     {
-                        downloadingDialog.dismiss();
+                        enableInput();
 
                         loginCommunicator.onTechSelectedAndApplied();
                     }
@@ -651,7 +651,7 @@ public class LoginTechSelectionFragment extends Fragment implements View.OnClick
                                     realm.commitTransaction();
                                 }
 
-                                downloadingDialog.dismiss();
+                                enableInput();
 
                                 loginCommunicator.onTechSelectedAndApplied();
                             }

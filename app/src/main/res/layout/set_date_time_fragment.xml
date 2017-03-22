@@ -14,14 +14,13 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="6dp"
+            android:layout_margin="4dp"
             android:orientation="horizontal">
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start|center_vertical"
-                android:layout_marginLeft="6dp"
                 android:src="@drawable/person_green"/>
 
             <TextView
@@ -38,14 +37,14 @@
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="6dp"
+            android:layout_margin="4dp"
             android:orientation="horizontal">
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:layout_marginLeft="6dp"
+                android:layout_marginLeft="3dp"
                 android:orientation="horizontal">
 
                 <ImageView
@@ -53,7 +52,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="start|center_vertical"
-                    android:layout_marginLeft="6dp"
                     android:src="@drawable/location_dark_green"/>
 
                 <TextView
@@ -71,7 +69,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical|end"
-                android:background="#00ff00"
+                android:background="#29b352"
+                android:padding="6dp"
                 android:text="Apri mappa"/>
 
         </FrameLayout>
@@ -79,14 +78,14 @@
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="6dp"
+            android:layout_margin="4dp"
             android:orientation="horizontal">
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:layout_margin="16dp"
+                android:layout_marginLeft="4dp"
                 android:orientation="horizontal">
 
                 <ImageView
@@ -94,7 +93,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="start|center_vertical"
-                    android:layout_marginLeft="6dp"
                     android:src="@drawable/phone_green"/>
 
                 <TextView
@@ -111,7 +109,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical|end"
-                android:background="#00ff00"
+                android:background="#29b352"
+                android:padding="6dp"
                 android:src="@drawable/arrow_right"
                 android:text="Chiama"/>
         </FrameLayout>
@@ -207,25 +206,25 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:layout_margin="6dp"
             android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="6dp"
                 android:orientation="horizontal">
 
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_margin="6dp"
+                    android:layout_margin="9dp"
                     android:orientation="horizontal">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="start|center_vertical"
+                        android:layout_gravity="start|bottom"
                         android:layout_marginLeft="6dp"
                         android:text="Data:"/>
 
@@ -243,13 +242,13 @@
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_margin="6dp"
+                    android:layout_margin="9dp"
                     android:orientation="horizontal">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="start|center_vertical"
+                        android:layout_gravity="start|bottom"
                         android:layout_marginLeft="6dp"
                         android:text="Ora:"/>
 
@@ -268,14 +267,15 @@
                     android:id="@+id/btnSetDate"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical|end"
+                    android:layout_gravity="top"
                     android:onClick="onClick"
+                    android:padding="6dp"
                     android:text="Imposta"/>
 
             </LinearLayout>
         </LinearLayout>
 
-        <FrameLayout
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="6dp"
@@ -285,9 +285,12 @@
                 android:id="@+id/btnSetDateTimeSubmit"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical|center"
-                android:background="#00ff33"
+                android:layout_gravity="center_vertical|start"
+                android:background="#29b352"
+                android:padding="6dp"
                 android:onClick="onClick"
+                android:layout_margin="6dp"
+                android:layout_weight="1"
                 android:text="Fisso il sopralluogo"/>
 
             <Button
@@ -296,8 +299,11 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical|end"
                 android:onClick="onClick"
+                android:padding="9dp"
+                android:layout_margin="6dp"
+                android:layout_weight="1"
                 android:text="Annulla"/>
-        </FrameLayout>
+        </LinearLayout>
 
     </LinearLayout>
 

@@ -127,8 +127,11 @@ public class CaldaiaReportFragment extends Fragment
 
         idItem = viewUtils.createViewThreeEdits(idItem, R.id.three_edits1);
 
-        EditText et1 = viewUtils.getEditTexts().get(idItem-2);
-        et1.setInputType(InputType.TYPE_CLASS_NUMBER);
+        EditText et0 = viewUtils.getEditTexts().get(idItem-1);
+        et0.setInputType(InputType.TYPE_CLASS_TEXT);
+
+        EditText et1 = viewUtils.getEditTexts().get(idItem-3);
+        et1.setInputType(InputType.TYPE_CLASS_TEXT);
 
         idItem = viewUtils.createViewTwoRadiosAndEdit(idItem, R.id.two_radios_and_edit2);
 

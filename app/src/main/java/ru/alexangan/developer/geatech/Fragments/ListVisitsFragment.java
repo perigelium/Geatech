@@ -58,22 +58,6 @@ public class ListVisitsFragment extends ListFragment
         super.onActivityCreated(savedInstanceState);
 
         activity = getActivity();
-
-/*        Collections.sort(visitItemsFiltered, new Comparator()
-        {
-            public int compare(Object o1, Object o2)
-            {
-                VisitItem p1 = (VisitItem) o1;
-                VisitItem p2 = (VisitItem) o2;
-                // ## Ascending order
-                return p1.getGeaSopralluogo().getData_ora_presa_appuntamento().compareToIgnoreCase(p2.getGeaSopralluogo().getData_ora_presa_appuntamento()); // To compare string values
-                // return Integer.valueOf(emp1.getId()).compareTo(emp2.getId()); // To compare integer values
-
-                // ## Descending order
-                // return emp2.getFirstName().compareToIgnoreCase(emp1.getFirstName()); // To compare string values
-                // return Integer.valueOf(emp2.getId()).compareTo(emp1.getId()); // To compare integer values
-            }
-        });*/
     }
 
     @Override
@@ -92,51 +76,15 @@ public class ListVisitsFragment extends ListFragment
         }
     }
 
-/*    public void updateView(boolean filterTimeSetItems)
-    {
-        realm.beginTransaction();
-        RealmResults<ReportStates> reportStatesList = realm.where(ReportStates.class).findAll();
-        realm.commitTransaction();
-
-        //visitItemsFiltered.clear();
-
-        for (VisitItem visitItem : visitItems)
-        {
-            for(ReportStates reportStates : reportStatesList)
-            {
-                if (visitItem.getGeaSopralluogo().getId_sopralluogo() == reportStates.getId_sopralluogo())
-                {
-                    if (filterTimeSetItems && reportStates.getData_ora_presa_appuntamento() != null)
-                    {
-                        visitItemsFiltered.remove(visitItem);
-                        myListAdapter.notifyDataSetChanged();
-                        break;
-                    }
-                }
-            }
-        }
-
-        //setListAdapter(myListAdapter);
-
-        //onResume();
-    }*/
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
         View rootView = inflater.inflate(R.layout.list_visits_fragment, container, false);
 
         visitItemsFiltered = new ArrayList<>();
-        //visitItemsFiltered.addAll(visitItems);
-
-/*        realm.beginTransaction();
-        RealmResults<ReportStates> reportStatesList = realm.where(ReportStates.class).equalTo("company_id", company_id)
-                .equalTo("tech_id", selectedTech.getId()).findAll();
-        realm.commitTransaction();*/
 
         TreeMap<Long, VisitItem> unsortedVisits = new TreeMap<>();
         long n = 0;
-
 
         for (VisitItem visitItem : visitItems)
         //for (int i = 0; i < visitItems.size(); i++)
@@ -258,32 +206,6 @@ public class ListVisitsFragment extends ListFragment
                 }
             }
         });
-
-/*        lv.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener()
-        {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view,int position, long id)
-            {
-                int idSopralluogo = visitItemsFiltered.get(position).getGeaSopralluogo().getId_sopralluogo();
-                int idVisit = visitItemsFiltered.get(position).getId();
-                realm.beginTransaction();
-                ReportStates reportStates = realm.where(ReportStates.class).equalTo("id_sopralluogo", idSopralluogo).findFirst();
-                realm.commitTransaction();
-
-                if (swipeDetector.swipeDetected())
-                {
-                    // do the onSwipe action
-                } else
-                {
-                    if(reportStates.getData_ora_presa_appuntamento() != null)
-                    {
-                        mCommunicator.OnListItemSelected(idVisit, false);
-                    }
-                }
-
-                return false;
-            }
-        });*/
     }
 
     private void showToastMessage(final String msg)

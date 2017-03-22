@@ -87,7 +87,7 @@
             android:focusableInTouchMode="true"
             android:inputType="none"
             android:text=""
-            android:textColor="#c0c0c0"/>
+            android:textColor="#000000"/>
 
     </LinearLayout>
 

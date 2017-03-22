@@ -290,8 +290,8 @@
                         android:layout_marginLeft="6dp"
                         android:text="Coord.Nord*" />
 
-                    <TextView
-                        android:id="@+id/tvCoordNord"
+                    <EditText
+                        android:id="@+id/etCoordNord"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="6dp"
@@ -324,8 +324,8 @@
                         android:layout_marginLeft="6dp"
                         android:text="Coord.Est*" />
 
-                    <TextView
-                        android:id="@+id/tvCoordEst"
+                    <EditText
+                        android:id="@+id/etCoordEst"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="6dp"
@@ -334,6 +334,7 @@
                         android:textSize="19dp"
                         android:textStyle="bold"
                         android:maxLines="1"
+                        android:inputType="number"
                         android:text="Sconoscuto" />
 
                 </LinearLayout>
@@ -358,8 +359,8 @@
                         android:layout_marginLeft="6dp"
                         android:text="Altitudine*" />
 
-                    <TextView
-                        android:id="@+id/tvAltitude"
+                    <EditText
+                        android:id="@+id/etAltitude"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="6dp"
@@ -368,6 +369,7 @@
                         android:textSize="19dp"
                         android:textStyle="bold"
                         android:maxLines="1"
+                        android:inputType="number"
                         android:text="Sconoscuto" />
 
                 </LinearLayout>

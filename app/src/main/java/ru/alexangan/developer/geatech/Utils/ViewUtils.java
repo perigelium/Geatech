@@ -75,7 +75,7 @@ public class ViewUtils
 
         al_llSectionHeaders = new ArrayList<>();
         llSectionHeaders = new ArrayList<>();
-        allSectionsCollapsed = new boolean[]{false, false, false, false, false, false, false};
+        allSectionsCollapsed = new boolean[]{true, true, true, true, true, true, true};
 
         VisitItem visitItem = visitItems.get(selectedIndex);
         GeaSopralluogo geaSopralluogo = visitItem.getGeaSopralluogo();
@@ -161,6 +161,8 @@ public class ViewUtils
     {
         return RadioGroups;
     }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     public int createViewFourCheckboxes(int idItem, int idRes)
     {
@@ -1879,6 +1881,7 @@ public class ViewUtils
     {
         LinearLayout header = (LinearLayout) rootView.findViewById(idRes);
         FrameLayout flSectionHeader = (FrameLayout) header.findViewById(R.id.flSectionHeader);
+        final ImageView ivArrowSectionHeader = (ImageView) header.findViewById(R.id.ivArrowSectionHeader);
         final int curHeader = headerNumber;
 
         flSectionHeader.setOnClickListener(new View.OnClickListener()
@@ -1891,6 +1894,9 @@ public class ViewUtils
                     ll.setVisibility(!allSectionsCollapsed[curHeader] ? View.GONE : View.VISIBLE);
                 }
 
+                ivArrowSectionHeader.setImageResource(allSectionsCollapsed[curHeader]
+                        ? android.R.drawable.arrow_up_float : android.R.drawable.arrow_down_float);
+
                 allSectionsCollapsed[curHeader] = !allSectionsCollapsed[curHeader];
             }
         });
@@ -1902,6 +1908,12 @@ public class ViewUtils
         llSecHeaders.addAll(llSectionHeaders);
         al_llSectionHeaders.add(llSecHeaders);
         llSectionHeaders.clear();
+
+        for (LinearLayout ll : al_llSectionHeaders.get(headerNumber)) // close all sections initially
+        {
+            ll.setVisibility(View.GONE);
+        }
+
         headerNumber++;
     }
 
@@ -1909,7 +1921,7 @@ public class ViewUtils
 
     public int saveSeveralRadiosAndEdit(int idItem)
     {
-        String str_Id_item = "";
+        String str_id_item = "";
         RadioGroup rg = RadioGroups.get(idItem);
 
         int checkedBtnId = rg.getCheckedRadioButtonId();
@@ -1917,37 +1929,41 @@ public class ViewUtils
         if (checkedBtnId != -1)
         {
             RadioButton radioButton = (RadioButton) rg.findViewById(checkedBtnId);
-            str_Id_item = radioButton.getVisibility() == View.VISIBLE ? radioButton.getText().toString() : "Not applicabile";
+            //str_Id_item = radioButton.getVisibility() == View.VISIBLE ? radioButton.getText().toString() : "Not applicabile";
+            str_id_item = radioButton.getText().toString();
         } else
         {
             EditText et = EditTexts.get(idItem);
-            str_Id_item = et.getText().toString();
+            str_id_item = et.getText().toString();
         }
-        DatabaseUtils.insertStringInReportItem(id_rapporto_sopralluogo, idItem, str_Id_item);
+        DatabaseUtils.insertStringInReportItem(id_rapporto_sopralluogo, idItem, str_id_item);
 
         return ++idItem;
     }
 
     public int saveSeveralRadios(int idItem)
     {
-        String str_Id_item = "";
+        String str_id_item = "";
         RadioGroup rg = RadioGroups.get(idItem);
 
-        LinearLayout ll = LinearLayouts.get(idItem).second;
+        LinearLayout ll = LinearLayouts.get(idItem).first;
 
-        if (ll.getVisibility() != View.VISIBLE)
+        if (ll.getVisibility() == View.INVISIBLE)
         {
-            str_Id_item = "Not applicabile";
+            str_id_item = "Not applicabile";
         }
-
-        int checkedBtnId = rg.getCheckedRadioButtonId();
-
-        if (checkedBtnId != -1)
+        else
         {
-            RadioButton radioButton = (RadioButton) rg.findViewById(checkedBtnId);
-            str_Id_item = radioButton.getVisibility() == View.VISIBLE ? radioButton.getText().toString() : "Not applicabile";
+            int checkedBtnId = rg.getCheckedRadioButtonId();
+
+            if (checkedBtnId != -1)
+            {
+                RadioButton radioButton = (RadioButton) rg.findViewById(checkedBtnId);
+                //str_Id_item = radioButton.getVisibility() == View.VISIBLE ? radioButton.getText().toString() : "Not applicabile";
+                str_id_item = radioButton.getText().toString();
+            }
         }
-        DatabaseUtils.insertStringInReportItem(id_rapporto_sopralluogo, idItem, str_Id_item);
+        DatabaseUtils.insertStringInReportItem(id_rapporto_sopralluogo, idItem, str_id_item);
 
         return ++idItem;
     }
@@ -2000,16 +2016,19 @@ public class ViewUtils
         ArrayList<CheckBox> alChks = CheckBoxes.get(idItem);
         String str_Id_item = "";
 
-        LinearLayout ll = LinearLayouts.get(idItem).second;
+        LinearLayout ll = LinearLayouts.get(idItem).first;
 
-        if (ll.getVisibility() != View.VISIBLE)
+        if (ll.getVisibility() == View.INVISIBLE)
         {
             str_Id_item = "Not applicabile";
         }
-
-        for (int i = 0; i < alChks.size(); i++)
+        else
         {
-            str_Id_item += alChks.get(i).isChecked() ? alChks.get(i).getText().toString() + "||" : "";
+
+            for (int i = 0; i < alChks.size(); i++)
+            {
+                str_Id_item += alChks.get(i).isChecked() ? alChks.get(i).getText().toString() + "||" : "";
+            }
         }
         DatabaseUtils.insertStringInReportItem(id_rapporto_sopralluogo, idItem, str_Id_item);
 
@@ -2025,7 +2044,7 @@ public class ViewUtils
             Switch sw = Switches.get(idItem);
             str_Id_item = sw.isChecked() ? "SI" : "NO";
 
-            if (!(sw.getVisibility() == View.VISIBLE))
+            if (sw.getVisibility() == View.INVISIBLE)
             {
                 str_Id_item = "NO";
             }
@@ -2039,10 +2058,31 @@ public class ViewUtils
 
     public int saveSeveralEdits(int idItem, int quant)
     {
+        String str_id_item = "";
+        boolean llInvisible = false;
+        LinearLayout ll = null;
+        Pair<LinearLayout, LinearLayout> llPair = LinearLayouts.get(idItem);
+        if (llPair != null)
+        {
+            ll = llPair.first;
+        }
+
+        if (ll != null && ll.getVisibility() == View.INVISIBLE)
+        {
+            llInvisible = true;
+        }
+
         for (int i = 0; i < quant; i++)
         {
-            EditText et = EditTexts.get(idItem);
-            String str_id_item = et.getVisibility() == View.VISIBLE ? et.getText().toString() : "Not applicabile";
+            if (llInvisible)
+            {
+                str_id_item = "Not applicabile";
+            } else
+            {
+                EditText et = EditTexts.get(idItem);
+                //str_id_item = et.getVisibility() == View.VISIBLE ? et.getText().toString() : "Not applicabile";
+                str_id_item = et.getText().toString();
+            }
             DatabaseUtils.insertStringInReportItem(id_rapporto_sopralluogo, idItem, str_id_item);
             idItem++;
         }
@@ -2151,8 +2191,7 @@ public class ViewUtils
                 {
                     chkbox.setChecked(true);
                     break;
-                }
-                else
+                } else
                 {
                     chkbox.setChecked(false);
                 }
