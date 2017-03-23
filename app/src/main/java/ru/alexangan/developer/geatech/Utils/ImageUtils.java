@@ -73,7 +73,14 @@ public class ImageUtils
         // First decode with inJustDecodeBounds=true to check dimensions
         final BitmapFactory.Options options = new BitmapFactory.Options();
         options.inJustDecodeBounds = true;
-        BitmapFactory.decodeFile(path, options);
+
+        try
+        {
+            BitmapFactory.decodeFile(path, options);
+        } catch (Exception e)
+        {
+            e.printStackTrace();
+        }
 
         // Calculate inSampleSize
         options.inSampleSize = calculateInSampleSize(options, reqWidth,
@@ -81,7 +88,14 @@ public class ImageUtils
 
         // Decode bitmap with inSampleSize set
         options.inJustDecodeBounds = false;
-        bm = BitmapFactory.decodeFile(path, options);
+
+        try
+        {
+            bm = BitmapFactory.decodeFile(path, options);
+        } catch (Exception e)
+        {
+            e.printStackTrace();
+        }
 
         return bm;
     }

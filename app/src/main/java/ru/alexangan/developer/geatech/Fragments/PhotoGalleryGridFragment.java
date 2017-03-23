@@ -5,6 +5,7 @@ import android.Manifest;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.Fragment;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -13,8 +14,10 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.MediaStore;
 import android.support.annotation.RequiresApi;
 import android.view.LayoutInflater;
@@ -23,6 +26,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -35,6 +39,7 @@ import java.util.Collections;
 
 import io.realm.RealmResults;
 import ru.alexangan.developer.geatech.Adapters.GridViewAdapter;
+import ru.alexangan.developer.geatech.Interfaces.OnTaskCompleted;
 import ru.alexangan.developer.geatech.Models.GeaImagineRapporto;
 import ru.alexangan.developer.geatech.Models.ReportStates;
 import ru.alexangan.developer.geatech.Models.VisitItem;
@@ -68,6 +73,17 @@ public class PhotoGalleryGridFragment extends Fragment
     GridView gvPhotoGallery;
     Activity activity;
     private int PERMISSION_REQUEST_CODE = 12;
+    private ProgressDialog loadingImagesDialog;
+    File[] filePaths;
+    Bitmap fullSizeBitmap;
+    private Handler handler;
+    private Runnable runnable;
+
+/*    interface MyCallbackInterface
+    {
+
+        void onDownloadFinished(String result);
+    }*/
 
     public PhotoGalleryGridFragment()
     {
@@ -85,7 +101,30 @@ public class PhotoGalleryGridFragment extends Fragment
             selectedIndex = getArguments().getInt("selectedIndex");
             photosFolderName = "photos" + selectedIndex;
         }
+
+        loadingImagesDialog = new ProgressDialog(getActivity());
+        loadingImagesDialog.setTitle("");
+        loadingImagesDialog.setIndeterminate(true);
+
+/*        handler = new Handler();
+
+        runnable = new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                showToastMessage("Timeout reached");
+                activity.runOnUiThread(new Runnable()
+                {
+                    public void run()
+                    {
+                        loadingImagesDialog.dismiss();
+                    }
+                });
+            }
+        };*/
     }
+
 
     private void getImagesArray()
     {
@@ -96,15 +135,10 @@ public class PhotoGalleryGridFragment extends Fragment
             appDirectory.mkdir();
         }
 
-        File[] filePaths = appDirectory.listFiles();
+        filePaths = appDirectory.listFiles();
 
         for (File path : filePaths)
         {
-            BitmapFactory.Options bmOptions = new BitmapFactory.Options();
-            Bitmap bitmap = BitmapFactory.decodeFile(path.getAbsolutePath(), bmOptions);
-
-            imageBitmaps.add(bitmap);
-
             Bitmap bm = ImageUtils.decodeSampledBitmapFromUri(path.getAbsolutePath(), imageHolderWidth, imageHolderHeight);
 
             imageThumbnails.add(bm);
@@ -138,7 +172,52 @@ public class PhotoGalleryGridFragment extends Fragment
         pathItems = new ArrayList<>();
         imageBitmaps = new ArrayList<>();
 
-        getImagesArray(); // Long time operation
+        loadingImagesDialog.setMessage(getString(R.string.LoadingImagesInProgress));
+        loadingImagesDialog.show();
+
+/*        handler.postDelayed(runnable, 10000);*/
+
+        AsyncTask asyncTask = new AsyncTask()
+        {
+            @Override
+            protected Object doInBackground(Object[] objects)
+            {
+                getImagesArray(); // Long time operation
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Object o)
+            {
+                super.onPostExecute(o);
+
+                loadingImagesDialog.dismiss();
+
+                imageThumbnails.add(photoAddButton);
+                imageBitmaps.add(photoAddButton);
+                pathItems.add(new File("photoAddButton"));
+
+                gridAdapter = new GridViewAdapter(activity, R.layout.grid_item_layout, imageThumbnails);
+
+                gvPhotoGallery.setAdapter(gridAdapter);
+
+                //handler.removeCallbacks(runnable);
+            }
+        };
+
+        asyncTask.execute();
+
+/*        downloadUrl("http://google.com", new MyCallbackInterface() {
+
+            @Override
+            public void onDownloadFinished(String result) {
+                // Do something when download finished
+            }
+        });*/
+        
+/*        getImagesArray(); // Long time operation
+
+        loadingImagesDialog.dismiss();
 
         imageThumbnails.add(photoAddButton);
         imageBitmaps.add(photoAddButton);
@@ -146,14 +225,17 @@ public class PhotoGalleryGridFragment extends Fragment
 
         gridAdapter = new GridViewAdapter(activity, R.layout.grid_item_layout, imageThumbnails);
 
-        gvPhotoGallery.setAdapter(gridAdapter);
+        gvPhotoGallery.setAdapter(gridAdapter);*/
 
-        gvPhotoGallery.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            public boolean onItemLongClick(AdapterView<?> parent, View v, int position, long id) {
+
+        gvPhotoGallery.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener()
+        {
+            public boolean onItemLongClick(AdapterView<?> parent, View v, int position, long id)
+            {
 
                 currentPicPos = position;
 
-                if(currentPicPos == imageThumbnails.size() - 1)
+                if (currentPicPos == imageThumbnails.size() - 1)
                 {
                     if (checkSelfPermission(activity, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)
                     {
@@ -175,8 +257,7 @@ public class PhotoGalleryGridFragment extends Fragment
 
                         startActivityForResult(pickIntent, PICK_GALLERY_IMAGE);
                     }
-                }
-                else // remove item
+                } else // remove item
                 {
                     currentPicPos = position;
 
@@ -203,7 +284,9 @@ public class PhotoGalleryGridFragment extends Fragment
             {
                 currentPicPos = position;
 
-                if(currentPicPos == imageThumbnails.size() - 1)
+                final int pos = position;
+
+                if (currentPicPos == imageThumbnails.size() - 1)
                 {
 /*                    DateFormat df = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
                     Date today = Calendar.getInstance().getTime();
@@ -234,12 +317,39 @@ public class PhotoGalleryGridFragment extends Fragment
                         //intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
                         startActivityForResult(intent, PICK_CAMERA_IMAGE);
                     }
-                }
-                else
+                } else
                 {
-                    imageViewFullSize.setVisibility(View.VISIBLE);
-                    gvPhotoGallery.setVisibility(View.GONE);
-                    imageViewFullSize.setImageBitmap(imageBitmaps.get(position));
+                    fullSizeBitmap = null;
+
+                    AsyncTask asyncTask = new AsyncTask()
+                    {
+                        @Override
+                        protected Object doInBackground(Object[] objects)
+                        {
+                            fullSizeBitmap = ImageUtils.decodeSampledBitmapFromUri(filePaths[pos].getAbsolutePath(), 2048, 2048);
+                            return null;
+                        }
+
+                        @Override
+                        protected void onPostExecute(Object o)
+                        {
+                            super.onPostExecute(o);
+
+                            loadingImagesDialog.dismiss();
+
+                            if(fullSizeBitmap!=null)
+                            {
+                                imageViewFullSize.setImageBitmap(fullSizeBitmap);
+                            }
+                            imageViewFullSize.setVisibility(View.VISIBLE);
+                            gvPhotoGallery.setVisibility(View.GONE);
+                        }
+                    };
+
+                    loadingImagesDialog.setMessage(getString(R.string.PreparingImageForDisplaying));
+                    loadingImagesDialog.show();
+
+                    asyncTask.execute();
 
 /*                    File file = new File(pathItems.get(position).getAbsolutePath());
                     //String extStorageFile = getActivity().getExternalCacheDir() + "/" + file.getName();
@@ -272,7 +382,7 @@ public class PhotoGalleryGridFragment extends Fragment
         ReportStates reportStates = realm.where(ReportStates.class).equalTo("company_id", company_id).equalTo("tech_id", selectedTech.getId())
                 .equalTo("id_sopralluogo", idSopralluogo).findFirst();
 
-        if(reportStates==null)
+        if (reportStates == null)
         {
             return;
         }
@@ -289,18 +399,18 @@ public class PhotoGalleryGridFragment extends Fragment
 
         int reportImagesSize = reportImages.size();
 
-        for(File imageFile : pathItems)
+        for (File imageFile : pathItems)
         {
-            if(!imageFile.getPath().equals("photoAddButton"))
+            if (!imageFile.getPath().equals("photoAddButton"))
             {
 
                 String fileName = imageFile.getName();
 
                 realm.beginTransaction();
 
-                    GeaImagineRapporto gea_immagine = new GeaImagineRapporto(
-                            company_id, selectedTech.getId(), id_rapporto_sopralluogo, reportImagesSize++, imageFile.getAbsolutePath(), fileName);
-                    realm.copyToRealm(gea_immagine);
+                GeaImagineRapporto gea_immagine = new GeaImagineRapporto(
+                        company_id, selectedTech.getId(), id_rapporto_sopralluogo, reportImagesSize++, imageFile.getAbsolutePath(), fileName);
+                realm.copyToRealm(gea_immagine);
 
                 realm.commitTransaction();
             }
@@ -323,7 +433,7 @@ public class PhotoGalleryGridFragment extends Fragment
 
                     saveReturnedImage(uri);
 
-                     //Toast.makeText(getActivity(), "" + imagePath + "",Toast.LENGTH_LONG).show();
+                    //Toast.makeText(getActivity(), "" + imagePath + "",Toast.LENGTH_LONG).show();
                 }
                 break;
 
@@ -437,8 +547,7 @@ public class PhotoGalleryGridFragment extends Fragment
         } catch (Exception e)
         {
             e.printStackTrace();
-        }
-        finally
+        } finally
         {
             if (cursor != null)
             {
@@ -459,7 +568,7 @@ public class PhotoGalleryGridFragment extends Fragment
             cursor = context.getContentResolver().query(contentUri, proj, null, null, null);
             int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
             cursor.moveToFirst();
-            realPath  = cursor.getString(column_index);
+            realPath = cursor.getString(column_index);
 
         } catch (Exception e)
         {
@@ -480,4 +589,53 @@ public class PhotoGalleryGridFragment extends Fragment
     {
         requestPermissions(permissions, PERMISSION_REQUEST_CODE);
     }
+
+    private void showToastMessage(final String msg)
+    {
+        activity.runOnUiThread(new Runnable()
+        {
+            public void run()
+            {
+                Toast.makeText(activity, msg, Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+/*    private class DownloadWebpageTask extends AsyncTask<String, Void, String>
+    {
+
+        final MyCallbackInterface callback;
+
+        DownloadWebpageTask(MyCallbackInterface callback)
+        {
+            this.callback = callback;
+        }
+
+        @Override
+        protected String doInBackground(String... strings)
+        {
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String result)
+        {
+            callback.onDownloadFinished(result);
+        }
+
+        //except for this leave your code for this class untouched...
+    }
+
+    public void downloadUrl(String stringUrl, final MyCallbackInterface callback)
+    {
+        new DownloadWebpageTask(callback)
+        {
+            @Override
+            protected void onPostExecute(String result)
+            {
+                super.onPostExecute(result);
+                callback.onDownloadFinished(result);
+            }
+        }.execute(stringUrl);
+    }*/
 }

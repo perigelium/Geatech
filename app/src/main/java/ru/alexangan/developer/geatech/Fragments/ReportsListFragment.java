@@ -99,10 +99,8 @@ public class ReportsListFragment extends ListFragment
 
                 if (
                         visitItem.getGeaSopralluogo().getId_sopralluogo() == reportStates.getId_sopralluogo()
-                                && (reportStates.getGeneralInfoCompletionState() == 2)
-                                && reportStates.getPhotoAddedNumber() >= 1
-                                && reportStates.getDataOraRaportoCompletato()!=null
-                                && reportStates.getData_ora_invio_rapporto()!=null
+                                && reportStates.getDataOraRaportoCompletato() != null
+                                && reportStates.getData_ora_invio_rapporto() != null
                         )
                 {
 

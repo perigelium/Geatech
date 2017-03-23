@@ -162,28 +162,6 @@ public class STermodinamicoReportFragment extends Fragment
 
         idItem = viewUtils.createViewTwoRadiosAndSwitch(idItem, R.id.two_radios_and_switch1);
 
-        final Switch sw1TwoRadiosAndSwitch = viewUtils.getSwitches().get(idItem-3);
-        final Pair <LinearLayout, LinearLayout> llPair = viewUtils.getLinearLayouts().get(idItem-2);
-        //final RadioGroup rg = viewUtils.getRadioGroups().get(idItem - 2);
-
-        sw1TwoRadiosAndSwitch.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View view)
-            {
-                if(sw1TwoRadiosAndSwitch.isChecked())
-                {
-                    llPair.first.setVisibility(View.VISIBLE);
-                    llPair.second.setVisibility(View.VISIBLE);
-                }
-                else
-                {
-                    llPair.first.setVisibility(View.GONE);
-                    llPair.second.setVisibility(View.GONE);
-                }
-            }
-        });
-
         // SectionHeader2
         viewUtils.createViewSectionHeader(R.id.header2);
 
@@ -304,22 +282,47 @@ public class STermodinamicoReportFragment extends Fragment
             idItem = viewUtils.fillSeveralSwitches(idItem, 1);
 
             idItem = viewUtils.fillSeveralRadios(idItem);
-
             idItem = viewUtils.fillSeveralSwitches(idItem, 1);
 
-            Switch sw1TwoRadiosAndSwitch = viewUtils.getSwitches().get(idItem - 3);
-            Pair <LinearLayout, LinearLayout> llPair = viewUtils.getLinearLayouts().get(idItem - 2);
+            final Switch sw1TwoRadiosAndSwitch = viewUtils.getSwitches().get(idItem - 3);
+            final Pair <LinearLayout, LinearLayout> llPair = viewUtils.getLinearLayouts().get(idItem - 2);
 
             if(sw1TwoRadiosAndSwitch.isChecked())
             {
                 llPair.first.setVisibility(View.VISIBLE);
                 llPair.second.setVisibility(View.VISIBLE);
+                llPair.first.setEnabled(true);
+                llPair.second.setEnabled(true);
             }
             else
             {
                 llPair.first.setVisibility(View.GONE);
                 llPair.second.setVisibility(View.GONE);
+                llPair.first.setEnabled(false);
+                llPair.second.setEnabled(false);
             }
+
+            sw1TwoRadiosAndSwitch.setOnClickListener(new View.OnClickListener()
+            {
+                @Override
+                public void onClick(View view)
+                {
+                    if(sw1TwoRadiosAndSwitch.isChecked())
+                    {
+                        llPair.first.setVisibility(View.VISIBLE);
+                        llPair.second.setVisibility(View.VISIBLE);
+                        llPair.first.setEnabled(true);
+                        llPair.second.setEnabled(true);
+                    }
+                    else
+                    {
+                        llPair.first.setVisibility(View.GONE);
+                        llPair.second.setVisibility(View.GONE);
+                        llPair.first.setEnabled(false);
+                        llPair.second.setEnabled(false);
+                    }
+                }
+            });
 
             idItem = viewUtils.fillSeveralEdits(idItem, 2);
 

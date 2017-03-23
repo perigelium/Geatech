@@ -91,7 +91,7 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
 
         requestServerDialog = new ProgressDialog(activity);
         requestServerDialog.setTitle("");
-        requestServerDialog.setMessage("Trasmettere dei dati, si prega di attendere un po'...");
+        requestServerDialog.setMessage(getString(R.string.TransmittingDataPleaseWait));
         requestServerDialog.setIndeterminate(true);
     }
 
@@ -167,7 +167,7 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
         {
             if (!NetworkUtils.isNetworkAvailable(activity))
             {
-                showToastMessage("Controlla la connessione a Internet");
+                showToastMessage(getString(R.string.CheckInternetConnection));
                 return;
             }
                 disableInputAndShowProgressDialog();
@@ -241,7 +241,7 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
 
         if (!NetworkUtils.isNetworkAvailable(activity))
         {
-            showToastMessage("Connessione ad internet non presente");
+            showToastMessage(getString(R.string.CheckInternetConnection));
             return;
         }
 
@@ -253,12 +253,12 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
     {
         if (call == callSendReport)
         {
-            showToastMessage("Invio rapporto fallito");
+            showToastMessage(getString(R.string.SendingReportFailed));
         }
 
         if (call == callSendImage)
         {
-            showToastMessage("Invio immagine fallito");
+            showToastMessage(getString(R.string.SendingReportFailed));
         }
 
         activity.runOnUiThread(new Runnable()
@@ -303,7 +303,7 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
                 {
                     public void run()
                     {
-                        Toast.makeText(activity, "Rapporto inviato", Toast.LENGTH_LONG).show(); //, server ritorna: " + reportSendResponse
+                        Toast.makeText(activity, R.string.ReportSent, Toast.LENGTH_LONG).show(); //, server ritorna: " + reportSendResponse
 
                         Calendar calendarNow = Calendar.getInstance();
                         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);

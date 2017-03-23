@@ -43,7 +43,6 @@ public class ViewUtils
     boolean[] allSectionsCollapsed;
     GeaModelloRapporto geaModello;
     List<GeaSezioneModelliRapporto> geaSezioniModelli;
-    List<GeaItemModelliRapporto> geaItemModelli;
     ArrayList<ArrayList<LinearLayout>> al_llSectionHeaders;
     ArrayList<LinearLayout> llSectionHeaders;
 
@@ -98,7 +97,7 @@ public class ViewUtils
         realm.commitTransaction();
 
         realm.beginTransaction();
-        geaItemModelli = realm.where(GeaItemModelliRapporto.class)
+        List<GeaItemModelliRapporto> geaItemModelli = realm.where(GeaItemModelliRapporto.class)
                 .between("id_sezione", geaSezioniModelli.get(0).getId_sezione(), geaSezioniModelli.get(geaSezioniModelli.size() - 1).getId_sezione()).findAll();
         realm.commitTransaction();
 
@@ -1948,9 +1947,9 @@ public class ViewUtils
 
         LinearLayout ll = LinearLayouts.get(idItem).first;
 
-        if (ll.getVisibility() == View.INVISIBLE)
+        if (ll.isEnabled() == false)
         {
-            str_id_item = "Not applicabile";
+            str_id_item = "Non applicabile";
         }
         else
         {
@@ -2018,9 +2017,9 @@ public class ViewUtils
 
         LinearLayout ll = LinearLayouts.get(idItem).first;
 
-        if (ll.getVisibility() == View.INVISIBLE)
+        if (ll.isEnabled() == false)
         {
-            str_Id_item = "Not applicabile";
+            str_Id_item = "Non applicabile";
         }
         else
         {
@@ -2044,7 +2043,7 @@ public class ViewUtils
             Switch sw = Switches.get(idItem);
             str_Id_item = sw.isChecked() ? "SI" : "NO";
 
-            if (sw.getVisibility() == View.INVISIBLE)
+            if (sw.isEnabled() == false)
             {
                 str_Id_item = "NO";
             }
@@ -2059,7 +2058,7 @@ public class ViewUtils
     public int saveSeveralEdits(int idItem, int quant)
     {
         String str_id_item = "";
-        boolean llInvisible = false;
+        boolean llDisabled = false;
         LinearLayout ll = null;
         Pair<LinearLayout, LinearLayout> llPair = LinearLayouts.get(idItem);
         if (llPair != null)
@@ -2067,16 +2066,16 @@ public class ViewUtils
             ll = llPair.first;
         }
 
-        if (ll != null && ll.getVisibility() == View.INVISIBLE)
+        if (ll != null && ll.isEnabled() == false)
         {
-            llInvisible = true;
+            llDisabled = true;
         }
 
         for (int i = 0; i < quant; i++)
         {
-            if (llInvisible)
+            if (llDisabled)
             {
-                str_id_item = "Not applicabile";
+                str_id_item = "Non applicabile";
             } else
             {
                 EditText et = EditTexts.get(idItem);

@@ -64,7 +64,7 @@ public class LoginCompanyFragment extends Fragment implements View.OnClickListen
 
         downloadingDialog = new ProgressDialog(getActivity());
         downloadingDialog.setTitle("");
-        downloadingDialog.setMessage("Ricevere dei dati, si prega di attendere un po'...");
+        downloadingDialog.setMessage(getString(R.string.DownloadingDataPleaseWait));
         downloadingDialog.setIndeterminate(true);
     }
 
@@ -183,7 +183,7 @@ public class LoginCompanyFragment extends Fragment implements View.OnClickListen
 
             if (!android.util.Patterns.EMAIL_ADDRESS.matcher(strLogin).matches())
             {
-                showToastMessage("Login non e valido.");
+                showToastMessage(getString(R.string.InvalidLogin));
                 return;
             }
 
@@ -191,7 +191,7 @@ public class LoginCompanyFragment extends Fragment implements View.OnClickListen
 
             if (strPassword.length() < 5)
             {
-                showToastMessage("Password non e valido.");
+                showToastMessage(getString(R.string.InvalidPassword));
                 return;
             }
 
@@ -219,7 +219,7 @@ public class LoginCompanyFragment extends Fragment implements View.OnClickListen
                 }
                 else
                 {
-                    showToastMessage("Login fallito, controlla la connessione a Internet");
+                    showToastMessage(getString(R.string.LoginFailedCheckInternetConnection));
                 }
             } else
             {
@@ -248,7 +248,7 @@ public class LoginCompanyFragment extends Fragment implements View.OnClickListen
 
         if (call == callTechnicianList)
         {
-            showToastMessage("Login fallito, controlla la connessione ad Internet");
+            showToastMessage(getString(R.string.LoginFailedCheckInternetConnection));
         }
     }
 
@@ -305,7 +305,7 @@ public class LoginCompanyFragment extends Fragment implements View.OnClickListen
                 } catch (JSONException e)
                 {
                     e.printStackTrace();
-                    showToastMessage("Parse lista tecnici non è riuscito");
+                    showToastMessage(getString(R.string.ParsingTechListFailed));
                 }
             } else
             {
@@ -328,7 +328,7 @@ public class LoginCompanyFragment extends Fragment implements View.OnClickListen
                 }
                 else
                 {
-                    showToastMessage("Login o password non è valido");
+                    showToastMessage(getString(R.string.LoginOrPasswordNotValid));
                 }
             }
         }

@@ -26,7 +26,6 @@
                 android:layout_margin="9dp"
                 android:text=" Section name"
                 android:maxWidth="250dp"
-
                 android:textSize="13sp"/>
 
             <ImageView

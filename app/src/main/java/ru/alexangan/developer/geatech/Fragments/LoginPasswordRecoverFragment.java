@@ -75,7 +75,7 @@ public class LoginPasswordRecoverFragment extends Fragment implements View.OnCli
                 {
                     public void run()
                     {
-                        Toast.makeText(activity, "Password inviato, verifica il vostro e-mail", Toast.LENGTH_LONG).show();
+                        Toast.makeText(activity, R.string.PasswordSentCheckYourMail, Toast.LENGTH_LONG).show();
                     }
                 });
 
@@ -87,7 +87,7 @@ public class LoginPasswordRecoverFragment extends Fragment implements View.OnCli
                 {
                     public void run()
                     {
-                        Toast.makeText(activity, "Inserire e-mail valido", Toast.LENGTH_LONG).show();
+                        Toast.makeText(activity, R.string.InsertValidEmail, Toast.LENGTH_LONG).show();
                     }
                 });
             }

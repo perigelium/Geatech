@@ -257,10 +257,12 @@ public class FotovoltaicoReportFragment extends Fragment
                 if (rg1ThreeRadiosAndEdit.getCheckedRadioButtonId() == rg1ThreeRadiosAndEdit.getChildAt(1).getId()) //second radio
                 {
                     llEditThreeRadiosAndEdit.setVisibility(View.VISIBLE);
+                    llEditThreeRadiosAndEdit.setEnabled(true);
                     et1ThreeRadiosAndEdit.setText("");
                 } else
                 {
                     llEditThreeRadiosAndEdit.setVisibility(View.GONE);
+                    llEditThreeRadiosAndEdit.setEnabled(false);
                     et1ThreeRadiosAndEdit.setText("Non applicabile");
                 }
 
@@ -274,10 +276,12 @@ public class FotovoltaicoReportFragment extends Fragment
                         if (rg1ThreeRadiosAndEdit.getCheckedRadioButtonId() == rg1ThreeRadiosAndEdit.getChildAt(1).getId()) //second radio
                         {
                             llEditThreeRadiosAndEdit.setVisibility(View.VISIBLE);
+                            llEditThreeRadiosAndEdit.setEnabled(true);
                             et1ThreeRadiosAndEdit.setText("");
                         } else
                         {
                             llEditThreeRadiosAndEdit.setVisibility(View.GONE);
+                            llEditThreeRadiosAndEdit.setEnabled(false);
                             et1ThreeRadiosAndEdit.setText("Non applicabile");
                         }
                     }
@@ -299,9 +303,11 @@ public class FotovoltaicoReportFragment extends Fragment
             if (!sw1.isChecked())
             {
                 llEdit1.setVisibility(View.GONE);
+                llEdit1.setEnabled(false);
             } else
             {
                 llEdit1.setVisibility(View.VISIBLE);
+                llEdit1.setEnabled(true);
             }
 
             sw1.setOnClickListener(new View.OnClickListener()
@@ -312,10 +318,12 @@ public class FotovoltaicoReportFragment extends Fragment
                     if (sw1.isChecked())
                     {
                         llEdit1.setVisibility(View.VISIBLE);
+                        llEdit1.setEnabled(true);
                         et3.setText("");
                     } else
                     {
                         llEdit1.setVisibility(View.GONE);
+                        llEdit1.setEnabled(false);
                         et3.setText("Non applicabile");
                     }
                 }

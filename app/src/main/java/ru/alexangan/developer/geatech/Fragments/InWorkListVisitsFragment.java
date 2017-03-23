@@ -3,7 +3,6 @@ package ru.alexangan.developer.geatech.Fragments;
 import android.app.ListFragment;
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -70,7 +69,7 @@ public class InWorkListVisitsFragment extends ListFragment
         {
             for(ReportStates reportStates : reportStatesList)
             {
-                int photoAddedStatus = reportStates.getPhotoAddedNumber();
+                int photoAddedNumber = reportStates.getPhotoAddedNumber();
                 int generalInfoCompletionState = reportStates.getGeneralInfoCompletionState();
                 int reportCompletionState = reportStates.getReportCompletionState();
                 String data_ora_sopralluogo = visitItem.getGeaSopralluogo().getData_ora_sopralluogo();
@@ -78,10 +77,10 @@ public class InWorkListVisitsFragment extends ListFragment
 
                 if (visitItem.getGeaSopralluogo().getId_sopralluogo() == reportStates.getId_sopralluogo()
 
-                        && (photoAddedStatus!=0 || generalInfoCompletionState!=0 || reportCompletionState!=0) // report data not empty
-                        && !(photoAddedStatus>=3 && generalInfoCompletionState==2) // data not complete
-                        && reportStates.getDataOraRaportoCompletato()==null
-                        && reportStates.getData_ora_invio_rapporto()==null
+                        && (generalInfoCompletionState == 2) // data and client coords already set
+                        && !(photoAddedNumber >= 3 && reportCompletionState == 3)
+                        && reportStates.getDataOraRaportoCompletato() == null // report not complete
+                        && reportStates.getData_ora_invio_rapporto() == null // report not sent
                         )
                 {
 

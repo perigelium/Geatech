@@ -41,6 +41,7 @@ import ru.alexangan.developer.geatech.Utils.ViewUtils;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.company_id;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.realm;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.selectedTech;
+import static ru.alexangan.developer.geatech.Models.GlobalConstants.tokenStr;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.visitItems;
 
 public class CaldaiaReportFragment extends Fragment
@@ -264,10 +265,12 @@ public class CaldaiaReportFragment extends Fragment
             if(!sw1.isChecked())
             {
                 llEdit1.setVisibility(View.GONE);
+                llEdit1.setEnabled(false);
             }
             else
             {
                 llEdit1.setVisibility(View.VISIBLE);
+                llEdit1.setEnabled(true);
             }
 
             sw1.setOnClickListener(new View.OnClickListener()
@@ -278,12 +281,14 @@ public class CaldaiaReportFragment extends Fragment
                     if (sw1.isChecked())
                     {
                         llEdit1.setVisibility(View.VISIBLE);
+                        llEdit1.setEnabled(true);
                         et3.setText("");
                     }
                     else
                     {
                         llEdit1.setVisibility(View.GONE);
-                        et3.setText("Non applicabile");
+                        llEdit1.setEnabled(false);
+                        et3.setText(String.valueOf(R.string.NotApplicable));
                     }
                 }
             });
@@ -306,14 +311,15 @@ public class CaldaiaReportFragment extends Fragment
             final LinearLayout llEdit2 = viewUtils.getLinearLayouts().get(idItem-1).first;
             final EditText et5 = viewUtils.getEditTexts().get(idItem-1);
 
-
             if(!sw2.isChecked())
             {
                 llEdit2.setVisibility(View.GONE);
+                llEdit2.setEnabled(false);
             }
             else
             {
                 llEdit2.setVisibility(View.VISIBLE);
+                llEdit2.setEnabled(true);
             }
 
             sw2.setOnClickListener(new View.OnClickListener()
@@ -324,12 +330,14 @@ public class CaldaiaReportFragment extends Fragment
                     if (sw2.isChecked())
                     {
                         llEdit2.setVisibility(View.VISIBLE);
+                        llEdit2.setEnabled(true);
                         et5.setText("");
                     }
                     else
                     {
                         llEdit2.setVisibility(View.GONE);
-                        et5.setText("Non applicabile");
+                        llEdit2.setEnabled(false);
+                        et5.setText(String.valueOf(R.string.NotApplicable));
                     }
                 }
             });

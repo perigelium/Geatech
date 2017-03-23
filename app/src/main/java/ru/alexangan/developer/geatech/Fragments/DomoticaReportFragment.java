@@ -237,10 +237,12 @@ public class DomoticaReportFragment extends Fragment
             if(sw.isChecked())
             {
                 llEdit.setVisibility(View.GONE);
+                llEdit.setEnabled(false);
             }
             else
             {
                 llEdit.setVisibility(View.VISIBLE);
+                llEdit.setEnabled(true);
             }
 
             sw.setOnClickListener(new View.OnClickListener()
@@ -251,11 +253,13 @@ public class DomoticaReportFragment extends Fragment
                     if (!sw.isChecked())
                     {
                         llEdit.setVisibility(View.VISIBLE);
+                        llEdit.setEnabled(true);
                         et3.setText("");
                     }
                     else
                     {
                         llEdit.setVisibility(View.GONE);
+                        llEdit.setEnabled(false);
                         et3.setText("Non applicabile");
                     }
                 }

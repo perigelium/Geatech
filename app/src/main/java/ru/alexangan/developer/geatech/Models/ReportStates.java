@@ -26,6 +26,7 @@ public class ReportStates extends RealmObject
     private String dataOraProssimoTentativo;
     private String dataOraUltimoTentativo;
     private String data_ora_compilazione_rapporto;
+    private int completion_percent;
     private String data_ora_invio_rapporto;
 
     private String nome_tecnico;
@@ -260,4 +261,13 @@ public class ReportStates extends RealmObject
     {
         return tech_id;
     }
-}
+
+    public int getCompletion_percent()
+    {
+        return completion_percent;
+    }
+
+    public void setCompletion_percent(int completion_percent)
+    {
+        this.completion_percent = completion_percent;
+    }}

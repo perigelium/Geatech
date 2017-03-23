@@ -6,6 +6,7 @@ import java.util.Map;
 import io.realm.RealmResults;
 import ru.alexangan.developer.geatech.Models.GeaItemModelliRapporto;
 import ru.alexangan.developer.geatech.Models.GeaItemRapporto;
+import ru.alexangan.developer.geatech.Models.ReportStates;
 
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.company_id;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.realm;
@@ -38,6 +39,18 @@ public class DatabaseUtils
                 partiallyComplete++;
             }
         }
+
+        int completionPercent = partiallyComplete*100/geaItemRapportoResults.size();
+
+        realm.beginTransaction();
+
+        ReportStates reportStates = realm.where(ReportStates.class).equalTo("company_id", company_id).equalTo("tech_id", selectedTech.getId())
+                .equalTo("id_rapporto_sopralluogo", id_rapporto_sopralluogo).findFirst();
+
+
+        reportStates.setCompletion_percent(completionPercent);
+
+        realm.commitTransaction();
 
         if (reportComplete)
         {

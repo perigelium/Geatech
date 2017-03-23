@@ -8,7 +8,6 @@ import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.Html;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -112,7 +111,7 @@ public class LoginTechSelectionFragment extends Fragment implements View.OnClick
 
         downloadingDialog = new ProgressDialog(getActivity());
         downloadingDialog.setTitle("");
-        downloadingDialog.setMessage("Ricevere dei dati, si prega di attendere un po'...");
+        downloadingDialog.setMessage(getString(R.string.DownloadingDataPleaseWait));
         downloadingDialog.setIndeterminate(true);
     }
 
@@ -306,7 +305,7 @@ public class LoginTechSelectionFragment extends Fragment implements View.OnClick
         {
             if (!NetworkUtils.isNetworkAvailable(activity))
             {
-                showToastMessage("Controlla la connessione a Internet");
+                showToastMessage(getString(R.string.CheckInternetConnection));
                 return;
             }
 
@@ -323,7 +322,7 @@ public class LoginTechSelectionFragment extends Fragment implements View.OnClick
             }
             else
             {
-                showToastMessage("inserire il nome e cognome prima");
+                showToastMessage(getString(R.string.InsertNameAndSurnameFirst));
             }
         }
 
@@ -333,7 +332,7 @@ public class LoginTechSelectionFragment extends Fragment implements View.OnClick
 
             if (selectedTech == null)
             {
-                showToastMessage("Seleziona il tecnico per favore");
+                showToastMessage(getString(R.string.SelectTechPlease));
                 return;
             }
 
@@ -374,13 +373,13 @@ public class LoginTechSelectionFragment extends Fragment implements View.OnClick
 
         if (call == callLoginToken)
         {
-            showToastMessage("Token non ricevuto");
+            showToastMessage(getString(R.string.TokenReceiveFailed));
             loginCommunicator.onLoginFailed();
         }
 
         if (call == callVisits)
         {
-            showToastMessage("Visite data non ricevuto");
+            showToastMessage(getString(R.string.ListVisitsReceiveFailed));
             loginCommunicator.onLoginFailed();
         }
     }
@@ -420,7 +419,7 @@ public class LoginTechSelectionFragment extends Fragment implements View.OnClick
                     } catch (JSONException e)
                     {
                         e.printStackTrace();
-                        showToastMessage("Parse lista tecnici non è riuscito");
+                        showToastMessage(getString(R.string.ParsingTechListFailed));
                     }
                 } else
                 {

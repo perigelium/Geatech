@@ -15,13 +15,13 @@
 
         <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="9dp">
+            android:layout_height="wrap_content">
 
             <TextView
                 android:id="@+id/tvHeaderTwoSwitchesAndEdit"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_margin="9dp"
                 android:layout_gravity="start|center_vertical"
                 android:text=" Section name"
                 android:maxWidth="250dp"
@@ -126,7 +126,7 @@
                 android:background="@android:color/transparent"
                 android:ems="9"
                 android:inputType="none"
-                android:text="Non applicabile"
+                android:text=""
                 android:textColor="#000000"/>
 
         </LinearLayout>

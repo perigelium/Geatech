@@ -82,18 +82,17 @@ public class NotSentListVisitsFragment extends ListFragment// implements View.On
         {
             for(ReportStates reportStates : reportStatesList)
             {
-                //int photoAddedStatus = reportStates.getPhotoAddedNumber();
-                //int generalInfoCompletionState = reportStates.getGeneralInfoCompletionState();
-                //int reportCompletionState = reportStates.getReportCompletionState();
+                int generalInfoCompletionState = reportStates.getGeneralInfoCompletionState();
+                int reportCompletionState = reportStates.getReportCompletionState();
+                int photoAddedNumber = reportStates.getPhotoAddedNumber();
                 String data_ora_sopralluogo = visitItem.getGeaSopralluogo().getData_ora_sopralluogo();
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ITALIAN);
 
                 if (
                         visitItem.getGeaSopralluogo().getId_sopralluogo() == reportStates.getId_sopralluogo()
-                        && (reportStates.getGeneralInfoCompletionState() == 2)
-                        && reportStates.getPhotoAddedNumber() >= 3
-                        && reportStates.getDataOraRaportoCompletato()!=null
-                        && reportStates.getData_ora_invio_rapporto()==null
+                        && (generalInfoCompletionState == 2)
+                                && (photoAddedNumber >= 3 && reportCompletionState == 3)
+                        && reportStates.getData_ora_invio_rapporto() == null
                         )
                 {
 

@@ -9,7 +9,6 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
@@ -72,6 +71,7 @@ public class MainActivity extends Activity implements Communicator, Callback
     NotSentListVisitsFragment notSentListVisits;
     ReportsListFragment reportsList;
     private ProgressDialog requestServerDialog;
+    private boolean visitTimeNotSetOnly;
     Handler handler;
     Runnable runnable;
 
@@ -124,7 +124,7 @@ public class MainActivity extends Activity implements Communicator, Callback
 
         if (visitItems.size() == 0)
         {
-            Toast.makeText(this, "Elenco sopralluoghi e vuoto", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, R.string.ListVisitsIsEmpty, Toast.LENGTH_LONG).show();
 
             this.finish();
         }
@@ -186,8 +186,10 @@ public class MainActivity extends Activity implements Communicator, Callback
 
         requestServerDialog = new ProgressDialog(this);
         requestServerDialog.setTitle("");
-        requestServerDialog.setMessage("Ricevere dei dati, si prega di attendere un po'...");
+        requestServerDialog.setMessage(getString(R.string.DownloadingDataPleaseWait));
         requestServerDialog.setIndeterminate(true);
+
+        visitTimeNotSetOnly = false;
 
         handler = new Handler();
 
@@ -196,7 +198,7 @@ public class MainActivity extends Activity implements Communicator, Callback
             @Override
             public void run()
             {
-                showToastMessage("La risposta non è ricevuta");
+                showToastMessage(getString(R.string.ServerAnswerNotReceived));
                 requestServerDialog.dismiss();
             }
         };
@@ -240,7 +242,7 @@ public class MainActivity extends Activity implements Communicator, Callback
             if (!listVisits.isAdded())
             {
                 Bundle args = new Bundle();
-                args.putBoolean("visitTimeNotSetOnly", false);
+                args.putBoolean("visitTimeNotSetOnly", visitTimeNotSetOnly);
                 listVisits.setArguments(args);
 
                 setVisitsListContent(listVisits);
@@ -455,6 +457,7 @@ public class MainActivity extends Activity implements Communicator, Callback
         }
 
         vFragmentTransaction.commit();
+        //visitTimeNotSetOnly = false;
     }
 
     @Override
@@ -485,7 +488,7 @@ public class MainActivity extends Activity implements Communicator, Callback
     @Override
     public void onDateTimeSetReturned(Boolean mDatetimeAlreadySet)
     {
-        if (!mDatetimeAlreadySet && networkUtils.isNetworkAvailable(this))
+        if (!mDatetimeAlreadySet && NetworkUtils.isNetworkAvailable(this))
         {
             requestServerDialog.show();
 
@@ -562,17 +565,30 @@ public class MainActivity extends Activity implements Communicator, Callback
                 setVisitsListContent(listVisits);
             }
 
+/*            if (NetworkUtils.isNetworkAvailable(this))
+            {
+                requestServerDialog.show();
+
+                handler.postDelayed(runnable, 15000);
+
+                callVisits = networkUtils.getData(this, GET_VISITS_URL_SUFFIX, tokenStr);
+                visitTimeNotSetOnly = true;
+            } else
+            {
+                setVisitsListContent(listVisits);
+            }*/
+
             //ctrlBtnsFragment1.setCheckedBtnId(R.id.btnVisits);
         }
 
         if (view.getId() == R.id.btnNotifUrgentReports)
         {
-            Toast.makeText(this, "Nessun trovato delle urgente rapporti", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, R.string.NoUrgentReportsFound, Toast.LENGTH_LONG).show();
         }
 
         if (view.getId() == R.id.btnAppSettings)
         {
-            String[] listItemsArray = {"Aggiorna la lista", "Logout", "Esci"};
+            String[] listItemsArray = {"Logout", "Esci"};
 
             //ContextThemeWrapper themedContext = new ContextThemeWrapper
             // (this, android.R.style.Theme_DeviceDefault_Light_Dialog_NoActionBar);
@@ -600,19 +616,19 @@ public class MainActivity extends Activity implements Communicator, Callback
                         finish();
                     }*/
 
-                    if (which == 2)
+                    if (which == 1)
                     {
                         exitApp();
                     }
 
-                    if (which == 1)
+                    if (which == 0)
                     {
                         logout();
                     }
-                    if (which == 0)
+/*                    if (which == 0)
                     {
                         showToastMessage("Not implemented exception");
-                    }
+                    }*/
 
                 }
             });
@@ -715,7 +731,7 @@ public class MainActivity extends Activity implements Communicator, Callback
     {
         if (call == callVisits)
         {
-            showToastMessage("Sopralluoghi dato non è ricevuto");
+            showToastMessage(getString(R.string.ListVisitsReceiveFailed));
 
             requestServerDialog.dismiss();
 

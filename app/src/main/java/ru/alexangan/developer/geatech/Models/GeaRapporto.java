@@ -7,6 +7,7 @@ public class GeaRapporto
     private int id_sopralluogo;
     private String data_ora_compilazione_rapporto; // data_ora_compilazione_rapporto
     private String data_ora_invio_rapporto; // data_ora_invio_rapporto
+    private int completion_percent;
     private String nome_tecnico;
     private int altitudine; // altitudine
     private double latitudine; // latitudine

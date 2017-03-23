@@ -355,10 +355,12 @@ public class PompaDiCaloreReportFragment extends Fragment
             if(!sw1.isChecked())
             {
                 llEdit1.setVisibility(View.GONE);
+                llEdit1.setEnabled(false);
             }
             else
             {
                 llEdit1.setVisibility(View.VISIBLE);
+                llEdit1.setEnabled(true);
             }
 
             sw1.setOnClickListener(new View.OnClickListener()
@@ -369,11 +371,13 @@ public class PompaDiCaloreReportFragment extends Fragment
                     if (sw1.isChecked())
                     {
                         llEdit1.setVisibility(View.VISIBLE);
+                        llEdit1.setEnabled(true);
                         et3.setText("");
                     }
                     else
                     {
                         llEdit1.setVisibility(View.GONE);
+                        llEdit1.setEnabled(false);
                         et3.setText("Non applicabile");
                     }
                 }
