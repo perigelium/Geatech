@@ -1,20 +1,27 @@
 package ru.alexangan.developer.geatech.Fragments;
 
+import android.app.Activity;
 import android.app.Fragment;
+import android.app.ProgressDialog;
+import android.graphics.Bitmap;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.GridView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 import io.realm.RealmResults;
+import ru.alexangan.developer.geatech.Adapters.GridViewAdapter;
 import ru.alexangan.developer.geatech.Models.ClientData;
 import ru.alexangan.developer.geatech.Models.GeaItemModelliRapporto;
 import ru.alexangan.developer.geatech.Models.GeaItemRapporto;
@@ -25,6 +32,7 @@ import ru.alexangan.developer.geatech.Models.ReportStates;
 import ru.alexangan.developer.geatech.Models.VisitItem;
 import ru.alexangan.developer.geatech.Models.GeaSopralluogo;
 import ru.alexangan.developer.geatech.R;
+import ru.alexangan.developer.geatech.Utils.ImageUtils;
 
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.company_id;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.realm;
@@ -39,11 +47,33 @@ public class ReportSentDetailedFragment extends Fragment
 {
     private int selectedIndex;
     List<String> reportItems;
+    GridView gvPhotoGallery;
+    private ProgressDialog loadingImagesDialog;
+    Activity activity;
+    int imageHolderWidth = 100;
+    int imageHolderHeight = 75;
+    private String photosFolderName;
+    ArrayList<Bitmap> imageThumbnails;
+    ArrayList<File> pathItems;
 
     @Override
-    public void onActivityCreated(Bundle savedInstanceState)
+    public void onCreate(Bundle savedInstanceState)
     {
-        super.onActivityCreated(savedInstanceState);
+        super.onCreate(savedInstanceState);
+
+        if (getArguments() != null)
+        {
+            selectedIndex = getArguments().getInt("selectedIndex");
+        }
+
+        activity = getActivity();
+        reportItems = new ArrayList<>();
+
+        photosFolderName = "photos" + selectedIndex;
+
+        loadingImagesDialog = new ProgressDialog(getActivity());
+        loadingImagesDialog.setTitle("");
+        loadingImagesDialog.setIndeterminate(true);
     }
 
     @Override
@@ -58,6 +88,8 @@ public class ReportSentDetailedFragment extends Fragment
         int idSopralluogo = geaSopralluogo.getId_sopralluogo();
         //String productType = productData.getProductType();
         int id_product_type = productData.getIdProductType();
+
+        gvPhotoGallery = (GridView) rootView.findViewById(R.id.gvPhotoGallery);
 
         TextView tvdataOraSopralluogo = (TextView) rootView.findViewById(R.id.tvdataOraSopralluogo);
         TextView tvdataOraRaportoCompletato = (TextView) rootView.findViewById(R.id.tvdataOraRaportoCompletato);
@@ -169,9 +201,61 @@ public class ReportSentDetailedFragment extends Fragment
 
         listView.setAdapter(adapter);
 
+        imageThumbnails = new ArrayList<>();
+        pathItems = new ArrayList<>();
+
+        loadingImagesDialog.setMessage(getString(R.string.LoadingImagesInProgress));
+        loadingImagesDialog.show();
+
+        AsyncTask asyncTask = new AsyncTask()
+        {
+            @Override
+            protected Object doInBackground(Object[] objects)
+            {
+                getImagesArray(); // Long time operation
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Object o)
+            {
+                super.onPostExecute(o);
+
+                loadingImagesDialog.dismiss();
+
+                GridViewAdapter gridAdapter = new GridViewAdapter(activity, R.layout.grid_item_layout, imageThumbnails);
+
+                gvPhotoGallery.setAdapter(gridAdapter);
+
+                //handler.removeCallbacks(runnable);
+            }
+        };
+
+        asyncTask.execute();
+
         setListViewHeightBasedOnChildren(listView);
 
         return rootView;
+    }
+
+    private void getImagesArray()
+    {
+        File appDirectory = new File(activity.getFilesDir(), photosFolderName);
+
+        if (!appDirectory.exists())
+        {
+            appDirectory.mkdir();
+        }
+
+        File[] filePaths = appDirectory.listFiles();
+
+        for (File file : filePaths)
+        {
+            Bitmap bm = ImageUtils.decodeSampledBitmapFromUri(file.getAbsolutePath(), imageHolderWidth, imageHolderHeight);
+
+            imageThumbnails.add(bm);
+            pathItems.add(file);
+        }
     }
 
     private void setListViewHeightBasedOnChildren(ListView listView)
@@ -207,19 +291,6 @@ public class ReportSentDetailedFragment extends Fragment
     public void onHiddenChanged(boolean hidden)
     {
         super.onHiddenChanged(hidden);
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState)
-    {
-        super.onCreate(savedInstanceState);
-
-        if (getArguments() != null)
-        {
-            selectedIndex = getArguments().getInt("selectedIndex");
-        }
-
-        reportItems = new ArrayList<>();
     }
 
     @Override

@@ -37,7 +37,10 @@ public class ImageUtils
 
         try
         {
-            istream.close();
+            if(istream!=null)
+            {
+                istream.close();
+            }
         } catch (IOException e)
         {
             e.printStackTrace();

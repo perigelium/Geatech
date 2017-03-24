@@ -448,13 +448,14 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
             if (jsonObject.has("error"))
             {
                 final String errorStr;
+                alertDialog("Info", getString(R.string.OfflineModeShowLoginScreenQuestion));
 
                 try
                 {
                     errorStr = jsonObject.getString("error");
                     if (errorStr.length() != 0)
                     {
-                        showToastMessage(errorStr);
+                        //showToastMessage(errorStr);
                     }
 
                 } catch (JSONException e)

@@ -72,7 +72,7 @@ public class LoginTechSelectionFragment extends Fragment implements View.OnClick
     FrameLayout flTechnicianAdded;
     EditText etTechCognome, etTechNome;
     boolean bNewTechAdded;
-    TechnicianItem selectedTech;
+    TechnicianItem lastSelectedTech;
     private CheckBox chkboxRememberTech;
 
     Spinner spTecnicianList;
@@ -93,7 +93,7 @@ public class LoginTechSelectionFragment extends Fragment implements View.OnClick
     {
         super.onResume();
 
-        spinnerCurItem = 0;
+        spinnerCurItem = -1;
         bNewTechAdded = false;
 
         login = mSettings.getString("login", null);
@@ -140,13 +140,13 @@ public class LoginTechSelectionFragment extends Fragment implements View.OnClick
                 {
                     String selectedItem = parent.getItemAtPosition(position).toString();
                     realm.beginTransaction();
-                    selectedTech = realm.where(TechnicianItem.class).equalTo("full_name_tehnic", selectedItem).findFirst();
+                    lastSelectedTech = realm.where(TechnicianItem.class).equalTo("full_name_tehnic", selectedItem).findFirst();
                     realm.commitTransaction();
 
                     spinnerCurItem = position;
                 }
 
-                if (selectedTech != null)
+                if (lastSelectedTech != null)
                 {
                     chkboxRememberTech.setTextColor(Color.parseColor("#ffffff"));
                     chkboxRememberTech.setEnabled(true);
@@ -196,6 +196,7 @@ public class LoginTechSelectionFragment extends Fragment implements View.OnClick
 
         btnApplyAndEnterApp = (Button) rootView.findViewById(R.id.btnApplyAndEnterApp);
         btnApplyAndEnterApp.setOnClickListener(this);
+
 
         spTecnicianList = (Spinner) rootView.findViewById(R.id.spTecnicianList);
 
@@ -263,24 +264,46 @@ public class LoginTechSelectionFragment extends Fragment implements View.OnClick
                         saTecnicianList.add("");
                         int idPredefinedTech = mSettings.getInt("idPredefinedTech", -1);
                         int selectedTechPos = -1;
+                        String fullNameTechnic = "";
+                        int i;
 
-                        for (int i = 0; i < techModelList.size(); i++)
+                        for (i = 0; i < techModelList.size(); i++)
                         {
                             saTecnicianList.add(techModelList.get(i).getFullNameTehnic());
 
                             if (idPredefinedTech != -1 && techModelList.get(i).getId() == idPredefinedTech)
                             {
-                                selectedTechPos = i;
+                                selectedTechPos = i + 1;
+                                chkboxRememberTech.setChecked(true);
+                                fullNameTechnic = techModelList.get(i).getFullNameTehnic();
+                                break;
                             }
                         }
 
                         ArrayAdapter<String> technicianListAdapter = new ArrayAdapter<>(activity, R.layout.spinner_tech_selection_row, R.id.tvSpinnerTechSelItem, saTecnicianList);
                         spTecnicianList.setAdapter(technicianListAdapter);
 
+                        spTecnicianList.setSelection(selectedTechPos);
+
                         if (idPredefinedTech != -1)
                         {
-                            spTecnicianList.setSelection(selectedTechPos + 1);
+
                             chkboxRememberTech.setChecked(true);
+                        }
+                        else
+                        {
+                            chkboxRememberTech.setChecked(false);
+                        }
+
+                        if(i != techModelList.size())
+                        {
+                            realm.beginTransaction();
+                            lastSelectedTech = realm.where(TechnicianItem.class).equalTo("full_name_tehnic", fullNameTechnic).findFirst();
+                            realm.commitTransaction();
+                        }
+                        else
+                        {
+                            lastSelectedTech = null;
                         }
                     }
                 }
@@ -328,23 +351,12 @@ public class LoginTechSelectionFragment extends Fragment implements View.OnClick
 
         if (view.getId() == R.id.btnApplyAndEnterApp)
         {
-            GlobalConstants.selectedTech = selectedTech;
+            GlobalConstants.selectedTech = lastSelectedTech;
 
-            if (selectedTech == null)
+            if (lastSelectedTech == null)
             {
                 showToastMessage(getString(R.string.SelectTechPlease));
                 return;
-            }
-
-            if (chkboxRememberTech.isChecked())
-            {
-                if (selectedTech != null)
-                {
-                    mSettings.edit().putInt("idPredefinedTech", selectedTech.getId()).apply();
-                }
-            } else
-            {
-                mSettings.edit().putInt("idPredefinedTech", -1).apply();
             }
 
             if (NetworkUtils.isNetworkAvailable(activity))
@@ -352,7 +364,7 @@ public class LoginTechSelectionFragment extends Fragment implements View.OnClick
                 disableInputAndShowProgressDialog();
 
                 callLoginToken = networkUtils.loginRequest(LoginTechSelectionFragment.this, login, password,
-                        selectedTech.getFullNameTehnic(), selectedTech.getId());
+                        lastSelectedTech.getFullNameTehnic(), lastSelectedTech.getId());
             } else
             {
                 loginCommunicator.onTechSelectedAndApplied();
@@ -389,8 +401,16 @@ public class LoginTechSelectionFragment extends Fragment implements View.OnClick
     {
         super.onPause();
 
-/*        btnApplyAndEnterApp.setAlpha(1.0f);
-        btnApplyAndEnterApp.setEnabled(true);*/
+        if (chkboxRememberTech.isChecked())
+        {
+            if (lastSelectedTech != null)
+            {
+                mSettings.edit().putInt("idPredefinedTech", lastSelectedTech.getId()).apply();
+            }
+        } else
+        {
+            mSettings.edit().putInt("idPredefinedTech", -1).apply();
+        }
     }
 
     @Override
@@ -419,7 +439,7 @@ public class LoginTechSelectionFragment extends Fragment implements View.OnClick
                     } catch (JSONException e)
                     {
                         e.printStackTrace();
-                        showToastMessage(getString(R.string.ParsingTechListFailed));
+                        showToastMessage(getString(R.string.DatabaseError));
                     }
                 } else
                 {
@@ -446,7 +466,13 @@ public class LoginTechSelectionFragment extends Fragment implements View.OnClick
                 showToastMessage("JSON parse error");
             }
 
-            enableInput();
+            activity.runOnUiThread(new Runnable()
+            {
+                public void run()
+                {
+                    enableInput();
+                }
+            });
         }
 
         if (call == callLoginToken)
@@ -485,11 +511,23 @@ public class LoginTechSelectionFragment extends Fragment implements View.OnClick
                     {
                         e.printStackTrace();
 
-                        enableInput();
+                        activity.runOnUiThread(new Runnable()
+                        {
+                            public void run()
+                            {
+                                enableInput();
+                            }
+                        });
                     }
                 } else
                 {
-                    enableInput();
+                    activity.runOnUiThread(new Runnable()
+                    {
+                        public void run()
+                        {
+                            enableInput();
+                        }
+                    });
 
                     if (jsonObject.has("error"))
                     {
@@ -514,7 +552,13 @@ public class LoginTechSelectionFragment extends Fragment implements View.OnClick
                 e.printStackTrace();
                 showToastMessage("JSON parse error");
 
-                enableInput();
+                activity.runOnUiThread(new Runnable()
+                {
+                    public void run()
+                    {
+                        enableInput();
+                    }
+                });
             }
         }
 

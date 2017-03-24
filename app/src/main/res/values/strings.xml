@@ -1,3 +1,36 @@
 <resources>
     <string name="app_name">GATECH</string>
+
+    <string name="GetAltitudeFailedCheckIfOnline">Altitudine non identificata</string>
+    <string name="InstallMapApp">Manca un\'applicazione mappe</string>
+    <string name="FailedToGetCoords">Non riuscito</string>
+    <string name="Saved">Salvato</string>
+    <string name="DownloadingDataPleaseWait">Download in corso, attendere...</string>
+    <string name="SetDateTimeFailed">Impostazione data e ora non riuscita</string>
+    <string name="TransmittingDataPleaseWait">Trasmissione dati in corso, attendere...</string>
+    <string name="CheckInternetConnection">Verifica connessione internet</string>
+    <string name="OfflineModeShowLoginScreenQuestion">Sei offline,\n per connetterti fai login</string>
+    <string name="DateTimeSetSuccessfully">Data e ora è stato impostato</string>
+    <string name="VisitHasCancelled">Il sopralluogo è stato annullato</string>
+    <string name="NotApplicable">Non applicabile</string>
+    <string name="LoginOrPasswordNotValid">Login o password non valido</string>
+    <string name="DatabaseError">Database error</string>
+    <string name="LoginFailedCheckInternetConnection">Login fallito, controlla la connessione internet</string>
+    <string name="InvalidPassword">Password non valido.</string>
+    <string name="InvalidLogin">Login non valido.</string>
+    <string name="ListVisitsReceiveFailed">Elenco sopralluoghi non ricevuto</string>
+    <string name="TokenReceiveFailed">Server error</string>
+    <string name="SelectTechPlease">Seleziona il tecnico</string>
+    <string name="InsertNameAndSurnameFirst">Inserisci il nome e cognome</string>
+    <string name="NoUrgentReportsFound">Non ci sono solleciti rapporti</string>
+    <string name="ServerAnswerNotReceived">Server non risponde</string>
+    <string name="ListVisitsIsEmpty">Elenco dei sopralluoghi è vuoto</string>
+    <string name="ReportSent">Rapporto inviato</string>
+    <string name="SendingImageFailed">Invio immagine non riuscito</string>
+    <string name="SendingReportFailed">Invio rapporto non riuscito</string>
+    <string name="InsertValidEmail">Inserire e-mail valido</string>
+    <string name="PasswordSentCheckYourMail">Password inviato, verifica e-mail</string>
+    <string name="LoadingImagesInProgress">Caricamento immagini in corso ...</string>
+    <string name="PreparingImageForDisplaying">Visualizzazione in corso...</string>
+    <string name="UnableToAddImage">Impossibile aggiungere immagine</string>
 </resources>

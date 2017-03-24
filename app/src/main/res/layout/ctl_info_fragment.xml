@@ -43,6 +43,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="start|center_vertical"
                         android:layout_marginLeft="6dp"
+                        android:maxWidth="200dp"
                         android:text="Nome del cliente" />
 
                 </LinearLayout>
@@ -93,6 +94,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="start|center_vertical"
                         android:layout_marginLeft="6dp"
+                        android:maxWidth="200dp"
                         android:text="Indirizzo del cliente" />
 
                 </LinearLayout>

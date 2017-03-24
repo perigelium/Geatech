@@ -305,7 +305,7 @@ public class LoginCompanyFragment extends Fragment implements View.OnClickListen
                 } catch (JSONException e)
                 {
                     e.printStackTrace();
-                    showToastMessage(getString(R.string.ParsingTechListFailed));
+                    showToastMessage(getString(R.string.DatabaseError));
                 }
             } else
             {

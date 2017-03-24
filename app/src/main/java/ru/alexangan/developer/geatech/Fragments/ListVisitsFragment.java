@@ -123,11 +123,26 @@ public class ListVisitsFragment extends ListFragment
         {
                 VisitItem visitItem = (VisitItem) entry.getValue();
                 int id_tecnico = visitItem.getGeaSopralluogo().getId_tecnico();
+                int id_sopralluogo = visitItem.getGeaSopralluogo().getId_sopralluogo();
                 boolean ownReport = selectedTech.getId() == id_tecnico;
 
             if(ownReport)
             {
-                visitItemsFiltered.add(visitItem);
+                realm.beginTransaction();
+                ReportStates reportStates = realm.where(ReportStates.class)
+                        .equalTo("company_id", company_id).equalTo("tech_id", selectedTech.getId())
+                        .equalTo("id_sopralluogo", id_sopralluogo).findFirst();
+                realm.commitTransaction();
+
+                if (reportStates != null)
+                {
+                    realm.beginTransaction();
+                    if(reportStates.getId_rapporto_sopralluogo() != 0)
+                    {
+                        visitItemsFiltered.add(visitItem);
+                    }
+                    realm.commitTransaction();
+                }
             }
         }
 

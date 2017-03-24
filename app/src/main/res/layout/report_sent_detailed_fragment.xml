@@ -411,6 +411,20 @@
             android:layout_marginLeft="40dp"
             android:background="#999999"/>
 
+        <GridView
+            android:id="@+id/gvPhotoGallery"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:clickable="true"
+            android:columnWidth="100dp"
+            android:drawSelectorOnTop="true"
+            android:focusable="true"
+            android:gravity="center"
+            android:numColumns="auto_fit"
+            android:stretchMode="columnWidth"
+            android:verticalSpacing="5dp"/>
+
     </LinearLayout>
 
 </ScrollView>

@@ -39,8 +39,8 @@
                     android:id="@+id/tvNoteTecnicianAdded"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Nuovo tecnico aggiunta con successo\n
-                    seleziona dalla lista sottostante per favore"
+                    android:text="Nuovo tecnico aggiunta con successo\nseleziona dalla lista sottostante per favore"
+                    android:maxWidth="250dp"
                     android:textColor="#ffffff"
                     android:textSize="16sp"/>
 

@@ -44,7 +44,7 @@ public class ComingListVisitsFragment extends ListFragment
 
 /*        realm.beginTransaction();
         RealmResults <ReportStates> reportStatesList = realm.where(ReportStates.class).equalTo("company_id", company_id)
-                .equalTo("tech_id", selectedTech.getId()).findAll();
+                .equalTo("tech_id", lastSelectedTech.getId()).findAll();
         realm.commitTransaction();
 
         for (VisitItem visitItem : visitItems)

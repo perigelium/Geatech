@@ -71,7 +71,7 @@ public class MainActivity extends Activity implements Communicator, Callback
     NotSentListVisitsFragment notSentListVisits;
     ReportsListFragment reportsList;
     private ProgressDialog requestServerDialog;
-    private boolean visitTimeNotSetOnly;
+    private boolean timeNotSetItemsOnly;
     Handler handler;
     Runnable runnable;
 
@@ -189,7 +189,7 @@ public class MainActivity extends Activity implements Communicator, Callback
         requestServerDialog.setMessage(getString(R.string.DownloadingDataPleaseWait));
         requestServerDialog.setIndeterminate(true);
 
-        visitTimeNotSetOnly = false;
+        timeNotSetItemsOnly = false;
 
         handler = new Handler();
 
@@ -242,10 +242,11 @@ public class MainActivity extends Activity implements Communicator, Callback
             if (!listVisits.isAdded())
             {
                 Bundle args = new Bundle();
-                args.putBoolean("visitTimeNotSetOnly", visitTimeNotSetOnly);
+                args.putBoolean("timeNotSetItemsOnly", timeNotSetItemsOnly);
                 listVisits.setArguments(args);
 
                 setVisitsListContent(listVisits);
+                timeNotSetItemsOnly = false;
             }
         }
 
@@ -457,7 +458,7 @@ public class MainActivity extends Activity implements Communicator, Callback
         }
 
         vFragmentTransaction.commit();
-        //visitTimeNotSetOnly = false;
+        //timeNotSetItemsOnly = false;
     }
 
     @Override
@@ -558,25 +559,23 @@ public class MainActivity extends Activity implements Communicator, Callback
 
             if (!listVisits.isAdded())
             {
-                Bundle args = new Bundle();
-                args.putBoolean("timeNotSetItemsOnly", true);
-                listVisits.setArguments(args);
+                if (NetworkUtils.isNetworkAvailable(this))
+                {
+                    requestServerDialog.show();
 
-                setVisitsListContent(listVisits);
+                    handler.postDelayed(runnable, 15000);
+
+                    callVisits = networkUtils.getData(this, GET_VISITS_URL_SUFFIX, tokenStr);
+                    timeNotSetItemsOnly = true;
+                } else
+                {
+                    Bundle args = new Bundle();
+                    args.putBoolean("timeNotSetItemsOnly", true);
+                    listVisits.setArguments(args);
+
+                    setVisitsListContent(listVisits);
+                }
             }
-
-/*            if (NetworkUtils.isNetworkAvailable(this))
-            {
-                requestServerDialog.show();
-
-                handler.postDelayed(runnable, 15000);
-
-                callVisits = networkUtils.getData(this, GET_VISITS_URL_SUFFIX, tokenStr);
-                visitTimeNotSetOnly = true;
-            } else
-            {
-                setVisitsListContent(listVisits);
-            }*/
 
             //ctrlBtnsFragment1.setCheckedBtnId(R.id.btnVisits);
         }

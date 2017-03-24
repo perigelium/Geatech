@@ -61,6 +61,7 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
     NetworkUtils networkUtils;
     List<GeaImagineRapporto> imagesArray;
     private ProgressDialog requestServerDialog;
+    int objectsSentSuccessfully;
 
     public SendReportFragment()
     {
@@ -172,6 +173,7 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
             }
                 disableInputAndShowProgressDialog();
 
+                objectsSentSuccessfully = 0;
                 sendReportItem(selectedIndex);
 
             //mCommunicator.onSendReportReturned();
@@ -279,11 +281,31 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
             {
                 if (call == callSendImagesList.get(i))
                 {
+                    objectsSentSuccessfully++;
                     reportSendResponse = response.body().string();
 
-                    showToastMessage("Immagine " + i + " inviato"); //, server ritorna: " + reportSendResponse
+                    //showToastMessage("Immagine " + i + " inviato"); //, server ritorna: " + reportSendResponse
                     //Log.d("DEBUG", "image " + i + ", server returned:" + reportSendResponse);
                 }
+            }
+
+            if(objectsSentSuccessfully == callSendImagesList.size())
+            {
+                activity.runOnUiThread(new Runnable()
+                {
+                    public void run()
+                    {
+                        Calendar calendarNow = Calendar.getInstance();
+                        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
+                        String strDateTime = sdf.format(calendarNow.getTime());
+
+                        realm.beginTransaction();
+                        reportStates.setData_ora_invio_rapporto(strDateTime);
+                        realm.commitTransaction();
+
+                        Toast.makeText(activity, R.string.ReportSent, Toast.LENGTH_LONG).show();
+                    }
+                });
             }
 
             activity.runOnUiThread(new Runnable()
@@ -299,21 +321,13 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
         {
             reportSendResponse = response.body().string();
 
-                activity.runOnUiThread(new Runnable()
+/*                activity.runOnUiThread(new Runnable()
                 {
                     public void run()
                     {
                         Toast.makeText(activity, R.string.ReportSent, Toast.LENGTH_LONG).show(); //, server ritorna: " + reportSendResponse
-
-                        Calendar calendarNow = Calendar.getInstance();
-                        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
-                        String strDateTime = sdf.format(calendarNow.getTime());
-
-                        realm.beginTransaction();
-                        reportStates.setData_ora_invio_rapporto(strDateTime);
-                        realm.commitTransaction();
                     }
-                });
+                });*/
 
                 for (GeaImagineRapporto geaImagineRapporto : imagesArray)
                 {

@@ -29,6 +29,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="start|center_vertical"
                 android:layout_marginLeft="6dp"
+                android:maxWidth="250dp"
                 android:text="Nome del cliente"/>
 
         </LinearLayout>
@@ -60,6 +61,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="start|center_vertical"
                     android:layout_marginLeft="6dp"
+                    android:maxWidth="200dp"
                     android:text="Client indirizzo"/>
 
             </LinearLayout>
@@ -112,7 +114,7 @@
                 android:background="#29b352"
                 android:padding="6dp"
                 android:src="@drawable/arrow_right"
-                android:text="Chiama"/>
+                android:text="    Chiama    "/>
         </FrameLayout>
 
         <View
