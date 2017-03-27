@@ -27,6 +27,7 @@ import ru.alexangan.developer.geatech.Utils.SwipeDetector;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.company_id;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.realm;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.selectedTech;
+import static ru.alexangan.developer.geatech.Models.GlobalConstants.sentVisitItems;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.visitItems;
 
 public class ReportsListFragment extends ListFragment
@@ -87,7 +88,7 @@ public class ReportsListFragment extends ListFragment
 
         TreeMap<Long, VisitItem> unsortedVisits = new TreeMap<>();
 
-        for (VisitItem visitItem : visitItems)
+        for (VisitItem visitItem : sentVisitItems)
         {
             for(ReportStates reportStates : reportStatesList)
             {

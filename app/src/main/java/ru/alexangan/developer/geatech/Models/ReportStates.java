@@ -14,9 +14,15 @@ public class ReportStates extends RealmObject
     private String data_ora_presa_appuntamento;
     private String data_ora_sopralluogo;
 
+    private String clientName;
+    private String clientAddress;
+    private String clientMobile;
+
     private double latitudine;
     private double longitudine;
     private int altitudine;
+
+
 
     private int reportCompletionState;
     private int generalInfoCompletionState; // data ora appuntamento era inserita
@@ -270,4 +276,35 @@ public class ReportStates extends RealmObject
     public void setCompletion_percent(int completion_percent)
     {
         this.completion_percent = completion_percent;
-    }}
+    }
+
+    public String getClientName()
+    {
+        return clientName;
+    }
+
+    public void setClientName(String clientName)
+    {
+        this.clientName = clientName;
+    }
+
+    public String getClientAddress()
+    {
+        return clientAddress;
+    }
+
+    public void setClientAddress(String clientAddress)
+    {
+        this.clientAddress = clientAddress;
+    }
+
+    public String getClientMobile()
+    {
+        return clientMobile;
+    }
+
+    public void setClientMobile(String clientMobile)
+    {
+        this.clientMobile = clientMobile;
+    }
+}

@@ -30,7 +30,6 @@ public class DatabaseUtils
 
         for (GeaItemRapporto geaItemRapporto : geaItemRapportoResults)
         {
-
             if (geaItemRapporto.getValore() == null || geaItemRapporto.getValore().trim().length() == 0)
             {
                 reportComplete = false;

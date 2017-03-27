@@ -1,5 +1,7 @@
 package ru.alexangan.developer.geatech.Utils;
 
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.text.InputType;
 import android.util.Pair;
 import android.view.MotionEvent;
@@ -1171,6 +1173,8 @@ public class ViewUtils
         idItem++;
         tv1ThreeRadiosAndEdit.setText(itemModelli.get(idItem).getDescrizione_item());
         EditTexts.put(idItem, et1ThreeRadiosAndEdit);
+        //et1ThreeRadiosAndEdit.setBackgroundColor(Color.RED);
+        //et1ThreeRadiosAndEdit.getBackground().setColorFilter(Color.RED, PorterDuff.Mode.SRC_IN);
 
 /*        rg1ThreeRadiosAndEdit.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener()
         {
@@ -1232,6 +1236,7 @@ public class ViewUtils
         }
 
         final EditText et1ThreeRadiosAndEdit = (EditText) three_radios_and_edit.findViewById(R.id.et1ThreeRadiosAndEdit);
+        et1ThreeRadiosAndEdit.setBackgroundColor(Color.TRANSPARENT);
 
         EditTexts.put(idItem, et1ThreeRadiosAndEdit);
 
@@ -1901,7 +1906,7 @@ public class ViewUtils
         });
 
         TextView tvSectionHeader = (TextView) header.findViewById(R.id.tvSectionHeader);
-        tvSectionHeader.setText(headerNumber + 1 + ". " + geaSezioniModelli.get(headerNumber).getDescrizione_sezione());
+        tvSectionHeader.setText((headerNumber + 1) + ". " + geaSezioniModelli.get(headerNumber).getDescrizione_sezione());
 
         ArrayList<LinearLayout> llSecHeaders = new ArrayList<>();
         llSecHeaders.addAll(llSectionHeaders);

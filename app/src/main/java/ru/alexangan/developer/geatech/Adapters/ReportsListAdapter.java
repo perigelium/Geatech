@@ -68,33 +68,34 @@ public class ReportsListAdapter extends BaseAdapter
         LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View row = inflater.inflate(layout_id, parent, false);
 
-        VisitItem visitItem = visitItemsDateTimeSet.get(position);
+        //VisitItem visitItem = visitItemsDateTimeSet.get(position);
 
-        ClientData clientData = visitItem.getClientData();
-        ProductData productData = visitItem.getProductData();
-        GeaSopralluogo geaSopralluogo = visitItem.getGeaSopralluogo();
+        //ClientData clientData = visitItem.getClientData();
+        //ProductData productData = visitItem.getProductData();
+        //GeaSopralluogo geaSopralluogo = visitItem.getGeaSopralluogo();
+
+        realm.beginTransaction();
+
+        ReportStates reportStates = realm.where(ReportStates.class).equalTo("company_id", company_id).equalTo("tech_id", selectedTech.getId()).findFirst();
+
+        realm.commitTransaction();
 
         TextView tvVisitDay = (TextView)row.findViewById(R.id.tvVisitDay);
         TextView tvVisitMonth = (TextView)row.findViewById(R.id.tvVisitMonth);
         TextView tvVisitTime = (TextView)row.findViewById(R.id.tvVisitTime);
 
         TextView clientNameTextView = (TextView) row.findViewById(R.id.tvClientName);
-        clientNameTextView.setText(clientData.getName());
+        clientNameTextView.setText(reportStates.getClientName();
 
         TextView serviceTypeTextView = (TextView) row.findViewById(R.id.tvTypeOfService);
         serviceTypeTextView.setText(productData.getProductType());
 
         TextView clientAddressTextView = (TextView) row.findViewById(R.id.tvClientAddress);
-        clientAddressTextView.setText(clientData.getAddress());
+        clientAddressTextView.setText(reportStates.getClientAddress();
 
-        int idSopralluogo = geaSopralluogo.getId_sopralluogo();
+        //int idSopralluogo = geaSopralluogo.getId_sopralluogo();
 
-        realm.beginTransaction();
 
-        ReportStates reportStates = realm.where(ReportStates.class).equalTo("company_id", company_id).equalTo("tech_id", selectedTech.getId())
-                .equalTo("id_sopralluogo", idSopralluogo).findFirst();
-
-        realm.commitTransaction();
 
         String visitDateTime = reportStates.getData_ora_sopralluogo();
 

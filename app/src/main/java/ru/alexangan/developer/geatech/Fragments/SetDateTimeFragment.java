@@ -67,6 +67,7 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
     String strVisitDateTimeResponse;
     Activity activity;
     int idSopralluogo, stakedOut;
+    VisitItem visitItem;
 
     private TextView mDateSetTextView, mTimeSetTextView, btnSetDate, btnAnnullaSetDateTime, btnSetDateTimeSubmit, btnApriMappa, btnChiama;
 
@@ -180,7 +181,7 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
         btnApriMappa = (TextView) rootView.findViewById(R.id.btnApriMappa);
         btnChiama = (TextView) rootView.findViewById(R.id.btnChiama);
 
-        VisitItem visitItem = visitItems.get(selectedIndex);
+        visitItem = visitItems.get(selectedIndex);
         ClientData clientData = visitItem.getClientData();
         ProductData productData = visitItem.getProductData();
         GeaSopralluogo geaSopralluogo = visitItem.getGeaSopralluogo();
@@ -507,7 +508,9 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
                                                     reportStates.setData_ora_sopralluogo(strDateTimeSet);
                                                     reportStates.setData_ora_presa_appuntamento(strDateTimeNow);
                                                     reportStates.setNome_tecnico(selectedTech.getFullNameTehnic());
-                                                    realm.commitTransaction();
+                                                    reportStates.setClientName(visitItem.getClientData().getName());
+                                                    reportStates.setClientMobile(visitItem.getClientData().getMobile());
+                                                    reportStates.setClientAddress(visitItem.getClientData().getAddress());
                                                 }
 
                                                 showToastMessage(getString(R.string.DateTimeSetSuccessfully));//, server ritorna: " + strVisitDateTimeResponse

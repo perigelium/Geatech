@@ -1,8 +1,10 @@
 package ru.alexangan.developer.geatech.Fragments;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -13,6 +15,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -41,6 +46,7 @@ import static ru.alexangan.developer.geatech.Models.GlobalConstants.SEND_DATA_UR
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.company_id;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.realm;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.selectedTech;
+import static ru.alexangan.developer.geatech.Models.GlobalConstants.sentVisitItems;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.tokenStr;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.visitItems;
 
@@ -56,12 +62,13 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
 
     String reportSendResponse;
     Call callSendReport, callSendImage;
-    List <Call> callSendImagesList;
+    List<Call> callSendImagesList;
     Activity activity;
     NetworkUtils networkUtils;
     List<GeaImagineRapporto> imagesArray;
     private ProgressDialog requestServerDialog;
     int objectsSentSuccessfully;
+    AlertDialog alert;
 
     public SendReportFragment()
     {
@@ -171,10 +178,10 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
                 showToastMessage(getString(R.string.CheckInternetConnection));
                 return;
             }
-                disableInputAndShowProgressDialog();
+            disableInputAndShowProgressDialog();
 
-                objectsSentSuccessfully = 0;
-                sendReportItem(selectedIndex);
+            objectsSentSuccessfully = 0;
+            sendReportItem(selectedIndex);
 
             //mCommunicator.onSendReportReturned();
 
@@ -219,8 +226,7 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
         reportItem.setGea_items_rapporto_sopralluogo(listGeaItemRapporto);
 
 
-
-        RealmResults <GeaImagineRapporto> listReportImages = realm.where(GeaImagineRapporto.class)
+        RealmResults<GeaImagineRapporto> listReportImages = realm.where(GeaImagineRapporto.class)
                 .equalTo("company_id", company_id).equalTo("tech_id", selectedTech.getId())
                 .equalTo("id_rapporto_sopralluogo", id_rapporto_sopralluogo).findAll();
 
@@ -240,12 +246,6 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
         String str_ReportItem_json = gson.toJson(reportItem);
 
         //Log.d("DEBUG", str_ReportItem_json);
-
-        if (!NetworkUtils.isNetworkAvailable(activity))
-        {
-            showToastMessage(getString(R.string.CheckInternetConnection));
-            return;
-        }
 
         callSendReport = networkUtils.sendData(this, SEND_DATA_URL_SUFFIX, tokenStr, str_ReportItem_json);
     }
@@ -275,66 +275,163 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
     @Override
     public void onResponse(Call call, Response response) throws IOException
     {
-        if(callSendImagesList!=null)
+        if (call == callSendReport)
         {
-            for (int i = 0; i < callSendImagesList.size(); i++)
+            reportSendResponse = response.body().string();
+
+            response.body().close();
+
+            JSONObject jsonObject;
+
+            try
             {
-                if (call == callSendImagesList.get(i))
+                jsonObject = new JSONObject(reportSendResponse);
+
+                if (jsonObject.has("error"))
                 {
-                    objectsSentSuccessfully++;
-                    reportSendResponse = response.body().string();
+                    activity.runOnUiThread(new Runnable()
+                    {
+                        public void run()
+                        {
+                            enableInput();
+                            alertDialog("Info", getString(R.string.OfflineModeShowLoginScreenQuestion));
+                        }
+                    });
 
-                    //showToastMessage("Immagine " + i + " inviato"); //, server ritorna: " + reportSendResponse
-                    //Log.d("DEBUG", "image " + i + ", server returned:" + reportSendResponse);
+                    try
+                    {
+                        String errorStr = jsonObject.getString("error");
+                        if (errorStr.length() != 0)
+                        {
+                            //showToastMessage(errorStr);
+                        }
+
+                    } catch (JSONException e)
+                    {
+                        activity.runOnUiThread(new Runnable()
+                        {
+                            public void run()
+                            {
+                                enableInput();
+                            }
+                        });
+                        e.printStackTrace();
+                        return;
+                    }
+                } else
+                {
+                    for (GeaImagineRapporto geaImagineRapporto : imagesArray)
+                    {
+                        callSendImagesList.add(networkUtils.sendImage(this, activity, geaImagineRapporto));
+                    }
                 }
-            }
 
-            if(objectsSentSuccessfully == callSendImagesList.size())
+            } catch (JSONException e)
             {
                 activity.runOnUiThread(new Runnable()
                 {
                     public void run()
                     {
-                        Calendar calendarNow = Calendar.getInstance();
-                        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
-                        String strDateTime = sdf.format(calendarNow.getTime());
-
-                        realm.beginTransaction();
-                        reportStates.setData_ora_invio_rapporto(strDateTime);
-                        realm.commitTransaction();
-
-                        Toast.makeText(activity, R.string.ReportSent, Toast.LENGTH_LONG).show();
+                        enableInput();
                     }
                 });
+                e.printStackTrace();
+                showToastMessage("JSON parse error");
             }
 
-            activity.runOnUiThread(new Runnable()
+/*            activity.runOnUiThread(new Runnable()
             {
                 public void run()
                 {
-                    requestServerDialog.dismiss();
+                    Toast.makeText(activity, R.string.ReportSent + ", server ritornato: " + reportSendResponse, Toast.LENGTH_LONG).show(); //
                 }
-            });
-        }
+            });*/
 
-        if (call == callSendReport)
-        {
-            reportSendResponse = response.body().string();
-
-/*                activity.runOnUiThread(new Runnable()
-                {
-                    public void run()
-                    {
-                        Toast.makeText(activity, R.string.ReportSent, Toast.LENGTH_LONG).show(); //, server ritorna: " + reportSendResponse
-                    }
-                });*/
-
-                for (GeaImagineRapporto geaImagineRapporto : imagesArray)
-                {
-                    callSendImagesList.add(networkUtils.sendImage(this, activity, geaImagineRapporto));
-                }
 
             //mCommunicator.onSendReportReturned();
+        }
+
+        for (int i = 0; i < callSendImagesList.size(); i++)
+        {
+            if (call == callSendImagesList.get(i))
+            {
+                reportSendResponse = response.body().string();
+
+                response.body().close();
+
+                JSONObject jsonObject;
+
+                try
+                {
+                    jsonObject = new JSONObject(reportSendResponse);
+
+                    if (jsonObject.has("success"))
+                    {
+
+                        final String strSuccess ;
+                        try
+                        {
+                            strSuccess = jsonObject.getString("success");
+
+                            if (strSuccess.equals("0"))
+                            {
+
+                            }
+                            else
+                            {
+                                objectsSentSuccessfully++;
+
+                                if (objectsSentSuccessfully != 0 && objectsSentSuccessfully == callSendImagesList.size())
+                                {
+                                    activity.runOnUiThread(new Runnable()
+                                    {
+                                        public void run()
+                                        {
+                                            Calendar calendarNow = Calendar.getInstance();
+                                            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
+                                            String strDateTime = sdf.format(calendarNow.getTime());
+
+                                            realm.beginTransaction();
+                                            //sentVisitItems.add(visitItems.get(selectedIndex));
+                                            reportStates.setData_ora_invio_rapporto(strDateTime);
+                                            realm.commitTransaction();
+
+                                            requestServerDialog.dismiss();
+
+                                            Toast.makeText(activity, R.string.ReportSent, Toast.LENGTH_LONG).show();
+                                        }
+                                    });
+                                }
+                            }
+                        } catch (JSONException e)
+                        {
+                            activity.runOnUiThread(new Runnable()
+                            {
+                                public void run()
+                                {
+                                    enableInput();
+                                }
+                            });
+                            e.printStackTrace();
+                        }
+                    }
+                } catch (JSONException e)
+                {
+                    activity.runOnUiThread(new Runnable()
+                    {
+                        public void run()
+                        {
+                            enableInput();
+                        }
+                    });
+                    e.printStackTrace();
+                }
+
+                break;
+
+                //showToastMessage("Immagine " + i + " inviato"); //, server ritorna: " + reportSendResponse
+                //Log.d("DEBUG", "image " + i + ", server returned:" + reportSendResponse);
+            }
         }
     }
 
@@ -363,5 +460,34 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
         btnSendReportNow.setAlpha(1.0f);
 
         requestServerDialog.dismiss();
+    }
+
+    private void alertDialog(String title, String message)
+    {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+
+        builder.setTitle(title)
+                .setMessage(message)
+                .setIcon(android.R.drawable.ic_dialog_info)
+                .setPositiveButton("Si",
+                        new DialogInterface.OnClickListener()
+                        {
+                            public void onClick(DialogInterface dialog, int id)
+                            {
+                                mCommunicator.onLogoutCommand();
+                            }
+                        })
+                .setNegativeButton("No",
+                        new DialogInterface.OnClickListener()
+                        {
+                            public void onClick(DialogInterface dialog, int id)
+                            {
+                                alert.dismiss();
+                            }
+                        });
+
+        alert = builder.create();
+
+        alert.show();
     }
 }

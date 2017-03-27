@@ -18,6 +18,7 @@ public class GlobalConstants
     public static int company_id;
     public static TechnicianItem selectedTech;
     public static RealmResults<VisitItem> visitItems;
+    public static RealmList<VisitItem> sentVisitItems;
     public static RealmList<VisitItem> inVisitItems;
     public static String tokenStr;
 

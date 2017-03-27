@@ -86,8 +86,7 @@ public class ImageUtils
         }
 
         // Calculate inSampleSize
-        options.inSampleSize = calculateInSampleSize(options, reqWidth,
-                reqHeight);
+        options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight);
 
         // Decode bitmap with inSampleSize set
         options.inJustDecodeBounds = false;
@@ -95,6 +94,54 @@ public class ImageUtils
         try
         {
             bm = BitmapFactory.decodeFile(path, options);
+        } catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+
+        return bm;
+    }
+
+    public static Bitmap createProportionalBitmap(String pathFile)
+    {
+        int maxWidth = 2048;
+        int maxHeight = 2048;
+        Bitmap bm = null;
+
+        // First decode with inJustDecodeBounds=true to check dimensions
+        final BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+
+        try
+        {
+            BitmapFactory.decodeFile(pathFile, options);
+        } catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+
+        int width = options.outWidth;
+        int height = options.outHeight;
+        float ratioBitmap = (float) width / (float) height;
+        float ratioMax = (float) maxWidth / (float) maxHeight;
+
+        int finalWidth = maxWidth;
+        int finalHeight = maxHeight;
+        if (ratioMax > 1) {
+            finalWidth = (int) ((float)maxHeight * ratioBitmap);
+        } else {
+            finalHeight = (int) ((float)maxWidth / ratioBitmap);
+        }
+
+        // Calculate inSampleSize
+        options.inSampleSize = calculateInSampleSize(options, finalWidth, finalHeight);
+
+        // Decode bitmap with inSampleSize set
+        options.inJustDecodeBounds = false;
+
+        try
+        {
+            bm = BitmapFactory.decodeFile(pathFile, options);
         } catch (Exception e)
         {
             e.printStackTrace();

@@ -28,6 +28,7 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -44,7 +45,9 @@ import ru.alexangan.developer.geatech.Models.ReportStates;
 import ru.alexangan.developer.geatech.Models.VisitItem;
 import ru.alexangan.developer.geatech.Models.GeaSopralluogo;
 import ru.alexangan.developer.geatech.R;
+import ru.alexangan.developer.geatech.Utils.FileUtils;
 import ru.alexangan.developer.geatech.Utils.ImageUtils;
+import ru.alexangan.developer.geatech.Utils.MediaUtils;
 
 import static android.app.Activity.RESULT_OK;
 import static android.support.v4.content.PermissionChecker.checkSelfPermission;
@@ -60,18 +63,20 @@ public class PhotoGalleryGridFragment extends Fragment
     private final int PICK_GALLERY_IMAGE = 1;
     private final int PICK_CAMERA_IMAGE = 2;
     int currentPicPos = 0;
-    String photosFolderName;
-    int imageHolderWidth = 100;
-    int imageHolderHeight = 75;
-    ArrayList<Bitmap> imageThumbnails;
-    ArrayList<File> pathItems;
-    Bitmap bmpCameraAddButton, bmpGalleryAddButton, fullSizeBitmap;
+    File photosDir;
+    int imgHolderWidth = 100;
+    int imgHolderHeight = 75;
+    ArrayList<Bitmap> alImgThumbs;
+    ArrayList<File> alPathItems;
+    Bitmap bmpCameraAddButton, bmpGalleryAddButton, bmpFullSize;
     private int selectedIndex;
-    ImageView imageViewFullSize;
+    ImageView ivFullSize;
     GridView gvPhotoGallery;
     Activity activity;
     private int PERMISSION_REQUEST_CODE = 12;
-    private ProgressDialog loadingImagesDialog;
+    private ProgressDialog progressLoadingImages;
+    ReportStates reportStates;
+    Bitmap bm;
 
     private Handler handler;
     private Runnable runnable;
@@ -96,30 +101,37 @@ public class PhotoGalleryGridFragment extends Fragment
         if (getArguments() != null)
         {
             selectedIndex = getArguments().getInt("selectedIndex");
-            photosFolderName = "photos" + selectedIndex;
+        } else
+        {
+            return;
         }
 
-        loadingImagesDialog = new ProgressDialog(getActivity());
-        loadingImagesDialog.setTitle("");
-        loadingImagesDialog.setIndeterminate(true);
+        progressLoadingImages = new ProgressDialog(getActivity());
+        progressLoadingImages.setTitle("");
+        progressLoadingImages.setIndeterminate(true);
 
-/*        handler = new Handler();
+        realm.beginTransaction();
 
-        runnable = new Runnable()
+        VisitItem visitItem = visitItems.get(selectedIndex);
+        GeaSopralluogo geaSopralluogo = visitItem.getGeaSopralluogo();
+        int idSopralluogo = geaSopralluogo.getId_sopralluogo();
+        reportStates = realm.where(ReportStates.class).equalTo("company_id", company_id).equalTo("tech_id", selectedTech.getId())
+                .equalTo("id_sopralluogo", idSopralluogo).findFirst();
+
+        if (reportStates == null)
         {
-            @Override
-            public void run()
-            {
-                showToastMessage("Timeout reached");
-                activity.runOnUiThread(new Runnable()
-                {
-                    public void run()
-                    {
-                        loadingImagesDialog.dismiss();
-                    }
-                });
-            }
-        };*/
+            realm.commitTransaction();
+            return;
+        }
+
+        String photosFolderName = "photos" + idSopralluogo;
+
+        photosDir = new File(activity.getFilesDir(), photosFolderName);
+
+        if (!photosDir.exists())
+        {
+            photosDir.mkdir();
+        }
     }
 
     @Override
@@ -129,15 +141,14 @@ public class PhotoGalleryGridFragment extends Fragment
         final View rootView = inflater.inflate(R.layout.photo_gallery_grid, container, false);
 
         gvPhotoGallery = (GridView) rootView.findViewById(R.id.gvPhotoGallery);
+        ivFullSize = (ImageView) rootView.findViewById(R.id.imageViewFullSize);
 
-        imageViewFullSize = (ImageView) rootView.findViewById(R.id.imageViewFullSize);
-
-        imageViewFullSize.setOnClickListener(new View.OnClickListener()
+        ivFullSize.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View view)
             {
-                imageViewFullSize.setVisibility(View.GONE);
+                ivFullSize.setVisibility(View.GONE);
                 gvPhotoGallery.setVisibility(View.VISIBLE);
             }
         });
@@ -146,11 +157,11 @@ public class PhotoGalleryGridFragment extends Fragment
         bmpCameraAddButton = BitmapFactory.decodeResource(resources, R.drawable.photo_add);
         bmpGalleryAddButton = BitmapFactory.decodeResource(resources, R.drawable.galerea_photo_add);
 
-        imageThumbnails = new ArrayList<>();
-        pathItems = new ArrayList<>();
+        alImgThumbs = new ArrayList<>();
+        alPathItems = new ArrayList<>();
 
-        loadingImagesDialog.setMessage(getString(R.string.LoadingImagesInProgress));
-        loadingImagesDialog.show();
+        progressLoadingImages.setMessage(getString(R.string.LoadingImagesInProgress));
+        progressLoadingImages.show();
 
 /*        handler.postDelayed(runnable, 10000);*/
 
@@ -168,15 +179,15 @@ public class PhotoGalleryGridFragment extends Fragment
             {
                 super.onPostExecute(o);
 
-                loadingImagesDialog.dismiss();
+                progressLoadingImages.dismiss();
 
-                imageThumbnails.add(bmpGalleryAddButton);
-                imageThumbnails.add(bmpCameraAddButton);
+                alImgThumbs.add(bmpGalleryAddButton);
+                alImgThumbs.add(bmpCameraAddButton);
 
-                pathItems.add(new File("bmpGalleryAddButton"));
-                pathItems.add(new File("bmpCameraAddButton"));
+                alPathItems.add(new File("bmpGalleryAddButton"));
+                alPathItems.add(new File("bmpCameraAddButton"));
 
-                gridAdapter = new GridViewAdapter(activity, R.layout.grid_item_layout, imageThumbnails);
+                gridAdapter = new GridViewAdapter(activity, R.layout.grid_item_layout, alImgThumbs);
 
                 gvPhotoGallery.setAdapter(gridAdapter);
 
@@ -186,26 +197,6 @@ public class PhotoGalleryGridFragment extends Fragment
 
         asyncTask.execute();
 
-/*        downloadUrl("http://google.com", new MyCallbackInterface() {
-
-            @Override
-            public void onDownloadFinished(String result) {
-                // Do something when download finished
-            }
-        });*/
-        
-/*        getImagesArray(); // Long time operation
-
-        loadingImagesDialog.dismiss();
-
-        imageThumbnails.add(bmpCameraAddButton);
-        imageBitmaps.add(bmpCameraAddButton);
-        pathItems.add(new File("bmpCameraAddButton"));
-
-        gridAdapter = new GridViewAdapter(activity, R.layout.grid_item_layout, imageThumbnails);
-
-        gvPhotoGallery.setAdapter(gridAdapter);*/
-
 
         gvPhotoGallery.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener()
         {
@@ -214,7 +205,7 @@ public class PhotoGalleryGridFragment extends Fragment
 
                 currentPicPos = position;
 
-                if (currentPicPos == imageThumbnails.size() - 1 || currentPicPos == imageThumbnails.size() - 2)
+                if (currentPicPos == alImgThumbs.size() - 1 || currentPicPos == alImgThumbs.size() - 2)
                 {
 /*                    if (checkSelfPermission(activity, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)
                     {
@@ -240,14 +231,14 @@ public class PhotoGalleryGridFragment extends Fragment
                 {
                     currentPicPos = position;
 
-                    if (pathItems.get(currentPicPos).delete() == true)
+                    if (alPathItems.get(currentPicPos).delete() == true)
                     {
-                        imageThumbnails.remove(currentPicPos);
-                        pathItems.remove(currentPicPos);
+                        alImgThumbs.remove(currentPicPos);
+                        alPathItems.remove(currentPicPos);
                     }
 
-                    imageThumbnails.removeAll(Collections.singleton(null)); // remove all null items
-                    pathItems.removeAll(Collections.singleton(null)); // remove all null items
+                    alImgThumbs.removeAll(Collections.singleton(null)); // remove all null items
+                    alPathItems.removeAll(Collections.singleton(null)); // remove all null items
 
                     gvPhotoGallery.setAdapter(gridAdapter);
                 }
@@ -261,7 +252,7 @@ public class PhotoGalleryGridFragment extends Fragment
             {
                 currentPicPos = position;
 
-                if (currentPicPos == imageThumbnails.size() - 1)
+                if (currentPicPos == alImgThumbs.size() - 1)
                 {
                     if (checkSelfPermission(activity, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)
                     {
@@ -282,41 +273,40 @@ public class PhotoGalleryGridFragment extends Fragment
                         //intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
                         startActivityForResult(intent, PICK_CAMERA_IMAGE);
                     }
-                } else
-                if (currentPicPos == imageThumbnails.size() - 2)
+                } else if (currentPicPos == alImgThumbs.size() - 2)
                 {
 
-                        if (checkSelfPermission(activity, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)
+                    if (checkSelfPermission(activity, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)
+                    {
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
                         {
-                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
-                            {
 
-                                String[] permissions = new String[]
-                                        {
-                                                Manifest.permission.READ_EXTERNAL_STORAGE,
-                                        };
+                            String[] permissions = new String[]
+                                    {
+                                            Manifest.permission.READ_EXTERNAL_STORAGE,
+                                    };
 
-                                requestMultiplePermissions(permissions);
-                            }
-                        } else
-                        {
-                            Intent pickIntent = new Intent();
-                            pickIntent.setType("image/*");
-                            pickIntent.setAction(Intent.ACTION_PICK);
-
-                            startActivityForResult(pickIntent, PICK_GALLERY_IMAGE);
+                            requestMultiplePermissions(permissions);
                         }
+                    } else
+                    {
+                        Intent pickIntent = new Intent();
+                        pickIntent.setType("image/*");
+                        pickIntent.setAction(Intent.ACTION_PICK);
 
-                }else
+                        startActivityForResult(pickIntent, PICK_GALLERY_IMAGE);
+                    }
+
+                } else
                 {
-                    fullSizeBitmap = null;
+                    bmpFullSize = null;
 
                     AsyncTask asyncTask = new AsyncTask()
                     {
                         @Override
                         protected Object doInBackground(Object[] objects)
                         {
-                            fullSizeBitmap = ImageUtils.decodeSampledBitmapFromUri(pathItems.get(currentPicPos).getAbsolutePath(), 2048, 2048);
+                            bmpFullSize = ImageUtils.createProportionalBitmap(alPathItems.get(currentPicPos).getAbsolutePath());
                             return null;
                         }
 
@@ -325,19 +315,19 @@ public class PhotoGalleryGridFragment extends Fragment
                         {
                             super.onPostExecute(o);
 
-                            loadingImagesDialog.dismiss();
+                            progressLoadingImages.dismiss();
 
-                            if(fullSizeBitmap!=null)
+                            if (bmpFullSize != null)
                             {
-                                imageViewFullSize.setImageBitmap(fullSizeBitmap);
+                                ivFullSize.setImageBitmap(bmpFullSize);
                             }
-                            imageViewFullSize.setVisibility(View.VISIBLE);
+                            ivFullSize.setVisibility(View.VISIBLE);
                             gvPhotoGallery.setVisibility(View.GONE);
                         }
                     };
 
-                    loadingImagesDialog.setMessage(getString(R.string.PreparingImageForDisplaying));
-                    loadingImagesDialog.show();
+                    progressLoadingImages.setMessage(getString(R.string.PreparingImageForDisplaying));
+                    progressLoadingImages.show();
 
                     asyncTask.execute();
                 }
@@ -349,21 +339,22 @@ public class PhotoGalleryGridFragment extends Fragment
 
     private void getImagesArray()
     {
-        File appDirectory = new File(activity.getFilesDir(), photosFolderName);
+        File[] filePaths = photosDir.listFiles();
 
-        if (!appDirectory.exists())
+        if (filePaths == null)
         {
-            appDirectory.mkdir();
+            return;
         }
-
-        File[] filePaths = appDirectory.listFiles();
 
         for (File path : filePaths)
         {
-            Bitmap bm = ImageUtils.decodeSampledBitmapFromUri(path.getAbsolutePath(), imageHolderWidth, imageHolderHeight);
+            Bitmap bm = ImageUtils.decodeSampledBitmapFromUri(path.getAbsolutePath(), imgHolderWidth, imgHolderHeight);
 
-            imageThumbnails.add(bm);
-            pathItems.add(path);
+            if (bm != null)
+            {
+                alImgThumbs.add(bm);
+                alPathItems.add(path);
+            }
         }
     }
 
@@ -372,32 +363,19 @@ public class PhotoGalleryGridFragment extends Fragment
     {
         super.onDestroyView();
 
-        realm.beginTransaction();
-
-        VisitItem visitItem = visitItems.get(selectedIndex);
-        GeaSopralluogo geaSopralluogo = visitItem.getGeaSopralluogo();
-        int idSopralluogo = geaSopralluogo.getId_sopralluogo();
-        ReportStates reportStates = realm.where(ReportStates.class).equalTo("company_id", company_id).equalTo("tech_id", selectedTech.getId())
-                .equalTo("id_sopralluogo", idSopralluogo).findFirst();
-
-        if (reportStates == null)
-        {
-            return;
-        }
-
         int id_rapporto_sopralluogo = reportStates.getId_rapporto_sopralluogo();
 
         RealmResults<GeaImagineRapporto> reportImages = realm.where(GeaImagineRapporto.class).equalTo("company_id", company_id)
                 .equalTo("tech_id", selectedTech.getId()).equalTo("id_rapporto_sopralluogo", id_rapporto_sopralluogo).findAll();
         reportImages.deleteAllFromRealm();
 
-        reportStates.setPhotoAddedNumber(imageThumbnails.size() - 2);
+        reportStates.setPhotoAddedNumber(alPathItems.size() - 2);
 
         realm.commitTransaction();
 
         int reportImagesSize = reportImages.size();
 
-        for (File imageFile : pathItems)
+        for (File imageFile : alPathItems)
         {
             if (!imageFile.getPath().equals("bmpCameraAddButton") && !imageFile.getPath().equals("bmpGalleryAddButton"))
             {
@@ -425,7 +403,7 @@ public class PhotoGalleryGridFragment extends Fragment
             case PICK_CAMERA_IMAGE:
                 if (resultCode == RESULT_OK)
                 {
-                    String filePath = getLastShotImagePath();
+                    String filePath = MediaUtils.getLastShotImagePath(activity);
 
                     Uri uri = Uri.parse(new File(filePath).toString());
 
@@ -440,7 +418,7 @@ public class PhotoGalleryGridFragment extends Fragment
                 {
                     Uri selectedImage = imageReturnedIntent.getData();
 
-                    String filePath = getRealPathFromURI(getActivity(), selectedImage);
+                    String filePath = MediaUtils.getRealPathFromURI(getActivity(), selectedImage);
 
                     saveReturnedImage(Uri.parse(filePath));
                 }
@@ -451,17 +429,7 @@ public class PhotoGalleryGridFragment extends Fragment
 
     private void saveReturnedImage(Uri selectedImage)
     {
-        InputStream imageStream = null;
-        File imageFile = new File(selectedImage.toString());
-
-        try
-        {
-            imageStream = new FileInputStream(imageFile);
-        } catch (FileNotFoundException e)
-        {
-            e.printStackTrace();
-            return;
-        }
+        final File fileSrcImage = new File(selectedImage.toString());
 
         String fileName = selectedImage.getLastPathSegment();
 
@@ -481,111 +449,92 @@ public class PhotoGalleryGridFragment extends Fragment
             fileName += fileExtension;
         }
 
-        File file = new File(activity.getFilesDir(), photosFolderName + "/" + fileName);
+        final File fileFullSizeImage = new File(photosDir, fileName);
+        bm = null;
 
-        FileOutputStream out = null;
-        int read = 0;
-        byte[] bytes = new byte[1024];
-
-        try
+        AsyncTask asyncTask = new AsyncTask()
         {
-            out = new FileOutputStream(file);
-
-            while ((read = imageStream.read(bytes)) != -1)
+            @Override
+            protected void onPreExecute()
             {
-                out.write(bytes, 0, read);
+                super.onPreExecute();
+
+                progressLoadingImages.setMessage(getString(R.string.LoadingImagesInProgress));
+                progressLoadingImages.show();
             }
-        } catch (IOException e)
-        {
-            e.printStackTrace();
-        } finally
-        {
-            try
+
+            @Override
+            protected Object doInBackground(Object[] objects)
             {
-                if (out != null)
+
+/*        // Resize image to 2048x2048 dimensions maximum
+        bm = ImageUtils.createProportionalBitmap(fileSrcImage.getAbsolutePath());
+
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        bm.compress(Bitmap.CompressFormat.PNG, 0 *//**//*ignored for PNG*//*
+                ,bos);
+                byte[] bitmapdata = bos.toByteArray();
+
+                //write the bytes in file
+                FileOutputStream fos = null;
+                try
                 {
-                    out.close();
+                    fos = new FileOutputStream(fileFullSizeImage);
+                } catch (FileNotFoundException e)
+                {
+                    e.printStackTrace();
                 }
-            } catch (IOException e)
-            {
-                e.printStackTrace();
+
+                try
+                {
+                    if (fos != null)
+                    {
+                        fos.write(bitmapdata);
+                        fos.flush();
+                        fos.close();
+                    }
+
+                } catch (IOException e)
+                {
+                    e.printStackTrace();
+                }*/
+
+                // or simply copy the original file
+                if (!FileUtils.copyFile(fileSrcImage, fileFullSizeImage))
+                {
+                    showToastMessage(getString(R.string.UnableToAddImage));
+                    return null;
+                }
+
+                if (fileFullSizeImage.length() != 0)
+                {
+                    bm = ImageUtils.decodeSampledBitmapFromUri(fileFullSizeImage.getAbsolutePath(), imgHolderWidth, imgHolderHeight);
+                }
+
+                return null;
             }
-        }
 
-        if (file.length() != 0)
-        {
-/*            BitmapFactory.Options bmOptions = new BitmapFactory.Options();
-            Bitmap bitmap = BitmapFactory.decodeFile(file.getAbsolutePath(), bmOptions);
-
-            imageBitmaps.add(0, bitmap);*/
-
-            Bitmap bm = ImageUtils.decodeSampledBitmapFromUri(file.getAbsolutePath(), imageHolderWidth, imageHolderHeight);
-
-            if(bm!=null)
+            @Override
+            protected void onPostExecute(Object o)
             {
-                imageThumbnails.add(0, bm);
-                pathItems.add(0, file);
-                // redraw the gallery thumbnails to reflect the new addition
-                gvPhotoGallery.setAdapter(gridAdapter);
+                super.onPostExecute(o);
+
+                if (bm != null)
+                {
+                    alImgThumbs.add(0, bm);
+                    alPathItems.add(0, fileFullSizeImage);
+                    // redraw the gallery thumbnails to reflect the new addition
+                    gvPhotoGallery.setAdapter(gridAdapter);
+                } else
+                {
+                    showToastMessage(getString(R.string.UnableToAddImage));
+                }
+
+                progressLoadingImages.dismiss();
             }
-            else
-            {
-                showToastMessage(getString(R.string.UnableToAddImage));
-            }
-        }
-    }
+        };
 
-    public String getLastShotImagePath()
-    {
-        String filePath = "";
-        Cursor cursor = null;
-
-        try
-        {
-            String[] projection = {MediaStore.Images.Media.DATA};
-            cursor = getActivity().getContentResolver().query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, projection, null, null, null);
-            int column_index_data = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-            cursor.moveToLast();
-
-            filePath = cursor.getString(column_index_data);
-
-        } catch (Exception e)
-        {
-            e.printStackTrace();
-        } finally
-        {
-            if (cursor != null)
-            {
-                cursor.close();
-            }
-        }
-        return filePath;
-    }
-
-    public String getRealPathFromURI(Context context, Uri contentUri)
-    {
-        Cursor cursor = null;
-        String realPath = "";
-
-        try
-        {
-            String[] proj = {MediaStore.Images.Media.DATA};
-            cursor = context.getContentResolver().query(contentUri, proj, null, null, null);
-            int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-            cursor.moveToFirst();
-            realPath = cursor.getString(column_index);
-
-        } catch (Exception e)
-        {
-            e.printStackTrace();
-        } finally
-        {
-            if (cursor != null)
-            {
-                cursor.close();
-            }
-        }
-        return realPath;
+        asyncTask.execute();
     }
 
     @TargetApi(Build.VERSION_CODES.M)
