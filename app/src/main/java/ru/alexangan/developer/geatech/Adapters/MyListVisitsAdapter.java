@@ -37,6 +37,7 @@ public class MyListVisitsAdapter extends BaseAdapter
     private Context mContext;
     private ArrayList<VisitItem> visitItems;
     int layout_id;
+    //ViewHolder holder;
 
     public MyListVisitsAdapter(Context context, int layout_id, ArrayList<VisitItem> visitItems)
     {
@@ -70,12 +71,12 @@ public class MyListVisitsAdapter extends BaseAdapter
         LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View row = inflater.inflate(layout_id, parent, false);
 
-        //ViewHolder holder;
+/*        View row = convertView;
 
-/*        if (convertView == null)
+        if (row == null)
         {
-            //LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            //row = inflater.inflate(layout_id, parent, false);
+            LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            row = inflater.inflate(layout_id, parent, false);
 
             holder = new ViewHolder();
 
@@ -96,8 +97,8 @@ public class MyListVisitsAdapter extends BaseAdapter
         {
             row = convertView;
 
-            holder = (ViewHolder) row.getTag();
-        }*/
+            holder = (ViewHolder) row.getTag();*/
+
 
         ImageView calendarioIcon = (ImageView) row.findViewById(R.id.calendario);
         View vVisitDateView = row.findViewById(R.id.vVisitDateCell);
@@ -118,11 +119,9 @@ public class MyListVisitsAdapter extends BaseAdapter
         String dataOraSopralluogo = geaSopralluogo.getData_ora_sopralluogo();
         int idSopralluogo = geaSopralluogo.getId_sopralluogo();
         int id_tecnico = geaSopralluogo.getId_tecnico();
-
-        clientNameTextView.setText(clientData.getName());
-
         String productType = productData.getProductType();
 
+        clientNameTextView.setText(clientData.getName());
         serviceTypeTextView.setText(productType);
         clientAddressTextView.setText(clientData.getAddress());
 
@@ -171,6 +170,7 @@ public class MyListVisitsAdapter extends BaseAdapter
             tvVisitDay.setVisibility(View.VISIBLE);
             tvVisitMonth.setVisibility(View.VISIBLE);
             ivPersonTimeSet.setVisibility(View.VISIBLE);
+            ivPersonTimeUnset.setVisibility(View.GONE);
 
             tvVisitDay.setText(Integer.toString(calendar.get(calendar.DAY_OF_MONTH)));
             tvVisitMonth.setText(ItalianMonths.numToString(calendar.get(calendar.MONTH) + 1));
@@ -186,23 +186,25 @@ public class MyListVisitsAdapter extends BaseAdapter
         {
             calendarioIcon.setVisibility(View.VISIBLE);
             ivPersonTimeUnset.setVisibility(View.VISIBLE);
+            ivPersonTimeSet.setVisibility(View.GONE);
         }
 
-        return row;
-    }
 
-    static class ViewHolder
-    {
-        ImageView calendarioIcon;
-        View vVisitDateView;
-        TextView tvVisitDay;
-        TextView tvVisitMonth;
-        TextView tvVisitTime;
-        ImageView ivPersonTimeSet;
-        ImageView ivPersonTimeUnset;
+    return row;
+}
 
-        TextView clientNameTextView;
-        TextView serviceTypeTextView;
-        TextView clientAddressTextView;
-    }
+static class ViewHolder
+{
+    ImageView calendarioIcon;
+    View vVisitDateView;
+    TextView tvVisitDay;
+    TextView tvVisitMonth;
+    TextView tvVisitTime;
+    ImageView ivPersonTimeSet;
+    ImageView ivPersonTimeUnset;
+
+    TextView clientNameTextView;
+    TextView serviceTypeTextView;
+    TextView clientAddressTextView;
+}
 }

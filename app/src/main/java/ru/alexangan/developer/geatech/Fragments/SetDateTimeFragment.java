@@ -41,6 +41,7 @@ import ru.alexangan.developer.geatech.Interfaces.Communicator;
 import ru.alexangan.developer.geatech.Models.ClientData;
 import ru.alexangan.developer.geatech.Models.GeaImagineRapporto;
 import ru.alexangan.developer.geatech.Models.GeaItemRapporto;
+import ru.alexangan.developer.geatech.Models.GeaModelloRapporto;
 import ru.alexangan.developer.geatech.Models.ProductData;
 import ru.alexangan.developer.geatech.Models.ReportStates;
 import ru.alexangan.developer.geatech.Models.SubproductItem;
@@ -68,6 +69,7 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
     Activity activity;
     int idSopralluogo, stakedOut;
     VisitItem visitItem;
+    String product_type;
 
     private TextView mDateSetTextView, mTimeSetTextView, btnSetDate, btnAnnullaSetDateTime, btnSetDateTimeSubmit, btnApriMappa, btnChiama;
 
@@ -184,6 +186,14 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
         visitItem = visitItems.get(selectedIndex);
         ClientData clientData = visitItem.getClientData();
         ProductData productData = visitItem.getProductData();
+        int id_product_type = productData.getIdProductType();
+
+        realm.beginTransaction();
+        GeaModelloRapporto geaModello = realm.where(GeaModelloRapporto.class).equalTo("id_product_type", id_product_type).findFirst();
+        realm.commitTransaction();
+
+        product_type = geaModello.getNome_modello();
+
         GeaSopralluogo geaSopralluogo = visitItem.getGeaSopralluogo();
         String dataOraSopralluogo = geaSopralluogo.getData_ora_sopralluogo();
         idSopralluogo = geaSopralluogo.getId_sopralluogo();
@@ -422,14 +432,6 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
     @Override
     public void onResponse(Call call, Response response) throws IOException
     {
-        getActivity().runOnUiThread(new Runnable()
-        {
-            public void run()
-            {
-                enableInput();
-            }
-        });
-
         if (call == setDateTimeCall)
         {
             strVisitDateTimeResponse = response.body().string();
@@ -441,6 +443,14 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
                 jsonObject = new JSONObject(strVisitDateTimeResponse);
             } catch (JSONException e)
             {
+                getActivity().runOnUiThread(new Runnable()
+                {
+                    public void run()
+                    {
+                        enableInput();
+                    }
+                });
+
                 e.printStackTrace();
                 showToastMessage("JSON parse error");
                 return;
@@ -448,6 +458,14 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
 
             if (jsonObject.has("error"))
             {
+                getActivity().runOnUiThread(new Runnable()
+                {
+                    public void run()
+                    {
+                        enableInput();
+                    }
+                });
+
                 final String errorStr;
                 alertDialog("Info", getString(R.string.OfflineModeShowLoginScreenQuestion));
 
@@ -461,6 +479,13 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
 
                 } catch (JSONException e)
                 {
+                    getActivity().runOnUiThread(new Runnable()
+                    {
+                        public void run()
+                        {
+                            enableInput();
+                        }
+                    });
                     e.printStackTrace();
                     return;
                 }
@@ -508,9 +533,12 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
                                                     reportStates.setData_ora_sopralluogo(strDateTimeSet);
                                                     reportStates.setData_ora_presa_appuntamento(strDateTimeNow);
                                                     reportStates.setNome_tecnico(selectedTech.getFullNameTehnic());
+
                                                     reportStates.setClientName(visitItem.getClientData().getName());
                                                     reportStates.setClientMobile(visitItem.getClientData().getMobile());
                                                     reportStates.setClientAddress(visitItem.getClientData().getAddress());
+                                                    reportStates.setProductType(product_type);
+                                                    realm.commitTransaction();
                                                 }
 
                                                 showToastMessage(getString(R.string.DateTimeSetSuccessfully));//, server ritorna: " + strVisitDateTimeResponse
@@ -534,9 +562,6 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
                                                     .equalTo("company_id", company_id).equalTo("tech_id", selectedTech.getId())
                                                     .equalTo("id_rapporto_sopralluogo", reportStates.getId_rapporto_sopralluogo()).findAll();
 
-                                            realm.commitTransaction();
-
-                                            realm.beginTransaction();
                                             geaItemsRapporto.deleteAllFromRealm();
                                             listReportImages.deleteAllFromRealm();
                                             reportStates.deleteFromRealm();
@@ -546,6 +571,8 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
                                         showToastMessage(getString(R.string.VisitHasCancelled));
                                     }
 
+                                    enableInput();
+
                                     mCommunicator.onDateTimeSetReturned(false);
                                 }
                             });
@@ -553,8 +580,25 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
 
                     } catch (JSONException e)
                     {
+                        getActivity().runOnUiThread(new Runnable()
+                        {
+                            public void run()
+                            {
+                                enableInput();
+                            }
+                        });
                         e.printStackTrace();
                     }
+                }
+                else
+                {
+                    getActivity().runOnUiThread(new Runnable()
+                    {
+                        public void run()
+                        {
+                            enableInput();
+                        }
+                    });
                 }
             }
         }

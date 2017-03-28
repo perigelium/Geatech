@@ -1,7 +1,6 @@
 package ru.alexangan.developer.geatech.Fragments;
 
 import android.app.ListFragment;
-import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,20 +19,17 @@ import io.realm.RealmResults;
 import ru.alexangan.developer.geatech.Adapters.ReportsListAdapter;
 import ru.alexangan.developer.geatech.Interfaces.Communicator;
 import ru.alexangan.developer.geatech.Models.ReportStates;
-import ru.alexangan.developer.geatech.Models.VisitItem;
 import ru.alexangan.developer.geatech.R;
 import ru.alexangan.developer.geatech.Utils.SwipeDetector;
 
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.company_id;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.realm;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.selectedTech;
-import static ru.alexangan.developer.geatech.Models.GlobalConstants.sentVisitItems;
-import static ru.alexangan.developer.geatech.Models.GlobalConstants.visitItems;
 
 public class ReportsListFragment extends ListFragment
 {
     private Communicator mCommunicator;
-    ArrayList<Integer> visitItemsPositions;
+    ArrayList<Integer> reportStatesItemsPositions;
     SwipeDetector swipeDetector;
     ListView lv;
 
@@ -51,7 +47,7 @@ public class ReportsListFragment extends ListFragment
     {
         super.onCreate(savedInstanceState);
 
-        mCommunicator = (Communicator)getActivity();
+        mCommunicator = (Communicator) getActivity();
         swipeDetector = new SwipeDetector();
     }
 
@@ -59,10 +55,10 @@ public class ReportsListFragment extends ListFragment
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState)
     {
-        View rootView =  inflater.inflate(R.layout.list_visits_fragment, container, false);
+        View rootView = inflater.inflate(R.layout.list_visits_fragment, container, false);
 
-        ArrayList<VisitItem> visitItemsReportSent = new ArrayList<>();
-        visitItemsPositions = new ArrayList<>();
+        ArrayList<ReportStates> reportStatesItems = new ArrayList<>();
+        reportStatesItemsPositions = new ArrayList<>();
 
         realm.beginTransaction();
 
@@ -72,64 +68,53 @@ public class ReportsListFragment extends ListFragment
         realm.commitTransaction();
 
 
-/*        for (VisitItem visitItem : visitItems)
+        TreeMap<Long, ReportStates> unsortedReports = new TreeMap<>();
+
+
+        for (ReportStates reportStates : reportStatesList)
         {
-            for(ReportStates reportStates : reportStatesList)
+            //int photoAddedStatus = reportStates.getPhotoAddedNumber();
+            //int generalInfoCompletionState = reportStates.getGeneralInfoCompletionState();
+            //int reportCompletionState = reportStates.getReportCompletionState();
+            String data_ora_sopralluogo = reportStates.getData_ora_sopralluogo();
+
+            if (data_ora_sopralluogo == null)
             {
-                if (visitItem.getGeaSopralluogo().getId_sopralluogo() == reportStates.getId_sopralluogo()
-                        && reportStates.getData_ora_invio_rapporto()!=null)
-                {
-                    visitItemsReportSent.add(visitItem);
-                    visitItemsPositions.add(visitItem.getId());
-                    break;
-                }
+                continue;
             }
-        }*/
 
-        TreeMap<Long, VisitItem> unsortedVisits = new TreeMap<>();
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ITALIAN);
 
-        for (VisitItem visitItem : sentVisitItems)
-        {
-            for(ReportStates reportStates : reportStatesList)
+            if (
+                    reportStates.getDataOraRaportoCompletato() != null
+                            && reportStates.getData_ora_invio_rapporto() != null
+                    )
             {
-                //int photoAddedStatus = reportStates.getPhotoAddedNumber();
-                //int generalInfoCompletionState = reportStates.getGeneralInfoCompletionState();
-                //int reportCompletionState = reportStates.getReportCompletionState();
-                String data_ora_sopralluogo = visitItem.getGeaSopralluogo().getData_ora_sopralluogo();
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ITALIAN);
 
-                if (
-                        visitItem.getGeaSopralluogo().getId_sopralluogo() == reportStates.getId_sopralluogo()
-                                && reportStates.getDataOraRaportoCompletato() != null
-                                && reportStates.getData_ora_invio_rapporto() != null
-                        )
+                try
                 {
-
-                    try
-                    {
-                        Date date = sdf.parse(data_ora_sopralluogo);
-                        long time = date.getTime();
-                        ////Log.d("DEBUG", String.valueOf(time));
-                        unsortedVisits.put(time, visitItem);
-                    } catch (ParseException e)
-                    {
-                        e.printStackTrace();
-                    }
-                    break;
+                    Date date = sdf.parse(reportStates.getData_ora_sopralluogo());
+                    long time = date.getTime();
+                    ////Log.d("DEBUG", String.valueOf(time));
+                    unsortedReports.put(time, reportStates);
+                } catch (ParseException e)
+                {
+                    e.printStackTrace();
                 }
             }
         }
 
-        for (Map.Entry entry : unsortedVisits.entrySet())
-        {
-            VisitItem visitItem = (VisitItem)entry.getValue();
-            visitItemsReportSent.add(visitItem);
 
-            visitItemsPositions.add(visitItem.getId());
+        for (Map.Entry entry : unsortedReports.entrySet())
+        {
+            ReportStates reportStates = (ReportStates) entry.getValue();
+            reportStatesItems.add(reportStates);
+
+            reportStatesItemsPositions.add(reportStates.getId_rapporto_sopralluogo());
         }
 
         ReportsListAdapter myListAdapter =
-                new ReportsListAdapter(getActivity(), R.layout.reports_list_fragment_row, visitItemsReportSent);
+                new ReportsListAdapter(getActivity(), R.layout.reports_list_fragment_row, reportStatesItems);
         setListAdapter(myListAdapter);
 
         return rootView;
@@ -144,11 +129,11 @@ public class ReportsListFragment extends ListFragment
         {
             if (swipeDetector.getAction() == SwipeDetector.Action.LR)
             {
-                mCommunicator.OnReportListItemSelected(visitItemsPositions.get(position));
+                mCommunicator.OnReportListItemSelected(reportStatesItemsPositions.get(position));
             }
         } else
         {
-            mCommunicator.OnReportListItemSelected(visitItemsPositions.get(position));
+            mCommunicator.OnReportListItemSelected(reportStatesItemsPositions.get(position));
         }
     }
 }

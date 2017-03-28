@@ -98,6 +98,8 @@ public class LoginTechSelectionFragment extends Fragment implements View.OnClick
 
         login = mSettings.getString("login", null);
         password = mSettings.getString("password", null);
+
+        enableInput();
     }
 
     @Override
@@ -500,8 +502,13 @@ public class LoginTechSelectionFragment extends Fragment implements View.OnClick
 
                             //callModels = networkUtils.getData(this, GET_MODELS_URL_SUFFIX, tokenStr);
 
+/*                            if (geaItemModelliSize != 0)
+                            {
+                                //downloadingDialog.dismiss();
 
-                            if (geaItemModelliSize == 0)
+                                //loginCommunicator.onTechSelectedAndApplied();
+                            }
+                            else*/
                             {
                                 callModels = networkUtils.getData(this, GET_MODELS_URL_SUFFIX, tokenStr);
                             }
@@ -573,8 +580,6 @@ public class LoginTechSelectionFragment extends Fragment implements View.OnClick
                 public void run()
                 {
 
-                    //preparingListDialog.show();
-
                     realm.beginTransaction();
 
                     inVisitItems = JSON_to_model.getVisitTtemsList(visitsJSONData);
@@ -592,12 +597,12 @@ public class LoginTechSelectionFragment extends Fragment implements View.OnClick
                     realm.commitTransaction();
 
 
-                    if (geaItemModelliSize != 0)
+/*                    if (geaItemModelliSize != 0)
                     {
-                        enableInput();
+                        downloadingDialog.dismiss();
 
                         loginCommunicator.onTechSelectedAndApplied();
-                    }
+                    }*/
                 }
             });
         }
@@ -694,7 +699,7 @@ public class LoginTechSelectionFragment extends Fragment implements View.OnClick
                                     realm.commitTransaction();
                                 }
 
-                                enableInput();
+                                downloadingDialog.dismiss();
 
                                 loginCommunicator.onTechSelectedAndApplied();
                             }

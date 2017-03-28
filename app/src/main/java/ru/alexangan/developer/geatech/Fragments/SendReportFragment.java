@@ -44,9 +44,9 @@ import ru.alexangan.developer.geatech.R;
 
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.SEND_DATA_URL_SUFFIX;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.company_id;
+import static ru.alexangan.developer.geatech.Models.GlobalConstants.listVisitsIsObsolete;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.realm;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.selectedTech;
-import static ru.alexangan.developer.geatech.Models.GlobalConstants.sentVisitItems;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.tokenStr;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.visitItems;
 
@@ -399,6 +399,9 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
                                             requestServerDialog.dismiss();
 
                                             Toast.makeText(activity, R.string.ReportSent, Toast.LENGTH_LONG).show();
+
+                                            listVisitsIsObsolete = true;
+                                            mCommunicator.onDetailedReportReturned();
                                         }
                                     });
                                 }

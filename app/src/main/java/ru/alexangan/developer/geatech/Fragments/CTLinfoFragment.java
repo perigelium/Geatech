@@ -353,13 +353,6 @@ public class CTLinfoFragment extends Fragment implements View.OnClickListener, L
         {
             public void run()
             {
-                if (reportStates != null)
-                {
-                    realm.beginTransaction();
-                    reportStates.setAltitudine(altitude);
-                    realm.commitTransaction();
-                }
-
                 etAltitude.setText(String.valueOf(altitude), TextView.BufferType.EDITABLE);
 
                 enableInput();

@@ -53,6 +53,7 @@ import ru.alexangan.developer.geatech.Utils.SwipeDetector;
 
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.GET_VISITS_URL_SUFFIX;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.inVisitItems;
+import static ru.alexangan.developer.geatech.Models.GlobalConstants.listVisitsIsObsolete;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.realm;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.tokenStr;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.visitItems;
@@ -107,6 +108,12 @@ public class MainActivity extends Activity implements Communicator, Callback
     protected void onDestroy()
     {
         super.onDestroy();
+    }
+
+    @Override
+    protected void onResume()
+    {
+        super.onResume();
     }
 
     @Override
@@ -190,6 +197,7 @@ public class MainActivity extends Activity implements Communicator, Callback
         requestServerDialog.setIndeterminate(true);
 
         timeNotSetItemsOnly = false;
+        listVisitsIsObsolete = false;
 
         handler = new Handler();
 
@@ -209,6 +217,10 @@ public class MainActivity extends Activity implements Communicator, Callback
     {
         if (!listVisits.isAdded())
         {
+            FragmentTransaction mFragmentTransaction = mFragmentManager.beginTransaction();
+            mFragmentTransaction.hide(ctrlBtnsReportDetailed);
+            mFragmentTransaction.commit();
+
             removeAllLists();
 
             ctrlBtnsFragment1.setCheckedBtnId(R.id.btnVisits);
@@ -245,7 +257,14 @@ public class MainActivity extends Activity implements Communicator, Callback
                 args.putBoolean("timeNotSetItemsOnly", timeNotSetItemsOnly);
                 listVisits.setArguments(args);
 
-                setVisitsListContent(listVisits);
+                if (listVisitsIsObsolete && NetworkUtils.isNetworkAvailable(this))
+                {
+                    refreshVisitsList();
+                } else
+                {
+                    setVisitsListContent(listVisits);
+                }
+
                 timeNotSetItemsOnly = false;
             }
         }
@@ -331,7 +350,7 @@ public class MainActivity extends Activity implements Communicator, Callback
         {
             removeAllLists();
 
-            if(!photoGalleryGridFragment.isAdded())
+            if (!photoGalleryGridFragment.isAdded())
             {
                 Bundle args = frag.getArguments() != null ? frag.getArguments() : new Bundle();
                 args.putInt("selectedIndex", currentSelIndex);
@@ -345,7 +364,7 @@ public class MainActivity extends Activity implements Communicator, Callback
         {
             removeAllLists();
 
-            if(!ctlInfo.isAdded())
+            if (!ctlInfo.isAdded())
             {
                 Bundle args = new Bundle();
                 args.putInt("selectedIndex", currentSelIndex);
@@ -359,7 +378,7 @@ public class MainActivity extends Activity implements Communicator, Callback
         {
             removeAllLists();
 
-            if(!sendReportFragment.isAdded())
+            if (!sendReportFragment.isAdded())
             {
                 Bundle args = new Bundle();
                 args.putInt("selectedIndex", currentSelIndex);
@@ -462,7 +481,7 @@ public class MainActivity extends Activity implements Communicator, Callback
     }
 
     @Override
-    public void OnListItemSelected(int itemIndex, Boolean dateTimeHasSet)
+    public void OnListItemSelected(int itemIndex, boolean dateTimeHasSet)
     {
         //removeAllLists();
 
@@ -487,21 +506,10 @@ public class MainActivity extends Activity implements Communicator, Callback
     }
 
     @Override
-    public void onDateTimeSetReturned(Boolean mDatetimeAlreadySet)
+    public void onDateTimeSetReturned(boolean mDatetimeSetBefore)
     {
-        if (!mDatetimeAlreadySet && NetworkUtils.isNetworkAvailable(this))
-        {
-            requestServerDialog.show();
-
-            handler.postDelayed(runnable, 15000);
-
-            callVisits = networkUtils.getData(this, GET_VISITS_URL_SUFFIX, tokenStr);
-        } else
-        {
-            //removeAllLists();
-
-            ctrlBtnsFragment1.setCheckedBtnId(R.id.btnVisits);
-        }
+        listVisitsIsObsolete = true;
+        ctrlBtnsFragment1.setCheckedBtnId(R.id.btnVisits);
     }
 
     @Override
@@ -519,8 +527,6 @@ public class MainActivity extends Activity implements Communicator, Callback
     @Override
     public void OnReportListItemSelected(int itemIndex)
     {
-        currentSelIndex = itemIndex;
-
         FragmentTransaction mFragmentTransaction = mFragmentManager.beginTransaction();
         mFragmentTransaction.hide(ctrlBtnsFragment2);
         mFragmentTransaction.hide(ctrlBtnsFragment1);
@@ -559,22 +565,10 @@ public class MainActivity extends Activity implements Communicator, Callback
 
             if (!listVisits.isAdded())
             {
-                if (NetworkUtils.isNetworkAvailable(this))
-                {
-                    requestServerDialog.show();
+                timeNotSetItemsOnly = true;
+                listVisitsIsObsolete = true;
 
-                    handler.postDelayed(runnable, 15000);
-
-                    callVisits = networkUtils.getData(this, GET_VISITS_URL_SUFFIX, tokenStr);
-                    timeNotSetItemsOnly = true;
-                } else
-                {
-                    Bundle args = new Bundle();
-                    args.putBoolean("timeNotSetItemsOnly", true);
-                    listVisits.setArguments(args);
-
-                    setVisitsListContent(listVisits);
-                }
+                ctrlBtnsFragment1.setCheckedBtnId(R.id.btnVisits);
             }
 
             //ctrlBtnsFragment1.setCheckedBtnId(R.id.btnVisits);
@@ -683,7 +677,7 @@ public class MainActivity extends Activity implements Communicator, Callback
     }
 
     @Override
-    public void OnListItemSwiped(int itemIndex, Boolean dateTimeHasSet)
+    public void OnListItemSwiped(int itemIndex, boolean dateTimeHasSet)
     {
         if (!dateTimeHasSet)
         {
@@ -732,7 +726,13 @@ public class MainActivity extends Activity implements Communicator, Callback
         {
             showToastMessage(getString(R.string.ListVisitsReceiveFailed));
 
-            requestServerDialog.dismiss();
+            runOnUiThread(new Runnable()
+            {
+                public void run()
+                {
+                    requestServerDialog.dismiss();
+                }
+            });
 
             handler.removeCallbacks(runnable);
         }
@@ -746,6 +746,8 @@ public class MainActivity extends Activity implements Communicator, Callback
             handler.removeCallbacks(runnable);
 
             final String visitsJSONData = response.body().string();
+
+            response.body().close();
 
             runOnUiThread(new Runnable()
             {
@@ -773,12 +775,13 @@ public class MainActivity extends Activity implements Communicator, Callback
 
                     //removeAllLists();
 
-                    ctrlBtnsFragment1.setCheckedBtnId(R.id.btnVisits);
+                    setVisitsListContent(listVisits);
+
+                    requestServerDialog.dismiss();
+                    //ctrlBtnsFragment1.setCheckedBtnId(R.id.btnVisits);
                 }
             });
         }
-
-        requestServerDialog.dismiss();
     }
 
     private void logout()
@@ -796,5 +799,16 @@ public class MainActivity extends Activity implements Communicator, Callback
         intent.putExtra("Exit app", true);
         startActivity(intent);
         finish();
+    }
+
+    private void refreshVisitsList()
+    {
+        requestServerDialog.show();
+
+        handler.postDelayed(runnable, 15000);
+
+        callVisits = networkUtils.getData(this, GET_VISITS_URL_SUFFIX, tokenStr);
+
+        listVisitsIsObsolete = false;
     }
 }

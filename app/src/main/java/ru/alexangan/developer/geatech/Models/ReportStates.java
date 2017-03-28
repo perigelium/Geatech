@@ -14,6 +14,8 @@ public class ReportStates extends RealmObject
     private String data_ora_presa_appuntamento;
     private String data_ora_sopralluogo;
 
+    private String productType;
+
     private String clientName;
     private String clientAddress;
     private String clientMobile;
@@ -21,8 +23,6 @@ public class ReportStates extends RealmObject
     private double latitudine;
     private double longitudine;
     private int altitudine;
-
-
 
     private int reportCompletionState;
     private int generalInfoCompletionState; // data ora appuntamento era inserita
@@ -306,5 +306,15 @@ public class ReportStates extends RealmObject
     public void setClientMobile(String clientMobile)
     {
         this.clientMobile = clientMobile;
+    }
+
+    public String getProductType()
+    {
+        return productType;
+    }
+
+    public void setProductType(String productType)
+    {
+        this.productType = productType;
     }
 }

@@ -24,7 +24,9 @@
 
         <include android:id="@+id/four_radios_and_edit2" layout="@layout/four_radios_and_edit"/>
 
-        <include android:id="@+id/four_edits_and_switch1" layout="@layout/four_edits_and_switch"/>
+        <include android:id="@+id/four_radios_and_edit3" layout="@layout/four_radios_and_edit"/>
+
+        <include android:id="@+id/switch_1" layout="@layout/switch_"/>
 
         <include android:id="@+id/two_radios1" layout="@layout/two_radios"/>
 

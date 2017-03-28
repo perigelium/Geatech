@@ -9,24 +9,24 @@ import android.view.View;
 
 public interface Communicator
 {
-    public void onDateTimeSetReturned(Boolean DateTimeAlreadySet);
+    void onDateTimeSetReturned(boolean mDatetimeSetBefore);
 
-    public void onDetailedReportReturned();
+    void onDetailedReportReturned();
 
-    public void onSendReportReturned();
+    void onSendReportReturned();
 
-    public void onCtrlButtons1Clicked(View view);
-    public void onCtrlButtons2Clicked(View view);
+    void onCtrlButtons1Clicked(View view);
+    void onCtrlButtons2Clicked(View view);
 
-    public void OnListItemSwiped(int itemIndex, Boolean dateTimeHasSet);
+    void OnListItemSwiped(int itemIndex, boolean dateTimeHasSet);
 
-    public void OnListItemSelected(int itemIndex, Boolean dateTimeHasSet);
+    void OnListItemSelected(int itemIndex, boolean dateTimeHasSet);
 
-    public void OnReportListItemSelected(int itemIndex);
+    void OnReportListItemSelected(int itemIndex);
 
-    public void OnInWorkListItemSelected(int itemIndex);
+    void OnInWorkListItemSelected(int itemIndex);
 
-    public void onNotificationReportReturned(View view);
+    void onNotificationReportReturned(View view);
 
     void OnComingListItemSelected(int itemIndex);
 

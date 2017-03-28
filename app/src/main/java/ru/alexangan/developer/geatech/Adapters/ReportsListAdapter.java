@@ -13,17 +13,9 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Locale;
 
-import ru.alexangan.developer.geatech.Models.ClientData;
 import ru.alexangan.developer.geatech.Models.ItalianMonths;
-import ru.alexangan.developer.geatech.Models.ProductData;
 import ru.alexangan.developer.geatech.Models.ReportStates;
-import ru.alexangan.developer.geatech.Models.VisitItem;
-import ru.alexangan.developer.geatech.Models.GeaSopralluogo;
 import ru.alexangan.developer.geatech.R;
-
-import static ru.alexangan.developer.geatech.Models.GlobalConstants.company_id;
-import static ru.alexangan.developer.geatech.Models.GlobalConstants.realm;
-import static ru.alexangan.developer.geatech.Models.GlobalConstants.selectedTech;
 
 /**
  * Created by user on 11/21/2016.
@@ -33,20 +25,20 @@ public class ReportsListAdapter extends BaseAdapter
 {
     private Context mContext;
     int layout_id;
-    ArrayList<VisitItem> visitItemsDateTimeSet;
+    ArrayList<ReportStates> reportStatesItems;
 
-    public ReportsListAdapter(Context context, int layout_id, ArrayList<VisitItem> visitItemsDateTimeSet)
+    public ReportsListAdapter(Context context, int layout_id, ArrayList<ReportStates> reportStatesItems)
     {
         //super(context, textViewResourceId, objects);
         mContext = context;
         this.layout_id = layout_id;
-        this.visitItemsDateTimeSet = visitItemsDateTimeSet;
+        this.reportStatesItems = reportStatesItems;
     }
 
     @Override
     public int getCount()
     {
-        return visitItemsDateTimeSet.size();
+        return reportStatesItems.size();
     }
 
     @Override
@@ -68,34 +60,32 @@ public class ReportsListAdapter extends BaseAdapter
         LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View row = inflater.inflate(layout_id, parent, false);
 
-        //VisitItem visitItem = visitItemsDateTimeSet.get(position);
+        ReportStates reportStates = reportStatesItems.get(position);
 
         //ClientData clientData = visitItem.getClientData();
         //ProductData productData = visitItem.getProductData();
         //GeaSopralluogo geaSopralluogo = visitItem.getGeaSopralluogo();
 
-        realm.beginTransaction();
+/*        realm.beginTransaction();
 
         ReportStates reportStates = realm.where(ReportStates.class).equalTo("company_id", company_id).equalTo("tech_id", selectedTech.getId()).findFirst();
 
-        realm.commitTransaction();
+        realm.commitTransaction();*/
 
         TextView tvVisitDay = (TextView)row.findViewById(R.id.tvVisitDay);
         TextView tvVisitMonth = (TextView)row.findViewById(R.id.tvVisitMonth);
         TextView tvVisitTime = (TextView)row.findViewById(R.id.tvVisitTime);
 
         TextView clientNameTextView = (TextView) row.findViewById(R.id.tvClientName);
-        clientNameTextView.setText(reportStates.getClientName();
+        clientNameTextView.setText(reportStates.getClientName());
 
         TextView serviceTypeTextView = (TextView) row.findViewById(R.id.tvTypeOfService);
-        serviceTypeTextView.setText(productData.getProductType());
+        serviceTypeTextView.setText(reportStates.getProductType());
 
         TextView clientAddressTextView = (TextView) row.findViewById(R.id.tvClientAddress);
-        clientAddressTextView.setText(reportStates.getClientAddress();
+        clientAddressTextView.setText(reportStates.getClientAddress());
 
         //int idSopralluogo = geaSopralluogo.getId_sopralluogo();
-
-
 
         String visitDateTime = reportStates.getData_ora_sopralluogo();
 

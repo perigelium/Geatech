@@ -118,13 +118,14 @@ public class PhotoGalleryGridFragment extends Fragment
         reportStates = realm.where(ReportStates.class).equalTo("company_id", company_id).equalTo("tech_id", selectedTech.getId())
                 .equalTo("id_sopralluogo", idSopralluogo).findFirst();
 
+        realm.commitTransaction();
+
         if (reportStates == null)
         {
-            realm.commitTransaction();
             return;
         }
 
-        String photosFolderName = "photos" + idSopralluogo;
+        String photosFolderName = "photos" + reportStates.getId_sopralluogo();
 
         photosDir = new File(activity.getFilesDir(), photosFolderName);
 
@@ -362,6 +363,8 @@ public class PhotoGalleryGridFragment extends Fragment
     public void onDestroyView()
     {
         super.onDestroyView();
+
+        realm.beginTransaction();
 
         int id_rapporto_sopralluogo = reportStates.getId_rapporto_sopralluogo();
 

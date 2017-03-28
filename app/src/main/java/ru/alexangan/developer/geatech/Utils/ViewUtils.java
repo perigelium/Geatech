@@ -1018,6 +1018,99 @@ public class ViewUtils
         return ++idItem;
     }
 
+    public int createViewFourRadiosAndEditObl(int idItem, int idRes)
+    {
+        LinearLayout four_radios_and_edit = (LinearLayout) rootView.findViewById(idRes);
+
+        LinearLayout llHeaderFourRadiosAndEdit = (LinearLayout) four_radios_and_edit.findViewById(R.id.llHeaderFourRadiosAndEdit);
+
+        final ImageView ivArrowFourRadiosAndEdit = (ImageView) four_radios_and_edit.findViewById(R.id.ivArrowFourRadiosAndEdit);
+
+        ImageViews.put(idItem, ivArrowFourRadiosAndEdit);
+
+        TextView tvHeaderFourRadiosAndEdit = (TextView) four_radios_and_edit.findViewById(R.id.tvHeaderFourRadiosAndEdit);
+        tvHeaderFourRadiosAndEdit.setText(itemModelli.get(idItem).getDescrizione_item());
+
+        final LinearLayout llSectionFourRadiosAndEdit = (LinearLayout) four_radios_and_edit.findViewById(R.id.llSectionFourRadiosAndEdit);
+
+        LinearLayouts.put(idItem, new Pair<>(llHeaderFourRadiosAndEdit, llSectionFourRadiosAndEdit));
+
+        llSectionHeaders.add(llSectionFourRadiosAndEdit);
+
+        llHeaderFourRadiosAndEdit.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                llSectionFourRadiosAndEdit.setVisibility(llSectionFourRadiosAndEdit.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
+                ivArrowFourRadiosAndEdit.setImageResource(llSectionFourRadiosAndEdit.getVisibility() == View.VISIBLE
+                        ? android.R.drawable.arrow_up_float : android.R.drawable.arrow_down_float);
+            }
+        });
+
+        final RadioGroup rg1FourRadiosAndEdit = (RadioGroup) four_radios_and_edit.findViewById(R.id.rg1FourRadiosAndEdit);
+
+        RadioGroups.put(idItem, rg1FourRadiosAndEdit);
+
+        String valore = itemModelli.get(idItem).getValore();
+        String[] fields = valore.split("\\|\\|");
+
+        TextView tv1FourRadiosAndEdit = (TextView) four_radios_and_edit.findViewById(R.id.tv1FourRadiosAndEdit);
+
+        final EditText et1FourRadiosAndEdit = (EditText) four_radios_and_edit.findViewById(R.id.et1FourRadiosAndEdit);
+
+        final LinearLayout llEditFourRadiosAndEdit = (LinearLayout) four_radios_and_edit.findViewById(R.id.llEditFourRadiosAndEdit);
+
+/*        et1FourRadiosAndEdit.setOnTouchListener(new View.OnTouchListener()
+        {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent)
+            {
+                rg1FourRadiosAndEdit.clearCheck();
+                return false;
+            }
+        });*/
+
+        if (fields.length >= rg1FourRadiosAndEdit.getChildCount())
+        {
+            for (int i = 0; i < rg1FourRadiosAndEdit.getChildCount(); i++)
+            {
+                RadioButton rb = (RadioButton) rg1FourRadiosAndEdit.getChildAt(i);
+
+                rb.setText(fields[i]);
+
+/*                rb.setOnClickListener(new View.OnClickListener()
+                {
+                    @Override
+                    public void onClick(View view)
+                    {
+                        if(rg1FourRadiosAndEdit.getCheckedRadioButtonId() == rg1FourRadiosAndEdit.getChildAt(1).getId()) //second radio
+                        {
+                            llEditFourRadiosAndEdit.setVisibility(View.VISIBLE);
+                            et1FourRadiosAndEdit.setText("");
+                        }
+                        else
+                        {
+                            llEditFourRadiosAndEdit.setVisibility(View.GONE);
+                            et1FourRadiosAndEdit.setText("Non applicabile");
+                        }
+                    }
+                });*/
+            }
+        }
+
+        idItem++;
+        LinearLayouts.put(idItem, new Pair<>(llEditFourRadiosAndEdit, llEditFourRadiosAndEdit));
+        tv1FourRadiosAndEdit.setText(itemModelli.get(idItem).getDescrizione_item());
+        et1FourRadiosAndEdit.setInputType(InputType.TYPE_CLASS_NUMBER);
+        et1FourRadiosAndEdit.setText("Non applicabile");
+        EditTexts.put(idItem, et1FourRadiosAndEdit);
+
+        idItem+=2;
+
+        return ++idItem;
+    }
+
     public int createViewThreeRadiosAndEditEx(int idItem, int idRes)
     {
         LinearLayout three_radios_and_edit = (LinearLayout) rootView.findViewById(idRes);
@@ -1261,6 +1354,65 @@ public class ViewUtils
 
         return ++idItem;
     }
+
+/*    public int createViewFourRadiosAndSwitch(int idItem, int idRes)
+    {
+        LinearLayout four_radios_and_switch = (LinearLayout) rootView.findViewById(idRes);
+
+        LinearLayout llHeaderFourRadiosAndSwitch = (LinearLayout) four_radios_and_switch.findViewById(R.id.llHeaderFourRadiosAndSwitch);
+
+        final ImageView ivArrowFourRadiosAndSwitch = (ImageView) four_radios_and_switch.findViewById(R.id.ivArrowFourRadiosAndSwitch);
+
+        ImageViews.put(idItem, ivArrowFourRadiosAndSwitch);
+
+        TextView tvHeaderFourRadiosAndSwitch = (TextView) four_radios_and_switch.findViewById(R.id.tvHeaderFourRadiosAndSwitch);
+        tvHeaderFourRadiosAndSwitch.setText(itemModelli.get(idItem).getDescrizione_item());
+
+        final LinearLayout llSectionFourRadiosAndSwitch = (LinearLayout) four_radios_and_switch.findViewById(R.id.llSectionFourRadiosAndSwitch);
+
+        LinearLayouts.put(idItem, new Pair<>(llHeaderFourRadiosAndSwitch, llSectionFourRadiosAndSwitch));
+
+        llSectionHeaders.add(llSectionFourRadiosAndSwitch);
+
+        llHeaderFourRadiosAndSwitch.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                llSectionFourRadiosAndSwitch.setVisibility(llSectionFourRadiosAndSwitch.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
+                ivArrowFourRadiosAndSwitch.setImageResource(llSectionFourRadiosAndSwitch.getVisibility() == View.VISIBLE
+                        ? android.R.drawable.arrow_up_float : android.R.drawable.arrow_down_float);
+            }
+        });
+
+        final RadioGroup rg1FourRadiosAndSwitch = (RadioGroup) four_radios_and_switch.findViewById(R.id.rg1FourRadiosAndSwitch);
+
+        RadioGroups.put(idItem, rg1FourRadiosAndSwitch);
+
+        String valore = itemModelli.get(idItem).getValore();
+        String[] fields = valore.split("\\|\\|");
+
+        if (fields.length >= rg1FourRadiosAndSwitch.getChildCount())
+        {
+            for (int i = 0; i < rg1FourRadiosAndSwitch.getChildCount(); i++)
+            {
+                RadioButton rb = (RadioButton) rg1FourRadiosAndSwitch.getChildAt(i);
+
+                rb.setText(fields[i]);
+            }
+        }
+
+        idItem+=3;
+
+        TextView tv1FourRadiosAndSwitch = (TextView) four_radios_and_switch.findViewById(R.id.tv1FourRadiosAndSwitch);
+        tv1FourRadiosAndSwitch.setText(itemModelli.get(idItem).getDescrizione_item());
+
+        final Switch sw1FourRadiosAndSwitch = (Switch) four_radios_and_switch.findViewById(R.id.sw1FourRadiosAndSwitch);
+
+        Switches.put(idItem, sw1FourRadiosAndSwitch);
+
+        return ++idItem;
+    }*/
 
     public int createViewTwoRadiosAndSwitch(int idItem, int idRes)
     {
@@ -1768,7 +1920,7 @@ public class ViewUtils
         return idItem;
     }
 
-    public int createViewFourEditsAndSwitch(int idItem, int idRes)
+/*    public int createViewFourEditsAndSwitch(int idItem, int idRes)
     {
         LinearLayout four_edits_and_switch = (LinearLayout) rootView.findViewById(idRes);
         LinearLayout llHeaderFourEditsAndSwitch = (LinearLayout) four_edits_and_switch.findViewById(R.id.llHeaderFourEditsAndSwitch);
@@ -1825,10 +1977,6 @@ public class ViewUtils
 
         Switch sw1FourEditsAndSwitch = (Switch) four_edits_and_switch.findViewById(R.id.sw1FourEditsAndSwitch);
 
-/*        ArrayList<Switch> al_Switches = new ArrayList<>();
-        al_Switches.add(sw1FourEditsAndSwitch);*/
-
-
         for (int i = 0; i < al_tvs.size(); i++)
         {
             EditTexts.put(idItem, al_Edits.get(i));
@@ -1838,7 +1986,7 @@ public class ViewUtils
         tv5FourEditsAndSwitch.setText(itemModelli.get(idItem++).getDescrizione_item());
 
         return idItem;
-    }
+    }*/
 
     public int createViewEdit(int idItem, int idRes)
     {

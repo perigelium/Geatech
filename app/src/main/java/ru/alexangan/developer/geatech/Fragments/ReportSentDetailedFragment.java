@@ -69,8 +69,6 @@ public class ReportSentDetailedFragment extends Fragment
         activity = getActivity();
         reportItems = new ArrayList<>();
 
-        photosFolderName = "photos" + selectedIndex;
-
         loadingImagesDialog = new ProgressDialog(getActivity());
         loadingImagesDialog.setTitle("");
         loadingImagesDialog.setIndeterminate(true);
@@ -80,14 +78,6 @@ public class ReportSentDetailedFragment extends Fragment
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
         View rootView = inflater.inflate(R.layout.report_sent_detailed_fragment, container, false);
-
-        VisitItem visitItem = visitItems.get(selectedIndex);
-        ClientData clientData = visitItem.getClientData();
-        ProductData productData = visitItem.getProductData();
-        GeaSopralluogo geaSopralluogo = visitItem.getGeaSopralluogo();
-        int idSopralluogo = geaSopralluogo.getId_sopralluogo();
-        //String productType = productData.getProductType();
-        int id_product_type = productData.getIdProductType();
 
         gvPhotoGallery = (GridView) rootView.findViewById(R.id.gvPhotoGallery);
 
@@ -99,14 +89,15 @@ public class ReportSentDetailedFragment extends Fragment
         TextView tvTechName = (TextView) rootView.findViewById(R.id.tvTechName);
         tvTechName.setText(selectedTech.getFullNameTehnic());
 
-
         realm.beginTransaction();
-        ReportStates reportStates = realm.where(ReportStates.class).equalTo("company_id", company_id).equalTo("tech_id", selectedTech.getId())
-                .equalTo("id_sopralluogo", idSopralluogo).findFirst();
+        ReportStates reportStates = realm.where(ReportStates.class).equalTo("id_rapporto_sopralluogo", selectedIndex).findFirst();
         realm.commitTransaction();
+
+        photosFolderName = "photos" + reportStates.getId_sopralluogo();
 
         if (reportStates != null)
         {
+            String  product_type = reportStates.getProductType();
             int id_rapporto_sopralluogo = reportStates.getId_rapporto_sopralluogo();
 
             List<GeaItemRapporto> geaItemsRapporto = realm.where(GeaItemRapporto.class).equalTo("company_id", company_id)
@@ -114,12 +105,7 @@ public class ReportSentDetailedFragment extends Fragment
 
             if (geaItemsRapporto.size() != 0)
             {
-                realm.beginTransaction();
-                GeaModelloRapporto geaModello = realm.where(GeaModelloRapporto.class).equalTo("id_product_type", id_product_type).findFirst();
-                realm.commitTransaction();
-
-                String modelloName = geaModello != null ? geaModello.getNome_modello() : "";
-                tvReportName.setText(modelloName);
+                tvReportName.setText(product_type);
 
 /*            realm.beginTransaction();
             RealmResults <GeaSezioneModelliRapporto> geaSezioniModelli = realm.where(GeaSezioneModelliRapporto.class)
@@ -168,20 +154,18 @@ public class ReportSentDetailedFragment extends Fragment
         }
 
         TextView clientNameTextView = (TextView) rootView.findViewById(R.id.tvClientName);
-        clientNameTextView.setText(clientData.getName());
+        clientNameTextView.setText(reportStates.getClientName());
 
         TextView clientPhoneTextView = (TextView) rootView.findViewById(R.id.tvClientPhone);
-        clientPhoneTextView.setText(clientData.getMobile());
+        clientPhoneTextView.setText(reportStates.getClientMobile());
 
         TextView clientAddressTextView = (TextView) rootView.findViewById(R.id.tvClientAddress);
-        clientAddressTextView.setText(clientData.getAddress());
+        clientAddressTextView.setText(reportStates.getClientAddress());
 
         TextView etCoordNord = (TextView) rootView.findViewById(R.id.etCoordNord);
         TextView etCoordEst = (TextView) rootView.findViewById(R.id.etCoordEst);
         TextView etAltitude = (TextView) rootView.findViewById(R.id.etAltitude);
 
-        if (reportStates != null)
-        {
             double latitude = reportStates.getLatitudine();
             double longitude = reportStates.getLongitudine();
             double altitude = reportStates.getAltitudine();
@@ -193,7 +177,7 @@ public class ReportSentDetailedFragment extends Fragment
             {
                 etAltitude.setText(String.valueOf((int) altitude));
             }
-        }
+
 
         ListView listView = (ListView) rootView.findViewById(R.id.listItemsSentReport);
 

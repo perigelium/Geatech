@@ -122,7 +122,9 @@ public class FotovoltaicoReportFragment extends Fragment
 
         idItem = viewUtils.createViewFourRadiosAndEdit(idItem, R.id.four_radios_and_edit2);
 
-        idItem = viewUtils.createViewFourEditsAndSwitch(idItem, R.id.four_edits_and_switch1);
+        idItem = viewUtils.createViewFourRadiosAndEditObl(idItem, R.id.four_radios_and_edit3);
+
+        idItem = viewUtils.createViewSwitch(idItem, R.id.switch_1);
 
         idItem = viewUtils.createViewTwoRadios(idItem, R.id.two_radios1);
 
@@ -170,7 +172,13 @@ public class FotovoltaicoReportFragment extends Fragment
 
             idItem = viewUtils.saveSeveralRadiosAndEdit(idItem);
 
-            idItem = viewUtils.saveSeveralEdits(idItem, 4);
+            //idItem = viewUtils.saveSeveralEdits(idItem, 4);
+
+            idItem = viewUtils.saveSeveralRadios(idItem);
+
+            idItem = viewUtils.saveSeveralEdits(idItem, 1);
+
+            idItem+=2;
 
             idItem = viewUtils.saveSeveralSwitches(idItem, 1);
 
@@ -238,7 +246,12 @@ public class FotovoltaicoReportFragment extends Fragment
 
             idItem = viewUtils.fillSeveralRadiosAndEdit(idItem);
 
-            idItem = viewUtils.fillSeveralEdits(idItem, 4);
+            //idItem = viewUtils.fillSeveralEdits(idItem, 4);
+            idItem = viewUtils.fillSeveralRadios(idItem);
+
+            idItem = viewUtils.fillSeveralEdits(idItem, 1);
+
+            idItem+=2;
 
             idItem = viewUtils.fillSeveralSwitches(idItem, 1);
 
