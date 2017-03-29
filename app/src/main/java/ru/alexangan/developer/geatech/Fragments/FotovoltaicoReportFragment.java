@@ -2,6 +2,9 @@ package ru.alexangan.developer.geatech.Fragments;
 
 import android.app.Fragment;
 import android.content.Context;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.text.InputType;
 import android.util.Pair;
@@ -203,7 +206,7 @@ public class FotovoltaicoReportFragment extends Fragment
 
             int completionState = DatabaseUtils.getReportInitializationState(id_rapporto_sopralluogo);
 
-            if (completionState == 3)
+            if (completionState == ReportStates.REPORT_COMPLETED)
             {
                 realm.beginTransaction();
 
@@ -250,6 +253,8 @@ public class FotovoltaicoReportFragment extends Fragment
             idItem = viewUtils.fillSeveralRadios(idItem);
 
             idItem = viewUtils.fillSeveralEdits(idItem, 1);
+
+            //final EditText et1FourRadiosAndEdit = viewUtils.getEditTexts().get(idItem - 1);
 
             idItem+=2;
 

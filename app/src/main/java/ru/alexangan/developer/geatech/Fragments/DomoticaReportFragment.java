@@ -181,7 +181,7 @@ public class DomoticaReportFragment extends Fragment
 
             int completionState = DatabaseUtils.getReportInitializationState(id_rapporto_sopralluogo);
 
-            if (completionState == 3)
+            if (completionState == ReportStates.REPORT_COMPLETED)
             {
                 realm.beginTransaction();
 

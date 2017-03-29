@@ -90,10 +90,9 @@ public class NotSentListVisitsFragment extends ListFragment// implements View.On
 
                 if (
                         visitItem.getGeaSopralluogo().getId_sopralluogo() == reportStates.getId_sopralluogo()
-                        && (generalInfoCompletionState == 2)
-                                && (photoAddedNumber >= 3 && reportCompletionState == 3)
+                        && (generalInfoCompletionState == ReportStates.COORDS_SET && photoAddedNumber >= 3 && reportCompletionState == ReportStates.REPORT_COMPLETED)
                         && reportStates.getData_ora_invio_rapporto() == null
-                        )
+                        ) // coords set, photos added, report filled, but have not already sent
                 {
 
                     try

@@ -25,7 +25,15 @@ public class ReportStates extends RealmObject
     private int altitudine;
 
     private int reportCompletionState;
+    public static int REPORT_STATE_INDETERMINATE = -1;
+    public static int REPORT_NON_INITIATED = 0;
+    public static int REPORT_INITIATED = 1;
+    public static int REPORT_PARTIALLY_COMPLETED = 2;
+    public static int REPORT_ALMOST_COMPLETED = 3;
+    public static int REPORT_COMPLETED = 4;
+
     private int generalInfoCompletionState; // data ora appuntamento era inserita
+    public static int COORDS_SET = 2;
 
     private int sendingReportTriesState;
 
@@ -58,6 +66,7 @@ public class ReportStates extends RealmObject
         reportCompletionStatuses.add(new RealmString( "Non iniziato") );
         reportCompletionStatuses.add(new RealmString( "Iniziato") );
         reportCompletionStatuses.add(new RealmString( "Parziamente completato") );
+        reportCompletionStatuses.add(new RealmString( "Quasi completato") );
         reportCompletionStatuses.add(new RealmString( "Completato") );
 
         generalInfoCompletionStatuses = new RealmList<>();
@@ -75,7 +84,7 @@ public class ReportStates extends RealmObject
 
 
         photoAddedNumber = 0;
-        reportCompletionState = 0;
+        reportCompletionState = -1;
         generalInfoCompletionState = 0;
         sendingReportTriesState = 0;
         dataOraUltimoTentativo = "19:00";

@@ -85,12 +85,8 @@ public class ReportsListFragment extends ListFragment
 
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ITALIAN);
 
-            if (
-                    reportStates.getDataOraRaportoCompletato() != null
-                            && reportStates.getData_ora_invio_rapporto() != null
-                    )
+            if (reportStates.getData_ora_invio_rapporto() != null)
             {
-
                 try
                 {
                     Date date = sdf.parse(reportStates.getData_ora_sopralluogo());
@@ -103,7 +99,6 @@ public class ReportsListFragment extends ListFragment
                 }
             }
         }
-
 
         for (Map.Entry entry : unsortedReports.entrySet())
         {

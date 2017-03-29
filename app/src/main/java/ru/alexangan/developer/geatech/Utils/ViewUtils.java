@@ -25,6 +25,7 @@ import ru.alexangan.developer.geatech.Models.GeaItemModelliRapporto;
 import ru.alexangan.developer.geatech.Models.GeaModelloRapporto;
 import ru.alexangan.developer.geatech.Models.GeaSezioneModelliRapporto;
 import ru.alexangan.developer.geatech.Models.ProductData;
+import ru.alexangan.developer.geatech.Models.ReportStates;
 import ru.alexangan.developer.geatech.Models.VisitItem;
 import ru.alexangan.developer.geatech.Models.GeaSopralluogo;
 import ru.alexangan.developer.geatech.R;
@@ -346,13 +347,13 @@ public class ViewUtils
         EditText et4TwoTextsTwoEdits = (EditText) four_texts_four_edits.findViewById(R.id.et4FourTextsFourEdits);
 
         EditTexts.put(idItem, et1TwoTextsTwoEdits);
-        tv1TwoTextsTwoEdits.setText(itemModelli.get(idItem++).getDescrizione_item());
+        tv1TwoTextsTwoEdits.setText(itemModelli.get(idItem++).getValore());
         EditTexts.put(idItem, et2TwoTextsTwoEdits);
-        tv2TwoTextsTwoEdits.setText(itemModelli.get(idItem++).getDescrizione_item());
+        tv2TwoTextsTwoEdits.setText(itemModelli.get(idItem++).getValore());
         EditTexts.put(idItem, et3TwoTextsTwoEdits);
-        tv3TwoTextsTwoEdits.setText(itemModelli.get(idItem++).getDescrizione_item());
+        tv3TwoTextsTwoEdits.setText(itemModelli.get(idItem++).getValore());
         EditTexts.put(idItem, et4TwoTextsTwoEdits);
-        tv4TwoTextsTwoEdits.setText(itemModelli.get(idItem++).getDescrizione_item());
+        tv4TwoTextsTwoEdits.setText(itemModelli.get(idItem++).getValore());
 
         return idItem;
     }
@@ -375,11 +376,11 @@ public class ViewUtils
         EditText et3ThreeTextsThreeEdits = (EditText) three_texts_three_edits.findViewById(R.id.et3ThreeTextsThreeEdits);
 
         EditTexts.put(idItem, et1ThreeTextsThreeEdits);
-        tv1ThreeTextsThreeEdits.setText(itemModelli.get(idItem++).getDescrizione_item());
+        tv1ThreeTextsThreeEdits.setText(itemModelli.get(idItem++).getValore());
         EditTexts.put(idItem, et2ThreeTextsThreeEdits);
-        tv2ThreeTextsThreeEdits.setText(itemModelli.get(idItem++).getDescrizione_item());
+        tv2ThreeTextsThreeEdits.setText(itemModelli.get(idItem++).getValore());
         EditTexts.put(idItem, et3ThreeTextsThreeEdits);
-        tv3ThreeTextsThreeEdits.setText(itemModelli.get(idItem++).getDescrizione_item());
+        tv3ThreeTextsThreeEdits.setText(itemModelli.get(idItem++).getValore());
 
         return idItem;
     }
@@ -402,9 +403,9 @@ public class ViewUtils
         EditText et2TwoTextsTwoEdits = (EditText) two_texts_two_edits.findViewById(R.id.et2TwoTextsTwoEdits);
 
         EditTexts.put(idItem, et1TwoTextsTwoEdits);
-        tv1TwoTextsTwoEdits.setText(itemModelli.get(idItem++).getDescrizione_item());
+        tv1TwoTextsTwoEdits.setText(itemModelli.get(idItem++).getValore());
         EditTexts.put(idItem, et2TwoTextsTwoEdits);
-        tv2TwoTextsTwoEdits.setText(itemModelli.get(idItem++).getDescrizione_item());
+        tv2TwoTextsTwoEdits.setText(itemModelli.get(idItem++).getValore());
 
         return idItem;
     }
@@ -1102,11 +1103,10 @@ public class ViewUtils
         idItem++;
         LinearLayouts.put(idItem, new Pair<>(llEditFourRadiosAndEdit, llEditFourRadiosAndEdit));
         tv1FourRadiosAndEdit.setText(itemModelli.get(idItem).getDescrizione_item());
-        et1FourRadiosAndEdit.setInputType(InputType.TYPE_CLASS_NUMBER);
         et1FourRadiosAndEdit.setText("Non applicabile");
         EditTexts.put(idItem, et1FourRadiosAndEdit);
 
-        idItem+=2;
+        idItem += 2;
 
         return ++idItem;
     }
@@ -2061,9 +2061,33 @@ public class ViewUtils
         al_llSectionHeaders.add(llSecHeaders);
         llSectionHeaders.clear();
 
+        int completionState = DatabaseUtils.getReportInitializationState(id_rapporto_sopralluogo);
+        ArrayList<Integer> notSetItems = DatabaseUtils.getNotSetItems(id_rapporto_sopralluogo);
+
         for (LinearLayout ll : al_llSectionHeaders.get(headerNumber)) // close all sections initially
         {
-            ll.setVisibility(View.GONE);
+            if (completionState == ReportStates.REPORT_ALMOST_COMPLETED && notSetItems != null)
+            {
+                int i;
+                for (i = 0; i < notSetItems.size(); i++)
+                {
+                    LinearLayout llSection = getLinearLayouts().get(notSetItems.get(i)).second;
+
+                    if (ll == llSection)
+                    {
+                        ll.setVisibility(View.VISIBLE);
+                        break;
+                    }
+                }
+
+                if(i == notSetItems.size())
+                {
+                    ll.setVisibility(View.GONE);
+                }
+            } else
+            {
+                ll.setVisibility(View.GONE);
+            }
         }
 
         headerNumber++;
@@ -2103,8 +2127,7 @@ public class ViewUtils
         if (ll.isEnabled() == false)
         {
             str_id_item = "Non applicabile";
-        }
-        else
+        } else
         {
             int checkedBtnId = rg.getCheckedRadioButtonId();
 
@@ -2173,8 +2196,7 @@ public class ViewUtils
         if (ll.isEnabled() == false)
         {
             str_Id_item = "Non applicabile";
-        }
-        else
+        } else
         {
 
             for (int i = 0; i < alChks.size(); i++)

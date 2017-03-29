@@ -502,13 +502,7 @@ public class LoginTechSelectionFragment extends Fragment implements View.OnClick
 
                             //callModels = networkUtils.getData(this, GET_MODELS_URL_SUFFIX, tokenStr);
 
-/*                            if (geaItemModelliSize != 0)
-                            {
-                                //downloadingDialog.dismiss();
-
-                                //loginCommunicator.onTechSelectedAndApplied();
-                            }
-                            else*/
+                            if (geaItemModelliSize == 0)
                             {
                                 callModels = networkUtils.getData(this, GET_MODELS_URL_SUFFIX, tokenStr);
                             }
@@ -597,12 +591,12 @@ public class LoginTechSelectionFragment extends Fragment implements View.OnClick
                     realm.commitTransaction();
 
 
-/*                    if (geaItemModelliSize != 0)
+                    if (geaItemModelliSize != 0)
                     {
                         downloadingDialog.dismiss();
 
                         loginCommunicator.onTechSelectedAndApplied();
-                    }*/
+                    }
                 }
             });
         }

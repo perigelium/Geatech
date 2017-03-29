@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -129,7 +130,8 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
         if (reportStates != null)
         {
             if (visitItem.getGeaSopralluogo().getId_sopralluogo() == reportStates.getId_sopralluogo()
-                    && (reportStates.getGeneralInfoCompletionState() == 2 && reportStates.getReportCompletionState() == 3)
+                    && (reportStates.getGeneralInfoCompletionState() == ReportStates.COORDS_SET
+                    && reportStates.getReportCompletionState() == ReportStates.REPORT_COMPLETED)
                     && reportStates.getPhotoAddedNumber() >= 3) //  && reportStates.getData_ora_invio_rapporto() == null
             {
                 btnSendReportNow.setAlpha(1.0f);

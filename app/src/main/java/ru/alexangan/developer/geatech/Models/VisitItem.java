@@ -29,24 +29,12 @@ public class VisitItem extends RealmObject
         return geaSopralluogo;
     }
 
-    public void setGeaSopralluogo(GeaSopralluogo geaSopralluogo) {
-        this.geaSopralluogo = geaSopralluogo;
-    }
-
     public ClientData getClientData() {
         return clientData;
     }
 
-    public void setClientData(ClientData clientData) {
-        this.clientData = clientData;
-    }
-
     public ProductData getProductData() {
         return productData;
-    }
-
-    public void setProductData(ProductData productData) {
-        this.productData = productData;
     }
 
     public int getId()

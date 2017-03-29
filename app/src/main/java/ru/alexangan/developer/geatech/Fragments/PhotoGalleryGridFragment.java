@@ -503,7 +503,7 @@ public class PhotoGalleryGridFragment extends Fragment
                 }*/
 
                 // or simply copy the original file
-                if (!FileUtils.copyFile(fileSrcImage, fileFullSizeImage))
+                if (fileFullSizeImage.exists() || !FileUtils.copyFile(fileSrcImage, fileFullSizeImage))
                 {
                     showToastMessage(getString(R.string.UnableToAddImage));
                     return null;

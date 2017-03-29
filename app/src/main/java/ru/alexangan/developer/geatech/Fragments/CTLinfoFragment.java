@@ -233,7 +233,7 @@ public class CTLinfoFragment extends Fragment implements View.OnClickListener, L
 
                 if (reportStates != null && reportStates.getLatitudine() != 0 && reportStates.getLongitudine() != 0) // && altitude != -999
                 {
-                    reportStates.setGeneralInfoCompletionState(2);
+                    reportStates.setGeneralInfoCompletionState(ReportStates.COORDS_SET);
                 }
 
                 realm.commitTransaction();

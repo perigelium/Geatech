@@ -1,5 +1,6 @@
 package ru.alexangan.developer.geatech.Utils;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -18,12 +19,42 @@ import static ru.alexangan.developer.geatech.Models.GlobalConstants.selectedTech
 
 public class DatabaseUtils
 {
+    public static ArrayList <Integer> getNotSetItems(int id_rapporto_sopralluogo)
+    {
+        realm.beginTransaction();
+        RealmResults<GeaItemRapporto> geaItemRapportoResults =
+                realm.where(GeaItemRapporto.class).equalTo("id_rapporto_sopralluogo", id_rapporto_sopralluogo).findAll();
+        realm.commitTransaction();
+
+        if(geaItemRapportoResults.size() == 0)
+        {
+            return null;
+        }
+
+        ArrayList <Integer> notSetItems = new ArrayList<>();
+
+        for (GeaItemRapporto geaItemRapporto : geaItemRapportoResults)
+        {
+            if (geaItemRapporto.getValore() == null || geaItemRapporto.getValore().trim().length() == 0)
+            {
+                notSetItems.add(geaItemRapporto.getId_item_modello());
+            }
+        }
+
+        return  notSetItems;
+    }
+
     public static int getReportInitializationState(int id_rapporto_sopralluogo)
     {
         realm.beginTransaction();
         RealmResults<GeaItemRapporto> geaItemRapportoResults =
                 realm.where(GeaItemRapporto.class).equalTo("id_rapporto_sopralluogo", id_rapporto_sopralluogo).findAll();
         realm.commitTransaction();
+
+        if(geaItemRapportoResults.size() == 0)
+        {
+            return ReportStates.REPORT_STATE_INDETERMINATE;
+        }
 
         boolean reportComplete = true;
         int partiallyComplete = 0;
@@ -53,20 +84,25 @@ public class DatabaseUtils
 
         if (reportComplete)
         {
-            return 3;
+            return ReportStates.REPORT_COMPLETED;
         }
 
-        if(partiallyComplete >= (geaItemRapportoResults.size())/2)
+        if(completionPercent > 80)
         {
-            return 2;
+            return ReportStates.REPORT_ALMOST_COMPLETED;
         }
 
-        if (partiallyComplete > 0)
+        if(completionPercent > 50)
         {
-            return 1;
+            return ReportStates.REPORT_PARTIALLY_COMPLETED;
         }
 
-        return 0;
+        if (completionPercent > 0)
+        {
+            return ReportStates.REPORT_INITIATED;
+        }
+
+        return ReportStates.REPORT_NON_INITIATED;
     }
 
     public static void insertStringInReportItem(int id_rapporto_sopralluogo, int idItem, String strData)

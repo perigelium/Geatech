@@ -77,10 +77,8 @@ public class InWorkListVisitsFragment extends ListFragment
 
                 if (visitItem.getGeaSopralluogo().getId_sopralluogo() == reportStates.getId_sopralluogo()
 
-                        && (generalInfoCompletionState == 2) // data and client coords already set
-                        && !(photoAddedNumber >= 3 && reportCompletionState == 3)
-                        && reportStates.getDataOraRaportoCompletato() == null // report not complete
-                        && reportStates.getData_ora_invio_rapporto() == null // report not sent
+                        && (generalInfoCompletionState == ReportStates.COORDS_SET) // data and client coords already set
+                        && reportCompletionState < ReportStates.REPORT_COMPLETED // report not complete
                         )
                 {
 
