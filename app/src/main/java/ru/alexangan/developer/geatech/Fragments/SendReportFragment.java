@@ -142,9 +142,10 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
                 btnSendReportNow.setEnabled(false);
             }
 
+            int reportCompletionState = reportStates.getReportCompletionState();
 
             String generalInfoCompletionState = reportStates.getGeneralInfoCompletionStateString(reportStates.getGeneralInfoCompletionState()).Value();
-            String reportCompletionState = reportStates.getReportCompletionStateString(reportStates.getReportCompletionState()).Value();
+            String strReportCompletionState = reportStates.getReportCompletionStateString(reportCompletionState).Value();
 
             int photoAddedNumber = reportStates.getPhotoAddedNumber();
             String photoAddedNumberStr;
@@ -164,7 +165,7 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
             tvGeneralInfo.setText(generalInfoCompletionState);
 
             TextView tvTecnicalReportState = (TextView) rootView.findViewById(R.id.tvTecnicalReportState);
-            tvTecnicalReportState.setText(reportCompletionState);
+            tvTecnicalReportState.setText(strReportCompletionState);
         }
 
         return rootView;

@@ -345,6 +345,8 @@ public class CaldaiaReportFragment extends Fragment
             idItem = viewUtils.fillSeveralRadiosAndEdit(idItem);
 
             idItem = viewUtils.fillSeveralEdits(idItem, 2);
+
+            viewUtils.collapseSections(id_rapporto_sopralluogo);
         }
     }
 }

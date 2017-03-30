@@ -1,7 +1,6 @@
 package ru.alexangan.developer.geatech.Utils;
 
 import android.graphics.Color;
-import android.graphics.PorterDuff;
 import android.text.InputType;
 import android.util.Pair;
 import android.view.MotionEvent;
@@ -46,8 +45,8 @@ public class ViewUtils
     boolean[] allSectionsCollapsed;
     GeaModelloRapporto geaModello;
     List<GeaSezioneModelliRapporto> geaSezioniModelli;
-    ArrayList<ArrayList<LinearLayout>> al_llSectionHeaders;
-    ArrayList<LinearLayout> llSectionHeaders;
+    ArrayList<ArrayList<LinearLayout>> al_llHeaderSections;
+    ArrayList<LinearLayout> llHeaderSections;
 
     Map<Integer, ImageView> ImageViews;
     Map<Integer, Pair<LinearLayout, LinearLayout>> LinearLayouts;
@@ -75,8 +74,8 @@ public class ViewUtils
         ImageViews = new HashMap<>();
         CheckBoxes = new HashMap<>();
 
-        al_llSectionHeaders = new ArrayList<>();
-        llSectionHeaders = new ArrayList<>();
+        al_llHeaderSections = new ArrayList<>();
+        llHeaderSections = new ArrayList<>();
         allSectionsCollapsed = new boolean[]{true, true, true, true, true, true, true};
 
         VisitItem visitItem = visitItems.get(selectedIndex);
@@ -182,7 +181,7 @@ public class ViewUtils
 
         LinearLayouts.put(idItem, new Pair<>(llHeaderFourChkboxes, llSectionFourChkboxes));
 
-        llSectionHeaders.add(llSectionFourChkboxes);
+        llHeaderSections.add(llSectionFourChkboxes);
 
         llHeaderFourChkboxes.setOnClickListener(new View.OnClickListener()
         {
@@ -288,7 +287,7 @@ public class ViewUtils
 
         LinearLayouts.put(idItem, new Pair<>(llHeaderFiveChkboxes, llSectionFiveChkboxes));
 
-        llSectionHeaders.add(llSectionFiveChkboxes);
+        llHeaderSections.add(llSectionFiveChkboxes);
 
         llHeaderFiveChkboxes.setOnClickListener(new View.OnClickListener()
         {
@@ -332,9 +331,9 @@ public class ViewUtils
         LinearLayout four_texts_four_edits = (LinearLayout) rootView.findViewById(idRes);
         LinearLayout llSectionTwoTextsTwoEdits = (LinearLayout) four_texts_four_edits.findViewById(R.id.llSectionFourTextsFourEdits);
 
-        LinearLayouts.put(idItem, new Pair<>(llSectionTwoTextsTwoEdits, llSectionTwoTextsTwoEdits));
+        LinearLayouts.put(idItem, new Pair<>(four_texts_four_edits, llSectionTwoTextsTwoEdits));
 
-        llSectionHeaders.add(llSectionTwoTextsTwoEdits);
+        llHeaderSections.add(llSectionTwoTextsTwoEdits);
 
         TextView tv1TwoTextsTwoEdits = (TextView) four_texts_four_edits.findViewById(R.id.tv1FourTextsFourEdits);
         TextView tv2TwoTextsTwoEdits = (TextView) four_texts_four_edits.findViewById(R.id.tv2FourTextsFourEdits);
@@ -363,9 +362,9 @@ public class ViewUtils
         LinearLayout three_texts_three_edits = (LinearLayout) rootView.findViewById(idRes);
         LinearLayout llSectionThreeTextsThreeEdits = (LinearLayout) three_texts_three_edits.findViewById(R.id.llSectionThreeTextsThreeEdits);
 
-        LinearLayouts.put(idItem, new Pair<>(llSectionThreeTextsThreeEdits, llSectionThreeTextsThreeEdits));
+        LinearLayouts.put(idItem, new Pair<>(three_texts_three_edits, llSectionThreeTextsThreeEdits));
 
-        llSectionHeaders.add(llSectionThreeTextsThreeEdits);
+        llHeaderSections.add(llSectionThreeTextsThreeEdits);
 
         TextView tv1ThreeTextsThreeEdits = (TextView) three_texts_three_edits.findViewById(R.id.tv1ThreeTextsThreeEdits);
         TextView tv2ThreeTextsThreeEdits = (TextView) three_texts_three_edits.findViewById(R.id.tv2ThreeTextsThreeEdits);
@@ -390,9 +389,9 @@ public class ViewUtils
         LinearLayout two_texts_two_edits = (LinearLayout) rootView.findViewById(idRes);
         LinearLayout llSectionTwoTextsTwoEdits = (LinearLayout) two_texts_two_edits.findViewById(R.id.llSectionTwoTextsTwoEdits);
 
-        LinearLayouts.put(idItem, new Pair<>(llSectionTwoTextsTwoEdits, llSectionTwoTextsTwoEdits));
+        LinearLayouts.put(idItem, new Pair<>(two_texts_two_edits, llSectionTwoTextsTwoEdits));
 
-        llSectionHeaders.add(llSectionTwoTextsTwoEdits);
+        llHeaderSections.add(llSectionTwoTextsTwoEdits);
 
         TextView tv1TwoTextsTwoEdits = (TextView) two_texts_two_edits.findViewById(R.id.tv1TwoTextsTwoEdits);
 
@@ -422,7 +421,7 @@ public class ViewUtils
 
         LinearLayouts.put(idItem, new Pair<>(llHeaderThreeChkboxesAndEdit, llSectionThreeChkboxesAndEdit));
 
-        llSectionHeaders.add(llSectionThreeChkboxesAndEdit);
+        llHeaderSections.add(llSectionThreeChkboxesAndEdit);
 
         final ImageView ivArrowThreeChkboxesAndEdit = (ImageView) three_chkboxes_and_edit.findViewById(R.id.ivArrowThreeChkboxesAndEdit);
 
@@ -533,7 +532,7 @@ public class ViewUtils
 
         LinearLayouts.put(idItem, new Pair<>(llHeaderChkboxAndEdit, llSectionChkboxAndEdit));
 
-        llSectionHeaders.add(llSectionChkboxAndEdit);
+        llHeaderSections.add(llSectionChkboxAndEdit);
 
         final ImageView ivArrowChkboxAndEdit = (ImageView) chkbox_and_edit.findViewById(R.id.ivArrowChkboxAndEdit);
 
@@ -610,7 +609,7 @@ public class ViewUtils
 
         LinearLayouts.put(idItem, new Pair<>(llHeaderSwitchAndEdit, llSectionSwitchAndEdit));
 
-        llSectionHeaders.add(llSectionSwitchAndEdit);
+        llHeaderSections.add(llSectionSwitchAndEdit);
 
         final ImageView ivArrowSwitchAndEdit = (ImageView) switch_and_edit.findViewById(R.id.ivArrowSwitchAndEdit);
 
@@ -676,7 +675,7 @@ public class ViewUtils
 
         LinearLayouts.put(idItem, new Pair<>(llHeaderTwoSwitches, llSectionTwoSwitches));
 
-        llSectionHeaders.add(llSectionTwoSwitches);
+        llHeaderSections.add(llSectionTwoSwitches);
 
         final ImageView ivArrowTwoSwitches = (ImageView) two_switches.findViewById(R.id.ivArrowTwoSwitches);
 
@@ -733,7 +732,7 @@ public class ViewUtils
 
         LinearLayouts.put(idItem, new Pair<>(llHeaderTwoSwitchesAndEdit, llSectionTwoSwitchesAndEdit));
 
-        llSectionHeaders.add(llSectionTwoSwitchesAndEdit);
+        llHeaderSections.add(llSectionTwoSwitchesAndEdit);
 
         final ImageView ivArrowTwoSwitchesAndEdit = (ImageView) two_switches_and_edit.findViewById(R.id.ivArrowTwoSwitchesAndEdit);
 
@@ -822,7 +821,7 @@ public class ViewUtils
 
         LinearLayouts.put(idItem, new Pair<>(llHeaderSwitch, llSectionSwitch));
 
-        llSectionHeaders.add(llSectionSwitch);
+        llHeaderSections.add(llSectionSwitch);
 
         final ImageView ivArrowSwitch = (ImageView) switch_.findViewById(R.id.ivArrowSwitch);
 
@@ -861,7 +860,7 @@ public class ViewUtils
 
         LinearLayouts.put(idItem, new Pair<>(llHeaderFiveSwitches, llSectionFiveSwitches));
 
-        llSectionHeaders.add(llSectionFiveSwitches);
+        llHeaderSections.add(llSectionFiveSwitches);
 
         final ImageView ivArrowFiveSwitches = (ImageView) five_switches.findViewById(R.id.ivArrowFiveSwitches);
 
@@ -937,7 +936,7 @@ public class ViewUtils
 
         LinearLayouts.put(idItem, new Pair<>(llHeaderFiveRadios, llSectionFiveRadios));
 
-        llSectionHeaders.add(llSectionFiveRadios);
+        llHeaderSections.add(llSectionFiveRadios);
 
         llHeaderFiveRadios.setOnClickListener(new View.OnClickListener()
         {
@@ -987,7 +986,7 @@ public class ViewUtils
 
         LinearLayouts.put(idItem, new Pair<>(llHeaderFourRadios, llSectionFourRadios));
 
-        llSectionHeaders.add(llSectionFourRadios);
+        llHeaderSections.add(llSectionFourRadios);
 
         llHeaderFourRadios.setOnClickListener(new View.OnClickListener()
         {
@@ -1036,7 +1035,7 @@ public class ViewUtils
 
         LinearLayouts.put(idItem, new Pair<>(llHeaderFourRadiosAndEdit, llSectionFourRadiosAndEdit));
 
-        llSectionHeaders.add(llSectionFourRadiosAndEdit);
+        llHeaderSections.add(llSectionFourRadiosAndEdit);
 
         llHeaderFourRadiosAndEdit.setOnClickListener(new View.OnClickListener()
         {
@@ -1128,7 +1127,7 @@ public class ViewUtils
 
         LinearLayouts.put(idItem, new Pair<>(llHeaderThreeRadiosAndEdit, llSectionThreeRadiosAndEdit));
 
-        llSectionHeaders.add(llSectionThreeRadiosAndEdit);
+        llHeaderSections.add(llSectionThreeRadiosAndEdit);
 
         llHeaderThreeRadiosAndEdit.setOnClickListener(new View.OnClickListener()
         {
@@ -1219,7 +1218,7 @@ public class ViewUtils
 
         LinearLayouts.put(idItem, new Pair<>(llHeaderThreeRadiosAndEdit, llSectionThreeRadiosAndEdit));
 
-        llSectionHeaders.add(llSectionThreeRadiosAndEdit);
+        llHeaderSections.add(llSectionThreeRadiosAndEdit);
 
         llHeaderThreeRadiosAndEdit.setOnClickListener(new View.OnClickListener()
         {
@@ -1298,7 +1297,7 @@ public class ViewUtils
 
         LinearLayouts.put(idItem, new Pair<>(llHeaderThreeRadiosAndEdit, llSectionThreeRadiosAndEdit));
 
-        llSectionHeaders.add(llSectionThreeRadiosAndEdit);
+        llHeaderSections.add(llSectionThreeRadiosAndEdit);
 
         llHeaderThreeRadiosAndEdit.setOnClickListener(new View.OnClickListener()
         {
@@ -1372,7 +1371,7 @@ public class ViewUtils
 
         LinearLayouts.put(idItem, new Pair<>(llHeaderFourRadiosAndSwitch, llSectionFourRadiosAndSwitch));
 
-        llSectionHeaders.add(llSectionFourRadiosAndSwitch);
+        llHeaderSections.add(llSectionFourRadiosAndSwitch);
 
         llHeaderFourRadiosAndSwitch.setOnClickListener(new View.OnClickListener()
         {
@@ -1431,7 +1430,7 @@ public class ViewUtils
 
         LinearLayouts.put(idItem, new Pair<>(llHeaderTwoRadiosAndSwitch, llSectionTwoRadiosAndSwitch));
 
-        llSectionHeaders.add(llSectionTwoRadiosAndSwitch);
+        llHeaderSections.add(llSectionTwoRadiosAndSwitch);
 
         llHeaderTwoRadiosAndSwitch.setOnClickListener(new View.OnClickListener()
         {
@@ -1490,7 +1489,7 @@ public class ViewUtils
 
         LinearLayouts.put(idItem, new Pair<>(llHeaderTwoRadiosAndEdit, llSectionTwoRadiosAndEdit));
 
-        llSectionHeaders.add(llSectionTwoRadiosAndEdit);
+        llHeaderSections.add(llSectionTwoRadiosAndEdit);
 
         llHeaderTwoRadiosAndEdit.setOnClickListener(new View.OnClickListener()
         {
@@ -1563,7 +1562,7 @@ public class ViewUtils
 
         LinearLayouts.put(idItem, new Pair<>(llHeaderThreeRadios, llSectionThreeRadios));
 
-        llSectionHeaders.add(llSectionThreeRadios);
+        llHeaderSections.add(llSectionThreeRadios);
 
         llHeaderThreeRadios.setOnClickListener(new View.OnClickListener()
         {
@@ -1612,7 +1611,7 @@ public class ViewUtils
 
         LinearLayouts.put(idItem, new Pair<>(llHeaderTwoRadios, llSectionTwoRadios));
 
-        llSectionHeaders.add(llSectionTwoRadios);
+        llHeaderSections.add(llSectionTwoRadios);
 
         llHeaderTwoRadios.setOnClickListener(new View.OnClickListener()
         {
@@ -1662,7 +1661,7 @@ public class ViewUtils
 
         LinearLayouts.put(idItem, new Pair<>(llHeaderFourRadiosAndTwoEdits, llSectionFourRadiosAndTwoEdits));
 
-        llSectionHeaders.add(llSectionFourRadiosAndTwoEdits);
+        llHeaderSections.add(llSectionFourRadiosAndTwoEdits);
 
         llHeaderFourRadiosAndTwoEdits.setOnClickListener(new View.OnClickListener()
         {
@@ -1748,7 +1747,7 @@ public class ViewUtils
 
         LinearLayouts.put(idItem, new Pair<>(llHeaderFourRadiosAndEdit, llSectionFourRadiosAndEdit));
 
-        llSectionHeaders.add(llSectionFourRadiosAndEdit);
+        llHeaderSections.add(llSectionFourRadiosAndEdit);
 
         llHeaderFourRadiosAndEdit.setOnClickListener(new View.OnClickListener()
         {
@@ -1823,7 +1822,7 @@ public class ViewUtils
 
         LinearLayouts.put(idItem, new Pair<>(llHeaderTwoEdits, llSectionTwoEdits));
 
-        llSectionHeaders.add(llSectionTwoEdits);
+        llHeaderSections.add(llSectionTwoEdits);
 
         final ImageView ivArrowTwoEdits = (ImageView) two_edits.findViewById(R.id.ivArrowTwoEdits);
 
@@ -1875,7 +1874,7 @@ public class ViewUtils
 
         LinearLayouts.put(idItem, new Pair<>(llHeaderThreeEdits, llSectionThreeEdits));
 
-        llSectionHeaders.add(llSectionThreeEdits);
+        llHeaderSections.add(llSectionThreeEdits);
 
         final ImageView ivArrowThreeEdits = (ImageView) three_edits.findViewById(R.id.ivArrowThreeEdits);
 
@@ -1932,7 +1931,7 @@ public class ViewUtils
 
         LinearLayouts.put(idItem, new Pair<>(llHeaderFourEditsAndSwitch, llSectionFourEditsAndSwitch));
 
-        llSectionHeaders.add(llSectionFourEditsAndSwitch);
+        llHeaderSections.add(llSectionFourEditsAndSwitch);
 
         final ImageView ivArrowFourEditsAndSwitch = (ImageView) four_edits_and_switch.findViewById(R.id.ivArrowFourEditsAndSwitch);
 
@@ -1998,7 +1997,7 @@ public class ViewUtils
 
         final LinearLayout llSectionEdit = (LinearLayout) ll_edit.findViewById(R.id.llSectionEdit);
 
-        llSectionHeaders.add(llSectionEdit);
+        llHeaderSections.add(llSectionEdit);
 
         LinearLayouts.put(idItem, new Pair<>(llHeaderEdit, llSectionEdit));
 
@@ -2041,7 +2040,7 @@ public class ViewUtils
             @Override
             public void onClick(View view)
             {
-                for (LinearLayout ll : al_llSectionHeaders.get(curHeader))
+                for (LinearLayout ll : al_llHeaderSections.get(curHeader))
                 {
                     ll.setVisibility(!allSectionsCollapsed[curHeader] ? View.GONE : View.VISIBLE);
                 }
@@ -2057,30 +2056,54 @@ public class ViewUtils
         tvSectionHeader.setText((headerNumber + 1) + ". " + geaSezioniModelli.get(headerNumber).getDescrizione_sezione());
 
         ArrayList<LinearLayout> llSecHeaders = new ArrayList<>();
-        llSecHeaders.addAll(llSectionHeaders);
-        al_llSectionHeaders.add(llSecHeaders);
-        llSectionHeaders.clear();
+        llSecHeaders.addAll(llHeaderSections);
+        al_llHeaderSections.add(llSecHeaders);
+        llHeaderSections.clear();
 
-        int completionState = DatabaseUtils.getReportInitializationState(id_rapporto_sopralluogo);
+/*        int completionState = DatabaseUtils.getReportInitializationState(id_rapporto_sopralluogo);
         ArrayList<Integer> notSetItems = DatabaseUtils.getNotSetItems(id_rapporto_sopralluogo);
 
-        for (LinearLayout ll : al_llSectionHeaders.get(headerNumber)) // close all sections initially
+        for (LinearLayout ll : al_llHeaderSections.get(headerNumber)) // close all sections initially
         {
             if (completionState == ReportStates.REPORT_ALMOST_COMPLETED && notSetItems != null)
             {
                 int i;
                 for (i = 0; i < notSetItems.size(); i++)
                 {
-                    LinearLayout llSection = getLinearLayouts().get(notSetItems.get(i)).second;
+                    LinearLayout llSection = null;
+                    Pair<LinearLayout, LinearLayout> llSections = null;
+                    int itemId = notSetItems.get(i);
 
-                    if (ll == llSection)
+                    do
+                    {
+                        llSections = getLinearLayouts().get(itemId);
+                        itemId--;
+                    } while (llSections == null);
+
+                    LinearLayout llSection1 = llSections.second;
+                    LinearLayout llSection0 = llSections.first;
+
+                    if (llSection1.equals(llSection0))
+                    {
+                        Pair<LinearLayout, LinearLayout> llpreviousSections = getLinearLayouts().get(itemId);
+
+                        if (llpreviousSections != null)
+                        {
+                            llSection = llpreviousSections.second;
+                        }
+                    } else
+                    {
+                        llSection = llSection1;
+                    }
+
+                    if (ll.equals(llSection))
                     {
                         ll.setVisibility(View.VISIBLE);
                         break;
                     }
                 }
 
-                if(i == notSetItems.size())
+                if (i == notSetItems.size())
                 {
                     ll.setVisibility(View.GONE);
                 }
@@ -2088,9 +2111,73 @@ public class ViewUtils
             {
                 ll.setVisibility(View.GONE);
             }
-        }
+        }*/
 
         headerNumber++;
+    }
+
+    public void collapseSections(int id_rapporto_sopralluogo)
+    {
+        int completionState = DatabaseUtils.getReportInitializationState(id_rapporto_sopralluogo);
+        ArrayList<Integer> notSetItems = DatabaseUtils.getNotSetItems(id_rapporto_sopralluogo);
+
+        for (int k = 0; k < headerNumber; k++)
+        {
+            for (LinearLayout ll : al_llHeaderSections.get(k)) // close all sections initially
+            {
+                if (completionState == ReportStates.REPORT_ALMOST_COMPLETED && notSetItems != null)
+                {
+                    int i;
+                    for (i = 0; i < notSetItems.size(); i++)
+                    {
+                        LinearLayout llSection = null;
+                        Pair<LinearLayout, LinearLayout> llSections = null;
+                        int itemId = notSetItems.get(i);
+
+                        //llSections = getLinearLayouts().get(itemId);
+
+                        do
+                        {
+                            llSections = getLinearLayouts().get(itemId);
+                            itemId--;
+                        } while (llSections == null && itemId != -1);
+
+                        if(llSections != null)
+                        {
+                            LinearLayout llSection1 = llSections.second;
+                            LinearLayout llSection0 = llSections.first;
+
+                            if (llSection1.equals(llSection0))
+                            {
+                                Pair<LinearLayout, LinearLayout> llpreviousSections = getLinearLayouts().get(itemId);
+
+                                if (llpreviousSections != null)
+                                {
+                                    llSection = llpreviousSections.second;
+                                }
+                            } else
+                            {
+                                llSection = llSection1;
+                            }
+
+                            if (ll.equals(llSection))
+                            {
+                                ll.setVisibility(View.VISIBLE);
+                                break;
+                            }
+                        }
+                    }
+
+                    if (i == notSetItems.size())
+                    {
+                        ll.setVisibility(View.GONE);
+                    }
+                } else
+                {
+                    ll.setVisibility(View.GONE);
+                }
+            }
+        }
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////

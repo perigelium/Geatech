@@ -188,14 +188,13 @@ public class FotovoltaicoReportFragment extends Fragment
             idItem = viewUtils.saveSeveralRadios(idItem);
 
             idItem = viewUtils.saveSeveralRadios(idItem);
-
             idItem = viewUtils.saveSeveralEdits(idItem, 1);
 
             idItem = viewUtils.saveSeveralRadios(idItem);
 
             idItem = viewUtils.saveSeveralSwitches(idItem, 2);
-
             idItem = viewUtils.saveSeveralEdits(idItem, 1);
+
 
             idItem = viewUtils.saveSeveralEdits(idItem, 2);
 
@@ -263,7 +262,6 @@ public class FotovoltaicoReportFragment extends Fragment
             idItem = viewUtils.fillSeveralRadios(idItem);
 
             idItem = viewUtils.fillSeveralRadios(idItem);
-
             idItem = viewUtils.fillSeveralEdits(idItem, 1);
 
             final RadioGroup rg1ThreeRadiosAndEdit = viewUtils.getRadioGroups().get(idItem - 2);
@@ -276,12 +274,10 @@ public class FotovoltaicoReportFragment extends Fragment
                 {
                     llEditThreeRadiosAndEdit.setVisibility(View.VISIBLE);
                     llEditThreeRadiosAndEdit.setEnabled(true);
-                    et1ThreeRadiosAndEdit.setText("");
                 } else
                 {
                     llEditThreeRadiosAndEdit.setVisibility(View.GONE);
                     llEditThreeRadiosAndEdit.setEnabled(false);
-                    et1ThreeRadiosAndEdit.setText("Non applicabile");
                 }
 
                 RadioButton rb = (RadioButton) rg1ThreeRadiosAndEdit.getChildAt(i);
@@ -304,13 +300,11 @@ public class FotovoltaicoReportFragment extends Fragment
                         }
                     }
                 });
-
             }
 
             idItem = viewUtils.fillSeveralRadios(idItem);
 
             idItem = viewUtils.fillSeveralSwitches(idItem, 2);
-
             idItem = viewUtils.fillSeveralEdits(idItem, 1);
 
             final EditText et3 = viewUtils.getEditTexts().get(idItem - 1);
@@ -350,6 +344,8 @@ public class FotovoltaicoReportFragment extends Fragment
             idItem = viewUtils.fillSeveralEdits(idItem, 2);
 
             idItem = viewUtils.fillSeveralSwitches(idItem, 5);
+
+            viewUtils.collapseSections(id_rapporto_sopralluogo);
         }
     }
 

@@ -38,15 +38,17 @@ public class LocationRetriever implements ConnectionCallbacks, OnConnectionFaile
     private LocationRequest mLocationRequest;
 
     // Location updates intervals in sec
-    private static int UPDATE_INTERVAL = 60000; // 5 sec
+    private static int UPDATE_INTERVAL = 15000; // 30 sec
     private static int FASTEST_INTERVAL = 1000; // 1 sec
     private static int DISPLACEMENT = 0; // 1 meter
-    private static int EXPIRATION_DURATION = 60000;
-    private static int MAXWAITTIME = 60000;
+    private static int EXPIRATION_DURATION = 15000;
+    private static int MAXWAITTIME = 15000;
 
     Activity activity;
 
     private LocationRetrievedEvents callback;
+    Handler handler;
+    Runnable runnable;
 
     private int PERMISSION_REQUEST_CODE = 11;
 
@@ -100,7 +102,7 @@ public class LocationRetriever implements ConnectionCallbacks, OnConnectionFaile
         mLocationRequest = new LocationRequest();
         mLocationRequest.setInterval(UPDATE_INTERVAL);
         mLocationRequest.setFastestInterval(FASTEST_INTERVAL);
-        mLocationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
+        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
         mLocationRequest.setSmallestDisplacement(DISPLACEMENT);
         mLocationRequest.setExpirationDuration(EXPIRATION_DURATION);
         mLocationRequest.setMaxWaitTime(MAXWAITTIME);
@@ -125,16 +127,17 @@ public class LocationRetriever implements ConnectionCallbacks, OnConnectionFaile
         }
         LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
 
-        final Handler handler = new Handler();
-        handler.postDelayed(new Runnable()
+        handler = new Handler();
+        runnable = new Runnable()
         {
             @Override
             public void run()
             {
-                callback.onLocationReceived();
                 stopLocationUpdates();
+                callback.onLocationReceived();
             }
-        }, 30000);
+        };
+        handler.postDelayed(runnable, MAXWAITTIME);
     }
 
     protected void stopLocationUpdates()
@@ -162,6 +165,7 @@ public class LocationRetriever implements ConnectionCallbacks, OnConnectionFaile
             mLastLocation = location;
 
             stopLocationUpdates();
+            handler.removeCallbacks(runnable);
             callback.onLocationReceived();
         }
     }

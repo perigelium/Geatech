@@ -233,6 +233,7 @@ public class DomoticaReportFragment extends Fragment
             final Switch sw = viewUtils.getSwitches().get(idItem-2);
             final LinearLayout llEdit = viewUtils.getLinearLayouts().get(idItem-1).first;
             final EditText et3 = viewUtils.getEditTexts().get(idItem-1);
+            et3.setInputType(InputType.TYPE_CLASS_NUMBER);
 
             if(sw.isChecked())
             {
@@ -266,6 +267,8 @@ public class DomoticaReportFragment extends Fragment
             });
 
             idItem = viewUtils.fillSeveralEdits(idItem, 3);
+
+            viewUtils.collapseSections(id_rapporto_sopralluogo);
         }
     }
 

@@ -198,6 +198,8 @@ public class ClimatizzazioneReportFragment extends Fragment
             idItem = viewUtils.fillSeveralChkboxesAndEdit(idItem);
 
             idItem = viewUtils.fillSeveralEdits(idItem, 3);
+
+            viewUtils.collapseSections(id_rapporto_sopralluogo);
         }
     }
 

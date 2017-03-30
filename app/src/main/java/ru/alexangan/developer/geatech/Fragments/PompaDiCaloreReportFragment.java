@@ -401,6 +401,8 @@ public class PompaDiCaloreReportFragment extends Fragment
             idItem = viewUtils.fillSeveralRadios(idItem);
 
             idItem = viewUtils.fillSeveralRadios(idItem);
+
+            viewUtils.collapseSections(id_rapporto_sopralluogo);
         }
     }
 }

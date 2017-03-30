@@ -274,6 +274,8 @@ public class StorageReportFragment extends Fragment
             idItem = viewUtils.fillSeveralEdits(idItem, 4);
 
             idItem = viewUtils.fillSeveralSwitches(idItem, 5);
+
+            viewUtils.collapseSections(id_rapporto_sopralluogo);
         }
     }
 }

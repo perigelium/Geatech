@@ -16,6 +16,9 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -45,6 +48,7 @@ import ru.alexangan.developer.geatech.R;
 
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.SEND_DATA_URL_SUFFIX;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.company_id;
+import static ru.alexangan.developer.geatech.Models.GlobalConstants.listVisitsIsObsolete;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.realm;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.selectedTech;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.tokenStr;
@@ -68,6 +72,7 @@ public class NotSentListVisitsAdapter extends BaseAdapter implements Callback
     List<Call> callSendImagesList;
     ViewHolder mViewHolder;
     ArrayList<Boolean> alReportSent;
+    int objectsSentSuccessfully;
 
     public NotSentListVisitsAdapter(Activity activity, int layout_id, ArrayList<VisitItem> objects)
     {
@@ -201,6 +206,7 @@ public class NotSentListVisitsAdapter extends BaseAdapter implements Callback
 
                 notifyDataSetChanged();
 
+                objectsSentSuccessfully = 0;
                 sendReportItem(position);
             }
         });
@@ -336,7 +342,92 @@ public class NotSentListVisitsAdapter extends BaseAdapter implements Callback
     @Override
     public void onResponse(Call call, Response response) throws IOException
     {
-        if (callSendImagesList != null)
+        for (int i = 0; i < callSendImagesList.size(); i++)
+        {
+            if (call == callSendImagesList.get(i))
+            {
+                reportSendResponse = response.body().string();
+
+                response.body().close();
+
+                JSONObject jsonObject;
+
+                try
+                {
+                    jsonObject = new JSONObject(reportSendResponse);
+
+                    if (jsonObject.has("success"))
+                    {
+
+                        final String strSuccess ;
+                        try
+                        {
+                            strSuccess = jsonObject.getString("success");
+
+                            if (strSuccess.equals("0"))
+                            {
+
+                            }
+                            else
+                            {
+                                objectsSentSuccessfully++;
+
+                                if (objectsSentSuccessfully != 0 && objectsSentSuccessfully == callSendImagesList.size())
+                                {
+                                    activity.runOnUiThread(new Runnable()
+                                    {
+                                        public void run()
+                                        {
+                                            Calendar calendarNow = Calendar.getInstance();
+                                            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
+                                            String strDateTime = sdf.format(calendarNow.getTime());
+
+                                            realm.beginTransaction();
+                                            //sentVisitItems.add(visitItems.get(selectedIndex));
+                                            reportStates.setData_ora_invio_rapporto(strDateTime);
+                                            realm.commitTransaction();
+
+                                            requestServerDialog.dismiss();
+
+                                            Toast.makeText(activity, R.string.ReportSent, Toast.LENGTH_LONG).show();
+
+                                            listVisitsIsObsolete = true;
+                                        }
+                                    });
+                                }
+                            }
+                        } catch (JSONException e)
+                        {
+                            activity.runOnUiThread(new Runnable()
+                            {
+                                public void run()
+                                {
+                                    enableInput();
+                                }
+                            });
+                            e.printStackTrace();
+                        }
+                    }
+                } catch (JSONException e)
+                {
+                    activity.runOnUiThread(new Runnable()
+                    {
+                        public void run()
+                        {
+                            enableInput();
+                        }
+                    });
+                    e.printStackTrace();
+                }
+
+                break;
+
+                //showToastMessage("Immagine " + i + " inviato"); //, server ritorna: " + reportSendResponse
+                //Log.d("DEBUG", "image " + i + ", server returned:" + reportSendResponse);
+            }
+        }
+
+/*        if (callSendImagesList != null)
         {
             for (int i = 0; i < callSendImagesList.size(); i++)
             {
@@ -344,7 +435,7 @@ public class NotSentListVisitsAdapter extends BaseAdapter implements Callback
                 {
                     reportSendResponse = response.body().string();
 
-                    showToastMessage("Immagine " + i + " inviato"); //, server ritorna: " + reportSendResponse
+                    //showToastMessage("Immagine " + i + " inviato"); //, server ritorna: " + reportSendResponse
                     ////Log.d("DEBUG", "image " + i + ", server returned:" + reportSendResponse);
                 }
             }
@@ -356,7 +447,7 @@ public class NotSentListVisitsAdapter extends BaseAdapter implements Callback
                     requestServerDialog.dismiss();
                 }
             });
-        }
+        }*/
 
         if (call == callSendReport)
         {
@@ -367,7 +458,7 @@ public class NotSentListVisitsAdapter extends BaseAdapter implements Callback
             {
                 public void run()
                 {
-                    Toast.makeText(activity, "Rapporto inviato", Toast.LENGTH_LONG).show(); // , server ritorna: " + reportSendResponse
+                    //Toast.makeText(activity, "Rapporto inviato", Toast.LENGTH_LONG).show(); // , server ritorna: " + reportSendResponse
 
                     Calendar calendarNow = Calendar.getInstance();
                     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);

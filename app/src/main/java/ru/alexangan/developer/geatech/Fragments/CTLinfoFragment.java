@@ -30,6 +30,7 @@ import java.util.Locale;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
+import ru.alexangan.developer.geatech.Activities.MainActivity;
 import ru.alexangan.developer.geatech.Interfaces.Communicator;
 import ru.alexangan.developer.geatech.Interfaces.LocationRetrievedEvents;
 import ru.alexangan.developer.geatech.Models.ClientData;
@@ -147,7 +148,7 @@ public class CTLinfoFragment extends Fragment implements View.OnClickListener, L
                 longitude = reportStates.getLongitudine();
             }
 
-            if (reportStates.getAltitudine() != 0)
+            if (reportStates.getAltitudine() != -999)
             {
                 altitude = reportStates.getAltitudine();
             }
@@ -160,6 +161,10 @@ public class CTLinfoFragment extends Fragment implements View.OnClickListener, L
             if (altitude != -999)
             {
                 etAltitude.setText(String.valueOf(altitude));
+            }
+            else
+            {
+                etAltitude.setText("Sconosciuto");
             }
         }
 
@@ -382,13 +387,16 @@ public class CTLinfoFragment extends Fragment implements View.OnClickListener, L
 
     private void showToastMessage(final String msg)
     {
-        activity.runOnUiThread(new Runnable()
+        if(this.isAdded())
         {
-            public void run()
+            activity.runOnUiThread(new Runnable()
             {
-                Toast.makeText(activity, msg, Toast.LENGTH_LONG).show();
-            }
-        });
+                public void run()
+                {
+                    Toast.makeText(activity, msg, Toast.LENGTH_LONG).show();
+                }
+            });
+        }
     }
 
     @TargetApi(Build.VERSION_CODES.M)

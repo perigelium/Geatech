@@ -46,6 +46,7 @@ public class ReportStates extends RealmObject
     private String nome_tecnico;
     private String note_tecnico;
     private int photoAddedNumber; // immagini numero
+    public static int PHOTOS_MIN_ADDED = 3;
 
     private RealmList<RealmString> reportCompletionStatuses;
     private RealmList<RealmString> generalInfoCompletionStatuses;
