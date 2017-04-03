@@ -5,7 +5,7 @@
     <string name="InstallMapApp">Manca un\'applicazione mappe</string>
     <string name="FailedToGetCoords">Non riuscito</string>
     <string name="Saved">Salvato</string>
-    <string name="DownloadingDataPleaseWait">Download in corso, attendere...</string>
+    <string name="DownloadingDataPleaseWait">Elenco aggiornamento in corso, attendere...</string>
     <string name="SetDateTimeFailed">Impostazione data e ora non riuscita</string>
     <string name="TransmittingDataPleaseWait">Trasmissione dati in corso, attendere...</string>
     <string name="CheckInternetConnection">Verifica connessione internet</string>

@@ -336,6 +336,9 @@ public class PompaDiCaloreReportFragment extends Fragment
 
             idItem = viewUtils.fillSeveralEdits(idItem, 4);
 
+            final EditText et3 = viewUtils.getEditTexts().get(idItem-2);
+            et3.setInputType(InputType.TYPE_CLASS_TEXT);
+
             idItem = viewUtils.fillSeveralRadios(idItem);
 
             idItem = viewUtils.fillSeveralRadios(idItem);
@@ -347,8 +350,8 @@ public class PompaDiCaloreReportFragment extends Fragment
             idItem = viewUtils.fillSeveralSwitches(idItem, 1);
             idItem = viewUtils.fillSeveralEdits(idItem, 1);
 
-            final EditText et3 = viewUtils.getEditTexts().get(idItem-1);
-            et3.setInputType(InputType.TYPE_CLASS_NUMBER);
+            final EditText et4 = viewUtils.getEditTexts().get(idItem-1);
+            et4.setInputType(InputType.TYPE_CLASS_NUMBER);
             final Switch sw1 = viewUtils.getSwitches().get(idItem-2);
             final LinearLayout llEdit1 = viewUtils.getLinearLayouts().get(idItem-1).first;
 
@@ -372,13 +375,13 @@ public class PompaDiCaloreReportFragment extends Fragment
                     {
                         llEdit1.setVisibility(View.VISIBLE);
                         llEdit1.setEnabled(true);
-                        et3.setText("");
+                        et4.setText("");
                     }
                     else
                     {
                         llEdit1.setVisibility(View.GONE);
                         llEdit1.setEnabled(false);
-                        et3.setText("Non applicabile");
+                        et4.setText("Non applicabile");
                     }
                 }
             });

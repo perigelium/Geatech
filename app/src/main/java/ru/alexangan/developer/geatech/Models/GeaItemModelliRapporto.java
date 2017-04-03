@@ -34,4 +34,9 @@ public class GeaItemModelliRapporto extends RealmObject
     {
         return valore;
     }
+
+    public int getId_sezione()
+    {
+        return id_sezione;
+    }
 }

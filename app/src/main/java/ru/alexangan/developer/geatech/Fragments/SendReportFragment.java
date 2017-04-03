@@ -70,6 +70,7 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
     private ProgressDialog requestServerDialog;
     int objectsSentSuccessfully;
     AlertDialog alert;
+    int id_rapporto_sopralluogo;
 
     public SendReportFragment()
     {
@@ -185,9 +186,6 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
 
             objectsSentSuccessfully = 0;
             sendReportItem(selectedIndex);
-
-            //mCommunicator.onSendReportReturned();
-
         }
     }
 
@@ -210,7 +208,7 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
 
         ReportStates reportStates = realm.where(ReportStates.class).equalTo("company_id", company_id).equalTo("tech_id", selectedTech.getId())
                 .equalTo("id_sopralluogo", idSopralluogo).findFirst();
-        int id_rapporto_sopralluogo = reportStates.getId_rapporto_sopralluogo();
+        id_rapporto_sopralluogo = reportStates.getId_rapporto_sopralluogo();
 
         ReportStates reportStatesUnmanaged = realm.copyFromRealm(reportStates);
         String strReportStatesUnmanaged = gson.toJson(reportStatesUnmanaged);
@@ -404,7 +402,7 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
                                             Toast.makeText(activity, R.string.ReportSent, Toast.LENGTH_LONG).show();
 
                                             listVisitsIsObsolete = true;
-                                            mCommunicator.onDetailedReportReturned();
+                                            mCommunicator.onSendReportReturned(id_rapporto_sopralluogo);
                                         }
                                     });
                                 }

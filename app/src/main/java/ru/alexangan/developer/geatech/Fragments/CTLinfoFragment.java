@@ -93,42 +93,9 @@ public class CTLinfoFragment extends Fragment implements View.OnClickListener, L
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+    public void onResume()
     {
-        View rootView = inflater.inflate(R.layout.ctl_info_fragment, container, false);
-
-        btnGetCurrentCoords = (Button) rootView.findViewById(R.id.btnGetCurrentCoords);
-        btnSaveCoords = (Button) rootView.findViewById(R.id.btnSaveCoords);
-
-        btnGetCurrentCoords.setOnClickListener(this);
-        btnSaveCoords.setOnClickListener(this);
-
-        etCoordNord = (EditText) rootView.findViewById(R.id.etCoordNord);
-        etCoordEst = (EditText) rootView.findViewById(R.id.etCoordEst);
-        etAltitude = (EditText) rootView.findViewById(R.id.etAltitude);
-
-
-        VisitItem visitItem = visitItems.get(selectedIndex);
-        clientData = visitItem.getClientData();
-        GeaSopralluogo geaSopralluogo = visitItem.getGeaSopralluogo();
-        int idSopralluogo = geaSopralluogo.getId_sopralluogo();
-
-        realm.beginTransaction();
-        reportStates = realm.where(ReportStates.class).equalTo("company_id", company_id).equalTo("tech_id", selectedTech.getId())
-                .equalTo("id_sopralluogo", idSopralluogo).findFirst();
-        realm.commitTransaction();
-
-        TextView clientNameTextView = (TextView) rootView.findViewById(R.id.tvClientName);
-        clientNameTextView.setText(clientData.getName());
-
-        TextView clientPhoneTextView = (TextView) rootView.findViewById(R.id.tvClientPhone);
-        clientPhoneTextView.setText(clientData.getMobile());
-
-        TextView clientAddressTextView = (TextView) rootView.findViewById(R.id.tvClientAddress);
-        clientAddressTextView.setText(clientData.getAddress());
-
-        TextView tvTechnicianName = (TextView) rootView.findViewById(R.id.tvTechnicianName);
-        tvTechnicianName.setText(selectedTech.getFullNameTehnic());
+        super.onResume();
 
         if (reportStates != null)
         {
@@ -167,6 +134,44 @@ public class CTLinfoFragment extends Fragment implements View.OnClickListener, L
                 etAltitude.setText("Sconosciuto");
             }
         }
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+    {
+        View rootView = inflater.inflate(R.layout.ctl_info_fragment, container, false);
+
+        VisitItem visitItem = visitItems.get(selectedIndex);
+        clientData = visitItem.getClientData();
+        GeaSopralluogo geaSopralluogo = visitItem.getGeaSopralluogo();
+        int idSopralluogo = geaSopralluogo.getId_sopralluogo();
+
+        realm.beginTransaction();
+        reportStates = realm.where(ReportStates.class).equalTo("company_id", company_id).equalTo("tech_id", selectedTech.getId())
+                .equalTo("id_sopralluogo", idSopralluogo).findFirst();
+        realm.commitTransaction();
+
+        btnGetCurrentCoords = (Button) rootView.findViewById(R.id.btnGetCurrentCoords);
+        btnSaveCoords = (Button) rootView.findViewById(R.id.btnSaveCoords);
+
+        btnGetCurrentCoords.setOnClickListener(this);
+        btnSaveCoords.setOnClickListener(this);
+
+        etCoordNord = (EditText) rootView.findViewById(R.id.etCoordNord);
+        etCoordEst = (EditText) rootView.findViewById(R.id.etCoordEst);
+        etAltitude = (EditText) rootView.findViewById(R.id.etAltitude);
+
+        TextView clientNameTextView = (TextView) rootView.findViewById(R.id.tvClientName);
+        clientNameTextView.setText(clientData.getName());
+
+        TextView clientPhoneTextView = (TextView) rootView.findViewById(R.id.tvClientPhone);
+        clientPhoneTextView.setText(clientData.getMobile());
+
+        TextView clientAddressTextView = (TextView) rootView.findViewById(R.id.tvClientAddress);
+        clientAddressTextView.setText(clientData.getAddress());
+
+        TextView tvTechnicianName = (TextView) rootView.findViewById(R.id.tvTechnicianName);
+        tvTechnicianName.setText(selectedTech.getFullNameTehnic());
 
         return rootView;
     }
@@ -244,6 +249,8 @@ public class CTLinfoFragment extends Fragment implements View.OnClickListener, L
                 realm.commitTransaction();
 
                 showToastMessage(getString(R.string.Saved));
+
+                communicator.onCoordsSetReturned(selectedIndex);
             }
         }
     }
@@ -393,7 +400,7 @@ public class CTLinfoFragment extends Fragment implements View.OnClickListener, L
             {
                 public void run()
                 {
-                    Toast.makeText(activity, msg, Toast.LENGTH_LONG).show();
+                    Toast.makeText(activity, msg, Toast.LENGTH_SHORT).show();
                 }
             });
         }

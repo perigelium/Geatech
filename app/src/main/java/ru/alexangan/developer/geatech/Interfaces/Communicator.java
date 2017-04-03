@@ -13,7 +13,7 @@ public interface Communicator
 
     void onDetailedReportReturned();
 
-    void onSendReportReturned();
+    void onSendReportReturned(int id_rapporto_sopralluogo);
 
     void onCtrlButtons1Clicked(View view);
     void onCtrlButtons2Clicked(View view);
@@ -31,4 +31,6 @@ public interface Communicator
     void OnComingListItemSelected(int itemIndex);
 
     void onLogoutCommand();
+
+    void onCoordsSetReturned(int itemIndex);
 }

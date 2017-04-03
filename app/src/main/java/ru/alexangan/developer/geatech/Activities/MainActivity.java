@@ -217,18 +217,22 @@ public class MainActivity extends Activity implements Communicator, Callback
     {
         if (!listVisits.isAdded())
         {
-            FragmentTransaction mFragmentTransaction = mFragmentManager.beginTransaction();
-            mFragmentTransaction.hide(ctrlBtnsReportDetailed);
-            mFragmentTransaction.commit();
-
             removeAllLists();
 
-            ctrlBtnsFragment1.setCheckedBtnId(R.id.btnVisits);
+            if (ctrlBtnsReportDetailed.isVisible())
+            {
+                FragmentTransaction mFragmentTransaction = mFragmentManager.beginTransaction();
+                mFragmentTransaction.hide(ctrlBtnsReportDetailed);
+                mFragmentTransaction.commit();
 
+                ctrlBtnsFragment1.setCheckedBtnId(R.id.btnSentReports);
+            } else
+            {
+                ctrlBtnsFragment1.setCheckedBtnId(R.id.btnVisits);
+            }
             //removeAllLists();
 
             //currentSelIndex = -1;
-
         } else
         {
             //super.onBackPressed();
@@ -519,9 +523,9 @@ public class MainActivity extends Activity implements Communicator, Callback
     }
 
     @Override
-    public void onSendReportReturned()
+    public void onSendReportReturned(int id_rapporto_sopralluogo)
     {
-        onCtrlButtons2Clicked(findViewById(R.id.btnSendReport));
+        OnReportListItemSelected(id_rapporto_sopralluogo);
     }
 
     @Override
@@ -674,6 +678,13 @@ public class MainActivity extends Activity implements Communicator, Callback
     public void onLogoutCommand()
     {
         logout();
+    }
+
+    @Override
+    public void onCoordsSetReturned(int itemIndex)
+    {
+        //currentSelIndex = itemIndex;
+        ctrlBtnsFragment2.setCheckedBtnId(R.id.btnFillReport);
     }
 
     @Override
