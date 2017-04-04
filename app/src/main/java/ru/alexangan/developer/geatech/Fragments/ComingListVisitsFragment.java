@@ -1,9 +1,7 @@
 package ru.alexangan.developer.geatech.Fragments;
 
 import android.app.ListFragment;
-import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +11,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.TreeMap;
@@ -36,46 +33,18 @@ public class ComingListVisitsFragment extends ListFragment
     ArrayList<Integer> visitItemsPositions;
 
     @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-
-        Context context = getActivity();
-
-
-/*        realm.beginTransaction();
-        RealmResults <ReportStates> reportStatesList = realm.where(ReportStates.class).equalTo("company_id", company_id)
-                .equalTo("tech_id", lastSelectedTech.getId()).findAll();
-        realm.commitTransaction();
-
-        for (VisitItem visitItem : visitItems)
-        {
-            for(ReportStates reportStates : reportStatesList)
-            {
-                if (visitItem.getGeaSopralluogo().getId_sopralluogo() == reportStates.getId_sopralluogo()
-                        && reportStates.getData_ora_sopralluogo()!=null)
-                {
-                    visitItemsDateTimeSet.add(visitItem);
-                    break;
-                }
-            }
-        }*/
-
-
-    }
-
-    @Override
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
 
-        mCommunicator = (Communicator)getActivity();
+        mCommunicator = (Communicator) getActivity();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState)
     {
-        View rootView =  inflater.inflate(R.layout.list_visits_fragment, container, false);
+        View rootView = inflater.inflate(R.layout.list_visits_fragment, container, false);
 
         ArrayList<VisitItem> visitItemsDateTimeSet = new ArrayList<>();
         visitItemsPositions = new ArrayList<>();
@@ -83,16 +52,16 @@ public class ComingListVisitsFragment extends ListFragment
 
         realm.beginTransaction();
 
-        RealmResults <ReportStates> reportStatesResults = realm.where(ReportStates.class)
+        RealmResults<ReportStates> reportStatesResults = realm.where(ReportStates.class)
                 .equalTo("company_id", company_id).equalTo("tech_id", selectedTech.getId()).findAll();
 
         realm.commitTransaction();
 
-        TreeMap <Long, VisitItem> unsortedVisits = new TreeMap<>();
+        TreeMap<Long, VisitItem> unsortedVisits = new TreeMap<>();
 
         for (VisitItem visitItem : visitItems)
         {
-            for(ReportStates reportStates : reportStatesResults)
+            for (ReportStates reportStates : reportStatesResults)
             {
                 if (visitItem.getGeaSopralluogo().getId_sopralluogo() == reportStates.getId_sopralluogo()
                         && reportStates.getGeneralInfoCompletionState() == 0
@@ -119,7 +88,7 @@ public class ComingListVisitsFragment extends ListFragment
 
         for (Map.Entry entry : unsortedVisits.entrySet())
         {
-            VisitItem visitItem = (VisitItem)entry.getValue();
+            VisitItem visitItem = (VisitItem) entry.getValue();
             visitItemsDateTimeSet.add(visitItem);
 
             visitItemsPositions.add(visitItem.getId());

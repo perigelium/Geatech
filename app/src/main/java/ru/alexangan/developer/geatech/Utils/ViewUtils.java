@@ -6,12 +6,12 @@ import android.util.Pair;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.EditText;
 import android.widget.Switch;
 import android.widget.TextView;
 
@@ -23,10 +23,10 @@ import java.util.Map;
 import ru.alexangan.developer.geatech.Models.GeaItemModelliRapporto;
 import ru.alexangan.developer.geatech.Models.GeaModelloRapporto;
 import ru.alexangan.developer.geatech.Models.GeaSezioneModelliRapporto;
+import ru.alexangan.developer.geatech.Models.GeaSopralluogo;
 import ru.alexangan.developer.geatech.Models.ProductData;
 import ru.alexangan.developer.geatech.Models.ReportStates;
 import ru.alexangan.developer.geatech.Models.VisitItem;
-import ru.alexangan.developer.geatech.Models.GeaSopralluogo;
 import ru.alexangan.developer.geatech.R;
 
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.realm;
@@ -1970,7 +1970,7 @@ public class ViewUtils
 
         for (int k = 0; k < headerNumber; k++)
         {
-            for (LinearLayout ll : al_llHeaderSections.get(k)) // close all sections initially
+            for (LinearLayout ll : al_llHeaderSections.get(k))
             {
                 if (completionState == ReportStates.REPORT_ALMOST_COMPLETED && notSetItems != null)
                 {
@@ -1986,12 +1986,25 @@ public class ViewUtils
                         do
                         {
                             llSections = getLinearLayouts().get(idItem);
+
+                            if(llSections != null)
+                            {
+                                LinearLayout llSection1 = llSections.second;
+                                LinearLayout llSection0 = llSections.first;
+
+                                if (!llSection1.equals(llSection0))
+                                {
+                                    llSection = llSection1;
+                                    break;
+                                }
+                            }
                             idItem--;
-                        } while (llSections == null && idItem != -1);
+
+                        } while (idItem != 0);
 
                         if(llSections != null)
                         {
-                            LinearLayout llSection1 = llSections.second;
+/*                            LinearLayout llSection1 = llSections.second;
                             LinearLayout llSection0 = llSections.first;
 
                             if (llSection1.equals(llSection0))
@@ -2005,7 +2018,7 @@ public class ViewUtils
                             } else
                             {
                                 llSection = llSection1;
-                            }
+                            }*/
 
                             if (ll.equals(llSection))
                             {

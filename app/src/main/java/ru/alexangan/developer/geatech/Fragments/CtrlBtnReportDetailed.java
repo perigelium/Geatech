@@ -11,8 +11,7 @@ import ru.alexangan.developer.geatech.Interfaces.Communicator;
 import ru.alexangan.developer.geatech.R;
 
 /**
- * Created by user on 11/10/2016.
- */
+ * Created by Alex Angan on 11/10/2016.*/
 
 public class CtrlBtnReportDetailed extends Fragment implements View.OnClickListener
 {

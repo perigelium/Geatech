@@ -5,9 +5,7 @@ import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,7 +34,6 @@ import ru.alexangan.developer.geatech.Models.GeaImagineRapporto;
 import ru.alexangan.developer.geatech.Models.GeaItemRapporto;
 import ru.alexangan.developer.geatech.Models.GeaRapporto;
 import ru.alexangan.developer.geatech.Models.GeaSopralluogo;
-import ru.alexangan.developer.geatech.Models.ProductData;
 import ru.alexangan.developer.geatech.Models.ReportItem;
 import ru.alexangan.developer.geatech.Models.ReportStates;
 import ru.alexangan.developer.geatech.Models.VisitItem;
@@ -115,8 +112,8 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
 
         VisitItem visitItem = visitItems.get(selectedIndex);
         GeaSopralluogo geaSopralluogo = visitItem.getGeaSopralluogo();
-        ProductData productData = visitItem.getProductData();
-        String productType = productData.getProductType();
+        //ProductData productData = visitItem.getProductData();
+        //String productType = productData.getProductType();
         //int idProductType = productData.getIdProductType();
         int idSopralluogo = geaSopralluogo.getId_sopralluogo();
         //idRapportoSopralluogo = idSopralluogo;
@@ -198,8 +195,8 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
 
         VisitItem visitItem = visitItems.get(selectedIndex);
         GeaSopralluogo geaSopralluogo = visitItem.getGeaSopralluogo();
-        ProductData productData = visitItem.getProductData();
-        String productType = productData.getProductType();
+        //ProductData productData = visitItem.getProductData();
+        //String productType = productData.getProductType();
         //int idProductType = productData.getIdProductType();
         int idSopralluogo = geaSopralluogo.getId_sopralluogo();
 
@@ -290,20 +287,22 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
 
                 if (jsonObject.has("error"))
                 {
-                    activity.runOnUiThread(new Runnable()
-                    {
-                        public void run()
-                        {
-                            enableInput();
-                            alertDialog("Info", getString(R.string.OfflineModeShowLoginScreenQuestion));
-                        }
-                    });
+                    showToastMessage(getString(R.string.SendingReportFailed));
 
                     try
                     {
                         String errorStr = jsonObject.getString("error");
-                        if (errorStr.length() != 0)
+                        if (errorStr.length() != 0 && errorStr.contains("Empty token"))
                         {
+                            activity.runOnUiThread(new Runnable()
+                            {
+                                public void run()
+                                {
+                                    enableInput();
+                                    alertDialog("Info", getString(R.string.OfflineModeShowLoginScreenQuestion));
+                                }
+                            });
+
                             //showToastMessage(errorStr);
                         }
 
@@ -337,7 +336,7 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
                     }
                 });
                 e.printStackTrace();
-                showToastMessage("JSON parse error");
+                showToastMessage(getString(R.string.SendingReportFailed));
             }
 
 /*            activity.runOnUiThread(new Runnable()
@@ -374,11 +373,7 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
                         {
                             strSuccess = jsonObject.getString("success");
 
-                            if (strSuccess.equals("0"))
-                            {
-
-                            }
-                            else
+                            if (!strSuccess.equals("0"))
                             {
                                 objectsSentSuccessfully++;
 
@@ -407,8 +402,14 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
                                     });
                                 }
                             }
+                            else
+                            {
+                                showToastMessage(getString(R.string.SendingImageFailed));
+                            }
                         } catch (JSONException e)
                         {
+                            showToastMessage(getString(R.string.SendingImageFailed));
+
                             activity.runOnUiThread(new Runnable()
                             {
                                 public void run()
@@ -421,6 +422,8 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
                     }
                 } catch (JSONException e)
                 {
+                    showToastMessage(getString(R.string.SendingImageFailed));
+
                     activity.runOnUiThread(new Runnable()
                     {
                         public void run()

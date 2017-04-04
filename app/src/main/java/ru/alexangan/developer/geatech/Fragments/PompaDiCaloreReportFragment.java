@@ -4,36 +4,23 @@ import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.text.InputType;
-import android.util.Pair;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
-import android.widget.FrameLayout;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 
-import ru.alexangan.developer.geatech.Models.GeaItemModelliRapporto;
 import ru.alexangan.developer.geatech.Models.GeaModelloRapporto;
-import ru.alexangan.developer.geatech.Models.GeaSezioneModelliRapporto;
+import ru.alexangan.developer.geatech.Models.GeaSopralluogo;
 import ru.alexangan.developer.geatech.Models.ProductData;
 import ru.alexangan.developer.geatech.Models.ReportStates;
 import ru.alexangan.developer.geatech.Models.VisitItem;
-import ru.alexangan.developer.geatech.Models.GeaSopralluogo;
 import ru.alexangan.developer.geatech.R;
 import ru.alexangan.developer.geatech.Utils.DatabaseUtils;
 import ru.alexangan.developer.geatech.Utils.ViewUtils;
@@ -315,6 +302,9 @@ public class PompaDiCaloreReportFragment extends Fragment
             idItem = viewUtils.fillSeveralRadios(idItem);
 
             idItem = viewUtils.fillSeveralEdits(idItem, 1);
+
+            final EditText et0 = viewUtils.getEditTexts().get(idItem-1);
+            et0.setInputType(InputType.TYPE_CLASS_TEXT);
 
             idItem = viewUtils.fillSeveralEdits(idItem, 1);
 

@@ -1,6 +1,7 @@
 package ru.alexangan.developer.geatech.Adapters;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,12 +14,11 @@ import ru.alexangan.developer.geatech.Models.SubproductItem;
 import ru.alexangan.developer.geatech.R;
 
 /**
- * Created by user on 11/15/2016.
- */
+ * Created by user on 11/15/2016.*/
 
 public class SetVisitDateTimeListAdapter extends ArrayAdapter
 {
-    List<SubproductItem> subproductItems;
+    private List<SubproductItem> subproductItems;
 
     public SetVisitDateTimeListAdapter
             (Context context, List<SubproductItem> subproductItems)
@@ -29,9 +29,11 @@ public class SetVisitDateTimeListAdapter extends ArrayAdapter
         this.subproductItems = subproductItems;
     }
 
+    @NonNull
     @Override
 
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(int position, View convertView, @NonNull ViewGroup parent)
+    {
 
         // Get the data item for this position
 
@@ -39,12 +41,12 @@ public class SetVisitDateTimeListAdapter extends ArrayAdapter
 
         // Check if an existing view is being reused, otherwise inflate the view
 
-        if (convertView == null) {
+        if (convertView == null)
+        {
 
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.visits_day_time_set_list_row, parent, false);
 
         }
-
 
 
         // Lookup view for data population

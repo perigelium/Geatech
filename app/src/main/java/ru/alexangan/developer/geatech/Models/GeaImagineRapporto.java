@@ -1,7 +1,6 @@
 package ru.alexangan.developer.geatech.Models;
 
 import io.realm.RealmObject;
-import io.realm.annotations.PrimaryKey;
 
 /**
  * Created by user on 25.01.2017.

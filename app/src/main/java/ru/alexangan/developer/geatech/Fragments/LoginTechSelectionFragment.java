@@ -79,9 +79,8 @@ public class LoginTechSelectionFragment extends Fragment implements View.OnClick
     int spinnerCurItem;
 
     ArrayList<String> saTecnicianList;
-    private String modelsJSONData;
     int geaItemModelliSize;
-    private ProgressDialog downloadingDialog, preparingListDialog;
+    private ProgressDialog downloadingDialog;
 
     public LoginTechSelectionFragment()
     {
@@ -603,7 +602,7 @@ public class LoginTechSelectionFragment extends Fragment implements View.OnClick
 
         if (call == callModels)
         {
-            modelsJSONData = response.body().string();
+            String modelsJSONData = response.body().string();
 
             //Log.d("DEBUG", modelsJSONData);
 

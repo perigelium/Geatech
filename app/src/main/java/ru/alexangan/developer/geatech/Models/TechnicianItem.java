@@ -3,10 +3,8 @@ package ru.alexangan.developer.geatech.Models;
 /**
  * Created by user on 09.02.2017.
  */
-import java.util.List;
 
 import io.realm.RealmObject;
-import io.realm.annotations.PrimaryKey;
 
 public class TechnicianItem extends RealmObject
 {

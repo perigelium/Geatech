@@ -37,7 +37,7 @@ public class ImageUtils
 
         try
         {
-            if(istream!=null)
+            if (istream != null)
             {
                 istream.close();
             }
@@ -127,10 +127,13 @@ public class ImageUtils
 
         int finalWidth = maxWidth;
         int finalHeight = maxHeight;
-        if (ratioMax > 1) {
-            finalWidth = (int) ((float)maxHeight * ratioBitmap);
-        } else {
-            finalHeight = (int) ((float)maxWidth / ratioBitmap);
+
+        if (ratioMax > 1)
+        {
+            finalWidth = (int) ((float) maxHeight * ratioBitmap);
+        } else
+        {
+            finalHeight = (int) ((float) maxWidth / ratioBitmap);
         }
 
         // Calculate inSampleSize

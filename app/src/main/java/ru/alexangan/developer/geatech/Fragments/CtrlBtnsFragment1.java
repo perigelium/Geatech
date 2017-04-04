@@ -3,13 +3,9 @@ package ru.alexangan.developer.geatech.Fragments;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.Button;
-import android.widget.ImageButton;
-import android.widget.RadioGroup;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,16 +14,12 @@ import ru.alexangan.developer.geatech.Interfaces.Communicator;
 import ru.alexangan.developer.geatech.R;
 
 /**
- * Created by user on 11/10/2016.
- */
+ * Created by user on 11/10/2016*/
 
 public class CtrlBtnsFragment1 extends Fragment implements View.OnClickListener
 {
 
     private Communicator mCommunicator;
-    RadioGroup rGroup;
-    int checkedBtnId = 0;
-    int previousCheckedId = 0;
     List<Button> btnArray;
     View rootView;
 

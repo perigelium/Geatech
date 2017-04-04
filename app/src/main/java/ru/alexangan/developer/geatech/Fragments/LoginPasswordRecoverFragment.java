@@ -27,14 +27,6 @@ public class LoginPasswordRecoverFragment extends Fragment implements View.OnCli
         // Required empty public constructor
     }
 
-    // TODO: Rename and change types and number of parameters
-    public static LoginPasswordRecoverFragment newInstance(String param1, String param2)
-    {
-        LoginPasswordRecoverFragment fragment = new LoginPasswordRecoverFragment();
-
-        return fragment;
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState)
     {

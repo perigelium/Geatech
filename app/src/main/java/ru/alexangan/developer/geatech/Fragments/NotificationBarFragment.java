@@ -7,7 +7,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import ru.alexangan.developer.geatech.Interfaces.Communicator;
 import ru.alexangan.developer.geatech.R;
@@ -15,8 +14,7 @@ import ru.alexangan.developer.geatech.R;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.selectedTech;
 
 /**
- * Created by user on 11/10/2016.
- */
+ * Created by user on 11/10/2016*/
 
 public class NotificationBarFragment extends Fragment implements View.OnClickListener
 {

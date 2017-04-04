@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Fragment;
-import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
 import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
@@ -35,18 +34,17 @@ import io.realm.RealmResults;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
-import ru.alexangan.developer.geatech.Activities.MainActivity;
 import ru.alexangan.developer.geatech.Adapters.SetVisitDateTimeListAdapter;
 import ru.alexangan.developer.geatech.Interfaces.Communicator;
 import ru.alexangan.developer.geatech.Models.ClientData;
 import ru.alexangan.developer.geatech.Models.GeaImagineRapporto;
 import ru.alexangan.developer.geatech.Models.GeaItemRapporto;
 import ru.alexangan.developer.geatech.Models.GeaModelloRapporto;
+import ru.alexangan.developer.geatech.Models.GeaSopralluogo;
 import ru.alexangan.developer.geatech.Models.ProductData;
 import ru.alexangan.developer.geatech.Models.ReportStates;
 import ru.alexangan.developer.geatech.Models.SubproductItem;
 import ru.alexangan.developer.geatech.Models.VisitItem;
-import ru.alexangan.developer.geatech.Models.GeaSopralluogo;
 import ru.alexangan.developer.geatech.Network.NetworkUtils;
 import ru.alexangan.developer.geatech.R;
 
@@ -71,7 +69,7 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
     VisitItem visitItem;
     String product_type;
 
-    private TextView mDateSetTextView, mTimeSetTextView, btnSetDate, btnAnnullaSetDateTime, btnSetDateTimeSubmit, btnApriMappa, btnChiama;
+    private TextView mDateSetTextView, mTimeSetTextView, btnAnnullaSetDateTime, btnSetDateTimeSubmit;
 
     private int mYear, mMonth, mDay, mHour, mMinute;
 
@@ -80,7 +78,6 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
     NetworkUtils networkUtils;
 
     private Communicator mCommunicator;
-    private ProgressDialog requestServerDialog;
     AlertDialog alert;
     boolean dateSet, timeSet;
 
@@ -111,10 +108,10 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
 
         networkUtils = new NetworkUtils();
 
-        requestServerDialog = new ProgressDialog(getActivity());
+/*        ProgressDialog requestServerDialog = new ProgressDialog(getActivity());
         requestServerDialog.setTitle("");
         requestServerDialog.setMessage(getString(R.string.TransmittingDataPleaseWait));
-        requestServerDialog.setIndeterminate(true);
+        requestServerDialog.setIndeterminate(true);*/
 
         dateSet = false;
         timeSet = false;
@@ -177,11 +174,11 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
     {
         rootView = inflater.inflate(R.layout.set_date_time_fragment, container, false);
 
-        btnSetDate = (TextView) rootView.findViewById(R.id.btnSetDate);
+        TextView btnSetDate = (TextView) rootView.findViewById(R.id.btnSetDate);
         btnAnnullaSetDateTime = (TextView) rootView.findViewById(R.id.btnAnnullaSetDateTime);
         btnSetDateTimeSubmit = (TextView) rootView.findViewById(R.id.btnSetDateTimeSubmit);
-        btnApriMappa = (TextView) rootView.findViewById(R.id.btnApriMappa);
-        btnChiama = (TextView) rootView.findViewById(R.id.btnChiama);
+        TextView btnApriMappa = (TextView) rootView.findViewById(R.id.btnApriMappa);
+        TextView btnChiama = (TextView) rootView.findViewById(R.id.btnChiama);
 
         visitItem = visitItems.get(selectedIndex);
         ClientData clientData = visitItem.getClientData();
@@ -284,7 +281,7 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
     {
         if (v.getId() == R.id.btnApriMappa)
         {
-            if(!networkUtils.isNetworkAvailable(activity))
+            if(!NetworkUtils.isNetworkAvailable(activity))
             {
                 showToastMessage(getString(R.string.CheckInternetConnection));
                 return;
@@ -334,7 +331,7 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
 
         if (v.getId() == R.id.btnAnnullaSetDateTime)
         {
-            if(!networkUtils.isNetworkAvailable(activity))
+            if(!NetworkUtils.isNetworkAvailable(activity))
             {
                 showToastMessage(getString(R.string.CheckInternetConnection));
                 return;
@@ -356,7 +353,7 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
 
         if (v.getId() == R.id.btnSetDateTimeSubmit)
         {
-            if(!networkUtils.isNetworkAvailable(activity))
+            if(!NetworkUtils.isNetworkAvailable(activity))
             {
                 showToastMessage(getString(R.string.CheckInternetConnection));
                 return;
@@ -466,15 +463,17 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
                     }
                 });
 
-                final String errorStr;
                 alertDialog("Info", getString(R.string.OfflineModeShowLoginScreenQuestion));
 
-                try
+                //final String errorStr;
+
+/*                try
                 {
                     errorStr = jsonObject.getString("error");
+
                     if (errorStr.length() != 0)
                     {
-                        //showToastMessage(errorStr);
+                        showToastMessage(errorStr);
                     }
 
                 } catch (JSONException e)
@@ -488,7 +487,7 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
                     });
                     e.printStackTrace();
                     return;
-                }
+                }*/
             } else
             {
                 if (jsonObject.has("success"))

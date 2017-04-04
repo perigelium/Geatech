@@ -6,8 +6,8 @@ import io.realm.RealmObject;
 
 public class ReportStates extends RealmObject
 {
-    int company_id;
-    int tech_id;
+    private int company_id;
+    private int tech_id;
 
     private int id_sopralluogo;
     private int id_rapporto_sopralluogo;
@@ -23,12 +23,13 @@ public class ReportStates extends RealmObject
     private double latitudine;
     private double longitudine;
     private int altitudine;
+    public static int ALTITUDE_UNKNOWN = -999;
 
     private int reportCompletionState;
     public static int REPORT_STATE_INDETERMINATE = -1;
     public static int REPORT_NON_INITIATED = 0;
     public static int REPORT_INITIATED = 1;
-    public static int REPORT_PARTIALLY_COMPLETED = 2;
+    public static int REPORT_HALF_COMPLETED = 2;
     public static int REPORT_ALMOST_COMPLETED = 3;
     public static int REPORT_COMPLETED = 4;
 
@@ -93,7 +94,7 @@ public class ReportStates extends RealmObject
         nome_tecnico = "";
         latitudine = 0;
         longitudine = 0;
-        altitudine = -999;
+        altitudine = ALTITUDE_UNKNOWN;
     }
 
     public RealmString getReportCompletionStateString(int reportCompletionState)

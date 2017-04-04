@@ -2,14 +2,11 @@ package ru.alexangan.developer.geatech.Network;
 
 import android.Manifest;
 import android.app.Activity;
-import android.content.Context;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
-import android.util.Log;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
@@ -33,7 +30,7 @@ public class LocationRetriever implements ConnectionCallbacks, OnConnectionFaile
     private GoogleApiClient mGoogleApiClient;
 
     // boolean flag to toggle periodic location updates
-    private boolean mRequestingLocationUpdates = true;
+    //private boolean mRequestingLocationUpdates = true;
 
     private LocationRequest mLocationRequest;
 
@@ -47,10 +44,8 @@ public class LocationRetriever implements ConnectionCallbacks, OnConnectionFaile
     Activity activity;
 
     private LocationRetrievedEvents callback;
-    Handler handler;
-    Runnable runnable;
-
-    private int PERMISSION_REQUEST_CODE = 11;
+    private Handler handler;
+    private Runnable runnable;
 
     public LocationRetriever(Activity activity, LocationRetrievedEvents callback)
     {
@@ -70,7 +65,7 @@ public class LocationRetriever implements ConnectionCallbacks, OnConnectionFaile
         }
     }
 
-    protected synchronized void buildGoogleApiClient()
+    private synchronized void buildGoogleApiClient()
     {
         mGoogleApiClient = new GoogleApiClient.Builder(activity)
                 .addConnectionCallbacks(this)
@@ -97,7 +92,7 @@ public class LocationRetriever implements ConnectionCallbacks, OnConnectionFaile
         return true;
     }
 
-    protected void buildLocationRequest()
+    private void buildLocationRequest()
     {
         mLocationRequest = new LocationRequest();
         mLocationRequest.setInterval(UPDATE_INTERVAL);
@@ -112,13 +107,13 @@ public class LocationRetriever implements ConnectionCallbacks, OnConnectionFaile
     @Override
     public void onConnected(Bundle arg0)
     {
-        if (mRequestingLocationUpdates)
+        //if (mRequestingLocationUpdates)
         {
             startLocationUpdates();
         }
     }
 
-    protected void startLocationUpdates()
+    private void startLocationUpdates()
     {
         if (ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
                 || ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)
@@ -140,7 +135,7 @@ public class LocationRetriever implements ConnectionCallbacks, OnConnectionFaile
         handler.postDelayed(runnable, MAXWAITTIME);
     }
 
-    protected void stopLocationUpdates()
+    private void stopLocationUpdates()
     {
         LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
     }
@@ -148,7 +143,7 @@ public class LocationRetriever implements ConnectionCallbacks, OnConnectionFaile
     @Override
     public void onConnectionFailed(ConnectionResult result)
     {
-        Log.i("DEBUG", "Connection failed: ConnectionResult.getErrorCode() = " + result.getErrorCode());
+        //Log.i("DEBUG", "Connection failed: ConnectionResult.getErrorCode() = " + result.getErrorCode());
     }
 
     @Override

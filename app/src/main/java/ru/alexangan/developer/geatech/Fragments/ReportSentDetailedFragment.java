@@ -32,7 +32,7 @@ import static ru.alexangan.developer.geatech.Models.GlobalConstants.realm;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.selectedTech;
 
 /**
- * Created by user on 11/10/2016.
+ * Created by Alex Angan on 11/10/2016 .
  */
 
 public class ReportSentDetailedFragment extends Fragment
@@ -166,25 +166,28 @@ public class ReportSentDetailedFragment extends Fragment
             tvCoordNord.setText(String.valueOf(latitude));
             tvCoordEst.setText(String.valueOf(longitude));
 
-            if (altitude != -999)
+            if (altitude != ReportStates.ALTITUDE_UNKNOWN)
             {
                 tvAltitude.setText(String.valueOf((int) altitude));
+            } else
+            {
+                tvAltitude.setText(R.string.Unknown);
             }
         }
 
         ListView listView = (ListView) rootView.findViewById(R.id.listItemsSentReport);
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, reportItems);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, reportItems);
 
         listView.setAdapter(adapter);
+
+        setListViewHeightBasedOnChildren(listView);
 
         imageThumbnails = new ArrayList<>();
         pathItems = new ArrayList<>();
 
         LoadImagesTask loadImagesTask = new LoadImagesTask();
         loadImagesTask.execute();
-
-        setListViewHeightBasedOnChildren(listView);
 
         return rootView;
     }
@@ -193,9 +196,9 @@ public class ReportSentDetailedFragment extends Fragment
     {
         File appDirectory = new File(activity.getFilesDir(), photosFolderName);
 
-        if (!appDirectory.exists())
+        if (!appDirectory.exists() && !appDirectory.mkdir())
         {
-            appDirectory.mkdir();
+            return;
         }
 
         File[] filePaths = appDirectory.listFiles();
@@ -279,7 +282,39 @@ public class ReportSentDetailedFragment extends Fragment
 
             gvPhotoGallery.setAdapter(gridAdapter);
 
+            setDynamicHeight(gvPhotoGallery);
+
             //handler.removeCallbacks(runnable);
         }
-    };
+    }
+
+    private void setDynamicHeight(GridView gridView)
+    {
+        ListAdapter gridViewAdapter = gridView.getAdapter();
+        if (gridViewAdapter == null)
+        {
+            // pre-condition
+            return;
+        }
+
+        int totalHeight = 0;
+        int items = gridViewAdapter.getCount();
+        int rows = 0;
+
+        View listItem = gridViewAdapter.getView(0, null, gridView);
+        listItem.measure(0, 0);
+        totalHeight = listItem.getMeasuredHeight();
+
+        float x = 1;
+        if (items > 3)
+        {
+            x = items / 3;
+            rows = (int) (x + 1);
+            totalHeight *= rows;
+        }
+
+        ViewGroup.LayoutParams params = gridView.getLayoutParams();
+        params.height = totalHeight;
+        gridView.setLayoutParams(params);
+    }
 }

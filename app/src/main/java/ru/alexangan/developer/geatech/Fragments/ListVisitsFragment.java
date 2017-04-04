@@ -2,17 +2,13 @@ package ru.alexangan.developer.geatech.Fragments;
 
 import android.app.Activity;
 import android.app.ListFragment;
-import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.Toast;
 
-import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -21,25 +17,16 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.TreeMap;
 
-import io.realm.RealmResults;
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.Response;
 import ru.alexangan.developer.geatech.Adapters.MyListVisitsAdapter;
 import ru.alexangan.developer.geatech.Interfaces.Communicator;
 import ru.alexangan.developer.geatech.Models.ReportStates;
 import ru.alexangan.developer.geatech.Models.VisitItem;
-import ru.alexangan.developer.geatech.Network.NetworkUtils;
 import ru.alexangan.developer.geatech.R;
-import ru.alexangan.developer.geatech.Utils.JSON_to_model;
 import ru.alexangan.developer.geatech.Utils.SwipeDetector;
 
-import static ru.alexangan.developer.geatech.Models.GlobalConstants.GET_VISITS_URL_SUFFIX;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.company_id;
-import static ru.alexangan.developer.geatech.Models.GlobalConstants.inVisitItems;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.realm;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.selectedTech;
-import static ru.alexangan.developer.geatech.Models.GlobalConstants.tokenStr;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.visitItems;
 
 public class ListVisitsFragment extends ListFragment
@@ -223,7 +210,7 @@ public class ListVisitsFragment extends ListFragment
         });
     }
 
-    private void showToastMessage(final String msg)
+/*    private void showToastMessage(final String msg)
     {
         activity.runOnUiThread(new Runnable()
         {
@@ -232,7 +219,7 @@ public class ListVisitsFragment extends ListFragment
                 Toast.makeText(activity, msg, Toast.LENGTH_LONG).show();
             }
         });
-    }
+    }*/
 }
 
 /*            int optionId = randomInteger!=0 ? R.layout.list_visits_cell_datetime_set : R.layout.list_visits_cell_datetime_set;

@@ -6,18 +6,15 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.provider.MediaStore;
 import android.support.annotation.RequiresApi;
 import android.view.LayoutInflater;
@@ -30,22 +27,19 @@ import android.widget.Toast;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 
 import io.realm.RealmResults;
 import ru.alexangan.developer.geatech.Adapters.GridViewAdapter;
 import ru.alexangan.developer.geatech.Models.GeaImagineRapporto;
+import ru.alexangan.developer.geatech.Models.GeaSopralluogo;
 import ru.alexangan.developer.geatech.Models.ReportStates;
 import ru.alexangan.developer.geatech.Models.VisitItem;
-import ru.alexangan.developer.geatech.Models.GeaSopralluogo;
 import ru.alexangan.developer.geatech.R;
-import ru.alexangan.developer.geatech.Utils.FileUtils;
 import ru.alexangan.developer.geatech.Utils.ImageUtils;
 import ru.alexangan.developer.geatech.Utils.MediaUtils;
 
@@ -69,7 +63,6 @@ public class PhotoGalleryGridFragment extends Fragment
     ArrayList<Bitmap> alImgThumbs;
     ArrayList<File> alPathItems;
     Bitmap bmpCameraAddButton, bmpGalleryAddButton, bmpFullSize;
-    private int selectedIndex;
     ImageView ivFullSize;
     GridView gvPhotoGallery;
     Activity activity;
@@ -78,8 +71,8 @@ public class PhotoGalleryGridFragment extends Fragment
     ReportStates reportStates;
     Bitmap bm;
 
-    private Handler handler;
-    private Runnable runnable;
+/*    private Handler handler;
+    private Runnable runnable;*/
 
 /*    interface MyCallbackInterface
     {
@@ -97,6 +90,7 @@ public class PhotoGalleryGridFragment extends Fragment
         super.onCreate(savedInstanceState);
 
         activity = getActivity();
+        int selectedIndex;
 
         if (getArguments() != null)
         {
@@ -161,43 +155,8 @@ public class PhotoGalleryGridFragment extends Fragment
         alImgThumbs = new ArrayList<>();
         alPathItems = new ArrayList<>();
 
-        progressLoadingImages.setMessage(getString(R.string.LoadingImagesInProgress));
-        progressLoadingImages.show();
-
-/*        handler.postDelayed(runnable, 10000);*/
-
-        AsyncTask asyncTask = new AsyncTask()
-        {
-            @Override
-            protected Object doInBackground(Object[] objects)
-            {
-                getImagesArray(); // Long time operation
-                return null;
-            }
-
-            @Override
-            protected void onPostExecute(Object o)
-            {
-                super.onPostExecute(o);
-
-                progressLoadingImages.dismiss();
-
-                alImgThumbs.add(bmpGalleryAddButton);
-                alImgThumbs.add(bmpCameraAddButton);
-
-                alPathItems.add(new File("bmpGalleryAddButton"));
-                alPathItems.add(new File("bmpCameraAddButton"));
-
-                gridAdapter = new GridViewAdapter(activity, R.layout.grid_item_layout, alImgThumbs);
-
-                gvPhotoGallery.setAdapter(gridAdapter);
-
-                //handler.removeCallbacks(runnable);
-            }
-        };
-
-        asyncTask.execute();
-
+        RedrawTheGalleryTask redrawTheGalleryTask = new RedrawTheGalleryTask();
+        redrawTheGalleryTask.execute();
 
         gvPhotoGallery.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener()
         {
@@ -206,36 +165,22 @@ public class PhotoGalleryGridFragment extends Fragment
 
                 currentPicPos = position;
 
-                if (currentPicPos == alImgThumbs.size() - 1 || currentPicPos == alImgThumbs.size() - 2)
-                {
-/*                    if (checkSelfPermission(activity, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)
-                    {
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
-                        {
-
-                            String[] permissions = new String[]
-                                    {
-                                            Manifest.permission.READ_EXTERNAL_STORAGE,
-                                    };
-
-                            requestMultiplePermissions(permissions);
-                        }
-                    } else
-                    {
-                        Intent pickIntent = new Intent();
-                        pickIntent.setType("image*//*");
-                        pickIntent.setAction(Intent.ACTION_PICK);
-
-                        startActivityForResult(pickIntent, PICK_GALLERY_IMAGE);
-                    }*/
-                } else // remove item
-                {
+                if (currentPicPos != alImgThumbs.size() - 1 && currentPicPos != alImgThumbs.size() - 2)
+                {  // remove item
                     currentPicPos = position;
 
-                    if (alPathItems.get(currentPicPos).delete() == true)
+                    if (alPathItems.get(currentPicPos).delete())
                     {
                         alImgThumbs.remove(currentPicPos);
                         alPathItems.remove(currentPicPos);
+                    }
+                    else
+                    {
+                        alImgThumbs.clear();
+                        alPathItems.clear();
+
+                        RedrawTheGalleryTask redrawTheGalleryTask = new RedrawTheGalleryTask();
+                        redrawTheGalleryTask.execute();
                     }
 
                     alImgThumbs.removeAll(Collections.singleton(null)); // remove all null items
@@ -254,7 +199,7 @@ public class PhotoGalleryGridFragment extends Fragment
                 currentPicPos = position;
 
                 if (currentPicPos == alImgThumbs.size() - 1)
-                {
+                { // open Camera
                     if (checkSelfPermission(activity, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)
                     {
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
@@ -275,7 +220,7 @@ public class PhotoGalleryGridFragment extends Fragment
                         startActivityForResult(intent, PICK_CAMERA_IMAGE);
                     }
                 } else if (currentPicPos == alImgThumbs.size() - 2)
-                {
+                { // open Gallery
 
                     if (checkSelfPermission(activity, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)
                     {
@@ -299,38 +244,11 @@ public class PhotoGalleryGridFragment extends Fragment
                     }
 
                 } else
-                {
+                { // show full-size image
                     bmpFullSize = null;
 
-                    AsyncTask asyncTask = new AsyncTask()
-                    {
-                        @Override
-                        protected Object doInBackground(Object[] objects)
-                        {
-                            bmpFullSize = ImageUtils.createProportionalBitmap(alPathItems.get(currentPicPos).getAbsolutePath());
-                            return null;
-                        }
-
-                        @Override
-                        protected void onPostExecute(Object o)
-                        {
-                            super.onPostExecute(o);
-
-                            progressLoadingImages.dismiss();
-
-                            if (bmpFullSize != null)
-                            {
-                                ivFullSize.setImageBitmap(bmpFullSize);
-                            }
-                            ivFullSize.setVisibility(View.VISIBLE);
-                            gvPhotoGallery.setVisibility(View.GONE);
-                        }
-                    };
-
-                    progressLoadingImages.setMessage(getString(R.string.PreparingImageForDisplaying));
-                    progressLoadingImages.show();
-
-                    asyncTask.execute();
+                    ShowFullSizedImageTask showFullSizedImageTask = new ShowFullSizedImageTask();
+                    showFullSizedImageTask.execute();
                 }
             }
         });
@@ -411,8 +329,6 @@ public class PhotoGalleryGridFragment extends Fragment
                     Uri uri = Uri.parse(new File(filePath).toString());
 
                     saveReturnedImage(uri);
-
-                    //Toast.makeText(getActivity(), "" + imagePath + "",Toast.LENGTH_LONG).show();
                 }
                 break;
 
@@ -452,92 +368,21 @@ public class PhotoGalleryGridFragment extends Fragment
             fileName += fileExtension;
         }
 
-        final File fileFullSizeImage = new File(photosDir, fileName);
+        final File fileResizedImage = new File(photosDir, fileName);
+
+        if(fileResizedImage.exists())
+        {
+            showToastMessage(getString(R.string.UnableToAddImage));
+            return;
+        }
+
         bm = null;
 
-        AsyncTask asyncTask = new AsyncTask()
-        {
-            @Override
-            protected void onPreExecute()
-            {
-                super.onPreExecute();
+        ShowOriginalImageTask showOriginalImageTask = new ShowOriginalImageTask(fileSrcImage);
+        showOriginalImageTask.execute();
 
-                progressLoadingImages.setMessage(getString(R.string.LoadingImagesInProgress));
-                progressLoadingImages.show();
-            }
-
-            @Override
-            protected Object doInBackground(Object[] objects)
-            {
-
-/*        // Resize image to 2048x2048 dimensions maximum
-        bm = ImageUtils.createProportionalBitmap(fileSrcImage.getAbsolutePath());
-
-        ByteArrayOutputStream bos = new ByteArrayOutputStream();
-        bm.compress(Bitmap.CompressFormat.PNG, 0 *//**//*ignored for PNG*//*
-                ,bos);
-                byte[] bitmapdata = bos.toByteArray();
-
-                //write the bytes in file
-                FileOutputStream fos = null;
-                try
-                {
-                    fos = new FileOutputStream(fileFullSizeImage);
-                } catch (FileNotFoundException e)
-                {
-                    e.printStackTrace();
-                }
-
-                try
-                {
-                    if (fos != null)
-                    {
-                        fos.write(bitmapdata);
-                        fos.flush();
-                        fos.close();
-                    }
-
-                } catch (IOException e)
-                {
-                    e.printStackTrace();
-                }*/
-
-                // or simply copy the original file
-                if (fileFullSizeImage.exists() || !FileUtils.copyFile(fileSrcImage, fileFullSizeImage))
-                {
-                    showToastMessage(getString(R.string.UnableToAddImage));
-                    return null;
-                }
-
-                if (fileFullSizeImage.length() != 0)
-                {
-                    bm = ImageUtils.decodeSampledBitmapFromUri(fileFullSizeImage.getAbsolutePath(), imgHolderWidth, imgHolderHeight);
-                }
-
-                return null;
-            }
-
-            @Override
-            protected void onPostExecute(Object o)
-            {
-                super.onPostExecute(o);
-
-                if (bm != null)
-                {
-                    alImgThumbs.add(0, bm);
-                    alPathItems.add(0, fileFullSizeImage);
-                    // redraw the gallery thumbnails to reflect the new addition
-                    gvPhotoGallery.setAdapter(gridAdapter);
-                } else
-                {
-                    showToastMessage(getString(R.string.UnableToAddImage));
-                }
-
-                progressLoadingImages.dismiss();
-            }
-        };
-
-        asyncTask.execute();
+        ResizeImageTask resizeImageTask = new ResizeImageTask(fileSrcImage, fileResizedImage);
+        resizeImageTask.execute();
     }
 
     @TargetApi(Build.VERSION_CODES.M)
@@ -558,41 +403,186 @@ public class PhotoGalleryGridFragment extends Fragment
         });
     }
 
-/*    private class DownloadWebpageTask extends AsyncTask<String, Void, String>
+    class ShowOriginalImageTask extends AsyncTask<File, Void, Void>
     {
+        File fileSrc;
 
-        final MyCallbackInterface callback;
-
-        DownloadWebpageTask(MyCallbackInterface callback)
+        ShowOriginalImageTask(File fileSrcImage)
         {
-            this.callback = callback;
+            fileSrc = fileSrcImage;
         }
 
         @Override
-        protected String doInBackground(String... strings)
+        protected void onPreExecute()
         {
+            super.onPreExecute();
+
+            progressLoadingImages.setMessage(getString(R.string.LoadingImagesInProgress));
+            progressLoadingImages.show();
+        }
+
+        @Override
+        protected Void doInBackground(File... files)
+        {
+
+            bm = ImageUtils.decodeSampledBitmapFromUri(fileSrc.getAbsolutePath(), imgHolderWidth, imgHolderHeight);
+
+
             return null;
         }
 
         @Override
-        protected void onPostExecute(String result)
+        protected void onPostExecute(Void aVoid)
         {
-            callback.onDownloadFinished(result);
-        }
+            super.onPostExecute(aVoid);
 
-        //except for this leave your code for this class untouched...
+            if (bm != null)
+            {
+                alImgThumbs.add(alImgThumbs.size() - 2, bm);
+                alPathItems.add(alPathItems.size() - 2, fileSrc);
+                // redraw the gallery thumbnails to reflect the new addition
+                gvPhotoGallery.setAdapter(gridAdapter);
+            } else
+            {
+                showToastMessage(getString(R.string.UnableToAddImage));
+            }
+
+            progressLoadingImages.dismiss();
+        }
     }
 
-    public void downloadUrl(String stringUrl, final MyCallbackInterface callback)
+    class ResizeImageTask extends AsyncTask<File, Void, Void>
     {
-        new DownloadWebpageTask(callback)
+        File fileSrc, fileDst;
+        boolean success = true;
+
+        ResizeImageTask(File fileSrcImage, File fileResizedImage)
         {
-            @Override
-            protected void onPostExecute(String result)
+            fileSrc = fileSrcImage;
+            fileDst = fileResizedImage;
+        }
+
+        @Override
+        protected Void doInBackground(File... files)
+        {
+            // Resize image to 2048x2048 dimensions maximum
+            bm = ImageUtils.createProportionalBitmap(fileSrc.getAbsolutePath());
+
+            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+            bm.compress(Bitmap.CompressFormat.PNG, 100, bos);
+            byte[] bitmapdata = bos.toByteArray();
+
+            //write the bytes in file
+            FileOutputStream fos = null;
+            try
             {
-                super.onPostExecute(result);
-                callback.onDownloadFinished(result);
+                fos = new FileOutputStream(fileDst);
+            } catch (FileNotFoundException e)
+            {
+                e.printStackTrace();
+                success = false;
             }
-        }.execute(stringUrl);
-    }*/
+
+            try
+            {
+                if (fos != null)
+                {
+                    fos.write(bitmapdata);
+                    fos.flush();
+                    fos.close();
+                }
+
+            } catch (IOException e)
+            {
+                e.printStackTrace();
+                success = false;
+            }
+
+            return null;
+        }
+
+/*        @Override
+        protected void onPostExecute(Void aVoid)
+        {
+            super.onPostExecute(aVoid);
+
+            if (success)
+            {
+                //fileFullSizeImage.delete();
+                //RedrawTheGalleryTask redrawTheGalleryTask = new RedrawTheGalleryTask();
+                //redrawTheGalleryTask.execute();
+            }
+        }*/
+    }
+
+    class ShowFullSizedImageTask extends AsyncTask<Void, Void, Void>
+    {
+        @Override
+        protected void onPreExecute()
+        {
+            super.onPreExecute();
+
+            progressLoadingImages.setMessage(getString(R.string.PreparingImageForDisplaying));
+            progressLoadingImages.show();
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids)
+        {
+            bmpFullSize = ImageUtils.createProportionalBitmap(alPathItems.get(currentPicPos).getAbsolutePath());
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid)
+        {
+            super.onPostExecute(aVoid);
+
+            progressLoadingImages.dismiss();
+
+            if (bmpFullSize != null)
+            {
+                ivFullSize.setImageBitmap(bmpFullSize);
+            }
+            ivFullSize.setVisibility(View.VISIBLE);
+            gvPhotoGallery.setVisibility(View.GONE);
+        }
+    }
+
+    class RedrawTheGalleryTask extends AsyncTask<Void, Void, Void>
+    {
+        @Override
+        protected void onPreExecute()
+        {
+            super.onPreExecute();
+
+            progressLoadingImages.setMessage(getString(R.string.LoadingImagesInProgress));
+            progressLoadingImages.show();
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids)
+        {
+            getImagesArray(); // Long time operation
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid)
+        {
+            super.onPostExecute(aVoid);
+
+            progressLoadingImages.dismiss();
+
+            alImgThumbs.add(bmpGalleryAddButton);
+            alImgThumbs.add(bmpCameraAddButton);
+
+            alPathItems.add(new File("bmpGalleryAddButton"));
+            alPathItems.add(new File("bmpCameraAddButton"));
+
+            gridAdapter = new GridViewAdapter(activity, R.layout.grid_item_layout, alImgThumbs);
+
+            gvPhotoGallery.setAdapter(gridAdapter);
+        }
+    }
 }

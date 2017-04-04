@@ -23,7 +23,6 @@ import okhttp3.Callback;
 import okhttp3.Response;
 import ru.alexangan.developer.geatech.Fragments.CTLinfoFragment;
 import ru.alexangan.developer.geatech.Fragments.CaldaiaReportFragment;
-import ru.alexangan.developer.geatech.Fragments.STermodinamicoReportFragment;
 import ru.alexangan.developer.geatech.Fragments.ClimatizzazioneReportFragment;
 import ru.alexangan.developer.geatech.Fragments.ComingListVisitsFragment;
 import ru.alexangan.developer.geatech.Fragments.CtrlBtnReportDetailed;
@@ -40,6 +39,7 @@ import ru.alexangan.developer.geatech.Fragments.PhotoGalleryGridFragment;
 import ru.alexangan.developer.geatech.Fragments.PompaDiCaloreReportFragment;
 import ru.alexangan.developer.geatech.Fragments.ReportSentDetailedFragment;
 import ru.alexangan.developer.geatech.Fragments.ReportsListFragment;
+import ru.alexangan.developer.geatech.Fragments.STermodinamicoReportFragment;
 import ru.alexangan.developer.geatech.Fragments.SendReportFragment;
 import ru.alexangan.developer.geatech.Fragments.SetDateTimeFragment;
 import ru.alexangan.developer.geatech.Fragments.StorageReportFragment;
@@ -75,6 +75,17 @@ public class MainActivity extends Activity implements Communicator, Callback
     private boolean timeNotSetItemsOnly;
     Handler handler;
     Runnable runnable;
+
+    @Override
+    protected void onPause()
+    {
+        super.onPause();
+
+        if(handler!=null && runnable!= null)
+        {
+            handler.removeCallbacks(runnable);
+        }
+    }
 
     @Override
     protected void onStart()
@@ -816,7 +827,7 @@ public class MainActivity extends Activity implements Communicator, Callback
     {
         requestServerDialog.show();
 
-        handler.postDelayed(runnable, 15000);
+        handler.postDelayed(runnable, 30000);
 
         callVisits = networkUtils.getData(this, GET_VISITS_URL_SUFFIX, tokenStr);
 

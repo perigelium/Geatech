@@ -3,6 +3,7 @@ package ru.alexangan.developer.geatech.Adapters;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,13 +15,14 @@ import java.util.ArrayList;
 
 import ru.alexangan.developer.geatech.R;
 
-public class GridViewAdapter extends ArrayAdapter<Bitmap> {
+public class GridViewAdapter extends ArrayAdapter<Bitmap>
+{
 
     private int layoutResourceId;
     private ArrayList<Bitmap> imagesArrayList;
     private Context galleryContext;
 
-    Bitmap placeholder;
+    //Bitmap placeholder;
 
     public GridViewAdapter(Context context, int layoutResourceId, ArrayList<Bitmap> imagesArrayList)
     {
@@ -35,19 +37,23 @@ public class GridViewAdapter extends ArrayAdapter<Bitmap> {
         //placeholder = BitmapFactory.decodeResource(resources, R.drawable.ic_launcher);
     }
 
+    @NonNull
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(int position, View convertView, @NonNull ViewGroup parent)
+    {
         View row = convertView;
         ViewHolder holder;
 
-        if (row == null) {
+        if (row == null)
+        {
             LayoutInflater inflater = ((Activity) galleryContext).getLayoutInflater();
             row = inflater.inflate(layoutResourceId, parent, false);
             holder = new ViewHolder();
             holder.imageTitle = (TextView) row.findViewById(R.id.text);
             holder.image = (ImageView) row.findViewById(R.id.image);
             row.setTag(holder);
-        } else {
+        } else
+        {
             holder = (ViewHolder) row.getTag();
         }
 
@@ -61,12 +67,14 @@ public class GridViewAdapter extends ArrayAdapter<Bitmap> {
     }
 
     // helper method to add a bitmap to the gallery when the user chooses one
-    public void addPic(int position, Bitmap newPic) {
+/*    public void addPic(int position, Bitmap newPic)
+    {
         // set at currently selected index
         imagesArrayList.set(position, newPic);
-    }
+    }*/
 
-    static class ViewHolder {
+    private class ViewHolder
+    {
         TextView imageTitle;
         ImageView image;
     }

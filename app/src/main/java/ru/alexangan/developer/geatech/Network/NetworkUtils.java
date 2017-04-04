@@ -9,7 +9,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.Call;
@@ -27,8 +26,7 @@ import static ru.alexangan.developer.geatech.Models.GlobalConstants.REST_URL;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.SEND_IMAGE_URL;
 
 /**
- * Created by user on 12/20/2016.
- */
+ * Created by user on 12/20/2016*/
 
 public class NetworkUtils
 {

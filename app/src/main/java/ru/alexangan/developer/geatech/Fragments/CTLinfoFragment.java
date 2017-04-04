@@ -17,6 +17,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -30,7 +31,6 @@ import java.util.Locale;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
-import ru.alexangan.developer.geatech.Activities.MainActivity;
 import ru.alexangan.developer.geatech.Interfaces.Communicator;
 import ru.alexangan.developer.geatech.Interfaces.LocationRetrievedEvents;
 import ru.alexangan.developer.geatech.Models.ClientData;
@@ -47,7 +47,7 @@ import static ru.alexangan.developer.geatech.Models.GlobalConstants.realm;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.selectedTech;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.visitItems;
 
-public class CTLinfoFragment extends Fragment implements View.OnClickListener, LocationRetrievedEvents, Callback
+public class CTLinfoFragment extends Fragment implements View.OnClickListener, LocationRetrievedEvents, Callback, View.OnTouchListener
 {
     Button btnGetCurrentCoords, btnSaveCoords;
     EditText etCoordNord, etCoordEst, etAltitude;
@@ -63,6 +63,7 @@ public class CTLinfoFragment extends Fragment implements View.OnClickListener, L
     private ProgressDialog requestServerDialog;
     ClientData clientData;
     private int PERMISSION_REQUEST_CODE = 11;
+    private boolean coordsUnchanged;
 
     public CTLinfoFragment()
     {
@@ -80,7 +81,7 @@ public class CTLinfoFragment extends Fragment implements View.OnClickListener, L
             selectedIndex = getArguments().getInt("selectedIndex");
         }
 
-        altitude = -999;
+        altitude = ReportStates.ALTITUDE_UNKNOWN;
         longitude = 0;
         latitude = 0;
 
@@ -90,6 +91,8 @@ public class CTLinfoFragment extends Fragment implements View.OnClickListener, L
         requestServerDialog.setTitle("");
         requestServerDialog.setMessage(getString(R.string.DownloadingDataPleaseWait));
         requestServerDialog.setIndeterminate(true);
+
+        coordsUnchanged = true;
     }
 
     @Override
@@ -99,39 +102,38 @@ public class CTLinfoFragment extends Fragment implements View.OnClickListener, L
 
         if (reportStates != null)
         {
-            if (reportStates.getLatitudine() == 0)
+            latitude = reportStates.getLatitudine();
+            longitude = reportStates.getLongitudine();
+            altitude = reportStates.getAltitudine();
+
+            coordsUnchanged = latitude != 0 && longitude != 0 && altitude != ReportStates.ALTITUDE_UNKNOWN;
+
+            if(coordsUnchanged)
+            {
+                btnSaveCoords.setEnabled(false);
+                btnSaveCoords.setAlpha(.4f);
+            }
+
+            if (latitude == 0)
             {
                 latitude = clientData.getCoordNord();
-            } else
-            {
-                latitude = reportStates.getLatitudine();
             }
 
-            if (reportStates.getLongitudine() == 0)
+            if (longitude == 0)
             {
                 longitude = clientData.getCoordEst();
-            } else
-            {
-                longitude = reportStates.getLongitudine();
-            }
-
-            if (reportStates.getAltitudine() != -999)
-            {
-                altitude = reportStates.getAltitudine();
             }
 
             etCoordNord.setText(String.valueOf(latitude));
             etCoordEst.setText(String.valueOf(longitude));
 
-            altitude = reportStates.getAltitudine();
-
-            if (altitude != -999)
+            if (altitude != ReportStates.ALTITUDE_UNKNOWN)
             {
                 etAltitude.setText(String.valueOf(altitude));
             }
             else
             {
-                etAltitude.setText("Sconosciuto");
+                etAltitude.setText(R.string.Unknown);
             }
         }
     }
@@ -158,8 +160,11 @@ public class CTLinfoFragment extends Fragment implements View.OnClickListener, L
         btnSaveCoords.setOnClickListener(this);
 
         etCoordNord = (EditText) rootView.findViewById(R.id.etCoordNord);
+        etCoordNord.setOnTouchListener(this);
         etCoordEst = (EditText) rootView.findViewById(R.id.etCoordEst);
+        etCoordEst.setOnTouchListener(this);
         etAltitude = (EditText) rootView.findViewById(R.id.etAltitude);
+        etAltitude.setOnTouchListener(this);
 
         TextView clientNameTextView = (TextView) rootView.findViewById(R.id.tvClientName);
         clientNameTextView.setText(clientData.getName());
@@ -236,7 +241,7 @@ public class CTLinfoFragment extends Fragment implements View.OnClickListener, L
                     reportStates.setLongitudine(Double.valueOf(etCoordEst.getText().toString()));
                 }
 
-                if (altitude != -999)
+                if (altitude != ReportStates.ALTITUDE_UNKNOWN)
                 {
                     reportStates.setAltitudine(Integer.valueOf(etAltitude.getText().toString()));
                 }
@@ -325,7 +330,7 @@ public class CTLinfoFragment extends Fragment implements View.OnClickListener, L
         if (downloadedPage.length() > 0)
         {
             int r = -1;
-            StringBuffer respStr = new StringBuffer(downloadedPage);
+            StringBuilder respStr = new StringBuilder(downloadedPage);
             respStr.append((char) r);
             String tagOpen = "<elevation>";
             String tagClose = "</elevation>";
@@ -432,5 +437,17 @@ public class CTLinfoFragment extends Fragment implements View.OnClickListener, L
                 locationRetriever = new LocationRetriever(activity, this);
             }
         }
+    }
+
+    @Override
+    public boolean onTouch(View view, MotionEvent motionEvent)
+    {
+        if (view.getId() == R.id.etCoordNord || view.getId() == R.id.etCoordEst || view.getId() == R.id.etAltitude)
+        {
+            btnSaveCoords.setEnabled(true);
+            btnSaveCoords.setAlpha(1.0f);
+        }
+
+        return false;
     }
 }

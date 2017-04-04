@@ -1,9 +1,7 @@
 package ru.alexangan.developer.geatech.Fragments;
 
 import android.app.ListFragment;
-import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,7 +16,6 @@ import java.util.TreeMap;
 
 import io.realm.RealmResults;
 import ru.alexangan.developer.geatech.Adapters.NotSentListVisitsAdapter;
-import ru.alexangan.developer.geatech.Interfaces.Communicator;
 import ru.alexangan.developer.geatech.Models.ReportStates;
 import ru.alexangan.developer.geatech.Models.VisitItem;
 import ru.alexangan.developer.geatech.R;
@@ -30,22 +27,12 @@ import static ru.alexangan.developer.geatech.Models.GlobalConstants.visitItems;
 
 public class NotSentListVisitsFragment extends ListFragment// implements View.OnClickListener
 {
-    private Communicator mCommunicator;
     ArrayList<Integer> visitItemsPositions;
-
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-
-        Context context = getActivity();
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-
-        mCommunicator = (Communicator)getActivity();
     }
 
     @Override

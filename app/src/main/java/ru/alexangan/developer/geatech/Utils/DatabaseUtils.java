@@ -1,11 +1,8 @@
 package ru.alexangan.developer.geatech.Utils;
 
 import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.Map;
 
 import io.realm.RealmResults;
-import ru.alexangan.developer.geatech.Models.GeaItemModelliRapporto;
 import ru.alexangan.developer.geatech.Models.GeaItemRapporto;
 import ru.alexangan.developer.geatech.Models.ReportStates;
 
@@ -94,7 +91,7 @@ public class DatabaseUtils
 
         if(completionPercent > 50)
         {
-            return ReportStates.REPORT_PARTIALLY_COMPLETED;
+            return ReportStates.REPORT_HALF_COMPLETED;
         }
 
         if (completionPercent > 0)

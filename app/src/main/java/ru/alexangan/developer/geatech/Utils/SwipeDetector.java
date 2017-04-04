@@ -7,9 +7,11 @@ import android.view.View;
  * Created by user on 11/29/2016.
  */
 
-public class SwipeDetector implements View.OnTouchListener {
+public class SwipeDetector implements View.OnTouchListener
+{
 
-    public static enum Action {
+    public enum Action
+    {
         LR, // Left to Right
         RL, // Right to Left
         TB, // Top to bottom
@@ -17,28 +19,34 @@ public class SwipeDetector implements View.OnTouchListener {
         None // when no action was detected
     }
 
-    private static final String logTag = "SwipeDetector";
+    //private static final String logTag = "SwipeDetector";
     private static final int MIN_DISTANCE = 100;
     private float downX, downY, upX, upY;
     private Action mSwipeDetected = Action.None;
 
-    public boolean swipeDetected() {
+    public boolean swipeDetected()
+    {
         return mSwipeDetected != Action.None;
     }
 
-    public Action getAction() {
+    public Action getAction()
+    {
         return mSwipeDetected;
     }
 
-    public boolean onTouch(View v, MotionEvent event) {
-        switch (event.getAction()) {
-            case MotionEvent.ACTION_DOWN: {
+    public boolean onTouch(View v, MotionEvent event)
+    {
+        switch (event.getAction())
+        {
+            case MotionEvent.ACTION_DOWN:
+            {
                 downX = event.getX();
                 downY = event.getY();
                 mSwipeDetected = Action.None;
                 return false; // allow other events like Click to be processed
             }
-            case MotionEvent.ACTION_MOVE: {
+            case MotionEvent.ACTION_MOVE:
+            {
                 upX = event.getX();
                 upY = event.getY();
 
@@ -46,14 +54,17 @@ public class SwipeDetector implements View.OnTouchListener {
                 float deltaY = downY - upY;
 
                 // horizontal swipe detection
-                if (Math.abs(deltaX) > MIN_DISTANCE) {
+                if (Math.abs(deltaX) > MIN_DISTANCE)
+                {
                     // left or right
-                    if (deltaX < 0) {
+                    if (deltaX < 0)
+                    {
                         //Logger.show(Log.INFO,logTag, "Swipe Left to Right");
                         mSwipeDetected = Action.LR;
                         return true;
                     }
-                    if (deltaX > 0) {
+                    if (deltaX > 0)
+                    {
                         //Logger.show(Log.INFO,logTag, "Swipe Right to Left");
                         mSwipeDetected = Action.RL;
                         return true;
@@ -61,14 +72,17 @@ public class SwipeDetector implements View.OnTouchListener {
                 } else
 
                     // vertical swipe detection
-                    if (Math.abs(deltaY) > MIN_DISTANCE) {
+                    if (Math.abs(deltaY) > MIN_DISTANCE)
+                    {
                         // top or down
-                        if (deltaY < 0) {
+                        if (deltaY < 0)
+                        {
                             //Logger.show(Log.INFO,logTag, "Swipe Top to Bottom");
                             mSwipeDetected = Action.TB;
                             return false;
                         }
-                        if (deltaY > 0) {
+                        if (deltaY > 0)
+                        {
                             //Logger.show(Log.INFO,logTag, "Swipe Bottom to Top");
                             mSwipeDetected = Action.BT;
                             return false;

@@ -6,14 +6,13 @@ import org.json.JSONObject;
 
 import io.realm.RealmList;
 import ru.alexangan.developer.geatech.Models.ClientData;
+import ru.alexangan.developer.geatech.Models.GeaSopralluogo;
 import ru.alexangan.developer.geatech.Models.ProductData;
 import ru.alexangan.developer.geatech.Models.SubproductItem;
 import ru.alexangan.developer.geatech.Models.VisitItem;
-import ru.alexangan.developer.geatech.Models.GeaSopralluogo;
 
 /**
- * Created by user on 12/2/2016.
- */
+ * Created by user on 12/2/2016.*/
 
 public class JSON_to_model
 {
@@ -68,7 +67,7 @@ public class JSON_to_model
                 String product = client_data.getString("product");
 
 
-                RealmList<SubproductItem> subproductsList = new RealmList<SubproductItem>();
+                RealmList<SubproductItem> subproductsList = new RealmList<>();
 
                 for (int j = 0; j < subproducts.length(); j++)
                 {
@@ -98,10 +97,5 @@ public class JSON_to_model
         }
 
         return visitItems;
-    }
-
-    public String getData(String visitDataResponse)
-    {
-        return visitDataResponse;
     }
 }

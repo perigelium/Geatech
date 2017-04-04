@@ -18,14 +18,13 @@ import ru.alexangan.developer.geatech.Models.ReportStates;
 import ru.alexangan.developer.geatech.R;
 
 /**
- * Created by user on 11/21/2016.
- */
+ * Created by user on 11/21/2016.*/
 
 public class ReportsListAdapter extends BaseAdapter
 {
     private Context mContext;
-    int layout_id;
-    ArrayList<ReportStates> reportStatesItems;
+    private int layout_id;
+    private ArrayList<ReportStates> reportStatesItems;
 
     public ReportsListAdapter(Context context, int layout_id, ArrayList<ReportStates> reportStatesItems)
     {
@@ -106,13 +105,13 @@ public class ReportsListAdapter extends BaseAdapter
             tvVisitDay.setText(Integer.toString(calendar.get(Calendar.DAY_OF_MONTH)));
             tvVisitMonth.setText(ItalianMonths.numToString(calendar.get(Calendar.MONTH)+1));
 
-            String minuteStr = Integer.toString(calendar.get(calendar.MINUTE));
+            String minuteStr = Integer.toString(calendar.get(Calendar.MINUTE));
             if (minuteStr.length() == 1)
             {
                 minuteStr = "0" + minuteStr;
             }
 
-            tvVisitTime.setText(Integer.toString(calendar.get(calendar.HOUR_OF_DAY)) + ":" + minuteStr);
+            tvVisitTime.setText(Integer.toString(calendar.get(Calendar.HOUR_OF_DAY)) + ":" + minuteStr);
         }
 
         return row;

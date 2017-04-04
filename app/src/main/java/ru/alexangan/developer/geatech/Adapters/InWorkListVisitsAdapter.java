@@ -26,14 +26,13 @@ import static ru.alexangan.developer.geatech.Models.GlobalConstants.realm;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.selectedTech;
 
 /**
- * Created by user on 11/21/2016.
- */
+ * Created by user on 11/21/2016.*/
 
 public class InWorkListVisitsAdapter extends BaseAdapter
 {
     private Context mContext;
-    int layout_id;
-    ArrayList<VisitItem> visitItemsDateTimeSet;
+    private int layout_id;
+    private ArrayList<VisitItem> visitItemsDateTimeSet;
 
     public InWorkListVisitsAdapter(Context context, int layout_id, ArrayList<VisitItem> objects)
     {
@@ -62,7 +61,8 @@ public class InWorkListVisitsAdapter extends BaseAdapter
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(int position, View convertView, ViewGroup parent)
+    {
         // return super.getView(position, convertView, parent);
 
         LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -80,9 +80,9 @@ public class InWorkListVisitsAdapter extends BaseAdapter
                 .equalTo("id_sopralluogo", idSopralluogo).findFirst();
         realm.commitTransaction();
 
-        TextView tvVisitDay = (TextView)row.findViewById(R.id.tvVisitDay);
-        TextView tvVisitMonth = (TextView)row.findViewById(R.id.tvVisitMonth);
-        TextView tvVisitTime = (TextView)row.findViewById(R.id.tvVisitTime);
+        TextView tvVisitDay = (TextView) row.findViewById(R.id.tvVisitDay);
+        TextView tvVisitMonth = (TextView) row.findViewById(R.id.tvVisitMonth);
+        TextView tvVisitTime = (TextView) row.findViewById(R.id.tvVisitTime);
 
         TextView clientNameTextView = (TextView) row.findViewById(R.id.tvClientName);
         clientNameTextView.setText(clientData.getName());
@@ -93,48 +93,47 @@ public class InWorkListVisitsAdapter extends BaseAdapter
         TextView clientAddressTextView = (TextView) row.findViewById(R.id.tvClientAddress);
         clientAddressTextView.setText(clientData.getAddress());
 
-        String visitDateTime = reportStates.getData_ora_sopralluogo();
-
-        if(visitDateTime != null)
+        if (reportStates != null)
         {
-            Calendar calendar = Calendar.getInstance();
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
+            String visitDateTime = reportStates.getData_ora_sopralluogo();
 
-            try
+            if (visitDateTime != null)
             {
-                calendar.setTime(sdf.parse(visitDateTime));
+                Calendar calendar = Calendar.getInstance();
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
 
-            } catch (ParseException e)
-            {
-                e.printStackTrace();
+                try
+                {
+                    calendar.setTime(sdf.parse(visitDateTime));
+
+                } catch (ParseException e)
+                {
+                    e.printStackTrace();
+                }
+
+                tvVisitDay.setText(Integer.toString(calendar.get(Calendar.DAY_OF_MONTH)));
+                tvVisitMonth.setText(ItalianMonths.numToString(calendar.get(Calendar.MONTH) + 1));
+
+                String minuteStr = Integer.toString(calendar.get(Calendar.MINUTE));
+                if (minuteStr.length() == 1)
+                {
+                    minuteStr = "0" + minuteStr;
+                }
+
+                tvVisitTime.setText(Integer.toString(calendar.get(Calendar.HOUR_OF_DAY)) + ":" + minuteStr);
             }
 
-            tvVisitDay.setText(Integer.toString(calendar.get(Calendar.DAY_OF_MONTH)));
-            tvVisitMonth.setText(ItalianMonths.numToString(calendar.get(Calendar.MONTH)+1));
 
-            String minuteStr = Integer.toString(calendar.get(calendar.MINUTE));
-            if (minuteStr.length() == 1)
-            {
-                minuteStr = "0" + minuteStr;
-            }
-
-            tvVisitTime.setText(Integer.toString(calendar.get(calendar.HOUR_OF_DAY)) + ":" + minuteStr);
-        }
-
-
-        if(reportStates != null)
-        {
             String generalInfoCompletionState = reportStates.getGeneralInfoCompletionStateString(reportStates.getGeneralInfoCompletionState()).Value();
             String reportCompletionState = reportStates.getReportCompletionStateString(reportStates.getReportCompletionState()).Value();
 
-            int photoAddedNumber =  reportStates.getPhotoAddedNumber();
+            int photoAddedNumber = reportStates.getPhotoAddedNumber();
             String photoAddedNumberStr;
 
-            if(photoAddedNumber == 0)
+            if (photoAddedNumber == 0)
             {
                 photoAddedNumberStr = reportStates.getPhotoAddedNumberString(photoAddedNumber).Value();
-            }
-            else
+            } else
             {
                 photoAddedNumberStr = photoAddedNumber + reportStates.getPhotoAddedNumberString(photoAddedNumber).Value();
             }

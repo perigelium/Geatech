@@ -15,28 +15,23 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Locale;
 
-import io.realm.RealmResults;
 import ru.alexangan.developer.geatech.Models.ClientData;
+import ru.alexangan.developer.geatech.Models.GeaSopralluogo;
 import ru.alexangan.developer.geatech.Models.ItalianMonths;
 import ru.alexangan.developer.geatech.Models.ProductData;
-import ru.alexangan.developer.geatech.Models.ReportStates;
 import ru.alexangan.developer.geatech.Models.VisitItem;
-import ru.alexangan.developer.geatech.Models.GeaSopralluogo;
 import ru.alexangan.developer.geatech.R;
 
-import static ru.alexangan.developer.geatech.Models.GlobalConstants.company_id;
-import static ru.alexangan.developer.geatech.Models.GlobalConstants.realm;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.selectedTech;
 
 /**
- * Created by user on 11/21/2016.
- */
+ * Created by user on 11/21/2016.*/
 
 public class MyListVisitsAdapter extends BaseAdapter
 {
     private Context mContext;
     private ArrayList<VisitItem> visitItems;
-    int layout_id;
+    private int layout_id;
     //ViewHolder holder;
 
     public MyListVisitsAdapter(Context context, int layout_id, ArrayList<VisitItem> visitItems)
@@ -117,7 +112,7 @@ public class MyListVisitsAdapter extends BaseAdapter
         ProductData productData = visitItem.getProductData();
         GeaSopralluogo geaSopralluogo = visitItem.getGeaSopralluogo();
         String dataOraSopralluogo = geaSopralluogo.getData_ora_sopralluogo();
-        int idSopralluogo = geaSopralluogo.getId_sopralluogo();
+        //int idSopralluogo = geaSopralluogo.getId_sopralluogo();
         int id_tecnico = geaSopralluogo.getId_tecnico();
         String productType = productData.getProductType();
 
@@ -172,16 +167,16 @@ public class MyListVisitsAdapter extends BaseAdapter
             ivPersonTimeSet.setVisibility(View.VISIBLE);
             ivPersonTimeUnset.setVisibility(View.GONE);
 
-            tvVisitDay.setText(Integer.toString(calendar.get(calendar.DAY_OF_MONTH)));
-            tvVisitMonth.setText(ItalianMonths.numToString(calendar.get(calendar.MONTH) + 1));
+            tvVisitDay.setText(Integer.toString(calendar.get(Calendar.DAY_OF_MONTH)));
+            tvVisitMonth.setText(ItalianMonths.numToString(calendar.get(Calendar.MONTH) + 1));
 
-            String minuteStr = Integer.toString(calendar.get(calendar.MINUTE));
+            String minuteStr = Integer.toString(calendar.get(Calendar.MINUTE));
             if (minuteStr.length() == 1)
             {
                 minuteStr = "0" + minuteStr;
             }
 
-            tvVisitTime.setText(Integer.toString(calendar.get(calendar.HOUR_OF_DAY)) + ":" + minuteStr);
+            tvVisitTime.setText(Integer.toString(calendar.get(Calendar.HOUR_OF_DAY)) + ":" + minuteStr);
         } else
         {
             calendarioIcon.setVisibility(View.VISIBLE);
@@ -193,7 +188,7 @@ public class MyListVisitsAdapter extends BaseAdapter
     return row;
 }
 
-static class ViewHolder
+/*static class ViewHolder
 {
     ImageView calendarioIcon;
     View vVisitDateView;
@@ -206,5 +201,5 @@ static class ViewHolder
     TextView clientNameTextView;
     TextView serviceTypeTextView;
     TextView clientAddressTextView;
-}
+}*/
 }

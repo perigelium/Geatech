@@ -3,14 +3,11 @@ package ru.alexangan.developer.geatech.Adapters;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,7 +20,6 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
@@ -37,12 +33,12 @@ import ru.alexangan.developer.geatech.Models.ClientData;
 import ru.alexangan.developer.geatech.Models.GeaImagineRapporto;
 import ru.alexangan.developer.geatech.Models.GeaItemRapporto;
 import ru.alexangan.developer.geatech.Models.GeaRapporto;
+import ru.alexangan.developer.geatech.Models.GeaSopralluogo;
 import ru.alexangan.developer.geatech.Models.ItalianMonths;
 import ru.alexangan.developer.geatech.Models.ProductData;
 import ru.alexangan.developer.geatech.Models.ReportItem;
 import ru.alexangan.developer.geatech.Models.ReportStates;
 import ru.alexangan.developer.geatech.Models.VisitItem;
-import ru.alexangan.developer.geatech.Models.GeaSopralluogo;
 import ru.alexangan.developer.geatech.Network.NetworkUtils;
 import ru.alexangan.developer.geatech.R;
 
@@ -52,27 +48,25 @@ import static ru.alexangan.developer.geatech.Models.GlobalConstants.listVisitsIs
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.realm;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.selectedTech;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.tokenStr;
-import static ru.alexangan.developer.geatech.Models.GlobalConstants.visitItems;
 
 /**
- * Created by user on 11/21/2016.
- */
+ * Created by user on 11/21/2016.*/
 
 public class NotSentListVisitsAdapter extends BaseAdapter implements Callback
 {
     private final ProgressDialog requestServerDialog;
-    ArrayList<VisitItem> visitItemsDateTimeSet;
-    int layout_id;
-    ReportStates reportStates;
-    Call callSendReport, callSendImage;
-    Activity activity;
-    String reportSendResponse;
-    NetworkUtils networkUtils;
-    List<GeaImagineRapporto> imagesArray;
-    List<Call> callSendImagesList;
-    ViewHolder mViewHolder;
-    ArrayList<Boolean> alReportSent;
-    int objectsSentSuccessfully;
+    private ArrayList<VisitItem> visitItemsDateTimeSet;
+    private int layout_id;
+    private ReportStates reportStates;
+    private Call callSendReport, callSendImage;
+    private Activity activity;
+    private String reportSendResponse;
+    private NetworkUtils networkUtils;
+    private List<GeaImagineRapporto> imagesArray;
+    private List<Call> callSendImagesList;
+    private ViewHolder mViewHolder;
+    private ArrayList<Boolean> alReportSent;
+    private int objectsSentSuccessfully;
 
     public NotSentListVisitsAdapter(Activity activity, int layout_id, ArrayList<VisitItem> objects)
     {
@@ -136,7 +130,7 @@ public class NotSentListVisitsAdapter extends BaseAdapter implements Callback
             mViewHolder.btnSendReportNow = (Button) row.findViewById(R.id.btnSendReportNow);
 
             mViewHolder.tvDataOraReportSent = (TextView) row.findViewById(R.id.tvDataOraReportSent);
-            mViewHolder.tvDataOraReportSent.setText("Rapporto non è stato ancora inviato");
+            mViewHolder.tvDataOraReportSent.setText(R.string.ReportNotAlreadySent);
 
             row.setTag(mViewHolder);
 
@@ -230,13 +224,13 @@ public class NotSentListVisitsAdapter extends BaseAdapter implements Callback
             mViewHolder.tvVisitDay.setText(Integer.toString(calendar.get(Calendar.DAY_OF_MONTH)));
             mViewHolder.tvVisitMonth.setText(ItalianMonths.numToString(calendar.get(Calendar.MONTH) + 1));
 
-            String minuteStr = Integer.toString(calendar.get(calendar.MINUTE));
+            String minuteStr = Integer.toString(calendar.get(Calendar.MINUTE));
             if (minuteStr.length() == 1)
             {
                 minuteStr = "0" + minuteStr;
             }
 
-            mViewHolder.tvVisitTime.setText(Integer.toString(calendar.get(calendar.HOUR_OF_DAY)) + ":" + minuteStr);
+            mViewHolder.tvVisitTime.setText(Integer.toString(calendar.get(Calendar.HOUR_OF_DAY)) + ":" + minuteStr);
 
         }
 
@@ -252,8 +246,8 @@ public class NotSentListVisitsAdapter extends BaseAdapter implements Callback
 
         VisitItem visitItem = visitItemsDateTimeSet.get(selectedIndex);
         GeaSopralluogo geaSopralluogo = visitItem.getGeaSopralluogo();
-        ProductData productData = visitItem.getProductData();
-        String productType = productData.getProductType();
+        //ProductData productData = visitItem.getProductData();
+        //String productType = productData.getProductType();
         //int idProductType = productData.getIdProductType();
         int idSopralluogo = geaSopralluogo.getId_sopralluogo();
 
@@ -364,11 +358,7 @@ public class NotSentListVisitsAdapter extends BaseAdapter implements Callback
                         {
                             strSuccess = jsonObject.getString("success");
 
-                            if (strSuccess.equals("0"))
-                            {
-
-                            }
-                            else
+                            if (!strSuccess.equals("0"))
                             {
                                 objectsSentSuccessfully++;
 
@@ -507,7 +497,7 @@ public class NotSentListVisitsAdapter extends BaseAdapter implements Callback
         requestServerDialog.dismiss();
     }
 
-    class ViewHolder
+    private class ViewHolder
     {
         Button btnSendReportNow;
         TextView tvVisitDay;

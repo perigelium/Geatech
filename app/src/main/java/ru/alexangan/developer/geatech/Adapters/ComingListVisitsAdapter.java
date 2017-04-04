@@ -25,8 +25,7 @@ import static ru.alexangan.developer.geatech.Models.GlobalConstants.realm;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.selectedTech;
 
 /**
- * Created by user on 11/21/2016.
- */
+ * Created by user on 11/21/2016.*/
 
 public class ComingListVisitsAdapter extends BaseAdapter
 {

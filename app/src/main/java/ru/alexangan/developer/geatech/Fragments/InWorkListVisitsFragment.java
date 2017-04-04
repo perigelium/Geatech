@@ -1,7 +1,6 @@
 package ru.alexangan.developer.geatech.Fragments;
 
 import android.app.ListFragment;
-import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,14 +31,6 @@ public class InWorkListVisitsFragment extends ListFragment
 {
     ArrayList<Integer> visitItemsPositions;
     private Communicator mCommunicator;
-
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState)
-    {
-        super.onActivityCreated(savedInstanceState);
-
-        Context context = getActivity();
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState)
