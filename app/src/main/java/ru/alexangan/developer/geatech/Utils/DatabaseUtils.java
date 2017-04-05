@@ -50,7 +50,7 @@ public class DatabaseUtils
 
         if(geaItemRapportoResults.size() == 0)
         {
-            return ReportStates.REPORT_STATE_INDETERMINATE;
+            return ReportStates.REPORT_NON_INITIATED;
         }
 
         boolean reportComplete = true;

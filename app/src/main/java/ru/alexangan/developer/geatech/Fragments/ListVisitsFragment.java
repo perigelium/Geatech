@@ -115,21 +115,21 @@ public class ListVisitsFragment extends ListFragment
 
             if(ownReport)
             {
-                realm.beginTransaction();
+/*                realm.beginTransaction();
                 ReportStates reportStates = realm.where(ReportStates.class)
                         .equalTo("company_id", company_id).equalTo("tech_id", selectedTech.getId())
                         .equalTo("id_sopralluogo", id_sopralluogo).findFirst();
-                realm.commitTransaction();
+                realm.commitTransaction();*/
 
-                if (reportStates != null)
+/*                if (reportStates != null)
                 {
                     realm.beginTransaction();
                     if(reportStates.getId_rapporto_sopralluogo() != 0)
-                    {
+                    {*/
                         visitItemsFiltered.add(visitItem);
-                    }
+/*                    }
                     realm.commitTransaction();
-                }
+                }*/
             }
         }
 

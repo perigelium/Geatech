@@ -270,14 +270,14 @@ public class LoginTechSelectionFragment extends Fragment implements View.OnClick
 
                         for (i = 0; i < techModelList.size(); i++)
                         {
-                            saTecnicianList.add(techModelList.get(i).getFullNameTehnic());
+                            String fullTechName = techModelList.get(i).getFullNameTehnic();
+                            saTecnicianList.add(fullTechName);
 
                             if (idPredefinedTech != -1 && techModelList.get(i).getId() == idPredefinedTech)
                             {
                                 selectedTechPos = i + 1;
                                 chkboxRememberTech.setChecked(true);
-                                fullNameTechnic = techModelList.get(i).getFullNameTehnic();
-                                break;
+                                //fullNameTechnic = techModelList.get(i).getFullNameTehnic();
                             }
                         }
 
@@ -337,7 +337,7 @@ public class LoginTechSelectionFragment extends Fragment implements View.OnClick
             String strTechCognome = etTechCognome.getText().toString();
             String strNomeCognome = strTechNome + " " + strTechCognome;
 
-            if (strNomeCognome.length() > 6)
+            if (strTechNome.length() > 3 && strTechCognome.length() > 3 && strNomeCognome.length() > 6)
             {
                 disableInputAndShowProgressDialog();
 

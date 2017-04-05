@@ -147,6 +147,7 @@ public class NetworkUtils
         OkHttpClient okHttpClient = defaultHttpClient.build();
 
         JSONObject jsonObject = new JSONObject();
+
         try
         {
             jsonObject.put("token", tokenStr);

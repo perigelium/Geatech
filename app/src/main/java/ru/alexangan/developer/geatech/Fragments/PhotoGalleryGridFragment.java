@@ -17,6 +17,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.RequiresApi;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,13 +26,18 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 
 import io.realm.RealmResults;
 import ru.alexangan.developer.geatech.Adapters.GridViewAdapter;
@@ -200,21 +206,21 @@ public class PhotoGalleryGridFragment extends Fragment
 
                 if (currentPicPos == alImgThumbs.size() - 1)
                 { // open Camera
-                    if (checkSelfPermission(activity, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)
+                    if (checkSelfPermission(activity, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
+                            || checkSelfPermission(activity, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED)
                     {
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
                         {
 
                             String[] permissions = new String[]
                                     {
-                                            Manifest.permission.READ_EXTERNAL_STORAGE,
+                                            Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.CAMERA
                                     };
 
                             requestMultiplePermissions(permissions);
                         }
                     } else
                     {
-
                         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                         //intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
                         startActivityForResult(intent, PICK_CAMERA_IMAGE);
@@ -319,16 +325,30 @@ public class PhotoGalleryGridFragment extends Fragment
     {
         super.onActivityResult(requestCode, resultCode, imageReturnedIntent);
 
+        InputStream stream = null;
+
         switch (requestCode)
         {
             case PICK_CAMERA_IMAGE:
                 if (resultCode == RESULT_OK)
                 {
-                    String filePath = MediaUtils.getLastShotImagePath(activity);
+                    if(imageReturnedIntent != null)
+                    {
 
-                    Uri uri = Uri.parse(new File(filePath).toString());
+                            //stream = activity.getContentResolver().openInputStream(imageReturnedIntent.getData());
+                            //Uri uri = imageReturnedIntent.getData();
 
-                    saveReturnedImage(uri);
+
+                        Bitmap bm = (Bitmap) imageReturnedIntent.getExtras().get("data");
+
+                        saveReturnedImage(bm);
+                    }
+                    else
+                    {
+                        String filePath = MediaUtils.getLastShotImagePath(activity);
+                        Uri uri = Uri.parse(new File(filePath).toString());
+                        saveReturnedImage(uri);
+                    }
                 }
                 break;
 
@@ -344,6 +364,88 @@ public class PhotoGalleryGridFragment extends Fragment
                 break;
         }
         super.onActivityResult(requestCode, resultCode, imageReturnedIntent);
+    }
+
+    private void saveReturnedImage(Bitmap receivedBitmap)
+    {
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd_HH_mm_ss");
+        String  fileName = dateFormat.format(new Date()) + ".png";
+        File file = new File(photosDir, fileName);
+
+        if(file.exists())
+        {
+            showToastMessage(getString(R.string.UnableToAddImage));
+            return;
+        }
+
+
+        Bitmap bmThumb = null;
+        bmThumb = Bitmap.createScaledBitmap(receivedBitmap, imgHolderWidth, imgHolderHeight, false);
+
+
+
+/*        String fileExtension = "";
+        int extensionPtr = fileName.lastIndexOf(".");
+
+        if (extensionPtr != -1)
+        {
+            fileExtension = fileName.substring(extensionPtr);
+        }*/
+
+        //if (fileExtension.length() < 3)
+
+        OutputStream os = null;
+        try
+        {
+            os = new BufferedOutputStream(new FileOutputStream(file));
+        } catch (FileNotFoundException e)
+        {
+            e.printStackTrace();
+        }
+
+        try
+        {
+            receivedBitmap.compress(Bitmap.CompressFormat.PNG, 100, os);
+
+            if (os != null)
+            {
+                os.close();
+            }
+        } catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+
+        //final File fileSrcImage = new File(selectedImage.toString());
+
+/*        Uri uri = Uri.fromFile(file);
+
+        {
+            String strMediaType = ImageUtils.getMimeTypeOfUri(activity, uri);
+            String fileExtension = strMediaType.substring(strMediaType.lastIndexOf("/") + 1);
+            fileExtension = "." + fileExtension;
+            fileName += fileExtension;
+        }*/
+
+        //final File fileResizedImage = new File(photosDir, fileName);
+
+
+
+        alImgThumbs.add(alImgThumbs.size() - 2, bmThumb);
+        alPathItems.add(alPathItems.size() - 2, file);
+
+        gridAdapter = new GridViewAdapter(activity, R.layout.grid_item_layout, alImgThumbs);
+
+        gvPhotoGallery.setAdapter(gridAdapter);
+
+        //bm = null;
+
+        //ShowOriginalImageTask showOriginalImageTask = new ShowOriginalImageTask(file);
+        //showOriginalImageTask.execute();
+
+        //ResizeImageTask resizeImageTask = new ResizeImageTask(file, fileResizedImage);
+        //resizeImageTask.execute();
     }
 
     private void saveReturnedImage(Uri selectedImage)

@@ -8,7 +8,6 @@ public class GeaSopralluogo extends RealmObject
 {
     private int id_sopralluogo;
     private int id_tecnico;
-    private int completion_percent;
 
     //private int id_fornitore;
     //private int id_practice;
@@ -33,8 +32,6 @@ public class GeaSopralluogo extends RealmObject
 
         this.data_ora_presa_appuntamento = data_ora_presa_appuntamento;
         this.data_ora_sopralluogo = data_ora_sopralluogo;
-
-        completion_percent = 100;
     }
 
     public int getId_sopralluogo()

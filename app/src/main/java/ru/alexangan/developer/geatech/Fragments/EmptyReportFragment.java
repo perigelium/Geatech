@@ -64,11 +64,6 @@ public class EmptyReportFragment extends Fragment
         geaModello = realm.where(GeaModelloRapporto.class).equalTo("id_product_type", id_product_type).findFirst();
         realm.commitTransaction();
 
-        if (geaModello == null)
-        {
-            return;
-        }
-
         realm.beginTransaction();
 
         reportStates = realm.where(ReportStates.class).equalTo("company_id", company_id).equalTo("tech_id", selectedTech.getId())
@@ -82,12 +77,16 @@ public class EmptyReportFragment extends Fragment
     @Override
     public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState)
     {
-        rootView = inflater.inflate(R.layout.climatizzazione_report, container, false);
+        rootView = inflater.inflate(R.layout.empty_report, container, false);
 
         viewUtils = new ViewUtils(rootView, id_rapporto_sopralluogo, selectedIndex);
 
         TextView tvReportTitle = (TextView) rootView.findViewById(R.id.tvReportTitle);
-        tvReportTitle.setText(geaModello.getNome_modello());
+
+        if(geaModello != null)
+        {
+            tvReportTitle.setText(geaModello.getNome_modello());
+        }
 
         int idItem = viewUtils.getIdItemStart();
 
@@ -97,12 +96,12 @@ public class EmptyReportFragment extends Fragment
         et.setInputType(InputType.TYPE_CLASS_NUMBER);*/
 
         // SectionHeader1
-        viewUtils.createViewSectionHeader(R.id.header1);
+        //viewUtils.createViewSectionHeader(R.id.header1);
 
 
 
         // SectionHeader2
-        viewUtils.createViewSectionHeader(R.id.header2);
+        //viewUtils.createViewSectionHeader(R.id.header2);
 
 
         return viewUtils.getRootView();

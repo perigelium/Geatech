@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">GATECH</string>
+    <string name="app_name">GeaTech</string>
 
     <string name="GetAltitudeFailedCheckIfOnline">Altitudine non identificata</string>
     <string name="InstallMapApp">Manca un\'applicazione mappe</string>
@@ -33,4 +33,8 @@
     <string name="LoadingImagesInProgress">Caricamento immagini in corso ...</string>
     <string name="PreparingImageForDisplaying">Visualizzazione in corso...</string>
     <string name="UnableToAddImage">Impossibile aggiungere immagine</string>
+    <string name="Unknown">Sconosciuto</string>
+    <string name="ReportNotAlreadySent">Rapporto non è stato ancora inviato</string>
+    <string name="TechnicianAddedSelectFromListBelow">Nuovo tecnico aggiunta con successo\nseleziona dalla lista sottostante per favore</string>
+    <string name="RegisterAnNewTechnician">REGISTRA NUOVO TECNICO</string>
 </resources>

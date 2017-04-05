@@ -26,7 +26,7 @@ public class ReportStates extends RealmObject
     public static int ALTITUDE_UNKNOWN = -999;
 
     private int reportCompletionState;
-    public static int REPORT_STATE_INDETERMINATE = -1;
+    //public static int REPORT_STATE_INDETERMINATE = -1;
     public static int REPORT_NON_INITIATED = 0;
     public static int REPORT_INITIATED = 1;
     public static int REPORT_HALF_COMPLETED = 2;
@@ -86,7 +86,7 @@ public class ReportStates extends RealmObject
 
 
         photoAddedNumber = 0;
-        reportCompletionState = -1;
+        reportCompletionState = 0;
         generalInfoCompletionState = 0;
         sendingReportTriesState = 0;
         dataOraUltimoTentativo = "19:00";

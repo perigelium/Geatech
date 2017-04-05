@@ -1917,11 +1917,16 @@ public class ViewUtils
         final ImageView ivArrowSectionHeader = (ImageView) header.findViewById(R.id.ivArrowSectionHeader);
         final int curHeader = headerNumber;
 
-        realm.beginTransaction();
-        final List<GeaItemModelliRapporto> itemModelli = realm.where(GeaItemModelliRapporto.class)
-                .between("id_sezione", geaSezioniModelli.get(0).getId_sezione(), geaSezioniModelli.get(geaSezioniModelli.size() - 1).getId_sezione())
-                .equalTo("ordine", geaSezioniModelli.get(headerNumber).getOrdine()).findAll();
-        realm.commitTransaction();
+        if(geaSezioniModelli == null)
+        {
+            return;
+        }
+            realm.beginTransaction();
+            final List<GeaItemModelliRapporto> itemModelli = realm.where(GeaItemModelliRapporto.class)
+                    .between("id_sezione", geaSezioniModelli.get(0).getId_sezione(), geaSezioniModelli.get(geaSezioniModelli.size() - 1).getId_sezione())
+                    .equalTo("ordine", geaSezioniModelli.get(headerNumber).getOrdine()).findAll();
+            realm.commitTransaction();
+
 
         flSectionHeader.setOnClickListener(new View.OnClickListener()
         {

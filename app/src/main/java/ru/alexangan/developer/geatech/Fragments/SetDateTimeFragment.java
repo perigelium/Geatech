@@ -189,7 +189,10 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
         GeaModelloRapporto geaModello = realm.where(GeaModelloRapporto.class).equalTo("id_product_type", id_product_type).findFirst();
         realm.commitTransaction();
 
-        product_type = geaModello.getNome_modello();
+        if(geaModello != null)
+        {
+            product_type = geaModello.getNome_modello();
+        }
 
         GeaSopralluogo geaSopralluogo = visitItem.getGeaSopralluogo();
         String dataOraSopralluogo = geaSopralluogo.getData_ora_sopralluogo();
@@ -258,6 +261,12 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
         else
         {
             disableInput();
+        }
+
+        if(reportStates==null || reportStates.getData_ora_sopralluogo() == null)
+        {
+            btnAnnullaSetDateTime.setEnabled(false);
+            btnAnnullaSetDateTime.setAlpha(.4f);
         }
 
         mYear = calendar.get(Calendar.YEAR);
