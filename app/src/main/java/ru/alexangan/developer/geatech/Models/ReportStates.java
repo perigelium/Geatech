@@ -22,8 +22,10 @@ public class ReportStates extends RealmObject
 
     private double latitudine;
     private double longitudine;
-    private int altitudine;
+    private int altitude;
+    private String altitudine;
     public static int ALTITUDE_UNKNOWN = -999;
+    public static String STRING_ALTITUDE_UNKNOWN = "Sconosciuto";
 
     private int reportCompletionState;
     //public static int REPORT_STATE_INDETERMINATE = -1;
@@ -94,7 +96,7 @@ public class ReportStates extends RealmObject
         nome_tecnico = "";
         latitudine = 0;
         longitudine = 0;
-        altitudine = ALTITUDE_UNKNOWN;
+        altitude = ALTITUDE_UNKNOWN;
     }
 
     public RealmString getReportCompletionStateString(int reportCompletionState)
@@ -204,14 +206,14 @@ public class ReportStates extends RealmObject
         this.latitudine = latitudine;
     }
 
-    public int getAltitudine()
+    public int getAltitude()
     {
-        return altitudine;
+        return altitude;
     }
 
-    public void setAltitudine(int altitudine)
+    public void setAltitude(int altitude)
     {
-        this.altitudine = altitudine;
+        this.altitude = altitude;
     }
 
     public int getGeneralInfoCompletionState()

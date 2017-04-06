@@ -307,12 +307,11 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
                                     alertDialog("Info", getString(R.string.OfflineModeShowLoginScreenQuestion));
                                 }
                             });
-
-                            //showToastMessage(errorStr);
                         }
                         else
                         {
-                            showToastMessage("Error in sent data");
+                            showToastMessage(errorStr);
+                            //showToastMessage("Error in sent data");
                         }
 
                         activity.runOnUiThread(new Runnable()
@@ -325,7 +324,7 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
 
                     } catch (JSONException e)
                     {
-                        showToastMessage("JSON Error in report response");
+                        showToastMessage(getString(R.string.DatabaseError));
 
                         activity.runOnUiThread(new Runnable()
                         {
@@ -338,6 +337,8 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
                     }
                 } else
                 {
+                    callSendImagesList.clear();
+
                     for (GeaImagineRapporto geaImagineRapporto : imagesArray)
                     {
                         callSendImagesList.add(networkUtils.sendImage(this, activity, geaImagineRapporto));

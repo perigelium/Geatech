@@ -66,6 +66,12 @@ public class ImageUtils
                 inSampleSize = Math.round((float) width / (float) reqWidth);
             }
         }
+
+/*        if(inSampleSize > 1)
+        {
+            inSampleSize++;
+        }*/
+
         return inSampleSize;
     }
 
@@ -122,25 +128,32 @@ public class ImageUtils
 
         int width = options.outWidth;
         int height = options.outHeight;
+
         float ratioBitmap = (float) width / (float) height;
-        float ratioMax = (float) maxWidth / (float) maxHeight;
+        //float ratioMax = (float) maxWidth / (float) maxHeight;
 
-        int finalWidth = maxWidth;
-        int finalHeight = maxHeight;
+        int finalWidth = width;
+        int finalHeight = height;
 
-        if (ratioMax > 1)
+        if(width > maxWidth || height > maxHeight)
         {
-            finalWidth = (int) ((float) maxHeight * ratioBitmap);
-        } else
-        {
-            finalHeight = (int) ((float) maxWidth / ratioBitmap);
+
+            if (ratioBitmap > 1) // width > height
+            {
+                finalWidth = maxWidth;
+                finalHeight = (int) ((float) maxWidth / ratioBitmap);
+
+            } else
+            {
+                finalHeight = maxHeight;
+                finalWidth = (int) ((float) maxHeight * ratioBitmap);
+            }
         }
+            // Calculate inSampleSize
+            options.inSampleSize = calculateInSampleSize(options, finalWidth, finalHeight);
 
-        // Calculate inSampleSize
-        options.inSampleSize = calculateInSampleSize(options, finalWidth, finalHeight);
-
-        // Decode bitmap with inSampleSize set
-        options.inJustDecodeBounds = false;
+            // Decode bitmap with inSampleSize set
+            options.inJustDecodeBounds = false;
 
         try
         {

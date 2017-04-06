@@ -8,7 +8,7 @@ import android.view.View;
 
 public interface Communicator
 {
-    void onDateTimeSetReturned(boolean mDatetimeSetBefore);
+    void onDateTimeSetReturned(int itemIndex);
 
     void onDetailedReportReturned();
 

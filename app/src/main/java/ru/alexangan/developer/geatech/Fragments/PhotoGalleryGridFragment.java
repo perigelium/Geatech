@@ -50,6 +50,7 @@ import ru.alexangan.developer.geatech.Utils.ImageUtils;
 import ru.alexangan.developer.geatech.Utils.MediaUtils;
 
 import static android.app.Activity.RESULT_OK;
+import static android.os.Environment.getExternalStorageDirectory;
 import static android.support.v4.content.PermissionChecker.checkSelfPermission;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.company_id;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.realm;
@@ -76,6 +77,7 @@ public class PhotoGalleryGridFragment extends Fragment
     private ProgressDialog progressLoadingImages;
     ReportStates reportStates;
     Bitmap bm;
+    String fullSizeImgPath;
 
 /*    private Handler handler;
     private Runnable runnable;*/
@@ -179,8 +181,7 @@ public class PhotoGalleryGridFragment extends Fragment
                     {
                         alImgThumbs.remove(currentPicPos);
                         alPathItems.remove(currentPicPos);
-                    }
-                    else
+                    } else
                     {
                         alImgThumbs.clear();
                         alPathItems.clear();
@@ -211,18 +212,23 @@ public class PhotoGalleryGridFragment extends Fragment
                     {
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
                         {
-
                             String[] permissions = new String[]
                                     {
-                                            Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.CAMERA
+                                            Manifest.permission.CAMERA
                                     };
 
                             requestMultiplePermissions(permissions);
                         }
                     } else
                     {
+                        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd_HH_mm_ss");
+                        String fileName = dateFormat.format(new Date()) + ".jpg";
+                        File file = new File(getExternalStorageDirectory().getAbsolutePath(), fileName);
+                        fullSizeImgPath = file.getAbsolutePath();
+                        Uri uriFullSizeCameraImage = Uri.fromFile(file);
+
                         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                        //intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
+                        intent.putExtra(MediaStore.EXTRA_OUTPUT, uriFullSizeCameraImage);
                         startActivityForResult(intent, PICK_CAMERA_IMAGE);
                     }
                 } else if (currentPicPos == alImgThumbs.size() - 2)
@@ -296,7 +302,13 @@ public class PhotoGalleryGridFragment extends Fragment
                 .equalTo("tech_id", selectedTech.getId()).equalTo("id_rapporto_sopralluogo", id_rapporto_sopralluogo).findAll();
         reportImages.deleteAllFromRealm();
 
-        reportStates.setPhotoAddedNumber(alPathItems.size() - 2);
+        alPathItems.clear();
+        for (File path : photosDir.listFiles())
+        {
+            alPathItems.add(path);
+        }
+
+        reportStates.setPhotoAddedNumber(alPathItems.size());
 
         realm.commitTransaction();
 
@@ -304,8 +316,8 @@ public class PhotoGalleryGridFragment extends Fragment
 
         for (File imageFile : alPathItems)
         {
-            if (!imageFile.getPath().equals("bmpCameraAddButton") && !imageFile.getPath().equals("bmpGalleryAddButton"))
-            {
+/*            if (!imageFile.getPath().equals("bmpCameraAddButton") && !imageFile.getPath().equals("bmpGalleryAddButton"))
+            {*/
 
                 String fileName = imageFile.getName();
 
@@ -316,7 +328,7 @@ public class PhotoGalleryGridFragment extends Fragment
                 realm.copyToRealm(gea_immagine);
 
                 realm.commitTransaction();
-            }
+           // }
         }
     }
 
@@ -330,27 +342,33 @@ public class PhotoGalleryGridFragment extends Fragment
         switch (requestCode)
         {
             case PICK_CAMERA_IMAGE:
-                if (resultCode == RESULT_OK)
+                //if (resultCode == RESULT_OK)
+            {
+/*                    if(imageReturnedIntent != null)
+                    {*/
+
+                //stream = activity.getContentResolver().openInputStream(imageReturnedIntent.getData());
+                //Uri uri = imageReturnedIntent.getData();
+
+                File imgFile = new File(fullSizeImgPath);
+                Bitmap bmFulSize = null;
+
+                if (imgFile.exists())
                 {
-                    if(imageReturnedIntent != null)
-                    {
-
-                            //stream = activity.getContentResolver().openInputStream(imageReturnedIntent.getData());
-                            //Uri uri = imageReturnedIntent.getData();
+                    //bmFulSize = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
 
 
-                        Bitmap bm = (Bitmap) imageReturnedIntent.getExtras().get("data");
+                    //Bitmap bm = (Bitmap) imageReturnedIntent.getExtras().get("data");
 
-                        saveReturnedImage(bm);
-                    }
-                    else
-                    {
-                        String filePath = MediaUtils.getLastShotImagePath(activity);
-                        Uri uri = Uri.parse(new File(filePath).toString());
-                        saveReturnedImage(uri);
-                    }
+                    saveReturnedImage(fullSizeImgPath);
+                } else
+                {
+                    String filePath = MediaUtils.getLastShotImagePath(activity);
+                    //Uri uri = Uri.parse(new File(filePath).toString());
+                    saveReturnedImage(filePath);
                 }
-                break;
+            }
+            break;
 
             case PICK_GALLERY_IMAGE:
                 if (resultCode == RESULT_OK)
@@ -359,7 +377,7 @@ public class PhotoGalleryGridFragment extends Fragment
 
                     String filePath = MediaUtils.getRealPathFromURI(getActivity(), selectedImage);
 
-                    saveReturnedImage(Uri.parse(filePath));
+                    saveReturnedImage(filePath);
                 }
                 break;
         }
@@ -370,10 +388,10 @@ public class PhotoGalleryGridFragment extends Fragment
     {
 
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd_HH_mm_ss");
-        String  fileName = dateFormat.format(new Date()) + ".png";
+        String fileName = dateFormat.format(new Date()) + ".png";
         File file = new File(photosDir, fileName);
 
-        if(file.exists())
+        if (file.exists())
         {
             showToastMessage(getString(R.string.UnableToAddImage));
             return;
@@ -431,7 +449,6 @@ public class PhotoGalleryGridFragment extends Fragment
         //final File fileResizedImage = new File(photosDir, fileName);
 
 
-
         alImgThumbs.add(alImgThumbs.size() - 2, bmThumb);
         alPathItems.add(alPathItems.size() - 2, file);
 
@@ -448,31 +465,31 @@ public class PhotoGalleryGridFragment extends Fragment
         //resizeImageTask.execute();
     }
 
-    private void saveReturnedImage(Uri selectedImage)
+    private void saveReturnedImage(String srcImagePath)
     {
-        final File fileSrcImage = new File(selectedImage.toString());
-
-        String fileName = selectedImage.getLastPathSegment();
+        File srcImageFile = new File(srcImagePath);
+        Uri uriSrcImage = Uri.parse(srcImagePath);
+        String srcImageFileName = uriSrcImage.getLastPathSegment();
 
         String fileExtension = "";
-        int extensionPtr = fileName.lastIndexOf(".");
+        int extensionPtr = srcImageFileName.lastIndexOf(".");
 
         if (extensionPtr != -1)
         {
-            fileExtension = fileName.substring(extensionPtr);
+            fileExtension = srcImageFileName.substring(extensionPtr);
         }
 
         if (fileExtension.length() < 3)
         {
-            String strMediaType = ImageUtils.getMimeTypeOfUri(activity, selectedImage);
+            String strMediaType = ImageUtils.getMimeTypeOfUri(activity, uriSrcImage);
             fileExtension = strMediaType.substring(strMediaType.lastIndexOf("/") + 1);
             fileExtension = "." + fileExtension;
-            fileName += fileExtension;
+            srcImageFileName += fileExtension;
         }
 
-        final File fileResizedImage = new File(photosDir, fileName);
+        final File fileResizedImage = new File(photosDir, srcImageFileName);
 
-        if(fileResizedImage.exists())
+        if (fileResizedImage.exists())
         {
             showToastMessage(getString(R.string.UnableToAddImage));
             return;
@@ -480,10 +497,12 @@ public class PhotoGalleryGridFragment extends Fragment
 
         bm = null;
 
-        ShowOriginalImageTask showOriginalImageTask = new ShowOriginalImageTask(fileSrcImage);
+        File fileWithExt = new File(photosDir, srcImageFileName);
+
+        ShowOriginalImageTask showOriginalImageTask = new ShowOriginalImageTask(srcImageFile);
         showOriginalImageTask.execute();
 
-        ResizeImageTask resizeImageTask = new ResizeImageTask(fileSrcImage, fileResizedImage);
+        ResizeImageTask resizeImageTask = new ResizeImageTask(srcImageFile, fileWithExt);
         resizeImageTask.execute();
     }
 
@@ -570,8 +589,13 @@ public class PhotoGalleryGridFragment extends Fragment
             // Resize image to 2048x2048 dimensions maximum
             bm = ImageUtils.createProportionalBitmap(fileSrc.getAbsolutePath());
 
+            if (bm == null)
+            {
+                return null;
+            }
+
             ByteArrayOutputStream bos = new ByteArrayOutputStream();
-            bm.compress(Bitmap.CompressFormat.PNG, 100, bos);
+            bm.compress(Bitmap.CompressFormat.JPEG, 100, bos);
             byte[] bitmapdata = bos.toByteArray();
 
             //write the bytes in file
@@ -599,6 +623,8 @@ public class PhotoGalleryGridFragment extends Fragment
                 e.printStackTrace();
                 success = false;
             }
+
+            //double size = fileDst.length();
 
             return null;
         }

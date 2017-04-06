@@ -89,7 +89,7 @@ public class ReportsListFragment extends ListFragment
             {
                 try
                 {
-                    Date date = sdf.parse(reportStates.getData_ora_sopralluogo());
+                    Date date = sdf.parse(reportStates.getData_ora_invio_rapporto());
                     long time = date.getTime();
                     ////Log.d("DEBUG", String.valueOf(time));
                     unsortedReports.put(time, reportStates);

@@ -458,7 +458,7 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
                 });
 
                 e.printStackTrace();
-                showToastMessage("JSON parse error");
+                showToastMessage(getString(R.string.ReceivedDataError));
                 return;
             }
 
@@ -581,7 +581,7 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
 
                                     enableInput();
 
-                                    mCommunicator.onDateTimeSetReturned(false);
+                                    mCommunicator.onDateTimeSetReturned(selectedIndex);
                                 }
                             });
                         }

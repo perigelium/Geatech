@@ -37,4 +37,5 @@
     <string name="ReportNotAlreadySent">Rapporto non è stato ancora inviato</string>
     <string name="TechnicianAddedSelectFromListBelow">Nuovo tecnico aggiunta con successo\nseleziona dalla lista sottostante per favore</string>
     <string name="RegisterAnNewTechnician">REGISTRA NUOVO TECNICO</string>
+    <string name="ReceivedDataError">Error in dato ricevuto</string>
 </resources>

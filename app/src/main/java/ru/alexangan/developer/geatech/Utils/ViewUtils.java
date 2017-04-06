@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import ru.alexangan.developer.geatech.Models.GeaItemModelliRapporto;
 import ru.alexangan.developer.geatech.Models.GeaModelloRapporto;
@@ -1973,11 +1974,21 @@ public class ViewUtils
         int completionState = DatabaseUtils.getReportInitializationState(id_rapporto_sopralluogo);
         ArrayList<Integer> notSetItems = DatabaseUtils.getNotSetItems(id_rapporto_sopralluogo);
 
-        for (int k = 0; k < headerNumber; k++)
+        for (Map.Entry entry : Switches.entrySet())
+        {
+            int key = (int) entry.getKey();
+            Pair <LinearLayout, LinearLayout> pairLL = LinearLayouts.get(key);
+            if(pairLL != null)
+            {
+                notSetItems.add((Integer) entry.getKey());
+            }
+        }
+
+        for (int k = 0; k < headerNumber; k++) // for each section separately
         {
             for (LinearLayout ll : al_llHeaderSections.get(k))
             {
-                if (completionState == ReportStates.REPORT_ALMOST_COMPLETED && notSetItems != null)
+                if (completionState >= ReportStates.REPORT_HALF_COMPLETED && notSetItems != null)
                 {
                     int i;
                     for (i = 0; i < notSetItems.size(); i++)
@@ -1985,8 +1996,6 @@ public class ViewUtils
                         LinearLayout llSection = null;
                         Pair<LinearLayout, LinearLayout> llSections = null;
                         int idItem = notSetItems.get(i);
-
-                        //llSections = getLinearLayouts().get(idItem);
 
                         do
                         {
@@ -2039,7 +2048,7 @@ public class ViewUtils
                     }
                 } else
                 {
-                    ll.setVisibility(View.GONE);
+                    ll.setVisibility(View.VISIBLE);
                 }
             }
         }

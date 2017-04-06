@@ -521,10 +521,11 @@ public class MainActivity extends Activity implements Communicator, Callback
     }
 
     @Override
-    public void onDateTimeSetReturned(boolean mDatetimeSetBefore)
+    public void onDateTimeSetReturned(int itemIndex)
     {
+        currentSelIndex = itemIndex;
         listVisitsIsObsolete = true;
-        ctrlBtnsFragment1.setCheckedBtnId(R.id.btnVisits);
+        ctrlBtnsFragment2.setCheckedBtnId(R.id.btnInfo);
     }
 
     @Override

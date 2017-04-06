@@ -70,7 +70,7 @@ public class InWorkListVisitsFragment extends ListFragment
 
                         && (generalInfoCompletionState != 0) // data initialized
                         && (reportCompletionState < ReportStates.REPORT_COMPLETED
-                        || photoAddedNumber < ReportStates.PHOTOS_MIN_ADDED) // data not complete
+                        && photoAddedNumber < ReportStates.PHOTOS_MIN_ADDED) // data not complete
                         )
                 {
 

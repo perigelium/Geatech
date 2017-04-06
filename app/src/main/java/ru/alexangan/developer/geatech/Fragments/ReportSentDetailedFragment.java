@@ -161,7 +161,7 @@ public class ReportSentDetailedFragment extends Fragment
 
             double latitude = reportStates.getLatitudine();
             double longitude = reportStates.getLongitudine();
-            double altitude = reportStates.getAltitudine();
+            double altitude = reportStates.getAltitude();
 
             tvCoordNord.setText(String.valueOf(latitude));
             tvCoordEst.setText(String.valueOf(longitude));
