@@ -25,7 +25,6 @@ public class ReportStates extends RealmObject
     private int altitude;
     private String altitudine;
     public static int ALTITUDE_UNKNOWN = -999;
-    public static String STRING_ALTITUDE_UNKNOWN = "Sconosciuto";
 
     private int reportCompletionState;
     //public static int REPORT_STATE_INDETERMINATE = -1;
@@ -329,5 +328,10 @@ public class ReportStates extends RealmObject
     public void setProductType(String productType)
     {
         this.productType = productType;
+    }
+
+    public void setAltitudine(String altitudine)
+    {
+        this.altitudine = altitudine;
     }
 }

@@ -205,6 +205,16 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
 
         ReportStates reportStates = realm.where(ReportStates.class).equalTo("company_id", company_id).equalTo("tech_id", selectedTech.getId())
                 .equalTo("id_sopralluogo", idSopralluogo).findFirst();
+
+        realm.commitTransaction();
+
+        if (reportStates == null)
+        {
+            return;
+        }
+
+        realm.beginTransaction();
+
         id_rapporto_sopralluogo = reportStates.getId_rapporto_sopralluogo();
 
         Calendar calendarNow = Calendar.getInstance();
@@ -223,6 +233,9 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
                 .equalTo("tech_id", selectedTech.getId()).equalTo("id_rapporto_sopralluogo", id_rapporto_sopralluogo).findAll();
         List<GeaItemRapporto> listGeaItemRapporto = new ArrayList<>();
 
+        realm.commitTransaction();
+        realm.beginTransaction();
+
         for (Object gi : geaItemsRapporto)
         {
             GeaItemRapporto gi_unmanaged = realm.copyFromRealm((GeaItemRapporto) gi);
@@ -230,21 +243,36 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
         }
         reportItem.setGea_items_rapporto_sopralluogo(listGeaItemRapporto);
 
+        realm.commitTransaction();
+        realm.beginTransaction();
 
         RealmResults<GeaImagineRapporto> listReportImages = realm.where(GeaImagineRapporto.class)
                 .equalTo("company_id", company_id).equalTo("tech_id", selectedTech.getId())
                 .equalTo("id_rapporto_sopralluogo", id_rapporto_sopralluogo).findAll();
 
+        realm.commitTransaction();
+        realm.beginTransaction();
+
         imagesArray = new ArrayList<>();
+        List<GeaImagineRapporto> imagesForSendingArray = new ArrayList<>();
 
         for (GeaImagineRapporto geaImagineRapporto : listReportImages)
         {
             GeaImagineRapporto geaImagineRapportoUnmanaged = realm.copyFromRealm(geaImagineRapporto);
-            //geaImagineRapportoUnmanaged.setFilePath(null);
-            geaImagineRapportoUnmanaged.setId_immagine_rapporto(0);
             imagesArray.add(geaImagineRapportoUnmanaged);
         }
-        reportItem.setGea_immagini_rapporto_sopralluogo(imagesArray);
+        realm.commitTransaction();
+        realm.beginTransaction();
+
+        for (GeaImagineRapporto geaImagineRapporto : listReportImages)
+        {
+            GeaImagineRapporto geaImagineRapportoUnmanaged = realm.copyFromRealm(geaImagineRapporto);
+
+            geaImagineRapportoUnmanaged.setId_immagine_rapporto(0);
+            geaImagineRapportoUnmanaged.setfilePath("");
+            imagesForSendingArray.add(geaImagineRapportoUnmanaged);
+        }
+        reportItem.setGea_immagini_rapporto_sopralluogo(imagesForSendingArray);
 
         realm.commitTransaction();
 
@@ -261,20 +289,34 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
         if (call == callSendReport)
         {
             showToastMessage(getString(R.string.SendingReportFailed));
-        }
-
-        if (call == callSendImage)
-        {
-            showToastMessage("Invio immagine " + objectsSentSuccessfully + " di " + callSendImagesList.size() + " fallito");
-        }
-
-        activity.runOnUiThread(new Runnable()
-        {
-            public void run()
+            activity.runOnUiThread(new Runnable()
             {
-                enableInput();
+                public void run()
+                {
+                    enableInput();
+                }
+            });
+        }
+
+        for (int i = 0; i < callSendImagesList.size(); i++)
+        {
+            if (call == callSendImagesList.get(i))
+            {
+                showToastMessage("Invio immagine " + (i + 1) + " di " + callSendImagesList.size() + " non riuscito");
+
+                if (i == callSendImagesList.size() - 1)
+                {
+                    activity.runOnUiThread(new Runnable()
+                    {
+                        public void run()
+                        {
+                            enableInput();
+                        }
+                    });
+                }
+                break;
             }
-        });
+        }
     }
 
     @Override
@@ -307,8 +349,7 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
                                     alertDialog("Info", getString(R.string.OfflineModeShowLoginScreenQuestion));
                                 }
                             });
-                        }
-                        else
+                        } else
                         {
                             showToastMessage(errorStr);
                             //showToastMessage("Error in sent data");
@@ -386,7 +427,6 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
 
                         if (jsonObject.has("success"))
                         {
-
                             final String strSuccess;
                             try
                             {
@@ -398,7 +438,7 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
 
                                     showToastMessage("immagine " + objectsSentSuccessfully + " di " + callSendImagesList.size() + " inviato");
 
-                                    if (objectsSentSuccessfully != 0 && objectsSentSuccessfully == callSendImagesList.size())
+                                    if (i == callSendImagesList.size() - 1)
                                     {
                                         activity.runOnUiThread(new Runnable()
                                         {
@@ -429,6 +469,13 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
                             } catch (JSONException e)
                             {
                                 showToastMessage("Immagine JSONException");
+                                activity.runOnUiThread(new Runnable()
+                                {
+                                    public void run()
+                                    {
+                                        enableInput();
+                                    }
+                                });
 
                                 e.printStackTrace();
                             }
@@ -436,17 +483,16 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
                     } catch (JSONException e)
                     {
                         showToastMessage("Immagine JSONException");
+                        activity.runOnUiThread(new Runnable()
+                        {
+                            public void run()
+                            {
+                                enableInput();
+                            }
+                        });
 
                         e.printStackTrace();
                     }
-
-                    activity.runOnUiThread(new Runnable()
-                    {
-                        public void run()
-                        {
-                            enableInput();
-                        }
-                    });
 
                     break;
 

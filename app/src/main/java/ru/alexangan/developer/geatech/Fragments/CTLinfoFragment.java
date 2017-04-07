@@ -244,6 +244,7 @@ public class CTLinfoFragment extends Fragment implements View.OnClickListener, L
                 if (altitude != ReportStates.ALTITUDE_UNKNOWN)
                 {
                     reportStates.setAltitude(Integer.valueOf(etAltitude.getText().toString()));
+                    reportStates.setAltitudine(etAltitude.getText().toString());
                 }
 
                 if (reportStates != null && reportStates.getLatitudine() != 0 && reportStates.getLongitudine() != 0) // && altitude != -999

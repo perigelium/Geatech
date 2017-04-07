@@ -169,6 +169,26 @@ public class LoginTechSelectionFragment extends Fragment implements View.OnClick
             {
             }
         });
+
+/*        OnOpenListener onOpenListener = new OnOpenListener(spTecnicianList)
+        {
+
+            @Override
+            public void onOpen()
+            {
+                // spinner was opened
+                spTecnicianList.setBackgroundColor(Color.parseColor("#ff8bc24a"));
+                //llTechListRow.setBackgroundColor(Color.parseColor("#ff8bc24a"));
+            }
+
+            @Override
+            public void onClose()
+            {
+                spTecnicianList.setBackgroundColor(Color.parseColor("#ff22A04B"));
+
+                // spinner was closed
+            }
+        };*/
     }
 
     @Override
@@ -200,6 +220,7 @@ public class LoginTechSelectionFragment extends Fragment implements View.OnClick
 
 
         spTecnicianList = (Spinner) rootView.findViewById(R.id.spTecnicianList);
+        //llTechListRow = (LinearLayout)  rootView.findViewById(R.id.llTechListRow);
 
         realm.beginTransaction();
         RealmResults<GeaItemModelliRapporto> geaItemModelli = realm.where(GeaItemModelliRapporto.class).findAll();
@@ -281,7 +302,7 @@ public class LoginTechSelectionFragment extends Fragment implements View.OnClick
                             }
                         }
 
-                        ArrayAdapter<String> technicianListAdapter = new ArrayAdapter<>(activity, R.layout.spinner_tech_selection_row, R.id.tvSpinnerTechSelItem, saTecnicianList);
+                        ArrayAdapter <String> technicianListAdapter = new ArrayAdapter<>(activity, R.layout.spinner_tech_selection_row, R.id.tvSpinnerTechSelItem, saTecnicianList);
                         spTecnicianList.setAdapter(technicianListAdapter);
 
                         spTecnicianList.setSelection(selectedTechPos);
@@ -290,19 +311,17 @@ public class LoginTechSelectionFragment extends Fragment implements View.OnClick
                         {
 
                             chkboxRememberTech.setChecked(true);
-                        }
-                        else
+                        } else
                         {
                             chkboxRememberTech.setChecked(false);
                         }
 
-                        if(i != techModelList.size())
+                        if (i != techModelList.size())
                         {
                             realm.beginTransaction();
                             lastSelectedTech = realm.where(TechnicianItem.class).equalTo("full_name_tehnic", fullNameTechnic).findFirst();
                             realm.commitTransaction();
-                        }
-                        else
+                        } else
                         {
                             lastSelectedTech = null;
                         }
@@ -343,8 +362,7 @@ public class LoginTechSelectionFragment extends Fragment implements View.OnClick
 
                 bNewTechAdded = true;
                 callTechnicianList = networkUtils.loginRequest(this, login, password, strNomeCognome, -1);
-            }
-            else
+            } else
             {
                 showToastMessage(getString(R.string.InsertNameAndSurnameFirst));
             }
@@ -710,8 +728,7 @@ public class LoginTechSelectionFragment extends Fragment implements View.OnClick
                             }
                         });
                     }
-                }
-                else
+                } else
                 {
                     activity.runOnUiThread(new Runnable()
                     {

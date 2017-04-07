@@ -2,6 +2,8 @@ package ru.alexangan.developer.geatech.Models;
 
 import android.content.SharedPreferences;
 
+import java.util.List;
+
 import io.realm.Realm;
 import io.realm.RealmList;
 import io.realm.RealmResults;

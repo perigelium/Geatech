@@ -16,7 +16,7 @@
             android:layout_gravity="left"
             android:layout_marginBottom="60dp"
             android:layout_marginTop="60dp"
-            android:layout_marginLeft="45dp"
+            android:layout_marginLeft="30dp"
             android:src="@drawable/login_logo"/>
 
         <View
@@ -29,13 +29,16 @@
             android:id="@+id/Email"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="9dp"
+            android:background="#22A04B"
             android:orientation="vertical">
 
             <TextView
                 android:id="@+id/tvLogin"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="6dp"
+                android:layout_marginTop="6dp"
                 android:text="MAIL"
                 android:textColor="#ffffff"/>
 
@@ -43,6 +46,9 @@
                 android:id="@+id/etLogin"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="6dp"
+                android:layout_marginBottom="6dp"
                 android:ems="10"
                 android:hint="Inserire e-mail"
                 android:background="@android:color/transparent"
@@ -56,19 +62,24 @@
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_gravity="bottom"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
             android:background="#ffffff"/>
 
         <LinearLayout
             android:id="@+id/Password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="9dp"
+            android:background="#22A04B"
             android:orientation="vertical">
 
             <TextView
                 android:id="@+id/tvPassword"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="6dp"
+                android:layout_marginTop="6dp"
                 android:text="PASSWORD"
                 android:textColor="#ffffff"/>
 
@@ -76,6 +87,9 @@
                 android:id="@+id/etPassword"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="6dp"
+                android:layout_marginBottom="6dp"
                 android:hint="Inserire password"
                 android:inputType="textPassword"
                 android:background="@android:color/transparent"
@@ -88,19 +102,22 @@
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_gravity="bottom"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
             android:background="#ffffff"/>
 
         <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="6dp">
+            android:layout_height="wrap_content">
 
             <CheckBox
                 android:id="@+id/chkboxRememberMe"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="left|center_vertical"
-                android:layout_marginLeft="6dp"
+                android:layout_marginLeft="30dp"
+                android:layout_marginTop="6dp"
+                android:layout_marginBottom="6dp"
                 android:fontFamily="sans-serif"
                 android:text=" Ricordami"
                 android:textColor="#ffff"
@@ -127,7 +144,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:layout_marginBottom="9dp">
+            android:layout_marginBottom="6dp">
 
         <FrameLayout
             android:layout_width="match_parent"

@@ -1,32 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:background="#29b352">
+              android:layout_height="match_parent">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:background="#29b352">
 
         <Button
             android:id="@+id/btnNewTechnician"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            style="@android:style/Widget.Button"
             android:layout_gravity="center_vertical"
-            android:background="@android:color/transparent"
+            android:background="@drawable/button_border_transparent"
             android:layout_marginBottom="20dp"
             android:layout_marginLeft="20dp"
             android:layout_marginTop="20dp"
+            android:padding="9dp"
             android:text="@string/RegisterAnNewTechnician"
             android:textColor="#ffffff"
-            android:textSize="13sp"/>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_gravity="bottom"
-            android:background="#ffffff"/>
+            android:textSize="15sp"/>
 
             <FrameLayout
                 android:id="@+id/flTechnicianAdded"
@@ -132,23 +128,24 @@
             android:layout_marginBottom="30dp"
             android:layout_marginLeft="30dp"
             android:layout_marginTop="20dp"
-            android:text="Scegliere \ntecnico"
+            android:text="Scegli \nil tecnico"
             android:textColor="#ffffff"
             android:textSize="45sp"/>
 
         <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:background="#ff22A04B">
 
             <Spinner
                 android:id="@+id/spTecnicianList"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
                 android:layout_marginLeft="6dp"
-                android:background="@android:color/transparent"
+                android:background="#ff22A04B"
+                android:popupBackground="#ff8bc24a"
                 android:ems="10"
-                android:minHeight="19dp"
+                android:minHeight="50dp"
                 android:minWidth="200dp"/>
 
             <ImageView
@@ -167,7 +164,8 @@
             android:layout_gravity="bottom"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
-            android:background="#ffffff"/>
+            android:background="#ffffff"
+            android:visibility="gone"/>
 
         <CheckBox
             android:id="@+id/chkboxRememberTech"

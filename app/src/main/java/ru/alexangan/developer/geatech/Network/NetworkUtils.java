@@ -215,7 +215,7 @@ public class NetworkUtils
         String fileName = geaImagineRapporto.getNome_file();
 
         File imageFile = new File(geaImagineRapporto.getFilePath());
-        double fileSize = imageFile.length();
+        //double fileSize = imageFile.length();
         String strMediaType = ImageUtils.getMimeTypeOfUri(context, Uri.fromFile(imageFile));
 
         OkHttpClient.Builder defaultHttpClient = new OkHttpClient.Builder();
