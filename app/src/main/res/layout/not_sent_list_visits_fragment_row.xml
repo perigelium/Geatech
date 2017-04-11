@@ -199,7 +199,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start|center_vertical"
-                android:text="Dato di completamente al rapporto"/>
+                android:text="Rapporto inviato il "/>
 
         </LinearLayout>
 
@@ -285,7 +285,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="start|center_vertical"
                 android:layout_marginLeft="6dp"
-                android:text="Dato di invio al rapporto"/>
+                android:text="La data di invio del rapporto"/>
 
         </LinearLayout>
 

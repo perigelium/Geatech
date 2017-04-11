@@ -231,7 +231,7 @@ public class ReportSentDetailedFragment extends Fragment
             totalHeight += view.getMeasuredHeight();
         }
         ViewGroup.LayoutParams params = listView.getLayoutParams();
-        params.height = totalHeight + (listView.getDividerHeight() * (listAdapter.getCount() - 1));
+        params.height = totalHeight + (listView.getDividerHeight() * (listAdapter.getCount() - 1) + 20);
         listView.setLayoutParams(params);
     }
 

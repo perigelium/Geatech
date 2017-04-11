@@ -308,11 +308,6 @@ public class PhotoGalleryGridFragment extends Fragment
 
         alPathItems.addAll(Arrays.asList(photosDir.listFiles()));
 
-/*        for (File path : photosDir.listFiles())
-        {
-            alPathItems.add(path);
-        }*/
-
         reportStates.setPhotoAddedNumber(alPathItems.size());
 
         realm.commitTransaction();
@@ -367,7 +362,7 @@ public class PhotoGalleryGridFragment extends Fragment
                 }
                 break;
         }
-        super.onActivityResult(requestCode, resultCode, imageReturnedIntent);
+        //super.onActivityResult(requestCode, resultCode, imageReturnedIntent);
     }
 
     private void saveReturnedImage(String srcImagePath)
@@ -543,10 +538,10 @@ public class PhotoGalleryGridFragment extends Fragment
             {
                 alPathItems.set(alPathItems.size() - 3, fileDst);
 
-                if(!fileSrc.delete())
+/*                if(!fileSrc.delete())
                 {
                     Log.d("DEBUG", "File not deleted !");
-                }
+                }*/
             }
         }
     }

@@ -436,7 +436,7 @@
             android:layout_gravity="left"
             android:layout_margin="9dp"
             android:layout_weight="1"
-            android:background="#00ff33"
+            android:background="#29b352"
             android:onClick="onClick"
             android:text="Recupera da gps" />
 
@@ -447,7 +447,7 @@
                 android:layout_gravity="right"
                 android:layout_margin="9dp"
                 android:layout_weight="1"
-                android:background="#00ff33"
+                android:background="#29b352"
                 android:onClick="onClick"
                 android:text="Salva" />
 

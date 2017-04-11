@@ -1988,7 +1988,7 @@ public class ViewUtils
         {
             for (LinearLayout ll : al_llHeaderSections.get(k))
             {
-                if (completionState >= ReportStates.REPORT_HALF_COMPLETED && notSetItems != null)
+                if (completionState >= ReportStates.REPORT_INITIATED && notSetItems != null)
                 {
                     int i;
                     for (i = 0; i < notSetItems.size(); i++)

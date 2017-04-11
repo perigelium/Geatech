@@ -16,29 +16,27 @@ import static ru.alexangan.developer.geatech.Models.GlobalConstants.selectedTech
 
 public class DatabaseUtils
 {
-    public static ArrayList <Integer> getNotSetItems(int id_rapporto_sopralluogo)
+    public static ArrayList<Integer> getNotSetItems(int id_rapporto_sopralluogo)
     {
         realm.beginTransaction();
         RealmResults<GeaItemRapporto> geaItemRapportoResults =
                 realm.where(GeaItemRapporto.class).equalTo("id_rapporto_sopralluogo", id_rapporto_sopralluogo).findAll();
         realm.commitTransaction();
 
-        if(geaItemRapportoResults.size() == 0)
-        {
-            return null;
-        }
+        ArrayList<Integer> notSetItems = new ArrayList<>();
 
-        ArrayList <Integer> notSetItems = new ArrayList<>();
-
-        for (GeaItemRapporto geaItemRapporto : geaItemRapportoResults)
+        if (geaItemRapportoResults.size() != 0)
         {
-            if (geaItemRapporto.getValore() == null || geaItemRapporto.getValore().trim().length() == 0)
+            for (GeaItemRapporto geaItemRapporto : geaItemRapportoResults)
             {
-                notSetItems.add(geaItemRapporto.getId_item_modello());
+                if (geaItemRapporto.getValore() == null || geaItemRapporto.getValore().trim().length() == 0)
+                {
+                    notSetItems.add(geaItemRapporto.getId_item_modello());
+                }
             }
         }
 
-        return  notSetItems;
+        return notSetItems;
     }
 
     public static int getReportInitializationState(int id_rapporto_sopralluogo)
@@ -48,7 +46,7 @@ public class DatabaseUtils
                 realm.where(GeaItemRapporto.class).equalTo("id_rapporto_sopralluogo", id_rapporto_sopralluogo).findAll();
         realm.commitTransaction();
 
-        if(geaItemRapportoResults.size() == 0)
+        if (geaItemRapportoResults.size() == 0)
         {
             return ReportStates.REPORT_NON_INITIATED;
         }
@@ -67,7 +65,7 @@ public class DatabaseUtils
             }
         }
 
-        int completionPercent = partiallyComplete*100/geaItemRapportoResults.size();
+        int completionPercent = partiallyComplete * 100 / geaItemRapportoResults.size();
 
         realm.beginTransaction();
 
@@ -84,12 +82,12 @@ public class DatabaseUtils
             return ReportStates.REPORT_COMPLETED;
         }
 
-        if(completionPercent > 80)
+        if (completionPercent > 80)
         {
             return ReportStates.REPORT_ALMOST_COMPLETED;
         }
 
-        if(completionPercent > 50)
+        if (completionPercent > 50)
         {
             return ReportStates.REPORT_HALF_COMPLETED;
         }
@@ -110,12 +108,11 @@ public class DatabaseUtils
         realm.commitTransaction();
 
         realm.beginTransaction();
-        if(geaItemRapporto == null)
+        if (geaItemRapporto == null)
         {
             GeaItemRapporto geaItem = new GeaItemRapporto(company_id, selectedTech.getId(), id_rapporto_sopralluogo, idItem, strData);
             realm.copyToRealm(geaItem);
-        }
-        else
+        } else
         {
             geaItemRapporto.setValore(strData);
         }
@@ -129,11 +126,10 @@ public class DatabaseUtils
                 realm.where(GeaItemRapporto.class).equalTo("id_rapporto_sopralluogo", id_rapporto_sopralluogo).equalTo("id_item_modello", idItem).findFirst();
         realm.commitTransaction();
 
-        if(geaItemRapporto !=null)
+        if (geaItemRapporto != null)
         {
             return geaItemRapporto.getValore();
-        }
-        else
+        } else
         {
             return "";
         }

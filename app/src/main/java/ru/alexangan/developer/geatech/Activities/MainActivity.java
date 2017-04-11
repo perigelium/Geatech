@@ -16,6 +16,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import java.io.File;
 import java.io.IOException;
 
 import okhttp3.Call;
@@ -48,9 +49,11 @@ import ru.alexangan.developer.geatech.Models.ProductData;
 import ru.alexangan.developer.geatech.Models.VisitItem;
 import ru.alexangan.developer.geatech.Network.NetworkUtils;
 import ru.alexangan.developer.geatech.R;
+import ru.alexangan.developer.geatech.Utils.FileUtils;
 import ru.alexangan.developer.geatech.Utils.JSON_to_model;
 import ru.alexangan.developer.geatech.Utils.SwipeDetector;
 
+import static android.os.Environment.DIRECTORY_PICTURES;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.GET_VISITS_URL_SUFFIX;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.inVisitItems;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.listVisitsIsObsolete;
@@ -119,6 +122,18 @@ public class MainActivity extends Activity implements Communicator, Callback
     protected void onDestroy()
     {
         super.onDestroy();
+
+        String imagesDirPath = getExternalFilesDir(DIRECTORY_PICTURES).getAbsolutePath();
+
+        if(imagesDirPath != null)
+        {
+            File imagesDir = new File(imagesDirPath);
+
+            for (File child : imagesDir.listFiles())
+            {
+                child.delete();
+            }
+        }
     }
 
     @Override

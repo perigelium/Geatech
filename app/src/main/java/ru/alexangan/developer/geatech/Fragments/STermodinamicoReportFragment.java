@@ -275,21 +275,6 @@ public class STermodinamicoReportFragment extends Fragment
             final Switch sw1TwoRadiosAndSwitch = viewUtils.getSwitches().get(idItem - 3);
             final Pair <LinearLayout, LinearLayout> llPair = viewUtils.getLinearLayouts().get(idItem - 2);
 
-            if(sw1TwoRadiosAndSwitch.isChecked())
-            {
-                llPair.first.setVisibility(View.VISIBLE);
-                llPair.second.setVisibility(View.VISIBLE);
-                llPair.first.setEnabled(true);
-                llPair.second.setEnabled(true);
-            }
-            else
-            {
-                llPair.first.setVisibility(View.GONE);
-                llPair.second.setVisibility(View.GONE);
-                llPair.first.setEnabled(false);
-                llPair.second.setEnabled(false);
-            }
-
             sw1TwoRadiosAndSwitch.setOnClickListener(new View.OnClickListener()
             {
                 @Override
@@ -317,6 +302,21 @@ public class STermodinamicoReportFragment extends Fragment
             idItem = viewUtils.fillSeveralSwitches(idItem, 5);
 
             viewUtils.collapseSections(id_rapporto_sopralluogo);
+
+            if(sw1TwoRadiosAndSwitch.isChecked())
+            {
+                llPair.first.setVisibility(View.VISIBLE);
+                llPair.second.setVisibility(View.VISIBLE);
+                llPair.first.setEnabled(true);
+                llPair.second.setEnabled(true);
+            }
+            else
+            {
+                llPair.first.setVisibility(View.GONE);
+                llPair.second.setVisibility(View.GONE);
+                llPair.first.setEnabled(false);
+                llPair.second.setEnabled(false);
+            }
         }
     }
 }

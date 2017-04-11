@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -59,7 +60,7 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
     ReportStates reportStates;
 
     String reportSendResponse;
-    Call callSendReport, callSendImage;
+    Call callSendReport;
     List<Call> callSendImagesList;
     Activity activity;
     NetworkUtils networkUtils;
@@ -222,7 +223,7 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
         String strDateTime = sdf.format(calendarNow.getTime());
 
         //sentVisitItems.add(visitItems.get(selectedIndex));
-        reportStates.setData_ora_invio_rapporto(strDateTime);
+        //reportStates.setData_ora_invio_rapporto(strDateTime);
 
         ReportStates reportStatesUnmanaged = realm.copyFromRealm(reportStates);
         String strReportStatesUnmanaged = gson.toJson(reportStatesUnmanaged);
@@ -288,7 +289,6 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
     {
         if (call == callSendReport)
         {
-            showToastMessage(getString(R.string.SendingReportFailed));
             activity.runOnUiThread(new Runnable()
             {
                 public void run()
@@ -296,6 +296,7 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
                     enableInput();
                 }
             });
+            showToastMessage(getString(R.string.SendingReportFailed));
         }
 
         for (int i = 0; i < callSendImagesList.size(); i++)
@@ -354,38 +355,79 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
                             showToastMessage(errorStr);
                             //showToastMessage("Error in sent data");
                         }
-
-                        activity.runOnUiThread(new Runnable()
-                        {
-                            public void run()
-                            {
-                                enableInput();
-                            }
-                        });
-
                     } catch (JSONException e)
                     {
                         showToastMessage(getString(R.string.DatabaseError));
 
-                        activity.runOnUiThread(new Runnable()
-                        {
-                            public void run()
-                            {
-                                enableInput();
-                            }
-                        });
                         e.printStackTrace();
                     }
+
+                    activity.runOnUiThread(new Runnable()
+                    {
+                        public void run()
+                        {
+                            enableInput();
+                        }
+                    });
                 } else
                 {
                     callSendImagesList.clear();
 
-                    for (GeaImagineRapporto geaImagineRapporto : imagesArray)
-                    {
-                        callSendImagesList.add(networkUtils.sendImage(this, activity, geaImagineRapporto));
-                    }
-                }
+                    JSONArray json_arImages = (JSONArray) jsonObject.get("images");
 
+                    ArrayList<String> alImages = new ArrayList<String>();
+
+                    if (json_arImages != null)
+                    {
+                        for (int i = 0; i < json_arImages.length(); i++)
+                        {
+                            alImages.add(json_arImages.getString(i));
+                        }
+                    }
+
+                    for (int i = 0; i < imagesArray.size(); i++)
+                    {
+                        String imageName = imagesArray.get(i).getNome_file();
+
+                        if (!alImages.contains(imageName))
+                        {
+                            callSendImagesList.add(networkUtils.sendImage(this, activity, imagesArray.get(i)));
+                        } else
+                        {
+                            objectsSentSuccessfully++;
+                        }
+                    }
+
+                    if (objectsSentSuccessfully == imagesArray.size())
+                    {
+                        activity.runOnUiThread(new Runnable()
+                        {
+                            public void run()
+                            {
+                                Calendar calendarNow = Calendar.getInstance();
+                                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
+                                String strDateTime = sdf.format(calendarNow.getTime());
+
+                                if (objectsSentSuccessfully == imagesArray.size())
+                                {
+                                    realm.beginTransaction();
+                                    reportStates.setData_ora_invio_rapporto(strDateTime);
+                                    realm.commitTransaction();
+
+                                    Toast.makeText(activity, R.string.ReportSent, Toast.LENGTH_LONG).show();
+
+                                    listVisitsIsObsolete = true;
+                                } else
+                                {
+                                    showToastMessage(getString(R.string.SendingReportFailed));
+                                }
+                                requestServerDialog.dismiss();
+                                mCommunicator.onSendReportReturned(id_rapporto_sopralluogo);
+                            }
+                        });
+                    }
+
+                }
             } catch (JSONException e)
             {
                 activity.runOnUiThread(new Runnable()
@@ -436,35 +478,39 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
                                 {
                                     objectsSentSuccessfully++;
 
-                                    showToastMessage("immagine " + objectsSentSuccessfully + " di " + callSendImagesList.size() + " inviato");
+                                    showToastMessage("immagine " + (i + 1) + " di " + callSendImagesList.size() + " inviato");
 
-                                    if (i == callSendImagesList.size() - 1)
+                                    if (objectsSentSuccessfully == imagesArray.size())
                                     {
                                         activity.runOnUiThread(new Runnable()
                                         {
                                             public void run()
                                             {
-/*                                                Calendar calendarNow = Calendar.getInstance();
+                                                Calendar calendarNow = Calendar.getInstance();
                                                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
                                                 String strDateTime = sdf.format(calendarNow.getTime());
 
-                                                realm.beginTransaction();
-                                                //sentVisitItems.add(visitItems.get(selectedIndex));
-                                                reportStates.setData_ora_invio_rapporto(strDateTime);
-                                                realm.commitTransaction();*/
+                                                if (objectsSentSuccessfully == imagesArray.size())
+                                                {
+                                                    realm.beginTransaction();
+                                                    reportStates.setData_ora_invio_rapporto(strDateTime);
+                                                    realm.commitTransaction();
 
+                                                    Toast.makeText(activity, R.string.ReportSent, Toast.LENGTH_LONG).show();
+
+                                                    listVisitsIsObsolete = true;
+                                                } else
+                                                {
+                                                    showToastMessage(getString(R.string.SendingReportFailed));
+                                                }
                                                 requestServerDialog.dismiss();
-
-                                                Toast.makeText(activity, R.string.ReportSent, Toast.LENGTH_LONG).show();
-
-                                                listVisitsIsObsolete = true;
                                                 mCommunicator.onSendReportReturned(id_rapporto_sopralluogo);
                                             }
                                         });
                                     }
                                 } else
                                 {
-                                    showToastMessage("Invio immagine non riuscito, Server ritorna: " + reportSendResponse);
+                                    showToastMessage("Invio immagine " + (i + 1) + "non riuscito, Server ritorna: " + reportSendResponse);
                                 }
                             } catch (JSONException e)
                             {
