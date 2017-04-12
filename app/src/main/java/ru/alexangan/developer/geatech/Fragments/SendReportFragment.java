@@ -6,6 +6,7 @@ import android.app.Fragment;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +20,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -100,7 +102,8 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
         requestServerDialog = new ProgressDialog(activity);
         requestServerDialog.setTitle("");
         requestServerDialog.setMessage(getString(R.string.TransmittingDataPleaseWait));
-        requestServerDialog.setIndeterminate(true);
+        requestServerDialog.setIndeterminate(false);
+        requestServerDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
     }
 
     @Override
@@ -196,9 +199,6 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
 
         VisitItem visitItem = visitItems.get(selectedIndex);
         GeaSopralluogo geaSopralluogo = visitItem.getGeaSopralluogo();
-        //ProductData productData = visitItem.getProductData();
-        //String productType = productData.getProductType();
-        //int idProductType = productData.getIdProductType();
         int idSopralluogo = geaSopralluogo.getId_sopralluogo();
 
         GeaSopralluogo geaSopralluogoUnmanaged = realm.copyFromRealm(geaSopralluogo);
@@ -218,9 +218,9 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
 
         id_rapporto_sopralluogo = reportStates.getId_rapporto_sopralluogo();
 
-        Calendar calendarNow = Calendar.getInstance();
+/*        Calendar calendarNow = Calendar.getInstance();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
-        String strDateTime = sdf.format(calendarNow.getTime());
+        String strDateTime = sdf.format(calendarNow.getTime());*/
 
         //sentVisitItems.add(visitItems.get(selectedIndex));
         //reportStates.setData_ora_invio_rapporto(strDateTime);
@@ -261,8 +261,13 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
         {
             GeaImagineRapporto geaImagineRapportoUnmanaged = realm.copyFromRealm(geaImagineRapporto);
             imagesArray.add(geaImagineRapportoUnmanaged);
+
+            File file = new File(geaImagineRapporto.getFilePath());
+            long fileLength = file.length();
+            Log.d("DEBUG", String.valueOf(fileLength));
         }
         realm.commitTransaction();
+        requestServerDialog.setMax(100);
         realm.beginTransaction();
 
         for (GeaImagineRapporto geaImagineRapporto : listReportImages)
@@ -375,7 +380,7 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
 
                     JSONArray json_arImages = (JSONArray) jsonObject.get("images");
 
-                    ArrayList<String> alImages = new ArrayList<String>();
+                    ArrayList<String> alImages = new ArrayList<>();
 
                     if (json_arImages != null)
                     {
@@ -477,8 +482,20 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
                                 if (!strSuccess.equals("0"))
                                 {
                                     objectsSentSuccessfully++;
+                                    requestServerDialog.setProgress(objectsSentSuccessfully*100/imagesArray.size());
 
-                                    showToastMessage("immagine " + (i + 1) + " di " + callSendImagesList.size() + " inviato");
+                                    //showToastMessage("immagine " + (i + 1) + " di " + callSendImagesList.size() + " inviato");
+
+                                    if(i == callSendImagesList.size() - 1)
+                                    {
+                                        activity.runOnUiThread(new Runnable()
+                                        {
+                                            public void run()
+                                            {
+                                                enableInput();
+                                            }
+                                        });
+                                    }
 
                                     if (objectsSentSuccessfully == imagesArray.size())
                                     {
@@ -565,6 +582,7 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
         btnSendReportNow.setEnabled(false);
         btnSendReportNow.setAlpha(.4f);
 
+        requestServerDialog.setProgress(0);
         requestServerDialog.show();
     }
 

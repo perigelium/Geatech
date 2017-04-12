@@ -106,7 +106,7 @@ public class CTLinfoFragment extends Fragment implements View.OnClickListener, L
             longitude = reportStates.getLongitudine();
             altitude = reportStates.getAltitude();
 
-            coordsUnchanged = latitude != 0 && longitude != 0 && altitude != ReportStates.ALTITUDE_UNKNOWN;
+            coordsUnchanged = latitude != 0 && longitude != 0;// && altitude != ReportStates.ALTITUDE_UNKNOWN;
 
             if(coordsUnchanged)
             {

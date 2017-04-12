@@ -7,8 +7,10 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
@@ -16,9 +18,18 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Type;
+import java.util.List;
 
+import io.realm.RealmResults;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
@@ -45,6 +56,9 @@ import ru.alexangan.developer.geatech.Fragments.SendReportFragment;
 import ru.alexangan.developer.geatech.Fragments.SetDateTimeFragment;
 import ru.alexangan.developer.geatech.Fragments.StorageReportFragment;
 import ru.alexangan.developer.geatech.Interfaces.Communicator;
+import ru.alexangan.developer.geatech.Models.GeaItemModelliRapporto;
+import ru.alexangan.developer.geatech.Models.GeaModelloRapporto;
+import ru.alexangan.developer.geatech.Models.GeaSezioneModelliRapporto;
 import ru.alexangan.developer.geatech.Models.ProductData;
 import ru.alexangan.developer.geatech.Models.VisitItem;
 import ru.alexangan.developer.geatech.Network.NetworkUtils;
@@ -54,6 +68,7 @@ import ru.alexangan.developer.geatech.Utils.JSON_to_model;
 import ru.alexangan.developer.geatech.Utils.SwipeDetector;
 
 import static android.os.Environment.DIRECTORY_PICTURES;
+import static ru.alexangan.developer.geatech.Models.GlobalConstants.GET_MODELS_URL_SUFFIX;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.GET_VISITS_URL_SUFFIX;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.inVisitItems;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.listVisitsIsObsolete;
@@ -115,7 +130,7 @@ public class MainActivity extends Activity implements Communicator, Callback
     NotificationBarFragment notificationBarFragment;
     int currentSelIndex;
     boolean ctrlBtnChkChanged;
-    private Call callVisits;
+    private Call callVisits, callModels;
     NetworkUtils networkUtils;
 
     @Override
@@ -305,8 +320,10 @@ public class MainActivity extends Activity implements Communicator, Callback
             mFragmentTransaction.hide(ctrlBtnsReportDetailed);
             mFragmentTransaction.commit();
 
-            removeAllLists();
-            setVisitsListContent(reportsList);
+/*            removeAllLists();
+            setVisitsListContent(reportsList);*/
+
+            ctrlBtnsFragment1.setCheckedBtnId(R.id.btnSentReports);
         }
 
         if (view == findViewById(R.id.btnComingVisits))
@@ -612,7 +629,7 @@ public class MainActivity extends Activity implements Communicator, Callback
 
         if (view.getId() == R.id.btnAppSettings)
         {
-            String[] listItemsArray = {"Logout", "Esci"};
+            String[] listItemsArray = {"Aggiorna applicazione", "Logout", "Esci"};
 
             //ContextThemeWrapper themedContext = new ContextThemeWrapper
             // (this, android.R.style.Theme_DeviceDefault_Light_Dialog_NoActionBar);
@@ -640,19 +657,19 @@ public class MainActivity extends Activity implements Communicator, Callback
                         finish();
                     }*/
 
-                    if (which == 1)
+                    if (which == 2)
                     {
                         exitApp();
                     }
 
-                    if (which == 0)
+                    if (which == 1)
                     {
                         logout();
                     }
-/*                    if (which == 0)
+                    if (which == 0)
                     {
                         showToastMessage("Not implemented exception");
-                    }*/
+                    }
 
                 }
             });
@@ -774,6 +791,21 @@ public class MainActivity extends Activity implements Communicator, Callback
 
             handler.removeCallbacks(runnable);
         }
+
+        if (call == callModels)
+        {
+            showToastMessage(getString(R.string.ApplicationUpdateFailed));
+
+            runOnUiThread(new Runnable()
+            {
+                public void run()
+                {
+                    requestServerDialog.dismiss();
+                }
+            });
+
+            handler.removeCallbacks(runnable);
+        }
     }
 
     @Override
@@ -820,6 +852,121 @@ public class MainActivity extends Activity implements Communicator, Callback
                 }
             });
         }
+
+        if (call == callModels)
+        {
+            String modelsJSONData = response.body().string();
+
+            //Log.d("DEBUG", modelsJSONData);
+
+            JSONObject jsonObject;
+
+            try
+            {
+                jsonObject = new JSONObject(modelsJSONData);
+
+                if (jsonObject.has("type_report_data"))
+                {
+                    try
+                    {
+                        JSONObject type_report_data = jsonObject.getJSONObject("type_report_data");
+
+                        String str_gea_modelli = type_report_data.getString("gea_modelli_rapporto_sopralluogo");
+                        String str_gea_sezioni_modelli = type_report_data.getString("gea_sezioni_modelli_rapporto_sopralluogo");
+                        String str_gea_items_modelli = type_report_data.getString("gea_items_modelli_rapporto_sopralluogo");
+
+
+                        if (Build.VERSION.SDK_INT >= 24)
+                        {
+                            //str_gea_modelli = String.valueOf(Html.fromHtml(str_gea_modelli, Html.FROM_HTML_MODE_LEGACY));
+                            str_gea_sezioni_modelli = String.valueOf(Html.fromHtml(str_gea_sezioni_modelli, Html.FROM_HTML_MODE_LEGACY));
+                            str_gea_items_modelli = String.valueOf(Html.fromHtml(str_gea_items_modelli, Html.FROM_HTML_MODE_LEGACY));
+                        } else
+                        {
+                            //str_gea_modelli = String.valueOf(Html.fromHtml(str_gea_modelli));
+                            str_gea_sezioni_modelli = String.valueOf(Html.fromHtml(str_gea_sezioni_modelli));
+                            str_gea_items_modelli = String.valueOf(Html.fromHtml(str_gea_items_modelli));
+                        }
+
+                        Gson gson = new Gson();
+
+                        Type typeGeaModelli = new TypeToken<List<GeaModelloRapporto>>()
+                        {
+                        }.getType();
+                        final List<GeaModelloRapporto> l_geaModelli = gson.fromJson(str_gea_modelli, typeGeaModelli);
+
+                        Type typeGeaSezioniModelli = new TypeToken<List<GeaSezioneModelliRapporto>>()
+                        {
+                        }.getType();
+                        final List<GeaSezioneModelliRapporto> l_geaSezioniModelli = gson.fromJson(str_gea_sezioni_modelli, typeGeaSezioniModelli);
+
+                        Type typeGeaItemsModelli = new TypeToken<List<GeaItemModelliRapporto>>()
+                        {
+                        }.getType();
+                        final List<GeaItemModelliRapporto> l_geaItemsModelli = gson.fromJson(str_gea_items_modelli, typeGeaItemsModelli);
+
+                        runOnUiThread(new Runnable()
+                        {
+                            public void run()
+                            {
+                                realm.beginTransaction();
+                                RealmResults<GeaModelloRapporto> geaModelli = realm.where(GeaModelloRapporto.class).findAll();
+                                geaModelli.deleteAllFromRealm();
+                                realm.commitTransaction();
+
+                                for (GeaModelloRapporto gm : l_geaModelli)
+                                {
+                                    realm.beginTransaction();
+                                    realm.copyToRealm(gm);
+                                    realm.commitTransaction();
+                                }
+
+                                realm.beginTransaction();
+                                RealmResults<GeaSezioneModelliRapporto> geaSezioniModelli = realm.where(GeaSezioneModelliRapporto.class).findAll();
+                                geaSezioniModelli.deleteAllFromRealm();
+                                realm.commitTransaction();
+
+                                for (GeaSezioneModelliRapporto gs : l_geaSezioniModelli)
+                                {
+                                    realm.beginTransaction();
+                                    realm.copyToRealm(gs);
+                                    realm.commitTransaction();
+                                }
+
+                                realm.beginTransaction();
+                                RealmResults<GeaItemModelliRapporto> geaItemModelli = realm.where(GeaItemModelliRapporto.class).findAll();
+                                geaItemModelli.deleteAllFromRealm();
+                                realm.commitTransaction();
+
+                                for (GeaItemModelliRapporto gi : l_geaItemsModelli)
+                                {
+                                    realm.beginTransaction();
+                                    realm.copyToRealm(gi);
+                                    realm.commitTransaction();
+                                }
+
+                                requestServerDialog.dismiss();
+                                showToastMessage(getString(R.string.ApplicationUpdateSucceeded));
+                            }
+                        });
+
+                    } catch (Exception e)
+                    {
+                        e.printStackTrace();
+
+                        requestServerDialog.dismiss();
+                    }
+                } else
+                {
+                    requestServerDialog.dismiss();
+                }
+            } catch (JSONException e)
+            {
+                e.printStackTrace();
+
+                requestServerDialog.dismiss();
+            }
+        }
     }
 
     private void logout()
@@ -846,6 +993,17 @@ public class MainActivity extends Activity implements Communicator, Callback
         handler.postDelayed(runnable, 30000);
 
         callVisits = networkUtils.getData(this, GET_VISITS_URL_SUFFIX, tokenStr);
+
+        listVisitsIsObsolete = false;
+    }
+
+    private void refreshGeaModels()
+    {
+        requestServerDialog.show();
+
+        handler.postDelayed(runnable, 30000);
+
+        callModels = networkUtils.getData(this, GET_MODELS_URL_SUFFIX, tokenStr);
 
         listVisitsIsObsolete = false;
     }

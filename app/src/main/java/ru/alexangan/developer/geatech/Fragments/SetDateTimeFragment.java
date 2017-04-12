@@ -561,19 +561,7 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
                                     {
                                         if (reportStates != null)
                                         {
-                                            realm.beginTransaction();
-
-                                            RealmResults geaItemsRapporto = realm.where(GeaItemRapporto.class).equalTo("company_id", company_id)
-                                                    .equalTo("tech_id", selectedTech.getId()).equalTo("id_rapporto_sopralluogo", reportStates.getId_rapporto_sopralluogo()).findAll();
-
-                                            RealmResults <GeaImagineRapporto> listReportImages = realm.where(GeaImagineRapporto.class)
-                                                    .equalTo("company_id", company_id).equalTo("tech_id", selectedTech.getId())
-                                                    .equalTo("id_rapporto_sopralluogo", reportStates.getId_rapporto_sopralluogo()).findAll();
-
-                                            geaItemsRapporto.deleteAllFromRealm();
-                                            listReportImages.deleteAllFromRealm();
-                                            reportStates.deleteFromRealm();
-                                            realm.commitTransaction();
+                                            cleanUpOldReportData();
                                         }
 
                                         showToastMessage(getString(R.string.VisitHasCancelled));
@@ -609,6 +597,27 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
                     });
                 }
             }
+        }
+    }
+
+    private void cleanUpOldReportData()
+    {
+        if(reportStates != null)
+        {
+            realm.beginTransaction();
+
+            RealmResults geaItemsRapporto = realm.where(GeaItemRapporto.class).equalTo("company_id", company_id)
+                    .equalTo("tech_id", selectedTech.getId()).equalTo("id_rapporto_sopralluogo", reportStates.getId_rapporto_sopralluogo()).findAll();
+
+            RealmResults<GeaImagineRapporto> listReportImages = realm.where(GeaImagineRapporto.class)
+                    .equalTo("company_id", company_id).equalTo("tech_id", selectedTech.getId())
+                    .equalTo("id_rapporto_sopralluogo", reportStates.getId_rapporto_sopralluogo()).findAll();
+
+            geaItemsRapporto.deleteAllFromRealm();
+            listReportImages.deleteAllFromRealm();
+            reportStates.deleteFromRealm();
+
+            realm.commitTransaction();
         }
     }
 

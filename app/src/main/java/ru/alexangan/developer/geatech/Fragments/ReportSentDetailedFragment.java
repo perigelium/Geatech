@@ -11,7 +11,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.GridView;
-import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -26,14 +25,13 @@ import ru.alexangan.developer.geatech.Models.GeaItemRapporto;
 import ru.alexangan.developer.geatech.Models.ReportStates;
 import ru.alexangan.developer.geatech.R;
 import ru.alexangan.developer.geatech.Utils.ImageUtils;
+import ru.alexangan.developer.geatech.Utils.ViewUtils;
 
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.company_id;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.realm;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.selectedTech;
 
-/**
- * Created by Alex Angan on 11/10/2016 .
- */
+// Created by Alex Angan on 11/10/2016 .
 
 public class ReportSentDetailedFragment extends Fragment
 {
@@ -98,11 +96,6 @@ public class ReportSentDetailedFragment extends Fragment
             if (geaItemsRapporto.size() != 0)
             {
                 tvReportName.setText(product_type);
-
-/*            realm.beginTransaction();
-            RealmResults <GeaSezioneModelliRapporto> geaSezioniModelli = realm.where(GeaSezioneModelliRapporto.class)
-                    .equalTo("id_modello", geaModello.getId_modello()).findAll();
-            realm.commitTransaction();*/
 
                 int idItem = geaItemsRapporto.get(0).getId_item_modello();
                 int idItemStart = idItem;
@@ -181,7 +174,7 @@ public class ReportSentDetailedFragment extends Fragment
 
         listView.setAdapter(adapter);
 
-        setListViewHeightBasedOnChildren(listView);
+        ViewUtils.setListViewHeightBasedOnChildren(listView);
 
         imageThumbnails = new ArrayList<>();
         pathItems = new ArrayList<>();
@@ -210,29 +203,6 @@ public class ReportSentDetailedFragment extends Fragment
             imageThumbnails.add(bm);
             pathItems.add(file);
         }
-    }
-
-    private void setListViewHeightBasedOnChildren(ListView listView)
-    {
-        ListAdapter listAdapter = listView.getAdapter();
-        if (listAdapter == null)
-            return;
-
-        int desiredWidth = View.MeasureSpec.makeMeasureSpec(listView.getWidth(), View.MeasureSpec.UNSPECIFIED);
-        int totalHeight = 0;
-        View view = null;
-        for (int i = 0; i < listAdapter.getCount(); i++)
-        {
-            view = listAdapter.getView(i, view, listView);
-            if (i == 0)
-                view.setLayoutParams(new ViewGroup.LayoutParams(desiredWidth, ViewGroup.LayoutParams.WRAP_CONTENT));
-
-            view.measure(desiredWidth, View.MeasureSpec.UNSPECIFIED);
-            totalHeight += view.getMeasuredHeight();
-        }
-        ViewGroup.LayoutParams params = listView.getLayoutParams();
-        params.height = totalHeight + (listView.getDividerHeight() * (listAdapter.getCount() - 1) + 20);
-        listView.setLayoutParams(params);
     }
 
     @Override
@@ -282,39 +252,9 @@ public class ReportSentDetailedFragment extends Fragment
 
             gvPhotoGallery.setAdapter(gridAdapter);
 
-            setDynamicHeight(gvPhotoGallery);
+            ViewUtils.setGridViewHeight(gvPhotoGallery);
 
             //handler.removeCallbacks(runnable);
         }
-    }
-
-    private void setDynamicHeight(GridView gridView)
-    {
-        ListAdapter gridViewAdapter = gridView.getAdapter();
-        if (gridViewAdapter == null)
-        {
-            // pre-condition
-            return;
-        }
-
-        int totalHeight = 0;
-        int items = gridViewAdapter.getCount();
-        int rows = 0;
-
-        View listItem = gridViewAdapter.getView(0, null, gridView);
-        listItem.measure(0, 0);
-        totalHeight = listItem.getMeasuredHeight();
-
-        float x = 1;
-        if (items > 3)
-        {
-            x = items / 3;
-            rows = (int) (x + 1);
-            totalHeight *= rows;
-        }
-
-        ViewGroup.LayoutParams params = gridView.getLayoutParams();
-        params.height = totalHeight;
-        gridView.setLayoutParams(params);
     }
 }

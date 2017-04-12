@@ -86,7 +86,7 @@ public class ReportsListAdapter extends BaseAdapter
 
         //int idSopralluogo = geaSopralluogo.getId_sopralluogo();
 
-        String visitDateTime = reportStates.getData_ora_sopralluogo();
+        String visitDateTime = reportStates.getData_ora_invio_rapporto();
 
         if(visitDateTime != null)
         {

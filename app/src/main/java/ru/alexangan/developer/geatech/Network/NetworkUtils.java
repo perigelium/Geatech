@@ -141,9 +141,9 @@ public class NetworkUtils
     public Call sendData(Callback callback, String urlSuffix, String tokenStr, String gsonStr)
     {
         OkHttpClient.Builder defaultHttpClient = new OkHttpClient.Builder();
-        defaultHttpClient.connectTimeout(4, TimeUnit.SECONDS);
-        defaultHttpClient.readTimeout(10, TimeUnit.SECONDS);
-        defaultHttpClient.writeTimeout(10, TimeUnit.SECONDS);
+/*        defaultHttpClient.connectTimeout(15, TimeUnit.SECONDS);
+        defaultHttpClient.readTimeout(30, TimeUnit.SECONDS);
+        defaultHttpClient.writeTimeout(45, TimeUnit.SECONDS);*/
         OkHttpClient okHttpClient = defaultHttpClient.build();
 
         JSONObject jsonObject = new JSONObject();

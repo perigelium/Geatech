@@ -38,4 +38,6 @@
     <string name="TechnicianAddedSelectFromListBelow">Nuovo tecnico aggiunta con successo\nseleziona dalla lista sottostante per favore</string>
     <string name="RegisterAnNewTechnician">REGISTRA NUOVO TECNICO</string>
     <string name="ReceivedDataError">Error in dato ricevuto</string>
+    <string name="ApplicationUpdateFailed">Aggiornamento di applicazione non riuscito</string>
+    <string name="ApplicationUpdateSucceeded">Aggiornamento di applicazione completato</string>
 </resources>

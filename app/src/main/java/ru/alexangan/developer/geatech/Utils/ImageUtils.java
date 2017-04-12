@@ -9,9 +9,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 
-/**
- * Created by user on 06.02.2017.
- */
+// Created by Alexandr Angan on 06.02.2017.
 
 public class ImageUtils
 {
@@ -49,7 +47,7 @@ public class ImageUtils
         return opt.outMimeType;
     }
 
-    public static int calculateInSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight)
+    private static int calculateInSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight)
     {
         // Raw height and width of image
         final int height = options.outHeight;
