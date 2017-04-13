@@ -33,7 +33,7 @@ public class NotificationBarFragment extends Fragment implements View.OnClickLis
     {
         View rootView = inflater.inflate(R.layout.notification_bar, container, false);
 
-        TextView tvTechName = (TextView) rootView.findViewById(R.id.tvTechName);
+/*        TextView tvTechName = (TextView) rootView.findViewById(R.id.tvTechName);
         tvTechName.setText(selectedTech.getFullNameTehnic());
 
         Button btnNotifTimeNotSetVisits = (Button) rootView.findViewById(R.id.btnNotifTimeNotSetVisits);
@@ -43,7 +43,7 @@ public class NotificationBarFragment extends Fragment implements View.OnClickLis
         btnNotifUrgentReports.setOnClickListener(this);
 
         Button btnAppSettings = (Button) rootView.findViewById(R.id.btnAppSettings);
-        btnAppSettings.setOnClickListener(this);
+        btnAppSettings.setOnClickListener(this);*/
 
         return rootView;
     }

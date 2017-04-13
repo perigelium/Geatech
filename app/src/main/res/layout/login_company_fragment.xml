@@ -23,13 +23,12 @@
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_gravity="bottom"
-            android:background="#ffffff"/>
+            android:background="#93d8a8"/>
 
         <LinearLayout
-            android:id="@+id/Email"
+            android:id="@+id/llLogin"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#22A04B"
             android:orientation="vertical">
 
             <TextView
@@ -38,7 +37,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="30dp"
                 android:layout_marginRight="6dp"
-                android:layout_marginTop="6dp"
+                android:layout_marginTop="19dp"
                 android:text="MAIL"
                 android:textColor="#ffffff"/>
 
@@ -48,29 +47,31 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="30dp"
                 android:layout_marginRight="6dp"
-                android:layout_marginBottom="6dp"
+                android:layout_marginTop="11dp"
+                android:layout_marginBottom="15dp"
                 android:ems="10"
                 android:hint="Inserire e-mail"
                 android:background="@android:color/transparent"
+                android:focusableInTouchMode="true"
                 android:inputType="textEmailAddress"
                 android:textColor="#ffffff"
-                android:textColorHint="#cccccc"/>
+                android:textColorHint="#93d8a8"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_gravity="bottom"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:background="#93d8a8"
+                android:id="@+id/view"/>
 
         </LinearLayout>
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_gravity="bottom"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:background="#ffffff"/>
-
         <LinearLayout
-            android:id="@+id/Password"
+            android:id="@+id/llPassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#22A04B"
             android:orientation="vertical">
 
             <TextView
@@ -79,7 +80,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="30dp"
                 android:layout_marginRight="6dp"
-                android:layout_marginTop="6dp"
+                android:layout_marginTop="19dp"
+                android:layout_marginBottom="11dp"
                 android:text="PASSWORD"
                 android:textColor="#ffffff"/>
 
@@ -89,12 +91,14 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="30dp"
                 android:layout_marginRight="6dp"
-                android:layout_marginBottom="6dp"
+                android:layout_marginBottom="15dp"
                 android:hint="Inserire password"
+                android:focusableInTouchMode="true"
                 android:inputType="textPassword"
+                android:fontFamily=""
                 android:background="@android:color/transparent"
                 android:textColor="#ffffff"
-                android:textColorHint="#cccccc"/>
+                android:textColorHint="#93d8a8"/>
 
         </LinearLayout>
 
@@ -104,7 +108,7 @@
             android:layout_gravity="bottom"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
-            android:background="#ffffff"/>
+            android:background="#93d8a8"/>
 
         <FrameLayout
             android:layout_width="match_parent"
@@ -116,10 +120,11 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="left|center_vertical"
                 android:layout_marginLeft="30dp"
-                android:layout_marginTop="6dp"
+                android:layout_marginTop="15dp"
                 android:layout_marginBottom="6dp"
                 android:fontFamily="sans-serif"
-                android:text=" Ricordami"
+                android:text="   Ricordami"
+                android:focusableInTouchMode="true"
                 android:textColor="#ffff"
                 android:button="@drawable/login_checkbox_selector"
                 android:textSize="16sp"/>
@@ -141,7 +146,7 @@
         </FrameLayout>
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:layout_marginBottom="6dp">
@@ -149,22 +154,22 @@
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:layout_gravity="center|bottom">
 
-        <Button
-            android:id="@+id/btnLogin"
-            style="@android:style/Widget.Button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginLeft="9dp"
-            android:layout_marginRight="9dp"
-            android:text="Accedi"
-            android:textColor="#29b352"
-            android:paddingRight="99dip"
-            android:drawableRight="@drawable/login_accedi_20px"
-            android:background="@drawable/button_border_white"
-            android:textSize="19sp"/>
+            <Button
+                android:id="@+id/btnLogin"
+                style="@android:style/Widget.Button"
+                android:layout_width="match_parent"
+                android:minWidth="340dp"
+                android:layout_height="55dp"
+                android:layout_gravity="center"
+                android:layout_marginLeft="9dp"
+                android:layout_marginRight="9dp"
+                android:textColor="#29b352"
+                android:drawableTop="@drawable/accedi"
+                android:paddingTop="18dp"
+                android:background="@drawable/button_border_white"/>
 
         </FrameLayout>
 

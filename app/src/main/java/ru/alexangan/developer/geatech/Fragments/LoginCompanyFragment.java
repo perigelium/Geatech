@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.app.ProgressDialog;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -13,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import org.json.JSONException;
@@ -46,6 +48,7 @@ public class LoginCompanyFragment extends Fragment implements View.OnClickListen
     NetworkUtils networkUtils;
     String strLogin, strPassword;
     private ProgressDialog downloadingDialog;
+    LinearLayout llLogin, llPassword;
 
     public LoginCompanyFragment()
     {
@@ -82,7 +85,7 @@ public class LoginCompanyFragment extends Fragment implements View.OnClickListen
                 LoginCredentials loginCredentials = realm.where(LoginCredentials.class).findFirst();
                 realm.commitTransaction();
 
-                if (loginCredentials!=null)
+                if (loginCredentials != null)
                 {
                     String strLogin = loginCredentials.getLogin();
                     etLogin.setText(strLogin);
@@ -105,6 +108,7 @@ public class LoginCompanyFragment extends Fragment implements View.OnClickListen
         btnPasswordRecover = (Button) rootView.findViewById(R.id.btnPasswordRecover);
         btnPasswordRecover.setOnClickListener(this);
 
+        llLogin = (LinearLayout) rootView.findViewById(R.id.llLogin);
         etLogin = (EditText) rootView.findViewById(R.id.etLogin);
         etLogin.setOnTouchListener(new View.OnTouchListener()
         {
@@ -116,6 +120,22 @@ public class LoginCompanyFragment extends Fragment implements View.OnClickListen
             }
         });
 
+        etLogin.setOnFocusChangeListener(new View.OnFocusChangeListener()
+        {
+            @Override
+            public void onFocusChange(View view, boolean hasFocus)
+            {
+                if (hasFocus)
+                {
+                    llLogin.setBackgroundColor(Color.parseColor("#ff22A04B"));
+                } else
+                {
+                    llLogin.setBackgroundColor(Color.TRANSPARENT);
+                }
+            }
+        });
+
+        llPassword = (LinearLayout) rootView.findViewById(R.id.llPassword);
         etPassword = (EditText) rootView.findViewById(R.id.etPassword);
         etPassword.setOnTouchListener(new View.OnTouchListener()
         {
@@ -127,7 +147,38 @@ public class LoginCompanyFragment extends Fragment implements View.OnClickListen
             }
         });
 
+        etPassword.setOnFocusChangeListener(new View.OnFocusChangeListener()
+        {
+            @Override
+            public void onFocusChange(View view, boolean hasFocus)
+            {
+                if (view.getId() == R.id.etPassword)
+                {
+                    if (hasFocus)
+                    {
+                        llPassword.setBackgroundColor(Color.parseColor("#ff22A04B"));
+                    } else
+                    {
+                        llPassword.setBackgroundColor(Color.TRANSPARENT);
+                    }
+                }
+            }
+        });
+
         chkboxRememberMe = (CheckBox) rootView.findViewById(R.id.chkboxRememberMe);
+
+        chkboxRememberMe.setOnTouchListener(new View.OnTouchListener()
+        {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent)
+            {
+                chkboxRememberMe.setChecked(!chkboxRememberMe.isChecked());
+                llLogin.setBackgroundColor(Color.TRANSPARENT);
+                llPassword.setBackgroundColor(Color.TRANSPARENT);
+
+                return true;
+            }
+        });
 
         return rootView;
     }
@@ -179,11 +230,11 @@ public class LoginCompanyFragment extends Fragment implements View.OnClickListen
             credentialsesFound = false;
             strLogin = etLogin.getText().toString();
 
-            if (!android.util.Patterns.EMAIL_ADDRESS.matcher(strLogin).matches())
+/*            if (!android.util.Patterns.EMAIL_ADDRESS.matcher(strLogin).matches())
             {
                 showToastMessage(getString(R.string.InvalidLogin));
                 return;
-            }
+            }*/
 
             strPassword = etPassword.getText().toString();
 
@@ -211,11 +262,10 @@ public class LoginCompanyFragment extends Fragment implements View.OnClickListen
 
             if (!NetworkUtils.isNetworkAvailable(activity))
             {
-                if(credentialsesFound)
+                if (credentialsesFound)
                 {
                     loginCommunicator.onLoginSucceeded();
-                }
-                else
+                } else
                 {
                     showToastMessage(getString(R.string.LoginFailedCheckInternetConnection));
                 }
@@ -323,8 +373,7 @@ public class LoginCompanyFragment extends Fragment implements View.OnClickListen
                     {
                         e.printStackTrace();
                     }
-                }
-                else
+                } else
                 {
                     showToastMessage(getString(R.string.LoginOrPasswordNotValid));
                 }

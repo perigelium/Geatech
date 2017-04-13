@@ -10,7 +10,9 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Message;
 import android.text.Html;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
@@ -93,23 +95,7 @@ public class MainActivity extends Activity implements Communicator, Callback
     private boolean timeNotSetItemsOnly;
     Handler handler;
     Runnable runnable;
-
-    @Override
-    protected void onPause()
-    {
-        super.onPause();
-
-        if(handler!=null && runnable!= null)
-        {
-            handler.removeCallbacks(runnable);
-        }
-    }
-
-    @Override
-    protected void onStart()
-    {
-        super.onStart();
-    }
+    AlertDialog alert;
 
     CTLinfoFragment ctlInfo;
     CtrlBtnReportDetailed ctrlBtnsReportDetailed;
@@ -134,21 +120,29 @@ public class MainActivity extends Activity implements Communicator, Callback
     NetworkUtils networkUtils;
 
     @Override
+    protected void onPause()
+    {
+        super.onPause();
+
+        if(handler!=null && runnable!= null)
+        {
+            handler.removeCallbacks(runnable);
+        }
+    }
+
+    @Override
     protected void onDestroy()
     {
         super.onDestroy();
 
         String imagesDirPath = getExternalFilesDir(DIRECTORY_PICTURES).getAbsolutePath();
 
-        if(imagesDirPath != null)
-        {
             File imagesDir = new File(imagesDirPath);
 
             for (File child : imagesDir.listFiles())
             {
                 child.delete();
             }
-        }
     }
 
     @Override
@@ -668,7 +662,8 @@ public class MainActivity extends Activity implements Communicator, Callback
                     }
                     if (which == 0)
                     {
-                        showToastMessage("Not implemented exception");
+                        //showToastMessage("Not implemented exception");
+                        refreshGeaModels();
                     }
 
                 }
@@ -706,7 +701,7 @@ public class MainActivity extends Activity implements Communicator, Callback
             });*/
 
             builder.setView(layout);
-            AlertDialog alert = builder.create();
+            alert = builder.create();
             alert.show();
         }
     }
@@ -745,8 +740,6 @@ public class MainActivity extends Activity implements Communicator, Callback
 
     public Fragment assignFragmentModel(String productType)
     {
-        Fragment frag;
-
         switch (productType)
         {
             case "SOLARE TERMODINAMICO":
@@ -946,26 +939,23 @@ public class MainActivity extends Activity implements Communicator, Callback
                                 }
 
                                 requestServerDialog.dismiss();
+                                alert.dismiss();
                                 showToastMessage(getString(R.string.ApplicationUpdateSucceeded));
+                                logout();
                             }
                         });
 
                     } catch (Exception e)
                     {
                         e.printStackTrace();
-
-                        requestServerDialog.dismiss();
                     }
-                } else
-                {
-                    requestServerDialog.dismiss();
                 }
             } catch (JSONException e)
             {
                 e.printStackTrace();
-
-                requestServerDialog.dismiss();
             }
+
+            requestServerDialog.dismiss();
         }
     }
 
