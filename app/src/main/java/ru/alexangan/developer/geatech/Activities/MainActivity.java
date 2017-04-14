@@ -40,13 +40,15 @@ import ru.alexangan.developer.geatech.Fragments.CaldaiaReportFragment;
 import ru.alexangan.developer.geatech.Fragments.ClimatizzazioneReportFragment;
 import ru.alexangan.developer.geatech.Fragments.ComingListVisitsFragment;
 import ru.alexangan.developer.geatech.Fragments.CtrlBtnReportDetailed;
-import ru.alexangan.developer.geatech.Fragments.CtrlBtnsFragment1;
+import ru.alexangan.developer.geatech.Fragments.CtrlBtnsBottom;
 import ru.alexangan.developer.geatech.Fragments.CtrlBtnsFragment2;
 import ru.alexangan.developer.geatech.Fragments.DomoticaReportFragment;
 import ru.alexangan.developer.geatech.Fragments.EmptyReportFragment;
 import ru.alexangan.developer.geatech.Fragments.FotovoltaicoReportFragment;
+import ru.alexangan.developer.geatech.Fragments.FragListVisitsFree;
+import ru.alexangan.developer.geatech.Fragments.FragListVisitsOther;
+import ru.alexangan.developer.geatech.Fragments.FragListVisitsToday;
 import ru.alexangan.developer.geatech.Fragments.InWorkListVisitsFragment;
-import ru.alexangan.developer.geatech.Fragments.ListVisitsFragment;
 import ru.alexangan.developer.geatech.Fragments.NotSentListVisitsFragment;
 import ru.alexangan.developer.geatech.Fragments.NotificationBarFragment;
 import ru.alexangan.developer.geatech.Fragments.PhotoGalleryGridFragment;
@@ -83,10 +85,12 @@ public class MainActivity extends Activity implements Communicator, Callback
     private FragmentManager mFragmentManager;
     SwipeDetector swipeDetector;
 
-    CtrlBtnsFragment1 ctrlBtnsFragment1;
+    CtrlBtnsBottom ctrlBtnsBottom;
     CtrlBtnsFragment2 ctrlBtnsFragment2;
     SetDateTimeFragment dateTimeSetFragment;
-    ListVisitsFragment listVisits;
+    FragListVisitsFree listVisitsFree;
+    FragListVisitsToday listVisitsToday;
+    FragListVisitsOther listVisitsOther;
     InWorkListVisitsFragment inWorkListVisits;
     ComingListVisitsFragment comingListVisits;
     NotSentListVisitsFragment notSentListVisits;
@@ -173,10 +177,13 @@ public class MainActivity extends Activity implements Communicator, Callback
 
         swipeDetector = new SwipeDetector();
 
-        ctrlBtnsFragment1 = new CtrlBtnsFragment1();
+        ctrlBtnsBottom = new CtrlBtnsBottom();
+        //ctrlBtnsBottom = new ctrlBtnsBottom();
         ctrlBtnsFragment2 = new CtrlBtnsFragment2();
         dateTimeSetFragment = new SetDateTimeFragment();
-        listVisits = new ListVisitsFragment();
+        listVisitsFree = new FragListVisitsFree();
+        listVisitsToday = new FragListVisitsToday();
+        listVisitsOther = new FragListVisitsOther();
         inWorkListVisits = new InWorkListVisitsFragment();
         comingListVisits = new ComingListVisitsFragment();
         notSentListVisits = new NotSentListVisitsFragment();
@@ -205,20 +212,24 @@ public class MainActivity extends Activity implements Communicator, Callback
 
         mFragmentTransaction.add(R.id.NotificationBarFragContainer, notificationBarFragment);
 
-        mFragmentTransaction.add(R.id.CtrlBtnFragContainer, ctrlBtnsFragment1);
-        mFragmentTransaction.add(R.id.CtrlBtnFragContainer, ctrlBtnsFragment2);
-        mFragmentTransaction.add(R.id.CtrlBtnFragContainer, ctrlBtnsReportDetailed);
+        mFragmentTransaction.add(R.id.CtrlBtnFragContainer, ctrlBtnsBottom);
+        //mFragmentTransaction.add(R.id.CtrlBtnFragContainer, ctrlBtnsBottom);
+        //mFragmentTransaction.add(R.id.CtrlBtnFragContainer, ctrlBtnsFragment2);
+        //mFragmentTransaction.add(R.id.CtrlBtnFragContainer, ctrlBtnsReportDetailed);
 
-        mFragmentTransaction.addToBackStack("listVisits");
+        //mFragmentTransaction.addToBackStack("listVisitsFree");
 
-        Bundle args = new Bundle();
+/*        Bundle args = new Bundle();
         args.putBoolean("withNoSopralluogoTime", false);
-        listVisits.setArguments(args);
-        mFragmentTransaction.add(R.id.CtrlBtnFragContainer, listVisits);
+        listVisits.setArguments(args);*/
+        mFragmentTransaction.add(R.id.InnerFragContainer, listVisitsFree);
+        mFragmentTransaction.add(R.id.InnerFragContainer, listVisitsToday);
+        mFragmentTransaction.add(R.id.InnerFragContainer, listVisitsOther);
 
-        mFragmentTransaction.hide(ctrlBtnsReportDetailed);
-        mFragmentTransaction.hide(ctrlBtnsFragment2);
-        mFragmentTransaction.show(ctrlBtnsFragment1);
+        //mFragmentTransaction.hide(ctrlBtnsReportDetailed);
+        //mFragmentTransaction.hide(ctrlBtnsFragment2);
+        //mFragmentTransaction.hide(ctrlBtnsBottom);
+        mFragmentTransaction.show(ctrlBtnsBottom);
 
         //mFragmentManager.executePendingTransactions();
 
@@ -250,7 +261,7 @@ public class MainActivity extends Activity implements Communicator, Callback
     @Override
     public void onBackPressed()
     {
-        if (!listVisits.isAdded())
+        if (!listVisitsFree.isAdded())
         {
             removeAllLists();
 
@@ -260,10 +271,10 @@ public class MainActivity extends Activity implements Communicator, Callback
                 mFragmentTransaction.hide(ctrlBtnsReportDetailed);
                 mFragmentTransaction.commit();
 
-                ctrlBtnsFragment1.setCheckedBtnId(R.id.btnSentReports);
+                //ctrlBtnsBottom.setCheckedBtnId(R.id.btnSentReports);
             } else
             {
-                ctrlBtnsFragment1.setCheckedBtnId(R.id.btnVisits);
+                ctrlBtnsBottom.setCheckedBtnId(R.id.btnVisits);
             }
             //removeAllLists();
 
@@ -280,7 +291,7 @@ public class MainActivity extends Activity implements Communicator, Callback
     {
         FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
         fragmentTransaction.hide(ctrlBtnsFragment2);
-        fragmentTransaction.show(ctrlBtnsFragment1);
+        fragmentTransaction.show(ctrlBtnsBottom);
         fragmentTransaction.commit();
         currentSelIndex = -1;
 
@@ -288,20 +299,20 @@ public class MainActivity extends Activity implements Communicator, Callback
         {
             removeAllLists();
 
-            listVisits = new ListVisitsFragment();
+            listVisitsFree = new FragListVisitsFree();
 
-            if (!listVisits.isAdded())
+            if (!listVisitsFree.isAdded())
             {
                 Bundle args = new Bundle();
                 args.putBoolean("timeNotSetItemsOnly", timeNotSetItemsOnly);
-                listVisits.setArguments(args);
+                listVisitsFree.setArguments(args);
 
                 if (listVisitsIsObsolete && NetworkUtils.isNetworkAvailable(this))
                 {
                     refreshVisitsList();
                 } else
                 {
-                    setVisitsListContent(listVisits);
+                    setVisitsListContent(listVisitsFree);
                 }
 
                 timeNotSetItemsOnly = false;
@@ -317,10 +328,10 @@ public class MainActivity extends Activity implements Communicator, Callback
 /*            removeAllLists();
             setVisitsListContent(reportsList);*/
 
-            ctrlBtnsFragment1.setCheckedBtnId(R.id.btnSentReports);
+            //ctrlBtnsBottom.setCheckedBtnId(R.id.btnSentReports);
         }
 
-        if (view == findViewById(R.id.btnComingVisits))
+        if (view == findViewById(R.id.btnNotifUrgentReports))
         {
             removeAllLists();
             setVisitsListContent(comingListVisits);
@@ -338,18 +349,18 @@ public class MainActivity extends Activity implements Communicator, Callback
             setVisitsListContent(notSentListVisits);
         }
 
-        if (view == findViewById(R.id.btnSentReports))
+/*        if (view == findViewById(R.id.btnSentReports))
         {
             removeAllLists();
             setVisitsListContent(reportsList);
-        }
+        }*/
     }
 
     @Override
     public void onCtrlButtons2Clicked(View view)
     {
         FragmentTransaction mFragmentTransaction = mFragmentManager.beginTransaction();
-        mFragmentTransaction.hide(ctrlBtnsFragment1);
+        mFragmentTransaction.hide(ctrlBtnsBottom);
         mFragmentTransaction.show(ctrlBtnsFragment2);
         mFragmentTransaction.commit();
 
@@ -362,7 +373,7 @@ public class MainActivity extends Activity implements Communicator, Callback
         {
             removeAllLists();
 
-            ctrlBtnsFragment1.setCheckedBtnId(R.id.btnVisits);
+            ctrlBtnsBottom.setCheckedBtnId(R.id.btnVisits);
         }
 
         if (view == findViewById(R.id.btnFillReport))
@@ -478,9 +489,9 @@ public class MainActivity extends Activity implements Communicator, Callback
             mFragmentTransaction.remove(ctlInfo);
         }
 
-        if (listVisits.isAdded())
+        if (listVisitsFree.isAdded())
         {
-            mFragmentTransaction.remove(listVisits);
+            mFragmentTransaction.remove(listVisitsFree);
         }
 
         if (comingListVisits.isAdded())
@@ -571,7 +582,7 @@ public class MainActivity extends Activity implements Communicator, Callback
     {
         FragmentTransaction mFragmentTransaction = mFragmentManager.beginTransaction();
         mFragmentTransaction.hide(ctrlBtnsFragment2);
-        mFragmentTransaction.hide(ctrlBtnsFragment1);
+        mFragmentTransaction.hide(ctrlBtnsBottom);
         mFragmentTransaction.show(ctrlBtnsReportDetailed);
         mFragmentTransaction.commit();
 
@@ -603,17 +614,17 @@ public class MainActivity extends Activity implements Communicator, Callback
         {
             removeAllLists();
 
-            listVisits = new ListVisitsFragment();
+            listVisitsFree = new FragListVisitsFree();
 
-            if (!listVisits.isAdded())
+            if (!listVisitsFree.isAdded())
             {
                 timeNotSetItemsOnly = true;
                 listVisitsIsObsolete = true;
 
-                ctrlBtnsFragment1.setCheckedBtnId(R.id.btnVisits);
+                ctrlBtnsBottom.setCheckedBtnId(R.id.btnVisits);
             }
 
-            //ctrlBtnsFragment1.setCheckedBtnId(R.id.btnVisits);
+            //ctrlBtnsBottom.setCheckedBtnId(R.id.btnVisits);
         }
 
         if (view.getId() == R.id.btnNotifUrgentReports)
@@ -838,10 +849,10 @@ public class MainActivity extends Activity implements Communicator, Callback
 
                     //removeAllLists();
 
-                    setVisitsListContent(listVisits);
+                    setVisitsListContent(listVisitsFree);
 
                     requestServerDialog.dismiss();
-                    //ctrlBtnsFragment1.setCheckedBtnId(R.id.btnVisits);
+                    //ctrlBtnsBottom.setCheckedBtnId(R.id.btnVisits);
                 }
             });
         }

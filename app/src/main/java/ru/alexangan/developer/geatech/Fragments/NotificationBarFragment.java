@@ -45,6 +45,15 @@ public class NotificationBarFragment extends Fragment implements View.OnClickLis
         Button btnAppSettings = (Button) rootView.findViewById(R.id.btnAppSettings);
         btnAppSettings.setOnClickListener(this);*/
 
+        TextView tvListName = (TextView) rootView.findViewById(R.id.tvListName);
+        tvListName.setText("Elenco dei prossimi sopralluoghi");
+
+        TextView tvListFilterName = (TextView) rootView.findViewById(R.id.tvListFilterName);
+        tvListFilterName.setText("Tutti i sopralluoghi");
+
+        Button btnListFilters = (Button) rootView.findViewById(R.id.btnListFilters);
+        btnListFilters.setOnClickListener(this);
+
         return rootView;
     }
 

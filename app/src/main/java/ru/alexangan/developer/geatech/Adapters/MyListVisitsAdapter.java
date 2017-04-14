@@ -95,13 +95,13 @@ public class MyListVisitsAdapter extends BaseAdapter
             holder = (ViewHolder) row.getTag();*/
 
 
-        ImageView calendarioIcon = (ImageView) row.findViewById(R.id.calendario);
-        View vVisitDateView = row.findViewById(R.id.vVisitDateCell);
+        ImageView ivReportStatus = (ImageView) row.findViewById(R.id.ivReportStatus);
+        //View vVisitDateView = row.findViewById(R.id.vVisitDateCell);
         TextView tvVisitDay = (TextView) row.findViewById(R.id.tvVisitDay);
         TextView tvVisitMonth = (TextView) row.findViewById(R.id.tvVisitMonth);
         TextView tvVisitTime = (TextView) row.findViewById(R.id.tvVisitTime);
-        ImageView ivPersonTimeSet = (ImageView) row.findViewById(R.id.ivPersonTimeSet);
-        ImageView ivPersonTimeUnset = (ImageView) row.findViewById(R.id.ivPersonTimeUnset);
+        //ImageView ivPersonTimeSet = (ImageView) row.findViewById(R.id.ivPersonTimeSet);
+        //ImageView ivPersonTimeUnset = (ImageView) row.findViewById(R.id.ivPersonTimeUnset);
 
         TextView clientNameTextView = (TextView) row.findViewById(R.id.tvClientName);
         TextView serviceTypeTextView = (TextView) row.findViewById(R.id.tvVisitTOS);
@@ -121,6 +121,7 @@ public class MyListVisitsAdapter extends BaseAdapter
         clientAddressTextView.setText(clientData.getAddress());
 
         boolean ownReport = selectedTech.getId() == id_tecnico;
+        TextView tvTechName = (TextView) row.findViewById(R.id.tvTechName);
 
 
 /*        realm.beginTransaction();
@@ -141,6 +142,8 @@ public class MyListVisitsAdapter extends BaseAdapter
 
         if (id_tecnico != 0)
         {
+            tvTechName.setText(selectedTech.getFullNameTehnic() + " • ");
+
             Calendar calendar = Calendar.getInstance();
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
 
@@ -155,17 +158,17 @@ public class MyListVisitsAdapter extends BaseAdapter
 
             if (ownReport)
             {
-                vVisitDateView.setBackgroundColor(Color.parseColor("#009922"));
+                ivReportStatus.setBackgroundResource(R.drawable.dot_green);
 
             } else
             {
-                vVisitDateView.setBackgroundColor(Color.parseColor("#999999"));
+                ivReportStatus.setBackgroundResource(R.drawable.dot_gray);
             }
 
             tvVisitDay.setVisibility(View.VISIBLE);
             tvVisitMonth.setVisibility(View.VISIBLE);
-            ivPersonTimeSet.setVisibility(View.VISIBLE);
-            ivPersonTimeUnset.setVisibility(View.GONE);
+/*            ivPersonTimeSet.setVisibility(View.VISIBLE);
+            ivPersonTimeUnset.setVisibility(View.GONE);*/
 
             tvVisitDay.setText(Integer.toString(calendar.get(Calendar.DAY_OF_MONTH)));
             tvVisitMonth.setText(ItalianMonths.numToString(calendar.get(Calendar.MONTH) + 1));
@@ -179,9 +182,10 @@ public class MyListVisitsAdapter extends BaseAdapter
             tvVisitTime.setText(Integer.toString(calendar.get(Calendar.HOUR_OF_DAY)) + ":" + minuteStr);
         } else
         {
-            calendarioIcon.setVisibility(View.VISIBLE);
-            ivPersonTimeUnset.setVisibility(View.VISIBLE);
-            ivPersonTimeSet.setVisibility(View.GONE);
+            ivReportStatus.setBackgroundResource(R.drawable.dot_yellow);
+            //calendarioIcon.setVisibility(View.VISIBLE);
+/*            ivPersonTimeUnset.setVisibility(View.VISIBLE);
+            ivPersonTimeSet.setVisibility(View.GONE);*/
         }
 
 

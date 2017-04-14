@@ -2,19 +2,40 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
-              android:background="#ffffff"
+              android:weightSum="10"
               android:orientation="vertical">
 
     <LinearLayout
         android:id="@+id/NotificationBarFragContainer"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        android:layout_gravity="top"
+        android:layout_weight="1"
         android:orientation="vertical"/>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_gravity="top"
+        android:layout_weight="8"
+        android:background="#f5f5f5"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/InnerFragContainer"
+            android:orientation="vertical">
+        </LinearLayout>
+
+    </ScrollView>
 
     <LinearLayout
         android:id="@+id/CtrlBtnFragContainer"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_gravity="bottom"
         android:orientation="vertical"/>
 
 </LinearLayout>

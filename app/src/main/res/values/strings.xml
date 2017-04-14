@@ -40,4 +40,7 @@
     <string name="ReceivedDataError">Error in dato ricevuto</string>
     <string name="ApplicationUpdateFailed">Aggiornamento di applicazione non riuscito</string>
     <string name="ApplicationUpdateSucceeded">Aggiornamento di applicazione completato</string>
+    <string name="VisitsFree">Sopralluoghi da fissare</string>
+    <string name="VisitsOfToday">Sopralluoghi di oggi:</string>
+    <string name="VisitsComing">Prossimi sopralluoghi</string>
 </resources>

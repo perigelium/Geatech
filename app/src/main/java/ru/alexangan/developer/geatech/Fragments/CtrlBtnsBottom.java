@@ -16,7 +16,7 @@ import ru.alexangan.developer.geatech.R;
 /**
  * Created by user on 11/10/2016*/
 
-public class CtrlBtnsFragment1 extends Fragment implements View.OnClickListener
+public class CtrlBtnsBottom extends Fragment implements View.OnClickListener
 {
 
     private Communicator mCommunicator;
@@ -26,7 +26,7 @@ public class CtrlBtnsFragment1 extends Fragment implements View.OnClickListener
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
-        rootView = inflater.inflate(R.layout.ctrl_btns_fragment1, container, false);
+        rootView = inflater.inflate(R.layout.ctrl_btns_bottom, container, false);
 
         //final OnClickedListener listener = (OnClickedListener) getActivity();
 
@@ -36,17 +36,17 @@ public class CtrlBtnsFragment1 extends Fragment implements View.OnClickListener
         //rGroup.check(checkedBtnId);
 
         Button btnVisits = (Button)rootView.findViewById(R.id.btnVisits);
-        Button btnComingVisits = (Button)rootView.findViewById(R.id.btnComingVisits);
         Button btnInWorkVisits = (Button)rootView.findViewById(R.id.btnInWorkVisits);
+        Button btnComingVisits = (Button)rootView.findViewById(R.id.btnNotifUrgentReports);
         Button btnNotSentReports = (Button)rootView.findViewById(R.id.btnNotSentReports);
-        Button btnSentReports = (Button)rootView.findViewById(R.id.btnSentReports);
+        Button btnAppSettings = (Button)rootView.findViewById(R.id.btnAppSettings);
 
         btnArray = new ArrayList<>();
         btnArray.add(btnVisits);
         btnArray.add(btnComingVisits);
         btnArray.add(btnInWorkVisits);
         btnArray.add(btnNotSentReports);
-        btnArray.add(btnSentReports);
+        btnArray.add(btnAppSettings);
 
         for(Button btn : btnArray)
         {

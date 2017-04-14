@@ -1,54 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="match_parent"
-        android:layout_height="64dp"
-        android:background="#29b352"
-        android:layout_gravity="center"
-        android:orientation="horizontal">
+             android:layout_width="match_parent"
+             android:layout_height="64dp"
+             android:layout_gravity="center"
+             android:background="#29b352"
+             android:orientation="horizontal">
 
     <ImageView
         android:layout_width="36dp"
         android:layout_height="36dp"
-        android:layout_marginLeft="15dp"
         android:layout_gravity="center_vertical"
+        android:layout_marginLeft="15dp"
         android:src="@mipmap/ic_launcher"/>
 
     <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tvListName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:orientation="vertical">
+            android:text=""
+            android:textColor="#ffffff"
+            android:textSize="15sp"/>
 
-                <TextView
-                    android:id="@+id/tvListName"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:text="Elenco dei prossimi sopralluoghi"
-                    android:textColor="#ffffff"
-                    android:textSize="15sp"/>
+        <TextView
+            android:id="@+id/tvListFilterName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text=""
+            android:textColor="#ffffff"
+            android:textSize="12sp"/>
 
-                <TextView
-                    android:id="@+id/tvListFilterName"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="#ffffff"
-                    android:layout_gravity="center"
-                    android:text="Tutti i sopralluoghi"
-                    android:textSize="12sp"/>
-
-        </LinearLayout>
+    </LinearLayout>
 
     <Button
-        android:id="@+id/btnAppSettings"
+        android:id="@+id/btnListFilters"
         android:layout_width="22dp"
         android:layout_height="22dp"
         android:layout_gravity="center_vertical|end"
         android:layout_marginRight="20dp"
-        android:scaleType="fitXY"
+        android:background="@drawable/filter_icon"
         android:button="@null"
+        android:scaleType="fitXY"
         android:textOff=""
-        android:textOn=""
-        android:background="@drawable/filter_icon"/>
+        android:textOn=""/>
 
 </FrameLayout>

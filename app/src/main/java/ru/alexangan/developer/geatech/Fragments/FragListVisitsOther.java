@@ -23,13 +23,14 @@ import ru.alexangan.developer.geatech.Models.ReportStates;
 import ru.alexangan.developer.geatech.Models.VisitItem;
 import ru.alexangan.developer.geatech.R;
 import ru.alexangan.developer.geatech.Utils.SwipeDetector;
+import ru.alexangan.developer.geatech.Utils.ViewUtils;
 
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.company_id;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.realm;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.selectedTech;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.visitItems;
 
-public class ListVisitsFragment extends ListFragment
+public class FragListVisitsOther extends ListFragment
 {
     private Communicator mCommunicator;
     SwipeDetector swipeDetector;
@@ -66,7 +67,7 @@ public class ListVisitsFragment extends ListFragment
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
-        View rootView = inflater.inflate(R.layout.list_visits_fragment, container, false);
+        View rootView = inflater.inflate(R.layout.list_visits_other, container, false);
 
         visitItemsFiltered = new ArrayList<>();
 
@@ -106,7 +107,7 @@ public class ListVisitsFragment extends ListFragment
             }
         }
 
-        for (Map.Entry entry : unsortedVisits.entrySet()) // add own visits first
+/*        for (Map.Entry entry : unsortedVisits.entrySet()) // add own visits first
         {
                 VisitItem visitItem = (VisitItem) entry.getValue();
                 int id_tecnico = visitItem.getGeaSopralluogo().getId_tecnico();
@@ -115,25 +116,25 @@ public class ListVisitsFragment extends ListFragment
 
             if(ownReport)
             {
-/*                realm.beginTransaction();
+*//*                realm.beginTransaction();
                 ReportStates reportStates = realm.where(ReportStates.class)
                         .equalTo("company_id", company_id).equalTo("tech_id", selectedTech.getId())
                         .equalTo("id_sopralluogo", id_sopralluogo).findFirst();
-                realm.commitTransaction();*/
+                realm.commitTransaction();*//*
 
-/*                if (reportStates != null)
+*//*                if (reportStates != null)
                 {
                     realm.beginTransaction();
                     if(reportStates.getId_rapporto_sopralluogo() != 0)
-                    {*/
+                    {*//*
                         visitItemsFiltered.add(visitItem);
-/*                    }
+*//*                    }
                     realm.commitTransaction();
-                }*/
+                }*//*
             }
-        }
+        }*/
 
-        for (Map.Entry entry : unsortedVisits.entrySet()) // add free visits
+/*        for (Map.Entry entry : unsortedVisits.entrySet()) // add free visits
         {
             VisitItem visitItem = (VisitItem) entry.getValue();
             int id_tecnico = visitItem.getGeaSopralluogo().getId_tecnico();
@@ -143,7 +144,7 @@ public class ListVisitsFragment extends ListFragment
             {
                 visitItemsFiltered.add(visitItem);
             }
-        }
+        }*/
 
         for (Map.Entry entry : unsortedVisits.entrySet()) // add other visits
         {
@@ -169,6 +170,9 @@ public class ListVisitsFragment extends ListFragment
         super.onViewCreated(view, savedInstanceState);
 
         lv = getListView();
+
+        ViewUtils.setListViewHeightBasedOnChildren(lv);
+
         lv.setOnTouchListener(swipeDetector);
 
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener()

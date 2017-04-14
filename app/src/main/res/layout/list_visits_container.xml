@@ -4,14 +4,23 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
-    <TextView
-        android:id="@+id/listVisitsFreeTitle"
+    <ListView
+        android:id="@+id/listVisitsFree"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center"
-        android:layout_gravity="top"
-        android:text="@string/VisitsFree" >
-    </TextView>
+        android:choiceMode="singleChoice"
+        android:focusable="true"
+        android:background="#ffffff" >
+    </ListView>
+
+    <ListView
+        android:id="@+id/listVisitsToday"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:choiceMode="singleChoice"
+        android:focusable="true"
+        android:background="#ffffff" >
+    </ListView>
 
     <ListView
         android:id="@id/android:list"
