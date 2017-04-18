@@ -75,6 +75,7 @@ public class ComingListVisitsFragment extends ListFragment
                     try
                     {
                         Date date = sdf.parse(data_ora_sopralluogo);
+
                         long time = date.getTime();
                         //Log.d("DEBUG", String.valueOf(time));
                         unsortedVisits.put(time, visitItem);

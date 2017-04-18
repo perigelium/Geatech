@@ -11,8 +11,8 @@ import java.util.List;
 public class ItalianMonths
 {
 
-    private static List<String> itMonths = new ArrayList<>(Arrays.asList("gen", "feb", "mar", "apr", "mag", "giu", "lug",
-            "ago", "set", "ott", "nov", "dic"));
+    private static List<String> itMonths = new ArrayList<>(Arrays.asList("GEN", "FEB", "MAR", "APR", "MAG", "GIU", "LUG",
+            "AGO", "SET", "OTT", "NOV", "DIC"));
 
     public static String numToString(int value)
     {

@@ -19,9 +19,11 @@ import ru.alexangan.developer.geatech.Models.ClientData;
 import ru.alexangan.developer.geatech.Models.GeaSopralluogo;
 import ru.alexangan.developer.geatech.Models.ItalianMonths;
 import ru.alexangan.developer.geatech.Models.ProductData;
+import ru.alexangan.developer.geatech.Models.TechnicianItem;
 import ru.alexangan.developer.geatech.Models.VisitItem;
 import ru.alexangan.developer.geatech.R;
 
+import static ru.alexangan.developer.geatech.Models.GlobalConstants.realm;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.selectedTech;
 
 /**
@@ -113,14 +115,31 @@ public class MyListVisitsAdapter extends BaseAdapter
         GeaSopralluogo geaSopralluogo = visitItem.getGeaSopralluogo();
         String dataOraSopralluogo = geaSopralluogo.getData_ora_sopralluogo();
         //int idSopralluogo = geaSopralluogo.getId_sopralluogo();
-        int id_tecnico = geaSopralluogo.getId_tecnico();
+        int tech_id = geaSopralluogo.getId_tecnico();
+
+        String nome_tecnico = "";
+        TechnicianItem technicianItem = realm.where(TechnicianItem.class).equalTo("id", tech_id).findFirst();
+        
+        if(technicianItem!=null)
+        {
+            nome_tecnico = technicianItem.getFullNameTehnic();
+        }
         String productType = productData.getProductType();
 
-        clientNameTextView.setText(clientData.getName());
+        String clientName = clientData.getName();
+
+        clientName = clientName.toLowerCase();
+        String[] strArray = clientName.split(" ");
+        StringBuilder builder = new StringBuilder();
+        for (String s : strArray) {
+            String cap = s.substring(0, 1).toUpperCase() + s.substring(1);
+            builder.append(cap + " ");
+        }
+        clientNameTextView.setText(builder.toString());
         serviceTypeTextView.setText(productType);
         clientAddressTextView.setText(clientData.getAddress());
 
-        boolean ownReport = selectedTech.getId() == id_tecnico;
+        boolean ownReport = selectedTech.getId() == tech_id;
         TextView tvTechName = (TextView) row.findViewById(R.id.tvTechName);
 
 
@@ -140,9 +159,9 @@ public class MyListVisitsAdapter extends BaseAdapter
         }*/
 
 
-        if (id_tecnico != 0)
+        if (tech_id != 0)
         {
-            tvTechName.setText(selectedTech.getFullNameTehnic() + " • ");
+            tvTechName.setText(nome_tecnico + " • ");
 
             Calendar calendar = Calendar.getInstance();
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);

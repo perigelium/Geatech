@@ -19,6 +19,7 @@
         android:layout_height="wrap_content"
         android:choiceMode="singleChoice"
         android:focusable="true"
+        android:divider="#00000000"
         android:background="#ffffff" >
     </ListView>
 

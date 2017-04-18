@@ -81,7 +81,7 @@ public class FragListVisitsOther extends ListFragment
             int id_tecnico = visitItem.getGeaSopralluogo().getId_tecnico();
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ITALIAN);
 
-            if ((!timeNotSetItemsOnly) || (timeNotSetItemsOnly && id_tecnico == 0))
+            if (!timeNotSetItemsOnly)
             {
                 try
                 {
@@ -150,9 +150,9 @@ public class FragListVisitsOther extends ListFragment
         {
             VisitItem visitItem = (VisitItem) entry.getValue();
             int id_tecnico = visitItem.getGeaSopralluogo().getId_tecnico();
-            boolean ownReport = selectedTech.getId() == id_tecnico;
+            //boolean ownReport = selectedTech.getId() == id_tecnico;
 
-            if(!ownReport && id_tecnico != 0)
+            if(id_tecnico != 0) // !ownReport &&
             {
                 visitItemsFiltered.add(visitItem);
             }

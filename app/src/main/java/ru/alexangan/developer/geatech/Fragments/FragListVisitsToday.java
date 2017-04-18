@@ -12,7 +12,9 @@ import android.widget.ListView;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.Locale;
 import java.util.Map;
 import java.util.TreeMap;
@@ -69,98 +71,6 @@ public class FragListVisitsToday extends ListFragment
     {
         View rootView = inflater.inflate(R.layout.list_visits_today, container, false);
 
-        visitItemsFiltered = new ArrayList<>();
-
-        TreeMap<Long, VisitItem> unsortedVisits = new TreeMap<>();
-        long n = 0;
-
-        for (VisitItem visitItem : visitItems)
-        //for (int i = 0; i < visitItems.size(); i++)
-        {
-            String data_ora_sopralluogo = visitItem.getGeaSopralluogo().getData_ora_sopralluogo();
-            int id_tecnico = visitItem.getGeaSopralluogo().getId_tecnico();
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ITALIAN);
-
-            if ((!timeNotSetItemsOnly) || (timeNotSetItemsOnly && id_tecnico == 0))
-            {
-                try
-                {
-                    Date date = sdf.parse(data_ora_sopralluogo);
-                    long time = date.getTime();
-                    //Log.d("DEBUG", String.valueOf(time));
-
-                    while(unsortedVisits.get(time) != null)
-                    {
-                        time++;
-                    }
-                    unsortedVisits.put(time, visitItem);
-
-                } catch (ParseException e)
-                {
-                    while(unsortedVisits.get(n) != null)
-                    {
-                        n++;
-                    }
-                    unsortedVisits.put(n++, visitItem);
-                    e.printStackTrace();
-                }
-            }
-        }
-
-        for (Map.Entry entry : unsortedVisits.entrySet()) // add own visits first
-        {
-                VisitItem visitItem = (VisitItem) entry.getValue();
-                int id_tecnico = visitItem.getGeaSopralluogo().getId_tecnico();
-                int id_sopralluogo = visitItem.getGeaSopralluogo().getId_sopralluogo();
-                boolean ownReport = selectedTech.getId() == id_tecnico;
-
-            if(ownReport)
-            {
-/*                realm.beginTransaction();
-                ReportStates reportStates = realm.where(ReportStates.class)
-                        .equalTo("company_id", company_id).equalTo("tech_id", selectedTech.getId())
-                        .equalTo("id_sopralluogo", id_sopralluogo).findFirst();
-                realm.commitTransaction();*/
-
-/*                if (reportStates != null)
-                {
-                    realm.beginTransaction();
-                    if(reportStates.getId_rapporto_sopralluogo() != 0)
-                    {*/
-                        visitItemsFiltered.add(visitItem);
-/*                    }
-                    realm.commitTransaction();
-                }*/
-            }
-        }
-
-/*        for (Map.Entry entry : unsortedVisits.entrySet()) // add free visits
-        {
-            VisitItem visitItem = (VisitItem) entry.getValue();
-            int id_tecnico = visitItem.getGeaSopralluogo().getId_tecnico();
-            boolean ownReport = selectedTech.getId() == id_tecnico;
-
-            if(!ownReport && id_tecnico == 0)
-            {
-                visitItemsFiltered.add(visitItem);
-            }
-        }
-
-        for (Map.Entry entry : unsortedVisits.entrySet()) // add other visits
-        {
-            VisitItem visitItem = (VisitItem) entry.getValue();
-            int id_tecnico = visitItem.getGeaSopralluogo().getId_tecnico();
-            boolean ownReport = selectedTech.getId() == id_tecnico;
-
-            if(!ownReport && id_tecnico != 0)
-            {
-                visitItemsFiltered.add(visitItem);
-            }
-        }*/
-
-        myListAdapter = new MyListVisitsAdapter(getActivity(), R.layout.list_visits_fragment_row, visitItemsFiltered);
-        setListAdapter(myListAdapter);
-
         return rootView;
     }
 
@@ -168,6 +78,64 @@ public class FragListVisitsToday extends ListFragment
     public void onViewCreated(View view, Bundle savedInstanceState)
     {
         super.onViewCreated(view, savedInstanceState);
+
+        visitItemsFiltered = new ArrayList<>();
+
+        TreeMap<Long, VisitItem> unsortedVisits = new TreeMap<>();
+        long n = 0;
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ITALIAN);
+        Calendar calendarNow = Calendar.getInstance();
+        calendarNow.set(Calendar.HOUR, 23);
+        calendarNow.set(Calendar.MINUTE, 59);
+        calendarNow.set(Calendar.SECOND, 59);
+        long lastMilliSecondsOfToday = calendarNow.getTimeInMillis();
+
+        for (VisitItem visitItem : visitItems)
+        //for (int i = 0; i < visitItems.size(); i++)
+        {
+            String data_ora_sopralluogo = visitItem.getGeaSopralluogo().getData_ora_sopralluogo();
+            int id_tecnico = visitItem.getGeaSopralluogo().getId_tecnico();
+            boolean ownVisit = selectedTech.getId() == id_tecnico;
+
+            if (!timeNotSetItemsOnly && ownVisit)
+            {
+                try
+                {
+                    Date date = sdf.parse(data_ora_sopralluogo);
+                    long time = date.getTime();
+                    //Log.d("DEBUG", String.valueOf(time));
+
+                    while(unsortedVisits.get(time) != null) // item with the same time already exists
+                    {
+                        time++;
+                    }
+
+                    if(time <= lastMilliSecondsOfToday)
+                    {
+                        unsortedVisits.put(time, visitItem);
+                    }
+
+                } catch (ParseException e)
+                {
+/*                    while(unsortedVisits.get(n) != null)
+                    {
+                        n++;
+                    }
+                    unsortedVisits.put(n++, visitItem);*/
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        for (Map.Entry entry : unsortedVisits.entrySet())
+        {
+            VisitItem visitItem = (VisitItem) entry.getValue();
+            {
+                visitItemsFiltered.add(visitItem);
+            }
+        }
+        myListAdapter = new MyListVisitsAdapter(getActivity(), R.layout.list_visits_fragment_row, visitItemsFiltered);
+        setListAdapter(myListAdapter);
 
         lv = getListView();
 
@@ -182,7 +150,6 @@ public class FragListVisitsToday extends ListFragment
                 int idSopralluogo = visitItemsFiltered.get(position).getGeaSopralluogo().getId_sopralluogo();
 
                 int idVisit = visitItemsFiltered.get(position).getId();
-
                 int id_tecnico = visitItemsFiltered.get(position).getGeaSopralluogo().getId_tecnico();
 
                 realm.beginTransaction();
@@ -192,7 +159,7 @@ public class FragListVisitsToday extends ListFragment
                 realm.commitTransaction();
 
                 boolean ownVisit = selectedTech.getId() == id_tecnico;
-                boolean freeVisit = id_tecnico == 0;
+                boolean freeVisit = (id_tecnico == 0);
 
                 if (ownVisit || freeVisit) //
                 {
