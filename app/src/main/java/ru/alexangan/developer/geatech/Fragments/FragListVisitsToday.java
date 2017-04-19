@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -41,6 +42,7 @@ public class FragListVisitsToday extends ListFragment
     MyListVisitsAdapter myListAdapter;
     ListView lv;
     Activity activity;
+    TextView tvListVisitsTodayDate;
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState)
@@ -71,6 +73,8 @@ public class FragListVisitsToday extends ListFragment
     {
         View rootView = inflater.inflate(R.layout.list_visits_today, container, false);
 
+        tvListVisitsTodayDate = (TextView) rootView.findViewById(R.id.tvListVisitsTodayDate);
+
         return rootView;
     }
 
@@ -84,7 +88,12 @@ public class FragListVisitsToday extends ListFragment
         TreeMap<Long, VisitItem> unsortedVisits = new TreeMap<>();
         long n = 0;
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ITALIAN);
-        Calendar calendarNow = Calendar.getInstance();
+        Calendar calendarNow = Calendar.getInstance(Locale.ITALY);
+        String strMonth = calendarNow.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.ITALY);
+        String dateString = " " + calendarNow.get(Calendar.DAY_OF_MONTH) + " " + strMonth;
+
+        tvListVisitsTodayDate.setText(dateString);
+
         calendarNow.set(Calendar.HOUR, 23);
         calendarNow.set(Calendar.MINUTE, 59);
         calendarNow.set(Calendar.SECOND, 59);
@@ -134,6 +143,7 @@ public class FragListVisitsToday extends ListFragment
                 visitItemsFiltered.add(visitItem);
             }
         }
+
         myListAdapter = new MyListVisitsAdapter(getActivity(), R.layout.list_visits_fragment_row, visitItemsFiltered);
         setListAdapter(myListAdapter);
 

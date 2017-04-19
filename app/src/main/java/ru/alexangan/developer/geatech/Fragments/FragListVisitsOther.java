@@ -12,6 +12,7 @@ import android.widget.ListView;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Map;
@@ -69,7 +70,7 @@ public class FragListVisitsOther extends ListFragment
     {
         View rootView = inflater.inflate(R.layout.list_visits_other, container, false);
 
-        visitItemsFiltered = new ArrayList<>();
+/*        visitItemsFiltered = new ArrayList<>();
 
         TreeMap<Long, VisitItem> unsortedVisits = new TreeMap<>();
         long n = 0;
@@ -105,7 +106,7 @@ public class FragListVisitsOther extends ListFragment
                     e.printStackTrace();
                 }
             }
-        }
+        }*/
 
 /*        for (Map.Entry entry : unsortedVisits.entrySet()) // add own visits first
         {
@@ -146,7 +147,7 @@ public class FragListVisitsOther extends ListFragment
             }
         }*/
 
-        for (Map.Entry entry : unsortedVisits.entrySet()) // add other visits
+/*        for (Map.Entry entry : unsortedVisits.entrySet()) // add other visits
         {
             VisitItem visitItem = (VisitItem) entry.getValue();
             int id_tecnico = visitItem.getGeaSopralluogo().getId_tecnico();
@@ -159,7 +160,7 @@ public class FragListVisitsOther extends ListFragment
         }
 
         myListAdapter = new MyListVisitsAdapter(getActivity(), R.layout.list_visits_fragment_row, visitItemsFiltered);
-        setListAdapter(myListAdapter);
+        setListAdapter(myListAdapter);*/
 
         return rootView;
     }
@@ -168,6 +169,65 @@ public class FragListVisitsOther extends ListFragment
     public void onViewCreated(View view, Bundle savedInstanceState)
     {
         super.onViewCreated(view, savedInstanceState);
+
+        visitItemsFiltered = new ArrayList<>();
+
+        TreeMap<Long, VisitItem> unsortedVisits = new TreeMap<>();
+        long n = 0;
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ITALIAN);
+        Calendar calendarNow = Calendar.getInstance();
+        calendarNow.set(Calendar.HOUR, 23);
+        calendarNow.set(Calendar.MINUTE, 59);
+        calendarNow.set(Calendar.SECOND, 59);
+        long lastMilliSecondsOfToday = calendarNow.getTimeInMillis();
+
+        for (VisitItem visitItem : visitItems)
+        //for (int i = 0; i < visitItems.size(); i++)
+        {
+            String data_ora_sopralluogo = visitItem.getGeaSopralluogo().getData_ora_sopralluogo();
+            int id_tecnico = visitItem.getGeaSopralluogo().getId_tecnico();
+            //boolean ownVisit = selectedTech.getId() == id_tecnico;
+
+            if (!timeNotSetItemsOnly && id_tecnico != 0)
+            {
+                try
+                {
+                    Date date = sdf.parse(data_ora_sopralluogo);
+                    long sopralluogoTime = date.getTime();
+                    //Log.d("DEBUG", String.valueOf(sopralluogoTime));
+
+                    while(unsortedVisits.get(sopralluogoTime) != null) // item with the same sopralluogoTime already exists
+                    {
+                        sopralluogoTime++;
+                    }
+
+                    if(sopralluogoTime > lastMilliSecondsOfToday)
+                    {
+                        unsortedVisits.put(sopralluogoTime, visitItem);
+                    }
+
+                } catch (ParseException e)
+                {
+/*                    while(unsortedVisits.get(n) != null)
+                    {
+                        n++;
+                    }
+                    unsortedVisits.put(n++, visitItem);*/
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        for (Map.Entry entry : unsortedVisits.entrySet())
+        {
+            VisitItem visitItem = (VisitItem) entry.getValue();
+            {
+                visitItemsFiltered.add(visitItem);
+            }
+        }
+
+        myListAdapter = new MyListVisitsAdapter(getActivity(), R.layout.list_visits_fragment_row, visitItemsFiltered);
+        setListAdapter(myListAdapter);
 
         lv = getListView();
 

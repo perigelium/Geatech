@@ -39,8 +39,31 @@
 
     </LinearLayout>
 
-    <Button
-        android:id="@+id/btnListFilters"
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical|end">
+
+        <Spinner
+            android:id="@+id/spVisitsFilter"
+            android:layout_width="22dp"
+            android:layout_height="22dp"
+            android:gravity="center"
+            android:background="@android:color/transparent"
+            android:popupBackground="#ff8bc24a"
+            android:ems="10"/>
+
+        <ImageView
+            android:layout_width="22dp"
+            android:layout_height="22dp"
+            android:layout_gravity="end|center_vertical"
+            android:layout_marginRight="20dp"
+            android:scaleType="centerInside"
+            android:src="@drawable/filter_icon"/>
+
+    </FrameLayout>
+<!--    <Button
+        android:id="@+id/btnVisitsListFilter"
         android:layout_width="22dp"
         android:layout_height="22dp"
         android:layout_gravity="center_vertical|end"
@@ -49,6 +72,6 @@
         android:button="@null"
         android:scaleType="fitXY"
         android:textOff=""
-        android:textOn=""/>
+        android:textOn=""/>-->
 
 </FrameLayout>

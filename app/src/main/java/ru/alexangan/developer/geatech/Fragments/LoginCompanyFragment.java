@@ -49,6 +49,7 @@ public class LoginCompanyFragment extends Fragment implements View.OnClickListen
     String strLogin, strPassword;
     private ProgressDialog downloadingDialog;
     LinearLayout llLogin, llPassword;
+    boolean initialized;
 
     public LoginCompanyFragment()
     {
@@ -67,6 +68,16 @@ public class LoginCompanyFragment extends Fragment implements View.OnClickListen
         downloadingDialog.setTitle("");
         downloadingDialog.setMessage(getString(R.string.DownloadingDataPleaseWait));
         downloadingDialog.setIndeterminate(true);
+
+        initialized = false;
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState)
+    {
+        super.onActivityCreated(savedInstanceState);
+
+        loginCommunicator = (LoginCommunicator) getActivity();
     }
 
     @Override
@@ -103,13 +114,28 @@ public class LoginCompanyFragment extends Fragment implements View.OnClickListen
         View rootView = inflater.inflate(R.layout.login_company_fragment, container, false);
 
         btnLogin = (Button) rootView.findViewById(R.id.btnLogin);
-        btnLogin.setOnClickListener(this);
 
         btnPasswordRecover = (Button) rootView.findViewById(R.id.btnPasswordRecover);
         btnPasswordRecover.setOnClickListener(this);
 
         llLogin = (LinearLayout) rootView.findViewById(R.id.llLogin);
         etLogin = (EditText) rootView.findViewById(R.id.etLogin);
+
+        llPassword = (LinearLayout) rootView.findViewById(R.id.llPassword);
+        etPassword = (EditText) rootView.findViewById(R.id.etPassword);
+
+        chkboxRememberMe = (CheckBox) rootView.findViewById(R.id.chkboxRememberMe);
+
+        return rootView;
+    }
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState)
+    {
+        super.onViewCreated(view, savedInstanceState);
+
+        btnLogin.setOnClickListener(this);
+
         etLogin.setOnTouchListener(new View.OnTouchListener()
         {
             @Override
@@ -120,23 +146,6 @@ public class LoginCompanyFragment extends Fragment implements View.OnClickListen
             }
         });
 
-        etLogin.setOnFocusChangeListener(new View.OnFocusChangeListener()
-        {
-            @Override
-            public void onFocusChange(View view, boolean hasFocus)
-            {
-                if (hasFocus)
-                {
-                    llLogin.setBackgroundColor(Color.parseColor("#ff22A04B"));
-                } else
-                {
-                    llLogin.setBackgroundColor(Color.TRANSPARENT);
-                }
-            }
-        });
-
-        llPassword = (LinearLayout) rootView.findViewById(R.id.llPassword);
-        etPassword = (EditText) rootView.findViewById(R.id.etPassword);
         etPassword.setOnTouchListener(new View.OnTouchListener()
         {
             @Override
@@ -147,6 +156,40 @@ public class LoginCompanyFragment extends Fragment implements View.OnClickListen
             }
         });
 
+        etLogin.setOnTouchListener(new View.OnTouchListener()
+        {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent)
+            {
+                llLogin.setBackgroundColor(Color.parseColor("#ff22A04B"));
+
+                return false;
+            }
+        });
+
+        etPassword.setOnTouchListener(new View.OnTouchListener()
+        {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent)
+            {
+                llPassword.setBackgroundColor(Color.parseColor("#ff22A04B"));
+
+                return false;
+            }
+        });
+
+        etLogin.setOnFocusChangeListener(new View.OnFocusChangeListener()
+        {
+            @Override
+            public void onFocusChange(View view, boolean hasFocus)
+            {
+                if (!hasFocus)
+                {
+                    llLogin.setBackgroundColor(Color.TRANSPARENT);
+                }
+            }
+        });
+
         etPassword.setOnFocusChangeListener(new View.OnFocusChangeListener()
         {
             @Override
@@ -154,18 +197,13 @@ public class LoginCompanyFragment extends Fragment implements View.OnClickListen
             {
                 if (view.getId() == R.id.etPassword)
                 {
-                    if (hasFocus)
-                    {
-                        llPassword.setBackgroundColor(Color.parseColor("#ff22A04B"));
-                    } else
+                    if (!hasFocus)
                     {
                         llPassword.setBackgroundColor(Color.TRANSPARENT);
                     }
                 }
             }
         });
-
-        chkboxRememberMe = (CheckBox) rootView.findViewById(R.id.chkboxRememberMe);
 
         chkboxRememberMe.setOnTouchListener(new View.OnTouchListener()
         {
@@ -179,16 +217,6 @@ public class LoginCompanyFragment extends Fragment implements View.OnClickListen
                 return true;
             }
         });
-
-        return rootView;
-    }
-
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState)
-    {
-        super.onActivityCreated(savedInstanceState);
-
-        loginCommunicator = (LoginCommunicator) getActivity();
     }
 
     @Override

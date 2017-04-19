@@ -1,26 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical" >
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/listVisitsTodayTitle"
-        android:layout_width="match_parent"
+    <LinearLayout
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:layout_gravity="top"
-        android:text="@string/VisitsOfToday" >
-    </TextView>
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:layout_marginLeft="12dp"
+            android:layout_marginBottom="6dp"
+            android:text="@string/VisitsOfToday">
+        </TextView>
+
+        <TextView
+            android:id="@+id/tvListVisitsTodayDate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:text=" DD MM">
+        </TextView>
+
+    </LinearLayout>
 
     <ListView
         android:id="@id/android:list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="#fff5f5f5"
         android:choiceMode="singleChoice"
-        android:focusable="true"
         android:divider="#00000000"
-        android:background="#ffffff" >
+        android:focusable="true">
     </ListView>
 
     <TextView
@@ -28,7 +43,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
-        android:text="Vuoto" >
+        android:text="Vuoto">
     </TextView>
 
 </LinearLayout>

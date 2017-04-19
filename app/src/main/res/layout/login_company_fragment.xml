@@ -50,9 +50,9 @@
                 android:layout_marginTop="11dp"
                 android:layout_marginBottom="15dp"
                 android:ems="10"
-                android:hint="Inserire e-mail"
-                android:background="@android:color/transparent"
+                android:hint="Inserire login"
                 android:focusableInTouchMode="true"
+                android:background="@android:color/transparent"
                 android:inputType="textEmailAddress"
                 android:textColor="#ffffff"
                 android:textColorHint="#93d8a8"/>

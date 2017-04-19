@@ -1,7 +1,6 @@
 package ru.alexangan.developer.geatech.Adapters;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -117,12 +116,12 @@ public class MyListVisitsAdapter extends BaseAdapter
         //int idSopralluogo = geaSopralluogo.getId_sopralluogo();
         int tech_id = geaSopralluogo.getId_tecnico();
 
-        String nome_tecnico = "";
+        String techName = "";
         TechnicianItem technicianItem = realm.where(TechnicianItem.class).equalTo("id", tech_id).findFirst();
         
         if(technicianItem!=null)
         {
-            nome_tecnico = technicianItem.getFullNameTehnic();
+            techName = technicianItem.getFullNameTehnic();
         }
         String productType = productData.getProductType();
 
@@ -131,10 +130,12 @@ public class MyListVisitsAdapter extends BaseAdapter
         clientName = clientName.toLowerCase();
         String[] strArray = clientName.split(" ");
         StringBuilder builder = new StringBuilder();
-        for (String s : strArray) {
+        for (String s : strArray)
+        {
             String cap = s.substring(0, 1).toUpperCase() + s.substring(1);
-            builder.append(cap + " ");
+            builder.append(cap).append(" ");
         }
+
         clientNameTextView.setText(builder.toString());
         serviceTypeTextView.setText(productType);
         clientAddressTextView.setText(clientData.getAddress());
@@ -161,7 +162,7 @@ public class MyListVisitsAdapter extends BaseAdapter
 
         if (tech_id != 0)
         {
-            tvTechName.setText(nome_tecnico + " • ");
+            tvTechName.setText(techName + " • ");
 
             Calendar calendar = Calendar.getInstance();
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
