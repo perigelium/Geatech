@@ -50,7 +50,7 @@
             android:layout_height="22dp"
             android:gravity="center"
             android:background="@android:color/transparent"
-            android:popupBackground="#ff8bc24a"
+            android:popupBackground="#ffffffff"
             android:ems="10"/>
 
         <ImageView

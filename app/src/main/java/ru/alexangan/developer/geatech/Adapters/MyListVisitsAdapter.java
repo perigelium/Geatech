@@ -203,6 +203,9 @@ public class MyListVisitsAdapter extends BaseAdapter
         } else
         {
             ivReportStatus.setBackgroundResource(R.drawable.dot_yellow);
+            tvVisitDay.setText("");
+            tvVisitMonth.setText("");
+            tvVisitTime.setText("");
             //calendarioIcon.setVisibility(View.VISIBLE);
 /*            ivPersonTimeUnset.setVisibility(View.VISIBLE);
             ivPersonTimeSet.setVisibility(View.GONE);*/

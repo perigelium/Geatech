@@ -10,9 +10,7 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Message;
 import android.text.Html;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
@@ -67,15 +65,18 @@ import ru.alexangan.developer.geatech.Models.ProductData;
 import ru.alexangan.developer.geatech.Models.VisitItem;
 import ru.alexangan.developer.geatech.Network.NetworkUtils;
 import ru.alexangan.developer.geatech.R;
-import ru.alexangan.developer.geatech.Utils.FileUtils;
 import ru.alexangan.developer.geatech.Utils.JSON_to_model;
 import ru.alexangan.developer.geatech.Utils.SwipeDetector;
 
 import static android.os.Environment.DIRECTORY_PICTURES;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.GET_MODELS_URL_SUFFIX;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.GET_VISITS_URL_SUFFIX;
+import static ru.alexangan.developer.geatech.Models.GlobalConstants.LIST_VISITS_MODE_ALL;
+import static ru.alexangan.developer.geatech.Models.GlobalConstants.LIST_VISITS_MODE_FREE;
+import static ru.alexangan.developer.geatech.Models.GlobalConstants.LIST_VISITS_MODE_TODAY;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.inVisitItems;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.listVisitsIsObsolete;
+import static ru.alexangan.developer.geatech.Models.GlobalConstants.mSettings;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.realm;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.tokenStr;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.visitItems;
@@ -88,9 +89,9 @@ public class MainActivity extends Activity implements Communicator, Callback
     CtrlBtnsBottom ctrlBtnsBottom;
     CtrlBtnsFragment2 ctrlBtnsFragment2;
     SetDateTimeFragment dateTimeSetFragment;
-    FragListVisitsFree listVisitsFree;
-    FragListVisitsToday listVisitsToday;
-    FragListVisitsOther listVisitsOther;
+    FragListVisitsFree fragListVisitsFree;
+    FragListVisitsToday fragListVisitsToday;
+    FragListVisitsOther fragListVisitsOther;
     InWorkListVisitsFragment inWorkListVisits;
     ComingListVisitsFragment comingListVisits;
     NotSentListVisitsFragment notSentListVisits;
@@ -150,6 +151,14 @@ public class MainActivity extends Activity implements Communicator, Callback
     }
 
     @Override
+    protected void onStart()
+    {
+        super.onStart();
+
+        ctrlBtnsBottom.setCheckedBtnId(R.id.btnVisits);
+    }
+
+    @Override
     protected void onResume()
     {
         super.onResume();
@@ -181,9 +190,9 @@ public class MainActivity extends Activity implements Communicator, Callback
         //ctrlBtnsBottom = new ctrlBtnsBottom();
         ctrlBtnsFragment2 = new CtrlBtnsFragment2();
         dateTimeSetFragment = new SetDateTimeFragment();
-        listVisitsFree = new FragListVisitsFree();
-        listVisitsToday = new FragListVisitsToday();
-        listVisitsOther = new FragListVisitsOther();
+        fragListVisitsFree = new FragListVisitsFree();
+        fragListVisitsToday = new FragListVisitsToday();
+        fragListVisitsOther = new FragListVisitsOther();
         inWorkListVisits = new InWorkListVisitsFragment();
         comingListVisits = new ComingListVisitsFragment();
         notSentListVisits = new NotSentListVisitsFragment();
@@ -217,14 +226,14 @@ public class MainActivity extends Activity implements Communicator, Callback
         //mFragmentTransaction.add(R.id.CtrlBtnFragContainer, ctrlBtnsFragment2);
         //mFragmentTransaction.add(R.id.CtrlBtnFragContainer, ctrlBtnsReportDetailed);
 
-        //mFragmentTransaction.addToBackStack("listVisitsFree");
+        //mFragmentTransaction.addToBackStack("fragListVisitsFree");
 
 /*        Bundle args = new Bundle();
         args.putBoolean("withNoSopralluogoTime", false);
         listVisits.setArguments(args);*/
-        mFragmentTransaction.add(R.id.InnerFragContainer, listVisitsFree);
-        mFragmentTransaction.add(R.id.InnerFragContainer, listVisitsToday);
-        mFragmentTransaction.add(R.id.InnerFragContainer, listVisitsOther);
+/*        mFragmentTransaction.add(R.id.innerFragContainer, fragListVisitsFree);
+        mFragmentTransaction.add(R.id.innerFragContainer, fragListVisitsToday);
+        mFragmentTransaction.add(R.id.innerFragContainer, fragListVisitsOther);*/
 
         //mFragmentTransaction.hide(ctrlBtnsReportDetailed);
         //mFragmentTransaction.hide(ctrlBtnsFragment2);
@@ -261,7 +270,7 @@ public class MainActivity extends Activity implements Communicator, Callback
     @Override
     public void onBackPressed()
     {
-        if (!listVisitsFree.isAdded())
+        if (!fragListVisitsFree.isAdded())
         {
             removeAllLists();
 
@@ -299,24 +308,44 @@ public class MainActivity extends Activity implements Communicator, Callback
         {
             removeAllLists();
 
-            listVisitsFree = new FragListVisitsFree();
+            FragmentTransaction mFragmentTransaction = mFragmentManager.beginTransaction();
+            if(!fragListVisitsFree.isAdded())
+            {
+                mFragmentTransaction.add(R.id.innerFragContainer, fragListVisitsFree);
+            }
+            if(!fragListVisitsToday.isAdded())
+            {
+                mFragmentTransaction.add(R.id.innerFragContainer, fragListVisitsToday);
+            }
+            if(!fragListVisitsOther.isAdded())
+            {
+                mFragmentTransaction.add(R.id.innerFragContainer, fragListVisitsOther);
+            }
+            mFragmentTransaction.commit();
 
-            if (!listVisitsFree.isAdded())
+            mFragmentManager.executePendingTransactions();
+
+            int mode = mSettings.getInt("listVisitsFilterMode", 0);
+            showSelectedVisitsList(mode);
+
+/*            fragListVisitsFree = new FragListVisitsFree();
+
+            if (!fragListVisitsFree.isAdded())
             {
                 Bundle args = new Bundle();
                 args.putBoolean("timeNotSetItemsOnly", timeNotSetItemsOnly);
-                listVisitsFree.setArguments(args);
+                fragListVisitsFree.setArguments(args);
 
                 if (listVisitsIsObsolete && NetworkUtils.isNetworkAvailable(this))
                 {
                     refreshVisitsList();
                 } else
                 {
-                    setVisitsListContent(listVisitsFree);
+                    setVisitsListContent(fragListVisitsFree);
                 }
 
                 timeNotSetItemsOnly = false;
-            }
+            }*/
         }
 
         if (view == findViewById(R.id.btnReportsReturn))
@@ -347,6 +376,66 @@ public class MainActivity extends Activity implements Communicator, Callback
         {
             removeAllLists();
             setVisitsListContent(notSentListVisits);
+        }
+
+        if (view == findViewById(R.id.btnAppSettings))
+        {
+            String[] listItemsArray = {"Aggiorna applicazione", "Logout", "Esci"};
+
+            //ContextThemeWrapper themedContext = new ContextThemeWrapper
+            // (this, android.R.style.Theme_DeviceDefault_Light_Dialog_NoActionBar);
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+
+            LayoutInflater inflater = getLayoutInflater();
+            View layout = inflater.inflate(R.layout.alert_dialog_custom, null);
+
+            ListView listView = (ListView) layout.findViewById(R.id.alertList);
+            ArrayAdapter<String> listAdapter = new ArrayAdapter<>(this, R.layout.alert_dialog_item_custom, listItemsArray);
+            listView.setAdapter(listAdapter);
+
+            listView.setOnItemClickListener(new AdapterView.OnItemClickListener()
+            {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int which, long id)
+                {
+/*                    if (which == 1)
+                    {
+                        Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        intent.putExtra("Password recover", true);
+                        startActivity(intent);
+                        finish();
+                    }*/
+
+                    if (which == 2)
+                    {
+                        exitApp();
+                    }
+
+                    if (which == 1)
+                    {
+                        logout();
+                    }
+                    if (which == 0)
+                    {
+                        //showToastMessage("Not implemented exception");
+                        if(NetworkUtils.isNetworkAvailable(MainActivity.this))
+                        {
+                            refreshGeaModels();
+                        }
+                        else
+                        {
+                            showToastMessage(getString(R.string.CheckInternetConnection));
+                        }
+                    }
+
+                }
+            });
+
+            builder.setView(layout);
+            alert = builder.create();
+            alert.show();
         }
 
 /*        if (view == findViewById(R.id.btnSentReports))
@@ -489,9 +578,9 @@ public class MainActivity extends Activity implements Communicator, Callback
             mFragmentTransaction.remove(ctlInfo);
         }
 
-        if (listVisitsFree.isAdded())
+        if (fragListVisitsFree.isAdded())
         {
-            mFragmentTransaction.remove(listVisitsFree);
+            mFragmentTransaction.remove(fragListVisitsFree);
         }
 
         if (comingListVisits.isAdded())
@@ -514,6 +603,21 @@ public class MainActivity extends Activity implements Communicator, Callback
             mFragmentTransaction.remove(reportsList);
         }
 
+        if (fragListVisitsFree.isAdded())
+        {
+            mFragmentTransaction.remove(fragListVisitsFree);
+        }
+
+        if (fragListVisitsToday.isAdded())
+        {
+            mFragmentTransaction.remove(fragListVisitsToday);
+        }
+
+        if (fragListVisitsOther.isAdded())
+        {
+            mFragmentTransaction.remove(fragListVisitsOther);
+        }
+
         mFragmentManager.executePendingTransactions();
 
         mFragmentTransaction.commit();
@@ -525,7 +629,7 @@ public class MainActivity extends Activity implements Communicator, Callback
 
         if (!fragment.isAdded())
         {
-            vFragmentTransaction.add(R.id.CtrlBtnFragContainer, fragment);
+            vFragmentTransaction.add(R.id.innerFragContainer, fragment);
         }
 
         vFragmentTransaction.commit();
@@ -608,15 +712,17 @@ public class MainActivity extends Activity implements Communicator, Callback
     }
 
     @Override
-    public void onNotificationReportReturned(View view)
+    public void onNotificationReportReturned(int mode)
     {
-        if (view.getId() == R.id.btnNotifTimeNotSetVisits)
+        showSelectedVisitsList(mode);
+
+/*        if (view.getId() == R.id.btnNotifTimeNotSetVisits)
         {
             removeAllLists();
 
-            listVisitsFree = new FragListVisitsFree();
+            fragListVisitsFree = new FragListVisitsFree();
 
-            if (!listVisitsFree.isAdded())
+            if (!fragListVisitsFree.isAdded())
             {
                 timeNotSetItemsOnly = true;
                 listVisitsIsObsolete = true;
@@ -653,14 +759,14 @@ public class MainActivity extends Activity implements Communicator, Callback
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int which, long id)
                 {
-/*                    if (which == 1)
+*//*                    if (which == 1)
                     {
                         Intent intent = new Intent(MainActivity.this, LoginActivity.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         intent.putExtra("Password recover", true);
                         startActivity(intent);
                         finish();
-                    }*/
+                    }*//*
 
                     if (which == 2)
                     {
@@ -680,41 +786,40 @@ public class MainActivity extends Activity implements Communicator, Callback
                 }
             });
 
-            //ListView listView = (ListView) v.findViewById(R.id.notifBarlist);
-
-            //final ArrayAdapter <String> listAdapter = new ArrayAdapter<>(this, R.id.DialogTextView, listItemsArray);
-            //listView.setAdapter(listAdapter);
-            //listView.setBackgroundColor(Color.GRAY);
-
-/*            builder.setItems(listItemsArray, new DialogInterface.OnClickListener()
-            {
-                @Override
-                public void onClick(DialogInterface Dialog, int which)
-                {
-                    if(which == 1)  // exit app
-                    {
-                        Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        intent.putExtra("Password recover", true);
-                        startActivity(intent);
-                        finish();
-                    }
-
-                    if(which == 0) // password recover
-                    {
-                        Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        intent.putExtra("Exit app", true);
-                        startActivity(intent);
-                        finish();
-                    }
-                }
-            });*/
-
             builder.setView(layout);
             alert = builder.create();
             alert.show();
+        }*/
+    }
+
+    private void showSelectedVisitsList(int mode)
+    {
+        //removeAllLists();
+        mSettings.edit().putInt("listVisitsFilterMode", mode).apply();
+        FragmentTransaction mFragmentTransaction = mFragmentManager.beginTransaction();
+
+        if(mode == LIST_VISITS_MODE_ALL)
+        {
+
+            mFragmentTransaction.show(fragListVisitsFree);
+            mFragmentTransaction.show(fragListVisitsToday);
+            mFragmentTransaction.show(fragListVisitsOther);
         }
+
+        if(mode == LIST_VISITS_MODE_TODAY)
+        {
+            mFragmentTransaction.hide(fragListVisitsFree);
+            mFragmentTransaction.show(fragListVisitsToday);
+            mFragmentTransaction.hide(fragListVisitsOther);
+        }
+
+        if(mode == LIST_VISITS_MODE_FREE)
+        {
+            mFragmentTransaction.show(fragListVisitsFree);
+            mFragmentTransaction.hide(fragListVisitsToday);
+            mFragmentTransaction.hide(fragListVisitsOther);
+        }
+        mFragmentTransaction.commit();
     }
 
     @Override
@@ -849,7 +954,7 @@ public class MainActivity extends Activity implements Communicator, Callback
 
                     //removeAllLists();
 
-                    setVisitsListContent(listVisitsFree);
+                    onCtrlButtons1Clicked(findViewById(R.id.btnVisits));
 
                     requestServerDialog.dismiss();
                     //ctrlBtnsBottom.setCheckedBtnId(R.id.btnVisits);

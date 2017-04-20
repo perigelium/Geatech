@@ -13,6 +13,9 @@ import android.widget.TextView;
 import ru.alexangan.developer.geatech.Models.SpinnerItemData;
 import ru.alexangan.developer.geatech.R;
 
+import static ru.alexangan.developer.geatech.Models.GlobalConstants.LIST_VISITS_MODE_ALL;
+import static ru.alexangan.developer.geatech.Models.GlobalConstants.mSettings;
+
 // Created by Alex Angan 19.04.2017.
 
 public class CustomSpinnerAdapter extends ArrayAdapter<SpinnerItemData>
@@ -35,7 +38,17 @@ public class CustomSpinnerAdapter extends ArrayAdapter<SpinnerItemData>
     {
         View itemView = inflater.inflate(groupid, parent, false);
         ImageView imageView = (ImageView) itemView.findViewById(R.id.ivVisitsFilterDialogItem);
-        imageView.setImageResource(list.get(position).getImageId());
+        int listVisitsMode = mSettings.getInt("listVisitsFilterMode", 0);
+
+        if(listVisitsMode == position)
+        {
+            imageView.setImageResource(R.drawable.check_mark_green_small);
+        }
+        else
+        {
+            imageView.setImageResource(R.drawable.transparent21px);
+        }
+
         TextView textView = (TextView) itemView.findViewById(R.id.tvVisitsFilterDialogItem);
         textView.setText(list.get(position).getText());
         return itemView;

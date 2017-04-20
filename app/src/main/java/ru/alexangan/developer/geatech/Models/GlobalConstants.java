@@ -23,6 +23,9 @@ public class GlobalConstants
     public static RealmList<VisitItem> inVisitItems;
     public static String tokenStr;
     public static boolean listVisitsIsObsolete;
+    public static int LIST_VISITS_MODE_ALL = 0;
+    public static int LIST_VISITS_MODE_TODAY = 1;
+    public static int LIST_VISITS_MODE_FREE = 2;
 
     public static String LOGIN_URL_SUFFIX = "?case=login";
     public static String GET_VISITS_URL_SUFFIX = "?case=get_raport";

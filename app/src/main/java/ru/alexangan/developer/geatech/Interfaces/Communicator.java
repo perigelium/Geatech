@@ -25,7 +25,7 @@ public interface Communicator
 
     void OnInWorkListItemSelected(int itemIndex);
 
-    void onNotificationReportReturned(View view);
+    void onNotificationReportReturned(int mode);
 
     void OnComingListItemSelected(int itemIndex);
 

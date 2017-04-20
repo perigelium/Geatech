@@ -24,14 +24,19 @@ import ru.alexangan.developer.geatech.Interfaces.Communicator;
 import ru.alexangan.developer.geatech.Models.SpinnerItemData;
 import ru.alexangan.developer.geatech.R;
 
+import static ru.alexangan.developer.geatech.Models.GlobalConstants.LIST_VISITS_MODE_ALL;
+import static ru.alexangan.developer.geatech.Models.GlobalConstants.mSettings;
+
 /**
- * Created by user on 11/10/2016*/
+ * Created by user on 11/10/2016
+ */
 
 public class NotificationBarFragment extends Fragment implements View.OnClickListener
 {
     private Communicator mCommunicator;
     private Activity activity;
     AlertDialog alert;
+    Spinner spVisitsFilter;
 
 
     @Override
@@ -39,7 +44,7 @@ public class NotificationBarFragment extends Fragment implements View.OnClickLis
     {
         super.onActivityCreated(savedInstanceState);
 
-        mCommunicator = (Communicator)getActivity();
+        mCommunicator = (Communicator) getActivity();
     }
 
     @Override
@@ -48,7 +53,9 @@ public class NotificationBarFragment extends Fragment implements View.OnClickLis
         View rootView = inflater.inflate(R.layout.notification_bar, container, false);
 
         String[] listItemsArray = {"Tutti i sopralluoghi", "I miei sopralluoghi", "Sopralluoghi da fissare"};
-        Integer[] icons = new Integer[] {R.drawable.three_balls, R.drawable.two_balls, R.drawable.yellow_ball};
+        Integer[] icons = new Integer[]{R.drawable.transparent21px, R.drawable.transparent21px, R.drawable.transparent21px};
+
+        mSettings.edit().putInt("listVisitsFilterMode", LIST_VISITS_MODE_ALL).apply();
 
 /*        TextView tvTechName = (TextView) rootView.findViewById(R.id.tvTechName);
         tvTechName.setText(selectedTech.getFullNameTehnic());
@@ -71,21 +78,43 @@ public class NotificationBarFragment extends Fragment implements View.OnClickLis
         //Button btnListFilters = (Button) rootView.findViewById(R.id.btnVisitsListFilter);
         //btnListFilters.setOnClickListener(this);
 
-        Spinner spVisitsFilter = (Spinner) rootView.findViewById(R.id.spVisitsFilter);
+        spVisitsFilter = (Spinner) rootView.findViewById(R.id.spVisitsFilter);
 
-        ArrayList<SpinnerItemData> list=new ArrayList<>();
+        ArrayList<SpinnerItemData> list = new ArrayList<>();
 
-        for (int i = 0; i < 3; i++)
+        for (int i = 0; i < listItemsArray.length; i++)
         {
             list.add(new SpinnerItemData(listItemsArray[i], icons[i]));
         }
         SpinnerAdapter adapter =
-                new CustomSpinnerAdapter(activity, R.layout.alert_visits_filter_item_custom,R.id.tvVisitsFilterDialogItem, list);
+                new CustomSpinnerAdapter(activity, R.layout.alert_visits_filter_item_custom, R.id.tvVisitsFilterDialogItem, list);
         spVisitsFilter.setAdapter(adapter);
 
         //CustomSpinnerAdapter adapter = new CustomSpinnerAdapter(activity, R.layout.alert_visits_filter_item_custom, map);
 
         return rootView;
+    }
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState)
+    {
+        super.onViewCreated(view, savedInstanceState);
+
+        spVisitsFilter.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
+        {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l)
+            {
+                mCommunicator.onNotificationReportReturned(i);
+                mSettings.edit().putInt("listVisitsFilterMode", i).apply();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView)
+            {
+
+            }
+        });
     }
 
     @Override
@@ -141,7 +170,7 @@ public class NotificationBarFragment extends Fragment implements View.OnClickLis
     private void showVisitsFilterDialog()
     {
         String[] listItemsArray = {"Tutti i sopralluoghi", "I miei sopralluoghi", "Sopralluoghi da fissare"};
-        Integer[] icons = new Integer[] {R.drawable.three_balls, R.drawable.two_balls, R.drawable.yellow_ball};
+        Integer[] icons = new Integer[]{R.drawable.three_balls, R.drawable.two_balls, R.drawable.yellow_ball};
 
         //ContextThemeWrapper themedContext = new ContextThemeWrapper
         // (this, android.R.style.Theme_DeviceDefault_Light_Dialog_NoActionBar);
@@ -163,20 +192,7 @@ public class NotificationBarFragment extends Fragment implements View.OnClickLis
             public void onItemClick(AdapterView<?> parent, View view, int which, long id)
             {
 
-                if (which == 2)
-                {
-                    mCommunicator.onNotificationReportReturned(view);
-                }
-
-                if (which == 1)
-                {
-
-                }
-                if (which == 0)
-                {
-
-                }
-
+                mCommunicator.onNotificationReportReturned(which);
             }
         });
 
