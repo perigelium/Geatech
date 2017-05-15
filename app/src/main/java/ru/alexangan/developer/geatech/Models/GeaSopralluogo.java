@@ -10,7 +10,7 @@ public class GeaSopralluogo extends RealmObject
     private int id_tecnico;
 
     //private int id_fornitore;
-    //private int id_practice;
+    private int id_practice;
 /*    private String data_ora_assegnazione;
     private String data_sollecito_appuntamento;*/
     private String data_ora_presa_appuntamento;
@@ -24,7 +24,7 @@ public class GeaSopralluogo extends RealmObject
 
     public GeaSopralluogo(){};
 
-    public GeaSopralluogo(int id_sopralluogo, int id_tecnico, String data_ora_presa_appuntamento, String data_ora_sopralluogo)
+    public GeaSopralluogo(int id_sopralluogo, int id_tecnico, String data_ora_presa_appuntamento, String data_ora_sopralluogo, int id_practice)
     {
         this.id_sopralluogo = id_sopralluogo;
         this.id_tecnico = id_tecnico;
@@ -32,6 +32,12 @@ public class GeaSopralluogo extends RealmObject
 
         this.data_ora_presa_appuntamento = data_ora_presa_appuntamento;
         this.data_ora_sopralluogo = data_ora_sopralluogo;
+        this.id_practice = id_practice;
+    }
+
+    public int getId_practice()
+    {
+        return id_practice;
     }
 
     public int getId_sopralluogo()
@@ -53,4 +59,6 @@ public class GeaSopralluogo extends RealmObject
     {
         return id_tecnico;
     }
+
+
 }

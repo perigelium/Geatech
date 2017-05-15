@@ -14,7 +14,8 @@ import ru.alexangan.developer.geatech.Interfaces.Communicator;
 import ru.alexangan.developer.geatech.R;
 
 /**
- * Created by user on 11/10/2016*/
+ * Created by user on 11/10/2016
+ */
 
 public class CtrlBtnsBottom extends Fragment implements View.OnClickListener
 {
@@ -35,11 +36,11 @@ public class CtrlBtnsBottom extends Fragment implements View.OnClickListener
         //rGroup = ((RadioGroup) rootView.findViewById(R.id.toggleGroup));
         //rGroup.check(checkedBtnId);
 
-        Button btnVisits = (Button)rootView.findViewById(R.id.btnVisits);
-        Button btnInWorkVisits = (Button)rootView.findViewById(R.id.btnInWorkVisits);
-        Button btnComingVisits = (Button)rootView.findViewById(R.id.btnNotifUrgentReports);
-        Button btnNotSentReports = (Button)rootView.findViewById(R.id.btnNotSentReports);
-        Button btnAppSettings = (Button)rootView.findViewById(R.id.btnAppSettings);
+        Button btnVisits = (Button) rootView.findViewById(R.id.btnVisits);
+        Button btnInWorkVisits = (Button) rootView.findViewById(R.id.btnInWorkVisits);
+        Button btnComingVisits = (Button) rootView.findViewById(R.id.btnNotifUrgentReports);
+        Button btnNotSentReports = (Button) rootView.findViewById(R.id.btnNotSentReports);
+        Button btnAppSettings = (Button) rootView.findViewById(R.id.btnAppSettings);
 
         btnArray = new ArrayList<>();
         btnArray.add(btnVisits);
@@ -48,7 +49,7 @@ public class CtrlBtnsBottom extends Fragment implements View.OnClickListener
         btnArray.add(btnNotSentReports);
         btnArray.add(btnAppSettings);
 
-        for(Button btn : btnArray)
+        for (Button btn : btnArray)
         {
             btn.setOnClickListener(this);
         }
@@ -115,18 +116,23 @@ public class CtrlBtnsBottom extends Fragment implements View.OnClickListener
     @Override
     public void onClick(View view)
     {
-        Button rBtn = (Button)view;
+        Button rBtn = (Button) view;
         selectButton(rBtn);
     }
 
     private void selectButton(Button btnSelected)
     {
-        for(Button btn : btnArray)
+        if (btnSelected.isSelected())
+        {
+            return;
+        }
+
+        for (Button btn : btnArray)
         {
             btn.setSelected(false);
         }
 
         btnSelected.setSelected(true);
-        mCommunicator.onCtrlButtons1Clicked(btnSelected);
+        mCommunicator.onCtrlBtnsBottomClicked(btnSelected);
     }
 }

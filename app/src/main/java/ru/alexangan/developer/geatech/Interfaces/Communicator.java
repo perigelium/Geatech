@@ -14,8 +14,7 @@ public interface Communicator
 
     void onSendReportReturned(int id_rapporto_sopralluogo);
 
-    void onCtrlButtons1Clicked(View view);
-    void onCtrlButtons2Clicked(View view);
+    void onCtrlBtnsBottomClicked(View view);
 
     void OnListItemSwiped(int itemIndex, boolean dateTimeHasSet);
 

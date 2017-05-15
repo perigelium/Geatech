@@ -1,4 +1,4 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
              xmlns:tools="http://schemas.android.com/tools"
              android:layout_width="match_parent"
              android:layout_height="match_parent"
@@ -12,131 +12,171 @@
         android:orientation="vertical">
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="4dp"
-            android:orientation="horizontal">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="start|center_vertical"
-                android:src="@drawable/person_green"/>
+            android:layout_margin="6dp"
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/tvClientName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start|center_vertical"
+                android:layout_marginBottom="18dp"
                 android:layout_marginLeft="6dp"
                 android:maxWidth="250dp"
-                android:text="Nome del cliente"/>
+                android:text="Nome del cliente"
+                android:textSize="27sp"
+                android:textStyle="bold"/>
 
-        </LinearLayout>
-
-
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="4dp"
-            android:orientation="horizontal">
-
-            <LinearLayout
+            <TextView
+                android:id="@+id/tvClientAddress"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_marginLeft="3dp"
-                android:orientation="horizontal">
+                android:layout_gravity="start|center_vertical"
+                android:layout_marginBottom="6dp"
+                android:layout_marginLeft="6dp"
+                android:maxWidth="200dp"
+                android:text="Client indirizzo"
+                android:textSize="18sp"/>
 
-                <ImageView
-                    android:id="@+id/ivAddressDateTime"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="start|center_vertical"
-                    android:src="@drawable/location_dark_green"/>
-
-                <TextView
-                    android:id="@+id/tvClientAddress"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="start|center_vertical"
-                    android:layout_marginLeft="6dp"
-                    android:maxWidth="200dp"
-                    android:text="Client indirizzo"/>
-
-            </LinearLayout>
-
-            <Button
-                android:id="@+id/btnApriMappa"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical|end"
-                android:background="#29b352"
-                android:padding="6dp"
-                android:text="Apri mappa"/>
-
-        </FrameLayout>
-
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="4dp"
-            android:orientation="horizontal">
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_marginLeft="4dp"
-                android:orientation="horizontal">
-
-                <ImageView
-                    android:id="@+id/ivPhoneDateTime"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="start|center_vertical"
-                    android:src="@drawable/phone_green"/>
-
-                <TextView
-                    android:id="@+id/tvClientPhone"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="start|center_vertical"
-                    android:layout_marginLeft="6dp"
-                    android:text="Client phone"/>
-            </LinearLayout>
-
-            <Button
-                android:id="@+id/btnChiama"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical|end"
-                android:background="#29b352"
-                android:padding="6dp"
-                android:src="@drawable/arrow_right"
-                android:text="    Chiama    "/>
-        </FrameLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1px"
-            android:layout_gravity="bottom"
-            android:layout_marginLeft="40dp"
-            android:background="#000000"/>
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="start|center_vertical"
-            android:layout_margin="6dp"
-            android:orientation="horizontal">
-
-            <ImageView
+            <TextView
+                android:id="@+id/tvClientPhone"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start|center_vertical"
                 android:layout_marginLeft="6dp"
-                android:src="@drawable/service_green"/>
+                android:text="Client phone"
+                android:textSize="18sp"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="2">
+
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="6dp"
+                android:layout_weight="1">
+
+                <ImageView
+                    android:layout_width="72dp"
+                    android:layout_height="22dp"
+                    android:layout_gravity="center"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/android_chiama"/>
+
+                <Button
+                    android:id="@+id/btnOpenDialer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:background="@drawable/button_border_transparent"/>
+
+            </FrameLayout>
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="6dp"
+                android:layout_weight="1">
+
+                <!--android:drawableRight="@drawable/login_disconnect"-->
+
+                <ImageView
+                    android:layout_width="72dp"
+                    android:layout_height="22dp"
+                    android:layout_gravity="center"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/android_map"/>
+
+                <Button
+                    android:id="@+id/btnOpenMap"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:background="@drawable/button_border_transparent"/>
+
+            </FrameLayout>
+
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="6dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tvdataOraSopralluogo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start|bottom"
+                android:layout_marginLeft="6dp"
+                android:text="Pianifica un sopralluogo:"
+                android:textSize="17sp"/>
+
+            <FrameLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/tvTechName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="Nome di tecnico"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:visibility="gone"/>
+
+                <Button
+                    android:id="@+id/btnSetDate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:background="@android:color/transparent"
+                    android:onClick="onClick"
+                    android:padding="6dp"
+                    android:textStyle="normal"
+                    android:text="Imposta la data e l'ora"/>
+
+            </FrameLayout>
+        </LinearLayout>
+
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="6dp"
+                android:background="@drawable/button_green_oval">
+
+                <Button
+                    android:id="@+id/btnSetDateTimeSubmit"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:background="@android:color/transparent"/>
+
+                <ImageView
+                    android:layout_width="196dp"
+                    android:layout_height="24dp"
+                    android:layout_gravity="center"
+                    android:scaleType="centerInside"
+                    android:background="@drawable/button_green_oval"
+                    android:src="@drawable/android_fissa"/>
+            </FrameLayout>
+
+
+
 
             <TextView
                 android:id="@+id/tvVisitTOS"
@@ -144,16 +184,10 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="start|center_vertical"
                 android:layout_marginLeft="6dp"
+                android:layout_marginBottom="12dp"
+                android:textSize="19sp"
+                android:textStyle="bold"
                 android:text="Nome di servizio"/>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="start|center_vertical"
-            android:layout_marginLeft="9dp"
-            android:orientation="horizontal">
 
             <TextView
                 android:id="@+id/tvProductModel"
@@ -163,22 +197,6 @@
                 android:layout_marginLeft="6dp"
                 android:text="Prodotto"/>
 
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="6dp"
-            android:orientation="horizontal">
-
-            <ImageView
-                android:id="@+id/ivSottprodottiDateTime"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="start|center_vertical"
-                android:layout_marginLeft="6dp"
-                android:src="@drawable/stack_green"/>
-
             <TextView
                 android:id="@+id/tvSottprodottiDateTime"
                 android:layout_width="wrap_content"
@@ -187,9 +205,6 @@
                 android:layout_marginLeft="6dp"
                 android:text="Eventualli sottoprodotti:"/>
 
-        </LinearLayout>
-
-
         <ListView
             android:id="@+id/listSubproducts"
             android:layout_width="match_parent"
@@ -197,116 +212,112 @@
             android:layout="@layout/visits_day_time_set_list_row">
         </ListView>
 
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1px"
-            android:layout_gravity="bottom"
-            android:layout_marginLeft="40dp"
-            android:background="#000000"/>
-
         <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_margin="6dp"
-            android:orientation="vertical">
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="9dp"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="start|bottom"
-                        android:layout_marginLeft="6dp"
-                        android:text="Data:"/>
-
-                    <TextView
-                        android:id="@+id/tvDateSet"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="start|center_vertical"
-                        android:layout_marginLeft="6dp"
-                        android:text=""
-                        android:textSize="16sp"
-                        android:textStyle="bold"/>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="9dp"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="start|bottom"
-                        android:layout_marginLeft="6dp"
-                        android:text="Ora:"/>
-
-                    <TextView
-                        android:id="@+id/tvTimeSet"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="start|center_vertical"
-                        android:layout_marginLeft="6dp"
-                        android:text=""
-                        android:textSize="16sp"
-                        android:textStyle="bold"/>
-                </LinearLayout>
-
-                <Button
-                    android:id="@+id/btnSetDate"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="top"
-                    android:onClick="onClick"
-                    android:padding="6dp"
-                    android:text="Imposta"/>
-
-            </LinearLayout>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="6dp"
             android:orientation="horizontal">
 
-            <Button
-                android:id="@+id/btnSetDateTimeSubmit"
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical|start"
-                android:background="#29b352"
-                android:padding="6dp"
-                android:onClick="onClick"
-                android:layout_margin="6dp"
-                android:layout_weight="1"
-                android:text="Fisso il sopralluogo"/>
+                android:layout_gravity="start|center_vertical"
+                android:layout_marginLeft="6dp"
+                android:text="Coord.Nord*" />
+
+            <EditText
+                android:id="@+id/etCoordNord"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="6dp"
+                android:layout_gravity="start|center_vertical"
+                android:background="@android:color/transparent"
+                android:inputType="number"
+                android:textSize="19dp"
+                android:textStyle="bold"
+                android:text="Sconoscuto" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="6dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start|center_vertical"
+                android:layout_marginLeft="6dp"
+                android:text="Coord.Est*" />
+
+            <EditText
+                android:id="@+id/etCoordEst"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="6dp"
+                android:layout_gravity="start|center_vertical"
+                android:background="@android:color/transparent"
+                android:textSize="19dp"
+                android:textStyle="bold"
+                android:maxLines="1"
+                android:inputType="number"
+                android:text="Sconoscuto" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="6dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start|center_vertical"
+                android:layout_marginLeft="6dp"
+                android:text="Altitudine*" />
+
+            <EditText
+                android:id="@+id/etAltitude"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="6dp"
+                android:layout_gravity="start|center_vertical"
+                android:background="@android:color/transparent"
+                android:textSize="19dp"
+                android:textStyle="bold"
+                android:maxLines="1"
+                android:inputType="number"
+                android:text="Sconoscuto" />
+
+        </LinearLayout>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            android:layout_weight="1">
+
+            <ImageView
+                android:layout_width="180dp"
+                android:layout_height="24dp"
+                android:layout_gravity="center"
+                android:scaleType="fitXY"
+                android:src="@drawable/android_gps"/>
 
             <Button
-                android:id="@+id/btnAnnullaSetDateTime"
-                android:layout_width="wrap_content"
+                android:id="@+id/btnGetCurrentCoords"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical|end"
-                android:onClick="onClick"
-                android:padding="9dp"
-                android:layout_margin="6dp"
-                android:layout_weight="1"
-                android:text="Annulla"/>
-        </LinearLayout>
+                android:layout_gravity="center"
+                android:background="@drawable/button_border_transparent"/>
+
+        </FrameLayout>
 
     </LinearLayout>
 
-</FrameLayout>
+</ScrollView>

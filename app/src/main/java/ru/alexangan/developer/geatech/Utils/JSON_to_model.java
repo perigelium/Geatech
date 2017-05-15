@@ -46,10 +46,14 @@ public class JSON_to_model
                 String data_ora_presa_appuntamento = visit_data.getString("data_ora_presa_appuntamento");
                 //String data_sollecito_appuntamento = visit_data.getString("data_sollecito_appuntamento");
                 String data_ora_sopralluogo = visit_data.getString("data_ora_sopralluogo");
+
+                int id_practice = visit_data.getInt("id_practice");
+
+
                 //String note_sopralluogo = visit_data.getString("note_sopralluogo");
                 //String tipo_gestione_sopralluogo = visit_data.getString("tipo_gestione_sopralluogo");
 
-                GeaSopralluogo geaSopralluogo = new GeaSopralluogo(id_sopralluogo, id_tecnico, data_ora_presa_appuntamento, data_ora_sopralluogo);
+                GeaSopralluogo geaSopralluogo = new GeaSopralluogo(id_sopralluogo, id_tecnico, data_ora_presa_appuntamento, data_ora_sopralluogo, id_practice);
 
                 //JSONObject client_dataJSONObject = client_data.getJSONObject();
 

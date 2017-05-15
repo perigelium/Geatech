@@ -18,6 +18,7 @@ import ru.alexangan.developer.geatech.Models.ClientData;
 import ru.alexangan.developer.geatech.Models.GeaSopralluogo;
 import ru.alexangan.developer.geatech.Models.ItalianMonths;
 import ru.alexangan.developer.geatech.Models.ProductData;
+import ru.alexangan.developer.geatech.Models.ReportStates;
 import ru.alexangan.developer.geatech.Models.TechnicianItem;
 import ru.alexangan.developer.geatech.Models.VisitItem;
 import ru.alexangan.developer.geatech.R;
@@ -159,10 +160,15 @@ public class MyListVisitsAdapter extends BaseAdapter
             }
         }*/
 
+/*        if (tech_id == 0)
+        {
+            serviceTypeTextView.setText(serviceTypeTextView.getText() + String.valueOf(geaSopralluogo.getId_sopralluogo()) + geaSopralluogo.getId_practice());
+        }*/
+
 
         if (tech_id != 0)
         {
-            tvTechName.setText(techName + " • ");
+            tvTechName.setText(techName);
 
             Calendar calendar = Calendar.getInstance();
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);

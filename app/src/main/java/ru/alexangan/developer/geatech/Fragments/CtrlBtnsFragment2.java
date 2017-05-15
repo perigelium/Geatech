@@ -127,6 +127,6 @@ public class CtrlBtnsFragment2 extends Fragment implements View.OnClickListener
         }
 
         btnSelected.setSelected(true);
-        mCommunicator.onCtrlButtons2Clicked(btnSelected);
+        //mCommunicator.onCtrlButtons2Clicked(btnSelected);
     }
 }

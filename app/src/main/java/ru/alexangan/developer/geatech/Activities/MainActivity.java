@@ -15,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -187,7 +188,6 @@ public class MainActivity extends Activity implements Communicator, Callback
         swipeDetector = new SwipeDetector();
 
         ctrlBtnsBottom = new CtrlBtnsBottom();
-        //ctrlBtnsBottom = new ctrlBtnsBottom();
         ctrlBtnsFragment2 = new CtrlBtnsFragment2();
         dateTimeSetFragment = new SetDateTimeFragment();
         fragListVisitsFree = new FragListVisitsFree();
@@ -222,22 +222,6 @@ public class MainActivity extends Activity implements Communicator, Callback
         mFragmentTransaction.add(R.id.NotificationBarFragContainer, notificationBarFragment);
 
         mFragmentTransaction.add(R.id.CtrlBtnFragContainer, ctrlBtnsBottom);
-        //mFragmentTransaction.add(R.id.CtrlBtnFragContainer, ctrlBtnsBottom);
-        //mFragmentTransaction.add(R.id.CtrlBtnFragContainer, ctrlBtnsFragment2);
-        //mFragmentTransaction.add(R.id.CtrlBtnFragContainer, ctrlBtnsReportDetailed);
-
-        //mFragmentTransaction.addToBackStack("fragListVisitsFree");
-
-/*        Bundle args = new Bundle();
-        args.putBoolean("withNoSopralluogoTime", false);
-        listVisits.setArguments(args);*/
-/*        mFragmentTransaction.add(R.id.innerFragContainer, fragListVisitsFree);
-        mFragmentTransaction.add(R.id.innerFragContainer, fragListVisitsToday);
-        mFragmentTransaction.add(R.id.innerFragContainer, fragListVisitsOther);*/
-
-        //mFragmentTransaction.hide(ctrlBtnsReportDetailed);
-        //mFragmentTransaction.hide(ctrlBtnsFragment2);
-        //mFragmentTransaction.hide(ctrlBtnsBottom);
         mFragmentTransaction.show(ctrlBtnsBottom);
 
         //mFragmentManager.executePendingTransactions();
@@ -296,15 +280,16 @@ public class MainActivity extends Activity implements Communicator, Callback
     }
 
     @Override
-    public void onCtrlButtons1Clicked(View view)
+    public void onCtrlBtnsBottomClicked(View view)
     {
         FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
         fragmentTransaction.hide(ctrlBtnsFragment2);
         fragmentTransaction.show(ctrlBtnsBottom);
         fragmentTransaction.commit();
         currentSelIndex = -1;
+        Button btnClicked = (Button)view;
 
-        if (view == findViewById(R.id.btnVisits))
+        if (btnClicked.getId() == R.id.btnVisits)
         {
             removeAllLists();
 
@@ -327,58 +312,34 @@ public class MainActivity extends Activity implements Communicator, Callback
 
             int mode = mSettings.getInt("listVisitsFilterMode", 0);
             showSelectedVisitsList(mode);
-
-/*            fragListVisitsFree = new FragListVisitsFree();
-
-            if (!fragListVisitsFree.isAdded())
-            {
-                Bundle args = new Bundle();
-                args.putBoolean("timeNotSetItemsOnly", timeNotSetItemsOnly);
-                fragListVisitsFree.setArguments(args);
-
-                if (listVisitsIsObsolete && NetworkUtils.isNetworkAvailable(this))
-                {
-                    refreshVisitsList();
-                } else
-                {
-                    setVisitsListContent(fragListVisitsFree);
-                }
-
-                timeNotSetItemsOnly = false;
-            }*/
         }
 
-        if (view == findViewById(R.id.btnReportsReturn))
+        if (btnClicked.getId() == R.id.btnReportsReturn)
         {
             FragmentTransaction mFragmentTransaction = mFragmentManager.beginTransaction();
             mFragmentTransaction.hide(ctrlBtnsReportDetailed);
             mFragmentTransaction.commit();
-
-/*            removeAllLists();
-            setVisitsListContent(reportsList);*/
-
-            //ctrlBtnsBottom.setCheckedBtnId(R.id.btnSentReports);
         }
 
-        if (view == findViewById(R.id.btnNotifUrgentReports))
+        if (btnClicked.getId() == R.id.btnNotifUrgentReports)
         {
             removeAllLists();
             setVisitsListContent(comingListVisits);
         }
 
-        if (view == findViewById(R.id.btnInWorkVisits))
+        if (btnClicked.getId() == R.id.btnInWorkVisits)
         {
             removeAllLists();
             setVisitsListContent(inWorkListVisits);
         }
 
-        if (view == findViewById(R.id.btnNotSentReports))
+        if (btnClicked.getId() == R.id.btnNotSentReports)
         {
             removeAllLists();
             setVisitsListContent(notSentListVisits);
         }
 
-        if (view == findViewById(R.id.btnAppSettings))
+        if (btnClicked.getId() == R.id.btnAppSettings)
         {
             String[] listItemsArray = {"Aggiorna applicazione", "Logout", "Esci"};
 
@@ -445,7 +406,7 @@ public class MainActivity extends Activity implements Communicator, Callback
         }*/
     }
 
-    @Override
+/*    @Override
     public void onCtrlButtons2Clicked(View view)
     {
         FragmentTransaction mFragmentTransaction = mFragmentManager.beginTransaction();
@@ -528,7 +489,7 @@ public class MainActivity extends Activity implements Communicator, Callback
                 setVisitsListContent(sendReportFragment);
             }
         }
-    }
+    }*/
 
     private void removeAllLists()
     {
@@ -639,8 +600,6 @@ public class MainActivity extends Activity implements Communicator, Callback
     @Override
     public void OnListItemSelected(int itemIndex, boolean dateTimeHasSet)
     {
-        //removeAllLists();
-
         currentSelIndex = itemIndex;
 
         if (dateTimeHasSet) // if visit day is empty, show set datetime fragment, otherwise show CTL info.
@@ -672,7 +631,7 @@ public class MainActivity extends Activity implements Communicator, Callback
     @Override
     public void onDetailedReportReturned()
     {
-        onCtrlButtons1Clicked(findViewById(R.id.btnReportsReturn));
+        onCtrlBtnsBottomClicked(findViewById(R.id.btnReportsReturn));
     }
 
     @Override
@@ -954,7 +913,7 @@ public class MainActivity extends Activity implements Communicator, Callback
 
                     //removeAllLists();
 
-                    onCtrlButtons1Clicked(findViewById(R.id.btnVisits));
+                    onCtrlBtnsBottomClicked(findViewById(R.id.btnVisits));
 
                     requestServerDialog.dismiss();
                     //ctrlBtnsBottom.setCheckedBtnId(R.id.btnVisits);

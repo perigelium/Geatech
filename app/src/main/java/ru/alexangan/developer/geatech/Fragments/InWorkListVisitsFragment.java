@@ -102,7 +102,7 @@ public class InWorkListVisitsFragment extends ListFragment
 
 
         InWorkListVisitsAdapter myListAdapter =
-                new InWorkListVisitsAdapter(getActivity(), R.layout.in_work_list_visits_fragment_row, visitItemsDateTimeSet);
+                new InWorkListVisitsAdapter(getActivity(), R.layout.in_work_reports_fragment_row, visitItemsDateTimeSet);
         setListAdapter(myListAdapter);
 
         return rootView;

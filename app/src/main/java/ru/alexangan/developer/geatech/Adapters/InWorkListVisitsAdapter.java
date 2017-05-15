@@ -138,11 +138,11 @@ public class InWorkListVisitsAdapter extends BaseAdapter
                 photoAddedNumberStr = photoAddedNumber + reportStates.getPhotoAddedNumberString(photoAddedNumber).Value();
             }
 
-            TextView tvPhotosPresent = (TextView) row.findViewById(R.id.tvPhotosPresent);
+            TextView tvPhotosPresent = (TextView) row.findViewById(R.id.tvPhotosQuant);
             tvPhotosPresent.setText(photoAddedNumberStr);
 
-            TextView tvGeneralInfo = (TextView) row.findViewById(R.id.tvGeneralInfo);
-            tvGeneralInfo.setText(generalInfoCompletionState);
+            TextView tvGeneralInfo = (TextView) row.findViewById(R.id.tvCoordsState);
+            tvGeneralInfo.setText("General info: " + generalInfoCompletionState);
 
             TextView tvTecnicalReportState = (TextView) row.findViewById(R.id.tvTecnicalReportState);
             tvTecnicalReportState.setText(reportCompletionState);
