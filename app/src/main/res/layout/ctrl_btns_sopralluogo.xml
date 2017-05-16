@@ -1,0 +1,123 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ctrlBtnsReport"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp">
+
+        <Button
+            android:id="@+id/btnVisitReturn"
+            android:layout_width="21dp"
+            android:layout_height="21dp"
+            android:layout_gravity="start|center_vertical"
+            android:layout_margin="15dp"
+            android:background="@drawable/report_back"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Sopralluogo"
+            android:textColor="#ff000000"
+            android:textSize="21sp"/>
+
+
+    </FrameLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_gravity="center_vertical"
+        android:orientation="horizontal"
+        android:weightSum="4">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1">
+
+            <Button
+                android:id="@+id/btnInfo"
+                android:layout_width="52dp"
+                android:layout_height="52dp"
+                android:layout_gravity="center"
+                android:layout_marginLeft="18dp"
+                android:layout_marginRight="18dp"
+                android:background="@drawable/report_info_selector"
+                android:button="@null"
+                android:onClick="onClick"
+                android:textOff=""
+                android:textOn=""/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1">
+
+            <Button
+                android:id="@+id/btnFillReport"
+                android:layout_width="52dp"
+                android:layout_height="52dp"
+                android:layout_gravity="center"
+                android:layout_marginLeft="18dp"
+                android:layout_marginRight="18dp"
+                android:background="@drawable/report_rapporto_selector"
+                android:button="@null"
+                android:onClick="onClick"
+                android:textOff=""
+                android:textOn=""/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1">
+
+            <Button
+                android:id="@+id/btnAddPhotos"
+                android:layout_width="52dp"
+                android:layout_height="52dp"
+                android:layout_gravity="center"
+                android:layout_marginLeft="18dp"
+                android:layout_marginRight="18dp"
+                android:background="@drawable/report_foto_selector"
+                android:button="@null"
+                android:onClick="onClick"
+                android:textOff=""
+                android:textOn=""/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1">
+
+            <Button
+                android:id="@+id/btnSendReport"
+                android:layout_width="52dp"
+                android:layout_height="52dp"
+                android:layout_gravity="center"
+                android:layout_marginLeft="18dp"
+                android:layout_marginRight="18dp"
+                android:background="@drawable/report_sync_selector"
+                android:button="@null"
+                android:onClick="onClick"
+                android:textOff=""
+                android:textOn=""/>
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

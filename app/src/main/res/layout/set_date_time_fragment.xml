@@ -1,9 +1,10 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-             xmlns:tools="http://schemas.android.com/tools"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent"
-             android:overScrollMode="never"
-             tools:context="ru.alexangan.developer.geatech.Fragments.SetDateTimeFragment">
+            xmlns:tools="http://schemas.android.com/tools"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:overScrollMode="never"
+            android:background="@android:color/white"
+            tools:context="ru.alexangan.developer.geatech.Fragments.SetDateTimeFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -26,7 +27,8 @@
                 android:layout_marginLeft="6dp"
                 android:maxWidth="250dp"
                 android:text="Nome del cliente"
-                android:textSize="27sp"
+                android:textSize="36sp"
+                android:textColor="#ff000000"
                 android:textStyle="bold"/>
 
             <TextView
@@ -36,9 +38,10 @@
                 android:layout_gravity="start|center_vertical"
                 android:layout_marginBottom="6dp"
                 android:layout_marginLeft="6dp"
-                android:maxWidth="200dp"
+                android:maxWidth="280dp"
                 android:text="Client indirizzo"
-                android:textSize="18sp"/>
+                android:textColor="#ff666666"
+                android:textSize="13sp"/>
 
             <TextView
                 android:id="@+id/tvClientPhone"
@@ -47,7 +50,9 @@
                 android:layout_gravity="start|center_vertical"
                 android:layout_marginLeft="6dp"
                 android:text="Client phone"
-                android:textSize="18sp"/>
+                android:maxWidth="200dp"
+                android:textColor="#ff666666"
+                android:textSize="13sp"/>
 
         </LinearLayout>
 
@@ -56,7 +61,6 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:weightSum="2">
-
 
             <FrameLayout
                 android:layout_width="match_parent"
@@ -77,7 +81,6 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:background="@drawable/button_border_transparent"/>
-
             </FrameLayout>
 
             <FrameLayout
@@ -122,6 +125,7 @@
                 android:layout_gravity="start|bottom"
                 android:layout_marginLeft="6dp"
                 android:text="Pianifica un sopralluogo:"
+                android:textColor="#ff000000"
                 android:textSize="17sp"/>
 
             <FrameLayout
@@ -139,76 +143,79 @@
                     android:visibility="gone"/>
 
                 <Button
-                    android:id="@+id/btnSetDate"
+                    android:id="@+id/btnSetDateTime"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:background="@android:color/transparent"
                     android:onClick="onClick"
                     android:padding="6dp"
-                    android:textStyle="normal"
-                    android:text="Imposta la data e l'ora"/>
+                    android:textSize="18sp"
+                    android:text="Imposta la data e l'ora"
+                    android:textColor="#ff666666"
+                    android:textStyle="normal"/>
 
             </FrameLayout>
         </LinearLayout>
 
 
-            <FrameLayout
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="6dp"
+            android:background="@drawable/button_green_oval">
+
+            <Button
+                android:id="@+id/btnSetDateTimeSubmit"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_margin="6dp"
-                android:background="@drawable/button_green_oval">
+                android:layout_gravity="center"
+                android:background="@android:color/transparent"/>
 
-                <Button
-                    android:id="@+id/btnSetDateTimeSubmit"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center"
-                    android:background="@android:color/transparent"/>
+            <ImageView
+                android:layout_width="196dp"
+                android:layout_height="24dp"
+                android:layout_gravity="center"
+                android:background="@drawable/button_green_oval"
+                android:scaleType="centerInside"
+                android:src="@drawable/android_fissa"/>
+        </FrameLayout>
 
-                <ImageView
-                    android:layout_width="196dp"
-                    android:layout_height="24dp"
-                    android:layout_gravity="center"
-                    android:scaleType="centerInside"
-                    android:background="@drawable/button_green_oval"
-                    android:src="@drawable/android_fissa"/>
-            </FrameLayout>
+        <TextView
+            android:id="@+id/tvVisitTOS"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start|center_vertical"
+            android:layout_marginBottom="12dp"
+            android:layout_marginLeft="6dp"
+            android:text="Nome di servizio"
+            android:textSize="17sp"
+            android:textColor="#ff000000"/>
 
+        <TextView
+            android:id="@+id/tvProductModel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start|center_vertical"
+            android:layout_marginLeft="6dp"
+            android:textSize="13sp"
+            android:textColor="#ff666666"
+            android:text="Prodotto"/>
 
-
-
-            <TextView
-                android:id="@+id/tvVisitTOS"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="start|center_vertical"
-                android:layout_marginLeft="6dp"
-                android:layout_marginBottom="12dp"
-                android:textSize="19sp"
-                android:textStyle="bold"
-                android:text="Nome di servizio"/>
-
-            <TextView
-                android:id="@+id/tvProductModel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="start|center_vertical"
-                android:layout_marginLeft="6dp"
-                android:text="Prodotto"/>
-
-            <TextView
-                android:id="@+id/tvSottprodottiDateTime"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="start|center_vertical"
-                android:layout_marginLeft="6dp"
-                android:text="Eventualli sottoprodotti:"/>
+        <TextView
+            android:id="@+id/tvSottprodottiDateTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start|center_vertical"
+            android:layout_marginLeft="6dp"
+            android:textSize="13sp"
+            android:textColor="#ff666666"
+            android:text="Eventualli sottoprodotti:"/>
 
         <ListView
             android:id="@+id/listSubproducts"
             android:layout_width="match_parent"
-            android:layout_height="100dp"
+            android:layout_height="wrap_content"
             android:layout="@layout/visits_day_time_set_list_row">
         </ListView>
 
@@ -223,19 +230,20 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="start|center_vertical"
                 android:layout_marginLeft="6dp"
-                android:text="Coord.Nord*" />
+                android:textSize="17sp"
+                android:text="Coord. Nord"/>
 
             <EditText
                 android:id="@+id/etCoordNord"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="6dp"
                 android:layout_gravity="start|center_vertical"
+                android:layout_marginLeft="6dp"
                 android:background="@android:color/transparent"
                 android:inputType="number"
-                android:textSize="19dp"
-                android:textStyle="bold"
-                android:text="Sconoscuto" />
+                android:text="Sconoscuto"
+                android:textSize="19sp"
+                android:textColor="#ff29B352"/>
 
         </LinearLayout>
 
@@ -250,20 +258,21 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="start|center_vertical"
                 android:layout_marginLeft="6dp"
-                android:text="Coord.Est*" />
+                android:textSize="17sp"
+                android:text="Coord. Est:"/>
 
             <EditText
                 android:id="@+id/etCoordEst"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="6dp"
                 android:layout_gravity="start|center_vertical"
+                android:layout_marginLeft="6dp"
                 android:background="@android:color/transparent"
-                android:textSize="19dp"
-                android:textStyle="bold"
-                android:maxLines="1"
                 android:inputType="number"
-                android:text="Sconoscuto" />
+                android:maxLines="1"
+                android:text="Sconoscuto"
+                android:textColor="#ff29B352"
+                android:textSize="19sp"/>
 
         </LinearLayout>
 
@@ -278,28 +287,29 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="start|center_vertical"
                 android:layout_marginLeft="6dp"
-                android:text="Altitudine*" />
+                android:textSize="17sp"
+                android:text="Altitudine:"/>
 
             <EditText
                 android:id="@+id/etAltitude"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="6dp"
                 android:layout_gravity="start|center_vertical"
+                android:layout_marginLeft="6dp"
                 android:background="@android:color/transparent"
-                android:textSize="19dp"
-                android:textStyle="bold"
-                android:maxLines="1"
                 android:inputType="number"
-                android:text="Sconoscuto" />
+                android:maxLines="1"
+                android:text="Sconoscuto"
+                android:textSize="19sp"
+                android:textColor="#ff29B352"/>
 
         </LinearLayout>
 
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
             android:layout_marginBottom="16dp"
+            android:layout_marginTop="16dp"
             android:layout_weight="1">
 
             <ImageView

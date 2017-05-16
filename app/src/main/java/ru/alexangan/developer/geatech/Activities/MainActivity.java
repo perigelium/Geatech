@@ -40,7 +40,7 @@ import ru.alexangan.developer.geatech.Fragments.ClimatizzazioneReportFragment;
 import ru.alexangan.developer.geatech.Fragments.ComingListVisitsFragment;
 import ru.alexangan.developer.geatech.Fragments.CtrlBtnReportDetailed;
 import ru.alexangan.developer.geatech.Fragments.CtrlBtnsBottom;
-import ru.alexangan.developer.geatech.Fragments.CtrlBtnsFragment2;
+import ru.alexangan.developer.geatech.Fragments.CtrlBtnsSopralluogo;
 import ru.alexangan.developer.geatech.Fragments.DomoticaReportFragment;
 import ru.alexangan.developer.geatech.Fragments.EmptyReportFragment;
 import ru.alexangan.developer.geatech.Fragments.FotovoltaicoReportFragment;
@@ -62,7 +62,6 @@ import ru.alexangan.developer.geatech.Interfaces.Communicator;
 import ru.alexangan.developer.geatech.Models.GeaItemModelliRapporto;
 import ru.alexangan.developer.geatech.Models.GeaModelloRapporto;
 import ru.alexangan.developer.geatech.Models.GeaSezioneModelliRapporto;
-import ru.alexangan.developer.geatech.Models.ProductData;
 import ru.alexangan.developer.geatech.Models.VisitItem;
 import ru.alexangan.developer.geatech.Network.NetworkUtils;
 import ru.alexangan.developer.geatech.R;
@@ -88,7 +87,7 @@ public class MainActivity extends Activity implements Communicator, Callback
     SwipeDetector swipeDetector;
 
     CtrlBtnsBottom ctrlBtnsBottom;
-    CtrlBtnsFragment2 ctrlBtnsFragment2;
+    CtrlBtnsSopralluogo ctrlBtnsSopralluogo;
     SetDateTimeFragment dateTimeSetFragment;
     FragListVisitsFree fragListVisitsFree;
     FragListVisitsToday fragListVisitsToday;
@@ -98,7 +97,6 @@ public class MainActivity extends Activity implements Communicator, Callback
     NotSentListVisitsFragment notSentListVisits;
     ReportsListFragment reportsList;
     private ProgressDialog requestServerDialog;
-    private boolean timeNotSetItemsOnly;
     Handler handler;
     Runnable runnable;
     AlertDialog alert;
@@ -188,7 +186,7 @@ public class MainActivity extends Activity implements Communicator, Callback
         swipeDetector = new SwipeDetector();
 
         ctrlBtnsBottom = new CtrlBtnsBottom();
-        ctrlBtnsFragment2 = new CtrlBtnsFragment2();
+        ctrlBtnsSopralluogo = new CtrlBtnsSopralluogo();
         dateTimeSetFragment = new SetDateTimeFragment();
         fragListVisitsFree = new FragListVisitsFree();
         fragListVisitsToday = new FragListVisitsToday();
@@ -219,11 +217,14 @@ public class MainActivity extends Activity implements Communicator, Callback
 
         FragmentTransaction mFragmentTransaction = mFragmentManager.beginTransaction();
 
-        mFragmentTransaction.add(R.id.NotificationBarFragContainer, notificationBarFragment);
-
-        mFragmentTransaction.add(R.id.CtrlBtnFragContainer, ctrlBtnsBottom);
-        mFragmentTransaction.show(ctrlBtnsBottom);
-
+        mFragmentTransaction.add(R.id.headerFragContainer, notificationBarFragment);
+        mFragmentTransaction.addToBackStack(notificationBarFragment.getTag());
+/*        mFragmentTransaction.add(R.id.headerFragContainer, ctrlBtnsSopralluogo);
+        mFragmentTransaction.addToBackStack(ctrlBtnsSopralluogo.getTag());*/
+        mFragmentTransaction.add(R.id.footerFragContainer, ctrlBtnsBottom);
+        mFragmentTransaction.addToBackStack(ctrlBtnsBottom.getTag());
+        //mFragmentTransaction.show(ctrlBtnsBottom);
+        //mFragmentTransaction.hide(ctrlBtnsSopralluogo);
         //mFragmentManager.executePendingTransactions();
 
         mFragmentTransaction.commit();
@@ -235,7 +236,6 @@ public class MainActivity extends Activity implements Communicator, Callback
         requestServerDialog.setMessage(getString(R.string.DownloadingDataPleaseWait));
         requestServerDialog.setIndeterminate(true);
 
-        timeNotSetItemsOnly = false;
         listVisitsIsObsolete = false;
 
         handler = new Handler();
@@ -254,24 +254,38 @@ public class MainActivity extends Activity implements Communicator, Callback
     @Override
     public void onBackPressed()
     {
-        if (!fragListVisitsFree.isAdded())
+        if (!fragListVisitsOther.isAdded())
         {
-            removeAllLists();
+            removeAllLists(fragListVisitsFree.getTag());
 
-            if (ctrlBtnsReportDetailed.isVisible())
+            FragmentTransaction mFragmentTransaction = mFragmentManager.beginTransaction();
+            if(!fragListVisitsFree.isAdded())
             {
-                FragmentTransaction mFragmentTransaction = mFragmentManager.beginTransaction();
-                mFragmentTransaction.hide(ctrlBtnsReportDetailed);
-                mFragmentTransaction.commit();
-
-                //ctrlBtnsBottom.setCheckedBtnId(R.id.btnSentReports);
-            } else
-            {
-                ctrlBtnsBottom.setCheckedBtnId(R.id.btnVisits);
+                mFragmentTransaction.add(R.id.innerFragContainer, fragListVisitsFree);
+                mFragmentTransaction.addToBackStack(fragListVisitsFree.getTag());
             }
-            //removeAllLists();
+            if(!fragListVisitsToday.isAdded())
+            {
+                mFragmentTransaction.add(R.id.innerFragContainer, fragListVisitsToday);
+                mFragmentTransaction.addToBackStack(fragListVisitsToday.getTag());
+            }
+            if(!fragListVisitsOther.isAdded())
+            {
+                mFragmentTransaction.add(R.id.innerFragContainer, fragListVisitsOther);
+                mFragmentTransaction.addToBackStack(fragListVisitsOther.getTag());
+            }
+            mFragmentTransaction.commit();
 
-            //currentSelIndex = -1;
+            mFragmentManager.executePendingTransactions();
+
+            if (ctrlBtnsSopralluogo.isAdded())
+            {
+                FragmentTransaction vFragmentTransaction = mFragmentManager.beginTransaction();
+                vFragmentTransaction.replace(R.id.headerFragContainer, notificationBarFragment);
+
+                mFragmentManager.executePendingTransactions();
+                vFragmentTransaction.commit();
+            }
         } else
         {
             //super.onBackPressed();
@@ -282,29 +296,28 @@ public class MainActivity extends Activity implements Communicator, Callback
     @Override
     public void onCtrlBtnsBottomClicked(View view)
     {
-        FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
-        fragmentTransaction.hide(ctrlBtnsFragment2);
-        fragmentTransaction.show(ctrlBtnsBottom);
-        fragmentTransaction.commit();
         currentSelIndex = -1;
         Button btnClicked = (Button)view;
 
         if (btnClicked.getId() == R.id.btnVisits)
         {
-            removeAllLists();
+            //removeAllLists(fragListVisitsFree.getTag());
 
             FragmentTransaction mFragmentTransaction = mFragmentManager.beginTransaction();
             if(!fragListVisitsFree.isAdded())
             {
                 mFragmentTransaction.add(R.id.innerFragContainer, fragListVisitsFree);
+                mFragmentTransaction.addToBackStack(fragListVisitsFree.getTag());
             }
             if(!fragListVisitsToday.isAdded())
             {
                 mFragmentTransaction.add(R.id.innerFragContainer, fragListVisitsToday);
+                mFragmentTransaction.addToBackStack(fragListVisitsToday.getTag());
             }
             if(!fragListVisitsOther.isAdded())
             {
                 mFragmentTransaction.add(R.id.innerFragContainer, fragListVisitsOther);
+                mFragmentTransaction.addToBackStack(fragListVisitsOther.getTag());
             }
             mFragmentTransaction.commit();
 
@@ -323,19 +336,19 @@ public class MainActivity extends Activity implements Communicator, Callback
 
         if (btnClicked.getId() == R.id.btnNotifUrgentReports)
         {
-            removeAllLists();
+            mFragmentManager.popBackStackImmediate();
             setVisitsListContent(comingListVisits);
         }
 
         if (btnClicked.getId() == R.id.btnInWorkVisits)
         {
-            removeAllLists();
+            removeAllLists(inWorkListVisits.getTag());
             setVisitsListContent(inWorkListVisits);
         }
 
         if (btnClicked.getId() == R.id.btnNotSentReports)
         {
-            removeAllLists();
+            mFragmentManager.popBackStackImmediate();
             setVisitsListContent(notSentListVisits);
         }
 
@@ -407,19 +420,14 @@ public class MainActivity extends Activity implements Communicator, Callback
     }
 
 /*    @Override
-    public void onCtrlButtons2Clicked(View view)
+    public void onCtrlBtnsSopralluogoClicked(View view)
     {
-        FragmentTransaction mFragmentTransaction = mFragmentManager.beginTransaction();
-        mFragmentTransaction.hide(ctrlBtnsBottom);
-        mFragmentTransaction.show(ctrlBtnsFragment2);
-        mFragmentTransaction.commit();
-
         if (currentSelIndex == -1)
         {
             return;
         }
 
-        if (view == findViewById(R.id.btnReturn))
+        if (view == findViewById(R.id.btnReportReturn))
         {
             removeAllLists();
 
@@ -491,11 +499,11 @@ public class MainActivity extends Activity implements Communicator, Callback
         }
     }*/
 
-    private void removeAllLists()
+    private void removeAllLists(String tag)
     {
-        FragmentTransaction mFragmentTransaction = mFragmentManager.beginTransaction();
+        //FragmentTransaction mFragmentTransaction = mFragmentManager.beginTransaction();
 
-        if (currentSelIndex != -1)
+/*        if (currentSelIndex != -1)
         {
             VisitItem visitItem = visitItems.get(currentSelIndex);
             ProductData productData = visitItem.getProductData();
@@ -507,9 +515,21 @@ public class MainActivity extends Activity implements Communicator, Callback
             {
                 mFragmentTransaction.remove(frag);
             }
-        }
+        }*/
 
-        if (emptyReportFragment.isAdded())
+        //while (mFragmentManager.getBackStackEntryCount() != 0) {
+            //mFragmentManager.popBackStackImmediate();
+        mFragmentManager.popBackStack();
+            //mFragmentManager.popBackStack(tag, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+        //}
+
+/*        if(mFragmentManager.popBackStackImmediate())
+        {
+            Log.d("DEBUG", "frag popped successfully");
+        }*/
+        return;
+
+/*        if (emptyReportFragment.isAdded())
         {
             mFragmentTransaction.remove(emptyReportFragment);
         }
@@ -579,9 +599,14 @@ public class MainActivity extends Activity implements Communicator, Callback
             mFragmentTransaction.remove(fragListVisitsOther);
         }
 
-        mFragmentManager.executePendingTransactions();
+        if (ctrlBtnsSopralluogo.isAdded())
+        {
+            mFragmentTransaction.remove(ctrlBtnsSopralluogo);
+        }*/
 
-        mFragmentTransaction.commit();
+        //mFragmentManager.executePendingTransactions();
+
+        //mFragmentTransaction.commit();
     }
 
     private void setVisitsListContent(Fragment fragment)
@@ -591,6 +616,7 @@ public class MainActivity extends Activity implements Communicator, Callback
         if (!fragment.isAdded())
         {
             vFragmentTransaction.add(R.id.innerFragContainer, fragment);
+            vFragmentTransaction.addToBackStack(fragment.getTag());
         }
 
         vFragmentTransaction.commit();
@@ -602,13 +628,16 @@ public class MainActivity extends Activity implements Communicator, Callback
     {
         currentSelIndex = itemIndex;
 
-        if (dateTimeHasSet) // if visit day is empty, show set datetime fragment, otherwise show CTL info.
-        {
-            ctrlBtnsFragment2.setCheckedBtnId(R.id.btnInfo);
-        } else
-        {
-            removeAllLists();
+        mFragmentManager.popBackStack();
 
+        //if (!ctrlBtnsSopralluogo.isAdded())
+        {
+            FragmentTransaction vFragmentTransaction = mFragmentManager.beginTransaction();
+            vFragmentTransaction.replace(R.id.headerFragContainer, ctrlBtnsSopralluogo);
+
+            mFragmentManager.executePendingTransactions();
+            vFragmentTransaction.commit();
+        }
             if (!dateTimeSetFragment.isAdded())
             {
                 Bundle args = new Bundle();
@@ -617,7 +646,7 @@ public class MainActivity extends Activity implements Communicator, Callback
 
                 setVisitsListContent(dateTimeSetFragment);
             }
-        }
+        //}
     }
 
     @Override
@@ -625,7 +654,7 @@ public class MainActivity extends Activity implements Communicator, Callback
     {
         currentSelIndex = itemIndex;
         listVisitsIsObsolete = true;
-        ctrlBtnsFragment2.setCheckedBtnId(R.id.btnInfo);
+        ctrlBtnsSopralluogo.setCheckedBtnId(R.id.btnInfo);
     }
 
     @Override
@@ -644,12 +673,11 @@ public class MainActivity extends Activity implements Communicator, Callback
     public void OnReportListItemSelected(int itemIndex)
     {
         FragmentTransaction mFragmentTransaction = mFragmentManager.beginTransaction();
-        mFragmentTransaction.hide(ctrlBtnsFragment2);
         mFragmentTransaction.hide(ctrlBtnsBottom);
         mFragmentTransaction.show(ctrlBtnsReportDetailed);
         mFragmentTransaction.commit();
 
-        removeAllLists();
+        mFragmentManager.popBackStackImmediate();
 
         if (!reportDetailedFragment.isAdded())
         {
@@ -667,7 +695,7 @@ public class MainActivity extends Activity implements Communicator, Callback
     {
         currentSelIndex = itemIndex;
 
-        ctrlBtnsFragment2.setCheckedBtnId(R.id.btnFillReport);
+        ctrlBtnsSopralluogo.setCheckedBtnId(R.id.btnFillReport);
     }
 
     @Override
@@ -785,7 +813,7 @@ public class MainActivity extends Activity implements Communicator, Callback
     public void OnComingListItemSelected(int itemIndex)
     {
         currentSelIndex = itemIndex;
-        ctrlBtnsFragment2.setCheckedBtnId(R.id.btnInfo);
+        ctrlBtnsSopralluogo.setCheckedBtnId(R.id.btnInfo);
     }
 
     @Override
@@ -798,7 +826,7 @@ public class MainActivity extends Activity implements Communicator, Callback
     public void onCoordsSetReturned(int itemIndex)
     {
         //currentSelIndex = itemIndex;
-        ctrlBtnsFragment2.setCheckedBtnId(R.id.btnFillReport);
+        ctrlBtnsSopralluogo.setCheckedBtnId(R.id.btnFillReport);
     }
 
     @Override
@@ -942,7 +970,6 @@ public class MainActivity extends Activity implements Communicator, Callback
                         String str_gea_modelli = type_report_data.getString("gea_modelli_rapporto_sopralluogo");
                         String str_gea_sezioni_modelli = type_report_data.getString("gea_sezioni_modelli_rapporto_sopralluogo");
                         String str_gea_items_modelli = type_report_data.getString("gea_items_modelli_rapporto_sopralluogo");
-
 
                         if (Build.VERSION.SDK_INT >= 24)
                         {

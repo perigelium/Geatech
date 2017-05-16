@@ -47,6 +47,7 @@ import ru.alexangan.developer.geatech.Models.SubproductItem;
 import ru.alexangan.developer.geatech.Models.VisitItem;
 import ru.alexangan.developer.geatech.Network.NetworkUtils;
 import ru.alexangan.developer.geatech.R;
+import ru.alexangan.developer.geatech.Utils.ViewUtils;
 
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.SET_DATA_URL_SUFFIX;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.company_id;
@@ -69,7 +70,7 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
     VisitItem visitItem;
     String product_type;
 
-    private TextView mDateSetTextView, mTimeSetTextView, btnAnnullaSetDateTime, btnSetDateTimeSubmit;
+    private TextView btnSetDateTimeSubmit;
 
     private int mYear, mMonth, mDay, mHour, mMinute;
 
@@ -174,11 +175,11 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
     {
         rootView = inflater.inflate(R.layout.set_date_time_fragment, container, false);
 
-        TextView btnSetDate = (TextView) rootView.findViewById(R.id.btnSetDate);
-        btnAnnullaSetDateTime = (TextView) rootView.findViewById(R.id.btnAnnullaSetDateTime);
+        TextView btnSetDateTime = (TextView) rootView.findViewById(R.id.btnSetDateTime);
+        //btnAnnullaSetDateTime = (TextView) rootView.findViewById(R.id.btnAnnullaSetDateTime);
         btnSetDateTimeSubmit = (TextView) rootView.findViewById(R.id.btnSetDateTimeSubmit);
-        TextView btnApriMappa = (TextView) rootView.findViewById(R.id.btnApriMappa);
-        TextView btnChiama = (TextView) rootView.findViewById(R.id.btnChiama);
+        TextView btnOpenMap = (TextView) rootView.findViewById(R.id.btnOpenMap);
+        TextView btnOpenDialer = (TextView) rootView.findViewById(R.id.btnOpenDialer);
 
         visitItem = visitItems.get(selectedIndex);
         ClientData clientData = visitItem.getClientData();
@@ -209,6 +210,8 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
         ListView listView = (ListView) rootView.findViewById(R.id.listSubproducts);
         listView.setAdapter(adapter);
 
+        ViewUtils.setListViewHeightBasedOnChildren(listView);
+
         TextView clientNameTextView = (TextView) rootView.findViewById(R.id.tvClientName);
         clientNameTextView.setText(clientData.getName());
 
@@ -224,8 +227,8 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
         TextView clientAddressTextView = (TextView) rootView.findViewById(R.id.tvClientAddress);
         clientAddressTextView.setText(clientData.getAddress());
 
-        mDateSetTextView = (TextView) rootView.findViewById(R.id.tvDateSet);
-        mTimeSetTextView = (TextView) rootView.findViewById(R.id.tvTimeSet);
+        //mDateSetTextView = (TextView) rootView.findViewById(R.id.tvDateSet);
+        //mTimeSetTextView = (TextView) rootView.findViewById(R.id.tvTimeSet);
 
         //String visitDateTime = reportStates!=null ? reportStates.getData_ora_sopralluogo() : " ";
 
@@ -265,8 +268,8 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
 
         if(reportStates==null || reportStates.getData_ora_sopralluogo() == null)
         {
-            btnAnnullaSetDateTime.setEnabled(false);
-            btnAnnullaSetDateTime.setAlpha(.4f);
+/*            btnAnnullaSetDateTime.setEnabled(false);
+            btnAnnullaSetDateTime.setAlpha(.4f);*/
         }
 
         mYear = calendar.get(Calendar.YEAR);
@@ -275,20 +278,20 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
         mHour = calendar.get(Calendar.HOUR_OF_DAY);
         mMinute = calendar.get(Calendar.MINUTE);
 
-        btnSetDate.setOnClickListener(this);
+        btnSetDateTime.setOnClickListener(this);
 
-        btnAnnullaSetDateTime.setOnClickListener(this);
+        //btnAnnullaSetDateTime.setOnClickListener(this);
 
         btnSetDateTimeSubmit.setOnClickListener(this);
-        btnApriMappa.setOnClickListener(this);
-        btnChiama.setOnClickListener(this);
+        btnOpenMap.setOnClickListener(this);
+        btnOpenDialer.setOnClickListener(this);
 
         return rootView;
     }
 
     public void onClick(View v)
     {
-        if (v.getId() == R.id.btnApriMappa)
+        if (v.getId() == R.id.btnOpenMap)
         {
             if(!NetworkUtils.isNetworkAvailable(activity))
             {
@@ -319,7 +322,7 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
             }
         }
 
-        if (v.getId() == R.id.btnChiama)
+        if (v.getId() == R.id.btnOpenDialer)
         {
             String phoneNumber = "tel:" + visitItems.get(selectedIndex).getClientData().getMobile();
             Intent intent = new Intent(Intent.ACTION_DIAL);
@@ -327,7 +330,7 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
             startActivity(intent);
         }
 
-        if (v.getId() == R.id.btnSetDate)
+        if (v.getId() == R.id.btnSetDateTime)
         {
             TimePickerDialog DialogTimePicker = new TimePickerDialog(getActivity(), timePickerListener,
                     mHour, mMinute, DateFormat.is24HourFormat(getActivity()));
@@ -338,7 +341,7 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
             DialogDatePicker.show();
         }
 
-        if (v.getId() == R.id.btnAnnullaSetDateTime)
+/*        if (v.getId() == R.id.btnAnnullaSetDateTime)
         {
             if(!NetworkUtils.isNetworkAvailable(activity))
             {
@@ -358,7 +361,7 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
             disableInput();
 
             notifyServerDataOraSopralluogo(idSopralluogo, stakedOut);
-        }
+        }*/
 
         if (v.getId() == R.id.btnSetDateTimeSubmit)
         {
@@ -415,10 +418,10 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
     {
         SimpleDateFormat sdfDate = new SimpleDateFormat("dd.MM", Locale.ITALIAN);
         String shortDateStr = sdfDate.format(calendar.getTime());
-        mDateSetTextView.setText(shortDateStr);
+        //mDateSetTextView.setText(shortDateStr);
         SimpleDateFormat sdfTime = new SimpleDateFormat("HH:mm", Locale.ITALIAN);
         String shortTimeStr = sdfTime.format(calendar.getTime());
-        mTimeSetTextView.setText(shortTimeStr);
+        //mTimeSetTextView.setText(shortTimeStr);
     }
 
     @Override
@@ -636,8 +639,8 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
     {
         btnSetDateTimeSubmit.setEnabled(false);
         btnSetDateTimeSubmit.setAlpha(.4f);
-        btnAnnullaSetDateTime.setEnabled(false);
-        btnAnnullaSetDateTime.setAlpha(.4f);
+/*        btnAnnullaSetDateTime.setEnabled(false);
+        btnAnnullaSetDateTime.setAlpha(.4f);*/
 
         //requestServerDialog.show();
     }
@@ -646,8 +649,8 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
     {
         btnSetDateTimeSubmit.setEnabled(true);
         btnSetDateTimeSubmit.setAlpha(1.0f);
-        btnAnnullaSetDateTime.setEnabled(true);
-        btnAnnullaSetDateTime.setAlpha(1.0f);
+/*        btnAnnullaSetDateTime.setEnabled(true);
+        btnAnnullaSetDateTime.setAlpha(1.0f);*/
 
         //requestServerDialog.dismiss();
     }
