@@ -109,7 +109,7 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
-        rootView = inflater.inflate(R.layout.send_report_fragment, container, false);
+        rootView = inflater.inflate(R.layout.sync_report_fragment, container, false);
 
         btnSendReportNow = (Button) rootView.findViewById(R.id.btnSendReport);
         btnSendReportNow.setOnClickListener(this);

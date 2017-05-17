@@ -1,6 +1,7 @@
 package ru.alexangan.developer.geatech.Interfaces;
 
 import android.view.View;
+import android.widget.Button;
 
 /**
  * Created by user on 11/16/2016.*/
@@ -14,7 +15,9 @@ public interface Communicator
 
     void onSendReportReturned(int id_rapporto_sopralluogo);
 
-    void onCtrlBtnsBottomClicked(View view);
+    void onCtrlBtnsBottomClicked(int btnId);
+
+    void onCtrlBtnsSopralluogoClicked(int btnId);
 
     void OnListItemSwiped(int itemIndex, boolean dateTimeHasSet);
 

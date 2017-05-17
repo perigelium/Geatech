@@ -97,42 +97,29 @@ public class PhotoGalleryGridFragment extends Fragment
         super.onCreate(savedInstanceState);
 
         activity = getActivity();
-        int selectedIndex;
+        int id_sopralluogo;
 
         if (getArguments() != null)
         {
-            selectedIndex = getArguments().getInt("selectedIndex");
-        } else
-        {
-            return;
-        }
+            id_sopralluogo = getArguments().getInt("id_sopralluogo");
 
-        progressLoadingImages = new ProgressDialog(getActivity());
-        progressLoadingImages.setTitle("");
-        progressLoadingImages.setIndeterminate(true);
+            if (id_sopralluogo == 0)
+            {
+                showToastMessage("id_sopralluogo equal 0 !");
+            }
 
-        realm.beginTransaction();
+            String photosFolderName = "photos" + id_sopralluogo;
 
-        VisitItem visitItem = visitItems.get(selectedIndex);
-        GeaSopralluogo geaSopralluogo = visitItem.getGeaSopralluogo();
-        int idSopralluogo = geaSopralluogo.getId_sopralluogo();
-        reportStates = realm.where(ReportStates.class).equalTo("company_id", company_id).equalTo("tech_id", selectedTech.getId())
-                .equalTo("id_sopralluogo", idSopralluogo).findFirst();
+            photosDir = new File(activity.getFilesDir(), photosFolderName);
 
-        realm.commitTransaction();
+            if (!photosDir.exists())
+            {
+                photosDir.mkdir();
+            }
 
-        if (reportStates == null)
-        {
-            return;
-        }
-
-        String photosFolderName = "photos" + reportStates.getId_sopralluogo();
-
-        photosDir = new File(activity.getFilesDir(), photosFolderName);
-
-        if (!photosDir.exists())
-        {
-            photosDir.mkdir();
+            progressLoadingImages = new ProgressDialog(getActivity());
+            progressLoadingImages.setTitle("");
+            progressLoadingImages.setIndeterminate(true);
         }
     }
 
@@ -272,6 +259,11 @@ public class PhotoGalleryGridFragment extends Fragment
 
     private void getImagesArray()
     {
+        if (photosDir == null)
+        {
+            return;
+        }
+
         File[] filePaths = photosDir.listFiles();
 
         if (filePaths == null)
@@ -296,6 +288,11 @@ public class PhotoGalleryGridFragment extends Fragment
     {
         super.onDestroyView();
 
+        if (reportStates == null)
+        {
+            return;
+        }
+
         realm.beginTransaction();
 
         int id_rapporto_sopralluogo = reportStates.getId_rapporto_sopralluogo();
@@ -316,15 +313,15 @@ public class PhotoGalleryGridFragment extends Fragment
 
         for (File imageFile : alPathItems)
         {
-                String fileName = imageFile.getName();
+            String fileName = imageFile.getName();
 
-                realm.beginTransaction();
+            realm.beginTransaction();
 
-                GeaImagineRapporto gea_immagine = new GeaImagineRapporto(
-                        company_id, selectedTech.getId(), id_rapporto_sopralluogo, reportImagesSize++, imageFile.getAbsolutePath(), fileName);
-                realm.copyToRealm(gea_immagine);
+            GeaImagineRapporto gea_immagine = new GeaImagineRapporto(
+                    company_id, selectedTech.getId(), id_rapporto_sopralluogo, reportImagesSize++, imageFile.getAbsolutePath(), fileName);
+            realm.copyToRealm(gea_immagine);
 
-                realm.commitTransaction();
+            realm.commitTransaction();
         }
     }
 

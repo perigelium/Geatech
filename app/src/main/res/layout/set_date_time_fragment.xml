@@ -198,6 +198,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="start|center_vertical"
             android:layout_marginLeft="6dp"
+            android:layout_marginBottom="9dp"
             android:textSize="13sp"
             android:textColor="#ff666666"
             android:text="Prodotto"/>
@@ -208,6 +209,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="start|center_vertical"
             android:layout_marginLeft="6dp"
+            android:layout_marginBottom="6dp"
             android:textSize="13sp"
             android:textColor="#ff666666"
             android:text="Eventualli sottoprodotti:"/>
@@ -218,6 +220,16 @@
             android:layout_height="wrap_content"
             android:layout="@layout/visits_day_time_set_list_row">
         </ListView>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start|center_vertical"
+            android:layout_marginBottom="12dp"
+            android:layout_marginLeft="6dp"
+            android:text="Localizzazione"
+            android:textSize="17sp"
+            android:textColor="#ff000000"/>
 
         <LinearLayout
             android:layout_width="wrap_content"

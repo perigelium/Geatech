@@ -30,13 +30,23 @@ public class CtrlBtnsSopralluogo extends Fragment implements View.OnClickListene
 
         mCommunicator = (Communicator) getActivity();
 
-        Button btnInfo = (Button) rootView.findViewById(R.id.btnInfo);
+        final Button btnSopralluogoReturn = (Button) rootView.findViewById(R.id.btnSopralluogoReturn);
+        btnSopralluogoReturn.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                mCommunicator.onCtrlBtnsSopralluogoClicked(btnSopralluogoReturn.getId());
+            }
+        });
+
+        Button btnSopralluogoInfo = (Button) rootView.findViewById(R.id.btnSopralluogoInfo);
         Button btnFillReport = (Button) rootView.findViewById(R.id.btnFillReport);
         Button btnAddPhotos = (Button) rootView.findViewById(R.id.btnAddPhotos);
         Button btnSendReport = (Button) rootView.findViewById(R.id.btnSendReport);
 
         btnArray = new ArrayList<>();
-        btnArray.add(btnInfo);
+        btnArray.add(btnSopralluogoInfo);
         btnArray.add(btnFillReport);
         btnArray.add(btnAddPhotos);
         btnArray.add(btnSendReport);
@@ -81,6 +91,6 @@ public class CtrlBtnsSopralluogo extends Fragment implements View.OnClickListene
         }
 
         btnSelected.setSelected(true);
-        mCommunicator.onCtrlBtnsBottomClicked(btnSelected);
+        mCommunicator.onCtrlBtnsSopralluogoClicked(btnSelected.getId());
     }
 }
