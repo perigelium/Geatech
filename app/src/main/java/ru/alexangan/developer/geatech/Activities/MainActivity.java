@@ -15,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -56,6 +57,7 @@ import ru.alexangan.developer.geatech.Fragments.ReportsListFragment;
 import ru.alexangan.developer.geatech.Fragments.STermodinamicoReportFragment;
 import ru.alexangan.developer.geatech.Fragments.SendReportFragment;
 import ru.alexangan.developer.geatech.Fragments.SetDateTimeFragment;
+import ru.alexangan.developer.geatech.Fragments.SettingsFragment;
 import ru.alexangan.developer.geatech.Fragments.StorageReportFragment;
 import ru.alexangan.developer.geatech.Interfaces.Communicator;
 import ru.alexangan.developer.geatech.Models.GeaItemModelliRapporto;
@@ -93,6 +95,7 @@ public class MainActivity extends Activity implements Communicator, Callback
     CtrlBtnsBottom ctrlBtnsBottom;
     CtrlBtnsSopralluogo ctrlBtnsSopralluogo;
     SetDateTimeFragment setDateTimeFragment;
+    SettingsFragment settingsFragment;
     FragListVisitsFree fragListVisitsFree;
     FragListVisitsToday fragListVisitsToday;
     FragListVisitsOther fragListVisitsOther;
@@ -192,6 +195,7 @@ public class MainActivity extends Activity implements Communicator, Callback
         ctrlBtnsBottom = new CtrlBtnsBottom();
         ctrlBtnsSopralluogo = new CtrlBtnsSopralluogo();
         setDateTimeFragment = new SetDateTimeFragment();
+        settingsFragment = new SettingsFragment();
         fragListVisitsFree = new FragListVisitsFree();
         fragListVisitsToday = new FragListVisitsToday();
         fragListVisitsOther = new FragListVisitsOther();
@@ -225,7 +229,7 @@ public class MainActivity extends Activity implements Communicator, Callback
 
         FragmentTransaction nFragmentTransaction = mFragmentManager.beginTransaction();
         nFragmentTransaction.add(R.id.headerFragContainer, notificationBarFragment);
-        nFragmentTransaction.addToBackStack(notificationBarFragment.getTag());
+        //nFragmentTransaction.addToBackStack(notificationBarFragment.getTag());
         nFragmentTransaction.commit();
 
 /*        mFragmentTransaction.add(R.id.headerFragContainer, ctrlBtnsSopralluogo);
@@ -262,8 +266,12 @@ public class MainActivity extends Activity implements Communicator, Callback
     {
         if (!fragListVisitsOther.isAdded())
         {
-            mFragmentManager.popBackStack();
+            Button btn = (Button) findViewById(R.id.btnVisits);
+            btn.setSelected(false);
+            ctrlBtnsBottom.setCheckedBtnId(R.id.btnVisits);
 
+/*        if (!fragListVisitsOther.isAdded())
+        {
             FragmentTransaction mFragmentTransaction = mFragmentManager.beginTransaction();
             if(!fragListVisitsFree.isAdded())
             {
@@ -291,8 +299,8 @@ public class MainActivity extends Activity implements Communicator, Callback
 
                 mFragmentManager.executePendingTransactions();
                 vFragmentTransaction.commit();
-            }
-        } else
+            }*/
+        }else
         {
             //super.onBackPressed();
             this.finish();
@@ -315,6 +323,8 @@ public class MainActivity extends Activity implements Communicator, Callback
         if (btnId == R.id.btnVisits)
         {
             //removeAllLists(fragListVisitsFree.getTag());
+
+            mFragmentManager.popBackStack();
 
             FragmentTransaction mFragmentTransaction = mFragmentManager.beginTransaction();
             if(!fragListVisitsFree.isAdded())
@@ -364,7 +374,9 @@ public class MainActivity extends Activity implements Communicator, Callback
 
         if (btnId == R.id.btnAppSettings)
         {
-            String[] listItemsArray = {"Aggiorna applicazione", "Logout", "Esci"};
+            setVisitsListContent(settingsFragment);
+
+/*            String[] listItemsArray = {"Aggiorna applicazione", "Logout", "Esci"};
 
             //ContextThemeWrapper themedContext = new ContextThemeWrapper
             // (this, android.R.style.Theme_DeviceDefault_Light_Dialog_NoActionBar);
@@ -383,14 +395,14 @@ public class MainActivity extends Activity implements Communicator, Callback
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int which, long id)
                 {
-/*                    if (which == 1)
+*//*                    if (which == 1)
                     {
                         Intent intent = new Intent(MainActivity.this, LoginActivity.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         intent.putExtra("Password recover", true);
                         startActivity(intent);
                         finish();
-                    }*/
+                    }*//*
 
                     if (which == 2)
                     {
@@ -419,7 +431,7 @@ public class MainActivity extends Activity implements Communicator, Callback
 
             builder.setView(layout);
             alert = builder.create();
-            alert.show();
+            alert.show();*/
         }
 
 /*        if (view == findViewById(R.id.btnSentReports))

@@ -1,20 +1,33 @@
 package ru.alexangan.developer.geatech.Fragments;
 
+import android.Manifest;
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Fragment;
+import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
 import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Paint;
+import android.location.Location;
+import android.location.LocationManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.RequiresApi;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.TimePicker;
@@ -36,6 +49,7 @@ import okhttp3.Callback;
 import okhttp3.Response;
 import ru.alexangan.developer.geatech.Adapters.SetVisitDateTimeListAdapter;
 import ru.alexangan.developer.geatech.Interfaces.Communicator;
+import ru.alexangan.developer.geatech.Interfaces.LocationRetrievedEvents;
 import ru.alexangan.developer.geatech.Models.ClientData;
 import ru.alexangan.developer.geatech.Models.GeaImagineRapporto;
 import ru.alexangan.developer.geatech.Models.GeaItemRapporto;
@@ -45,10 +59,12 @@ import ru.alexangan.developer.geatech.Models.ProductData;
 import ru.alexangan.developer.geatech.Models.ReportStates;
 import ru.alexangan.developer.geatech.Models.SubproductItem;
 import ru.alexangan.developer.geatech.Models.VisitItem;
+import ru.alexangan.developer.geatech.Network.LocationRetriever;
 import ru.alexangan.developer.geatech.Network.NetworkUtils;
 import ru.alexangan.developer.geatech.R;
 import ru.alexangan.developer.geatech.Utils.ViewUtils;
 
+import static android.support.v4.content.PermissionChecker.checkSelfPermission;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.SET_DATA_URL_SUFFIX;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.company_id;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.realm;
@@ -56,19 +72,29 @@ import static ru.alexangan.developer.geatech.Models.GlobalConstants.selectedTech
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.tokenStr;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.visitItems;
 
-public class SetDateTimeFragment extends Fragment implements View.OnClickListener, Callback
+public class SetDateTimeFragment extends Fragment implements View.OnClickListener, Callback, LocationRetrievedEvents
 {
     Calendar calendarNow;
     Calendar calendar;
     long elapsedDays;
     String strDateTimeSet, strDateTimeNow;
-    ReportStates reportStates;
-    Call setDateTimeCall;
-    String strVisitDateTimeResponse;
-    Activity activity;
+    Call callSetDateTime;
     int idSopralluogo, stakedOut;
     VisitItem visitItem;
     String product_type;
+    EditText etCoordNord, etCoordEst, etAltitude;
+    Call callGetPageWithAltitude;
+    double latitude, longitude;
+    int altitude;
+    LocationRetriever locationRetriever;
+    Activity activity;
+    Location mLastLocation;
+    ReportStates reportStates;
+    Communicator communicator;
+    private ProgressDialog requestServerDialog;
+    ClientData clientData;
+    private int PERMISSION_REQUEST_CODE = 11;
+    private boolean coordsUnchanged;
 
     private TextView btnSetDateTimeSubmit;
 
@@ -81,6 +107,11 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
     private Communicator mCommunicator;
     AlertDialog alert;
     boolean dateSet, timeSet;
+    private TextView tvdataOraSopralluogo;
+    private TextView tvTechnicianName;
+    private Button btnOpenMap, btnOpenDialer;
+    private Button btnGetCurrentCoords;
+    private TextView tvSetDateTime;
 
 
     public SetDateTimeFragment()
@@ -109,13 +140,28 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
 
         networkUtils = new NetworkUtils();
 
-/*        ProgressDialog requestServerDialog = new ProgressDialog(getActivity());
-        requestServerDialog.setTitle("");
-        requestServerDialog.setMessage(getString(R.string.TransmittingDataPleaseWait));
-        requestServerDialog.setIndeterminate(true);*/
-
         dateSet = false;
         timeSet = false;
+
+        activity = getActivity();
+
+        if (getArguments() != null)
+        {
+            selectedIndex = getArguments().getInt("selectedIndex");
+        }
+
+        altitude = ReportStates.ALTITUDE_UNKNOWN;
+        longitude = 0;
+        latitude = 0;
+
+        communicator = (Communicator) getActivity();
+
+        requestServerDialog = new ProgressDialog(getActivity());
+        requestServerDialog.setTitle("");
+        requestServerDialog.setMessage(getString(R.string.DownloadingDataPleaseWait));
+        requestServerDialog.setIndeterminate(true);
+
+        coordsUnchanged = true;
     }
 
     private DatePickerDialog.OnDateSetListener datePickerListener = new DatePickerDialog.OnDateSetListener()
@@ -132,8 +178,6 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
             calendar.set(Calendar.MONTH, selectedMonth);
             mDay = selectedDay;
             calendar.set(Calendar.DAY_OF_MONTH, mDay);
-
-            updateDisplay();
         }
     };
 
@@ -165,21 +209,42 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
                 elapsedDays = periodMilliSeconds / 1000 / 60 / 60 / 24;
             }
 
-            updateDisplay();
+            SimpleDateFormat sdfDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ITALIAN);
+            String dateTimeStr = sdfDate.format(calendar.getTime());
+            tvdataOraSopralluogo.setText(dateTimeStr);
+
+            tvSetDateTime.setVisibility(View.GONE);
+            tvTechnicianName.setVisibility(View.VISIBLE);
         }
     };
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState)
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
         rootView = inflater.inflate(R.layout.set_date_time_fragment, container, false);
 
-        TextView btnSetDateTime = (TextView) rootView.findViewById(R.id.btnSetDateTime);
-        //btnAnnullaSetDateTime = (TextView) rootView.findViewById(R.id.btnAnnullaSetDateTime);
+        tvSetDateTime = (TextView) rootView.findViewById(R.id.btnSetDateTime);
+        tvSetDateTime.setPaintFlags(tvSetDateTime.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+
         btnSetDateTimeSubmit = (TextView) rootView.findViewById(R.id.btnSetDateTimeSubmit);
-        TextView btnOpenMap = (TextView) rootView.findViewById(R.id.btnOpenMap);
-        TextView btnOpenDialer = (TextView) rootView.findViewById(R.id.btnOpenDialer);
+        btnOpenMap = (Button) rootView.findViewById(R.id.btnOpenMap);
+        btnOpenDialer = (Button) rootView.findViewById(R.id.btnOpenDialer);
+        tvdataOraSopralluogo = (TextView) rootView.findViewById(R.id.tvdataOraSopralluogo);
+        tvTechnicianName = (TextView) rootView.findViewById(R.id.tvTechnicianName);
+
+        btnGetCurrentCoords = (Button) rootView.findViewById(R.id.btnGetCurrentCoords);
+
+        btnGetCurrentCoords.setOnClickListener(this);
+
+        etCoordNord = (EditText) rootView.findViewById(R.id.etCoordNord);
+        //etCoordNord.setOnTouchListener(this);
+        etCoordEst = (EditText) rootView.findViewById(R.id.etCoordEst);
+        //etCoordEst.setOnTouchListener(this);
+        etAltitude = (EditText) rootView.findViewById(R.id.etAltitude);
+        //etAltitude.setOnTouchListener(this);
+
+        TextView tvTechnicianName = (TextView) rootView.findViewById(R.id.tvTechnicianName);
+        tvTechnicianName.setText(selectedTech.getFullNameTehnic());
 
         visitItem = visitItems.get(selectedIndex);
         ClientData clientData = visitItem.getClientData();
@@ -196,7 +261,6 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
         }
 
         GeaSopralluogo geaSopralluogo = visitItem.getGeaSopralluogo();
-        String dataOraSopralluogo = geaSopralluogo.getData_ora_sopralluogo();
         idSopralluogo = geaSopralluogo.getId_sopralluogo();
         List<SubproductItem> listSubproducts = productData.getSubItem();
 
@@ -204,6 +268,8 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
         reportStates = realm.where(ReportStates.class).equalTo("company_id", company_id).equalTo("tech_id", selectedTech.getId())
                 .equalTo("id_sopralluogo", idSopralluogo).findFirst();
         realm.commitTransaction();
+
+        String dataOraSopralluogo = null;
 
         SetVisitDateTimeListAdapter adapter = new SetVisitDateTimeListAdapter(getActivity(), listSubproducts);
 
@@ -227,24 +293,47 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
         TextView clientAddressTextView = (TextView) rootView.findViewById(R.id.tvClientAddress);
         clientAddressTextView.setText(clientData.getAddress());
 
-        //mDateSetTextView = (TextView) rootView.findViewById(R.id.tvDateSet);
-        //mTimeSetTextView = (TextView) rootView.findViewById(R.id.tvTimeSet);
-
         //String visitDateTime = reportStates!=null ? reportStates.getData_ora_sopralluogo() : " ";
 
         calendarNow = Calendar.getInstance();
         calendar = Calendar.getInstance();
 
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ITALIAN);
+        //strDateTimeNow = sdf.format(calendarNow.getTime());
 
-        strDateTimeNow = sdf.format(calendarNow.getTime());
-
-        if(dataOraSopralluogo.length() > 4)
+        if(reportStates!=null)
         {
+            dataOraSopralluogo = reportStates.getData_ora_sopralluogo();
+        }
+
+        if(dataOraSopralluogo!=null && dataOraSopralluogo.length() > 4)
+        {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ITALIAN);
+
             try
             {
                 calendar.setTime(sdf.parse(dataOraSopralluogo));
 
+                tvdataOraSopralluogo.setText(dataOraSopralluogo);
+                tvTechnicianName.setVisibility(View.VISIBLE);
+                tvSetDateTime.setVisibility(View.GONE);
+                btnSetDateTimeSubmit.setVisibility(View.GONE);
+
+            } catch (ParseException e)
+            {
+                e.printStackTrace();
+            }
+        }
+        else
+        {
+            tvTechnicianName.setVisibility(View.GONE);
+            tvSetDateTime.setVisibility(View.VISIBLE);
+        }
+
+/*        if(dataOraSopralluogo.length() > 4)
+        {
+            try
+            {
+                calendar.setTime(sdf.parse(dataOraSopralluogo));
                 int millsDiff = calendar.compareTo(calendarNow);
 
                 if (millsDiff < 0)
@@ -252,7 +341,10 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
                     calendar = calendarNow;
                 }
 
-                updateDisplay();
+                SimpleDateFormat sdfDate = new SimpleDateFormat("dd.MM HH:mm", Locale.ITALIAN);
+                String dateTimeStr = sdfDate.format(calendar.getTime());
+
+                tvdataOraSopralluogo.setText(dateTimeStr);
 
             } catch (ParseException e)
             {
@@ -264,13 +356,13 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
         else
         {
             disableInput();
-        }
+        }*/
 
-        if(reportStates==null || reportStates.getData_ora_sopralluogo() == null)
+/*        if(reportStates==null || visitDateTime == null)
         {
-/*            btnAnnullaSetDateTime.setEnabled(false);
-            btnAnnullaSetDateTime.setAlpha(.4f);*/
-        }
+*//*            btnAnnullaSetDateTime.setEnabled(false);
+            btnAnnullaSetDateTime.setAlpha(.4f);*//*
+        }*/
 
         mYear = calendar.get(Calendar.YEAR);
         mMonth = calendar.get(Calendar.MONTH) + 1;
@@ -278,10 +370,7 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
         mHour = calendar.get(Calendar.HOUR_OF_DAY);
         mMinute = calendar.get(Calendar.MINUTE);
 
-        btnSetDateTime.setOnClickListener(this);
-
-        //btnAnnullaSetDateTime.setOnClickListener(this);
-
+        tvSetDateTime.setOnClickListener(this);
         btnSetDateTimeSubmit.setOnClickListener(this);
         btnOpenMap.setOnClickListener(this);
         btnOpenDialer.setOnClickListener(this);
@@ -291,6 +380,39 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
 
     public void onClick(View v)
     {
+        if (v.getId() == R.id.btnGetCurrentCoords)
+        {
+            LocationManager locationManager = (LocationManager) activity.getSystemService(Context.LOCATION_SERVICE);
+            if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
+                    && !locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER))
+            {
+                activity.startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+                return;
+            }
+
+            if (checkSelfPermission(activity, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                    || checkSelfPermission(activity, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)
+            {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+                {
+
+                    String[] permissions = new String[]
+                            {
+                                    Manifest.permission.ACCESS_COARSE_LOCATION,
+                                    Manifest.permission.ACCESS_FINE_LOCATION
+                            };
+
+                    requestMultiplePermissions(permissions);
+                }
+            } else
+            {
+                //disableInputAndShowProgressDialog();
+                requestServerDialog.show();
+
+                locationRetriever = new LocationRetriever(activity, this);
+            }
+        }
+
         if (v.getId() == R.id.btnOpenMap)
         {
             if(!NetworkUtils.isNetworkAvailable(activity))
@@ -341,28 +463,6 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
             DialogDatePicker.show();
         }
 
-/*        if (v.getId() == R.id.btnAnnullaSetDateTime)
-        {
-            if(!NetworkUtils.isNetworkAvailable(activity))
-            {
-                showToastMessage(getString(R.string.CheckInternetConnection));
-                return;
-            }
-
-            if(tokenStr == null)
-            {
-                //showToastMessage("Modalità offline, si prega di logout e login di nuovo");
-                alertDialog("Info", getString(R.string.OfflineModeShowLoginScreenQuestion));
-                return;
-            }
-
-            stakedOut = 0;
-
-            disableInput();
-
-            notifyServerDataOraSopralluogo(idSopralluogo, stakedOut);
-        }*/
-
         if (v.getId() == R.id.btnSetDateTimeSubmit)
         {
             if(!NetworkUtils.isNetworkAvailable(activity))
@@ -411,23 +511,21 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
             e.printStackTrace();
         }
 
-        setDateTimeCall = networkUtils.setData(this, SET_DATA_URL_SUFFIX, String.valueOf(jsonObject));
-    }
-
-    public void updateDisplay()
-    {
-        SimpleDateFormat sdfDate = new SimpleDateFormat("dd.MM", Locale.ITALIAN);
-        String shortDateStr = sdfDate.format(calendar.getTime());
-        //mDateSetTextView.setText(shortDateStr);
-        SimpleDateFormat sdfTime = new SimpleDateFormat("HH:mm", Locale.ITALIAN);
-        String shortTimeStr = sdfTime.format(calendar.getTime());
-        //mTimeSetTextView.setText(shortTimeStr);
+        callSetDateTime = networkUtils.setData(this, SET_DATA_URL_SUFFIX, String.valueOf(jsonObject));
     }
 
     @Override
     public void onFailure(Call call, IOException e)
     {
-        showToastMessage(getString(R.string.SetDateTimeFailed));
+        if(call == callGetPageWithAltitude)
+        {
+            showToastMessage(String.valueOf(R.string.GetAltitudeFailedCheckIfOnline));
+        }
+
+        if (call == callSetDateTime)
+        {
+            showToastMessage(getString(R.string.SetDateTimeFailed));
+        }
 
         activity.runOnUiThread(new Runnable()
         {
@@ -441,9 +539,26 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
     @Override
     public void onResponse(Call call, Response response) throws IOException
     {
-        if (call == setDateTimeCall)
+        if(call == callGetPageWithAltitude)
         {
-            strVisitDateTimeResponse = response.body().string();
+            String result = response.body().string();
+
+            altitude = (int) parseElevationFromGoogleMaps(result);
+
+            activity.runOnUiThread(new Runnable()
+            {
+                public void run()
+                {
+                    etAltitude.setText(String.valueOf(altitude), TextView.BufferType.EDITABLE);
+
+                    enableInput();
+                }
+            });
+        }
+
+        if (call == callSetDateTime)
+        {
+            String strVisitDateTimeResponse = response.body().string();
 
             final JSONObject jsonObject;
 
@@ -639,20 +754,20 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
     {
         btnSetDateTimeSubmit.setEnabled(false);
         btnSetDateTimeSubmit.setAlpha(.4f);
-/*        btnAnnullaSetDateTime.setEnabled(false);
-        btnAnnullaSetDateTime.setAlpha(.4f);*/
+        btnGetCurrentCoords.setEnabled(false);
+        btnGetCurrentCoords.setAlpha(.4f);
 
-        //requestServerDialog.show();
+        requestServerDialog.show();
     }
 
     private void enableInput()
     {
         btnSetDateTimeSubmit.setEnabled(true);
         btnSetDateTimeSubmit.setAlpha(1.0f);
-/*        btnAnnullaSetDateTime.setEnabled(true);
-        btnAnnullaSetDateTime.setAlpha(1.0f);*/
+        btnGetCurrentCoords.setEnabled(true);
+        btnGetCurrentCoords.setAlpha(1.0f);
 
-        //requestServerDialog.dismiss();
+        requestServerDialog.dismiss();
     }
 
     private void alertDialog(String title, String message)
@@ -682,5 +797,119 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
         alert = builder.create();
 
         alert.show();
+    }
+
+    @Override
+    public void onLocationReceived()
+    {
+        mLastLocation = locationRetriever.getLastLocation();
+
+        if (mLastLocation != null)
+        {
+            latitude = mLastLocation.getLatitude();
+            longitude = mLastLocation.getLongitude();
+
+            etCoordNord.setText(String.valueOf(latitude));
+            etCoordEst.setText(String.valueOf(longitude));
+
+            if (mLastLocation.hasAltitude())
+            {
+                altitude = (int) mLastLocation.getAltitude();
+                etAltitude.setText(String.valueOf(altitude), TextView.BufferType.EDITABLE);
+            } else
+            {
+                if (NetworkUtils.isNetworkAvailable(activity))// && NetworkUtils.isOnline())
+                {
+                    String elevationUrl = "http://maps.googleapis.com/maps/api/elevation/"
+                            + "xml?locations=" + String.valueOf(latitude)
+                            + "," + String.valueOf(longitude)
+                            + "&sensor=true";
+
+                    NetworkUtils networkUtils = new NetworkUtils();
+
+                    callGetPageWithAltitude = networkUtils.downloadURL(this, elevationUrl);
+                } else
+                {
+                    showToastMessage(getString(R.string.GetAltitudeFailedCheckIfOnline));
+                }
+            }
+        } else
+        {
+            String uri = String.format(Locale.ENGLISH, "http://maps.google.com/maps?daddr=%f,%f (%s)", (float) latitude, (float) longitude, "Where the party is at");
+            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
+            intent.setClassName("com.google.android.apps.maps", "com.google.android.maps.MapsActivity");
+
+            try
+            {
+                startActivity(intent);
+            } catch (ActivityNotFoundException ex)
+            {
+                try
+                {
+                    Intent unrestrictedIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
+                    startActivity(unrestrictedIntent);
+                } catch (ActivityNotFoundException innerEx)
+                {
+                    Toast.makeText(getActivity(), R.string.InstallMapApp, Toast.LENGTH_LONG).show();
+                }
+            }
+
+            showToastMessage(getString(R.string.FailedToGetCoords));
+        }
+
+        ////Log.d("new", "coords= " + String.valueOf(latitude) + " " + String.valueOf(longitude));
+
+        enableInput();
+    }
+
+    private double parseElevationFromGoogleMaps(String downloadedPage)
+    {
+        double result = 0;
+
+        if (downloadedPage.length() > 0)
+        {
+            int r = -1;
+            StringBuilder respStr = new StringBuilder(downloadedPage);
+            respStr.append((char) r);
+            String tagOpen = "<elevation>";
+            String tagClose = "</elevation>";
+            if (respStr.indexOf(tagOpen) != -1)
+            {
+                int start = respStr.indexOf(tagOpen) + tagOpen.length();
+                int end = respStr.indexOf(tagClose);
+                String value = respStr.substring(start, end);
+                result = (Double.parseDouble(value)); // convert from meters to feet value*3.2808399
+            }
+        }
+        return result;
+    }
+
+    @TargetApi(Build.VERSION_CODES.M)
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    public void requestMultiplePermissions(String[] permissions)
+    {
+        requestPermissions(permissions, PERMISSION_REQUEST_CODE);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults)
+    {
+        if (requestCode == PERMISSION_REQUEST_CODE && grantResults.length >= 1)
+        {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED || grantResults[1] == PackageManager.PERMISSION_GRANTED)
+            {
+                disableInputAndShowProgressDialog();
+
+                locationRetriever = new LocationRetriever(activity, this);
+            }
+        }
+    }
+
+    private void disableInputAndShowProgressDialog()
+    {
+        btnGetCurrentCoords.setEnabled(false);
+        btnGetCurrentCoords.setAlpha(.4f);
+
+        requestServerDialog.show();
     }
 }

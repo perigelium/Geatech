@@ -186,12 +186,6 @@ public class CTLinfoFragment extends Fragment implements View.OnClickListener, L
     {
         if (view.getId() == R.id.btnGetCurrentCoords)
         {
-/*            if (!NetworkUtils.isNetworkAvailable(activity))
-            {
-                Toast.makeText(activity, "Controlla la connessione a Internet", Toast.LENGTH_LONG).show();
-                return;
-            }*/
-
             LocationManager locationManager = (LocationManager) activity.getSystemService(Context.LOCATION_SERVICE);
             if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
                     && !locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER))
@@ -428,13 +422,6 @@ public class CTLinfoFragment extends Fragment implements View.OnClickListener, L
             {
                 disableInputAndShowProgressDialog();
 
-/*                try
-                {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e)
-                {
-                    e.printStackTrace();
-                }*/
                 locationRetriever = new LocationRetriever(activity, this);
             }
         }
