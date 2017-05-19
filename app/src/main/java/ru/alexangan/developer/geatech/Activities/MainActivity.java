@@ -16,6 +16,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -514,7 +515,19 @@ public class MainActivity extends Activity implements Communicator, Callback
                     args.putInt("id_sopralluogo", id_sopralluogo);
                     photoGalleryGridFragment.setArguments(args);
 
-                    setVisitsListContent(photoGalleryGridFragment);
+                    //setVisitsListContent(photoGalleryGridFragment);
+
+                    if (!photoGalleryGridFragment.isAdded())
+                    {
+                        FragmentTransaction vFragmentTransaction = mFragmentManager.beginTransaction();
+                        vFragmentTransaction.add(R.id.photosFragContainer, photoGalleryGridFragment);
+                        vFragmentTransaction.addToBackStack(photoGalleryGridFragment.getTag());
+                        vFragmentTransaction.commit();
+
+/*                        FrameLayout flphotosFragContainer = (FrameLayout) findViewById(R.id.photosFragContainer);
+                        flphotosFragContainer.setVisibility(View.VISIBLE);*/
+
+                    }
                 }
             }
         }

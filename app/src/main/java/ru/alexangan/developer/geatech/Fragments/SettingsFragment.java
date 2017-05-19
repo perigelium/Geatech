@@ -1,14 +1,22 @@
 package ru.alexangan.developer.geatech.Fragments;
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 import ru.alexangan.developer.geatech.Interfaces.Communicator;
 import ru.alexangan.developer.geatech.Models.GlobalConstants;
@@ -25,6 +33,7 @@ public class SettingsFragment extends Fragment implements View.OnClickListener
     private TextView tvTechnicianName;
     private LinearLayout llTermsOfUse, llSettings;
     private Button btnTermsOfUseOk;
+    Activity activity;
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState)
@@ -56,6 +65,17 @@ public class SettingsFragment extends Fragment implements View.OnClickListener
         flTermsOfUse.setOnClickListener(this);
         flLogout.setOnClickListener(this);
 
+        Spinner spVisitRemindTime = (Spinner) rootView.findViewById(R.id.spVisitRemindTime);
+
+        String [] remindTimePoints = {"1 hour", "2 hours", "4 hours", "1 day before", "2 days before", "a week before"};
+        List<String> saRemindTimePoints = Arrays.asList(remindTimePoints);
+
+        ArrayAdapter<String> visitRemindTimeListAdapter =
+                new ArrayAdapter<>(activity, R.layout.spinner_visit_reminder_time_row, R.id.tvSpinnerVisitItem, saRemindTimePoints);
+        spVisitRemindTime.setAdapter(visitRemindTimeListAdapter);
+
+        spVisitRemindTime.setSelection(0);
+
         return rootView;
     }
 
@@ -69,6 +89,8 @@ public class SettingsFragment extends Fragment implements View.OnClickListener
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
+
+        activity = getActivity();
     }
 
     @Override

@@ -4,6 +4,7 @@ package ru.alexangan.developer.geatech.Fragments;
 import android.Manifest;
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -11,19 +12,26 @@ import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.RequiresApi;
+import android.support.design.widget.FloatingActionButton;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import java.io.ByteArrayOutputStream;
@@ -38,6 +46,7 @@ import java.util.Collections;
 import java.util.Date;
 
 import io.realm.RealmResults;
+import ru.alexangan.developer.geatech.Activities.MainActivity;
 import ru.alexangan.developer.geatech.Adapters.GridViewAdapter;
 import ru.alexangan.developer.geatech.Models.GeaImagineRapporto;
 import ru.alexangan.developer.geatech.Models.GeaSopralluogo;
@@ -68,7 +77,7 @@ public class PhotoGalleryGridFragment extends Fragment
     int imgHolderHeight = 75;
     ArrayList<Bitmap> alImgThumbs;
     ArrayList<File> alPathItems;
-    Bitmap bmpCameraAddButton, bmpGalleryAddButton, bmpFullSize;
+    Bitmap bmpFullSize;
     ImageView ivFullSize;
     GridView gvPhotoGallery;
     Activity activity;
@@ -77,6 +86,8 @@ public class PhotoGalleryGridFragment extends Fragment
     ReportStates reportStates;
     Bitmap bm;
     String fullSizeImgPath;
+    private FloatingActionButton fabAddPhoto;
+    AlertDialog alert;
 
 /*    private Handler handler;
     private Runnable runnable;*/
@@ -85,6 +96,16 @@ public class PhotoGalleryGridFragment extends Fragment
     {
 
         void onDownloadFinished(String result);
+    }*/
+
+/*    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState)
+    {
+        super.onViewCreated(view, savedInstanceState);
+
+        ivFullSize.setImageBitmap(bmpCameraAddButton);
+        ivFullSize.setVisibility(View.VISIBLE);
+        gvPhotoGallery.setVisibility(View.GONE);
     }*/
 
     public PhotoGalleryGridFragment()
@@ -131,6 +152,99 @@ public class PhotoGalleryGridFragment extends Fragment
 
         gvPhotoGallery = (GridView) rootView.findViewById(R.id.gvPhotoGallery);
         ivFullSize = (ImageView) rootView.findViewById(R.id.imageViewFullSize);
+        fabAddPhoto = (FloatingActionButton) rootView.findViewById(R.id.fabAddPhoto);
+
+        fabAddPhoto.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                String[] listItemsArray = {"Scatta foto", "Scegli esistente", "Cancel"};
+
+                LayoutInflater inflater = activity.getLayoutInflater();
+                View layout = inflater.inflate(R.layout.alert_dialog_custom, null);
+
+                ListView listView = (ListView) layout.findViewById(R.id.alertList);
+                ArrayAdapter<String> listAdapter = new ArrayAdapter<>(activity, R.layout.alert_dialog_item_custom, listItemsArray);
+                listView.setAdapter(listAdapter);
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+                builder.setView(layout);
+                alert = builder.create();
+                WindowManager.LayoutParams wmlp = alert.getWindow().getAttributes();
+                wmlp.gravity = Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL;
+
+                listView.setOnItemClickListener(new AdapterView.OnItemClickListener()
+                {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int which, long id)
+                    {
+                        if (which == 2)
+                        {
+                            alert.dismiss();
+                        }
+
+                        if (which == 1)
+                        {
+                            if (checkSelfPermission(activity, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)
+                            {
+                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+                                {
+
+                                    String[] permissions = new String[]
+                                            {
+                                                    Manifest.permission.READ_EXTERNAL_STORAGE,
+                                            };
+
+                                    requestMultiplePermissions(permissions);
+                                }
+                            } else
+                            {
+                                Intent pickIntent = new Intent();
+                                pickIntent.setType("image/*");
+                                pickIntent.setAction(Intent.ACTION_PICK);
+
+                                startActivityForResult(pickIntent, PICK_GALLERY_IMAGE);
+                            }
+                            alert.dismiss();
+                        }
+                        if (which == 0)
+                        {
+                            if (checkSelfPermission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
+                                    || checkSelfPermission(activity, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED)
+                            {
+                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+                                {
+                                    String[] permissions = new String[]
+                                            {
+                                                    Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE
+                                            };
+
+                                    requestMultiplePermissions(permissions);
+                                }
+                            } else
+                            {
+                                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd_HH_mm_ss");
+                                String fileName = dateFormat.format(new Date()) + ".jpg";
+                                File file = new File(activity.getExternalFilesDir(DIRECTORY_PICTURES).getAbsolutePath(), fileName);
+
+                                fullSizeImgPath = file.getAbsolutePath();
+                                Uri uriFullSizeCameraImage = Uri.fromFile(file);
+
+                                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                                intent.putExtra(MediaStore.EXTRA_OUTPUT, uriFullSizeCameraImage);
+                                startActivityForResult(intent, PICK_CAMERA_IMAGE);
+                            }
+                            alert.dismiss();
+                        }
+
+                    }
+                });
+
+                alert.show();
+            }
+        });
+
 
         ivFullSize.setOnClickListener(new View.OnClickListener()
         {
@@ -139,12 +253,13 @@ public class PhotoGalleryGridFragment extends Fragment
             {
                 ivFullSize.setVisibility(View.GONE);
                 gvPhotoGallery.setVisibility(View.VISIBLE);
+                fabAddPhoto.setVisibility(View.VISIBLE);
             }
         });
 
-        Resources resources = getResources();
-        bmpCameraAddButton = BitmapFactory.decodeResource(resources, R.drawable.photo_add);
-        bmpGalleryAddButton = BitmapFactory.decodeResource(resources, R.drawable.galerea_photo_add);
+        //Resources resources = getResources();
+        //bmpCameraAddButton = BitmapFactory.decodeResource(resources, R.drawable.photo_add);
+        //bmpGalleryAddButton = BitmapFactory.decodeResource(resources, R.drawable.galerea_photo_add);
 
         alImgThumbs = new ArrayList<>();
         alPathItems = new ArrayList<>();
@@ -159,7 +274,7 @@ public class PhotoGalleryGridFragment extends Fragment
 
                 currentPicPos = position;
 
-                if (currentPicPos != alImgThumbs.size() - 1 && currentPicPos != alImgThumbs.size() - 2)
+                //if (currentPicPos != alImgThumbs.size() - 1 && currentPicPos != alImgThumbs.size() - 2)
                 {  // remove item
                     currentPicPos = position;
 
@@ -191,7 +306,7 @@ public class PhotoGalleryGridFragment extends Fragment
             {
                 currentPicPos = position;
 
-                if (currentPicPos == alImgThumbs.size() - 1)
+/*                if (currentPicPos == alImgThumbs.size() - 1)
                 { // open Camera
                     if (checkSelfPermission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
                             || checkSelfPermission(activity, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED)
@@ -236,13 +351,13 @@ public class PhotoGalleryGridFragment extends Fragment
                     } else
                     {
                         Intent pickIntent = new Intent();
-                        pickIntent.setType("image/*");
+                        pickIntent.setType("image*//*");
                         pickIntent.setAction(Intent.ACTION_PICK);
 
                         startActivityForResult(pickIntent, PICK_GALLERY_IMAGE);
                     }
 
-                } else
+                } else*/
                 { // show full-size image
                     bmpFullSize = null;
 
@@ -302,7 +417,6 @@ public class PhotoGalleryGridFragment extends Fragment
         reportImages.deleteAllFromRealm();
 
         alPathItems.clear();
-
         alPathItems.addAll(Arrays.asList(photosDir.listFiles()));
 
         reportStates.setPhotoAddedNumber(alPathItems.size());
@@ -456,8 +570,8 @@ public class PhotoGalleryGridFragment extends Fragment
 
             if (bm != null)
             {
-                alImgThumbs.add(alImgThumbs.size() - 2, bm);
-                alPathItems.add(alPathItems.size() - 2, fileSrc);
+                alImgThumbs.add(bm);
+                alPathItems.add(fileSrc);
                 // redraw the gallery thumbnails to reflect the new addition
                 gvPhotoGallery.setAdapter(gridAdapter);
             } else
@@ -492,7 +606,7 @@ public class PhotoGalleryGridFragment extends Fragment
             }
 
             ByteArrayOutputStream bos = new ByteArrayOutputStream();
-            bm.compress(Bitmap.CompressFormat.JPEG, 100, bos);
+            bm.compress(Bitmap.CompressFormat.JPEG, 85, bos);
             byte[] bitmapdata = bos.toByteArray();
 
             //write the bytes in file
@@ -533,7 +647,8 @@ public class PhotoGalleryGridFragment extends Fragment
 
             if (success)
             {
-                alPathItems.set(alPathItems.size() - 3, fileDst);
+                alPathItems.set(alPathItems.size() - 1, fileDst);
+                //alPathItems.add(fileDst);
 
 /*                if(!fileSrc.delete())
                 {
@@ -574,6 +689,7 @@ public class PhotoGalleryGridFragment extends Fragment
             }
             ivFullSize.setVisibility(View.VISIBLE);
             gvPhotoGallery.setVisibility(View.GONE);
+            fabAddPhoto.setVisibility(View.GONE);
         }
     }
 
@@ -602,11 +718,11 @@ public class PhotoGalleryGridFragment extends Fragment
 
             progressLoadingImages.dismiss();
 
-            alImgThumbs.add(bmpGalleryAddButton);
-            alImgThumbs.add(bmpCameraAddButton);
+            //alImgThumbs.add(bmpGalleryAddButton);
+            //alImgThumbs.add(bmpCameraAddButton);
 
-            alPathItems.add(new File("bmpGalleryAddButton"));
-            alPathItems.add(new File("bmpCameraAddButton"));
+            //alPathItems.add(new File("bmpGalleryAddButton"));
+            //alPathItems.add(new File("bmpCameraAddButton"));
 
             gridAdapter = new GridViewAdapter(activity, R.layout.grid_item_layout, alImgThumbs);
 

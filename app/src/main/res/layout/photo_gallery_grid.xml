@@ -1,32 +1,70 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="#f0f0f0">
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#f0f0f0"
+    android:orientation="vertical">
 
-    <FrameLayout
+    <GridView
+        android:id="@+id/gvPhotoGallery"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:clickable="true"
+        android:columnWidth="100dp"
+        android:drawSelectorOnTop="true"
+        android:focusable="true"
+        android:gravity="center"
+        android:numColumns="auto_fit"
+        android:stretchMode="columnWidth"
+        android:verticalSpacing="5dp"/>
 
-        <ImageView
-            android:id="@+id/imageViewFullSize"
+    <ImageView
+        android:id="@+id/imageViewFullSize"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:background="#ff000000"
+        android:scaleType="centerInside"
+        android:visibility="gone"/>
+
+    <!--    <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:scaleType="centerInside"
-            android:visibility="gone"/>
+            android:orientation="vertical">
 
-        <GridView
-            android:id="@+id/gvPhotoGallery"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:clickable="true"
-            android:columnWidth="100dp"
-            android:drawSelectorOnTop="true"
-            android:focusable="true"
-            android:gravity="center"
-            android:numColumns="auto_fit"
-            android:stretchMode="columnWidth"
-            android:verticalSpacing="5dp"/>
+            <LinearLayout
+                android:id="@+id/viewA"
+                android:layout_width="match_parent"
+                android:layout_weight="0.9"
+                android:background="@android:color/holo_purple"
+                android:orientation="horizontal"/>
 
-    </FrameLayout>
-</RelativeLayout>
+            <LinearLayout
+                android:id="@+id/viewB"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.1"
+                android:background="@android:color/holo_orange_light"
+                android:orientation="horizontal"/>
+
+        </LinearLayout>-->
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fabAddPhoto"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="16dp"
+        android:src="@drawable/add_photo"
+        app:backgroundTint="@android:color/transparent"
+        app:borderWidth="0dp"
+        app:elevation="0dp"
+        app:fabSize="normal"/>
+
+    <!--    app:layout_anchor="@id/imageViewFullSize"
+        app:layout_anchorGravity="bottom|right|end"-->
+
+
+</FrameLayout>

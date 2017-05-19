@@ -152,11 +152,19 @@
             </LinearLayout>
 
             <Spinner
-                android:id="@+id/spVisitRemindRate"
-                android:layout_width="wrap_content"
+                android:id="@+id/spVisitRemindTime"
+                android:layout_width="120dp"
                 android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
                 android:layout_gravity="center_vertical|end"
                 android:layout_marginRight="25dp"/>
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_gravity="end|center_vertical"
+                android:layout_marginRight="25dp"
+                android:src="@drawable/triangle_orange"/>
 
         </FrameLayout>
 
