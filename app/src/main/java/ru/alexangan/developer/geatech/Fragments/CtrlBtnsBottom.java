@@ -33,7 +33,7 @@ public class CtrlBtnsBottom extends Fragment implements View.OnClickListener
         Button btnVisits = (Button) rootView.findViewById(R.id.btnVisits);
         Button btnInWorkVisits = (Button) rootView.findViewById(R.id.btnInWorkVisits);
         Button btnComingVisits = (Button) rootView.findViewById(R.id.btnNotifUrgentReports);
-        Button btnNotSentReports = (Button) rootView.findViewById(R.id.btnNotSentReports);
+        Button btnNotSentReports = (Button) rootView.findViewById(R.id.btnCompletedReports);
         Button btnAppSettings = (Button) rootView.findViewById(R.id.btnAppSettings);
 
         btnArray = new ArrayList<>();

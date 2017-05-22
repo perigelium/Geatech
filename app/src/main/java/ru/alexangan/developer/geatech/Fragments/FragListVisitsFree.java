@@ -146,18 +146,6 @@ public class FragListVisitsFree extends ListFragment
             }
         }
 
-/*        for (Map.Entry entry : unsortedVisits.entrySet()) // add other visits
-        {
-            VisitItem visitItem = (VisitItem) entry.getValue();
-            int id_tecnico = visitItem.getGeaSopralluogo().getId_tecnico();
-            boolean ownReport = selectedTech.getId() == id_tecnico;
-
-            if(!ownReport && id_tecnico != 0)
-            {
-                visitItemsFiltered.add(visitItem);
-            }
-        }*/
-
         myListAdapter = new MyListVisitsAdapter(getActivity(), R.layout.list_visits_fragment_row, visitItemsFiltered);
 
         setListAdapter(myListAdapter);

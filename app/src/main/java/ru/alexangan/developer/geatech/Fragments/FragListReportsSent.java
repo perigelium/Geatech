@@ -21,12 +21,13 @@ import ru.alexangan.developer.geatech.Interfaces.Communicator;
 import ru.alexangan.developer.geatech.Models.ReportStates;
 import ru.alexangan.developer.geatech.R;
 import ru.alexangan.developer.geatech.Utils.SwipeDetector;
+import ru.alexangan.developer.geatech.Utils.ViewUtils;
 
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.company_id;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.realm;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.selectedTech;
 
-public class ReportsListFragment extends ListFragment
+public class FragListReportsSent extends ListFragment
 {
     private Communicator mCommunicator;
     ArrayList<Integer> reportStatesItemsPositions;
@@ -39,6 +40,9 @@ public class ReportsListFragment extends ListFragment
         super.onViewCreated(view, savedInstanceState);
 
         lv = getListView();
+
+        ViewUtils.setListViewHeightBasedOnChildren(lv);
+
         lv.setOnTouchListener(swipeDetector);
     }
 
@@ -55,7 +59,7 @@ public class ReportsListFragment extends ListFragment
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState)
     {
-        View rootView = inflater.inflate(R.layout.list_visits_fragment, container, false);
+        View rootView = inflater.inflate(R.layout.list_reports_sent, container, false);
 
         ArrayList<ReportStates> reportStatesItems = new ArrayList<>();
         reportStatesItemsPositions = new ArrayList<>();
@@ -73,9 +77,10 @@ public class ReportsListFragment extends ListFragment
 
         for (ReportStates reportStates : reportStatesList)
         {
-            //int photoAddedStatus = reportStates.getPhotoAddedNumber();
-            //int generalInfoCompletionState = reportStates.getGeneralInfoCompletionState();
-            //int reportCompletionState = reportStates.getReportCompletionState();
+            boolean reportComplete = reportStates.getGeneralInfoCompletionState() == ReportStates.COORDS_SET
+                    && reportStates.getReportCompletionState() == ReportStates.REPORT_COMPLETED
+                    && reportStates.getPhotoAddedNumber() >= reportStates.PHOTOS_MIN_ADDED;
+
             String data_ora_sopralluogo = reportStates.getData_ora_sopralluogo();
 
             if (data_ora_sopralluogo == null)
@@ -85,11 +90,11 @@ public class ReportsListFragment extends ListFragment
 
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ITALIAN);
 
-            if (reportStates.getData_ora_invio_rapporto() != null)
+            if (reportComplete && reportStates.getData_ora_invio_rapporto() != null)
             {
                 try
                 {
-                    Date date = sdf.parse(reportStates.getData_ora_invio_rapporto());
+                    Date date = sdf.parse(reportStates.getData_ora_sopralluogo());
                     long time = date.getTime();
                     ////Log.d("DEBUG", String.valueOf(time));
                     unsortedReports.put(time, reportStates);
@@ -109,7 +114,7 @@ public class ReportsListFragment extends ListFragment
         }
 
         ReportsListAdapter myListAdapter =
-                new ReportsListAdapter(getActivity(), R.layout.reports_list_fragment_row, reportStatesItems);
+                new ReportsListAdapter(getActivity(), R.layout.list_visits_fragment_row, reportStatesItems);
         setListAdapter(myListAdapter);
 
         return rootView;

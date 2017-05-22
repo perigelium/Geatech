@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:id="@+id/list_visits_other"
+              android:id="@+id/list_reports_sent"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
               android:layout_marginTop="12dp"
@@ -8,21 +8,20 @@
               android:orientation="vertical">
 
     <TextView
-        android:id="@+id/listVisitsOtherTitle"
+        android:id="@+id/listReportsSentTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="start"
+        android:layout_gravity="left"
         android:layout_marginBottom="6dp"
         android:layout_marginLeft="12dp"
         android:gravity="center"
-        android:text="@string/VisitsComing">
+        android:text="Inviati rapporti:">
     </TextView>
 
     <ListView
         android:id="@id/android:list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#fff5f5f5"
         android:choiceMode="singleChoice"
         android:divider="@android:color/transparent"
         android:focusable="true">
@@ -31,8 +30,10 @@
     <TextView
         android:id="@id/android:empty"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:gravity="center"
+        android:maxLines="1"
+        android:background="#ffffffff"
         android:text="Vuoto">
     </TextView>
 

@@ -8,7 +8,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#ffcc22"
+        android:background="#ffffffff"
         android:orientation="vertical">
 
 
@@ -19,7 +19,7 @@
             android:layout_marginLeft="6dp"
             android:layout_marginTop="10dp"
             android:text="REPORT TECNICO"
-            android:textColor="#ffffff"
+            android:textColor="#ff000000"
             android:textSize="13dp"/>
 
         <TextView
@@ -31,7 +31,7 @@
             android:layout_marginLeft="6dp"
             android:layout_marginTop="20dp"
             android:text="Report title"
-            android:textColor="#ffffff"
+            android:textColor="#ff000000"
             android:textSize="29sp"/>
     </LinearLayout>
 

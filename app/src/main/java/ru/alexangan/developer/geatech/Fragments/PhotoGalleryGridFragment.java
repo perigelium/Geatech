@@ -9,10 +9,7 @@ import android.app.Fragment;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.content.res.Resources;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -20,7 +17,6 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.FloatingActionButton;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,7 +24,6 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -46,24 +41,19 @@ import java.util.Collections;
 import java.util.Date;
 
 import io.realm.RealmResults;
-import ru.alexangan.developer.geatech.Activities.MainActivity;
 import ru.alexangan.developer.geatech.Adapters.GridViewAdapter;
 import ru.alexangan.developer.geatech.Models.GeaImagineRapporto;
-import ru.alexangan.developer.geatech.Models.GeaSopralluogo;
 import ru.alexangan.developer.geatech.Models.ReportStates;
-import ru.alexangan.developer.geatech.Models.VisitItem;
 import ru.alexangan.developer.geatech.R;
 import ru.alexangan.developer.geatech.Utils.ImageUtils;
 import ru.alexangan.developer.geatech.Utils.MediaUtils;
 
 import static android.app.Activity.RESULT_OK;
 import static android.os.Environment.DIRECTORY_PICTURES;
-import static android.os.Environment.getExternalStorageDirectory;
 import static android.support.v4.content.PermissionChecker.checkSelfPermission;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.company_id;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.realm;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.selectedTech;
-import static ru.alexangan.developer.geatech.Models.GlobalConstants.visitItems;
 
 public class PhotoGalleryGridFragment extends Fragment
 {
@@ -128,6 +118,11 @@ public class PhotoGalleryGridFragment extends Fragment
             {
                 showToastMessage("id_sopralluogo equal 0 !");
             }
+
+            realm.beginTransaction();
+            reportStates = realm.where(ReportStates.class).equalTo("company_id", company_id).equalTo("tech_id", selectedTech.getId())
+                    .equalTo("id_sopralluogo", id_sopralluogo).findFirst();
+            realm.commitTransaction();
 
             String photosFolderName = "photos" + id_sopralluogo;
 
@@ -399,9 +394,9 @@ public class PhotoGalleryGridFragment extends Fragment
     }
 
     @Override
-    public void onDestroyView()
+    public void onDestroy()
     {
-        super.onDestroyView();
+        super.onDestroy();
 
         if (reportStates == null)
         {

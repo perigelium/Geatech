@@ -11,13 +11,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.Html;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.FrameLayout;
-import android.widget.ListView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -35,26 +29,23 @@ import io.realm.RealmResults;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
-import ru.alexangan.developer.geatech.Fragments.CTLinfoFragment;
 import ru.alexangan.developer.geatech.Fragments.CaldaiaReportFragment;
 import ru.alexangan.developer.geatech.Fragments.ClimatizzazioneReportFragment;
-import ru.alexangan.developer.geatech.Fragments.ComingListVisitsFragment;
-import ru.alexangan.developer.geatech.Fragments.CtrlBtnReportDetailed;
 import ru.alexangan.developer.geatech.Fragments.CtrlBtnsBottom;
 import ru.alexangan.developer.geatech.Fragments.CtrlBtnsSopralluogo;
 import ru.alexangan.developer.geatech.Fragments.DomoticaReportFragment;
 import ru.alexangan.developer.geatech.Fragments.EmptyReportFragment;
 import ru.alexangan.developer.geatech.Fragments.FotovoltaicoReportFragment;
+import ru.alexangan.developer.geatech.Fragments.FragListInWorkVisits;
+import ru.alexangan.developer.geatech.Fragments.FragListReportsNotSent;
+import ru.alexangan.developer.geatech.Fragments.FragListReportsSent;
 import ru.alexangan.developer.geatech.Fragments.FragListVisitsFree;
 import ru.alexangan.developer.geatech.Fragments.FragListVisitsOther;
 import ru.alexangan.developer.geatech.Fragments.FragListVisitsToday;
-import ru.alexangan.developer.geatech.Fragments.InWorkListVisitsFragment;
-import ru.alexangan.developer.geatech.Fragments.NotSentListVisitsFragment;
 import ru.alexangan.developer.geatech.Fragments.NotificationBarFragment;
 import ru.alexangan.developer.geatech.Fragments.PhotoGalleryGridFragment;
 import ru.alexangan.developer.geatech.Fragments.PompaDiCaloreReportFragment;
 import ru.alexangan.developer.geatech.Fragments.ReportSentDetailedFragment;
-import ru.alexangan.developer.geatech.Fragments.ReportsListFragment;
 import ru.alexangan.developer.geatech.Fragments.STermodinamicoReportFragment;
 import ru.alexangan.developer.geatech.Fragments.SendReportFragment;
 import ru.alexangan.developer.geatech.Fragments.SetDateTimeFragment;
@@ -100,17 +91,15 @@ public class MainActivity extends Activity implements Communicator, Callback
     FragListVisitsFree fragListVisitsFree;
     FragListVisitsToday fragListVisitsToday;
     FragListVisitsOther fragListVisitsOther;
-    InWorkListVisitsFragment inWorkListVisits;
-    ComingListVisitsFragment comingListVisits;
-    NotSentListVisitsFragment notSentListVisits;
-    ReportsListFragment reportsList;
+    FragListInWorkVisits fragListInWorkVisits;
+    FragListReportsNotSent fragListReportsNotSent;
+    FragListReportsSent fragListReportsSent;
+
     private ProgressDialog requestServerDialog;
     Handler handler;
     Runnable runnable;
     AlertDialog alert;
 
-    CTLinfoFragment ctlInfo;
-    CtrlBtnReportDetailed ctrlBtnsReportDetailed;
     ReportSentDetailedFragment reportDetailedFragment;
     SendReportFragment sendReportFragment;
     PhotoGalleryGridFragment photoGalleryGridFragment;
@@ -130,6 +119,7 @@ public class MainActivity extends Activity implements Communicator, Callback
     boolean ctrlBtnChkChanged;
     private Call callVisits, callModels;
     NetworkUtils networkUtils;
+    private boolean firstStart;
 
     @Override
     protected void onPause()
@@ -162,7 +152,11 @@ public class MainActivity extends Activity implements Communicator, Callback
     {
         super.onStart();
 
-        ctrlBtnsBottom.setCheckedBtnId(R.id.btnVisits);
+        if(firstStart)
+        {
+            ctrlBtnsBottom.setCheckedBtnId(R.id.btnVisits);
+            firstStart = false;
+        }
     }
 
     @Override
@@ -179,6 +173,7 @@ public class MainActivity extends Activity implements Communicator, Callback
 
         currentSelIndex = -1;
         ctrlBtnChkChanged = true;
+        firstStart = true;
 
         realm.beginTransaction();
         visitItems = realm.where(VisitItem.class).findAll();
@@ -200,12 +195,10 @@ public class MainActivity extends Activity implements Communicator, Callback
         fragListVisitsFree = new FragListVisitsFree();
         fragListVisitsToday = new FragListVisitsToday();
         fragListVisitsOther = new FragListVisitsOther();
-        inWorkListVisits = new InWorkListVisitsFragment();
-        comingListVisits = new ComingListVisitsFragment();
-        notSentListVisits = new NotSentListVisitsFragment();
-        reportsList = new ReportsListFragment();
-        ctlInfo = new CTLinfoFragment();
-        ctrlBtnsReportDetailed = new CtrlBtnReportDetailed();
+        fragListInWorkVisits = new FragListInWorkVisits();
+        fragListReportsNotSent = new FragListReportsNotSent();
+        fragListReportsSent = new FragListReportsSent();
+
         reportDetailedFragment = new ReportSentDetailedFragment();
         sendReportFragment = new SendReportFragment();
         photoGalleryGridFragment = new PhotoGalleryGridFragment();
@@ -223,21 +216,11 @@ public class MainActivity extends Activity implements Communicator, Callback
         notificationBarFragment = new NotificationBarFragment();
 
         mFragmentManager = getFragmentManager();
-
         FragmentTransaction mFragmentTransaction = mFragmentManager.beginTransaction();
         mFragmentTransaction.add(R.id.footerFragContainer, ctrlBtnsBottom);
+        mFragmentTransaction.add(R.id.headerFragContainer, notificationBarFragment);
         mFragmentTransaction.commit();
 
-        FragmentTransaction nFragmentTransaction = mFragmentManager.beginTransaction();
-        nFragmentTransaction.add(R.id.headerFragContainer, notificationBarFragment);
-        //nFragmentTransaction.addToBackStack(notificationBarFragment.getTag());
-        nFragmentTransaction.commit();
-
-/*        mFragmentTransaction.add(R.id.headerFragContainer, ctrlBtnsSopralluogo);
-        mFragmentTransaction.addToBackStack(ctrlBtnsSopralluogo.getTag());*/
-
-        //mFragmentTransaction.show(ctrlBtnsBottom);
-        //mFragmentTransaction.hide(ctrlBtnsSopralluogo);
         //mFragmentManager.executePendingTransactions();
 
         networkUtils = new NetworkUtils();
@@ -270,37 +253,6 @@ public class MainActivity extends Activity implements Communicator, Callback
             Button btn = (Button) findViewById(R.id.btnVisits);
             btn.setSelected(false);
             ctrlBtnsBottom.setCheckedBtnId(R.id.btnVisits);
-
-/*        if (!fragListVisitsOther.isAdded())
-        {
-            FragmentTransaction mFragmentTransaction = mFragmentManager.beginTransaction();
-            if(!fragListVisitsFree.isAdded())
-            {
-                mFragmentTransaction.add(R.id.innerFragContainer, fragListVisitsFree);
-                mFragmentTransaction.addToBackStack(fragListVisitsFree.getTag());
-            }
-            if(!fragListVisitsToday.isAdded())
-            {
-                mFragmentTransaction.add(R.id.innerFragContainer, fragListVisitsToday);
-                mFragmentTransaction.addToBackStack(fragListVisitsToday.getTag());
-            }
-            if(!fragListVisitsOther.isAdded())
-            {
-                mFragmentTransaction.add(R.id.innerFragContainer, fragListVisitsOther);
-                mFragmentTransaction.addToBackStack(fragListVisitsOther.getTag());
-            }
-            mFragmentTransaction.commit();
-
-            mFragmentManager.executePendingTransactions();
-
-            if (ctrlBtnsSopralluogo.isAdded())
-            {
-                FragmentTransaction vFragmentTransaction = mFragmentManager.beginTransaction();
-                vFragmentTransaction.replace(R.id.headerFragContainer, notificationBarFragment);
-
-                mFragmentManager.executePendingTransactions();
-                vFragmentTransaction.commit();
-            }*/
         }else
         {
             //super.onBackPressed();
@@ -323,8 +275,6 @@ public class MainActivity extends Activity implements Communicator, Callback
 
         if (btnId == R.id.btnVisits)
         {
-            //removeAllLists(fragListVisitsFree.getTag());
-
             mFragmentManager.popBackStack();
 
             FragmentTransaction mFragmentTransaction = mFragmentManager.beginTransaction();
@@ -351,19 +301,19 @@ public class MainActivity extends Activity implements Communicator, Callback
             showSelectedVisitsList(mode);
         }
 
-/*        if (btnId == R.id.btnReportsReturn)
-        {
-            FragmentTransaction mFragmentTransaction = mFragmentManager.beginTransaction();
-            mFragmentTransaction.hide(ctrlBtnsReportDetailed);
-            mFragmentTransaction.commit();
-        }*/
-
         if (btnId == R.id.btnInWorkVisits)
         {
-            setVisitsListContent(inWorkListVisits);
+            FragmentTransaction mFragmentTransaction = mFragmentManager.beginTransaction();
+
+            if(!fragListInWorkVisits.isAdded())
+            {
+                mFragmentTransaction.add(R.id.innerFragContainer, fragListInWorkVisits);
+                mFragmentTransaction.addToBackStack(fragListInWorkVisits.getTag());
+            }
+            mFragmentTransaction.commit();
         }
 
-        if (btnId == R.id.btnNotifUrgentReports)
+/*        if (btnId == R.id.btnNotifUrgentReports)
         {
             setVisitsListContent(comingListVisits);
         }
@@ -371,75 +321,37 @@ public class MainActivity extends Activity implements Communicator, Callback
         if (btnId == R.id.btnNotSentReports)
         {
             setVisitsListContent(notSentListVisits);
+        }*/
+
+        if (btnId == R.id.btnCompletedReports)
+        {
+            mFragmentManager.popBackStack();
+
+            FragmentTransaction mFragmentTransaction = mFragmentManager.beginTransaction();
+            if(!fragListReportsNotSent.isAdded())
+            {
+                mFragmentTransaction.add(R.id.innerFragContainer, fragListReportsNotSent);
+                mFragmentTransaction.addToBackStack(fragListReportsNotSent.getTag());
+            }
+
+            if(!fragListReportsSent.isAdded())
+            {
+                mFragmentTransaction.add(R.id.innerFragContainer, fragListReportsSent);
+                mFragmentTransaction.addToBackStack(fragListReportsSent.getTag());
+            }
+
+            mFragmentTransaction.commit();
+
+            mFragmentManager.executePendingTransactions();
+
+            int mode = mSettings.getInt("listVisitsFilterMode", 0);
+            showSelectedVisitsList(mode);
         }
 
         if (btnId == R.id.btnAppSettings)
         {
             setVisitsListContent(settingsFragment);
-
-/*            String[] listItemsArray = {"Aggiorna applicazione", "Logout", "Esci"};
-
-            //ContextThemeWrapper themedContext = new ContextThemeWrapper
-            // (this, android.R.style.Theme_DeviceDefault_Light_Dialog_NoActionBar);
-
-            AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-
-            LayoutInflater inflater = getLayoutInflater();
-            View layout = inflater.inflate(R.layout.alert_dialog_custom, null);
-
-            ListView listView = (ListView) layout.findViewById(R.id.alertList);
-            ArrayAdapter<String> listAdapter = new ArrayAdapter<>(this, R.layout.alert_dialog_item_custom, listItemsArray);
-            listView.setAdapter(listAdapter);
-
-            listView.setOnItemClickListener(new AdapterView.OnItemClickListener()
-            {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int which, long id)
-                {
-*//*                    if (which == 1)
-                    {
-                        Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        intent.putExtra("Password recover", true);
-                        startActivity(intent);
-                        finish();
-                    }*//*
-
-                    if (which == 2)
-                    {
-                        exitApp();
-                    }
-
-                    if (which == 1)
-                    {
-                        logout();
-                    }
-                    if (which == 0)
-                    {
-                        //showToastMessage("Not implemented exception");
-                        if(NetworkUtils.isNetworkAvailable(MainActivity.this))
-                        {
-                            refreshGeaModels();
-                        }
-                        else
-                        {
-                            showToastMessage(getString(R.string.CheckInternetConnection));
-                        }
-                    }
-
-                }
-            });
-
-            builder.setView(layout);
-            alert = builder.create();
-            alert.show();*/
         }
-
-/*        if (view == findViewById(R.id.btnSentReports))
-        {
-            mFragmentManager.popBackStack();
-            setVisitsListContent(reportsList);
-        }*/
     }
 
     @Override
@@ -463,7 +375,7 @@ public class MainActivity extends Activity implements Communicator, Callback
             {
                 Bundle args = new Bundle();
                 args.putInt("selectedIndex", currentSelIndex);
-                ctlInfo.setArguments(args);
+                setDateTimeFragment.setArguments(args);
 
                 setVisitsListContent(setDateTimeFragment);
             }
@@ -597,7 +509,7 @@ public class MainActivity extends Activity implements Communicator, Callback
     @Override
     public void onDetailedReportReturned()
     {
-        onCtrlBtnsBottomClicked(R.id.btnReportsReturn);
+        //onCtrlBtnsBottomClicked(R.id.btnReportsReturn);
     }
 
     @Override
@@ -609,10 +521,10 @@ public class MainActivity extends Activity implements Communicator, Callback
     @Override
     public void OnReportListItemSelected(int itemIndex)
     {
-        FragmentTransaction mFragmentTransaction = mFragmentManager.beginTransaction();
+/*        FragmentTransaction mFragmentTransaction = mFragmentManager.beginTransaction();
         mFragmentTransaction.hide(ctrlBtnsBottom);
         mFragmentTransaction.show(ctrlBtnsReportDetailed);
-        mFragmentTransaction.commit();
+        mFragmentTransaction.commit();*/
 
         mFragmentManager.popBackStackImmediate();
 
@@ -639,81 +551,6 @@ public class MainActivity extends Activity implements Communicator, Callback
     public void onNotificationReportReturned(int mode)
     {
         showSelectedVisitsList(mode);
-
-/*        if (view.getId() == R.id.btnNotifTimeNotSetVisits)
-        {
-            mFragmentManager.popBackStack();
-
-            fragListVisitsFree = new FragListVisitsFree();
-
-            if (!fragListVisitsFree.isAdded())
-            {
-                timeNotSetItemsOnly = true;
-                listVisitsIsObsolete = true;
-
-                ctrlBtnsBottom.setCheckedBtnId(R.id.btnVisits);
-            }
-
-            //ctrlBtnsBottom.setCheckedBtnId(R.id.btnVisits);
-        }
-
-        if (view.getId() == R.id.btnNotifUrgentReports)
-        {
-            Toast.makeText(this, R.string.NoUrgentReportsFound, Toast.LENGTH_LONG).show();
-        }
-
-        if (view.getId() == R.id.btnAppSettings)
-        {
-            String[] listItemsArray = {"Aggiorna applicazione", "Logout", "Esci"};
-
-            //ContextThemeWrapper themedContext = new ContextThemeWrapper
-            // (this, android.R.style.Theme_DeviceDefault_Light_Dialog_NoActionBar);
-
-            AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-
-            LayoutInflater inflater = getLayoutInflater();
-            View layout = inflater.inflate(R.layout.alert_dialog_custom, null);
-
-            ListView listView = (ListView) layout.findViewById(R.id.alertList);
-            ArrayAdapter<String> listAdapter = new ArrayAdapter<>(this, R.layout.alert_dialog_item_custom, listItemsArray);
-            listView.setAdapter(listAdapter);
-
-            listView.setOnItemClickListener(new AdapterView.OnItemClickListener()
-            {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int which, long id)
-                {
-*//*                    if (which == 1)
-                    {
-                        Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        intent.putExtra("Password recover", true);
-                        startActivity(intent);
-                        finish();
-                    }*//*
-
-                    if (which == 2)
-                    {
-                        exitApp();
-                    }
-
-                    if (which == 1)
-                    {
-                        logout();
-                    }
-                    if (which == 0)
-                    {
-                        //showToastMessage("Not implemented exception");
-                        refreshGeaModels();
-                    }
-
-                }
-            });
-
-            builder.setView(layout);
-            alert = builder.create();
-            alert.show();
-        }*/
     }
 
     private void showSelectedVisitsList(int mode)
@@ -724,7 +561,6 @@ public class MainActivity extends Activity implements Communicator, Callback
 
         if(mode == LIST_VISITS_MODE_ALL)
         {
-
             mFragmentTransaction.show(fragListVisitsFree);
             mFragmentTransaction.show(fragListVisitsToday);
             mFragmentTransaction.show(fragListVisitsOther);

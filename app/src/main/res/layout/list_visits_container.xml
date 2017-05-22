@@ -4,39 +4,10 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
-    <ListView
-        android:id="@+id/listVisitsFree"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:choiceMode="singleChoice"
-        android:focusable="true"
-        android:background="#ffffff" >
-    </ListView>
+    <include android:id="@+id/list_visits_free" layout="@layout/list_visits_free"/>
 
-    <ListView
-        android:id="@+id/listVisitsToday"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:choiceMode="singleChoice"
-        android:focusable="true"
-        android:background="#ffffff" >
-    </ListView>
+    <include android:id="@+id/list_visits_today" layout="@layout/list_visits_today"/>
 
-    <ListView
-        android:id="@id/android:list"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:choiceMode="singleChoice"
-        android:focusable="true"
-        android:background="#ffffff" >
-    </ListView>
-
-    <TextView
-        android:id="@id/android:empty"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:text="Vuoto" >
-    </TextView>
+    <include android:id="@+id/list_visits_other" layout="@layout/list_visits_other"/>
 
 </LinearLayout>

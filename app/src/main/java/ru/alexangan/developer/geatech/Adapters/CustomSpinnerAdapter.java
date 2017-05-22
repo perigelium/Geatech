@@ -1,19 +1,19 @@
 package ru.alexangan.developer.geatech.Adapters;
 
 import android.app.Activity;
-import android.widget.ArrayAdapter;
-import java.util.ArrayList;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import java.util.ArrayList;
 
 import ru.alexangan.developer.geatech.Models.SpinnerItemData;
 import ru.alexangan.developer.geatech.R;
 
-import static ru.alexangan.developer.geatech.Models.GlobalConstants.LIST_VISITS_MODE_ALL;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.mSettings;
 
 // Created by Alex Angan 19.04.2017.

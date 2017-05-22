@@ -78,7 +78,7 @@ public class ReportsListAdapter extends BaseAdapter
         TextView clientNameTextView = (TextView) row.findViewById(R.id.tvClientName);
         clientNameTextView.setText(reportStates.getClientName());
 
-        TextView serviceTypeTextView = (TextView) row.findViewById(R.id.tvTypeOfService);
+        TextView serviceTypeTextView = (TextView) row.findViewById(R.id.tvVisitTOS);
         serviceTypeTextView.setText(reportStates.getProductType());
 
         TextView clientAddressTextView = (TextView) row.findViewById(R.id.tvClientAddress);

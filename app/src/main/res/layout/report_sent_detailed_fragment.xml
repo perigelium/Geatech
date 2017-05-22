@@ -118,8 +118,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="start|center_vertical"
-                    android:layout_marginLeft="4dp"
-                    android:src="@drawable/person_green"/>
+                    android:layout_marginLeft="4dp"/>
 
                 <TextView
                     android:id="@+id/tvClientName"
@@ -143,8 +142,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="start|center_vertical"
-                    android:layout_marginLeft="6dp"
-                    android:src="@drawable/location_dark_green"/>
+                    android:layout_marginLeft="6dp"/>
 
                 <TextView
                     android:id="@+id/tvClientAddress"
@@ -169,8 +167,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="start|center_vertical"
-                    android:layout_marginLeft="6dp"
-                    android:src="@drawable/phone_green"/>
+                    android:layout_marginLeft="6dp"/>
 
                 <TextView
                     android:id="@+id/tvClientPhone"
@@ -207,8 +204,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="start|center"
-                    android:layout_marginLeft="6dp"
-                    android:src="@drawable/stack_green"/>
+                    android:layout_marginLeft="6dp"/>
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -256,8 +252,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="start|center_vertical"
-                    android:layout_marginLeft="6dp"
-                    android:src="@drawable/coords"/>
+                    android:layout_marginLeft="6dp"/>
 
                 <TextView
                     android:layout_width="wrap_content"

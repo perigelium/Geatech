@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:id="@+id/list_visits_today"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
               android:layout_marginTop="12dp"
@@ -36,7 +37,7 @@
         android:layout_height="wrap_content"
         android:background="#fff5f5f5"
         android:choiceMode="singleChoice"
-        android:divider="#00000000"
+        android:divider="@android:color/transparent"
         android:focusable="true">
     </ListView>
 

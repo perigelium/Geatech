@@ -21,6 +21,8 @@ import java.util.TreeMap;
 
 import ru.alexangan.developer.geatech.Adapters.MyListVisitsAdapter;
 import ru.alexangan.developer.geatech.Interfaces.Communicator;
+import ru.alexangan.developer.geatech.Models.GeaSopralluogo;
+import ru.alexangan.developer.geatech.Models.GlobalConstants;
 import ru.alexangan.developer.geatech.Models.ReportStates;
 import ru.alexangan.developer.geatech.Models.VisitItem;
 import ru.alexangan.developer.geatech.R;
@@ -32,7 +34,7 @@ import static ru.alexangan.developer.geatech.Models.GlobalConstants.realm;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.selectedTech;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.visitItems;
 
-public class FragListVisitsToday extends ListFragment
+public class FragListReportsNotSent extends ListFragment
 {
     private Communicator mCommunicator;
     SwipeDetector swipeDetector;
@@ -70,9 +72,9 @@ public class FragListVisitsToday extends ListFragment
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
-        View rootView = inflater.inflate(R.layout.list_visits_today, container, false);
+        View rootView = inflater.inflate(R.layout.list_reports_not_sent, container, false);
 
-        tvListVisitsTodayDate = (TextView) rootView.findViewById(R.id.tvListVisitsTodayDate);
+        //tvListVisitsTodayDate = (TextView) rootView.findViewById(R.id.tvListVisitsTodayDate);
 
         return rootView;
     }
@@ -89,9 +91,9 @@ public class FragListVisitsToday extends ListFragment
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ITALIAN);
         Calendar calendarNow = Calendar.getInstance(Locale.ITALY);
         String strMonth = calendarNow.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.ITALY);
-        String dateString = " " + calendarNow.get(Calendar.DAY_OF_MONTH) + " " + strMonth;
+        //String dateString = " " + calendarNow.get(Calendar.DAY_OF_MONTH) + " " + strMonth;
 
-        tvListVisitsTodayDate.setText(dateString);
+        //tvListVisitsTodayDate.setText(dateString);
 
         calendarNow.set(Calendar.HOUR, 23);
         calendarNow.set(Calendar.MINUTE, 59);
@@ -102,35 +104,54 @@ public class FragListVisitsToday extends ListFragment
         //for (int i = 0; i < visitItems.size(); i++)
         {
             String data_ora_sopralluogo = visitItem.getGeaSopralluogo().getData_ora_sopralluogo();
-            int id_tecnico = visitItem.getGeaSopralluogo().getId_tecnico();
-            boolean ownVisit = selectedTech.getId() == id_tecnico;
+            GeaSopralluogo geaSopralluogo = visitItem.getGeaSopralluogo();
+            int idSopralluogo = geaSopralluogo.getId_sopralluogo();
 
-            if (!timeNotSetItemsOnly && ownVisit)
+            realm.beginTransaction();
+            ReportStates reportStates = realm.where(ReportStates.class).equalTo("company_id", company_id).equalTo("tech_id", selectedTech.getId())
+                    .equalTo("id_sopralluogo", idSopralluogo).findFirst();
+            realm.commitTransaction();
+
+            boolean reportCompleteNotSent = false;
+
+            if (reportStates != null)
             {
-                try
+                reportCompleteNotSent = reportStates.getGeneralInfoCompletionState() == ReportStates.COORDS_SET
+                        && reportStates.getReportCompletionState() == ReportStates.REPORT_COMPLETED
+                        && reportStates.getPhotoAddedNumber() >= reportStates.PHOTOS_MIN_ADDED
+                        && reportStates.getData_ora_invio_rapporto() == null;
+
+
+/*                int id_tecnico = visitItem.getGeaSopralluogo().getId_tecnico();
+                boolean ownVisit = selectedTech.getId() == id_tecnico;*/
+
+                if (reportCompleteNotSent)
                 {
-                    Date date = sdf.parse(data_ora_sopralluogo);
-                    long time = date.getTime();
-                    //Log.d("DEBUG", String.valueOf(time));
-
-                    while(unsortedVisits.get(time) != null) // item with the same time already exists
+                    try
                     {
-                        time++;
-                    }
+                        Date date = sdf.parse(data_ora_sopralluogo);
+                        long time = date.getTime();
+                        //Log.d("DEBUG", String.valueOf(time));
 
-                    if(time <= lastMilliSecondsOfToday)
+                        while (unsortedVisits.get(time) != null) // item with the same time already exists
+                        {
+                            time++;
+                        }
+
+                        if (true)
+                        {
+                            unsortedVisits.put(time, visitItem);
+                        }
+
+                    } catch (ParseException e)
                     {
-                        unsortedVisits.put(time, visitItem);
-                    }
-
-                } catch (ParseException e)
-                {
 /*                    while(unsortedVisits.get(n) != null)
                     {
                         n++;
                     }
                     unsortedVisits.put(n++, visitItem);*/
-                    e.printStackTrace();
+                        e.printStackTrace();
+                    }
                 }
             }
         }
@@ -143,7 +164,7 @@ public class FragListVisitsToday extends ListFragment
             }
         }
 
-        myListAdapter = new MyListVisitsAdapter(getActivity(), R.layout.list_visits_fragment_row, visitItemsFiltered);
+        myListAdapter = new MyListVisitsAdapter(getActivity(), R.layout.in_work_list_visits_fragment_row, visitItemsFiltered);
         setListAdapter(myListAdapter);
 
         lv = getListView();

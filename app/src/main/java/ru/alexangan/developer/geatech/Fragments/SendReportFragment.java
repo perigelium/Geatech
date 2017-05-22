@@ -5,12 +5,14 @@ import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -71,6 +73,9 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
     int objectsSentSuccessfully;
     AlertDialog alert;
     int id_rapporto_sopralluogo;
+    private boolean reportComplete;
+    private ImageView ivCoordsSetCheckmark;
+    private ImageView ivReportFilledCheckmark, ivPhotosAddedCheckmark;
 
     public SendReportFragment()
     {
@@ -104,6 +109,8 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
         requestServerDialog.setMessage(getString(R.string.TransmittingDataPleaseWait));
         requestServerDialog.setIndeterminate(false);
         requestServerDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+
+        reportComplete = false;
     }
 
     @Override
@@ -113,6 +120,10 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
 
         btnSendReportNow = (Button) rootView.findViewById(R.id.btnSendReport);
         btnSendReportNow.setOnClickListener(this);
+
+        ivCoordsSetCheckmark = (ImageView) rootView.findViewById(R.id.ivCoordsSetCheckmark);
+        ivReportFilledCheckmark = (ImageView) rootView.findViewById(R.id.ivReportFilledCheckmark);
+        ivPhotosAddedCheckmark = (ImageView) rootView.findViewById(R.id.ivPhotosAddedCheckmark);
 
         VisitItem visitItem = visitItems.get(selectedIndex);
         GeaSopralluogo geaSopralluogo = visitItem.getGeaSopralluogo();
@@ -131,10 +142,26 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
 
         if (reportStates != null)
         {
-            if (visitItem.getGeaSopralluogo().getId_sopralluogo() == reportStates.getId_sopralluogo()
-                    && (reportStates.getGeneralInfoCompletionState() == ReportStates.COORDS_SET
-                    && reportStates.getReportCompletionState() == ReportStates.REPORT_COMPLETED)
-                    && reportStates.getPhotoAddedNumber() >= 3) //  && reportStates.getData_ora_invio_rapporto() == null
+            reportComplete = reportStates.getGeneralInfoCompletionState() == ReportStates.COORDS_SET
+                    && reportStates.getReportCompletionState() == ReportStates.REPORT_COMPLETED
+                    && reportStates.getPhotoAddedNumber() >= reportStates.PHOTOS_MIN_ADDED;
+
+            if(reportStates.getGeneralInfoCompletionState() == ReportStates.COORDS_SET)
+            {
+                ivCoordsSetCheckmark.setImageResource(R.drawable.green_filter_checkmark);
+            }
+
+            if(reportStates.getReportCompletionState() == ReportStates.REPORT_COMPLETED)
+            {
+                ivReportFilledCheckmark.setImageResource(R.drawable.green_filter_checkmark);
+            }
+
+            if(reportStates.getPhotoAddedNumber() >= reportStates.PHOTOS_MIN_ADDED)
+            {
+                ivPhotosAddedCheckmark.setImageResource(R.drawable.green_filter_checkmark);
+            }
+
+            if (visitItem.getGeaSopralluogo().getId_sopralluogo() == reportStates.getId_sopralluogo() && reportComplete) //  && reportStates.getData_ora_invio_rapporto() == null
             {
                 btnSendReportNow.setAlpha(1.0f);
                 btnSendReportNow.setEnabled(true);
@@ -170,6 +197,17 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
             tvTecnicalReportState.setText(strReportCompletionState);
         }
 
+        if(reportComplete)
+        {
+            btnSendReportNow.setBackgroundResource(R.drawable.button_green_oval);
+            btnSendReportNow.setTextColor(Color.parseColor("#ffffffff"));
+        }
+        else
+        {
+            btnSendReportNow.setBackgroundResource(R.drawable.button_grey_border);
+            btnSendReportNow.setTextColor(Color.parseColor("#ff666666"));
+        }
+
         return rootView;
     }
 
@@ -178,15 +216,22 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
     {
         if (view.getId() == R.id.btnSendReport)
         {
-            if (!NetworkUtils.isNetworkAvailable(activity))
+            if(reportComplete)
             {
-                showToastMessage(getString(R.string.CheckInternetConnection));
-                return;
-            }
-            disableInputAndShowProgressDialog();
+                if (!NetworkUtils.isNetworkAvailable(activity))
+                {
+                    showToastMessage(getString(R.string.CheckInternetConnection));
+                    return;
+                }
+                disableInputAndShowProgressDialog();
 
-            objectsSentSuccessfully = 0;
-            sendReportItem(selectedIndex);
+                objectsSentSuccessfully = 0;
+                sendReportItem(selectedIndex);
+            }
+            else
+            {
+                showToastMessage("Rapporto non ancora completato.");
+            }
         }
     }
 

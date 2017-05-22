@@ -1,8 +1,5 @@
 package ru.alexangan.developer.geatech.Interfaces;
 
-import android.view.View;
-import android.widget.Button;
-
 /**
  * Created by user on 11/16/2016.*/
 

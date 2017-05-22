@@ -9,7 +9,7 @@
             android:id="@+id/flSectionHeader"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#ff6633"
+            android:background="#ff29B352"
             android:clickable="true">
 
             <TextView

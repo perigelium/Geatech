@@ -59,10 +59,10 @@
                     android:layout_gravity="center_vertical|end"/>
 
                 <ImageView
+                    android:id="@+id/ivCoordsSetCheckmark"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:src="@drawable/green_filter_checkmark"/>
+                    android:layout_gravity="center"/>
 
             </FrameLayout>
 
@@ -119,10 +119,10 @@
                     android:layout_gravity="center_vertical|end"/>
 
                 <ImageView
+                    android:id="@+id/ivReportFilledCheckmark"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:src="@drawable/green_filter_checkmark"/>
+                    android:layout_gravity="center"/>
 
             </FrameLayout>
 
@@ -178,11 +178,10 @@
                     android:layout_gravity="center_vertical|end"/>
 
                 <ImageView
-                    android:id="@+id/calendario"
+                    android:id="@+id/ivPhotosAddedCheckmark"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:src="@drawable/green_filter_checkmark"/>
+                    android:layout_gravity="center"/>
 
             </FrameLayout>
 

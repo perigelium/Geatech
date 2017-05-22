@@ -143,13 +143,6 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
         dateSet = false;
         timeSet = false;
 
-        activity = getActivity();
-
-        if (getArguments() != null)
-        {
-            selectedIndex = getArguments().getInt("selectedIndex");
-        }
-
         altitude = ReportStates.ALTITUDE_UNKNOWN;
         longitude = 0;
         latitude = 0;
@@ -797,6 +790,39 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
         alert = builder.create();
 
         alert.show();
+    }
+
+    @Override
+    public void onDestroy()
+    {
+        super.onDestroy();
+
+        if (reportStates != null)
+        {
+            realm.beginTransaction();
+
+            if (latitude != 0)
+            {
+                reportStates.setLatitudine(Double.valueOf(etCoordNord.getText().toString()));
+            }
+            if (longitude != 0)
+            {
+                reportStates.setLongitudine(Double.valueOf(etCoordEst.getText().toString()));
+            }
+
+            if (altitude != ReportStates.ALTITUDE_UNKNOWN)
+            {
+                reportStates.setAltitude(Integer.valueOf(etAltitude.getText().toString()));
+                reportStates.setAltitudine(etAltitude.getText().toString());
+            }
+
+            if (reportStates != null && reportStates.getLatitudine() != 0 && reportStates.getLongitudine() != 0) // && altitude != -999
+            {
+                reportStates.setGeneralInfoCompletionState(ReportStates.COORDS_SET);
+            }
+
+            realm.commitTransaction();
+        }
     }
 
     @Override
