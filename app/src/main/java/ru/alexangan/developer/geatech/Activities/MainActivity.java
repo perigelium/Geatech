@@ -11,7 +11,9 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.Html;
+import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -69,7 +71,7 @@ import static ru.alexangan.developer.geatech.Models.GlobalConstants.GET_MODELS_U
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.GET_VISITS_URL_SUFFIX;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.LIST_VISITS_MODE_ALL;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.LIST_VISITS_MODE_FREE;
-import static ru.alexangan.developer.geatech.Models.GlobalConstants.LIST_VISITS_MODE_TODAY;
+import static ru.alexangan.developer.geatech.Models.GlobalConstants.LIST_VISITS_MODE_MY;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.company_id;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.inVisitItems;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.listVisitsIsObsolete;
@@ -78,6 +80,7 @@ import static ru.alexangan.developer.geatech.Models.GlobalConstants.realm;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.selectedTech;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.tokenStr;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.visitItems;
+import static ru.alexangan.developer.geatech.R.id.innerFragContainer;
 
 public class MainActivity extends Activity implements Communicator, Callback
 {
@@ -271,34 +274,43 @@ public class MainActivity extends Activity implements Communicator, Callback
             FragmentTransaction vFragmentTransaction = mFragmentManager.beginTransaction();
             vFragmentTransaction.replace(R.id.headerFragContainer, notificationBarFragment);
             vFragmentTransaction.commit();
+
+            mFragmentManager.executePendingTransactions();
         }
 
         if (btnId == R.id.btnVisits)
         {
             mFragmentManager.popBackStack();
 
-            FragmentTransaction mFragmentTransaction = mFragmentManager.beginTransaction();
+            notificationBarFragment.setView(R.string.ComingVisitsList, View.VISIBLE, View.VISIBLE);
+
+/*            FragmentTransaction mFragmentTransaction = mFragmentManager.beginTransaction();
             if(!fragListVisitsFree.isAdded())
             {
-                mFragmentTransaction.add(R.id.innerFragContainer, fragListVisitsFree);
-                mFragmentTransaction.addToBackStack(fragListVisitsFree.getTag());
+                mFragmentTransaction.add(innerFragContainer, fragListVisitsFree);
+                //mFragmentTransaction.addToBackStack(fragListVisitsFree.getTag());
             }
             if(!fragListVisitsToday.isAdded())
             {
-                mFragmentTransaction.add(R.id.innerFragContainer, fragListVisitsToday);
-                mFragmentTransaction.addToBackStack(fragListVisitsToday.getTag());
+                mFragmentTransaction.add(innerFragContainer, fragListVisitsToday);
+                //mFragmentTransaction.addToBackStack(fragListVisitsToday.getTag());
             }
             if(!fragListVisitsOther.isAdded())
             {
-                mFragmentTransaction.add(R.id.innerFragContainer, fragListVisitsOther);
-                mFragmentTransaction.addToBackStack(fragListVisitsOther.getTag());
+                mFragmentTransaction.add(innerFragContainer, fragListVisitsOther);
+                //mFragmentTransaction.addToBackStack(fragListVisitsOther.getTag());
             }
+            mFragmentTransaction.addToBackStack(fragListVisitsFree.getTag());
             mFragmentTransaction.commit();
 
-            mFragmentManager.executePendingTransactions();
+            mFragmentManager.executePendingTransactions();*/
 
             int mode = mSettings.getInt("listVisitsFilterMode", 0);
             showSelectedVisitsList(mode);
+        }
+        else
+        {
+            notificationBarFragment.setView(R.string.NullString, View.GONE, View.GONE);
         }
 
         if (btnId == R.id.btnInWorkVisits)
@@ -307,21 +319,22 @@ public class MainActivity extends Activity implements Communicator, Callback
 
             if(!fragListInWorkVisits.isAdded())
             {
-                mFragmentTransaction.add(R.id.innerFragContainer, fragListInWorkVisits);
+                mFragmentTransaction.add(innerFragContainer, fragListInWorkVisits);
                 mFragmentTransaction.addToBackStack(fragListInWorkVisits.getTag());
             }
             mFragmentTransaction.commit();
+
+            TextView tvWindowTitle = (TextView) findViewById(R.id.tvWindowTitle);
+            tvWindowTitle.setText("Compilazioni in corso");
         }
 
-/*        if (btnId == R.id.btnNotifUrgentReports)
+        if (btnId == R.id.btnNotifications)
         {
-            setVisitsListContent(comingListVisits);
-        }
+            //setVisitsListContent(fragNotifications);
 
-        if (btnId == R.id.btnNotSentReports)
-        {
-            setVisitsListContent(notSentListVisits);
-        }*/
+            TextView tvWindowTitle = (TextView) findViewById(R.id.tvWindowTitle);
+            tvWindowTitle.setText("Notifiche");
+        }
 
         if (btnId == R.id.btnCompletedReports)
         {
@@ -330,27 +343,33 @@ public class MainActivity extends Activity implements Communicator, Callback
             FragmentTransaction mFragmentTransaction = mFragmentManager.beginTransaction();
             if(!fragListReportsNotSent.isAdded())
             {
-                mFragmentTransaction.add(R.id.innerFragContainer, fragListReportsNotSent);
+                mFragmentTransaction.add(innerFragContainer, fragListReportsNotSent);
                 mFragmentTransaction.addToBackStack(fragListReportsNotSent.getTag());
             }
 
             if(!fragListReportsSent.isAdded())
             {
-                mFragmentTransaction.add(R.id.innerFragContainer, fragListReportsSent);
+                mFragmentTransaction.add(innerFragContainer, fragListReportsSent);
                 mFragmentTransaction.addToBackStack(fragListReportsSent.getTag());
             }
 
             mFragmentTransaction.commit();
 
-            mFragmentManager.executePendingTransactions();
+            //mFragmentManager.executePendingTransactions();
 
-            int mode = mSettings.getInt("listVisitsFilterMode", 0);
-            showSelectedVisitsList(mode);
+/*            int mode = mSettings.getInt("listVisitsFilterMode", 0);
+            showSelectedVisitsList(mode);*/
+
+            TextView tvWindowTitle = (TextView) findViewById(R.id.tvWindowTitle);
+            tvWindowTitle.setText("Compilazioni completati");
         }
 
         if (btnId == R.id.btnAppSettings)
         {
             setVisitsListContent(settingsFragment);
+
+            TextView tvWindowTitle = (TextView) findViewById(R.id.tvWindowTitle);
+            tvWindowTitle.setText("Impostazioni");
         }
     }
 
@@ -463,8 +482,9 @@ public class MainActivity extends Activity implements Communicator, Callback
     {
         if (!fragment.isAdded())
         {
+            mFragmentManager.popBackStack();
             FragmentTransaction vFragmentTransaction = mFragmentManager.beginTransaction();
-            vFragmentTransaction.add(R.id.innerFragContainer, fragment);
+            vFragmentTransaction.add(innerFragContainer, fragment);
             vFragmentTransaction.addToBackStack(fragment.getTag());
             vFragmentTransaction.commit();
         }
@@ -495,7 +515,6 @@ public class MainActivity extends Activity implements Communicator, Callback
                 //setVisitsListContent(setDateTimeFragment);
                 ctrlBtnsSopralluogo.setCheckedBtnId(R.id.btnSopralluogoInfo);
             }
-        //}
     }
 
     @Override
@@ -550,35 +569,73 @@ public class MainActivity extends Activity implements Communicator, Callback
     @Override
     public void onNotificationReportReturned(int mode)
     {
-        showSelectedVisitsList(mode);
+        if(!firstStart)
+        {
+            mFragmentManager.popBackStackImmediate();
+            showSelectedVisitsList(mode);
+        }
     }
 
     private void showSelectedVisitsList(int mode)
     {
-        //mFragmentManager.popBackStack();
         mSettings.edit().putInt("listVisitsFilterMode", mode).apply();
         FragmentTransaction mFragmentTransaction = mFragmentManager.beginTransaction();
 
         if(mode == LIST_VISITS_MODE_ALL)
         {
-            mFragmentTransaction.show(fragListVisitsFree);
+            mSettings.edit().putBoolean("ownVisitsOnly", false).apply();
+
+            if (!fragListVisitsFree.isAdded())
+            {
+                mFragmentTransaction.add(innerFragContainer, fragListVisitsFree);
+            }
+
+            if (!fragListVisitsToday.isAdded())
+            {
+                mFragmentTransaction.add(innerFragContainer, fragListVisitsToday);
+            }
+
+            if (!fragListVisitsOther.isAdded())
+            {
+                mFragmentTransaction.add(innerFragContainer, fragListVisitsOther);
+            }
+
+/*            mFragmentTransaction.show(fragListVisitsFree);
             mFragmentTransaction.show(fragListVisitsToday);
-            mFragmentTransaction.show(fragListVisitsOther);
+            mFragmentTransaction.show(fragListVisitsOther);*/
         }
 
-        if(mode == LIST_VISITS_MODE_TODAY)
+        if(mode == LIST_VISITS_MODE_MY)
         {
-            mFragmentTransaction.hide(fragListVisitsFree);
+            mSettings.edit().putBoolean("ownVisitsOnly", true).apply();
+
+            if (!fragListVisitsToday.isAdded())
+            {
+                mFragmentTransaction.add(innerFragContainer, fragListVisitsToday);
+            }
+
+            if (!fragListVisitsOther.isAdded())
+            {
+                mFragmentTransaction.add(innerFragContainer, fragListVisitsOther);
+            }
+
+/*            mFragmentTransaction.hide(fragListVisitsFree);
             mFragmentTransaction.show(fragListVisitsToday);
-            mFragmentTransaction.hide(fragListVisitsOther);
+            mFragmentTransaction.show(fragListVisitsOther);*/
         }
 
         if(mode == LIST_VISITS_MODE_FREE)
         {
+            if (!fragListVisitsFree.isAdded())
+            {
+                mFragmentTransaction.add(innerFragContainer, fragListVisitsFree);
+            }
+/*
             mFragmentTransaction.show(fragListVisitsFree);
             mFragmentTransaction.hide(fragListVisitsToday);
-            mFragmentTransaction.hide(fragListVisitsOther);
+            mFragmentTransaction.hide(fragListVisitsOther);*/
         }
+        mFragmentTransaction.addToBackStack(null);
         mFragmentTransaction.commit();
     }
 

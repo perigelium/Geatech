@@ -24,11 +24,11 @@
 
             <ImageView
                 android:id="@+id/ivArrowSectionHeader"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="26dp"
+                android:layout_height="26dp"
                 android:layout_gravity="center_vertical|end"
                 android:layout_marginRight="25dp"
-                android:src="@android:drawable/arrow_down_float"/>
+                android:src="@drawable/report_white_down"/>
 
         </FrameLayout>
 

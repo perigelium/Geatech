@@ -194,7 +194,7 @@ public class ViewUtils
             {
                 llSectionFourChkboxes.setVisibility(llSectionFourChkboxes.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
                 ivArrowFourChkboxes.setImageResource(llSectionFourChkboxes.getVisibility() == View.VISIBLE
-                        ? android.R.drawable.arrow_up_float : android.R.drawable.arrow_down_float);
+                        ? R.drawable.report_green_up : R.drawable.report_green_down);
             }
         });
 
@@ -300,7 +300,7 @@ public class ViewUtils
             {
                 llSectionFiveChkboxes.setVisibility(llSectionFiveChkboxes.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
                 ivArrowFiveChkboxes.setImageResource(llSectionFiveChkboxes.getVisibility() == View.VISIBLE
-                        ? android.R.drawable.arrow_up_float : android.R.drawable.arrow_down_float);
+                        ? R.drawable.report_green_up : R.drawable.report_green_down);
             }
         });
 
@@ -438,7 +438,7 @@ public class ViewUtils
             {
                 llSectionThreeChkboxesAndEdit.setVisibility(llSectionThreeChkboxesAndEdit.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
                 ivArrowThreeChkboxesAndEdit.setImageResource(llSectionThreeChkboxesAndEdit.getVisibility() == View.VISIBLE
-                        ? android.R.drawable.arrow_up_float : android.R.drawable.arrow_down_float);
+                        ? R.drawable.report_green_up : R.drawable.report_green_down);
             }
         });
 
@@ -549,7 +549,7 @@ public class ViewUtils
             {
                 llSectionChkboxAndEdit.setVisibility(llSectionChkboxAndEdit.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
                 ivArrowChkboxAndEdit.setImageResource(llSectionChkboxAndEdit.getVisibility() == View.VISIBLE
-                        ? android.R.drawable.arrow_up_float : android.R.drawable.arrow_down_float);
+                        ? R.drawable.report_green_up : R.drawable.report_green_down);
             }
         });
 
@@ -626,7 +626,7 @@ public class ViewUtils
             {
                 llSectionSwitchAndEdit.setVisibility(llSectionSwitchAndEdit.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
                 ivArrowSwitchAndEdit.setImageResource(llSectionSwitchAndEdit.getVisibility() == View.VISIBLE
-                        ? android.R.drawable.arrow_up_float : android.R.drawable.arrow_down_float);
+                        ? R.drawable.report_green_up : R.drawable.report_green_down);
             }
         });
 
@@ -692,7 +692,7 @@ public class ViewUtils
             {
                 llSectionTwoSwitches.setVisibility(llSectionTwoSwitches.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
                 ivArrowTwoSwitches.setImageResource(llSectionTwoSwitches.getVisibility() == View.VISIBLE
-                        ? android.R.drawable.arrow_up_float : android.R.drawable.arrow_down_float);
+                        ? R.drawable.report_green_up : R.drawable.report_green_down);
             }
         });
 
@@ -749,7 +749,7 @@ public class ViewUtils
             {
                 llSectionTwoSwitchesAndEdit.setVisibility(llSectionTwoSwitchesAndEdit.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
                 ivArrowTwoSwitchesAndEdit.setImageResource(llSectionTwoSwitchesAndEdit.getVisibility() == View.VISIBLE
-                        ? android.R.drawable.arrow_up_float : android.R.drawable.arrow_down_float);
+                        ? R.drawable.report_green_up : R.drawable.report_green_down);
             }
         });
 
@@ -838,7 +838,7 @@ public class ViewUtils
             {
                 llSectionSwitch.setVisibility(llSectionSwitch.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
                 ivArrowSwitch.setImageResource(llSectionSwitch.getVisibility() == View.VISIBLE
-                        ? android.R.drawable.arrow_up_float : android.R.drawable.arrow_down_float);
+                        ? R.drawable.report_green_up : R.drawable.report_green_down);
             }
         });
 
@@ -877,7 +877,7 @@ public class ViewUtils
             {
                 llSectionFiveSwitches.setVisibility(llSectionFiveSwitches.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
                 ivArrowFiveSwitches.setImageResource(llSectionFiveSwitches.getVisibility() == View.VISIBLE
-                        ? android.R.drawable.arrow_up_float : android.R.drawable.arrow_down_float);
+                        ? R.drawable.report_green_up : R.drawable.report_green_down);
             }
         });
 
@@ -949,7 +949,7 @@ public class ViewUtils
             {
                 llSectionFiveRadios.setVisibility(llSectionFiveRadios.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
                 ivArrowFiveRadios.setImageResource(llSectionFiveRadios.getVisibility() == View.VISIBLE
-                        ? android.R.drawable.arrow_up_float : android.R.drawable.arrow_down_float);
+                        ? R.drawable.report_green_up : R.drawable.report_green_down);
             }
         });
 
@@ -999,7 +999,7 @@ public class ViewUtils
             {
                 llSectionFourRadios.setVisibility(llSectionFourRadios.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
                 ivArrowFourRadios.setImageResource(llSectionFourRadios.getVisibility() == View.VISIBLE
-                        ? android.R.drawable.arrow_up_float : android.R.drawable.arrow_down_float);
+                        ? R.drawable.report_green_up : R.drawable.report_green_down);
             }
         });
 
@@ -1048,7 +1048,7 @@ public class ViewUtils
             {
                 llSectionFourRadiosAndEdit.setVisibility(llSectionFourRadiosAndEdit.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
                 ivArrowFourRadiosAndEdit.setImageResource(llSectionFourRadiosAndEdit.getVisibility() == View.VISIBLE
-                        ? android.R.drawable.arrow_up_float : android.R.drawable.arrow_down_float);
+                        ? R.drawable.report_green_up : R.drawable.report_green_down);
             }
         });
 
@@ -1141,7 +1141,7 @@ public class ViewUtils
             {
                 llSectionThreeRadiosAndEdit.setVisibility(llSectionThreeRadiosAndEdit.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
                 ivArrowThreeRadiosAndEdit.setImageResource(llSectionThreeRadiosAndEdit.getVisibility() == View.VISIBLE
-                        ? android.R.drawable.arrow_up_float : android.R.drawable.arrow_down_float);
+                        ? R.drawable.report_green_up : R.drawable.report_green_down);
             }
         });
 
@@ -1233,7 +1233,7 @@ public class ViewUtils
             {
                 llSectionThreeRadiosAndEdit.setVisibility(llSectionThreeRadiosAndEdit.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
                 ivArrowThreeRadiosAndEdit.setImageResource(llSectionThreeRadiosAndEdit.getVisibility() == View.VISIBLE
-                        ? android.R.drawable.arrow_up_float : android.R.drawable.arrow_down_float);
+                        ? R.drawable.report_green_up : R.drawable.report_green_down);
             }
         });
 
@@ -1313,7 +1313,7 @@ public class ViewUtils
             {
                 llSectionThreeRadiosAndEdit.setVisibility(llSectionThreeRadiosAndEdit.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
                 ivArrowThreeRadiosAndEdit.setImageResource(llSectionThreeRadiosAndEdit.getVisibility() == View.VISIBLE
-                        ? android.R.drawable.arrow_up_float : android.R.drawable.arrow_down_float);
+                        ? R.drawable.report_green_up : R.drawable.report_green_down);
             }
         });
 
@@ -1387,7 +1387,7 @@ public class ViewUtils
             {
                 llSectionTwoRadiosAndSwitch.setVisibility(llSectionTwoRadiosAndSwitch.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
                 ivArrowTwoRadiosAndSwitch.setImageResource(llSectionTwoRadiosAndSwitch.getVisibility() == View.VISIBLE
-                        ? android.R.drawable.arrow_up_float : android.R.drawable.arrow_down_float);
+                        ? R.drawable.report_green_up : R.drawable.report_green_down);
             }
         });
 
@@ -1446,7 +1446,7 @@ public class ViewUtils
             {
                 llSectionTwoRadiosAndEdit.setVisibility(llSectionTwoRadiosAndEdit.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
                 ivArrowTwoRadiosAndEdit.setImageResource(llSectionTwoRadiosAndEdit.getVisibility() == View.VISIBLE
-                        ? android.R.drawable.arrow_up_float : android.R.drawable.arrow_down_float);
+                        ? R.drawable.report_green_up : R.drawable.report_green_down);
             }
         });
 
@@ -1519,7 +1519,7 @@ public class ViewUtils
             {
                 llSectionThreeRadios.setVisibility(llSectionThreeRadios.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
                 ivArrowThreeRadios.setImageResource(llSectionThreeRadios.getVisibility() == View.VISIBLE
-                        ? android.R.drawable.arrow_up_float : android.R.drawable.arrow_down_float);
+                        ? R.drawable.report_green_up : R.drawable.report_green_down);
             }
         });
 
@@ -1568,7 +1568,7 @@ public class ViewUtils
             {
                 llSectionTwoRadios.setVisibility(llSectionTwoRadios.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
                 ivArrowTwoRadios.setImageResource(llSectionTwoRadios.getVisibility() == View.VISIBLE
-                        ? android.R.drawable.arrow_up_float : android.R.drawable.arrow_down_float);
+                        ? R.drawable.report_green_up : R.drawable.report_green_down);
             }
         });
 
@@ -1618,7 +1618,7 @@ public class ViewUtils
             {
                 llSectionFourRadiosAndTwoEdits.setVisibility(llSectionFourRadiosAndTwoEdits.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
                 ivArrowFourRadiosAndTwoEdits.setImageResource(llSectionFourRadiosAndTwoEdits.getVisibility() == View.VISIBLE
-                        ? android.R.drawable.arrow_up_float : android.R.drawable.arrow_down_float);
+                        ? R.drawable.report_green_up : R.drawable.report_green_down);
             }
         });
 
@@ -1705,7 +1705,7 @@ public class ViewUtils
             {
                 llSectionFourRadiosAndEdit.setVisibility(llSectionFourRadiosAndEdit.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
                 ivArrowFourRadiosAndEdit.setImageResource(llSectionFourRadiosAndEdit.getVisibility() == View.VISIBLE
-                        ? android.R.drawable.arrow_up_float : android.R.drawable.arrow_down_float);
+                        ? R.drawable.report_green_up : R.drawable.report_green_down);
             }
         });
 
@@ -1784,7 +1784,7 @@ public class ViewUtils
             {
                 llSectionTwoEdits.setVisibility(llSectionTwoEdits.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
                 ivArrowTwoEdits.setImageResource(llSectionTwoEdits.getVisibility() == View.VISIBLE
-                        ? android.R.drawable.arrow_up_float : android.R.drawable.arrow_down_float);
+                        ? R.drawable.report_green_up : R.drawable.report_green_down);
             }
         });
 
@@ -1838,7 +1838,7 @@ public class ViewUtils
             {
                 llSectionThreeEdits.setVisibility(llSectionThreeEdits.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
                 ivArrowThreeEdits.setImageResource(llSectionThreeEdits.getVisibility() == View.VISIBLE
-                        ? android.R.drawable.arrow_up_float : android.R.drawable.arrow_down_float);
+                        ? R.drawable.report_green_up : R.drawable.report_green_down);
             }
         });
 
@@ -1897,7 +1897,7 @@ public class ViewUtils
             {
                 llSectionEdit.setVisibility(llSectionEdit.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
                 ivArrowEdit.setImageResource(llSectionEdit.getVisibility() == View.VISIBLE
-                        ? android.R.drawable.arrow_up_float : android.R.drawable.arrow_down_float);
+                        ? R.drawable.report_green_up : R.drawable.report_green_down);
             }
         });
 
@@ -1943,7 +1943,7 @@ public class ViewUtils
                 }
 
                 ivArrowSectionHeader.setImageResource(allSectionsCollapsed[curHeader]
-                        ? android.R.drawable.arrow_up_float : android.R.drawable.arrow_down_float);
+                        ? R.drawable.report_white_up : R.drawable.report_white_down);
 
                 for (int i = 0; i < itemModelli.size(); i++)
                 {
@@ -1953,7 +1953,7 @@ public class ViewUtils
                     if(ivSection!=null)
                     {
                         ivSection.setImageResource(allSectionsCollapsed[curHeader]
-                                ? android.R.drawable.arrow_up_float : android.R.drawable.arrow_down_float);
+                                ? R.drawable.report_green_up : R.drawable.report_green_down);
                     }
                 }
 

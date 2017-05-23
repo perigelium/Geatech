@@ -38,6 +38,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.ConcurrentModificationException;
 import java.util.Date;
 
 import io.realm.RealmResults;
@@ -78,6 +79,7 @@ public class PhotoGalleryGridFragment extends Fragment
     String fullSizeImgPath;
     private FloatingActionButton fabAddPhoto;
     AlertDialog alert;
+    private ImageView ivTrashCan;
 
 /*    private Handler handler;
     private Runnable runnable;*/
@@ -146,96 +148,127 @@ public class PhotoGalleryGridFragment extends Fragment
         final View rootView = inflater.inflate(R.layout.photo_gallery_grid, container, false);
 
         gvPhotoGallery = (GridView) rootView.findViewById(R.id.gvPhotoGallery);
-        ivFullSize = (ImageView) rootView.findViewById(R.id.imageViewFullSize);
+        ivFullSize = (ImageView) rootView.findViewById(R.id.ivFullSize);
+        ivTrashCan = (ImageView) rootView.findViewById(R.id.ivTrashCan);
+
+        ivTrashCan.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                if (alPathItems.get(currentPicPos).delete())
+                {
+                    alImgThumbs.remove(currentPicPos);
+                    alPathItems.remove(currentPicPos);
+                } else
+                {
+                    alImgThumbs.clear();
+                    alPathItems.clear();
+
+                    RedrawTheGalleryTask redrawTheGalleryTask = new RedrawTheGalleryTask();
+                    redrawTheGalleryTask.execute();
+                }
+
+                alImgThumbs.removeAll(Collections.singleton(null)); // remove all null items
+                alPathItems.removeAll(Collections.singleton(null)); // remove all null items
+
+                gvPhotoGallery.setAdapter(gridAdapter);
+
+                ivFullSize.setVisibility(View.GONE);
+                ivTrashCan.setVisibility(View.GONE);
+                gvPhotoGallery.setVisibility(View.VISIBLE);
+                fabAddPhoto.setVisibility(View.VISIBLE);
+            }
+        });
+
         fabAddPhoto = (FloatingActionButton) rootView.findViewById(R.id.fabAddPhoto);
+
+        String[] listItemsArray = {"Scatta foto", "Scegli esistente", "Cancel"};
+
+        View layout = inflater.inflate(R.layout.alert_dialog_custom, null);
+
+        ListView listView = (ListView) layout.findViewById(R.id.alertList);
+        ArrayAdapter<String> listAdapter = new ArrayAdapter<>(activity, R.layout.alert_dialog_item_custom, listItemsArray);
+        listView.setAdapter(listAdapter);
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+        builder.setView(layout);
+        alert = builder.create();
+        WindowManager.LayoutParams wmlp = alert.getWindow().getAttributes();
+        wmlp.gravity = Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL;
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener()
+        {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int which, long id)
+            {
+                if (which == 2)
+                {
+                    alert.dismiss();
+                }
+
+                if (which == 1)
+                {
+                    if (checkSelfPermission(activity, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)
+                    {
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+                        {
+
+                            String[] permissions = new String[]
+                                    {
+                                            Manifest.permission.READ_EXTERNAL_STORAGE,
+                                    };
+
+                            requestMultiplePermissions(permissions);
+                        }
+                    } else
+                    {
+                        Intent pickIntent = new Intent();
+                        pickIntent.setType("image/*");
+                        pickIntent.setAction(Intent.ACTION_PICK);
+
+                        startActivityForResult(pickIntent, PICK_GALLERY_IMAGE);
+                    }
+                    alert.dismiss();
+                }
+                if (which == 0)
+                {
+                    if (checkSelfPermission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
+                            || checkSelfPermission(activity, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED)
+                    {
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+                        {
+                            String[] permissions = new String[]
+                                    {
+                                            Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE
+                                    };
+
+                            requestMultiplePermissions(permissions);
+                        }
+                    } else
+                    {
+                        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd_HH_mm_ss");
+                        String fileName = dateFormat.format(new Date()) + ".jpg";
+                        File file = new File(activity.getExternalFilesDir(DIRECTORY_PICTURES).getAbsolutePath(), fileName);
+
+                        fullSizeImgPath = file.getAbsolutePath();
+                        Uri uriFullSizeCameraImage = Uri.fromFile(file);
+
+                        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                        intent.putExtra(MediaStore.EXTRA_OUTPUT, uriFullSizeCameraImage);
+                        startActivityForResult(intent, PICK_CAMERA_IMAGE);
+                    }
+                    alert.dismiss();
+                }
+
+            }
+        });
 
         fabAddPhoto.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View view)
             {
-                String[] listItemsArray = {"Scatta foto", "Scegli esistente", "Cancel"};
-
-                LayoutInflater inflater = activity.getLayoutInflater();
-                View layout = inflater.inflate(R.layout.alert_dialog_custom, null);
-
-                ListView listView = (ListView) layout.findViewById(R.id.alertList);
-                ArrayAdapter<String> listAdapter = new ArrayAdapter<>(activity, R.layout.alert_dialog_item_custom, listItemsArray);
-                listView.setAdapter(listAdapter);
-
-                AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-                builder.setView(layout);
-                alert = builder.create();
-                WindowManager.LayoutParams wmlp = alert.getWindow().getAttributes();
-                wmlp.gravity = Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL;
-
-                listView.setOnItemClickListener(new AdapterView.OnItemClickListener()
-                {
-                    @Override
-                    public void onItemClick(AdapterView<?> parent, View view, int which, long id)
-                    {
-                        if (which == 2)
-                        {
-                            alert.dismiss();
-                        }
-
-                        if (which == 1)
-                        {
-                            if (checkSelfPermission(activity, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)
-                            {
-                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
-                                {
-
-                                    String[] permissions = new String[]
-                                            {
-                                                    Manifest.permission.READ_EXTERNAL_STORAGE,
-                                            };
-
-                                    requestMultiplePermissions(permissions);
-                                }
-                            } else
-                            {
-                                Intent pickIntent = new Intent();
-                                pickIntent.setType("image/*");
-                                pickIntent.setAction(Intent.ACTION_PICK);
-
-                                startActivityForResult(pickIntent, PICK_GALLERY_IMAGE);
-                            }
-                            alert.dismiss();
-                        }
-                        if (which == 0)
-                        {
-                            if (checkSelfPermission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
-                                    || checkSelfPermission(activity, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED)
-                            {
-                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
-                                {
-                                    String[] permissions = new String[]
-                                            {
-                                                    Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE
-                                            };
-
-                                    requestMultiplePermissions(permissions);
-                                }
-                            } else
-                            {
-                                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd_HH_mm_ss");
-                                String fileName = dateFormat.format(new Date()) + ".jpg";
-                                File file = new File(activity.getExternalFilesDir(DIRECTORY_PICTURES).getAbsolutePath(), fileName);
-
-                                fullSizeImgPath = file.getAbsolutePath();
-                                Uri uriFullSizeCameraImage = Uri.fromFile(file);
-
-                                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                                intent.putExtra(MediaStore.EXTRA_OUTPUT, uriFullSizeCameraImage);
-                                startActivityForResult(intent, PICK_CAMERA_IMAGE);
-                            }
-                            alert.dismiss();
-                        }
-
-                    }
-                });
-
                 alert.show();
             }
         });
@@ -247,6 +280,7 @@ public class PhotoGalleryGridFragment extends Fragment
             public void onClick(View view)
             {
                 ivFullSize.setVisibility(View.GONE);
+                ivTrashCan.setVisibility(View.GONE);
                 gvPhotoGallery.setVisibility(View.VISIBLE);
                 fabAddPhoto.setVisibility(View.VISIBLE);
             }
@@ -420,17 +454,24 @@ public class PhotoGalleryGridFragment extends Fragment
 
         int reportImagesSize = reportImages.size();
 
-        for (File imageFile : alPathItems)
+        try
         {
-            String fileName = imageFile.getName();
+            for (File imageFile : alPathItems)
+            {
+                String fileName = imageFile.getName();
 
-            realm.beginTransaction();
+                realm.beginTransaction();
 
-            GeaImagineRapporto gea_immagine = new GeaImagineRapporto(
-                    company_id, selectedTech.getId(), id_rapporto_sopralluogo, reportImagesSize++, imageFile.getAbsolutePath(), fileName);
-            realm.copyToRealm(gea_immagine);
+                GeaImagineRapporto gea_immagine = new GeaImagineRapporto(
+                        company_id, selectedTech.getId(), id_rapporto_sopralluogo, reportImagesSize++, imageFile.getAbsolutePath(), fileName);
+                realm.copyToRealm(gea_immagine);
 
-            realm.commitTransaction();
+                realm.commitTransaction();
+            }
+        }
+        catch (ConcurrentModificationException e)
+        {
+            showToastMessage("Salvare immagini non riuscito, provare anche una volta");
         }
     }
 
@@ -683,6 +724,7 @@ public class PhotoGalleryGridFragment extends Fragment
                 ivFullSize.setImageBitmap(bmpFullSize);
             }
             ivFullSize.setVisibility(View.VISIBLE);
+            ivTrashCan.setVisibility(View.VISIBLE);
             gvPhotoGallery.setVisibility(View.GONE);
             fabAddPhoto.setVisibility(View.GONE);
         }

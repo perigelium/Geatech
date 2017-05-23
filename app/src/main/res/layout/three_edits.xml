@@ -34,7 +34,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical|end"
                 android:layout_marginRight="16dp"
-                android:src="@android:drawable/arrow_down_float"/>
+                android:src="@drawable/report_green_down"/>
 
         </FrameLayout>
 

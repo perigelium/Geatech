@@ -57,7 +57,7 @@
         android:layout_weight="1">
 
         <Button
-            android:id="@+id/btnNotifUrgentReports"
+            android:id="@+id/btnNotifications"
             android:layout_width="55dp"
             android:layout_height="55dp"
             android:layout_gravity="center"

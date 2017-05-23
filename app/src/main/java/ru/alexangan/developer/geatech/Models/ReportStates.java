@@ -98,12 +98,12 @@ public class ReportStates extends RealmObject
         altitude = ALTITUDE_UNKNOWN;
     }
 
-    public RealmString getReportCompletionStateString(int reportCompletionState)
+    public RealmString getReportCompletionStateString()
     {
         return reportCompletionStatuses.get(reportCompletionState);
     }
 
-    public RealmString getGeneralInfoCompletionStateString(int generalInfoCompletionState)
+    public RealmString getGeneralInfoCompletionStateString()
     {
         return generalInfoCompletionStatuses.get(generalInfoCompletionState);
     }

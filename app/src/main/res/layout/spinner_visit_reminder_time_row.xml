@@ -8,7 +8,8 @@
         android:id="@+id/tvSpinnerVisitItem"
         android:layout_width="match_parent"
         android:layout_height="49dp"
-        android:layout_marginLeft="30dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
         android:textSize="16sp"
         android:gravity="left|center_vertical"
         android:textColor="#ff000000"/>
@@ -17,6 +18,6 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_gravity="bottom"
-        android:background="#c0c0c0"/>
+        android:background="@android:color/transparent"/>
 
 </LinearLayout>

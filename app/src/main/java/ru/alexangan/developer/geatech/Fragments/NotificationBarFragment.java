@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.Spinner;
@@ -35,6 +36,9 @@ public class NotificationBarFragment extends Fragment implements View.OnClickLis
     private Activity activity;
     AlertDialog alert;
     Spinner spVisitsFilter;
+    private TextView tvWindowTitle;
+    private ImageView ivLogoSmall;
+    private ImageView ivVisitsListsFilter;
 
 
     @Override
@@ -67,11 +71,12 @@ public class NotificationBarFragment extends Fragment implements View.OnClickLis
         Button btnAppSettings = (Button) rootView.findViewById(R.id.btnAppSettings);
         btnAppSettings.setOnClickListener(this);*/
 
-        TextView tvListName = (TextView) rootView.findViewById(R.id.tvListName);
-        tvListName.setText("Elenco dei prossimi sopralluoghi");
+        tvWindowTitle = (TextView) rootView.findViewById(R.id.tvWindowTitle);
+        ivLogoSmall = (ImageView) rootView.findViewById(R.id.ivLogoSmall);
+        ivVisitsListsFilter = (ImageView) rootView.findViewById(R.id.ivVisitsListsFilter);
 
-        TextView tvListFilterName = (TextView) rootView.findViewById(R.id.tvListFilterName);
-        tvListFilterName.setText("Tutti i sopralluoghi");
+/*        TextView tvListFilterName = (TextView) rootView.findViewById(R.id.tvListFilterName);
+        tvListFilterName.setText("Tutti i sopralluoghi");*/
 
         //Button btnListFilters = (Button) rootView.findViewById(R.id.btnVisitsListFilter);
         //btnListFilters.setOnClickListener(this);
@@ -103,8 +108,8 @@ public class NotificationBarFragment extends Fragment implements View.OnClickLis
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l)
             {
-                mCommunicator.onNotificationReportReturned(i);
                 mSettings.edit().putInt("listVisitsFilterMode", i).apply();
+                mCommunicator.onNotificationReportReturned(i);
             }
 
             @Override
@@ -197,5 +202,12 @@ public class NotificationBarFragment extends Fragment implements View.OnClickLis
         builder.setView(layout);
         alert = builder.create();
         alert.show();
+    }
+
+    public void setView(int tvWindowTitleString, int ivLogoSmallVisibility, int ivVisitsListsFilterVisibility)
+    {
+        tvWindowTitle.setText(tvWindowTitleString);
+        ivLogoSmall.setVisibility(ivLogoSmallVisibility);
+        ivVisitsListsFilter.setVisibility(ivVisitsListsFilterVisibility);
     }
 }

@@ -28,6 +28,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.TimePicker;
@@ -112,6 +113,7 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
     private Button btnOpenMap, btnOpenDialer;
     private Button btnGetCurrentCoords;
     private TextView tvSetDateTime;
+    private FrameLayout flSetDateTimeSubmit;
 
 
     public SetDateTimeFragment()
@@ -220,6 +222,7 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
         tvSetDateTime.setPaintFlags(tvSetDateTime.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
 
         btnSetDateTimeSubmit = (TextView) rootView.findViewById(R.id.btnSetDateTimeSubmit);
+        flSetDateTimeSubmit = (FrameLayout) rootView.findViewById(R.id.flSetDateTimeSubmit);
         btnOpenMap = (Button) rootView.findViewById(R.id.btnOpenMap);
         btnOpenDialer = (Button) rootView.findViewById(R.id.btnOpenDialer);
         tvdataOraSopralluogo = (TextView) rootView.findViewById(R.id.tvdataOraSopralluogo);
@@ -309,7 +312,7 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
                 tvdataOraSopralluogo.setText(dataOraSopralluogo);
                 tvTechnicianName.setVisibility(View.VISIBLE);
                 tvSetDateTime.setVisibility(View.GONE);
-                btnSetDateTimeSubmit.setVisibility(View.GONE);
+                flSetDateTimeSubmit.setVisibility(View.GONE);
 
             } catch (ParseException e)
             {
@@ -658,6 +661,11 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
                                                     reportStates.setClientAddress(visitItem.getClientData().getAddress());
                                                     reportStates.setProductType(product_type);
                                                     realm.commitTransaction();
+
+                                                    tvdataOraSopralluogo.setText(strDateTimeSet);
+                                                    tvTechnicianName.setVisibility(View.VISIBLE);
+                                                    tvSetDateTime.setVisibility(View.GONE);
+                                                    flSetDateTimeSubmit.setVisibility(View.GONE);
                                                 }
 
                                                 showToastMessage(getString(R.string.DateTimeSetSuccessfully));//, server ritorna: " + strVisitDateTimeResponse

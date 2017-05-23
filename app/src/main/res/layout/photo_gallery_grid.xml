@@ -21,11 +21,21 @@
         android:verticalSpacing="5dp"/>
 
     <ImageView
-        android:id="@+id/imageViewFullSize"
+        android:id="@+id/ivFullSize"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center"
         android:background="#ff000000"
+        android:scaleType="centerInside"
+        android:visibility="gone"/>
+
+    <ImageView
+        android:id="@+id/ivTrashCan"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="25dp"
+        android:src="@drawable/photo_delete"
         android:scaleType="centerInside"
         android:visibility="gone"/>
 

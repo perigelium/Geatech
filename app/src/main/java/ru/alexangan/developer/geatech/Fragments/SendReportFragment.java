@@ -161,7 +161,7 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
                 ivPhotosAddedCheckmark.setImageResource(R.drawable.green_filter_checkmark);
             }
 
-            if (visitItem.getGeaSopralluogo().getId_sopralluogo() == reportStates.getId_sopralluogo() && reportComplete) //  && reportStates.getData_ora_invio_rapporto() == null
+/*            if (visitItem.getGeaSopralluogo().getId_sopralluogo() == reportStates.getId_sopralluogo() && reportComplete) //  && reportStates.getData_ora_invio_rapporto() == null
             {
                 btnSendReportNow.setAlpha(1.0f);
                 btnSendReportNow.setEnabled(true);
@@ -169,12 +169,10 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
             {
                 btnSendReportNow.setAlpha(.4f);
                 btnSendReportNow.setEnabled(false);
-            }
+            }*/
 
-            int reportCompletionState = reportStates.getReportCompletionState();
-
-            String generalInfoCompletionState = reportStates.getGeneralInfoCompletionStateString(reportStates.getGeneralInfoCompletionState()).Value();
-            String strReportCompletionState = reportStates.getReportCompletionStateString(reportCompletionState).Value();
+            String generalInfoCompletionState = reportStates.getGeneralInfoCompletionStateString().Value();
+            String strReportCompletionState = reportStates.getReportCompletionStateString().Value();
 
             int photoAddedNumber = reportStates.getPhotoAddedNumber();
             String photoAddedNumberStr;

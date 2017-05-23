@@ -63,9 +63,19 @@ public class SettingsFragment extends Fragment implements View.OnClickListener
         flTermsOfUse.setOnClickListener(this);
         flLogout.setOnClickListener(this);
 
-        Spinner spVisitRemindTime = (Spinner) rootView.findViewById(R.id.spVisitRemindTime);
+        final Spinner spVisitRemindTime = (Spinner) rootView.findViewById(R.id.spVisitRemindTime);
+        FrameLayout flVisitRemindTime = (FrameLayout) rootView.findViewById(R.id.flVisitRemindTime);
 
-        String [] remindTimePoints = {"1 hour", "2 hours", "4 hours", "1 day before", "2 days before", "a week before"};
+        flVisitRemindTime.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                spVisitRemindTime.performClick();
+            }
+        });
+
+        String [] remindTimePoints = {"1 ora", "2 ore", "4 ore", "1 giorno", "2 giorni", "una settimana"};
         List<String> saRemindTimePoints = Arrays.asList(remindTimePoints);
 
         ArrayAdapter<String> visitRemindTimeListAdapter =

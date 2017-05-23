@@ -27,7 +27,8 @@
                 android:layout_height="9dp"
                 android:layout_gravity="center"
                 android:layout_marginLeft="15dp"
-                android:layout_marginRight="15dp"/>
+                android:layout_marginRight="15dp"
+                android:src="@drawable/dot_green"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -181,7 +182,7 @@
                 </LinearLayout>
 
                 <TextView
-                    android:id="@+id/tvGeneralInfo"
+                    android:id="@+id/tvDateTimeHasSet"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical|end"
@@ -237,7 +238,7 @@
                 </LinearLayout>
 
                 <TextView
-                    android:id="@+id/tvPhotosPresent"
+                    android:id="@+id/tvPhotosQuant"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical|end"

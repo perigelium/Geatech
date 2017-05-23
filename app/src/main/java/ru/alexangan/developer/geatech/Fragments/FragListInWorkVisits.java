@@ -19,6 +19,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.TreeMap;
 
+import ru.alexangan.developer.geatech.Adapters.InWorkListVisitsAdapter;
 import ru.alexangan.developer.geatech.Adapters.MyListVisitsAdapter;
 import ru.alexangan.developer.geatech.Interfaces.Communicator;
 import ru.alexangan.developer.geatech.Models.GeaSopralluogo;
@@ -40,7 +41,6 @@ public class FragListInWorkVisits extends ListFragment
     SwipeDetector swipeDetector;
     boolean timeNotSetItemsOnly;
     ArrayList<VisitItem> visitItemsFiltered;
-    MyListVisitsAdapter myListAdapter;
     ListView lv;
     Activity activity;
     TextView tvListVisitsTodayDate;
@@ -84,6 +84,8 @@ public class FragListInWorkVisits extends ListFragment
     {
         super.onViewCreated(view, savedInstanceState);
 
+
+
         visitItemsFiltered = new ArrayList<>();
 
         TreeMap<Long, VisitItem> unsortedVisits = new TreeMap<>();
@@ -103,7 +105,7 @@ public class FragListInWorkVisits extends ListFragment
         for (VisitItem visitItem : visitItems)
         //for (int i = 0; i < visitItems.size(); i++)
         {
-            String data_ora_sopralluogo = visitItem.getGeaSopralluogo().getData_ora_sopralluogo();
+            //String data_ora_sopralluogo = visitItem.getGeaSopralluogo().getData_ora_sopralluogo();
             GeaSopralluogo geaSopralluogo = visitItem.getGeaSopralluogo();
             int idSopralluogo = geaSopralluogo.getId_sopralluogo();
 
@@ -116,11 +118,12 @@ public class FragListInWorkVisits extends ListFragment
 
             if (reportStates != null)
             {
-                reportStartedNotCompleted = reportStates.getGeneralInfoCompletionState() == ReportStates.COORDS_SET
+                String data_ora_sopralluogo = reportStates.getData_ora_sopralluogo();
+/*                reportStartedNotCompleted = reportStates.getGeneralInfoCompletionState() == ReportStates.COORDS_SET
                         && (reportStates.getReportCompletionState() < ReportStates.REPORT_COMPLETED
-                        || reportStates.getPhotoAddedNumber() < reportStates.PHOTOS_MIN_ADDED);
+                        || reportStates.getPhotoAddedNumber() < reportStates.PHOTOS_MIN_ADDED);*/
 
-                if (reportStartedNotCompleted)
+                if (data_ora_sopralluogo!=null)
                 {
                     try
                     {
@@ -159,8 +162,8 @@ public class FragListInWorkVisits extends ListFragment
             }
         }
 
-        myListAdapter = new MyListVisitsAdapter(getActivity(), R.layout.in_work_list_visits_fragment_row, visitItemsFiltered);
-        setListAdapter(myListAdapter);
+        InWorkListVisitsAdapter inWorkListVisitsAdapter = new InWorkListVisitsAdapter(getActivity(), R.layout.in_work_list_visits_fragment_row, visitItemsFiltered);
+        setListAdapter(inWorkListVisitsAdapter);
 
         lv = getListView();
 
