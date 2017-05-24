@@ -27,9 +27,10 @@
                 android:text="Switch 1: "
                 android:minLines="2"
                 android:textSize="13sp"
-                android:textColor="#000000"/>
+                android:textColor="#ff808080"/>
 
             <Switch
+                android:theme="@style/SwitchCompatTheme"
                 android:id="@+id/sw1FiveSwitches"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -54,9 +55,10 @@
                 android:minLines="2"
                 android:text="Switch 2: "
                 android:textSize="13sp"
-                android:textColor="#000000"/>
+                android:textColor="#ff808080"/>
 
             <Switch
+                android:theme="@style/SwitchCompatTheme"
                 android:id="@+id/sw2FiveSwitches"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -81,9 +83,10 @@
                 android:minLines="2"
                 android:text="Switch 3: "
                 android:textSize="13sp"
-                android:textColor="#000000"/>
+                android:textColor="#ff808080"/>
 
             <Switch
+                android:theme="@style/SwitchCompatTheme"
                 android:id="@+id/sw3FiveSwitches"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -108,9 +111,10 @@
                 android:minLines="2"
                 android:text="Switch 4: "
                 android:textSize="13sp"
-                android:textColor="#000000"/>
+                android:textColor="#ff808080"/>
 
             <Switch
+                android:theme="@style/SwitchCompatTheme"
                 android:id="@+id/sw4FiveSwitches"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -135,9 +139,10 @@
                 android:minLines="2"
                 android:text="Switch 5: "
                 android:textSize="13sp"
-                android:textColor="#000000"/>
+                android:textColor="#ff808080"/>
 
             <Switch
+                android:theme="@style/SwitchCompatTheme"
                 android:id="@+id/sw5FiveSwitches"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

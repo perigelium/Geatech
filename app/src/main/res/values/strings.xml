@@ -43,4 +43,7 @@
     <string name="VisitsFree">Sopralluoghi da fissare</string>
     <string name="VisitsOfToday">Sopralluoghi di oggi:</string>
     <string name="VisitsComing">Prossimi sopralluoghi</string>
+    <string name="ComingVisitsList">Elenco dei prossimi sopralluoghi</string>
+    <string name="ReportDetailed">Dettagli di rapporto inviato</string>
+    <string name="NullString"></string>
 </resources>

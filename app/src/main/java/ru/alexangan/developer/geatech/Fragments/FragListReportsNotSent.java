@@ -22,7 +22,6 @@ import java.util.TreeMap;
 import ru.alexangan.developer.geatech.Adapters.MyListVisitsAdapter;
 import ru.alexangan.developer.geatech.Interfaces.Communicator;
 import ru.alexangan.developer.geatech.Models.GeaSopralluogo;
-import ru.alexangan.developer.geatech.Models.GlobalConstants;
 import ru.alexangan.developer.geatech.Models.ReportStates;
 import ru.alexangan.developer.geatech.Models.VisitItem;
 import ru.alexangan.developer.geatech.R;
@@ -164,7 +163,7 @@ public class FragListReportsNotSent extends ListFragment
             }
         }
 
-        myListAdapter = new MyListVisitsAdapter(getActivity(), R.layout.in_work_list_visits_fragment_row, visitItemsFiltered);
+        myListAdapter = new MyListVisitsAdapter(getActivity(), R.layout.list_visits_fragment_row, visitItemsFiltered);
         setListAdapter(myListAdapter);
 
         lv = getListView();
@@ -197,14 +196,14 @@ public class FragListReportsNotSent extends ListFragment
                     {
                         if (swipeDetector.getAction() == SwipeDetector.Action.LR)
                         {
-                            mCommunicator.OnListItemSwiped(idVisit, ownVisit && reportStates!=null);
+                            mCommunicator.OnVisitListItemSwiped(idVisit, ownVisit && reportStates!=null);
                         } else if (swipeDetector.getAction() == SwipeDetector.Action.RL)
                         {
-                            mCommunicator.OnListItemSwiped(idVisit, false);
+                            mCommunicator.OnVisitListItemSwiped(idVisit, false);
                         }
                     } else
                     {
-                        mCommunicator.OnListItemSelected(idVisit, ownVisit && reportStates!=null);
+                        mCommunicator.OnVisitListItemSelected(idVisit, ownVisit && reportStates!=null);
                     }
                 }
             }

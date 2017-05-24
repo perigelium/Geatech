@@ -43,6 +43,7 @@ import java.util.Date;
 
 import io.realm.RealmResults;
 import ru.alexangan.developer.geatech.Adapters.GridViewAdapter;
+import ru.alexangan.developer.geatech.Interfaces.Communicator;
 import ru.alexangan.developer.geatech.Models.GeaImagineRapporto;
 import ru.alexangan.developer.geatech.Models.ReportStates;
 import ru.alexangan.developer.geatech.R;
@@ -80,6 +81,7 @@ public class PhotoGalleryGridFragment extends Fragment
     private FloatingActionButton fabAddPhoto;
     AlertDialog alert;
     private ImageView ivTrashCan;
+    private Communicator mCommunicator;
 
 /*    private Handler handler;
     private Runnable runnable;*/
@@ -111,6 +113,7 @@ public class PhotoGalleryGridFragment extends Fragment
 
         activity = getActivity();
         int id_sopralluogo;
+        mCommunicator = (Communicator) getActivity();
 
         if (getArguments() != null)
         {
@@ -178,6 +181,8 @@ public class PhotoGalleryGridFragment extends Fragment
                 ivTrashCan.setVisibility(View.GONE);
                 gvPhotoGallery.setVisibility(View.VISIBLE);
                 fabAddPhoto.setVisibility(View.VISIBLE);
+
+                mCommunicator.showHeaderAndFooter();
             }
         });
 
@@ -283,6 +288,8 @@ public class PhotoGalleryGridFragment extends Fragment
                 ivTrashCan.setVisibility(View.GONE);
                 gvPhotoGallery.setVisibility(View.VISIBLE);
                 fabAddPhoto.setVisibility(View.VISIBLE);
+
+                mCommunicator.showHeaderAndFooter();
             }
         });
 
@@ -727,6 +734,8 @@ public class PhotoGalleryGridFragment extends Fragment
             ivTrashCan.setVisibility(View.VISIBLE);
             gvPhotoGallery.setVisibility(View.GONE);
             fabAddPhoto.setVisibility(View.GONE);
+
+            mCommunicator.hideHeaderAndFooter();
         }
     }
 

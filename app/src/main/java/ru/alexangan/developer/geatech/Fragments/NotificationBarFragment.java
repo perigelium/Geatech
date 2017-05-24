@@ -39,6 +39,7 @@ public class NotificationBarFragment extends Fragment implements View.OnClickLis
     private TextView tvWindowTitle;
     private ImageView ivLogoSmall;
     private ImageView ivVisitsListsFilter;
+    int spinnerCurItem;
 
 
     @Override
@@ -106,10 +107,17 @@ public class NotificationBarFragment extends Fragment implements View.OnClickLis
         spVisitsFilter.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
         {
             @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l)
+            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id)
             {
-                mSettings.edit().putInt("listVisitsFilterMode", i).apply();
-                mCommunicator.onNotificationReportReturned(i);
+                if (spinnerCurItem == position)
+                {
+                    return;
+                }
+
+                mSettings.edit().putInt("listVisitsFilterMode", position).apply();
+                mCommunicator.onNotificationReportReturned(position);
+
+                spinnerCurItem = position;
             }
 
             @Override

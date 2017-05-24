@@ -189,14 +189,14 @@ public class FragListVisitsFree extends ListFragment
                     {
                         if (swipeDetector.getAction() == SwipeDetector.Action.LR)
                         {
-                            mCommunicator.OnListItemSwiped(idVisit, ownVisit && reportStates!=null);
+                            mCommunicator.OnVisitListItemSwiped(idVisit, ownVisit && reportStates!=null);
                         } else if (swipeDetector.getAction() == SwipeDetector.Action.RL)
                         {
-                            mCommunicator.OnListItemSwiped(idVisit, false);
+                            mCommunicator.OnVisitListItemSwiped(idVisit, false);
                         }
                     } else
                     {
-                        mCommunicator.OnListItemSelected(idVisit, ownVisit && reportStates!=null);
+                        mCommunicator.OnVisitListItemSelected(idVisit, ownVisit && reportStates!=null);
                     }
                 }
             }

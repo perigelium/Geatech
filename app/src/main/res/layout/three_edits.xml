@@ -9,34 +9,25 @@
         android:id="@+id/llHeaderThreeEdits"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#eeeeee"
         android:clickable="true"
         android:orientation="horizontal">
 
-        <FrameLayout
-            android:layout_width="match_parent"
+        <ImageView
+            android:id="@+id/ivArrowThreeEdits"
+            android:layout_width="13dp"
+            android:layout_height="13dp"
+            android:layout_gravity="center_vertical|end"
+            android:layout_margin="15dp"
+            android:src="@drawable/report_green_down"/>
+
+        <TextView
+            android:id="@+id/tvHeaderThreeEdits"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="9dp">
-
-            <TextView
-                android:id="@+id/tvHeaderThreeEdits"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="start|center_vertical"
-                android:text=" Section name"
-                android:maxWidth="250dp"
-
-                android:textSize="13sp"/>
-
-            <ImageView
-                android:id="@+id/ivArrowThreeEdits"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical|end"
-                android:layout_marginRight="16dp"
-                android:src="@drawable/report_green_down"/>
-
-        </FrameLayout>
+            android:layout_gravity="start|center_vertical"
+            android:text="Section name"
+            android:maxWidth="250dp"
+            android:textSize="13sp"/>
 
     </LinearLayout>
 

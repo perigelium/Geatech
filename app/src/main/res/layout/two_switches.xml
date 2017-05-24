@@ -3,41 +3,40 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:layout_marginBottom="5dp"
+              android:background="#ffffffff"
               android:orientation="vertical">
 
     <LinearLayout
         android:id="@+id/llHeaderTwoSwitches"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#eeeeee"
         android:clickable="true"
         android:orientation="horizontal">
 
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+        <ImageView
+            android:id="@+id/ivArrowTwoSwitches"
+            android:layout_width="13dp"
+            android:layout_height="13dp"
+            android:layout_gravity="center_vertical|end"
+            android:layout_margin="15dp"
+            android:src="@drawable/report_green_down"/>
 
-            <TextView
-                android:id="@+id/tvHeaderTwoSwitches"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="9dp"
-                android:layout_gravity="start|center_vertical"
-                android:text=" Section name"
-                android:maxWidth="250dp"
-                android:textSize="13sp"/>
-
-            <ImageView
-                android:id="@+id/ivArrowTwoSwitches"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical|end"
-                android:layout_marginRight="25dp"
-                android:src="@drawable/report_green_down"/>
-
-        </FrameLayout>
+        <TextView
+            android:id="@+id/tvHeaderTwoSwitches"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start|center_vertical"
+            android:text="Section name"
+            android:maxWidth="250dp"
+            android:textSize="13sp"/>
 
     </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_gravity="bottom"
+        android:background="#ff808080"/>
 
     <LinearLayout
         android:id="@+id/llSectionTwoSwitches"
@@ -60,7 +59,7 @@
                 android:layout_gravity="start|center_vertical"
                 android:text="Switch 1: "
                 android:textSize="13sp"
-                android:textColor="#000000"/>
+                android:textColor="#ff808080"/>
 
             <Switch
                 android:id="@+id/sw1TwoSwitches"
@@ -68,6 +67,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="end|center_vertical"
                 android:layout_marginRight="16dp"
+                android:theme="@style/SwitchCompatTheme"
                 android:textColor="#000000"/>
 
         </FrameLayout>
@@ -86,7 +86,7 @@
                 android:layout_marginLeft="16dp"
                 android:text="Switch 2: "
                 android:textSize="13sp"
-                android:textColor="#000000"/>
+                android:textColor="#ff808080"/>
 
             <Switch
                 android:id="@+id/sw2TwoSwitches"
@@ -94,6 +94,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="end|center_vertical"
                 android:layout_marginRight="16dp"
+                android:theme="@style/SwitchCompatTheme"
                 android:textColor="#000000"/>
 
         </FrameLayout>

@@ -2,14 +2,14 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
+              android:background="#ffffffff"
               android:orientation="vertical">
 
     <LinearLayout
         android:id="@+id/llSectionTwoTextsTwoEdits"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#eeeeee"
-        android:layout_marginBottom="9dp"
+        android:layout_margin="9dp"
         android:orientation="vertical">
 
         <TextView
@@ -20,19 +20,18 @@
             android:layout_marginLeft="9dp"
             android:layout_marginTop="9dp"
             android:text="Note 1: "
-            android:textColor="#555555"/>
+            android:textColor="#ff808080"/>
 
         <EditText
             android:id="@+id/et1TwoTextsTwoEdits"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="30dp"
-            android:layout_marginRight="30dp"
-            android:layout_marginTop="9dp"
-            android:layout_marginBottom="9dp"
-            android:background="#ffffff"
+            android:layout_margin="9dp"
             android:inputType="none"
             android:ems="15"
+            android:background="@drawable/edittext_grey_border"
+            android:padding="12dp"
+            android:textColor="#ff808080"
             android:text=""/>
 
         <TextView
@@ -43,21 +42,19 @@
             android:layout_marginLeft="9dp"
             android:layout_marginTop="9dp"
             android:text="Note 2: "
-            android:textColor="#555555"/>
+            android:textColor="#ff808080"/>
 
         <EditText
             android:id="@+id/et2TwoTextsTwoEdits"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="30dp"
-            android:layout_marginRight="30dp"
-            android:layout_marginTop="9dp"
-            android:layout_marginBottom="9dp"
-            android:background="#ffffff"
+            android:layout_margin="9dp"
+            android:background="@drawable/edittext_grey_border"
             android:inputType="none"
             android:ems="15"
+            android:padding="12dp"
+            android:textColor="#ff808080"
             android:text=""/>
-
     </LinearLayout>
 
 </LinearLayout>

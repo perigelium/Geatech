@@ -19,7 +19,7 @@
                 android:layout_gravity="start|center_vertical"
                 android:layout_margin="9dp"
                 android:text="Section title"
-                android:textColor="#ffffff"
+                android:textColor="#ffffffff"
                 android:textSize="17sp"/>
 
             <ImageView
@@ -27,7 +27,7 @@
                 android:layout_width="26dp"
                 android:layout_height="26dp"
                 android:layout_gravity="center_vertical|end"
-                android:layout_marginRight="25dp"
+                android:layout_margin="15dp"
                 android:src="@drawable/report_white_down"/>
 
         </FrameLayout>

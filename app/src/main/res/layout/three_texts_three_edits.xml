@@ -8,7 +8,7 @@
         android:id="@+id/llSectionThreeTextsThreeEdits"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#eeeeee"
+        android:background="#ffffffff"
         android:layout_marginBottom="9dp"
         android:orientation="vertical">
 
@@ -20,19 +20,18 @@
             android:layout_marginLeft="9dp"
             android:layout_marginTop="9dp"
             android:text="Note 1: "
-            android:textColor="#555555"/>
+            android:textColor="#ff808080"/>
 
         <EditText
             android:id="@+id/et1ThreeTextsThreeEdits"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="30dp"
-            android:layout_marginRight="30dp"
-            android:layout_marginTop="9dp"
-            android:layout_marginBottom="9dp"
-            android:background="#ffffff"
+            android:layout_margin="9dp"
             android:inputType="none"
             android:ems="15"
+            android:background="@drawable/edittext_grey_border"
+            android:padding="12dp"
+            android:textColor="#ff808080"
             android:text=""/>
 
         <TextView
@@ -42,20 +41,19 @@
             android:layout_gravity="start|center_vertical"
             android:layout_marginLeft="9dp"
             android:layout_marginTop="9dp"
-            android:text="Note 2: "
-            android:textColor="#555555"/>
+            android:text="Note 1: "
+            android:textColor="#ff808080"/>
 
         <EditText
             android:id="@+id/et2ThreeTextsThreeEdits"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="30dp"
-            android:layout_marginRight="30dp"
-            android:layout_marginTop="9dp"
-            android:layout_marginBottom="9dp"
-            android:background="#ffffff"
+            android:layout_margin="9dp"
             android:inputType="none"
             android:ems="15"
+            android:background="@drawable/edittext_grey_border"
+            android:padding="12dp"
+            android:textColor="#ff808080"
             android:text=""/>
 
         <TextView
@@ -65,20 +63,19 @@
             android:layout_gravity="start|center_vertical"
             android:layout_marginLeft="9dp"
             android:layout_marginTop="9dp"
-            android:text="Note 3: "
-            android:textColor="#555555"/>
+            android:text="Note 1: "
+            android:textColor="#ff808080"/>
 
         <EditText
             android:id="@+id/et3ThreeTextsThreeEdits"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="30dp"
-            android:layout_marginRight="30dp"
-            android:layout_marginTop="9dp"
-            android:layout_marginBottom="9dp"
-            android:background="#ffffff"
+            android:layout_margin="9dp"
             android:inputType="none"
             android:ems="15"
+            android:background="@drawable/edittext_grey_border"
+            android:padding="12dp"
+            android:textColor="#ff808080"
             android:text=""/>
 
     </LinearLayout>

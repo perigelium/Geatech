@@ -492,7 +492,7 @@ public class MainActivity extends Activity implements Communicator, Callback
     }
 
     @Override
-    public void OnListItemSelected(int itemIndex, boolean dateTimeHasSet)
+    public void OnVisitListItemSelected(int itemIndex, boolean dateTimeHasSet)
     {
         currentSelIndex = itemIndex;
 
@@ -526,12 +526,6 @@ public class MainActivity extends Activity implements Communicator, Callback
     }
 
     @Override
-    public void onDetailedReportReturned()
-    {
-        //onCtrlBtnsBottomClicked(R.id.btnReportsReturn);
-    }
-
-    @Override
     public void onSendReportReturned(int id_rapporto_sopralluogo)
     {
         OnReportListItemSelected(id_rapporto_sopralluogo);
@@ -555,15 +549,9 @@ public class MainActivity extends Activity implements Communicator, Callback
             reportDetailedFragment.setArguments(args);
 
             setVisitsListContent(reportDetailedFragment);
+
+            notificationBarFragment.setView(R.string.ReportDetailed, View.GONE, View.GONE);
         }
-    }
-
-    @Override
-    public void OnInWorkListItemSelected(int itemIndex)
-    {
-        currentSelIndex = itemIndex;
-
-        ctrlBtnsSopralluogo.setCheckedBtnId(R.id.btnFillReport);
     }
 
     @Override
@@ -640,34 +628,20 @@ public class MainActivity extends Activity implements Communicator, Callback
     }
 
     @Override
-    public void OnComingListItemSelected(int itemIndex)
-    {
-        currentSelIndex = itemIndex;
-        ctrlBtnsSopralluogo.setCheckedBtnId(R.id.btnSopralluogoInfo);
-    }
-
-    @Override
     public void onLogoutCommand()
     {
         logout();
     }
 
     @Override
-    public void onCoordsSetReturned(int itemIndex)
-    {
-        //currentSelIndex = itemIndex;
-        ctrlBtnsSopralluogo.setCheckedBtnId(R.id.btnFillReport);
-    }
-
-    @Override
-    public void OnListItemSwiped(int itemIndex, boolean dateTimeHasSet)
+    public void OnVisitListItemSwiped(int itemIndex, boolean dateTimeHasSet)
     {
         if (!dateTimeHasSet)
         {
-            OnListItemSelected(itemIndex, false);
+            OnVisitListItemSelected(itemIndex, false);
         } else
         {
-            OnListItemSelected(itemIndex, true);
+            OnVisitListItemSelected(itemIndex, true);
         }
     }
 
@@ -928,5 +902,23 @@ public class MainActivity extends Activity implements Communicator, Callback
         callModels = networkUtils.getData(this, GET_MODELS_URL_SUFFIX, tokenStr);
 
         listVisitsIsObsolete = false;
+    }
+
+    @Override
+    public void hideHeaderAndFooter()
+    {
+        FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
+        fragmentTransaction.hide(ctrlBtnsBottom);
+        fragmentTransaction.hide(ctrlBtnsSopralluogo);
+        fragmentTransaction.commit();
+    }
+
+    @Override
+    public void showHeaderAndFooter()
+    {
+        FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
+        fragmentTransaction.show(ctrlBtnsBottom);
+        fragmentTransaction.show(ctrlBtnsSopralluogo);
+        fragmentTransaction.commit();
     }
 }
