@@ -116,7 +116,7 @@
             android:layout_margin="6dp"
             android:orientation="vertical">
 
-            <TextView
+<!--            <TextView
                 android:id="@+id/tvdataOraSopralluogo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -124,20 +124,22 @@
                 android:layout_marginLeft="6dp"
                 android:text="Pianifica un sopralluogo:"
                 android:textColor="#ff000000"
-                android:textSize="17sp"/>
+                android:textSize="17sp"/>-->
 
-            <FrameLayout
+            <TextView
+                android:id="@+id/tvTechnicianName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="Nome di tecnico"
+                android:textSize="16sp"
+                android:textStyle="bold"/>
+
+<!--            <FrameLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
 
-                <TextView
-                    android:id="@+id/tvTechnicianName"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:text="Nome di tecnico"
-                    android:textSize="16sp"
-                    android:textStyle="bold"/>
+
 
                 <Button
                     android:id="@+id/btnSetDateTime"
@@ -152,7 +154,7 @@
                     android:textColor="#ff666666"
                     android:textStyle="normal"/>
 
-            </FrameLayout>
+            </FrameLayout>-->
         </LinearLayout>
 
 

@@ -101,7 +101,6 @@ public class MainActivity extends Activity implements Communicator, Callback
     private ProgressDialog requestServerDialog;
     Handler handler;
     Runnable runnable;
-    AlertDialog alert;
 
     ReportSentDetailedFragment reportDetailedFragment;
     SendReportFragment sendReportFragment;
@@ -845,7 +844,6 @@ public class MainActivity extends Activity implements Communicator, Callback
                                 }
 
                                 requestServerDialog.dismiss();
-                                alert.dismiss();
                                 showToastMessage(getString(R.string.ApplicationUpdateSucceeded));
                                 logout();
                             }
@@ -893,7 +891,8 @@ public class MainActivity extends Activity implements Communicator, Callback
         listVisitsIsObsolete = false;
     }
 
-    private void refreshGeaModels()
+    @Override
+    public void refreshGeaModels()
     {
         requestServerDialog.show();
 

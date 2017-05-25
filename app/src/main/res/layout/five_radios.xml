@@ -50,7 +50,8 @@
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
                 android:button="@null"
-                android:drawableRight="@android:drawable/btn_radio"
+                android:drawableRight="@drawable/radio_button_selector"
+                  android:textColor="@drawable/radio_button_text_color_selector"
                 android:text="Radio "/>
 
             <RadioButton
@@ -60,7 +61,8 @@
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
                 android:button="@null"
-                android:drawableRight="@android:drawable/btn_radio"
+                android:drawableRight="@drawable/radio_button_selector"
+                  android:textColor="@drawable/radio_button_text_color_selector"
                 android:text="Radio 2"/>
 
             <RadioButton
@@ -70,7 +72,8 @@
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
                 android:button="@null"
-                android:drawableRight="@android:drawable/btn_radio"
+                android:drawableRight="@drawable/radio_button_selector"
+                  android:textColor="@drawable/radio_button_text_color_selector"
                 android:text="Radio 3"/>
 
             <RadioButton
@@ -80,7 +83,8 @@
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
                 android:button="@null"
-                android:drawableRight="@android:drawable/btn_radio"
+                android:drawableRight="@drawable/radio_button_selector"
+                  android:textColor="@drawable/radio_button_text_color_selector"
                 android:text="Radio 4   "/>
 
             <RadioButton
@@ -90,7 +94,8 @@
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
                 android:button="@null"
-                android:drawableRight="@android:drawable/btn_radio"
+                android:drawableRight="@drawable/radio_button_selector"
+                  android:textColor="@drawable/radio_button_text_color_selector"
                 android:text="Radio 5   "/>
 
         </RadioGroup>

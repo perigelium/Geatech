@@ -121,7 +121,8 @@ public class SettingsFragment extends Fragment implements View.OnClickListener
 
         if(view.getId() == R.id.flLogout)
         {
-            mCommunicator.onLogoutCommand();
+            //mCommunicator.onLogoutCommand();
+            mCommunicator.refreshGeaModels();
         }
 
         if(view.getId() == R.id.btnTermsOfUseOk)

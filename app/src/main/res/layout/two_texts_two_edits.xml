@@ -31,7 +31,7 @@
             android:ems="15"
             android:background="@drawable/edittext_grey_border"
             android:padding="12dp"
-            android:textColor="#ff808080"
+            android:textColor="#ff29b352"
             android:text=""/>
 
         <TextView
@@ -53,7 +53,7 @@
             android:inputType="none"
             android:ems="15"
             android:padding="12dp"
-            android:textColor="#ff808080"
+            android:textColor="#ff29b352"
             android:text=""/>
     </LinearLayout>
 

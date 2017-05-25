@@ -28,15 +28,15 @@
                 android:id="@+id/flTechnicianAdded"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="9dp"
-                android:visibility="gone">
+                android:layout_margin="9dp">
 
                 <TextView
                     android:id="@+id/tvNoteTecnicianAdded"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/TechnicianAddedSelectFromListBelow"
-                    android:maxWidth="250dp"
+                    android:maxLines="3"
+                    android:maxWidth="200dp"
                     android:textColor="#ffffff"
                     android:textSize="16sp"/>
 

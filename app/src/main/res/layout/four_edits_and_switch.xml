@@ -25,8 +25,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="start|center_vertical"
-            android:text="Section name"
             android:maxWidth="250dp"
+            android:text="Section name"
             android:textSize="13sp"/>
 
     </LinearLayout>
@@ -49,8 +49,8 @@
                 android:layout_gravity="start|center_vertical"
                 android:layout_margin="9dp"
                 android:text="Edit 1: "
-                android:textSize="13sp"
-                android:textColor="#000000"/>
+                android:textColor="#ff808080"
+                android:textSize="13sp"/>
 
             <EditText
                 android:id="@+id/et1FourEditsAndSwitch"
@@ -59,13 +59,13 @@
                 android:layout_gravity="start|center_vertical"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
-                android:hint="Inserire"
-                android:textColorHint="#cccccc"
                 android:background="@android:color/transparent"
                 android:ems="9"
+                android:hint="Inserire"
                 android:inputType="none"
                 android:text=""
-                android:textColor="#000000"/>
+                android:textColor="#ff29b352"
+                android:textColorHint="#cccccc"/>
 
         </LinearLayout>
 
@@ -81,8 +81,8 @@
                 android:layout_gravity="start|center_vertical"
                 android:layout_margin="9dp"
                 android:text="Edit 1: "
-                android:textSize="13sp"
-                android:textColor="#000000"/>
+                android:textColor="#ff808080"
+                android:textSize="13sp"/>
 
             <EditText
                 android:id="@+id/et2FourEditsAndSwitch"
@@ -91,13 +91,13 @@
                 android:layout_gravity="start|center_vertical"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
-                android:hint="Inserire"
-                android:textColorHint="#cccccc"
                 android:background="@android:color/transparent"
                 android:ems="9"
+                android:hint="Inserire"
                 android:inputType="none"
                 android:text=""
-                android:textColor="#000000"/>
+                android:textColor="#ff29b352"
+                android:textColorHint="#cccccc"/>
 
         </LinearLayout>
 
@@ -113,8 +113,8 @@
                 android:layout_gravity="start|center_vertical"
                 android:layout_margin="9dp"
                 android:text="Edit 1: "
-                android:textSize="13sp"
-                android:textColor="#000000"/>
+                android:textColor="#ff808080"
+                android:textSize="13sp"/>
 
             <EditText
                 android:id="@+id/et3FourEditsAndSwitch"
@@ -123,13 +123,13 @@
                 android:layout_gravity="start|center_vertical"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
-                android:hint="Inserire"
-                android:textColorHint="#cccccc"
                 android:background="@android:color/transparent"
                 android:ems="9"
+                android:hint="Inserire"
                 android:inputType="none"
                 android:text=""
-                android:textColor="#000000"/>
+                android:textColor="#ff29b352"
+                android:textColorHint="#cccccc"/>
 
         </LinearLayout>
 
@@ -145,8 +145,8 @@
                 android:layout_gravity="start|center_vertical"
                 android:layout_margin="9dp"
                 android:text="Edit 1: "
-                android:textSize="13sp"
-                android:textColor="#000000"/>
+                android:textColor="#ff808080"
+                android:textSize="13sp"/>
 
             <EditText
                 android:id="@+id/et4FourEditsAndSwitch"
@@ -155,13 +155,13 @@
                 android:layout_gravity="end|center_vertical"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
-                android:hint="Inserire"
-                android:textColorHint="#cccccc"
                 android:background="@android:color/transparent"
                 android:ems="9"
+                android:hint="Inserire"
                 android:inputType="none"
                 android:text=""
-                android:textColor="#000000"/>
+                android:textColor="#ff29b352"
+                android:textColorHint="#cccccc"/>
 
         </LinearLayout>
 
@@ -177,17 +177,17 @@
                 android:layout_gravity="start|center_vertical"
                 android:layout_margin="9dp"
                 android:text="Switch 1: "
-                android:textSize="13sp"
-                android:textColor="#000000"/>
+                android:textColor="#ff808080"
+                android:textSize="13sp"/>
 
             <Switch
-                android:theme="@style/SwitchCompatTheme"
                 android:id="@+id/sw1FourEditsAndSwitch"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end|center_vertical"
                 android:layout_marginRight="16dp"
-                android:textColor="#000000"/>
+                android:textColor="#ff808080"
+                android:theme="@style/SwitchCompatTheme"/>
 
         </FrameLayout>
     </LinearLayout>

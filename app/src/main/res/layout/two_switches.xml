@@ -32,12 +32,6 @@
 
     </LinearLayout>
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_gravity="bottom"
-        android:background="#ff808080"/>
-
     <LinearLayout
         android:id="@+id/llSectionTwoSwitches"
         android:layout_width="match_parent"
@@ -68,7 +62,7 @@
                 android:layout_gravity="end|center_vertical"
                 android:layout_marginRight="16dp"
                 android:theme="@style/SwitchCompatTheme"
-                android:textColor="#000000"/>
+                android:textColor="#ff808080"/>
 
         </FrameLayout>
 
@@ -95,7 +89,7 @@
                 android:layout_gravity="end|center_vertical"
                 android:layout_marginRight="16dp"
                 android:theme="@style/SwitchCompatTheme"
-                android:textColor="#000000"/>
+                android:textColor="#ff808080"/>
 
         </FrameLayout>
 

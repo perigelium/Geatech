@@ -50,7 +50,8 @@
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
                 android:button="@null"
-                android:drawableRight="@android:drawable/btn_radio"
+                android:drawableRight="@drawable/radio_button_selector"
+                  android:textColor="@drawable/radio_button_text_color_selector"
                 android:text="radio "/>
 
             <RadioButton
@@ -60,7 +61,8 @@
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
                 android:button="@null"
-                android:drawableRight="@android:drawable/btn_radio"
+                android:drawableRight="@drawable/radio_button_selector"
+                  android:textColor="@drawable/radio_button_text_color_selector"
                 android:text="radio 2"/>
 
         </RadioGroup>
@@ -90,9 +92,9 @@
                 android:textColorHint="#cccccc"
                 android:background="@android:color/transparent"
                 android:ems="9"
-                android:inputType="none"
+                                android:inputType="none"
                 android:text=""
-                android:textColor="#000000"/>
+                android:textColor="#ff29b352"/>
 
         </LinearLayout>
     </LinearLayout>

@@ -450,21 +450,30 @@ public class ViewUtils
         final CheckBox chk2ThreeChkboxesAndEdit = (CheckBox) three_chkboxes_and_edit.findViewById(R.id.chk2ThreeChkboxesAndEdit);
         final CheckBox chk3ThreeChkboxesAndEdit = (CheckBox) three_chkboxes_and_edit.findViewById(R.id.chk3ThreeChkboxesAndEdit);
 
+        final TextView tv1ThreeChkboxesAndEdit = (TextView) three_chkboxes_and_edit.findViewById(R.id.tv1ThreeChkboxesAndEdit);
+        final TextView tv2ThreeChkboxesAndEdit = (TextView) three_chkboxes_and_edit.findViewById(R.id.tv2ThreeChkboxesAndEdit);
+        final TextView tv3ThreeChkboxesAndEdit = (TextView) three_chkboxes_and_edit.findViewById(R.id.tv3ThreeChkboxesAndEdit);
+
         ArrayList<CheckBox> al_Chkboxes = new ArrayList<>();
         al_Chkboxes.add(chk1ThreeChkboxesAndEdit);
         al_Chkboxes.add(chk2ThreeChkboxesAndEdit);
         al_Chkboxes.add(chk3ThreeChkboxesAndEdit);
 
+        ArrayList<TextView> al_TextViews = new ArrayList<>();
+        al_TextViews.add(tv1ThreeChkboxesAndEdit);
+        al_TextViews.add(tv2ThreeChkboxesAndEdit);
+        al_TextViews.add(tv3ThreeChkboxesAndEdit);
+
         int i;
 
-        for (i = 0; i < al_Chkboxes.size(); i++)
+        for (i = 0; i < al_TextViews.size(); i++)
         {
             CheckBoxes.put(idItem, al_Chkboxes);
-            al_Chkboxes.get(i).setText(fields[i]);
+            al_TextViews.get(i).setText(fields[i]);
         }
 
-        TextView tv1ThreeChkboxesAndEdit = (TextView) three_chkboxes_and_edit.findViewById(R.id.tv1ThreeChkboxesAndEdit);
-        tv1ThreeChkboxesAndEdit.setText(fields[i]);
+        TextView tvEditThreeChkboxesAndEdit = (TextView) three_chkboxes_and_edit.findViewById(R.id.tvEditThreeChkboxesAndEdit);
+        tvEditThreeChkboxesAndEdit.setText(fields[i]);
 
         final EditText et1ThreeChkboxesAndEdit = (EditText) three_chkboxes_and_edit.findViewById(R.id.et1ThreeChkboxesAndEdit);
 
@@ -2412,7 +2421,7 @@ public class ViewUtils
             totalHeight += view.getMeasuredHeight();
         }
         ViewGroup.LayoutParams params = listView.getLayoutParams();
-        params.height = totalHeight + (listView.getDividerHeight() * (listAdapter.getCount() - 1) + 20);
+        params.height = totalHeight + (listView.getDividerHeight() * (listAdapter.getCount() - 1) + 30);
         listView.setLayoutParams(params);
     }
 

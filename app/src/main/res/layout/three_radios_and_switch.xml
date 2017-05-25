@@ -51,7 +51,8 @@
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
                 android:button="@null"
-                android:drawableRight="@android:drawable/btn_radio"
+                android:drawableRight="@drawable/radio_button_selector"
+                  android:textColor="@drawable/radio_button_text_color_selector"
                 android:text="radio "/>
 
             <RadioButton
@@ -61,7 +62,8 @@
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
                 android:button="@null"
-                android:drawableRight="@android:drawable/btn_radio"
+                android:drawableRight="@drawable/radio_button_selector"
+                  android:textColor="@drawable/radio_button_text_color_selector"
                 android:text="radio 2"/>
 
             <RadioButton
@@ -71,7 +73,8 @@
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
                 android:button="@null"
-                android:drawableRight="@android:drawable/btn_radio"
+                android:drawableRight="@drawable/radio_button_selector"
+                  android:textColor="@drawable/radio_button_text_color_selector"
                 android:text="radio 3"/>
         </RadioGroup>
 
@@ -89,7 +92,7 @@
                 android:layout_margin="9dp"
                 android:text="Switch text: "
                 android:textSize="13sp"
-                android:textColor="#000000"/>
+                android:textColor="#ff808080"/>
 
             <Switch
                 android:theme="@style/SwitchCompatTheme"
@@ -98,7 +101,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="end|center_vertical"
                 android:layout_marginRight="16dp"
-                android:textColor="#000000"/>
+                android:textColor="#ff808080"/>
 
         </FrameLayout>
     </LinearLayout>

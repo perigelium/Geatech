@@ -112,7 +112,6 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
     private TextView tvTechnicianName;
     private Button btnOpenMap, btnOpenDialer;
     private Button btnGetCurrentCoords;
-    private TextView tvSetDateTime;
     private FrameLayout flSetDateTimeSubmit;
 
 
@@ -207,9 +206,28 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
             SimpleDateFormat sdfDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ITALIAN);
             String dateTimeStr = sdfDate.format(calendar.getTime());
             tvdataOraSopralluogo.setText(dateTimeStr);
-
-            tvSetDateTime.setVisibility(View.GONE);
             tvTechnicianName.setVisibility(View.VISIBLE);
+
+            if(!NetworkUtils.isNetworkAvailable(activity))
+            {
+                showToastMessage(getString(R.string.CheckInternetConnection));
+                return;
+            }
+
+            if(tokenStr == null)
+            {
+                //showToastMessage("Modalità offline, si prega di logout e login di nuovo");
+                alertDialog("Info", getString(R.string.OfflineModeShowLoginScreenQuestion));
+                return;
+            }
+
+            stakedOut = 1;
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
+            strDateTimeSet = sdf.format(calendar.getTime());
+
+            disableInput();
+
+            notifyServerDataOraSopralluogo(idSopralluogo, stakedOut);
         }
     };
 
@@ -218,8 +236,7 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
     {
         rootView = inflater.inflate(R.layout.set_date_time_fragment, container, false);
 
-        tvSetDateTime = (TextView) rootView.findViewById(R.id.btnSetDateTime);
-        tvSetDateTime.setPaintFlags(tvSetDateTime.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+        //tvSetDateTime.setPaintFlags(tvSetDateTime.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
 
         btnSetDateTimeSubmit = (TextView) rootView.findViewById(R.id.btnSetDateTimeSubmit);
         flSetDateTimeSubmit = (FrameLayout) rootView.findViewById(R.id.flSetDateTimeSubmit);
@@ -311,7 +328,6 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
 
                 tvdataOraSopralluogo.setText(dataOraSopralluogo);
                 tvTechnicianName.setVisibility(View.VISIBLE);
-                tvSetDateTime.setVisibility(View.GONE);
                 flSetDateTimeSubmit.setVisibility(View.GONE);
 
             } catch (ParseException e)
@@ -322,7 +338,6 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
         else
         {
             tvTechnicianName.setVisibility(View.GONE);
-            tvSetDateTime.setVisibility(View.VISIBLE);
         }
 
 /*        if(dataOraSopralluogo.length() > 4)
@@ -366,7 +381,6 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
         mHour = calendar.get(Calendar.HOUR_OF_DAY);
         mMinute = calendar.get(Calendar.MINUTE);
 
-        tvSetDateTime.setOnClickListener(this);
         btnSetDateTimeSubmit.setOnClickListener(this);
         btnOpenMap.setOnClickListener(this);
         btnOpenDialer.setOnClickListener(this);
@@ -448,40 +462,21 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
             startActivity(intent);
         }
 
-        if (v.getId() == R.id.btnSetDateTime)
-        {
-            TimePickerDialog DialogTimePicker = new TimePickerDialog(getActivity(), timePickerListener,
-                    mHour, mMinute, DateFormat.is24HourFormat(getActivity()));
-            DialogTimePicker.show();
-
-            DatePickerDialog DialogDatePicker = new DatePickerDialog(getActivity(), datePickerListener,
-                    mYear, mMonth - 1, mDay);
-            DialogDatePicker.show();
-        }
-
         if (v.getId() == R.id.btnSetDateTimeSubmit)
         {
-            if(!NetworkUtils.isNetworkAvailable(activity))
-            {
-                showToastMessage(getString(R.string.CheckInternetConnection));
-                return;
-            }
-
-            if(tokenStr == null)
-            {
-                //showToastMessage("Modalità offline, si prega di logout e login di nuovo");
-                alertDialog("Info", getString(R.string.OfflineModeShowLoginScreenQuestion));
-                return;
-            }
-
-            stakedOut = 1;
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
-            strDateTimeSet = sdf.format(calendar.getTime());
-
-            disableInput();
-
-            notifyServerDataOraSopralluogo(idSopralluogo, stakedOut);
+            openSetDateTimeDialog();
         }
+    }
+
+    private void openSetDateTimeDialog()
+    {
+        TimePickerDialog DialogTimePicker = new TimePickerDialog(getActivity(), timePickerListener,
+                mHour, mMinute, DateFormat.is24HourFormat(getActivity()));
+        DialogTimePicker.show();
+
+        DatePickerDialog DialogDatePicker = new DatePickerDialog(getActivity(), datePickerListener,
+                mYear, mMonth - 1, mDay);
+        DialogDatePicker.show();
     }
 
     private void notifyServerDataOraSopralluogo(int idSopralluogo, int stakedOut)
@@ -664,7 +659,6 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
 
                                                     tvdataOraSopralluogo.setText(strDateTimeSet);
                                                     tvTechnicianName.setVisibility(View.VISIBLE);
-                                                    tvSetDateTime.setVisibility(View.GONE);
                                                     flSetDateTimeSubmit.setVisibility(View.GONE);
                                                 }
 

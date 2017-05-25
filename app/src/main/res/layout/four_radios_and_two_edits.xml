@@ -25,8 +25,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="start|center_vertical"
-            android:text="Section name"
             android:maxWidth="250dp"
+            android:text="Section name"
             android:textSize="13sp"/>
 
     </LinearLayout>
@@ -50,8 +50,9 @@
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
                 android:button="@null"
-                android:drawableRight="@android:drawable/btn_radio"
-                android:text="Radio "/>
+                android:drawableRight="@drawable/radio_button_selector"
+                android:text="Radio "
+                android:textColor="@drawable/radio_button_text_color_selector"/>
 
             <RadioButton
                 android:id="@+id/rb2FourRadiosAndTwoEdits"
@@ -60,8 +61,9 @@
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
                 android:button="@null"
-                android:drawableRight="@android:drawable/btn_radio"
-                android:text="Radio 2"/>
+                android:drawableRight="@drawable/radio_button_selector"
+                android:text="Radio 2"
+                android:textColor="@drawable/radio_button_text_color_selector"/>
 
             <RadioButton
                 android:id="@+id/rb3FourRadiosAndTwoEdits"
@@ -70,8 +72,9 @@
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
                 android:button="@null"
-                android:drawableRight="@android:drawable/btn_radio"
-                android:text="Radio 3"/>
+                android:drawableRight="@drawable/radio_button_selector"
+                android:text="Radio 3"
+                android:textColor="@drawable/radio_button_text_color_selector"/>
 
             <RadioButton
                 android:id="@+id/rb4FourRadiosAndTwoEdits"
@@ -80,72 +83,72 @@
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
                 android:button="@null"
-                android:drawableRight="@android:drawable/btn_radio"
-                android:text="Radio 4   "/>
+                android:drawableRight="@drawable/radio_button_selector"
+                android:text="Radio 4   "
+                android:textColor="@drawable/radio_button_text_color_selector"/>
 
         </RadioGroup>
 
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/tv1FourRadiosAndTwoEdits"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start|center_vertical"
+                android:layout_margin="9dp"
+                android:text="Altro: "
+                android:textSize="13sp"/>
 
-        <TextView
-            android:id="@+id/tv1FourRadiosAndTwoEdits"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="start|center_vertical"
-            android:layout_margin="9dp"
-            android:text="Altro: "
-            android:textSize="13sp"/>
+            <EditText
+                android:id="@+id/et1FourRadiosAndTwoEdits"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_gravity="start|center_vertical"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:background="@android:color/transparent"
+                android:ems="9"
+                android:hint="Inserire"
+                android:inputType="none"
+                android:text=""
+                android:textColor="#ff29b352"
+                android:textColorHint="#cccccc"/>
+        </LinearLayout>
 
-        <EditText
-            android:id="@+id/et1FourRadiosAndTwoEdits"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_gravity="start|center_vertical"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
-            android:hint="Inserire"
-            android:textColorHint="#cccccc"
-            android:background="@android:color/transparent"
-            android:ems="9"
-            android:inputType="none"
-            android:text=""
-            android:textColor="#000000"/>
-    </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/tv2FourRadiosAndTwoEdits"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start|center_vertical"
+                android:layout_margin="9dp"
+                android:text=""
+                android:textColor="#ff808080"
+                android:textSize="13sp"/>
 
-        <TextView
-            android:id="@+id/tv2FourRadiosAndTwoEdits"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="start|center_vertical"
-            android:layout_margin="9dp"
-            android:text=""
-            android:textSize="13sp"
-            android:textColor="#000000"/>
-
-        <EditText
-            android:id="@+id/et2FourRadiosAndTwoEdits"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_gravity="start|center_vertical"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
-            android:hint="Inserire"
-            android:textColorHint="#cccccc"
-            android:ems="9"
-            android:inputType="none"
-            android:text=""
-            android:textColor="#000000"/>
-    </LinearLayout>
+            <EditText
+                android:id="@+id/et2FourRadiosAndTwoEdits"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_gravity="start|center_vertical"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:ems="9"
+                android:hint="Inserire"
+                android:inputType="none"
+                android:text=""
+                android:textColor="#ff29b352"
+                android:textColorHint="#cccccc"/>
+        </LinearLayout>
 
     </LinearLayout>
 

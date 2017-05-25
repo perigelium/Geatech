@@ -27,7 +27,9 @@
                 android:layout_width="26dp"
                 android:layout_height="26dp"
                 android:layout_gravity="center_vertical|end"
-                android:layout_margin="15dp"
+                android:layout_marginTop="17dp"
+                android:layout_marginBottom="17dp"
+                android:layout_marginRight="22dp"
                 android:src="@drawable/report_white_down"/>
 
         </FrameLayout>

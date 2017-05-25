@@ -115,8 +115,8 @@ public class LoginCompanyFragment extends Fragment implements View.OnClickListen
 
         btnLogin = (Button) rootView.findViewById(R.id.btnLogin);
 
-        btnPasswordRecover = (Button) rootView.findViewById(R.id.btnPasswordRecover);
-        btnPasswordRecover.setOnClickListener(this);
+/*        btnPasswordRecover = (Button) rootView.findViewById(R.id.btnPasswordRecover);
+        btnPasswordRecover.setOnClickListener(this);*/
 
         llLogin = (LinearLayout) rootView.findViewById(R.id.llLogin);
         etLogin = (EditText) rootView.findViewById(R.id.etLogin);
@@ -305,10 +305,10 @@ public class LoginCompanyFragment extends Fragment implements View.OnClickListen
             }
         }
 
-        if (view.getId() == R.id.btnPasswordRecover)
+/*        if (view.getId() == R.id.btnPasswordRecover)
         {
             loginCommunicator.onRecoverPasswordClicked();
-        }
+        }*/
     }
 
     @Override

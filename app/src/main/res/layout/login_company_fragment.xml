@@ -129,7 +129,7 @@
                 android:button="@drawable/login_checkbox_selector"
                 android:textSize="16sp"/>
 
-            <Button
+<!--            <Button
                 android:id="@+id/btnPasswordRecover"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -141,7 +141,7 @@
                 android:onClick="onLoginSucceeded"
                 android:textColor="#ffffff"
                 android:textSize="12sp"
-                android:visibility="gone"/>
+                android:visibility="gone"/>-->
 
         </FrameLayout>
 

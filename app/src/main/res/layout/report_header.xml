@@ -19,7 +19,7 @@
             android:layout_marginLeft="6dp"
             android:layout_marginTop="10dp"
             android:text="REPORT TECNICO"
-            android:textColor="#ff000000"
+            android:textColor="#ff808080"
             android:textSize="13dp"/>
 
         <TextView

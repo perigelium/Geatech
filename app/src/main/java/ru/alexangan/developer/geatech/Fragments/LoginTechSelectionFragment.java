@@ -203,6 +203,7 @@ public class LoginTechSelectionFragment extends Fragment implements View.OnClick
         llTechnNameAndSurname = (LinearLayout) rootView.findViewById(R.id.llTechnNameAndSurname);
 
         flTechnicianAdded = (FrameLayout) rootView.findViewById(R.id.flTechnicianAdded);
+        flTechnicianAdded.setVisibility(View.GONE);
 
         etTechNome = (EditText) rootView.findViewById(R.id.etTechNome);
         etTechCognome = (EditText) rootView.findViewById(R.id.etTechCognome);
