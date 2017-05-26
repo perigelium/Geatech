@@ -5,112 +5,122 @@
               android:layout_marginBottom="5dp"
               android:orientation="vertical">
 
-    <LinearLayout
-        android:id="@+id/llHeaderThreeRadiosAndEdit"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:clickable="true"
-        android:orientation="horizontal">
+        android:layout_height="wrap_content">
 
-        <ImageView
-            android:id="@+id/ivArrowThreeRadiosAndEdit"
-            android:layout_width="13dp"
-            android:layout_height="13dp"
-            android:layout_gravity="center_vertical|end"
-            android:layout_margin="15dp"
-            android:src="@drawable/report_green_down"/>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:layout_gravity="top"
+            android:background="#ff808080"/>
 
-        <TextView
-            android:id="@+id/tvHeaderThreeRadiosAndEdit"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:id="@+id/llHeaderThreeRadiosAndEdit"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="start|center_vertical"
-            android:text="Section name"
-            android:maxWidth="250dp"
-            android:textSize="13sp"/>
+            android:clickable="true"
+            android:orientation="horizontal">
 
-    </LinearLayout>
+            <ImageView
+                android:id="@+id/ivArrowThreeRadiosAndEdit"
+                android:layout_width="13dp"
+                android:layout_height="13dp"
+                android:layout_gravity="center_vertical|end"
+                android:layout_margin="15dp"
+                android:src="@drawable/report_green_down"/>
+
+            <TextView
+                android:id="@+id/tvHeaderThreeRadiosAndEdit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start|center_vertical"
+                android:maxWidth="250dp"
+                android:text="Section name"
+                android:textColor="@color/colorBlack"
+                android:textSize="14sp"/>
+
+        </LinearLayout>
+
+    </FrameLayout>
 
     <LinearLayout
         android:id="@+id/llSectionThreeRadiosAndEdit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        ><!--android:visibility="gone">-->
-
+        android:layout_marginLeft="44dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        android:orientation="vertical">
 
         <RadioGroup
             android:id="@+id/rg1ThreeRadiosAndEdit"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:layout_marginBottom="4dp">
 
             <RadioButton
                 android:id="@+id/rb1ThreeRadiosAndEdit"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
+
+                android:background="@drawable/radiobutton_ripple_effect_selector"
                 android:button="@null"
                 android:drawableRight="@drawable/radio_button_selector"
-                  android:textColor="@drawable/radio_button_text_color_selector"
-                android:text="radio "/>
+                android:text="radio "
+                android:textColor="@drawable/radio_button_text_color_selector"/>
 
             <RadioButton
                 android:id="@+id/rb2ThreeRadiosAndEdit"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
+                android:background="@drawable/radiobutton_ripple_effect_selector"
                 android:button="@null"
                 android:drawableRight="@drawable/radio_button_selector"
-                  android:textColor="@drawable/radio_button_text_color_selector"
-                android:text="radio 2"/>
+                android:text="radio 2"
+                android:textColor="@drawable/radio_button_text_color_selector"/>
 
             <RadioButton
                 android:id="@+id/rb3ThreeRadiosAndEdit"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
+                android:background="@drawable/radiobutton_ripple_effect_selector"
                 android:button="@null"
                 android:drawableRight="@drawable/radio_button_selector"
-                  android:textColor="@drawable/radio_button_text_color_selector"
-                android:text="radio 3   "/>
+                android:text="radio 3   "
+                android:textColor="@drawable/radio_button_text_color_selector"/>
 
         </RadioGroup>
 
+        <LinearLayout
+            android:id="@+id/llEditThreeRadiosAndEdit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
+            <TextView
+                android:id="@+id/tv1ThreeRadiosAndEdit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start|center_vertical"
+                android:text="Altro: "
+                android:textSize="13sp"/>
 
-    <LinearLayout
-        android:id="@+id/llEditThreeRadiosAndEdit"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+            <EditText
+                android:id="@+id/et1ThreeRadiosAndEdit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start|center_vertical"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:ems="9"
+                android:hint="Inserire"
+                android:inputType="none"
+                android:text=""
+                android:textColor="#ff29b352"
+                android:textColorHint="#cccccc"/>
 
-        <TextView
-            android:id="@+id/tv1ThreeRadiosAndEdit"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="start|center_vertical"
-            android:layout_margin="9dp"
-            android:text="Altro: "
-            android:textSize="13sp"/>
-
-        <EditText
-            android:id="@+id/et1ThreeRadiosAndEdit"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_gravity="start|center_vertical"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
-            android:hint="Inserire"
-            android:textColorHint="#cccccc"
-            android:ems="9"
-            android:inputType="none"
-            android:text=""
-            android:textColor="#ff29b352"/>
-
-    </LinearLayout>
+        </LinearLayout>
     </LinearLayout>
 
 </LinearLayout>

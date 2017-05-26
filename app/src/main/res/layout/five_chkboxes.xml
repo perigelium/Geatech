@@ -5,6 +5,16 @@
               android:layout_marginBottom="5dp"
               android:orientation="vertical">
 
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_gravity="top"
+        android:background="#ff808080"/>
+
     <LinearLayout
         android:id="@+id/llHeaderFiveChkboxes"
         android:layout_width="match_parent"
@@ -27,9 +37,12 @@
             android:layout_gravity="start|center_vertical"
             android:text="Section name"
             android:maxWidth="250dp"
-            android:textSize="13sp"/>
+            android:textColor="@color/colorBlack"
+            android:textSize="14sp"/>
 
     </LinearLayout>
+
+    </FrameLayout>
 
     <LinearLayout
         android:id="@+id/llSectionFiveChkboxes"
@@ -39,66 +52,150 @@
         android:layout_margin="9dp"
         ><!--android:visibility="gone">-->
 
-        <CheckBox
-            android:id="@+id/chk1FiveChkboxes"
+        <FrameLayout
+            android:id="@+id/fl1FiveChkboxes"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="9dp"
-            android:layout_marginBottom="9dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
-            android:button="@null"
-            android:drawableRight="@drawable/checkbox_selector"
-            android:text="chkbox "/>
+            android:clickable="true"
+            android:background="@drawable/layout_on_press_color_selector"
+            android:layout_marginBottom="15dp">
 
-        <CheckBox
-            android:id="@+id/chk2FiveChkboxes"
+            <TextView
+                android:id="@+id/tv1FiveChkboxes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:layout_gravity="center_vertical|start"
+                android:text="chkbox 1"/>
+
+            <CheckBox
+                android:id="@+id/chk1FiveChkboxes"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:clickable="false"
+                android:layout_gravity="center_vertical|end"
+                android:layout_marginRight="25dp"
+                android:background="@drawable/checkbox_selector"
+                android:button="@null"
+                android:text=""/>
+
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/fl2FiveChkboxes"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="9dp"
-            android:layout_marginBottom="9dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
-            android:button="@null"
-            android:drawableRight="@drawable/checkbox_selector"
-            android:text="chkbox 2"/>
+            android:clickable="true"
+            android:background="@drawable/layout_on_press_color_selector"
+            android:layout_marginBottom="15dp">
 
-        <CheckBox
-            android:id="@+id/chk3FiveChkboxes"
+            <TextView
+                android:id="@+id/tv2FiveChkboxes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:layout_gravity="center_vertical|start"
+                android:text="chkbox 1"/>
+
+            <CheckBox
+                android:id="@+id/chk2FiveChkboxes"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:clickable="false"
+                android:layout_gravity="center_vertical|end"
+                android:layout_marginRight="25dp"
+                android:background="@drawable/checkbox_selector"
+                android:button="@null"
+                android:text=""/>
+
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/fl3FiveChkboxes"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="9dp"
-            android:layout_marginBottom="9dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
-            android:button="@null"
-            android:drawableRight="@drawable/checkbox_selector"
-            android:text="chkbox 3"/>
+            android:clickable="true"
+            android:background="@drawable/layout_on_press_color_selector"
+            android:layout_marginBottom="15dp">
 
-        <CheckBox
-            android:id="@+id/chk4FiveChkboxes"
+            <TextView
+                android:id="@+id/tv3FiveChkboxes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:layout_gravity="center_vertical|start"
+                android:text="chkbox 1"/>
+
+            <CheckBox
+                android:id="@+id/chk3FiveChkboxes"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:clickable="false"
+                android:layout_gravity="center_vertical|end"
+                android:layout_marginRight="25dp"
+                android:background="@drawable/checkbox_selector"
+                android:button="@null"
+                android:text=""/>
+
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/fl4FiveChkboxes"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="9dp"
-            android:layout_marginBottom="9dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
-            android:button="@null"
-            android:drawableRight="@drawable/checkbox_selector"
-            android:text="chkbox 4"/>
+            android:clickable="true"
+            android:background="@drawable/layout_on_press_color_selector"
+            android:layout_marginBottom="15dp">
 
-        <CheckBox
-            android:id="@+id/chk5FiveChkboxes"
+            <TextView
+                android:id="@+id/tv4FiveChkboxes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:layout_gravity="center_vertical|start"
+                android:text="chkbox 1"/>
+
+            <CheckBox
+                android:id="@+id/chk4FiveChkboxes"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:clickable="false"
+                android:layout_gravity="center_vertical|end"
+                android:layout_marginRight="25dp"
+                android:background="@drawable/checkbox_selector"
+                android:button="@null"
+                android:text=""/>
+
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/fl5FiveChkboxes"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="9dp"
-            android:layout_marginBottom="9dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
-            android:button="@null"
-            android:drawableRight="@drawable/checkbox_selector"
-            android:text="chkbox 5"/>
+            android:clickable="true"
+            android:background="@drawable/layout_on_press_color_selector"
+            android:layout_marginBottom="15dp">
 
+            <TextView
+                android:id="@+id/tv5FiveChkboxes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:layout_gravity="center_vertical|start"
+                android:text="chkbox 1"/>
+
+            <CheckBox
+                android:id="@+id/chk5FiveChkboxes"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:clickable="false"
+                android:layout_gravity="center_vertical|end"
+                android:layout_marginRight="25dp"
+                android:background="@drawable/checkbox_selector"
+                android:button="@null"
+                android:text=""/>
+
+        </FrameLayout>
 
     </LinearLayout>
 

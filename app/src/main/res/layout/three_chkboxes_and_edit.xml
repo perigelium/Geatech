@@ -5,45 +5,61 @@
               android:layout_marginBottom="5dp"
               android:orientation="vertical">
 
-    <LinearLayout
-        android:id="@+id/llHeaderThreeChkboxesAndEdit"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:clickable="true"
-        android:orientation="horizontal">
+        android:layout_height="wrap_content">
 
-        <ImageView
-            android:id="@+id/ivArrowThreeChkboxesAndEdit"
-            android:layout_width="13dp"
-            android:layout_height="13dp"
-            android:layout_gravity="center_vertical|end"
-            android:layout_margin="15dp"
-            android:src="@drawable/report_green_down"/>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:layout_gravity="top"
+            android:background="#ff808080"/>
 
-        <TextView
-            android:id="@+id/tvHeaderThreeChkboxesAndEdit"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:id="@+id/llHeaderThreeChkboxesAndEdit"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="start|center_vertical"
-            android:maxWidth="250dp"
-            android:text="Section name"
-            android:textSize="13sp"/>
+            android:clickable="true"
+            android:orientation="horizontal">
 
-    </LinearLayout>
+            <ImageView
+                android:id="@+id/ivArrowThreeChkboxesAndEdit"
+                android:layout_width="13dp"
+                android:layout_height="13dp"
+                android:layout_gravity="center_vertical|end"
+                android:layout_margin="15dp"
+                android:src="@drawable/report_green_down"/>
+
+            <TextView
+                android:id="@+id/tvHeaderThreeChkboxesAndEdit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start|center_vertical"
+                android:maxWidth="250dp"
+                android:text="Section name"
+                android:textColor="@color/colorBlack"
+                android:textSize="14sp"/>
+
+        </LinearLayout>
+
+    </FrameLayout>
 
     <LinearLayout
         android:id="@+id/llSectionThreeChkboxesAndEdit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="9dp"
-        android:orientation="vertical"
-        ><!--android:visibility="gone">-->
+        android:layout_marginLeft="44dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginBottom="15dp"
+        android:orientation="vertical">
 
         <FrameLayout
+            android:id="@+id/fl1ThreeChkboxesAndEdit"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="15dp"
-            android:layout_marginLeft="15dp">
+            android:background="@drawable/layout_on_press_color_selector"
+            android:clickable="true">
 
             <TextView
                 android:id="@+id/tv1ThreeChkboxesAndEdit"
@@ -60,22 +76,25 @@
                 android:layout_marginRight="25dp"
                 android:background="@drawable/checkbox_selector"
                 android:button="@null"
+                android:clickable="false"
                 android:text=""/>
 
         </FrameLayout>
 
         <FrameLayout
+            android:id="@+id/fl2ThreeChkboxesAndEdit"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="15dp"
-            android:layout_marginLeft="15dp">
+            android:background="@drawable/layout_on_press_color_selector"
+            android:clickable="true">
 
             <TextView
                 android:id="@+id/tv2ThreeChkboxesAndEdit"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical|start"
-                android:text="chkbox 2"/>
+                android:text="chkbox 1"/>
 
             <CheckBox
                 android:id="@+id/chk2ThreeChkboxesAndEdit"
@@ -85,22 +104,25 @@
                 android:layout_marginRight="25dp"
                 android:background="@drawable/checkbox_selector"
                 android:button="@null"
+                android:clickable="false"
                 android:text=""/>
 
         </FrameLayout>
 
         <FrameLayout
+            android:id="@+id/fl3ThreeChkboxesAndEdit"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="15dp"
-            android:layout_marginLeft="15dp">
+            android:background="@drawable/layout_on_press_color_selector"
+            android:clickable="true">
 
             <TextView
                 android:id="@+id/tv3ThreeChkboxesAndEdit"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical|start"
-                android:text="chkbox 3"/>
+                android:text="chkbox 1"/>
 
             <CheckBox
                 android:id="@+id/chk3ThreeChkboxesAndEdit"
@@ -110,6 +132,7 @@
                 android:layout_marginRight="25dp"
                 android:background="@drawable/checkbox_selector"
                 android:button="@null"
+                android:clickable="false"
                 android:text=""/>
 
         </FrameLayout>
@@ -117,8 +140,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="9dp">
+            android:layout_height="wrap_content">
 
             <TextView
                 android:id="@+id/tvEditThreeChkboxesAndEdit"
@@ -126,13 +148,12 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="start|center_vertical"
                 android:text="Altro: "
-                android:textSize="13sp"/>
+                android:textSize="14sp"/>
 
             <EditText
                 android:id="@+id/et1ThreeChkboxesAndEdit"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
                 android:layout_gravity="start|center_vertical"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"

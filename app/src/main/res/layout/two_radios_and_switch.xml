@@ -5,40 +5,44 @@
               android:layout_marginBottom="5dp"
               android:orientation="vertical">
 
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_gravity="top"
+        android:background="#ff808080"/>
+
     <LinearLayout
         android:id="@+id/llHeaderTwoRadiosAndSwitch"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#eeeeee"
         android:clickable="true"
         android:orientation="horizontal">
 
-        <FrameLayout
-            android:layout_width="match_parent"
+        <ImageView
+            android:id="@+id/ivArrowTwoRadiosAndSwitch"
+            android:layout_width="13dp"
+            android:layout_height="13dp"
+            android:layout_gravity="center_vertical|end"
+            android:layout_margin="15dp"
+            android:src="@drawable/report_green_down"/>
+
+        <TextView
+            android:id="@+id/tvHeaderTwoRadiosAndSwitch"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="9dp">
-
-            <TextView
-                android:id="@+id/tvHeaderTwoRadiosAndSwitch"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="start|center_vertical"
-                android:text=" Section name"
-                android:maxWidth="250dp"
-
-                android:textSize="13sp"/>
-
-            <ImageView
-                android:id="@+id/ivArrowTwoRadiosAndSwitch"
-                android:layout_width="13dp"
-                android:layout_height="13dp"
-                android:layout_gravity="center_vertical|end"
-                android:layout_margin="15dp"
-                android:src="@drawable/report_green_down"/>
-
-        </FrameLayout>
+            android:layout_gravity="start|center_vertical"
+            android:maxWidth="250dp"
+            android:text="Section name"
+            android:textColor="@color/colorBlack"
+            android:textSize="14sp"/>
 
     </LinearLayout>
+
+    </FrameLayout>
 
     <LinearLayout
         android:id="@+id/llSectionTwoRadiosAndSwitch"
@@ -60,6 +64,7 @@
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
                 android:button="@null"
+                android:background="@drawable/radiobutton_ripple_effect_selector"                
                 android:drawableRight="@drawable/radio_button_selector"
                   android:textColor="@drawable/radio_button_text_color_selector"
                 android:text="radio 1"/>
@@ -71,6 +76,7 @@
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
                 android:button="@null"
+                android:background="@drawable/radiobutton_ripple_effect_selector"                
                 android:drawableRight="@drawable/radio_button_selector"
                   android:textColor="@drawable/radio_button_text_color_selector"
                 android:text="radio 2"/>

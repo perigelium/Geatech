@@ -5,38 +5,54 @@
               android:layout_marginBottom="5dp"
               android:orientation="vertical">
 
-    <LinearLayout
-        android:id="@+id/llHeaderFourRadiosAndEdit"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:clickable="true"
-        android:orientation="horizontal">
+        android:layout_height="wrap_content">
 
-        <ImageView
-            android:id="@+id/ivArrowFourRadiosAndEdit"
-            android:layout_width="13dp"
-            android:layout_height="13dp"
-            android:layout_gravity="center_vertical|end"
-            android:layout_margin="15dp"
-            android:src="@drawable/report_green_down"/>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:layout_gravity="top"
+            android:background="#ff808080"/>
 
-        <TextView
-            android:id="@+id/tvHeaderFourRadiosAndEdit"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:id="@+id/llHeaderFourRadiosAndEdit"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="start|center_vertical"
-            android:maxWidth="250dp"
-            android:text="Section name"
-            android:textSize="13sp"/>
+            android:clickable="true"
+            android:orientation="horizontal">
 
-    </LinearLayout>
+            <ImageView
+                android:id="@+id/ivArrowFourRadiosAndEdit"
+                android:layout_width="13dp"
+                android:layout_height="13dp"
+                android:layout_gravity="center_vertical|end"
+                android:layout_margin="15dp"
+                android:src="@drawable/report_green_down"/>
+
+            <TextView
+                android:id="@+id/tvHeaderFourRadiosAndEdit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start|center_vertical"
+                android:maxWidth="250dp"
+                android:text="Section name"
+                android:textColor="@color/colorBlack"
+                android:textSize="14sp"/>
+
+        </LinearLayout>
+
+    </FrameLayout>
 
     <LinearLayout
         android:id="@+id/llSectionFourRadiosAndEdit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        ><!--android:visibility="gone">-->
+        android:layout_marginLeft="44dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="15dp">
 
         <RadioGroup
             android:id="@+id/rg1FourRadiosAndEdit"
@@ -47,8 +63,7 @@
                 android:id="@+id/rb1FourRadiosAndEdit"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
+                android:background="@drawable/radiobutton_ripple_effect_selector"
                 android:button="@null"
                 android:drawableRight="@drawable/radio_button_selector"
                 android:text="Radio "
@@ -58,8 +73,7 @@
                 android:id="@+id/rb2FourRadiosAndEdit"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
+                android:background="@drawable/radiobutton_ripple_effect_selector"
                 android:button="@null"
                 android:drawableRight="@drawable/radio_button_selector"
                 android:text="Radio 2"
@@ -69,8 +83,7 @@
                 android:id="@+id/rb3FourRadiosAndEdit"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
+                android:background="@drawable/radiobutton_ripple_effect_selector"
                 android:button="@null"
                 android:drawableRight="@drawable/radio_button_selector"
                 android:text="Radio 3"
@@ -80,8 +93,7 @@
                 android:id="@+id/rb4FourRadiosAndEdit"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
+                android:background="@drawable/radiobutton_ripple_effect_selector"
                 android:button="@null"
                 android:drawableRight="@drawable/radio_button_selector"
                 android:text="Radio 4   "
@@ -89,18 +101,17 @@
 
         </RadioGroup>
 
-
         <LinearLayout
             android:id="@+id/llEditFourRadiosAndEdit"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginTop="9dp">
 
             <TextView
                 android:id="@+id/tv1FourRadiosAndEdit"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start|center_vertical"
-                android:layout_margin="9dp"
                 android:text="Altro: "
                 android:textSize="13sp"/>
 

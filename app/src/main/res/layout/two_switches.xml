@@ -6,6 +6,16 @@
               android:background="#ffffffff"
               android:orientation="vertical">
 
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_gravity="top"
+        android:background="#ff808080"/>
+
     <LinearLayout
         android:id="@+id/llHeaderTwoSwitches"
         android:layout_width="match_parent"
@@ -28,9 +38,12 @@
             android:layout_gravity="start|center_vertical"
             android:text="Section name"
             android:maxWidth="250dp"
-            android:textSize="13sp"/>
+            android:textColor="@color/colorBlack"
+            android:textSize="14sp"/>
 
     </LinearLayout>
+
+    </FrameLayout>
 
     <LinearLayout
         android:id="@+id/llSectionTwoSwitches"

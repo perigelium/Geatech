@@ -5,13 +5,23 @@
               android:layout_marginBottom="5dp"
               android:orientation="vertical">
 
-    <LinearLayout
-        android:id="@+id/llHeaderTwoSwitchesAndEdit"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#ffffffff"
-        android:clickable="true"
-        android:orientation="horizontal">
+        android:layout_height="wrap_content">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:layout_gravity="top"
+            android:background="#ff808080"/>
+
+        <LinearLayout
+            android:id="@+id/llHeaderTwoSwitchesAndEdit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#ffffffff"
+            android:clickable="true"
+            android:orientation="horizontal">
 
             <ImageView
                 android:id="@+id/ivArrowTwoSwitchesAndEdit"
@@ -26,18 +36,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start|center_vertical"
-                android:text="Section name"
                 android:maxWidth="250dp"
+                android:text="Section name"
                 android:textColor="#ff000000"
                 android:textSize="17sp"/>
 
-    </LinearLayout>
+        </LinearLayout>
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_gravity="bottom"
-        android:background="#88808080"/>
+    </FrameLayout>
 
     <LinearLayout
         android:id="@+id/llSectionTwoSwitchesAndEdit"
@@ -49,8 +55,8 @@
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_margin="9dp">
+            android:layout_margin="9dp"
+            android:orientation="horizontal">
 
             <TextView
                 android:id="@+id/tv1TwoSwitchesAndEdit"
@@ -58,8 +64,8 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="start|center_vertical"
                 android:text="Switch 1: "
-                android:textSize="13sp"
-                android:textColor="#ff808080"/>
+                android:textColor="#ff808080"
+                android:textSize="13sp"/>
 
             <Switch
                 android:id="@+id/sw1TwoSwitchesAndEdit"
@@ -67,15 +73,15 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="end|center_vertical"
                 android:layout_marginRight="16dp"
-                android:theme="@style/SwitchCompatTheme"
-                android:textColor="#ff808080"/>
+                android:textColor="#ff808080"
+                android:theme="@style/SwitchCompatTheme"/>
         </FrameLayout>
 
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_margin="9dp">
+            android:layout_margin="9dp"
+            android:orientation="horizontal">
 
             <TextView
                 android:id="@+id/tv2TwoSwitchesAndEdit"
@@ -83,8 +89,8 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="start|center_vertical"
                 android:text="Switch 2: "
-                android:textSize="13sp"
-                android:textColor="#ff808080"/>
+                android:textColor="#ff808080"
+                android:textSize="13sp"/>
 
             <Switch
                 android:id="@+id/sw2TwoSwitchesAndEdit"
@@ -92,8 +98,8 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="end|center_vertical"
                 android:layout_marginRight="16dp"
-                android:theme="@style/SwitchCompatTheme"
-                android:textColor="#ff808080"/>
+                android:textColor="#ff808080"
+                android:theme="@style/SwitchCompatTheme"/>
 
         </FrameLayout>
 
@@ -101,8 +107,8 @@
             android:id="@+id/llEditTwoSwitchesAndEdit"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_margin="9dp">
+            android:layout_margin="9dp"
+            android:orientation="horizontal">
 
             <TextView
                 android:id="@+id/tv3TwoSwitchesAndEdit"
@@ -121,13 +127,13 @@
                 android:layout_gravity="start|center_vertical"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
-                android:hint="Inserire"
-                android:textColorHint="#ffb2b2b2"
                 android:background="@android:color/transparent"
                 android:ems="9"
+                android:hint="Inserire"
                 android:inputType="none"
                 android:text=""
-                android:textColor="#ff29B352"/>
+                android:textColor="#ff29B352"
+                android:textColorHint="#ffb2b2b2"/>
 
         </LinearLayout>
     </LinearLayout>
