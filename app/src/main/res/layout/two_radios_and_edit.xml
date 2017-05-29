@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
-              android:layout_marginBottom="5dp"
+              android:layout_marginBottom="25dp"
               android:orientation="vertical">
 
     <FrameLayout
@@ -48,8 +48,9 @@
         android:id="@+id/llSectionTwoRadiosAndEdit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        ><!--android:visibility="gone">-->
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:orientation="vertical">
 
         <RadioGroup
             android:id="@+id/rg1TwoRadiosAndEdit"
@@ -60,10 +61,8 @@
                 android:id="@+id/rb1TwoRadiosAndEdit"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
                 android:button="@null"
-                android:background="@drawable/radiobutton_ripple_effect_selector"                
+                android:background="@drawable/radiobutton_ripple_effect_selector"
                 android:drawableRight="@drawable/radio_button_selector"
                   android:textColor="@drawable/radio_button_text_color_selector"
                 android:text="radio "/>
@@ -72,10 +71,8 @@
                 android:id="@+id/rb2TwoRadiosAndEdit"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
                 android:button="@null"
-                android:background="@drawable/radiobutton_ripple_effect_selector"                
+                android:background="@drawable/radiobutton_ripple_effect_selector"
                 android:drawableRight="@drawable/radio_button_selector"
                   android:textColor="@drawable/radio_button_text_color_selector"
                 android:text="radio 2"/>
@@ -85,29 +82,28 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start|center_vertical"
-                android:layout_margin="9dp"
                 android:text="Altro: "
                 android:textSize="13sp"/>
 
             <EditText
                 android:id="@+id/et1TwoRadiosAndEdit"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
                 android:layout_gravity="start|center_vertical"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
                 android:hint="Inserire"
-                android:textColorHint="#cccccc"
+                android:textColorHint="@color/colorLightGrayB2"
                 android:background="@android:color/transparent"
                 android:ems="9"
-                                android:inputType="none"
+                android:inputType="none"
                 android:text=""
                 android:textColor="#ff29b352"/>
 

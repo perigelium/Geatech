@@ -100,10 +100,11 @@ public class FragListInWorkVisits extends ListFragment
         calendarNow.set(Calendar.SECOND, 59);
         long lastMilliSecondsOfToday = calendarNow.getTimeInMillis();
 
-        for (VisitItem visitItem : visitItems)
-        //for (int i = 0; i < visitItems.size(); i++)
+        //for (VisitItem visitItem : visitItems)
+        for (int i = 0; i < visitItems.size(); i++)
         {
             //String data_ora_sopralluogo = visitItem.getGeaSopralluogo().getData_ora_sopralluogo();
+            VisitItem visitItem = visitItems.get(i);
             GeaSopralluogo geaSopralluogo = visitItem.getGeaSopralluogo();
             int idSopralluogo = geaSopralluogo.getId_sopralluogo();
 

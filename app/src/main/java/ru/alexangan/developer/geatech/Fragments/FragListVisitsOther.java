@@ -12,6 +12,7 @@ import android.widget.ListView;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Map;
@@ -85,6 +86,11 @@ public class FragListVisitsOther extends ListFragment
         TreeMap<Long, VisitItem> unsortedVisits = new TreeMap<>();
 
         visitItemsFiltered = new ArrayList<>();
+        Calendar calendarNow = Calendar.getInstance(Locale.ITALY);
+        calendarNow.set(Calendar.HOUR, 23);
+        calendarNow.set(Calendar.MINUTE, 59);
+        calendarNow.set(Calendar.SECOND, 59);
+        long lastMilliSecondsOfToday = calendarNow.getTimeInMillis();
 
         long n = 0;
 
@@ -104,7 +110,11 @@ public class FragListVisitsOther extends ListFragment
                 {
                     time++;
                 }
-                unsortedVisits.put(time, visitItem);
+
+                if(time > lastMilliSecondsOfToday)
+                {
+                    unsortedVisits.put(time, visitItem);
+                }
 
             } catch (ParseException e)
             {

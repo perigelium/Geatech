@@ -152,7 +152,9 @@ public class PhotoGalleryGridFragment extends Fragment
 
         gvPhotoGallery = (GridView) rootView.findViewById(R.id.gvPhotoGallery);
         ivFullSize = (ImageView) rootView.findViewById(R.id.ivFullSize);
+        ivFullSize.setVisibility(View.GONE);
         ivTrashCan = (ImageView) rootView.findViewById(R.id.ivTrashCan);
+        ivTrashCan.setVisibility(View.GONE);
 
         ivTrashCan.setOnClickListener(new View.OnClickListener()
         {

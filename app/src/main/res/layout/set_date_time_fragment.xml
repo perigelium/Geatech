@@ -105,9 +105,7 @@
 
             </FrameLayout>
 
-
         </LinearLayout>
-
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -116,15 +114,15 @@
             android:layout_margin="6dp"
             android:orientation="vertical">
 
-<!--            <TextView
+            <TextView
                 android:id="@+id/tvdataOraSopralluogo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start|bottom"
                 android:layout_marginLeft="6dp"
                 android:text="Pianifica un sopralluogo:"
-                android:textColor="#ff000000"
-                android:textSize="17sp"/>-->
+                android:textColor="@color/colorTextLightGray66"
+                android:textSize="17sp"/>
 
             <TextView
                 android:id="@+id/tvTechnicianName"
@@ -133,28 +131,9 @@
                 android:layout_gravity="center"
                 android:text="Nome di tecnico"
                 android:textSize="16sp"
+                android:textColor="@color/colorBlack"
                 android:textStyle="bold"/>
 
-<!--            <FrameLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
-
-
-
-                <Button
-                    android:id="@+id/btnSetDateTime"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:background="@android:color/transparent"
-                    android:onClick="onClick"
-                    android:padding="6dp"
-                    android:textSize="18sp"
-                    android:text="Imposta la data e l'ora"
-                    android:textColor="#ff666666"
-                    android:textStyle="normal"/>
-
-            </FrameLayout>-->
         </LinearLayout>
 
 
@@ -186,7 +165,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="start|center_vertical"
-            android:layout_marginBottom="12dp"
+            android:layout_marginTop="12dp"
             android:layout_marginLeft="6dp"
             android:text="Nome di servizio"
             android:textSize="17sp"
@@ -198,19 +177,19 @@
             android:layout_height="wrap_content"
             android:layout_gravity="start|center_vertical"
             android:layout_marginLeft="6dp"
-            android:layout_marginBottom="9dp"
-            android:textSize="13sp"
+            android:layout_marginTop="12dp"
+            android:textSize="15sp"
             android:textColor="#ff666666"
             android:text="Prodotto"/>
 
         <TextView
-            android:id="@+id/tvSottprodottiDateTime"
+            android:id="@+id/tvListSottprodottiTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="start|center_vertical"
             android:layout_marginLeft="6dp"
-            android:layout_marginBottom="6dp"
-            android:textSize="13sp"
+            android:layout_marginTop="12dp"
+            android:textSize="14sp"
             android:textColor="#ff666666"
             android:text="Eventualli sottoprodotti:"/>
 
@@ -218,102 +197,112 @@
             android:id="@+id/listSubproducts"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="9dp"
             android:layout="@layout/visits_day_time_set_list_row">
         </ListView>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:layout_gravity="bottom"
+            android:layout_marginBottom="12dp"
+            android:layout_marginLeft="40dp"
+            android:layout_marginTop="12dp"
+            android:background="#999999"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="start|center_vertical"
-            android:layout_marginBottom="12dp"
-            android:layout_marginLeft="6dp"
             android:text="Localizzazione"
             android:textSize="17sp"
             android:textColor="#ff000000"/>
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="6dp"
-            android:orientation="horizontal">
+            android:layout_marginTop="12dp"
+            android:orientation="vertical">
 
-            <TextView
-                android:layout_width="wrap_content"
+            <FrameLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="start|center_vertical"
-                android:layout_marginLeft="6dp"
-                android:textSize="17sp"
-                android:text="Coord. Nord"/>
+                android:orientation="horizontal">
 
-            <EditText
-                android:id="@+id/etCoordNord"
-                android:layout_width="wrap_content"
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start|center_vertical"
+                    android:text="Coord.Nord"/>
+
+                <EditText
+                    android:id="@+id/etCoordNord"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end|center_vertical"
+                    android:layout_marginRight="20dp"
+                    android:background="@android:color/transparent"
+                    android:inputType="number"
+                    android:text="Sconoscuto"
+                    android:textSize="19sp"
+                    android:textColor="#ff29b352"
+                    android:textStyle="bold"/>
+
+            </FrameLayout>
+
+            <FrameLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="start|center_vertical"
-                android:layout_marginLeft="6dp"
-                android:background="@android:color/transparent"
-                android:inputType="number"
-                android:text="Sconoscuto"
-                android:textSize="19sp"
-                android:textColor="#ff29B352"/>
+                android:orientation="horizontal">
 
-        </LinearLayout>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start|center_vertical"
+                    android:text="Coord.Est"/>
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="6dp"
-            android:orientation="horizontal">
+                <EditText
+                    android:id="@+id/etCoordEst"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end|center_vertical"
+                    android:layout_marginRight="20dp"
+                    android:background="@android:color/transparent"
+                    android:maxLines="1"
+                    android:inputType="number"
+                    android:text="Sconoscuto"
+                    android:textSize="19sp"
+                    android:textColor="#ff29b352"
+                    android:textStyle="bold"/>
 
-            <TextView
-                android:layout_width="wrap_content"
+            </FrameLayout>
+
+            <FrameLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="start|center_vertical"
-                android:layout_marginLeft="6dp"
-                android:textSize="17sp"
-                android:text="Coord. Est:"/>
+                android:orientation="horizontal">
 
-            <EditText
-                android:id="@+id/etCoordEst"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="start|center_vertical"
-                android:layout_marginLeft="6dp"
-                android:background="@android:color/transparent"
-                android:inputType="number"
-                android:maxLines="1"
-                android:text="Sconoscuto"
-                android:textColor="#ff29B352"
-                android:textSize="19sp"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start|center_vertical"
+                    android:text="Altitudine"/>
 
-        </LinearLayout>
+                <EditText
+                    android:id="@+id/etAltitude"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end|center_vertical"
+                    android:layout_marginRight="20dp"
+                    android:background="@android:color/transparent"
+                    android:maxLines="1"
+                    android:inputType="number"
+                    android:text="Sconoscuto"
+                    android:textSize="19sp"
+                    android:textColor="#ff29b352"
+                    android:textStyle="bold"/>
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="6dp"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="start|center_vertical"
-                android:layout_marginLeft="6dp"
-                android:textSize="17sp"
-                android:text="Altitudine:"/>
-
-            <EditText
-                android:id="@+id/etAltitude"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="start|center_vertical"
-                android:layout_marginLeft="6dp"
-                android:background="@android:color/transparent"
-                android:inputType="number"
-                android:maxLines="1"
-                android:text="Sconoscuto"
-                android:textSize="19sp"
-                android:textColor="#ff29B352"/>
+            </FrameLayout>
 
         </LinearLayout>
 

@@ -3,7 +3,7 @@
 
         <item android:drawable="@android:color/transparent"
               android:state_pressed="false"/>
-        <item android:drawable="@color/colorLightLightGray"
+        <item android:drawable="@color/colorLightGrayF5"
               android:state_pressed="true"/>
         <item android:drawable="@android:color/transparent"/>
 

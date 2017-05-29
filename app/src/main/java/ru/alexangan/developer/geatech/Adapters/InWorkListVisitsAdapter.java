@@ -116,17 +116,9 @@ public class InWorkListVisitsAdapter extends BaseAdapter
         ClientData clientData = visitItem.getClientData();
         ProductData productData = visitItem.getProductData();
         GeaSopralluogo geaSopralluogo = visitItem.getGeaSopralluogo();
-        String dataOraSopralluogo = geaSopralluogo.getData_ora_sopralluogo();
         int idSopralluogo = geaSopralluogo.getId_sopralluogo();
-        int tech_id = geaSopralluogo.getId_tecnico();
+        //int tech_id = geaSopralluogo.getId_tecnico();
 
-        String techName = "";
-        TechnicianItem technicianItem = realm.where(TechnicianItem.class).equalTo("id", tech_id).findFirst();
-
-        if (technicianItem != null)
-        {
-            techName = technicianItem.getFullNameTehnic();
-        }
         String productType = productData.getProductType();
 
         String clientName = clientData.getName();
@@ -154,6 +146,8 @@ public class InWorkListVisitsAdapter extends BaseAdapter
 
         if (reportStates != null)
         {
+            int tech_id = reportStates.getTech_id();
+            String techName = reportStates.getNome_tecnico();
 
             tvDateTimeHasSet.setText(reportStates.getGeneralInfoCompletionStateString().Value());
             tvTecnicalReportState.setText(reportStates.getReportCompletionStateString().Value());
@@ -170,6 +164,7 @@ public class InWorkListVisitsAdapter extends BaseAdapter
             }
 
             tvPhotosQuant.setText(photoAddedNumberStr);
+            String dataOraSopralluogo = reportStates.getData_ora_sopralluogo();
 
             if (tech_id != 0)
             {
@@ -199,8 +194,10 @@ public class InWorkListVisitsAdapter extends BaseAdapter
                 tvVisitDay.setVisibility(View.VISIBLE);
                 tvVisitMonth.setVisibility(View.VISIBLE);
 
-                tvVisitDay.setText(Integer.toString(calendar.get(Calendar.DAY_OF_MONTH)));
-                tvVisitMonth.setText(ItalianMonths.numToString(calendar.get(Calendar.MONTH) + 1));
+                String visitDay = Integer.toString(calendar.get(Calendar.DAY_OF_MONTH));
+                tvVisitDay.setText(visitDay);
+                String visitMonth = ItalianMonths.numToString(calendar.get(Calendar.MONTH) + 1);
+                tvVisitMonth.setText(visitMonth);
 
                 String minuteStr = Integer.toString(calendar.get(Calendar.MINUTE));
                 if (minuteStr.length() == 1)
@@ -208,7 +205,8 @@ public class InWorkListVisitsAdapter extends BaseAdapter
                     minuteStr = "0" + minuteStr;
                 }
 
-                tvVisitTime.setText(Integer.toString(calendar.get(Calendar.HOUR_OF_DAY)) + ":" + minuteStr);
+                String visitTime = Integer.toString(calendar.get(Calendar.HOUR_OF_DAY)) + ":" + minuteStr;
+                tvVisitTime.setText(visitTime);
             }/* else
             {
                 ivReportStatus.setBackgroundResource(R.drawable.dot_yellow);

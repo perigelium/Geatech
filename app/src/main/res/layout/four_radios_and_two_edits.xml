@@ -2,45 +2,45 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
-              android:layout_marginBottom="5dp"
+              android:layout_marginBottom="25dp"
               android:orientation="vertical">
 
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1px"
-        android:layout_gravity="top"
-        android:background="#ff808080"/>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:layout_gravity="top"
+            android:background="#ff808080"/>
 
-    <LinearLayout
-        android:id="@+id/llHeaderFourRadiosAndTwoEdits"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:clickable="true"
-        android:orientation="horizontal">
-
-        <ImageView
-            android:id="@+id/ivArrowFourRadiosAndTwoEdits"
-            android:layout_width="13dp"
-            android:layout_height="13dp"
-            android:layout_gravity="center_vertical|end"
-            android:layout_margin="15dp"
-            android:src="@drawable/report_green_down"/>
-
-        <TextView
-            android:id="@+id/tvHeaderFourRadiosAndTwoEdits"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:id="@+id/llHeaderFourRadiosAndTwoEdits"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="start|center_vertical"
-            android:maxWidth="250dp"
-            android:text="Section name"
-            android:textColor="@color/colorBlack"
-            android:textSize="14sp"/>
+            android:clickable="true"
+            android:orientation="horizontal">
 
-    </LinearLayout>
+            <ImageView
+                android:id="@+id/ivArrowFourRadiosAndTwoEdits"
+                android:layout_width="13dp"
+                android:layout_height="13dp"
+                android:layout_gravity="center_vertical|end"
+                android:layout_margin="15dp"
+                android:src="@drawable/report_green_down"/>
+
+            <TextView
+                android:id="@+id/tvHeaderFourRadiosAndTwoEdits"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start|center_vertical"
+                android:maxWidth="250dp"
+                android:text="Section name"
+                android:textColor="@color/colorBlack"
+                android:textSize="14sp"/>
+
+        </LinearLayout>
 
     </FrameLayout>
 
@@ -49,7 +49,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        ><!--android:visibility="gone">-->
+        android:layout_marginLeft="44dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="6dp">
 
         <RadioGroup
             android:id="@+id/rg1FourRadiosAndTwoEdits"
@@ -60,22 +62,18 @@
                 android:id="@+id/rb1FourRadiosAndTwoEdits"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
+                android:background="@drawable/radiobutton_ripple_effect_selector"
                 android:button="@null"
-                android:background="@drawable/radiobutton_ripple_effect_selector"                
                 android:drawableRight="@drawable/radio_button_selector"
-                android:text="Radio "
+                android:text="Radio 1 "
                 android:textColor="@drawable/radio_button_text_color_selector"/>
 
             <RadioButton
                 android:id="@+id/rb2FourRadiosAndTwoEdits"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
+                android:background="@drawable/radiobutton_ripple_effect_selector"
                 android:button="@null"
-                android:background="@drawable/radiobutton_ripple_effect_selector"                
                 android:drawableRight="@drawable/radio_button_selector"
                 android:text="Radio 2"
                 android:textColor="@drawable/radio_button_text_color_selector"/>
@@ -84,10 +82,8 @@
                 android:id="@+id/rb3FourRadiosAndTwoEdits"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
+                android:background="@drawable/radiobutton_ripple_effect_selector"
                 android:button="@null"
-                android:background="@drawable/radiobutton_ripple_effect_selector"                
                 android:drawableRight="@drawable/radio_button_selector"
                 android:text="Radio 3"
                 android:textColor="@drawable/radio_button_text_color_selector"/>
@@ -96,10 +92,8 @@
                 android:id="@+id/rb4FourRadiosAndTwoEdits"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
+                android:background="@drawable/radiobutton_ripple_effect_selector"
                 android:button="@null"
-                android:background="@drawable/radiobutton_ripple_effect_selector"                
                 android:drawableRight="@drawable/radio_button_selector"
                 android:text="Radio 4   "
                 android:textColor="@drawable/radio_button_text_color_selector"/>
@@ -109,27 +103,25 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp">
 
             <TextView
                 android:id="@+id/tv1FourRadiosAndTwoEdits"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start|center_vertical"
-                android:layout_margin="9dp"
                 android:text="Altro: "
                 android:textSize="13sp"/>
 
             <EditText
                 android:id="@+id/et1FourRadiosAndTwoEdits"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
                 android:layout_gravity="start|center_vertical"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
                 android:background="@android:color/transparent"
-                android:ems="9"
                 android:hint="Inserire"
                 android:inputType="none"
                 android:text=""
@@ -139,27 +131,26 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp">
 
             <TextView
                 android:id="@+id/tv2FourRadiosAndTwoEdits"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start|center_vertical"
-                android:layout_margin="9dp"
-                android:text=""
+                android:text="Edit 2"
                 android:textColor="#ff808080"
                 android:textSize="13sp"/>
 
             <EditText
                 android:id="@+id/et2FourRadiosAndTwoEdits"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
                 android:layout_gravity="start|center_vertical"
+                android:background="@android:color/transparent"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
-                android:ems="9"
                 android:hint="Inserire"
                 android:inputType="none"
                 android:text=""

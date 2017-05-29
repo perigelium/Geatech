@@ -2,45 +2,45 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
-              android:layout_marginBottom="5dp"
+              android:layout_marginBottom="25dp"
               android:orientation="vertical">
 
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1px"
-        android:layout_gravity="top"
-        android:background="#ff808080"/>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:layout_gravity="top"
+            android:background="#ff808080"/>
 
-    <LinearLayout
-        android:id="@+id/llHeaderFourChkboxes"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:clickable="true"
-        android:orientation="horizontal">
-
-        <ImageView
-            android:id="@+id/ivArrowFourChkboxes"
-            android:layout_width="13dp"
-            android:layout_height="13dp"
-            android:layout_gravity="center_vertical|end"
-            android:layout_margin="15dp"
-            android:src="@drawable/report_green_down"/>
-
-        <TextView
-            android:id="@+id/tvHeaderFourChkboxes"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:id="@+id/llHeaderFourChkboxes"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="start|center_vertical"
-            android:text="Section name"
-            android:maxWidth="250dp"
-            android:textColor="@color/colorBlack"
-            android:textSize="14sp"/>
+            android:clickable="true"
+            android:orientation="horizontal">
 
-    </LinearLayout>
+            <ImageView
+                android:id="@+id/ivArrowFourChkboxes"
+                android:layout_width="13dp"
+                android:layout_height="13dp"
+                android:layout_gravity="center_vertical|end"
+                android:layout_margin="15dp"
+                android:src="@drawable/report_green_down"/>
+
+            <TextView
+                android:id="@+id/tvHeaderFourChkboxes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start|center_vertical"
+                android:maxWidth="250dp"
+                android:text="Section name"
+                android:textColor="@color/colorBlack"
+                android:textSize="14sp"/>
+
+        </LinearLayout>
 
     </FrameLayout>
 
@@ -49,22 +49,22 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        ><!--android:visibility="gone">-->
+        android:layout_marginTop="6dp"
+        android:layout_marginLeft="44dp"
+        android:layout_marginRight="16dp">
 
 
         <FrameLayout
             android:id="@+id/fl1FourChkboxes"
             android:layout_width="match_parent"
             android:layout_height="45dp"
-            android:clickable="true"
             android:background="@drawable/layout_on_press_color_selector"
-            android:layout_marginBottom="10dp">
+            android:clickable="true">
 
             <TextView
                 android:id="@+id/tv1FourChkboxes"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="15dp"
                 android:layout_gravity="center_vertical|start"
                 android:text="chkbox 1"/>
 
@@ -72,11 +72,10 @@
                 android:id="@+id/chk1FourChkboxes"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:clickable="false"
                 android:layout_gravity="center_vertical|end"
-                android:layout_marginRight="25dp"
                 android:background="@drawable/checkbox_selector"
                 android:button="@null"
+                android:clickable="false"
                 android:text=""/>
 
         </FrameLayout>
@@ -85,16 +84,14 @@
             android:id="@+id/fl2FourChkboxes"
             android:layout_width="match_parent"
             android:layout_height="45dp"
-            android:clickable="true"
             android:background="@drawable/layout_on_press_color_selector"
-            android:layout_marginBottom="10dp">
+            android:clickable="true">
 
             <TextView
                 android:id="@+id/tv2FourChkboxes"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical|start"
-                android:layout_marginLeft="15dp"
                 android:text="chkbox 1"/>
 
             <CheckBox
@@ -102,10 +99,9 @@
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_gravity="center_vertical|end"
-                android:layout_marginRight="25dp"
                 android:background="@drawable/checkbox_selector"
-                android:clickable="false"
                 android:button="@null"
+                android:clickable="false"
                 android:text=""/>
 
         </FrameLayout>
@@ -114,15 +110,13 @@
             android:id="@+id/fl3FourChkboxes"
             android:layout_width="match_parent"
             android:layout_height="45dp"
-            android:clickable="true"
             android:background="@drawable/layout_on_press_color_selector"
-            android:layout_marginBottom="10dp">
+            android:clickable="true">
 
             <TextView
                 android:id="@+id/tv3FourChkboxes"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="15dp"
                 android:layout_gravity="center_vertical|start"
                 android:text="chkbox 1"/>
 
@@ -131,10 +125,9 @@
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_gravity="center_vertical|end"
-                android:layout_marginRight="25dp"
                 android:background="@drawable/checkbox_selector"
-                android:clickable="false"
                 android:button="@null"
+                android:clickable="false"
                 android:text=""/>
 
         </FrameLayout>
@@ -143,15 +136,13 @@
             android:id="@+id/fl4FourChkboxes"
             android:layout_width="match_parent"
             android:layout_height="45dp"
-            android:clickable="true"
             android:background="@drawable/layout_on_press_color_selector"
-            android:layout_marginBottom="10dp">
+            android:clickable="true">
 
             <TextView
                 android:id="@+id/tv4FourChkboxes"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="15dp"
                 android:layout_gravity="center_vertical|start"
                 android:text="chkbox 1"/>
 
@@ -160,10 +151,9 @@
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_gravity="center_vertical|end"
-                android:layout_marginRight="25dp"
                 android:background="@drawable/checkbox_selector"
-                android:clickable="false"
                 android:button="@null"
+                android:clickable="false"
                 android:text=""/>
 
         </FrameLayout>

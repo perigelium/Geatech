@@ -170,7 +170,7 @@ public class ReportSentDetailedFragment extends Fragment
 
         ListView listView = (ListView) rootView.findViewById(R.id.listItemsSentReport);
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, reportItems);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), R.layout.report_sent_detailed_item_row, R.id.tvReportDataItem, reportItems);
 
         listView.setAdapter(adapter);
 

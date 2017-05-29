@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
-              android:layout_marginBottom="5dp"
+              android:layout_marginBottom="25dp"
               android:orientation="vertical">
 
     <FrameLayout
@@ -51,14 +51,12 @@
         android:layout_marginLeft="44dp"
         android:layout_marginRight="16dp"
         android:layout_marginTop="5dp"
-        android:layout_marginBottom="5dp"
         android:orientation="vertical">
 
         <RadioGroup
             android:id="@+id/rg1ThreeRadiosAndEdit"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginBottom="4dp">
+            android:layout_height="match_parent">
 
             <RadioButton
                 android:id="@+id/rb1ThreeRadiosAndEdit"
@@ -96,7 +94,8 @@
         <LinearLayout
             android:id="@+id/llEditThreeRadiosAndEdit"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp">
 
             <TextView
                 android:id="@+id/tv1ThreeRadiosAndEdit"
@@ -108,12 +107,12 @@
 
             <EditText
                 android:id="@+id/et1ThreeRadiosAndEdit"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start|center_vertical"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
-                android:ems="9"
+                android:background="@android:color/transparent"
                 android:hint="Inserire"
                 android:inputType="none"
                 android:text=""

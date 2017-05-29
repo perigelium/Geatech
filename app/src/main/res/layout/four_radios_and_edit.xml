@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
-              android:layout_marginBottom="5dp"
+              android:layout_marginBottom="25dp"
               android:orientation="vertical">
 
     <FrameLayout
@@ -105,7 +105,7 @@
             android:id="@+id/llEditFourRadiosAndEdit"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="9dp">
+            android:layout_marginTop="16dp">
 
             <TextView
                 android:id="@+id/tv1FourRadiosAndEdit"
@@ -117,14 +117,13 @@
 
             <EditText
                 android:id="@+id/et1FourRadiosAndEdit"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:layout_gravity="start|center_vertical"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
                 android:background="@android:color/transparent"
-                android:ems="9"
                 android:hint="Inserire"
                 android:inputType="none"
                 android:text=""

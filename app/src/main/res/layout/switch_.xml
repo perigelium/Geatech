@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
-              android:layout_marginBottom="5dp"
+              android:layout_marginBottom="25dp"
               android:orientation="vertical">
 
     <FrameLayout
@@ -49,20 +49,22 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        ><!--android:visibility="gone">-->
+        android:layout_marginLeft="44dp"
+        android:layout_marginTop="9dp">
 
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:layout_marginTop="9dp">
 
             <TextView
                 android:id="@+id/tv1Switch"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start|center_vertical"
-                android:layout_margin="9dp"
                 android:text="Switch 1: "
+                android:maxWidth="200dp"
                 android:textSize="13sp"
                 android:textColor="#ff808080"/>
 

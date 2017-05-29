@@ -243,10 +243,11 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
         btnOpenMap = (Button) rootView.findViewById(R.id.btnOpenMap);
         btnOpenDialer = (Button) rootView.findViewById(R.id.btnOpenDialer);
         tvdataOraSopralluogo = (TextView) rootView.findViewById(R.id.tvdataOraSopralluogo);
+        TextView tvListSottprodottiTitle = (TextView) rootView.findViewById(R.id.tvListSottprodottiTitle);
+
         tvTechnicianName = (TextView) rootView.findViewById(R.id.tvTechnicianName);
 
         btnGetCurrentCoords = (Button) rootView.findViewById(R.id.btnGetCurrentCoords);
-
         btnGetCurrentCoords.setOnClickListener(this);
 
         etCoordNord = (EditText) rootView.findViewById(R.id.etCoordNord);
@@ -289,7 +290,14 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
         ListView listView = (ListView) rootView.findViewById(R.id.listSubproducts);
         listView.setAdapter(adapter);
 
-        ViewUtils.setListViewHeightBasedOnChildren(listView);
+        if(adapter.getCount() != 0)
+        {
+            ViewUtils.setListViewHeightBasedOnChildren(listView);
+        }
+        else
+        {
+            tvListSottprodottiTitle.setText("");
+        }
 
         TextView clientNameTextView = (TextView) rootView.findViewById(R.id.tvClientName);
         clientNameTextView.setText(clientData.getName());

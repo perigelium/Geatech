@@ -80,7 +80,7 @@ public class ViewUtils
 
         al_llHeaderSections = new ArrayList<>();
         llHeaderSections = new ArrayList<>();
-        allSectionsCollapsed = new boolean[]{true, true, true, true, true, true, true};
+        allSectionsCollapsed = new boolean[]{false, false, false, false, false, false, false};
 
         VisitItem visitItem = visitItems.get(selectedIndex);
         GeaSopralluogo geaSopralluogo = visitItem.getGeaSopralluogo();
@@ -211,66 +211,129 @@ public class ViewUtils
 
         CheckBoxes.put(idItem, al_chkBoxes);
 
+        final TextView tv1FourChkboxes = (TextView) four_chkboxes.findViewById(R.id.tv1FourChkboxes);
+        final TextView tv2FourChkboxes = (TextView) four_chkboxes.findViewById(R.id.tv2FourChkboxes);
+        final TextView tv3FourChkboxes = (TextView) four_chkboxes.findViewById(R.id.tv3FourChkboxes);
+        final TextView tv4FourChkboxes = (TextView) four_chkboxes.findViewById(R.id.tv4FourChkboxes);
+
+        final ArrayList<TextView> al_TextViews = new ArrayList<>();
+        al_TextViews.add(tv1FourChkboxes);
+        al_TextViews.add(tv2FourChkboxes);
+        al_TextViews.add(tv3FourChkboxes);
+        al_TextViews.add(tv4FourChkboxes);
+
+        final FrameLayout fl1FourChkboxes = (FrameLayout) four_chkboxes.findViewById(R.id.fl1FourChkboxes);
+        final FrameLayout fl2FourChkboxes = (FrameLayout) four_chkboxes.findViewById(R.id.fl2FourChkboxes);
+        final FrameLayout fl3FourChkboxes = (FrameLayout) four_chkboxes.findViewById(R.id.fl3FourChkboxes);
+        final FrameLayout fl4FourChkboxes = (FrameLayout) four_chkboxes.findViewById(R.id.fl4FourChkboxes);
+
+        fl1FourChkboxes.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                chk1FourChkboxes.setChecked(!chk1FourChkboxes.isChecked());
+
+                if (chk1FourChkboxes.isChecked())
+                {
+                    for (int i = 0; i < al_chkBoxes.size(); i += 2)
+                    {
+                        al_chkBoxes.get(i).setChecked(false);
+                        al_TextViews.get(i).setTextColor(Color.parseColor("#ff808080"));
+                    }
+                    chk1FourChkboxes.setChecked(true);
+
+                    tv1FourChkboxes.setTextColor(Color.parseColor("#ff29b352"));
+                }
+                else
+                {
+                    tv1FourChkboxes.setTextColor(Color.parseColor("#ff808080"));
+                }
+            }
+        });
+
+        fl2FourChkboxes.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                chk2FourChkboxes.setChecked(!chk2FourChkboxes.isChecked());
+
+                if (chk2FourChkboxes.isChecked())
+                {
+                    for (int i = 1; i < al_chkBoxes.size(); i += 2)
+                    {
+                        al_chkBoxes.get(i).setChecked(false);
+                        al_TextViews.get(i).setTextColor(Color.parseColor("#ff808080"));
+                    }
+                    chk2FourChkboxes.setChecked(true);
+
+                    tv2FourChkboxes.setTextColor(Color.parseColor("#ff29b352"));
+                }
+                else
+                {
+                    tv2FourChkboxes.setTextColor(Color.parseColor("#ff808080"));
+                }
+            }
+        });
+
+        fl3FourChkboxes.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                chk3FourChkboxes.setChecked(!chk3FourChkboxes.isChecked());
+
+                if (chk3FourChkboxes.isChecked())
+                {
+                    for (int i = 0; i < al_chkBoxes.size(); i += 2)
+                    {
+                        al_chkBoxes.get(i).setChecked(false);
+                        al_TextViews.get(i).setTextColor(Color.parseColor("#ff808080"));
+                    }
+                    chk3FourChkboxes.setChecked(true);
+
+                    tv3FourChkboxes.setTextColor(Color.parseColor("#ff29b352"));
+                }
+                else
+                {
+                    tv3FourChkboxes.setTextColor(Color.parseColor("#ff808080"));
+                }
+            }
+        });
+
+        fl4FourChkboxes.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                chk4FourChkboxes.setChecked(!chk4FourChkboxes.isChecked());
+
+                if (chk4FourChkboxes.isChecked())
+                {
+                    for (int i = 1; i < al_chkBoxes.size(); i += 2)
+                    {
+                        al_chkBoxes.get(i).setChecked(false);
+                        al_TextViews.get(i).setTextColor(Color.parseColor("#ff808080"));
+                    }
+                    chk4FourChkboxes.setChecked(true);
+
+                    tv4FourChkboxes.setTextColor(Color.parseColor("#ff29b352"));
+                }
+                else
+                {
+                    tv4FourChkboxes.setTextColor(Color.parseColor("#ff808080"));
+                }
+            }
+        });
+
         String valore = itemModelli.get(idItem).getValore();
         final String[] fields = valore.split("\\|\\|");
 
-        for (int i = 0; i < fields.length; i++)
+        for (int i = 0; i < al_TextViews.size(); i++)
         {
-            al_chkBoxes.get(i).setText(fields[i]);
+            al_TextViews.get(i).setText(fields[i]);
         }
-
-        chk1FourChkboxes.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View view)
-            {
-                for (int i = 0; i < al_chkBoxes.size(); i += 2)
-                {
-                    al_chkBoxes.get(i).setChecked(false);
-                }
-                chk1FourChkboxes.setChecked(true);
-            }
-        });
-
-        chk3FourChkboxes.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View view)
-            {
-                for (int i = 0; i < al_chkBoxes.size(); i += 2)
-                {
-                    al_chkBoxes.get(i).setChecked(false);
-                }
-                chk3FourChkboxes.setChecked(true);
-            }
-        });
-
-        chk2FourChkboxes.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View view)
-            {
-                for (int i = 1; i < al_chkBoxes.size(); i += 2)
-                {
-                    al_chkBoxes.get(i).setChecked(false);
-                }
-                chk2FourChkboxes.setChecked(true);
-            }
-        });
-
-        chk4FourChkboxes.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View view)
-            {
-                for (int i = 1; i < al_chkBoxes.size(); i += 2)
-                {
-                    al_chkBoxes.get(i).setChecked(false);
-                }
-                chk4FourChkboxes.setChecked(true);
-            }
-        });
-
 
         return ++idItem;
     }
@@ -306,25 +369,134 @@ public class ViewUtils
 
         ArrayList<CheckBox> al_chkBoxes = new ArrayList<>();
 
-        CheckBox chk1FiveChkboxes = (CheckBox) five_chkboxes.findViewById(R.id.chk1FiveChkboxes);
+        final CheckBox chk1FiveChkboxes = (CheckBox) five_chkboxes.findViewById(R.id.chk1FiveChkboxes);
         al_chkBoxes.add(chk1FiveChkboxes);
-        CheckBox chk2FiveChkboxes = (CheckBox) five_chkboxes.findViewById(R.id.chk2FiveChkboxes);
+        final CheckBox chk2FiveChkboxes = (CheckBox) five_chkboxes.findViewById(R.id.chk2FiveChkboxes);
         al_chkBoxes.add(chk2FiveChkboxes);
-        CheckBox chk3FiveChkboxes = (CheckBox) five_chkboxes.findViewById(R.id.chk3FiveChkboxes);
+        final CheckBox chk3FiveChkboxes = (CheckBox) five_chkboxes.findViewById(R.id.chk3FiveChkboxes);
         al_chkBoxes.add(chk3FiveChkboxes);
-        CheckBox chk4FiveChkboxes = (CheckBox) five_chkboxes.findViewById(R.id.chk4FiveChkboxes);
+        final CheckBox chk4FiveChkboxes = (CheckBox) five_chkboxes.findViewById(R.id.chk4FiveChkboxes);
         al_chkBoxes.add(chk4FiveChkboxes);
-        CheckBox chk5FiveChkboxes = (CheckBox) five_chkboxes.findViewById(R.id.chk5FiveChkboxes);
+        final CheckBox chk5FiveChkboxes = (CheckBox) five_chkboxes.findViewById(R.id.chk5FiveChkboxes);
         al_chkBoxes.add(chk5FiveChkboxes);
 
         CheckBoxes.put(idItem, al_chkBoxes);
 
+        final TextView tv1FiveChkboxes = (TextView) five_chkboxes.findViewById(R.id.tv1FiveChkboxes);
+        final TextView tv2FiveChkboxes = (TextView) five_chkboxes.findViewById(R.id.tv2FiveChkboxes);
+        final TextView tv3FiveChkboxes = (TextView) five_chkboxes.findViewById(R.id.tv3FiveChkboxes);
+        final TextView tv4FiveChkboxes = (TextView) five_chkboxes.findViewById(R.id.tv4FiveChkboxes);
+        final TextView tv5FiveChkboxes = (TextView) five_chkboxes.findViewById(R.id.tv5FiveChkboxes);
+
+        final ArrayList<TextView> al_TextViews = new ArrayList<>();
+        al_TextViews.add(tv1FiveChkboxes);
+        al_TextViews.add(tv2FiveChkboxes);
+        al_TextViews.add(tv3FiveChkboxes);
+        al_TextViews.add(tv4FiveChkboxes);
+        al_TextViews.add(tv5FiveChkboxes);
+
+        final FrameLayout fl1FiveChkboxes = (FrameLayout) five_chkboxes.findViewById(R.id.fl1FiveChkboxes);
+        final FrameLayout fl2FiveChkboxes = (FrameLayout) five_chkboxes.findViewById(R.id.fl2FiveChkboxes);
+        final FrameLayout fl3FiveChkboxes = (FrameLayout) five_chkboxes.findViewById(R.id.fl3FiveChkboxes);
+        final FrameLayout fl4FiveChkboxes = (FrameLayout) five_chkboxes.findViewById(R.id.fl4FiveChkboxes);
+        final FrameLayout fl5FiveChkboxes = (FrameLayout) five_chkboxes.findViewById(R.id.fl5FiveChkboxes);
+
+        fl1FiveChkboxes.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                chk1FiveChkboxes.setChecked(!chk1FiveChkboxes.isChecked());
+
+                if (chk1FiveChkboxes.isChecked())
+                {
+                    tv1FiveChkboxes.setTextColor(Color.parseColor("#ff29b352"));
+                }
+                else
+                {
+                    tv1FiveChkboxes.setTextColor(Color.parseColor("#ff808080"));
+                }
+            }
+        });
+
+        fl2FiveChkboxes.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                chk2FiveChkboxes.setChecked(!chk2FiveChkboxes.isChecked());
+
+                if (chk2FiveChkboxes.isChecked())
+                {
+                    tv2FiveChkboxes.setTextColor(Color.parseColor("#ff29b352"));
+                }
+                else
+                {
+                    tv2FiveChkboxes.setTextColor(Color.parseColor("#ff808080"));
+                }
+            }
+        });
+
+        fl3FiveChkboxes.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                chk3FiveChkboxes.setChecked(!chk3FiveChkboxes.isChecked());
+
+                if (chk3FiveChkboxes.isChecked())
+                {
+                    tv3FiveChkboxes.setTextColor(Color.parseColor("#ff29b352"));
+                }
+                else
+                {
+                    tv3FiveChkboxes.setTextColor(Color.parseColor("#ff808080"));
+                }
+            }
+        });
+
+        fl4FiveChkboxes.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                chk4FiveChkboxes.setChecked(!chk4FiveChkboxes.isChecked());
+
+                if (chk4FiveChkboxes.isChecked())
+                {
+                    tv4FiveChkboxes.setTextColor(Color.parseColor("#ff29b352"));
+                }
+                else
+                {
+                    tv4FiveChkboxes.setTextColor(Color.parseColor("#ff808080"));
+                }
+            }
+        });
+
+        fl5FiveChkboxes.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                chk5FiveChkboxes.setChecked(!chk5FiveChkboxes.isChecked());
+
+                if (chk5FiveChkboxes.isChecked())
+                {
+                    tv5FiveChkboxes.setTextColor(Color.parseColor("#ff29b352"));
+                }
+                else
+                {
+                    tv5FiveChkboxes.setTextColor(Color.parseColor("#ff808080"));
+                }
+            }
+        });
+
         String valore = itemModelli.get(idItem).getValore();
         String[] fields = valore.split("\\|\\|");
 
-        for (int i = 0; i < fields.length; i++)
+        for (int i = 0; i < al_TextViews.size(); i++)
         {
-            al_chkBoxes.get(i).setText(fields[i]);
+            al_TextViews.get(i).setText(fields[i]);
         }
 
         return ++idItem;
@@ -445,7 +617,6 @@ public class ViewUtils
         String valore = itemModelli.get(idItem).getValore();
         final String[] fields = valore.split("\\|\\|");
 
-
         final CheckBox chk1ThreeChkboxesAndEdit = (CheckBox) three_chkboxes_and_edit.findViewById(R.id.chk1ThreeChkboxesAndEdit);
         final CheckBox chk2ThreeChkboxesAndEdit = (CheckBox) three_chkboxes_and_edit.findViewById(R.id.chk2ThreeChkboxesAndEdit);
         final CheckBox chk3ThreeChkboxesAndEdit = (CheckBox) three_chkboxes_and_edit.findViewById(R.id.chk3ThreeChkboxesAndEdit);
@@ -459,7 +630,7 @@ public class ViewUtils
         al_Chkboxes.add(chk2ThreeChkboxesAndEdit);
         al_Chkboxes.add(chk3ThreeChkboxesAndEdit);
 
-        ArrayList<TextView> al_TextViews = new ArrayList<>();
+        final ArrayList<TextView> al_TextViews = new ArrayList<>();
         al_TextViews.add(tv1ThreeChkboxesAndEdit);
         al_TextViews.add(tv2ThreeChkboxesAndEdit);
         al_TextViews.add(tv3ThreeChkboxesAndEdit);
@@ -479,41 +650,66 @@ public class ViewUtils
 
         EditTexts.put(idItem, et1ThreeChkboxesAndEdit);
 
-        chk1ThreeChkboxesAndEdit.setOnClickListener(new View.OnClickListener()
+        final FrameLayout fl1ThreeChkboxesAndEdit = (FrameLayout) three_chkboxes_and_edit.findViewById(R.id.fl1ThreeChkboxesAndEdit);
+        final FrameLayout fl2ThreeChkboxesAndEdit = (FrameLayout) three_chkboxes_and_edit.findViewById(R.id.fl2ThreeChkboxesAndEdit);
+        final FrameLayout fl3ThreeChkboxesAndEdit = (FrameLayout) three_chkboxes_and_edit.findViewById(R.id.fl3ThreeChkboxesAndEdit);
+
+        fl1ThreeChkboxesAndEdit.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View view)
             {
+                chk1ThreeChkboxesAndEdit.setChecked(!chk1ThreeChkboxesAndEdit.isChecked());
+
                 if (chk1ThreeChkboxesAndEdit.isChecked())
                 {
                     et1ThreeChkboxesAndEdit.setText("");
                     et1ThreeChkboxesAndEdit.clearFocus();
+                    tv1ThreeChkboxesAndEdit.setTextColor(Color.parseColor("#ff29b352"));
+                }
+                else
+                {
+                    tv1ThreeChkboxesAndEdit.setTextColor(Color.parseColor("#ff808080"));
                 }
             }
         });
 
-        chk2ThreeChkboxesAndEdit.setOnClickListener(new View.OnClickListener()
+        fl2ThreeChkboxesAndEdit.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View view)
             {
+                chk2ThreeChkboxesAndEdit.setChecked(!chk2ThreeChkboxesAndEdit.isChecked());
+
                 if (chk2ThreeChkboxesAndEdit.isChecked())
                 {
                     et1ThreeChkboxesAndEdit.setText("");
                     et1ThreeChkboxesAndEdit.clearFocus();
+                    tv2ThreeChkboxesAndEdit.setTextColor(Color.parseColor("#ff29b352"));
+                }
+                else
+                {
+                    tv2ThreeChkboxesAndEdit.setTextColor(Color.parseColor("#ff808080"));
                 }
             }
         });
 
-        chk3ThreeChkboxesAndEdit.setOnClickListener(new View.OnClickListener()
+        fl3ThreeChkboxesAndEdit.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View view)
             {
+                chk3ThreeChkboxesAndEdit.setChecked(!chk3ThreeChkboxesAndEdit.isChecked());
+
                 if (chk3ThreeChkboxesAndEdit.isChecked())
                 {
                     et1ThreeChkboxesAndEdit.setText("");
                     et1ThreeChkboxesAndEdit.clearFocus();
+                    tv3ThreeChkboxesAndEdit.setTextColor(Color.parseColor("#ff29b352"));
+                }
+                else
+                {
+                    tv3ThreeChkboxesAndEdit.setTextColor(Color.parseColor("#ff808080"));
                 }
             }
         });
@@ -526,6 +722,11 @@ public class ViewUtils
                 chk1ThreeChkboxesAndEdit.setChecked(false);
                 chk2ThreeChkboxesAndEdit.setChecked(false);
                 chk3ThreeChkboxesAndEdit.setChecked(false);
+
+                for (int i = 0; i < al_TextViews.size(); i++)
+                {
+                    al_TextViews.get(i).setTextColor(Color.parseColor("#ff808080"));
+                }
                 return false;
             }
         });
@@ -567,7 +768,7 @@ public class ViewUtils
 
 
         final CheckBox chk1ChkboxAndEdit = (CheckBox) chkbox_and_edit.findViewById(R.id.chk1ChkboxAndEdit);
-        chk1ChkboxAndEdit.setText(fields[0]);
+        //chk1ChkboxAndEdit.setText(fields[0]);
 
         ArrayList<CheckBox> al_Chkboxes = new ArrayList<>();
         al_Chkboxes.add(chk1ChkboxAndEdit);
@@ -577,22 +778,34 @@ public class ViewUtils
             CheckBoxes.put(idItem, al_Chkboxes);
         }
 
-        TextView tv1ChkboxAndEdit = (TextView) chkbox_and_edit.findViewById(R.id.tv1ChkboxAndEdit);
-        tv1ChkboxAndEdit.setText(fields[1]);
+        final TextView tv1ChkboxAndEdit = (TextView) chkbox_and_edit.findViewById(R.id.tv1ChkboxAndEdit);
+        tv1ChkboxAndEdit.setText(fields[0]);
+
+        TextView tvEditChkboxAndEdit = (TextView) chkbox_and_edit.findViewById(R.id.tvEditChkboxAndEdit);
+        tvEditChkboxAndEdit.setText(fields[1]);
 
         final EditText et1ChkboxAndEdit = (EditText) chkbox_and_edit.findViewById(R.id.et1ChkboxAndEdit);
 
         EditTexts.put(idItem, et1ChkboxAndEdit);
 
-        chk1ChkboxAndEdit.setOnClickListener(new View.OnClickListener()
+        final FrameLayout fl1ChkboxAndEdit = (FrameLayout) chkbox_and_edit.findViewById(R.id.fl1ChkboxAndEdit);
+
+        fl1ChkboxAndEdit.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View view)
             {
+                chk1ChkboxAndEdit.setChecked(!chk1ChkboxAndEdit.isChecked());
+
                 if (chk1ChkboxAndEdit.isChecked())
                 {
                     et1ChkboxAndEdit.setText("");
                     et1ChkboxAndEdit.clearFocus();
+                    tv1ChkboxAndEdit.setTextColor(Color.parseColor("#ff29b352"));
+                }
+                else
+                {
+                    tv1ChkboxAndEdit.setTextColor(Color.parseColor("#ff808080"));
                 }
             }
         });
@@ -603,6 +816,7 @@ public class ViewUtils
             public boolean onTouch(View view, MotionEvent motionEvent)
             {
                 chk1ChkboxAndEdit.setChecked(false);
+                tv1ChkboxAndEdit.setTextColor(Color.parseColor("#ff808080"));
                 return false;
             }
         });
@@ -1910,11 +2124,11 @@ public class ViewUtils
             }
         });
 
-        TextView tv1Edit = (TextView) ll_edit.findViewById(R.id.tv1Edit);
-        tv1Edit.setText(itemModelli.get(idItem).getDescrizione_item());
-
         EditText et1Edit = (EditText) ll_edit.findViewById(R.id.et1Edit);
         et1Edit.setHint(itemModelli.get(idItem).getUnita_misura());
+
+/*        TextView tv1EditUnit = (TextView) ll_edit.findViewById(R.id.tv1EditUnit);
+        tv1EditUnit.setText(itemModelli.get(idItem).getUnita_misura());*/
 
 /*        ArrayList<EditText> al_Edits = new ArrayList<>();
         al_Edits.add(et1Edit);*/
@@ -2228,7 +2442,15 @@ public class ViewUtils
             {
                 EditText et = EditTexts.get(idItem);
                 //str_id_item = et.getVisibility() == View.VISIBLE ? et.getText().toString() : "Not applicabile";
-                str_id_item = et.getText().toString();
+
+                String unit = itemModelli.get(idItem).getUnita_misura();
+
+                if(unit.equals("#"))
+                {
+                    unit = "";
+                }
+
+                str_id_item = et.getText().toString() + " " + unit;
             }
             DatabaseUtils.insertStringInReportItem(id_rapporto_sopralluogo, idItem, str_id_item);
             idItem++;
@@ -2418,10 +2640,10 @@ public class ViewUtils
                 view.setLayoutParams(new ViewGroup.LayoutParams(desiredWidth, ViewGroup.LayoutParams.WRAP_CONTENT));
 
             view.measure(desiredWidth, View.MeasureSpec.UNSPECIFIED);
-            totalHeight += view.getMeasuredHeight();
+            totalHeight += (view.getMeasuredHeight() + 18);
         }
         ViewGroup.LayoutParams params = listView.getLayoutParams();
-        params.height = totalHeight + (listView.getDividerHeight() * (listAdapter.getCount() - 1) + 30);
+        params.height = totalHeight + (listView.getDividerHeight() * (listAdapter.getCount() - 1) + 20);
         listView.setLayoutParams(params);
     }
 
