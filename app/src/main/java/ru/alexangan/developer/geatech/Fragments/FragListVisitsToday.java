@@ -28,6 +28,7 @@ import ru.alexangan.developer.geatech.Utils.SwipeDetector;
 import ru.alexangan.developer.geatech.Utils.ViewUtils;
 
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.company_id;
+import static ru.alexangan.developer.geatech.Models.GlobalConstants.mSettings;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.realm;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.selectedTech;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.visitItems;
@@ -36,7 +37,7 @@ public class FragListVisitsToday extends ListFragment
 {
     private Communicator mCommunicator;
     SwipeDetector swipeDetector;
-    boolean timeNotSetItemsOnly;
+    boolean ownVisitsOnly;
     ArrayList<VisitItem> visitItemsFiltered;
     MyListVisitsAdapter myListAdapter;
     ListView lv;
@@ -59,12 +60,7 @@ public class FragListVisitsToday extends ListFragment
         mCommunicator = (Communicator) getActivity();
         swipeDetector = new SwipeDetector();
 
-        timeNotSetItemsOnly = false;
-
-        if (getArguments() != null)
-        {
-            timeNotSetItemsOnly = getArguments().getBoolean("timeNotSetItemsOnly", false);
-        }
+        ownVisitsOnly = mSettings.getBoolean("ownVisitsOnly", false);
     }
 
     @Override
@@ -86,17 +82,24 @@ public class FragListVisitsToday extends ListFragment
 
         TreeMap<Long, VisitItem> unsortedVisits = new TreeMap<>();
         long n = 0;
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ITALIAN);
-        Calendar calendarNow = Calendar.getInstance(Locale.ITALY);
-        String strMonth = calendarNow.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.ITALY);
-        String dateString = " " + calendarNow.get(Calendar.DAY_OF_MONTH) + " " + strMonth;
+        Calendar calendarTodayLastMin = Calendar.getInstance(Locale.ITALY);
+        String strMonth = calendarTodayLastMin.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.ITALY);
+        String dateString = " " + calendarTodayLastMin.get(Calendar.DAY_OF_MONTH) + " " + strMonth;
 
         tvListVisitsTodayDate.setText(dateString);
 
-        calendarNow.set(Calendar.HOUR, 23);
-        calendarNow.set(Calendar.MINUTE, 59);
-        calendarNow.set(Calendar.SECOND, 59);
-        long lastMilliSecondsOfToday = calendarNow.getTimeInMillis();
+        calendarTodayLastMin.set(Calendar.HOUR_OF_DAY, 23);
+        calendarTodayLastMin.set(Calendar.MINUTE, 59);
+        calendarTodayLastMin.set(Calendar.SECOND, 59);
+
+        Calendar calendarTodayFirstMin = Calendar.getInstance(Locale.ITALY);
+
+        calendarTodayFirstMin.set(Calendar.HOUR_OF_DAY, 0);
+        calendarTodayFirstMin.set(Calendar.MINUTE, 0);
+        calendarTodayFirstMin.set(Calendar.SECOND, 0);
+
+        long lastMilliSecondsOfToday = calendarTodayLastMin.getTimeInMillis();
+        long firstMilliSecondsOfToday = calendarTodayFirstMin.getTimeInMillis();
 
         for (VisitItem visitItem : visitItems)
         //for (int i = 0; i < visitItems.size(); i++)
@@ -105,7 +108,9 @@ public class FragListVisitsToday extends ListFragment
             int id_tecnico = visitItem.getGeaSopralluogo().getId_tecnico();
             boolean ownVisit = selectedTech.getId() == id_tecnico;
 
-            if (!timeNotSetItemsOnly && ownVisit)
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss", Locale.ITALIAN);
+
+            if (!ownVisitsOnly || (ownVisitsOnly && ownVisit))
             {
                 try
                 {
@@ -118,7 +123,7 @@ public class FragListVisitsToday extends ListFragment
                         time++;
                     }
 
-                    if(time <= lastMilliSecondsOfToday)
+                    if(time >= firstMilliSecondsOfToday && time <= lastMilliSecondsOfToday)
                     {
                         unsortedVisits.put(time, visitItem);
                     }

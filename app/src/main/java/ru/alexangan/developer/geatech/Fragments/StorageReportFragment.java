@@ -210,7 +210,7 @@ public class StorageReportFragment extends Fragment
                 realm.beginTransaction();
 
                 Calendar calendarNow = Calendar.getInstance();
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
+                SimpleDateFormat sdf = new SimpleDateFormat("dd-mm-yyyy hh:mm", Locale.ENGLISH);
                 String strDateTime = sdf.format(calendarNow.getTime());
 
                 reportStates.setDataOraRaportoCompletato(strDateTime);
@@ -260,7 +260,7 @@ public class StorageReportFragment extends Fragment
 
             idItem = viewUtils.fillSeveralSwitches(idItem, 5);
 
-            viewUtils.collapseSections(id_rapporto_sopralluogo);
+            //viewUtils.markSectionsWithNotFilledItems(id_rapporto_sopralluogo);
         }
     }
 }

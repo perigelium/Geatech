@@ -63,7 +63,7 @@ public class FragListInWorkVisits extends ListFragment
 
         if (getArguments() != null)
         {
-            timeNotSetItemsOnly = getArguments().getBoolean("timeNotSetItemsOnly", false);
+            timeNotSetItemsOnly = getArguments().getBoolean("ownVisitsOnly", false);
         }
     }
 
@@ -88,7 +88,7 @@ public class FragListInWorkVisits extends ListFragment
 
         TreeMap<Long, VisitItem> unsortedVisits = new TreeMap<>();
         long n = 0;
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ITALIAN);
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-mm-yyyy hh:mm", Locale.ITALIAN);
         Calendar calendarNow = Calendar.getInstance(Locale.ITALY);
         String strMonth = calendarNow.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.ITALY);
         //String dateString = " " + calendarNow.get(Calendar.DAY_OF_MONTH) + " " + strMonth;
@@ -118,9 +118,9 @@ public class FragListInWorkVisits extends ListFragment
             if (reportStates != null)
             {
                 String data_ora_sopralluogo = reportStates.getData_ora_sopralluogo();
-/*                reportStartedNotCompleted = reportStates.getGeneralInfoCompletionState() == ReportStates.COORDS_SET
+                reportStartedNotCompleted = reportStates.getGeneralInfoCompletionState() == ReportStates.GENERAL_INFO_DATETIME_AND_COORDS_SET
                         && (reportStates.getReportCompletionState() < ReportStates.REPORT_COMPLETED
-                        || reportStates.getPhotoAddedNumber() < reportStates.PHOTOS_MIN_ADDED);*/
+                        || reportStates.getPhotoAddedNumber() < reportStates.PHOTOS_MIN_ADDED);
 
                 if (data_ora_sopralluogo!=null)
                 {

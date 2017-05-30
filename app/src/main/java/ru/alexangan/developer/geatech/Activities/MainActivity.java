@@ -122,6 +122,7 @@ public class MainActivity extends Activity implements Communicator, Callback
     private Call callVisits, callModels;
     NetworkUtils networkUtils;
     private boolean firstStart;
+    private int curSelBottomBtnId;
 
     @Override
     protected void onPause()
@@ -174,6 +175,7 @@ public class MainActivity extends Activity implements Communicator, Callback
         setContentView(R.layout.work_window);
 
         currentSelIndex = -1;
+        curSelBottomBtnId = 0;
         ctrlBtnChkChanged = true;
         firstStart = true;
 
@@ -250,7 +252,12 @@ public class MainActivity extends Activity implements Communicator, Callback
     @Override
     public void onBackPressed()
     {
-        if (!fragListVisitsOther.isAdded())
+        if(curSelBottomBtnId != 0)
+        {
+            ctrlBtnsBottom.setCheckedBtnId(curSelBottomBtnId);
+            curSelBottomBtnId = 0;
+        }
+        else if (!fragListVisitsOther.isAdded())
         {
             Button btn = (Button) findViewById(R.id.btnVisits);
             btn.setSelected(false);
@@ -279,33 +286,15 @@ public class MainActivity extends Activity implements Communicator, Callback
 
         if (btnId == R.id.btnVisits)
         {
-            mFragmentManager.popBackStack();
-
-            notificationBarFragment.setView(R.string.ComingVisitsList, View.VISIBLE, View.VISIBLE);
-
-/*            FragmentTransaction mFragmentTransaction = mFragmentManager.beginTransaction();
-            if(!fragListVisitsFree.isAdded())
+            if(listVisitsIsObsolete)
             {
-                mFragmentTransaction.add(innerFragContainer, fragListVisitsFree);
-                //mFragmentTransaction.addToBackStack(fragListVisitsFree.getTag());
+                refreshVisitsList();
             }
-            if(!fragListVisitsToday.isAdded())
+            else
             {
-                mFragmentTransaction.add(innerFragContainer, fragListVisitsToday);
-                //mFragmentTransaction.addToBackStack(fragListVisitsToday.getTag());
+                int mode = mSettings.getInt("listVisitsFilterMode", 0);
+                showSelectedVisitsList(mode);
             }
-            if(!fragListVisitsOther.isAdded())
-            {
-                mFragmentTransaction.add(innerFragContainer, fragListVisitsOther);
-                //mFragmentTransaction.addToBackStack(fragListVisitsOther.getTag());
-            }
-            mFragmentTransaction.addToBackStack(fragListVisitsFree.getTag());
-            mFragmentTransaction.commit();
-
-            mFragmentManager.executePendingTransactions();*/
-
-            int mode = mSettings.getInt("listVisitsFilterMode", 0);
-            showSelectedVisitsList(mode);
         }
         else
         {
@@ -385,6 +374,9 @@ public class MainActivity extends Activity implements Communicator, Callback
             onBackPressed();
         }
 
+        curSelBottomBtnId = ctrlBtnsBottom.getSelectedButtonId();
+        ctrlBtnsBottom.unselectAllButtons();
+
         if (btnId == R.id.btnSopralluogoInfo)
         {
             mFragmentManager.popBackStack();
@@ -445,18 +437,12 @@ public class MainActivity extends Activity implements Communicator, Callback
                     args.putInt("id_sopralluogo", id_sopralluogo);
                     photoGalleryGridFragment.setArguments(args);
 
-                    //setVisitsListContent(photoGalleryGridFragment);
-
                     if (!photoGalleryGridFragment.isAdded())
                     {
                         FragmentTransaction vFragmentTransaction = mFragmentManager.beginTransaction();
                         vFragmentTransaction.add(R.id.photosFragContainer, photoGalleryGridFragment);
                         vFragmentTransaction.addToBackStack(photoGalleryGridFragment.getTag());
                         vFragmentTransaction.commit();
-
-/*                        FrameLayout flphotosFragContainer = (FrameLayout) findViewById(R.id.photosFragContainer);
-                        flphotosFragContainer.setVisibility(View.VISIBLE);*/
-
                     }
                 }
             }
@@ -565,7 +551,12 @@ public class MainActivity extends Activity implements Communicator, Callback
 
     private void showSelectedVisitsList(int mode)
     {
+        mFragmentManager.popBackStack();
+
         mSettings.edit().putInt("listVisitsFilterMode", mode).apply();
+
+        notificationBarFragment.setView(R.string.ComingVisitsList, View.VISIBLE, View.VISIBLE);
+
         FragmentTransaction mFragmentTransaction = mFragmentManager.beginTransaction();
 
         if(mode == LIST_VISITS_MODE_ALL)
@@ -741,8 +732,6 @@ public class MainActivity extends Activity implements Communicator, Callback
                     realm.beginTransaction();
                     visitItems = realm.where(VisitItem.class).findAll();
                     realm.commitTransaction();
-
-                    //mFragmentManager.popBackStack();
 
                     onCtrlBtnsBottomClicked(R.id.btnVisits);
 

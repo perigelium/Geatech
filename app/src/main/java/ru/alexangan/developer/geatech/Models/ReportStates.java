@@ -27,23 +27,24 @@ public class ReportStates extends RealmObject
     public static int ALTITUDE_UNKNOWN = -999;
 
     private int reportCompletionState;
-    //public static int REPORT_STATE_INDETERMINATE = -1;
     public static int REPORT_NON_INITIATED = 0;
     public static int REPORT_INITIATED = 1;
     public static int REPORT_HALF_COMPLETED = 2;
     public static int REPORT_ALMOST_COMPLETED = 3;
     public static int REPORT_COMPLETED = 4;
 
-    private int generalInfoCompletionState; // data ora appuntamento era inserita
-    public static int COORDS_SET = 2;
+    private int general_info_coords_set;
+    private int general_info_datetime_set;
 
-    private int sendingReportTriesState;
+    public static int GENERAL_INFO_NOT_INITIATED = 0;
+/*    public static int GENERAL_INFO_COORDS_SET = 1;
+    public static int GENERAL_INFO_DATETIME_SET = 2;*/
+    public static int GENERAL_INFO_DATETIME_AND_COORDS_SET = 2;
 
-    private String dataOraProssimoTentativo;
-    private String dataOraUltimoTentativo;
     private String data_ora_compilazione_rapporto;
     private int completion_percent;
     private String data_ora_invio_rapporto;
+    private boolean triedToSendReport;
 
     private String nome_tecnico;
     private String note_tecnico;
@@ -55,7 +56,9 @@ public class ReportStates extends RealmObject
     private RealmList<RealmString> sendingReportFailedStatuses;
     private RealmList<RealmString> photoAddedStatuses;
 
-    public ReportStates() {}
+    public ReportStates()
+    {
+    }
 
     public ReportStates(int company_id, int tech_id, int id_sopralluogo, int id_rapporto_sopralluogo)
     {
@@ -66,36 +69,35 @@ public class ReportStates extends RealmObject
 
 
         reportCompletionStatuses = new RealmList<>();
-        reportCompletionStatuses.add(new RealmString( "Non iniziato") );
-        reportCompletionStatuses.add(new RealmString( "Iniziato") );
-        reportCompletionStatuses.add(new RealmString( "Parziamente completato") );
-        reportCompletionStatuses.add(new RealmString( "Quasi completato") );
-        reportCompletionStatuses.add(new RealmString( "Completato") );
+        reportCompletionStatuses.add(new RealmString("Non iniziato"));
+        reportCompletionStatuses.add(new RealmString("Iniziato"));
+        reportCompletionStatuses.add(new RealmString("Parziamente completato"));
+        reportCompletionStatuses.add(new RealmString("Quasi completato"));
+        reportCompletionStatuses.add(new RealmString("Completato"));
 
         generalInfoCompletionStatuses = new RealmList<>();
-        generalInfoCompletionStatuses.add(new RealmString( "Non iniziato") );
-        //generalInfoCompletionStatuses.add(new RealmString( "Iniziato") );
-        generalInfoCompletionStatuses.add(new RealmString( "Parziamente completato") );
-        generalInfoCompletionStatuses.add(new RealmString( "Completato") );
+        generalInfoCompletionStatuses.add(new RealmString("Non iniziato"));
+        generalInfoCompletionStatuses.add(new RealmString("Iniziato"));
+        //generalInfoCompletionStatuses.add(new RealmString( "Parziamente completato") );
+        generalInfoCompletionStatuses.add(new RealmString("Completato"));
 
         sendingReportFailedStatuses = new RealmList<>();
-        sendingReportFailedStatuses.add(new RealmString( "Invio falito per mancanza connesione dati") );
+        sendingReportFailedStatuses.add(new RealmString("Invio falito per mancanza connesione dati"));
 
         photoAddedStatuses = new RealmList<>();
-        photoAddedStatuses.add(new RealmString( "Nessun fotografia") );
-        photoAddedStatuses.add(new RealmString( " foto inserite") );
+        photoAddedStatuses.add(new RealmString("Nessun fotografia"));
+        photoAddedStatuses.add(new RealmString(" foto inserite"));
 
 
         photoAddedNumber = 0;
-        reportCompletionState = 0;
-        generalInfoCompletionState = 0;
-        sendingReportTriesState = 0;
-        dataOraUltimoTentativo = "19:00";
-        dataOraProssimoTentativo = "21:00";
+        reportCompletionState = REPORT_NON_INITIATED;
+        general_info_coords_set = 0;
+        general_info_datetime_set = 0;
         nome_tecnico = "";
         latitudine = 0;
         longitudine = 0;
         altitude = ALTITUDE_UNKNOWN;
+        triedToSendReport = false;
     }
 
     public RealmString getReportCompletionStateString()
@@ -105,21 +107,15 @@ public class ReportStates extends RealmObject
 
     public RealmString getGeneralInfoCompletionStateString()
     {
-        return generalInfoCompletionStatuses.get(generalInfoCompletionState);
-    }
-
-    public RealmString getSendingReportTriesStateString(int sendingReportTriesState)
-    {
-        return sendingReportFailedStatuses.get(sendingReportTriesState);
+        return generalInfoCompletionStatuses.get(general_info_coords_set + general_info_datetime_set);
     }
 
     public RealmString getPhotoAddedNumberString(int photoAddedNumber)
     {
-        if(photoAddedNumber != 0)
+        if (photoAddedNumber != 0)
         {
             return photoAddedStatuses.get(1);
-        }
-        else
+        } else
         {
             return photoAddedStatuses.get(0);
         }
@@ -153,16 +149,6 @@ public class ReportStates extends RealmObject
     public void setData_ora_invio_rapporto(String data_ora_invio_rapporto)
     {
         this.data_ora_invio_rapporto = data_ora_invio_rapporto;
-    }
-
-    public String getDataOraProssimoTentativo()
-    {
-        return dataOraProssimoTentativo;
-    }
-
-    public void dataOraProssimoTentativo(String dataOraProssimoTentativo)
-    {
-        this.dataOraProssimoTentativo = dataOraProssimoTentativo;
     }
 
     public String getData_ora_presa_appuntamento()
@@ -215,11 +201,6 @@ public class ReportStates extends RealmObject
         this.altitude = altitude;
     }
 
-    public int getGeneralInfoCompletionState()
-    {
-        return generalInfoCompletionState;
-    }
-
     public int getPhotoAddedNumber()
     {
         return photoAddedNumber;
@@ -230,20 +211,26 @@ public class ReportStates extends RealmObject
         this.photoAddedNumber = photoAddedNumber;
     }
 
-    public int getSendingReportTriesState()
+    public int getGeneralInfoCompletionState()
     {
-        return sendingReportTriesState;
+        return general_info_coords_set + general_info_datetime_set;
     }
 
-    public void setSendingReportTriesState(int sendingReportTriesState)
+    public void setGeneral_info_datetime_set(int general_info_datetime_set)
     {
-        this.sendingReportTriesState = sendingReportTriesState;
+        this.general_info_datetime_set = general_info_datetime_set;
     }
 
-    public void setGeneralInfoCompletionState(int generalInfoCompletionState)
+    public void setGeneral_info_coords_set(int general_info_coords_set)
     {
-        this.generalInfoCompletionState = generalInfoCompletionState;
+
+        this.general_info_coords_set = general_info_coords_set;
     }
+
+    /*    public void setGeneralInfoCompletionState(int generalInfoCompletionState)
+    {
+        this.generalInfoCompletionState |= generalInfoCompletionState;
+    }*/
 
     public String getNome_tecnico()
     {
@@ -333,5 +320,15 @@ public class ReportStates extends RealmObject
     public void setAltitudine(String altitudine)
     {
         this.altitudine = altitudine;
+    }
+
+    public boolean hasTriedToSendReport()
+    {
+        return triedToSendReport;
+    }
+
+    public void setTriedToSendReport(boolean triedToSendReport)
+    {
+        this.triedToSendReport = triedToSendReport;
     }
 }

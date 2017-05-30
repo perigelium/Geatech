@@ -13,7 +13,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Paint;
 import android.location.Location;
 import android.location.LocationManager;
 import android.net.Uri;
@@ -29,7 +28,9 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -96,6 +97,7 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
     ClientData clientData;
     private int PERMISSION_REQUEST_CODE = 11;
     private boolean coordsUnchanged;
+    ScrollView svVisitInfoScrollView;
 
     private TextView btnSetDateTimeSubmit;
 
@@ -113,6 +115,8 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
     private Button btnOpenMap, btnOpenDialer;
     private Button btnGetCurrentCoords;
     private FrameLayout flSetDateTimeSubmit;
+    private LinearLayout llSetDateTime;
+    boolean datetime_set, coords_set;
 
 
     public SetDateTimeFragment()
@@ -203,7 +207,7 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
                 elapsedDays = periodMilliSeconds / 1000 / 60 / 60 / 24;
             }
 
-            SimpleDateFormat sdfDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ITALIAN);
+            SimpleDateFormat sdfDate = new SimpleDateFormat("dd-mm-yyyy hh:mm", Locale.ITALIAN);
             String dateTimeStr = sdfDate.format(calendar.getTime());
             tvdataOraSopralluogo.setText(dateTimeStr);
             tvTechnicianName.setVisibility(View.VISIBLE);
@@ -222,7 +226,7 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
             }
 
             stakedOut = 1;
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
+            SimpleDateFormat sdf = new SimpleDateFormat("dd-mm-yyyy hh:mm", Locale.ENGLISH);
             strDateTimeSet = sdf.format(calendar.getTime());
 
             disableInput();
@@ -232,18 +236,66 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
     };
 
     @Override
+    public void onViewCreated(View view, Bundle savedInstanceState)
+    {
+        super.onViewCreated(view, savedInstanceState);
+
+        //svVisitInfoScrollView.fullScroll(ScrollView.FOCUS_DOWN);
+        //svVisitInfoScrollView.smoothScrollTo(0, llSetDateTime.getBottom());
+        //btnGetCurrentCoords.getParent().requestChildFocus(btnGetCurrentCoords, btnGetCurrentCoords);
+    }
+
+    @Override
+    public void onResume()
+    {
+        super.onResume();
+
+        if (reportStates != null)
+        {
+            latitude = reportStates.getLatitudine();
+            longitude = reportStates.getLongitudine();
+            altitude = reportStates.getAltitude();
+
+            //coordsUnchanged = latitude != 0 && longitude != 0;// && altitude != ReportStates.ALTITUDE_UNKNOWN;
+
+            if (latitude == 0)
+            {
+                latitude = clientData.getCoordNord();
+            }
+
+            if (longitude == 0)
+            {
+                longitude = clientData.getCoordEst();
+            }
+
+            etCoordNord.setText(String.valueOf(latitude));
+            etCoordEst.setText(String.valueOf(longitude));
+
+            if (altitude != ReportStates.ALTITUDE_UNKNOWN)
+            {
+                etAltitude.setText(String.valueOf(altitude));
+            } else
+            {
+                etAltitude.setText(R.string.Unknown);
+            }
+        }
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
         rootView = inflater.inflate(R.layout.set_date_time_fragment, container, false);
 
         //tvSetDateTime.setPaintFlags(tvSetDateTime.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
 
+        llSetDateTime = (LinearLayout) rootView.findViewById(R.id.llSetDateTime);
         btnSetDateTimeSubmit = (TextView) rootView.findViewById(R.id.btnSetDateTimeSubmit);
         flSetDateTimeSubmit = (FrameLayout) rootView.findViewById(R.id.flSetDateTimeSubmit);
         btnOpenMap = (Button) rootView.findViewById(R.id.btnOpenMap);
         btnOpenDialer = (Button) rootView.findViewById(R.id.btnOpenDialer);
         tvdataOraSopralluogo = (TextView) rootView.findViewById(R.id.tvdataOraSopralluogo);
         TextView tvListSottprodottiTitle = (TextView) rootView.findViewById(R.id.tvListSottprodottiTitle);
+        svVisitInfoScrollView = (ScrollView) rootView.findViewById(R.id.svVisitInfoScrollView);
 
         tvTechnicianName = (TextView) rootView.findViewById(R.id.tvTechnicianName);
 
@@ -261,7 +313,7 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
         tvTechnicianName.setText(selectedTech.getFullNameTehnic());
 
         visitItem = visitItems.get(selectedIndex);
-        ClientData clientData = visitItem.getClientData();
+        clientData = visitItem.getClientData();
         ProductData productData = visitItem.getProductData();
         int id_product_type = productData.getIdProductType();
 
@@ -328,7 +380,8 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
 
         if(dataOraSopralluogo!=null && dataOraSopralluogo.length() > 4)
         {
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ITALIAN);
+            datetime_set = true;
+            SimpleDateFormat sdf = new SimpleDateFormat("dd-mm-yyyy hh:mm", Locale.ITALIAN);
 
             try
             {
@@ -347,41 +400,6 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
         {
             tvTechnicianName.setVisibility(View.GONE);
         }
-
-/*        if(dataOraSopralluogo.length() > 4)
-        {
-            try
-            {
-                calendar.setTime(sdf.parse(dataOraSopralluogo));
-                int millsDiff = calendar.compareTo(calendarNow);
-
-                if (millsDiff < 0)
-                {
-                    calendar = calendarNow;
-                }
-
-                SimpleDateFormat sdfDate = new SimpleDateFormat("dd.MM HH:mm", Locale.ITALIAN);
-                String dateTimeStr = sdfDate.format(calendar.getTime());
-
-                tvdataOraSopralluogo.setText(dateTimeStr);
-
-            } catch (ParseException e)
-            {
-                e.printStackTrace();
-
-                calendar = calendarNow;
-            }
-        }
-        else
-        {
-            disableInput();
-        }*/
-
-/*        if(reportStates==null || visitDateTime == null)
-        {
-*//*            btnAnnullaSetDateTime.setEnabled(false);
-            btnAnnullaSetDateTime.setAlpha(.4f);*//*
-        }*/
 
         mYear = calendar.get(Calendar.YEAR);
         mMonth = calendar.get(Calendar.MONTH) + 1;
@@ -663,12 +681,16 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
                                                     reportStates.setClientMobile(visitItem.getClientData().getMobile());
                                                     reportStates.setClientAddress(visitItem.getClientData().getAddress());
                                                     reportStates.setProductType(product_type);
+
+                                                    reportStates.setGeneral_info_datetime_set(1);
                                                     realm.commitTransaction();
 
                                                     tvdataOraSopralluogo.setText(strDateTimeSet);
                                                     tvTechnicianName.setVisibility(View.VISIBLE);
                                                     flSetDateTimeSubmit.setVisibility(View.GONE);
                                                 }
+
+                                                btnGetCurrentCoords.getParent().requestChildFocus(btnGetCurrentCoords, btnGetCurrentCoords);
 
                                                 showToastMessage(getString(R.string.DateTimeSetSuccessfully));//, server ritorna: " + strVisitDateTimeResponse
                                             }
@@ -828,7 +850,7 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
 
             if (reportStates != null && reportStates.getLatitudine() != 0 && reportStates.getLongitudine() != 0) // && altitude != -999
             {
-                reportStates.setGeneralInfoCompletionState(ReportStates.COORDS_SET);
+                reportStates.setGeneral_info_coords_set(1);
             }
 
             realm.commitTransaction();

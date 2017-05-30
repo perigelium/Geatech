@@ -173,7 +173,7 @@ public class DomoticaReportFragment extends Fragment
                 realm.beginTransaction();
 
                 Calendar calendarNow = Calendar.getInstance();
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
+                SimpleDateFormat sdf = new SimpleDateFormat("dd-mm-yyyy hh:mm", Locale.ENGLISH);
                 String strDateTime = sdf.format(calendarNow.getTime());
 
                 reportStates.setDataOraRaportoCompletato(strDateTime);
@@ -255,7 +255,10 @@ public class DomoticaReportFragment extends Fragment
 
             idItem = viewUtils.fillSeveralEdits(idItem, 3);
 
-            viewUtils.collapseSections(id_rapporto_sopralluogo);
+            if(reportStates!=null && reportStates.hasTriedToSendReport())
+            {
+                viewUtils.markSectionsWithNotFilledItems(id_rapporto_sopralluogo);
+            }
         }
     }
 

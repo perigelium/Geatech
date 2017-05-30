@@ -1,5 +1,6 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:tools="http://schemas.android.com/tools"
+            android:id="@+id/svVisitInfoScrollView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:overScrollMode="never"
@@ -7,6 +8,7 @@
             tools:context="ru.alexangan.developer.geatech.Fragments.SetDateTimeFragment">
 
     <LinearLayout
+        android:id="@+id/llSetDateTime"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="9dp"

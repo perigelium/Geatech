@@ -2195,9 +2195,9 @@ public class ViewUtils
         headerNumber++;
     }
 
-    public void collapseSections(int id_rapporto_sopralluogo)
+    public void markSectionsWithNotFilledItems(int id_rapporto_sopralluogo)
     {
-        int completionState = DatabaseUtils.getReportInitializationState(id_rapporto_sopralluogo);
+        //int completionState = DatabaseUtils.getReportInitializationState(id_rapporto_sopralluogo);
         ArrayList<Integer> notSetItems = DatabaseUtils.getNotSetItems(id_rapporto_sopralluogo);
 
         for (Map.Entry entry : Switches.entrySet())
@@ -2214,7 +2214,7 @@ public class ViewUtils
         {
             for (LinearLayout ll : al_llHeaderSections.get(k))
             {
-                if (completionState >= ReportStates.REPORT_INITIATED && notSetItems != null)
+                if (notSetItems != null) //  && completionState >= ReportStates.REPORT_ALMOST_COMPLETED
                 {
                     int i;
                     for (i = 0; i < notSetItems.size(); i++)
@@ -2242,9 +2242,9 @@ public class ViewUtils
 
                         } while (idItem != 0);
 
-                        if(llSections != null)
+/*                        if(llSections != null)
                         {
-/*                            LinearLayout llSection1 = llSections.second;
+                            LinearLayout llSection1 = llSections.second;
                             LinearLayout llSection0 = llSections.first;
 
                             if (llSection1.equals(llSection0))
@@ -2262,20 +2262,23 @@ public class ViewUtils
 
                             if (ll.equals(llSection))
                             {
-                                ll.setVisibility(View.VISIBLE);
+                                //ll.setVisibility(View.VISIBLE);
+                                ll.setBackgroundResource(R.drawable.shape_red_border_rect);
                                 break;
                             }
-                        }
+                        //}
                     }
 
-                    if (i == notSetItems.size())
+/*                    if (i == notSetItems.size())
                     {
-                        ll.setVisibility(View.GONE);
-                    }
-                } else
+                        //ll.setVisibility(View.GONE);
+                        ll.setBackgroundResource(R.drawable.shape_transparent_border_rect);
+                    }*/
+                } /*else
                 {
-                    ll.setVisibility(View.VISIBLE);
-                }
+                    ll.setBackgroundResource(R.drawable.shape_transparent_border_rect);
+                    //ll.setVisibility(View.VISIBLE);
+                }*/
             }
         }
     }

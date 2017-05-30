@@ -77,7 +77,7 @@ public class FragListReportsSent extends ListFragment
 
         for (ReportStates reportStates : reportStatesList)
         {
-            boolean reportComplete = reportStates.getGeneralInfoCompletionState() == ReportStates.COORDS_SET
+            boolean reportComplete = reportStates.getGeneralInfoCompletionState() == ReportStates.GENERAL_INFO_DATETIME_AND_COORDS_SET
                     && reportStates.getReportCompletionState() == ReportStates.REPORT_COMPLETED
                     && reportStates.getPhotoAddedNumber() >= reportStates.PHOTOS_MIN_ADDED;
 
@@ -88,7 +88,7 @@ public class FragListReportsSent extends ListFragment
                 continue;
             }
 
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ITALIAN);
+            SimpleDateFormat sdf = new SimpleDateFormat("dd-mm-yyyy hh:mm", Locale.ITALIAN);
 
             if (reportComplete && reportStates.getData_ora_invio_rapporto() != null)
             {

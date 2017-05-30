@@ -59,13 +59,6 @@ public class FragListVisitsOther extends ListFragment
         swipeDetector = new SwipeDetector();
 
         ownVisitsOnly = mSettings.getBoolean("ownVisitsOnly", false);
-
-/*        if (getArguments() != null)
-        {
-            ownVisitsOnly = getArguments().getBoolean("ownVisitsOnly", false);
-        }*/
-
-
     }
 
     @Override
@@ -86,11 +79,20 @@ public class FragListVisitsOther extends ListFragment
         TreeMap<Long, VisitItem> unsortedVisits = new TreeMap<>();
 
         visitItemsFiltered = new ArrayList<>();
-        Calendar calendarNow = Calendar.getInstance(Locale.ITALY);
-        calendarNow.set(Calendar.HOUR, 23);
-        calendarNow.set(Calendar.MINUTE, 59);
-        calendarNow.set(Calendar.SECOND, 59);
-        long lastMilliSecondsOfToday = calendarNow.getTimeInMillis();
+        Calendar calendarTodayLastMin = Calendar.getInstance(Locale.ITALY);
+
+        calendarTodayLastMin.set(Calendar.HOUR_OF_DAY, 23);
+        calendarTodayLastMin.set(Calendar.MINUTE, 59);
+        calendarTodayLastMin.set(Calendar.SECOND, 59);
+
+        Calendar calendarTodayFirstMin = Calendar.getInstance(Locale.ITALY);
+
+        calendarTodayFirstMin.set(Calendar.HOUR_OF_DAY, 0);
+        calendarTodayFirstMin.set(Calendar.MINUTE, 0);
+        calendarTodayFirstMin.set(Calendar.SECOND, 0);
+
+        long lastMilliSecondsOfToday = calendarTodayLastMin.getTimeInMillis();
+        long firstMilliSecondsOfToday = calendarTodayFirstMin.getTimeInMillis();
 
         long n = 0;
 
@@ -98,32 +100,37 @@ public class FragListVisitsOther extends ListFragment
         //for (int i = 0; i < visitItems.size(); i++)
         {
             String data_ora_sopralluogo = visitItem.getGeaSopralluogo().getData_ora_sopralluogo();
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ITALIAN);
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss", Locale.ITALIAN);
+            int id_tecnico = visitItem.getGeaSopralluogo().getId_tecnico();
+            boolean ownVisit = selectedTech.getId() == id_tecnico;
 
-            try
+            if(!ownVisitsOnly || (ownVisitsOnly && ownVisit))
             {
-                Date date = sdf.parse(data_ora_sopralluogo);
-                long time = date.getTime();
-                //Log.d("DEBUG", String.valueOf(time));
-
-                while(unsortedVisits.get(time) != null)
+                try
                 {
-                    time++;
-                }
+                    Date date = sdf.parse(data_ora_sopralluogo);
+                    long time = date.getTime();
+                    //Log.d("DEBUG", String.valueOf(time));
 
-                if(time > lastMilliSecondsOfToday)
-                {
-                    unsortedVisits.put(time, visitItem);
-                }
+                    while (unsortedVisits.get(time) != null)
+                    {
+                        time++;
+                    }
 
-            } catch (ParseException e)
-            {
-                while(unsortedVisits.get(n) != null)
+                    if (time < firstMilliSecondsOfToday || time > lastMilliSecondsOfToday)
+                    {
+                        unsortedVisits.put(time, visitItem);
+                    }
+
+                } catch (ParseException e)
                 {
-                    n++;
+                    while (unsortedVisits.get(n) != null)
+                    {
+                        n++;
+                    }
+                    unsortedVisits.put(n++, visitItem);
+                    e.printStackTrace();
                 }
-                unsortedVisits.put(n++, visitItem);
-                e.printStackTrace();
             }
         }
 

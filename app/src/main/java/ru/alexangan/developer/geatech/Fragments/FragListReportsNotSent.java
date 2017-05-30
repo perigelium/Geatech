@@ -64,7 +64,7 @@ public class FragListReportsNotSent extends ListFragment
 
         if (getArguments() != null)
         {
-            timeNotSetItemsOnly = getArguments().getBoolean("timeNotSetItemsOnly", false);
+            timeNotSetItemsOnly = getArguments().getBoolean("ownVisitsOnly", false);
         }
     }
 
@@ -87,7 +87,7 @@ public class FragListReportsNotSent extends ListFragment
 
         TreeMap<Long, VisitItem> unsortedVisits = new TreeMap<>();
         long n = 0;
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ITALIAN);
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-mm-yyyy hh:mm", Locale.ITALIAN);
         Calendar calendarNow = Calendar.getInstance(Locale.ITALY);
         String strMonth = calendarNow.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.ITALY);
         //String dateString = " " + calendarNow.get(Calendar.DAY_OF_MONTH) + " " + strMonth;
@@ -115,7 +115,7 @@ public class FragListReportsNotSent extends ListFragment
 
             if (reportStates != null)
             {
-                reportCompleteNotSent = reportStates.getGeneralInfoCompletionState() == ReportStates.COORDS_SET
+                reportCompleteNotSent = reportStates.getGeneralInfoCompletionState() == ReportStates.GENERAL_INFO_DATETIME_AND_COORDS_SET
                         && reportStates.getReportCompletionState() == ReportStates.REPORT_COMPLETED
                         && reportStates.getPhotoAddedNumber() >= reportStates.PHOTOS_MIN_ADDED
                         && reportStates.getData_ora_invio_rapporto() == null;

@@ -85,4 +85,24 @@ public class CtrlBtnsBottom extends Fragment implements View.OnClickListener
         btnSelected.setSelected(true);
         mCommunicator.onCtrlBtnsBottomClicked(btnSelected.getId());
     }
+
+    public void unselectAllButtons()
+    {
+        for (Button btn : btnArray)
+        {
+            btn.setSelected(false);
+        }
+    }
+
+    public int getSelectedButtonId()
+    {
+        for (Button btn : btnArray)
+        {
+            if(btn.isSelected())
+            {
+                return btn.getId();
+            }
+        }
+        return 0;
+    }
 }

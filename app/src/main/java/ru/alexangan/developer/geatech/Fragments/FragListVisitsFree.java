@@ -60,7 +60,7 @@ public class FragListVisitsFree extends ListFragment
 
         if (getArguments() != null)
         {
-            timeNotSetItemsOnly = getArguments().getBoolean("timeNotSetItemsOnly", false);
+            timeNotSetItemsOnly = getArguments().getBoolean("ownVisitsOnly", false);
         }
     }
 
@@ -79,7 +79,7 @@ public class FragListVisitsFree extends ListFragment
         {
             String data_ora_sopralluogo = visitItem.getGeaSopralluogo().getData_ora_sopralluogo();
             int id_tecnico = visitItem.getGeaSopralluogo().getId_tecnico();
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ITALIAN);
+            SimpleDateFormat sdf = new SimpleDateFormat("dd-mm-yyyy hh:mm", Locale.ITALIAN);
 
             if ((!timeNotSetItemsOnly) || (timeNotSetItemsOnly && id_tecnico == 0))
             {

@@ -142,11 +142,11 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
 
         if (reportStates != null)
         {
-            reportComplete = reportStates.getGeneralInfoCompletionState() == ReportStates.COORDS_SET
+            reportComplete = reportStates.getGeneralInfoCompletionState() == ReportStates.GENERAL_INFO_DATETIME_AND_COORDS_SET
                     && reportStates.getReportCompletionState() == ReportStates.REPORT_COMPLETED
                     && reportStates.getPhotoAddedNumber() >= reportStates.PHOTOS_MIN_ADDED;
 
-            if(reportStates.getGeneralInfoCompletionState() == ReportStates.COORDS_SET)
+            if(reportStates.getGeneralInfoCompletionState() == ReportStates.GENERAL_INFO_DATETIME_AND_COORDS_SET)
             {
                 ivCoordsSetCheckmark.setImageResource(R.drawable.green_filter_checkmark);
             }
@@ -228,6 +228,12 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
             }
             else
             {
+                if(reportStates!=null)
+                {
+                    realm.beginTransaction();
+                    reportStates.setTriedToSendReport(true);
+                    realm.commitTransaction();
+                }
                 showToastMessage("Rapporto non ancora completato.");
             }
         }
@@ -262,7 +268,7 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
         id_rapporto_sopralluogo = reportStates.getId_rapporto_sopralluogo();
 
 /*        Calendar calendarNow = Calendar.getInstance();
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-mm-yyyy hh:mm", Locale.ENGLISH);
         String strDateTime = sdf.format(calendarNow.getTime());*/
 
         //sentVisitItems.add(visitItems.get(selectedIndex));
@@ -453,7 +459,7 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
                             public void run()
                             {
                                 Calendar calendarNow = Calendar.getInstance();
-                                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
+                                SimpleDateFormat sdf = new SimpleDateFormat("dd-mm-yyyy hh:mm", Locale.ENGLISH);
                                 String strDateTime = sdf.format(calendarNow.getTime());
 
                                 if (objectsSentSuccessfully == imagesArray.size())
@@ -547,7 +553,7 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
                                             public void run()
                                             {
                                                 Calendar calendarNow = Calendar.getInstance();
-                                                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
+                                                SimpleDateFormat sdf = new SimpleDateFormat("dd-mm-yyyy hh:mm", Locale.ENGLISH);
                                                 String strDateTime = sdf.format(calendarNow.getTime());
 
                                                 if (objectsSentSuccessfully == imagesArray.size())
