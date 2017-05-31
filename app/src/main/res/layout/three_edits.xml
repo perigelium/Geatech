@@ -68,18 +68,26 @@
                 android:textColor="#ff808080"
                 android:textSize="13sp"/>
 
-            <EditText
-                android:id="@+id/et1ThreeEdits"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="16dp"
-                android:layout_gravity="end|center_vertical"
-                android:background="@android:color/transparent"
-                android:hint="Inserire"
-                android:inputType="number"
-                android:text=""
-                android:textColor="#ff29b352"
-                android:textColorHint="#cccccc"/>
+                android:background="@drawable/shape_gray_border_rect">
+
+                <EditText
+                    android:id="@+id/et1ThreeEdits"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end|center_vertical"
+                    android:layout_marginLeft="6dp"
+                    android:background="@android:color/transparent"
+                    android:hint="Inserire"
+                    android:inputType="number"
+                    android:text=""
+                    android:textColor="#ff29b352"
+                    android:textColorHint="#cccccc"/>
+
+            </LinearLayout>
 
         </LinearLayout>
 
@@ -98,18 +106,26 @@
                 android:textColor="#ff808080"
                 android:textSize="13sp"/>
 
-            <EditText
-                android:id="@+id/et2ThreeEdits"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="16dp"
-                android:layout_gravity="end|center_vertical"
-                android:background="@android:color/transparent"
-                android:hint="Inserire"
-                android:inputType="number"
-                android:text=""
-                android:textColor="#ff29b352"
-                android:textColorHint="#cccccc"/>
+                android:background="@drawable/shape_gray_border_rect">
+
+                <EditText
+                    android:id="@+id/et2ThreeEdits"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end|center_vertical"
+                    android:layout_marginLeft="6dp"
+                    android:background="@android:color/transparent"
+                    android:hint="Inserire"
+                    android:inputType="number"
+                    android:text=""
+                    android:textColor="#ff29b352"
+                    android:textColorHint="#cccccc"/>
+
+            </LinearLayout>
 
         </LinearLayout>
 
@@ -128,18 +144,26 @@
                 android:textColor="#ff808080"
                 android:textSize="13sp"/>
 
-            <EditText
-                android:id="@+id/et3ThreeEdits"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="end|center_vertical"
-                android:background="@android:color/transparent"
                 android:layout_marginLeft="16dp"
-                android:hint="Inserire"
-                android:inputType="number"
-                android:text=""
-                android:textColor="#ff29b352"
-                android:textColorHint="#cccccc"/>
+                android:background="@drawable/shape_gray_border_rect">
+
+                <EditText
+                    android:id="@+id/et3ThreeEdits"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end|center_vertical"
+                    android:layout_marginLeft="6dp"
+                    android:background="@android:color/transparent"
+                    android:hint="Inserire"
+                    android:inputType="number"
+                    android:text=""
+                    android:textColor="#ff29b352"
+                    android:textColorHint="#cccccc"/>
+
+            </LinearLayout>
 
         </LinearLayout>
     </LinearLayout>

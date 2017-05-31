@@ -19,8 +19,10 @@ public class GlobalConstants
     public static TechnicianItem selectedTech;
     public static RealmResults<VisitItem> visitItems;
     public static RealmList<VisitItem> inVisitItems;
+
     public static String tokenStr;
     public static boolean listVisitsIsObsolete;
+
     public static int LIST_VISITS_MODE_ALL = 0;
     public static int LIST_VISITS_MODE_MY = 1;
     public static int LIST_VISITS_MODE_FREE = 2;

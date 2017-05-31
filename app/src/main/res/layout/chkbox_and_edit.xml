@@ -72,7 +72,6 @@
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_gravity="center_vertical|end"
-                android:layout_marginRight="16dp"
                 android:background="@drawable/checkbox_selector"
                 android:button="@null"
                 android:clickable="false"
@@ -93,22 +92,26 @@
                 android:text="Altro: "
                 android:textSize="13sp"/>
 
-            <EditText
-                android:id="@+id/et1ChkboxAndEdit"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_gravity="start|center_vertical"
                 android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
-                android:background="@android:color/transparent"
-                android:focusable="true"
-                android:focusableInTouchMode="true"
-                android:hint="Inserire"
-                android:inputType="none"
-                android:text=""
-                android:textColor="#ff29b352"
-                android:textColorHint="#cccccc"/>
+                android:background="@drawable/shape_gray_border_rect">
+
+                <EditText
+                    android:id="@+id/et1ChkboxAndEdit"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end|center_vertical"
+                    android:layout_marginLeft="6dp"
+                    android:background="@android:color/transparent"
+                    android:hint="Inserire"
+                    android:inputType="number"
+                    android:text=""
+                    android:textColor="#ff29b352"
+                    android:textColorHint="#cccccc"/>
+
+            </LinearLayout>
 
         </LinearLayout>
 

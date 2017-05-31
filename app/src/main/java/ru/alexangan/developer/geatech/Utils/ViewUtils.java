@@ -1565,9 +1565,12 @@ public class ViewUtils
         rg1ThreeRadiosAndEdit.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener()
         {
             @Override
-            public void onCheckedChanged(RadioGroup radioGroup, int i)
+            public void onCheckedChanged(RadioGroup radioGroup, int checkedId)
             {
-                et1ThreeRadiosAndEdit.setText("");
+                if(checkedId != -1)
+                {
+                    et1ThreeRadiosAndEdit.setText("");
+                }
             }
         });
 
@@ -1697,9 +1700,12 @@ public class ViewUtils
         rg1TwoRadiosAndEdit.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener()
         {
             @Override
-            public void onCheckedChanged(RadioGroup radioGroup, int i)
+            public void onCheckedChanged(RadioGroup radioGroup, int checkedId)
             {
-                et1TwoRadiosAndEdit.setText("");
+                if(checkedId != -1)
+                {
+                    et1TwoRadiosAndEdit.setText("");
+                }
             }
         });
 
@@ -1873,9 +1879,12 @@ public class ViewUtils
         rg1FourRadiosAndTwoEdits.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener()
         {
             @Override
-            public void onCheckedChanged(RadioGroup radioGroup, int i)
+            public void onCheckedChanged(RadioGroup radioGroup, int checkedId)
             {
-                et1FourRadiosAndTwoEdits.setText("");
+                if(checkedId != -1)
+                {
+                    et1FourRadiosAndTwoEdits.setText("");
+                }
             }
         });
 
@@ -1963,9 +1972,12 @@ public class ViewUtils
         rg1FourRadiosAndEdit.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener()
         {
             @Override
-            public void onCheckedChanged(RadioGroup radioGroup, int i)
+            public void onCheckedChanged(RadioGroup radioGroup, int checkedId)
             {
-                et1FourRadiosAndEdit.setText("");
+                if(checkedId != -1)
+                {
+                    et1FourRadiosAndEdit.setText("");
+                }
             }
         });
 
@@ -2200,15 +2212,16 @@ public class ViewUtils
         //int completionState = DatabaseUtils.getReportInitializationState(id_rapporto_sopralluogo);
         ArrayList<Integer> notSetItems = DatabaseUtils.getNotSetItems(id_rapporto_sopralluogo);
 
-        for (Map.Entry entry : Switches.entrySet())
+/*        for (Map.Entry entry : Switches.entrySet())
         {
             int key = (int) entry.getKey();
             Pair <LinearLayout, LinearLayout> pairLL = LinearLayouts.get(key);
+
             if(pairLL != null)
             {
                 notSetItems.add((Integer) entry.getKey());
             }
-        }
+        }*/
 
         for (int k = 0; k < headerNumber; k++) // for each section separately
         {
@@ -2232,13 +2245,13 @@ public class ViewUtils
                                 LinearLayout llSection1 = llSections.second;
                                 LinearLayout llSection0 = llSections.first;
 
-                                if (!llSection1.equals(llSection0))
+                                if (!llSection1.equals(llSection0)) // only section layouts have both layouts identical
                                 {
                                     llSection = llSection1;
                                     break;
                                 }
                             }
-                            idItem--;
+                            idItem--; // go to previous (parent) item
 
                         } while (idItem != 0);
 
@@ -2446,14 +2459,14 @@ public class ViewUtils
                 EditText et = EditTexts.get(idItem);
                 //str_id_item = et.getVisibility() == View.VISIBLE ? et.getText().toString() : "Not applicabile";
 
-                String unit = itemModelli.get(idItem).getUnita_misura();
+/*                String unit = itemModelli.get(idItem).getUnita_misura();
 
-                if(unit.equals("#"))
+                if(unit.equals("#") || unit.length() > 2)
                 {
                     unit = "";
-                }
+                }*/
 
-                str_id_item = et.getText().toString() + " " + unit;
+                str_id_item = et.getText().toString(); // + unit;
             }
             DatabaseUtils.insertStringInReportItem(id_rapporto_sopralluogo, idItem, str_id_item);
             idItem++;
@@ -2559,7 +2572,7 @@ public class ViewUtils
 
             for (int i = 0; i < strChkArray.length; i++)
             {
-                if (strChkArray[i].contains(chkBoxText))
+                if (chkBoxText.length()!=0 && strChkArray[i].contains(chkBoxText))
                 {
                     chkbox.setChecked(true);
                     break;

@@ -182,7 +182,10 @@ public class ClimatizzazioneReportFragment extends Fragment
 
             idItem = viewUtils.fillSeveralEdits(idItem, 3);
 
-            //viewUtils.markSectionsWithNotFilledItems(id_rapporto_sopralluogo);
+            if(reportStates!=null && reportStates.hasTriedToSendReport())
+            {
+                viewUtils.markSectionsWithNotFilledItems(id_rapporto_sopralluogo);
+            }
         }
     }
 

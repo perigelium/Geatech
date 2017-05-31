@@ -13,6 +13,7 @@ import android.os.Handler;
 import android.text.Html;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -54,6 +55,8 @@ import ru.alexangan.developer.geatech.Fragments.SetDateTimeFragment;
 import ru.alexangan.developer.geatech.Fragments.SettingsFragment;
 import ru.alexangan.developer.geatech.Fragments.StorageReportFragment;
 import ru.alexangan.developer.geatech.Interfaces.Communicator;
+import ru.alexangan.developer.geatech.Interfaces.ScrollViewExt;
+import ru.alexangan.developer.geatech.Interfaces.ScrollViewListener;
 import ru.alexangan.developer.geatech.Models.GeaItemModelliRapporto;
 import ru.alexangan.developer.geatech.Models.GeaModelloRapporto;
 import ru.alexangan.developer.geatech.Models.GeaSezioneModelliRapporto;
@@ -80,9 +83,10 @@ import static ru.alexangan.developer.geatech.Models.GlobalConstants.realm;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.selectedTech;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.tokenStr;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.visitItems;
+import static ru.alexangan.developer.geatech.R.id.always;
 import static ru.alexangan.developer.geatech.R.id.innerFragContainer;
 
-public class MainActivity extends Activity implements Communicator, Callback
+public class MainActivity extends Activity implements Communicator, Callback, ScrollViewListener
 {
     private FragmentManager mFragmentManager;
     SwipeDetector swipeDetector;
@@ -129,7 +133,7 @@ public class MainActivity extends Activity implements Communicator, Callback
     {
         super.onPause();
 
-        if(handler!=null && runnable!= null)
+        if (handler != null && runnable != null)
         {
             handler.removeCallbacks(runnable);
         }
@@ -142,12 +146,12 @@ public class MainActivity extends Activity implements Communicator, Callback
 
         String imagesDirPath = getExternalFilesDir(DIRECTORY_PICTURES).getAbsolutePath();
 
-            File imagesDir = new File(imagesDirPath);
+        File imagesDir = new File(imagesDirPath);
 
-            for (File child : imagesDir.listFiles())
-            {
-                child.delete();
-            }
+        for (File child : imagesDir.listFiles())
+        {
+            child.delete();
+        }
     }
 
     @Override
@@ -155,7 +159,7 @@ public class MainActivity extends Activity implements Communicator, Callback
     {
         super.onStart();
 
-        if(firstStart)
+        if (firstStart)
         {
             ctrlBtnsBottom.setCheckedBtnId(R.id.btnVisits);
             firstStart = false;
@@ -173,6 +177,9 @@ public class MainActivity extends Activity implements Communicator, Callback
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.work_window);
+
+        ScrollViewExt svInnerFragContainer = (ScrollViewExt) findViewById(R.id.svInnerFragContainer);
+        svInnerFragContainer.setScrollViewListener(this);
 
         currentSelIndex = -1;
         curSelBottomBtnId = 0;
@@ -252,17 +259,16 @@ public class MainActivity extends Activity implements Communicator, Callback
     @Override
     public void onBackPressed()
     {
-        if(curSelBottomBtnId != 0)
+        if (curSelBottomBtnId != 0)
         {
             ctrlBtnsBottom.setCheckedBtnId(curSelBottomBtnId);
             curSelBottomBtnId = 0;
-        }
-        else if (!fragListVisitsOther.isAdded())
+        } else if (!fragListVisitsOther.isAdded())
         {
             Button btn = (Button) findViewById(R.id.btnVisits);
             btn.setSelected(false);
             ctrlBtnsBottom.setCheckedBtnId(R.id.btnVisits);
-        }else
+        } else
         {
             //super.onBackPressed();
             this.finish();
@@ -286,17 +292,15 @@ public class MainActivity extends Activity implements Communicator, Callback
 
         if (btnId == R.id.btnVisits)
         {
-            if(listVisitsIsObsolete)
+            if (listVisitsIsObsolete)
             {
                 refreshVisitsList();
-            }
-            else
+            } else
             {
                 int mode = mSettings.getInt("listVisitsFilterMode", 0);
                 showSelectedVisitsList(mode);
             }
-        }
-        else
+        } else
         {
             notificationBarFragment.setView(R.string.NullString, View.GONE, View.GONE);
         }
@@ -305,7 +309,7 @@ public class MainActivity extends Activity implements Communicator, Callback
         {
             FragmentTransaction mFragmentTransaction = mFragmentManager.beginTransaction();
 
-            if(!fragListInWorkVisits.isAdded())
+            if (!fragListInWorkVisits.isAdded())
             {
                 mFragmentTransaction.add(innerFragContainer, fragListInWorkVisits);
                 mFragmentTransaction.addToBackStack(fragListInWorkVisits.getTag());
@@ -329,13 +333,13 @@ public class MainActivity extends Activity implements Communicator, Callback
             mFragmentManager.popBackStack();
 
             FragmentTransaction mFragmentTransaction = mFragmentManager.beginTransaction();
-            if(!fragListReportsNotSent.isAdded())
+            if (!fragListReportsNotSent.isAdded())
             {
                 mFragmentTransaction.add(innerFragContainer, fragListReportsNotSent);
                 mFragmentTransaction.addToBackStack(fragListReportsNotSent.getTag());
             }
 
-            if(!fragListReportsSent.isAdded())
+            if (!fragListReportsSent.isAdded())
             {
                 mFragmentTransaction.add(innerFragContainer, fragListReportsSent);
                 mFragmentTransaction.addToBackStack(fragListReportsSent.getTag());
@@ -349,7 +353,7 @@ public class MainActivity extends Activity implements Communicator, Callback
             showSelectedVisitsList(mode);*/
 
             TextView tvWindowTitle = (TextView) findViewById(R.id.tvWindowTitle);
-            tvWindowTitle.setText("Compilazioni completati");
+            tvWindowTitle.setText("Compilazioni completate");
         }
 
         if (btnId == R.id.btnAppSettings)
@@ -429,7 +433,7 @@ public class MainActivity extends Activity implements Communicator, Callback
 
                 realm.commitTransaction();
 
-                if(reportStates!=null)
+                if (reportStates != null)
                 {
                     int id_sopralluogo = reportStates.getId_sopralluogo();
 
@@ -490,16 +494,16 @@ public class MainActivity extends Activity implements Communicator, Callback
             vFragmentTransaction.commit();
         }
         mFragmentManager.executePendingTransactions();
-        
-            if (!setDateTimeFragment.isAdded())
-            {
-                Bundle args = new Bundle();
-                args.putInt("selectedIndex", itemIndex);
-                setDateTimeFragment.setArguments(args);
 
-                //setVisitsListContent(setDateTimeFragment);
-                ctrlBtnsSopralluogo.setCheckedBtnId(R.id.btnSopralluogoInfo);
-            }
+        if (!setDateTimeFragment.isAdded())
+        {
+            Bundle args = new Bundle();
+            args.putInt("selectedIndex", itemIndex);
+            setDateTimeFragment.setArguments(args);
+
+            //setVisitsListContent(setDateTimeFragment);
+            ctrlBtnsSopralluogo.setCheckedBtnId(R.id.btnSopralluogoInfo);
+        }
     }
 
     @Override
@@ -542,7 +546,7 @@ public class MainActivity extends Activity implements Communicator, Callback
     @Override
     public void onNotificationReportReturned(int mode)
     {
-        if(!firstStart)
+        if (!firstStart)
         {
             mFragmentManager.popBackStackImmediate();
             showSelectedVisitsList(mode);
@@ -559,7 +563,7 @@ public class MainActivity extends Activity implements Communicator, Callback
 
         FragmentTransaction mFragmentTransaction = mFragmentManager.beginTransaction();
 
-        if(mode == LIST_VISITS_MODE_ALL)
+        if (mode == LIST_VISITS_MODE_ALL)
         {
             mSettings.edit().putBoolean("ownVisitsOnly", false).apply();
 
@@ -583,7 +587,7 @@ public class MainActivity extends Activity implements Communicator, Callback
             mFragmentTransaction.show(fragListVisitsOther);*/
         }
 
-        if(mode == LIST_VISITS_MODE_MY)
+        if (mode == LIST_VISITS_MODE_MY)
         {
             mSettings.edit().putBoolean("ownVisitsOnly", true).apply();
 
@@ -602,7 +606,7 @@ public class MainActivity extends Activity implements Communicator, Callback
             mFragmentTransaction.show(fragListVisitsOther);*/
         }
 
-        if(mode == LIST_VISITS_MODE_FREE)
+        if (mode == LIST_VISITS_MODE_FREE)
         {
             if (!fragListVisitsFree.isAdded())
             {
@@ -908,5 +912,20 @@ public class MainActivity extends Activity implements Communicator, Callback
         fragmentTransaction.show(ctrlBtnsBottom);
         fragmentTransaction.show(ctrlBtnsSopralluogo);
         fragmentTransaction.commit();
+    }
+
+    @Override
+    public void onScrollChanged(ScrollViewExt scrollView, int x, int y, int oldx, int oldy)
+    {
+        // We take the last son in the scrollview
+        View view = (View) scrollView.getChildAt(scrollView.getChildCount() - 1);
+        int diff = (view.getBottom() - (scrollView.getHeight() + scrollView.getScrollY()));
+
+        // if diff is zero, then the bottom has been reached
+        if (diff == 0 && fragListVisitsOther.isAdded())
+        {
+            refreshVisitsList();
+            //showToastMessage("bottom is reached !");
+        }
     }
 }

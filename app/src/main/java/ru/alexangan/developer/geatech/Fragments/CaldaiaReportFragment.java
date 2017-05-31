@@ -332,7 +332,10 @@ public class CaldaiaReportFragment extends Fragment
 
             idItem = viewUtils.fillSeveralEdits(idItem, 2);
 
-            //viewUtils.markSectionsWithNotFilledItems(id_rapporto_sopralluogo);
+            if(reportStates!=null && reportStates.hasTriedToSendReport())
+            {
+                viewUtils.markSectionsWithNotFilledItems(id_rapporto_sopralluogo);
+            }
         }
     }
 }

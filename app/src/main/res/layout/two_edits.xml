@@ -49,6 +49,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="44dp"
+        android:layout_marginRight="16dp"
         android:orientation="vertical">
 
         <LinearLayout
@@ -62,23 +63,31 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start|center_vertical"
+                android:maxWidth="150dp"
                 android:text="Edit 1: "
                 android:textColor="#ff808080"
                 android:textSize="13sp"/>
 
-            <EditText
-                android:id="@+id/et1TwoEdits"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="end|center_vertical"
                 android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
-                android:background="@android:color/transparent"
-                android:hint="Inserire"
-                android:inputType="number"
-                android:text=""
-                android:textColor="#ff29b352"
-                android:textColorHint="#cccccc"/>
+                android:background="@drawable/shape_gray_border_rect">
+
+                <EditText
+                    android:id="@+id/et1TwoEdits"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end|center_vertical"
+                    android:layout_marginLeft="6dp"
+                    android:background="@android:color/transparent"
+                    android:hint="Inserire"
+                    android:inputType="number"
+                    android:text=""
+                    android:textColor="#ff29b352"
+                    android:textColorHint="#cccccc"/>
+
+            </LinearLayout>
 
         </LinearLayout>
 
@@ -93,23 +102,31 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start|center_vertical"
+                android:maxWidth="150dp"
                 android:text="Edit 1: "
                 android:textColor="#ff808080"
                 android:textSize="13sp"/>
 
-            <EditText
-                android:id="@+id/et2TwoEdits"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="end|center_vertical"
                 android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
-                android:background="@android:color/transparent"
-                android:hint="Inserire"
-                android:inputType="number"
-                android:text=""
-                android:textColor="#ff29b352"
-                android:textColorHint="#cccccc"/>
+                android:background="@drawable/shape_gray_border_rect">
+
+                <EditText
+                    android:id="@+id/et2TwoEdits"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end|center_vertical"
+                    android:layout_marginLeft="6dp"
+                    android:background="@android:color/transparent"
+                    android:hint="Inserire"
+                    android:inputType="number"
+                    android:text=""
+                    android:textColor="#ff29b352"
+                    android:textColorHint="#cccccc"/>
+
+            </LinearLayout>
 
         </LinearLayout>
 

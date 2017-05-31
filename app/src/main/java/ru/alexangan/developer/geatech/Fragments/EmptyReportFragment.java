@@ -155,7 +155,10 @@ public class EmptyReportFragment extends Fragment
         if (id_rapporto_sopralluogo != -1)
         {
 
-            //viewUtils.markSectionsWithNotFilledItems(id_rapporto_sopralluogo);
+            if(reportStates!=null && reportStates.hasTriedToSendReport())
+            {
+                viewUtils.markSectionsWithNotFilledItems(id_rapporto_sopralluogo);
+            }
         }
     }
 

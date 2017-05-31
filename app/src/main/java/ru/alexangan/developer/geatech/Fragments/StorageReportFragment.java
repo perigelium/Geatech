@@ -260,7 +260,10 @@ public class StorageReportFragment extends Fragment
 
             idItem = viewUtils.fillSeveralSwitches(idItem, 5);
 
-            //viewUtils.markSectionsWithNotFilledItems(id_rapporto_sopralluogo);
+            if(reportStates!=null && reportStates.hasTriedToSendReport())
+            {
+                viewUtils.markSectionsWithNotFilledItems(id_rapporto_sopralluogo);
+            }
         }
     }
 }

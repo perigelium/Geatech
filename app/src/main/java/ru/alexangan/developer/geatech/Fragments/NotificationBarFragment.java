@@ -178,7 +178,7 @@ public class NotificationBarFragment extends Fragment implements View.OnClickLis
         }*/
     }
 
-    private void showVisitsFilterDialog()
+/*    private void showVisitsFilterDialog()
     {
         String[] listItemsArray = {"Tutti i sopralluoghi", "I miei sopralluoghi", "Sopralluoghi da fissare"};
         Integer[] icons = new Integer[]{R.drawable.three_balls, R.drawable.two_balls, R.drawable.yellow_ball};
@@ -210,7 +210,7 @@ public class NotificationBarFragment extends Fragment implements View.OnClickLis
         builder.setView(layout);
         alert = builder.create();
         alert.show();
-    }
+    }*/
 
     public void setView(int tvWindowTitleString, int ivLogoSmallVisibility, int ivVisitsListsFilterVisibility)
     {
