@@ -6,7 +6,7 @@ import io.realm.RealmObject;
 
 // gea_imagine_rapporto_sopralluogo
 
-public class GeaImagineRapporto extends RealmObject
+public class GeaImmagineRapporto extends RealmObject
 {
 
     private int id_immagine_rapporto;
@@ -18,7 +18,7 @@ public class GeaImagineRapporto extends RealmObject
 
     private String filePath;
 
-    public GeaImagineRapporto
+    public GeaImmagineRapporto
             (int company_id, int tech_id, int id_rapporto_sopralluogo, int id_immagine_rapporto, String filePath, String nome_file)
     {
         this.company_id = company_id;
@@ -29,7 +29,7 @@ public class GeaImagineRapporto extends RealmObject
         this.nome_file = nome_file;
     }
 
-    public GeaImagineRapporto()
+    public GeaImmagineRapporto()
     {
     }
 
