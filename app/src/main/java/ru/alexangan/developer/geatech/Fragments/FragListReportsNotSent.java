@@ -19,8 +19,12 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.TreeMap;
 
+import io.realm.RealmList;
 import ru.alexangan.developer.geatech.Adapters.MyListVisitsAdapter;
 import ru.alexangan.developer.geatech.Interfaces.Communicator;
+import ru.alexangan.developer.geatech.Models.GeaImmagineRapportoSopralluogo;
+import ru.alexangan.developer.geatech.Models.GeaItemRapportoSopralluogo;
+import ru.alexangan.developer.geatech.Models.GeaRapportoSopralluogo;
 import ru.alexangan.developer.geatech.Models.GeaSopralluogo;
 import ru.alexangan.developer.geatech.Models.ReportStates;
 import ru.alexangan.developer.geatech.Models.VisitItem;
@@ -87,14 +91,14 @@ public class FragListReportsNotSent extends ListFragment
 
         TreeMap<Long, VisitItem> unsortedVisits = new TreeMap<>();
         long n = 0;
-        SimpleDateFormat sdf = new SimpleDateFormat("dd-mm-yyyy hh:mm", Locale.ITALIAN);
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy hh:mm", Locale.ITALIAN);
         Calendar calendarNow = Calendar.getInstance(Locale.ITALY);
         String strMonth = calendarNow.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.ITALY);
         //String dateString = " " + calendarNow.get(Calendar.DAY_OF_MONTH) + " " + strMonth;
 
         //tvListVisitsTodayDate.setText(dateString);
 
-        calendarNow.set(Calendar.HOUR, 23);
+        calendarNow.set(Calendar.HOUR_OF_DAY, 23);
         calendarNow.set(Calendar.MINUTE, 59);
         calendarNow.set(Calendar.SECOND, 59);
         long lastMilliSecondsOfToday = calendarNow.getTimeInMillis();
@@ -102,9 +106,10 @@ public class FragListReportsNotSent extends ListFragment
         for (VisitItem visitItem : visitItems)
         //for (int i = 0; i < visitItems.size(); i++)
         {
-            String data_ora_sopralluogo = visitItem.getGeaSopralluogo().getData_ora_sopralluogo();
             GeaSopralluogo geaSopralluogo = visitItem.getGeaSopralluogo();
             int idSopralluogo = geaSopralluogo.getId_sopralluogo();
+            RealmList<GeaItemRapportoSopralluogo> rl_ItemsRapportoSopralluogo = visitItem.getGea_items_rapporto_sopralluogo();
+            RealmList<GeaImmagineRapportoSopralluogo> rl_ImmaginiRapportoSopralluogo = visitItem.getGea_immagini_rapporto_sopralluogo();
 
             realm.beginTransaction();
             ReportStates reportStates = realm.where(ReportStates.class).equalTo("company_id", company_id).equalTo("tech_id", selectedTech.getId())
@@ -117,10 +122,12 @@ public class FragListReportsNotSent extends ListFragment
             {
                 reportCompleteNotSent = reportStates.getGeneralInfoCompletionState() == ReportStates.GENERAL_INFO_DATETIME_AND_COORDS_SET
                         && reportStates.getReportCompletionState() == ReportStates.REPORT_COMPLETED
-                        && reportStates.getPhotoAddedNumber() >= reportStates.PHOTOS_MIN_ADDED
+                        && reportStates.getPhotoAddedNumber() >= ReportStates.PHOTOS_MIN_ADDED
                         && reportStates.getData_ora_invio_rapporto() == null;
 
-
+                GeaRapportoSopralluogo gea_rapporto_sopralluogo = visitItem.getGeaRapportoSopralluogo();
+                String techName = gea_rapporto_sopralluogo.getNome_tecnico();
+                String data_ora_sopralluogo = reportStates.getData_ora_sopralluogo();
 /*                int id_tecnico = visitItem.getGeaSopralluogo().getId_tecnico();
                 boolean ownVisit = selectedTech.getId() == id_tecnico;*/
 

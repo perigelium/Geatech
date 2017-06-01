@@ -13,9 +13,13 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Locale;
 
+import ru.alexangan.developer.geatech.Models.GeaSopralluogo;
 import ru.alexangan.developer.geatech.Models.ItalianMonths;
 import ru.alexangan.developer.geatech.Models.ReportStates;
+import ru.alexangan.developer.geatech.Models.TechnicianItem;
 import ru.alexangan.developer.geatech.R;
+
+import static ru.alexangan.developer.geatech.Models.GlobalConstants.realm;
 
 /**
  * Created by user on 11/21/2016.*/
@@ -85,6 +89,16 @@ public class ReportsListAdapter extends BaseAdapter
         clientAddressTextView.setText(reportStates.getClientAddress());
 
         //int idSopralluogo = geaSopralluogo.getId_sopralluogo();
+
+        //int tech_id = geaSopralluogo.getId_tecnico();
+
+/*        String techName = "";
+        TechnicianItem technicianItem = realm.where(TechnicianItem.class).equalTo("id", tech_id).findFirst();
+
+        if(technicianItem!=null)
+        {
+            techName = technicianItem.getFullNameTehnic();
+        }*/
 
         String visitDateTime = reportStates.getData_ora_invio_rapporto();
 

@@ -53,7 +53,7 @@ import ru.alexangan.developer.geatech.Adapters.SetVisitDateTimeListAdapter;
 import ru.alexangan.developer.geatech.Interfaces.Communicator;
 import ru.alexangan.developer.geatech.Interfaces.LocationRetrievedEvents;
 import ru.alexangan.developer.geatech.Models.ClientData;
-import ru.alexangan.developer.geatech.Models.GeaImagineRapporto;
+import ru.alexangan.developer.geatech.Models.GeaImmagineRapporto;
 import ru.alexangan.developer.geatech.Models.GeaItemRapporto;
 import ru.alexangan.developer.geatech.Models.GeaModelloRapporto;
 import ru.alexangan.developer.geatech.Models.GeaSopralluogo;
@@ -207,7 +207,7 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
                 elapsedDays = periodMilliSeconds / 1000 / 60 / 60 / 24;
             }
 
-            SimpleDateFormat sdfDate = new SimpleDateFormat("dd-mm-yyyy hh:mm", Locale.ITALIAN);
+            SimpleDateFormat sdfDate = new SimpleDateFormat("dd-MM-yyyy hh:mm", Locale.ITALIAN);
             String dateTimeStr = sdfDate.format(calendar.getTime());
             tvdataOraSopralluogo.setText(dateTimeStr);
             tvTechnicianName.setVisibility(View.VISIBLE);
@@ -226,7 +226,7 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
             }
 
             stakedOut = 1;
-            SimpleDateFormat sdf = new SimpleDateFormat("dd-mm-yyyy hh:mm", Locale.ENGLISH);
+            SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy hh:mm", Locale.ENGLISH);
             strDateTimeSet = sdf.format(calendar.getTime());
 
             disableInput();
@@ -278,6 +278,11 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
             {
                 etAltitude.setText(R.string.Unknown);
             }
+        }
+        else
+        {
+            latitude = clientData.getCoordNord();
+            longitude = clientData.getCoordEst();
         }
     }
 
@@ -381,7 +386,7 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
         if(dataOraSopralluogo!=null && dataOraSopralluogo.length() > 4)
         {
             datetime_set = true;
-            SimpleDateFormat sdf = new SimpleDateFormat("dd-mm-yyyy hh:mm", Locale.ITALIAN);
+            SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy hh:mm", Locale.ITALIAN);
 
             try
             {
@@ -752,7 +757,7 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
             RealmResults geaItemsRapporto = realm.where(GeaItemRapporto.class).equalTo("company_id", company_id)
                     .equalTo("tech_id", selectedTech.getId()).equalTo("id_rapporto_sopralluogo", reportStates.getId_rapporto_sopralluogo()).findAll();
 
-            RealmResults<GeaImagineRapporto> listReportImages = realm.where(GeaImagineRapporto.class)
+            RealmResults<GeaImmagineRapporto> listReportImages = realm.where(GeaImmagineRapporto.class)
                     .equalTo("company_id", company_id).equalTo("tech_id", selectedTech.getId())
                     .equalTo("id_rapporto_sopralluogo", reportStates.getId_rapporto_sopralluogo()).findAll();
 

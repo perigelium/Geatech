@@ -44,7 +44,7 @@ import java.util.Date;
 import io.realm.RealmResults;
 import ru.alexangan.developer.geatech.Adapters.GridViewAdapter;
 import ru.alexangan.developer.geatech.Interfaces.Communicator;
-import ru.alexangan.developer.geatech.Models.GeaImagineRapporto;
+import ru.alexangan.developer.geatech.Models.GeaImmagineRapporto;
 import ru.alexangan.developer.geatech.Models.ReportStates;
 import ru.alexangan.developer.geatech.R;
 import ru.alexangan.developer.geatech.Utils.ImageUtils;
@@ -450,7 +450,7 @@ public class PhotoGalleryGridFragment extends Fragment
 
         int id_rapporto_sopralluogo = reportStates.getId_rapporto_sopralluogo();
 
-        RealmResults<GeaImagineRapporto> reportImages = realm.where(GeaImagineRapporto.class).equalTo("company_id", company_id)
+        RealmResults<GeaImmagineRapporto> reportImages = realm.where(GeaImmagineRapporto.class).equalTo("company_id", company_id)
                 .equalTo("tech_id", selectedTech.getId()).equalTo("id_rapporto_sopralluogo", id_rapporto_sopralluogo).findAll();
         reportImages.deleteAllFromRealm();
 
@@ -471,7 +471,7 @@ public class PhotoGalleryGridFragment extends Fragment
 
                 realm.beginTransaction();
 
-                GeaImagineRapporto gea_immagine = new GeaImagineRapporto(
+                GeaImmagineRapporto gea_immagine = new GeaImmagineRapporto(
                         company_id, selectedTech.getId(), id_rapporto_sopralluogo, reportImagesSize++, imageFile.getAbsolutePath(), fileName);
                 realm.copyToRealm(gea_immagine);
 

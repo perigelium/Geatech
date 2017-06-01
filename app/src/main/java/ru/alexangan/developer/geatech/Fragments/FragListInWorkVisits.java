@@ -88,14 +88,14 @@ public class FragListInWorkVisits extends ListFragment
 
         TreeMap<Long, VisitItem> unsortedVisits = new TreeMap<>();
         long n = 0;
-        SimpleDateFormat sdf = new SimpleDateFormat("dd-mm-yyyy hh:mm", Locale.ITALIAN);
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy hh:mm", Locale.ITALIAN);
         Calendar calendarNow = Calendar.getInstance(Locale.ITALY);
         String strMonth = calendarNow.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.ITALY);
         //String dateString = " " + calendarNow.get(Calendar.DAY_OF_MONTH) + " " + strMonth;
 
         //tvListVisitsTodayDate.setText(dateString);
 
-        calendarNow.set(Calendar.HOUR, 23);
+        calendarNow.set(Calendar.HOUR_OF_DAY, 23);
         calendarNow.set(Calendar.MINUTE, 59);
         calendarNow.set(Calendar.SECOND, 59);
         long lastMilliSecondsOfToday = calendarNow.getTimeInMillis();
@@ -118,9 +118,10 @@ public class FragListInWorkVisits extends ListFragment
             if (reportStates != null)
             {
                 String data_ora_sopralluogo = reportStates.getData_ora_sopralluogo();
+
                 reportStartedNotCompleted = reportStates.getGeneralInfoCompletionState() == ReportStates.GENERAL_INFO_DATETIME_AND_COORDS_SET
-                        && (reportStates.getReportCompletionState() < ReportStates.REPORT_COMPLETED
-                        || reportStates.getPhotoAddedNumber() < reportStates.PHOTOS_MIN_ADDED);
+                && ((reportStates.getReportCompletionState() >= ReportStates.REPORT_INITIATED && reportStates.getReportCompletionState() < ReportStates.REPORT_COMPLETED
+                || (reportStates.getPhotoAddedNumber() > 0 && reportStates.getPhotoAddedNumber() < ReportStates.PHOTOS_MIN_ADDED)));
 
                 if (data_ora_sopralluogo!=null)
                 {
@@ -135,7 +136,7 @@ public class FragListInWorkVisits extends ListFragment
                             time++;
                         }
 
-                        if (true)
+                        if (reportStartedNotCompleted)
                         {
                             unsortedVisits.put(time, visitItem);
                         }

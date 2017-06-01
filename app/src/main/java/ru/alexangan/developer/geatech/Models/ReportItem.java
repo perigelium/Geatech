@@ -14,7 +14,7 @@ public class ReportItem
     private GeaSopralluogo gea_sopralluoghi;
     private GeaRapporto gea_rapporto_sopralluogo;
 
-    private List<GeaImagineRapporto> gea_immagini_rapporto_sopralluogo;
+    private List<GeaImmagineRapporto> gea_immagini_rapporto_sopralluogo;
     private List<GeaItemRapporto> gea_items_rapporto_sopralluogo;
 
     public GeaSopralluogo getGeaSopralluogo()
@@ -37,12 +37,12 @@ public class ReportItem
         this.gea_rapporto_sopralluogo = gea_rapporto_sopralluogo;
     }
 
-    public List<GeaImagineRapporto> getGea_immagini_rapporto_sopralluogo()
+    public List<GeaImmagineRapporto> getGea_immagini_rapporto_sopralluogo()
     {
         return gea_immagini_rapporto_sopralluogo;
     }
 
-    public void setGea_immagini_rapporto_sopralluogo(List<GeaImagineRapporto> gea_immagini_rapporto_sopralluogo)
+    public void setGea_immagini_rapporto_sopralluogo(List<GeaImmagineRapporto> gea_immagini_rapporto_sopralluogo)
     {
         this.gea_immagini_rapporto_sopralluogo = gea_immagini_rapporto_sopralluogo;
     }

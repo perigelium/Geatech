@@ -88,7 +88,7 @@ public class FragListReportsSent extends ListFragment
                 continue;
             }
 
-            SimpleDateFormat sdf = new SimpleDateFormat("dd-mm-yyyy hh:mm", Locale.ITALIAN);
+            SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy hh:mm", Locale.ITALIAN);
 
             if (reportComplete && reportStates.getData_ora_invio_rapporto() != null)
             {

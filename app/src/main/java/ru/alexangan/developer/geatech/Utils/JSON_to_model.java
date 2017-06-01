@@ -1,15 +1,29 @@
 package ru.alexangan.developer.geatech.Utils;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.reflect.Type;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
+
 import io.realm.RealmList;
 import ru.alexangan.developer.geatech.Models.ClientData;
+import ru.alexangan.developer.geatech.Models.GeaImmagineRapportoSopralluogo;
+import ru.alexangan.developer.geatech.Models.GeaItemRapportoSopralluogo;
+import ru.alexangan.developer.geatech.Models.GeaRapportoSopralluogo;
 import ru.alexangan.developer.geatech.Models.GeaSopralluogo;
+import ru.alexangan.developer.geatech.Models.Gea_supplier;
 import ru.alexangan.developer.geatech.Models.ProductData;
 import ru.alexangan.developer.geatech.Models.SubproductItem;
 import ru.alexangan.developer.geatech.Models.VisitItem;
+
+import static ru.alexangan.developer.geatech.Models.GlobalConstants.realm;
 
 /**
  * Created by user on 12/2/2016.*/
@@ -19,43 +33,34 @@ public class JSON_to_model
     public static RealmList<VisitItem> getVisitTtemsList (String visits_downloaded_data)
     {
         RealmList<VisitItem> visitItems = new RealmList<>();
+        Gson gson = new Gson();
 
         try
         {
             JSONObject jsonObject = new JSONObject(visits_downloaded_data);
             JSONArray arr_caseArray = jsonObject.getJSONArray("arr_case");
-            //JSONArray visits_array = arr_caseArray.getJSONArray(0);
 
             for (int i = 0; i < arr_caseArray.length(); i++)
             {
                 JSONObject visit_items = arr_caseArray.getJSONObject(i);
 
+                // gea_sopralluoghi
                 JSONObject visit_data = (JSONObject) visit_items.get("gea_sopralluoghi");
-                JSONObject client_data = (JSONObject) visit_items.get("gea_client");
-                JSONArray subproducts = (JSONArray) visit_items.get("gea_products");
-
-
-                //JSONArray gea_supplier = (JSONArray) visit_items.get("gea_supplier");
-//                JSONArray gea_rapporto_soppralluogo = (JSONArray) visit_items.get("gea_rapporto_soppralluogo");
-//                JSONArray gea_immagini_rapporto_sopralluogo = (JSONArray) visit_items.get("gea_immagini_rapporto_sopralluogo");
-//                JSONArray gea_items_rapporto_soppralluogo = (JSONArray) visit_items.get("gea_items_rapporto_soppralluogo");
 
                 Integer id_sopralluogo = visit_data.getInt("id_sopralluogo");
                 int id_tecnico = visit_data.getInt("id_tecnico");
                 //String data_ora_assegnazione = visit_data.getString("data_ora_assegnazione");
                 String data_ora_presa_appuntamento = visit_data.getString("data_ora_presa_appuntamento");
-                //String data_sollecito_appuntamento = visit_data.getString("data_sollecito_appuntamento");
+                String data_sollecito_appuntamento = visit_data.getString("data_sollecito_appuntamento");
                 String data_ora_sopralluogo = visit_data.getString("data_ora_sopralluogo");
 
                 int id_practice = visit_data.getInt("id_practice");
 
 
-                //String note_sopralluogo = visit_data.getString("note_sopralluogo");
-                //String tipo_gestione_sopralluogo = visit_data.getString("tipo_gestione_sopralluogo");
-
                 GeaSopralluogo geaSopralluogo = new GeaSopralluogo(id_sopralluogo, id_tecnico, data_ora_presa_appuntamento, data_ora_sopralluogo, id_practice);
 
-                //JSONObject client_dataJSONObject = client_data.getJSONObject();
+                // gea_client
+                JSONObject client_data = (JSONObject) visit_items.get("gea_client");
 
                 String name = client_data.getString("name");
                 String address = client_data.getString("address");
@@ -70,6 +75,8 @@ public class JSON_to_model
                 int idProductType = client_data.getInt("id_product_type");
                 String product = client_data.getString("product");
 
+                // gea_products
+                JSONArray subproducts = (JSONArray) visit_items.get("gea_products");
 
                 RealmList<SubproductItem> subproductsList = new RealmList<>();
 
@@ -88,9 +95,41 @@ public class JSON_to_model
 
                 ProductData productData = new ProductData(i, productType,  idProductType, product, subproductsList);
 
-                VisitItem visitItem = new VisitItem(i, geaSopralluogo, clientData, productData);
+                // gea_supplier
+                JSONObject supplier_data = (JSONObject) visit_items.get("gea_supplier");
+
+                String supplier_name = supplier_data.getString("supplier");
+
+                Gea_supplier geaSupplier = new Gea_supplier(i, supplier_name);
+
+                // gea_rapporto_sopralluogo
+                JSONObject rapporto_sopralluogo_data = (JSONObject) visit_items.get("gea_rapporto_sopralluogo");
+
+                GeaRapportoSopralluogo gea_rapporto_sopralluogo = gson.fromJson(String.valueOf(rapporto_sopralluogo_data), GeaRapportoSopralluogo.class);
+
+                //
+                JSONArray data_items_rapporto_sopralluogo = (JSONArray) visit_items.get("gea_items_rapporto_sopralluogo");
+
+                Type typeGeaItemRapportoSopralluogo = new TypeToken<List<GeaItemRapportoSopralluogo>>()
+                {
+                }.getType();
+                final List<GeaItemRapportoSopralluogo> l_itemsRapportoSopralluogo = gson.fromJson(String.valueOf(data_items_rapporto_sopralluogo), typeGeaItemRapportoSopralluogo);
+
+                RealmList<GeaItemRapportoSopralluogo> rl_ItemsRapportoSopralluogo = new RealmList<>(l_itemsRapportoSopralluogo.toArray(new GeaItemRapportoSopralluogo[l_itemsRapportoSopralluogo.size()]));
+
+                JSONArray data_immagini_rapporto_sopralluogo = (JSONArray) visit_items.get("gea_immagini_rapporto_sopralluogo");
+
+                Type typeimmaginiRapportoSopralluogo = new TypeToken<List<GeaImmagineRapportoSopralluogo>>()
+                {
+                }.getType();
+                final List<GeaImmagineRapportoSopralluogo> l_immaginiRapportoSopralluogo = gson.fromJson(String.valueOf(data_immagini_rapporto_sopralluogo), typeimmaginiRapportoSopralluogo);
+
+                RealmList<GeaImmagineRapportoSopralluogo> rl_ImmaginiRapportoSopralluogo = new RealmList<>(l_immaginiRapportoSopralluogo.toArray(new GeaImmagineRapportoSopralluogo[l_immaginiRapportoSopralluogo.size()]));
+
+                VisitItem visitItem = new VisitItem(i, geaSopralluogo, clientData, productData, geaSupplier, gea_rapporto_sopralluogo, rl_ItemsRapportoSopralluogo, rl_ImmaginiRapportoSopralluogo);
 
                 visitItems.add(visitItem);
+
             }
 
             ////Log.d("DEBUG", String.valueOf(visitItems.size()));

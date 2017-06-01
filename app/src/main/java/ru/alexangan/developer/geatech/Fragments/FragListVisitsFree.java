@@ -79,7 +79,7 @@ public class FragListVisitsFree extends ListFragment
         {
             String data_ora_sopralluogo = visitItem.getGeaSopralluogo().getData_ora_sopralluogo();
             int id_tecnico = visitItem.getGeaSopralluogo().getId_tecnico();
-            SimpleDateFormat sdf = new SimpleDateFormat("dd-mm-yyyy hh:mm", Locale.ITALIAN);
+            SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy hh:mm", Locale.ITALIAN);
 
             if ((!timeNotSetItemsOnly) || (timeNotSetItemsOnly && id_tecnico == 0))
             {

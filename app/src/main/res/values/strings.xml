@@ -19,6 +19,7 @@
     <string name="InvalidPassword">Password non valido.</string>
     <string name="InvalidLogin">Login non valido.</string>
     <string name="ListVisitsReceiveFailed">Elenco sopralluoghi non ricevuto</string>
+    <string name="ListReportsReceiveFailed">Elenco rapporti non ricevuto</string>
     <string name="TokenReceiveFailed">Server error</string>
     <string name="SelectTechPlease">Seleziona il tecnico</string>
     <string name="InsertNameAndSurnameFirst">Inserisci il nome e cognome</string>

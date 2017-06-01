@@ -11,8 +11,8 @@ public class GeaSopralluogo extends RealmObject
 
     //private int id_fornitore;
     private int id_practice;
-/*    private String data_ora_assegnazione;
-    private String data_sollecito_appuntamento;*/
+    //private String data_ora_assegnazione;
+    private String data_sollecito_appuntamento;
     private String data_ora_presa_appuntamento;
     private String data_ora_sopralluogo;
 /*    private String data_sollecito_rapporto;

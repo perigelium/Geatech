@@ -35,7 +35,7 @@ import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
 import ru.alexangan.developer.geatech.Interfaces.Communicator;
-import ru.alexangan.developer.geatech.Models.GeaImagineRapporto;
+import ru.alexangan.developer.geatech.Models.GeaImmagineRapporto;
 import ru.alexangan.developer.geatech.Models.GeaItemRapporto;
 import ru.alexangan.developer.geatech.Models.GeaRapporto;
 import ru.alexangan.developer.geatech.Models.GeaSopralluogo;
@@ -68,7 +68,7 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
     List<Call> callSendImagesList;
     Activity activity;
     NetworkUtils networkUtils;
-    List<GeaImagineRapporto> imagesArray;
+    List<GeaImmagineRapporto> imagesArray;
     private ProgressDialog requestServerDialog;
     int objectsSentSuccessfully;
     AlertDialog alert;
@@ -268,7 +268,7 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
         id_rapporto_sopralluogo = reportStates.getId_rapporto_sopralluogo();
 
 /*        Calendar calendarNow = Calendar.getInstance();
-        SimpleDateFormat sdf = new SimpleDateFormat("dd-mm-yyyy hh:mm", Locale.ENGLISH);
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy hh:mm", Locale.ENGLISH);
         String strDateTime = sdf.format(calendarNow.getTime());*/
 
         //sentVisitItems.add(visitItems.get(selectedIndex));
@@ -296,7 +296,7 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
         realm.commitTransaction();
         realm.beginTransaction();
 
-        RealmResults<GeaImagineRapporto> listReportImages = realm.where(GeaImagineRapporto.class)
+        RealmResults<GeaImmagineRapporto> listReportImages = realm.where(GeaImmagineRapporto.class)
                 .equalTo("company_id", company_id).equalTo("tech_id", selectedTech.getId())
                 .equalTo("id_rapporto_sopralluogo", id_rapporto_sopralluogo).findAll();
 
@@ -304,14 +304,14 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
         realm.beginTransaction();
 
         imagesArray = new ArrayList<>();
-        List<GeaImagineRapporto> imagesForSendingArray = new ArrayList<>();
+        List<GeaImmagineRapporto> imagesForSendingArray = new ArrayList<>();
 
-        for (GeaImagineRapporto geaImagineRapporto : listReportImages)
+        for (GeaImmagineRapporto geaImmagineRapporto : listReportImages)
         {
-            GeaImagineRapporto geaImagineRapportoUnmanaged = realm.copyFromRealm(geaImagineRapporto);
-            imagesArray.add(geaImagineRapportoUnmanaged);
+            GeaImmagineRapporto geaImmagineRapportoUnmanaged = realm.copyFromRealm(geaImmagineRapporto);
+            imagesArray.add(geaImmagineRapportoUnmanaged);
 
-            File file = new File(geaImagineRapporto.getFilePath());
+            File file = new File(geaImmagineRapporto.getFilePath());
             long fileLength = file.length();
             Log.d("DEBUG", String.valueOf(fileLength));
         }
@@ -319,13 +319,13 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
         requestServerDialog.setMax(100);
         realm.beginTransaction();
 
-        for (GeaImagineRapporto geaImagineRapporto : listReportImages)
+        for (GeaImmagineRapporto geaImmagineRapporto : listReportImages)
         {
-            GeaImagineRapporto geaImagineRapportoUnmanaged = realm.copyFromRealm(geaImagineRapporto);
+            GeaImmagineRapporto geaImmagineRapportoUnmanaged = realm.copyFromRealm(geaImmagineRapporto);
 
-            geaImagineRapportoUnmanaged.setId_immagine_rapporto(0);
-            geaImagineRapportoUnmanaged.setfilePath("");
-            imagesForSendingArray.add(geaImagineRapportoUnmanaged);
+            geaImmagineRapportoUnmanaged.setId_immagine_rapporto(0);
+            geaImmagineRapportoUnmanaged.setfilePath("");
+            imagesForSendingArray.add(geaImmagineRapportoUnmanaged);
         }
         reportItem.setGea_immagini_rapporto_sopralluogo(imagesForSendingArray);
 
@@ -459,7 +459,7 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
                             public void run()
                             {
                                 Calendar calendarNow = Calendar.getInstance();
-                                SimpleDateFormat sdf = new SimpleDateFormat("dd-mm-yyyy hh:mm", Locale.ENGLISH);
+                                SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy hh:mm", Locale.ENGLISH);
                                 String strDateTime = sdf.format(calendarNow.getTime());
 
                                 if (objectsSentSuccessfully == imagesArray.size())
@@ -553,7 +553,7 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
                                             public void run()
                                             {
                                                 Calendar calendarNow = Calendar.getInstance();
-                                                SimpleDateFormat sdf = new SimpleDateFormat("dd-mm-yyyy hh:mm", Locale.ENGLISH);
+                                                SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy hh:mm", Locale.ENGLISH);
                                                 String strDateTime = sdf.format(calendarNow.getTime());
 
                                                 if (objectsSentSuccessfully == imagesArray.size())

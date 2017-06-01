@@ -515,14 +515,32 @@ public class LoginTechSelectionFragment extends Fragment implements View.OnClick
 
                         if (tokenStr.length() != 0)
                         {
-                            callVisits = networkUtils.getData(this, GET_VISITS_URL_SUFFIX, tokenStr);
-
-
-                            //callModels = networkUtils.getData(this, GET_MODELS_URL_SUFFIX, tokenStr);
-
-                            if (geaItemModelliSize == 0)
+                            try
                             {
-                                callModels = networkUtils.getData(this, GET_MODELS_URL_SUFFIX, tokenStr);
+
+
+                                callVisits = networkUtils.getData(this, GET_VISITS_URL_SUFFIX, tokenStr);
+
+                                //callModels = networkUtils.getData(this, GET_MODELS_URL_SUFFIX, tokenStr);
+
+                                if (geaItemModelliSize == 0)
+                                {
+                                    callModels = networkUtils.getData(this, GET_MODELS_URL_SUFFIX, tokenStr);
+                                }
+
+                            }catch (Exception e)
+                            {
+                                e.printStackTrace();
+
+                                showToastMessage("ERROR in data received from server.");
+
+                                activity.runOnUiThread(new Runnable()
+                                {
+                                    public void run()
+                                    {
+                                        enableInput();
+                                    }
+                                });
                             }
                         }
 

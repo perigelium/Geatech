@@ -1,7 +1,6 @@
 package ru.alexangan.developer.geatech.Activities;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
@@ -13,7 +12,6 @@ import android.os.Handler;
 import android.text.Html;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -61,6 +59,7 @@ import ru.alexangan.developer.geatech.Models.GeaItemModelliRapporto;
 import ru.alexangan.developer.geatech.Models.GeaModelloRapporto;
 import ru.alexangan.developer.geatech.Models.GeaSezioneModelliRapporto;
 import ru.alexangan.developer.geatech.Models.GeaSopralluogo;
+import ru.alexangan.developer.geatech.Models.GlobalConstants;
 import ru.alexangan.developer.geatech.Models.ProductData;
 import ru.alexangan.developer.geatech.Models.ReportStates;
 import ru.alexangan.developer.geatech.Models.VisitItem;
@@ -77,13 +76,13 @@ import static ru.alexangan.developer.geatech.Models.GlobalConstants.LIST_VISITS_
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.LIST_VISITS_MODE_MY;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.company_id;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.inVisitItems;
+import static ru.alexangan.developer.geatech.Models.GlobalConstants.listReportsIsObsolete;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.listVisitsIsObsolete;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.mSettings;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.realm;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.selectedTech;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.tokenStr;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.visitItems;
-import static ru.alexangan.developer.geatech.R.id.always;
 import static ru.alexangan.developer.geatech.R.id.innerFragContainer;
 
 public class MainActivity extends Activity implements Communicator, Callback, ScrollViewListener
@@ -127,6 +126,7 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
     NetworkUtils networkUtils;
     private boolean firstStart;
     private int curSelBottomBtnId;
+    private Call callReports;
 
     @Override
     protected void onPause()
@@ -242,6 +242,7 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
         requestServerDialog.setIndeterminate(true);
 
         listVisitsIsObsolete = false;
+        listReportsIsObsolete = false;
 
         handler = new Handler();
 
@@ -332,28 +333,37 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
         {
             mFragmentManager.popBackStack();
 
-            FragmentTransaction mFragmentTransaction = mFragmentManager.beginTransaction();
-            if (!fragListReportsNotSent.isAdded())
+            //GlobalConstants.listReportsIsObsolete = true;
+
+            if(GlobalConstants.listReportsIsObsolete)
             {
-                mFragmentTransaction.add(innerFragContainer, fragListReportsNotSent);
-                mFragmentTransaction.addToBackStack(fragListReportsNotSent.getTag());
+                refreshReportsList();
             }
-
-            if (!fragListReportsSent.isAdded())
+            else
             {
-                mFragmentTransaction.add(innerFragContainer, fragListReportsSent);
-                mFragmentTransaction.addToBackStack(fragListReportsSent.getTag());
-            }
+                FragmentTransaction mFragmentTransaction = mFragmentManager.beginTransaction();
+                if (!fragListReportsNotSent.isAdded())
+                {
+                    mFragmentTransaction.add(innerFragContainer, fragListReportsNotSent);
+                    mFragmentTransaction.addToBackStack(fragListReportsNotSent.getTag());
+                }
 
-            mFragmentTransaction.commit();
+                if (!fragListReportsSent.isAdded())
+                {
+                    mFragmentTransaction.add(innerFragContainer, fragListReportsSent);
+                    mFragmentTransaction.addToBackStack(fragListReportsSent.getTag());
+                }
 
-            //mFragmentManager.executePendingTransactions();
+                mFragmentTransaction.commit();
+
+                //mFragmentManager.executePendingTransactions();
 
 /*            int mode = mSettings.getInt("listVisitsFilterMode", 0);
             showSelectedVisitsList(mode);*/
 
-            TextView tvWindowTitle = (TextView) findViewById(R.id.tvWindowTitle);
-            tvWindowTitle.setText("Compilazioni completate");
+                TextView tvWindowTitle = (TextView) findViewById(R.id.tvWindowTitle);
+                tvWindowTitle.setText("Compilazioni completate");
+            }
         }
 
         if (btnId == R.id.btnAppSettings)
@@ -477,7 +487,6 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
             vFragmentTransaction.addToBackStack(fragment.getTag());
             vFragmentTransaction.commit();
         }
-        //timeNotSetItemsOnly = false;
     }
 
     @Override
@@ -501,7 +510,6 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
             args.putInt("selectedIndex", itemIndex);
             setDateTimeFragment.setArguments(args);
 
-            //setVisitsListContent(setDateTimeFragment);
             ctrlBtnsSopralluogo.setCheckedBtnId(R.id.btnSopralluogoInfo);
         }
     }
@@ -523,23 +531,20 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
     @Override
     public void OnReportListItemSelected(int itemIndex)
     {
-/*        FragmentTransaction mFragmentTransaction = mFragmentManager.beginTransaction();
-        mFragmentTransaction.hide(ctrlBtnsBottom);
-        mFragmentTransaction.show(ctrlBtnsReportDetailed);
-        mFragmentTransaction.commit();*/
-
         mFragmentManager.popBackStackImmediate();
 
         if (!reportDetailedFragment.isAdded())
         {
+            notificationBarFragment.setView(R.string.ReportDetailed, View.GONE, View.GONE);
+
+            ctrlBtnsBottom.unselectAllButtons();
+
             Bundle args = reportDetailedFragment.getArguments() != null ? reportDetailedFragment.getArguments() : new Bundle();
 
             args.putInt("selectedIndex", itemIndex);
             reportDetailedFragment.setArguments(args);
 
             setVisitsListContent(reportDetailedFragment);
-
-            notificationBarFragment.setView(R.string.ReportDetailed, View.GONE, View.GONE);
         }
     }
 
@@ -555,7 +560,7 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
 
     private void showSelectedVisitsList(int mode)
     {
-        mFragmentManager.popBackStack();
+        mFragmentManager.popBackStackImmediate();
 
         mSettings.edit().putInt("listVisitsFilterMode", mode).apply();
 
@@ -686,6 +691,21 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
             handler.removeCallbacks(runnable);
         }
 
+        if (call == callReports)
+        {
+            showToastMessage(getString(R.string.ListReportsReceiveFailed));
+
+            runOnUiThread(new Runnable()
+            {
+                public void run()
+                {
+                    requestServerDialog.dismiss();
+                }
+            });
+
+            handler.removeCallbacks(runnable);
+        }
+
         if (call == callModels)
         {
             showToastMessage(getString(R.string.ApplicationUpdateFailed));
@@ -738,6 +758,48 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
                     realm.commitTransaction();
 
                     onCtrlBtnsBottomClicked(R.id.btnVisits);
+
+                    requestServerDialog.dismiss();
+                    //ctrlBtnsBottom.setCheckedBtnId(R.id.btnVisits);
+                }
+            });
+        }
+
+        if (call == callReports)
+        {
+            handler.removeCallbacks(runnable);
+
+            final String reportsJSONData = response.body().string();
+
+            response.body().close();
+
+            GlobalConstants.listReportsIsObsolete = false;
+
+            runOnUiThread(new Runnable()
+            {
+                public void run()
+                {
+/*                    realm.beginTransaction();
+
+                    inVisitItems = JSON_to_model.getVisitTtemsList(reportsJSONData);
+
+                    visitItems = realm.where(VisitItem.class).findAll();
+                    visitItems.deleteAllFromRealm();
+
+                    if (inVisitItems != null && inVisitItems.size() > 0)
+                    {
+                        for (VisitItem visitItem : inVisitItems)
+                        {
+                            realm.copyToRealmOrUpdate(visitItem);
+                        }
+                    }
+                    realm.commitTransaction();
+
+                    realm.beginTransaction();
+                    visitItems = realm.where(VisitItem.class).findAll();
+                    realm.commitTransaction();
+
+                    onCtrlBtnsBottomClicked(R.id.btnVisits);*/
 
                     requestServerDialog.dismiss();
                     //ctrlBtnsBottom.setCheckedBtnId(R.id.btnVisits);
@@ -882,6 +944,17 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
         callVisits = networkUtils.getData(this, GET_VISITS_URL_SUFFIX, tokenStr);
 
         listVisitsIsObsolete = false;
+    }
+
+    private void refreshReportsList()
+    {
+        requestServerDialog.show();
+
+        handler.postDelayed(runnable, 30000);
+
+        callReports = networkUtils.getData(this, GET_VISITS_URL_SUFFIX, tokenStr);
+
+        //listReportsIsObsolete = false;
     }
 
     @Override

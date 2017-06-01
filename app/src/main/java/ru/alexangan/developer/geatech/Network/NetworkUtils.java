@@ -18,7 +18,7 @@ import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
-import ru.alexangan.developer.geatech.Models.GeaImagineRapporto;
+import ru.alexangan.developer.geatech.Models.GeaImmagineRapporto;
 import ru.alexangan.developer.geatech.Utils.ImageUtils;
 
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.LOGIN_URL_SUFFIX;
@@ -138,6 +138,55 @@ public class NetworkUtils
         return call;
     }
 
+/*    public Call getReports(Callback callback, String urlSuffix, String tokenStr)
+    {
+        OkHttpClient.Builder defaultHttpClient = new OkHttpClient.Builder();
+        defaultHttpClient.connectTimeout(4, TimeUnit.SECONDS);
+        defaultHttpClient.readTimeout(10, TimeUnit.SECONDS);
+        defaultHttpClient.writeTimeout(10, TimeUnit.SECONDS);
+        OkHttpClient okHttpClient = defaultHttpClient.build();
+
+        JSONObject jsonToken = new JSONObject();
+
+        realm.beginTransaction();
+        LoginCredentials loginCredentials = realm.where(LoginCredentials.class).findFirst();
+        realm.commitTransaction();
+
+        if (loginCredentials == null)
+        {
+            return null;
+        }
+        String strLogin = loginCredentials.getLogin();
+        String strPassword = loginCredentials.getPassword();
+
+        try
+        {
+            jsonToken.put("token", tokenStr);
+            jsonToken.put("login", strLogin);
+            jsonToken.put("password", strPassword);
+            jsonToken.put("id", GlobalConstants.selectedTech.getId());
+            jsonToken.put("full_name_tehnic", GlobalConstants.selectedTech.getFullNameTehnic());
+
+        } catch (JSONException e)
+        {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            return null;
+        }
+
+        RequestBody body = RequestBody.create(JSON, String.valueOf(jsonToken));
+
+        Request request = new Request.Builder()
+                .url(REST_URL + urlSuffix)
+                .post(body)
+                .build();
+
+        Call call = okHttpClient.newCall(request);
+        call.enqueue(callback);
+
+        return call;
+    }*/
+
     public Call sendData(Callback callback, String urlSuffix, String tokenStr, String gsonStr)
     {
         OkHttpClient.Builder defaultHttpClient = new OkHttpClient.Builder();
@@ -210,11 +259,11 @@ public class NetworkUtils
         return callData;
     }
 
-    public Call sendImage(Callback callback, Context context, GeaImagineRapporto geaImagineRapporto)
+    public Call sendImage(Callback callback, Context context, GeaImmagineRapporto geaImmagineRapporto)
     {
-        String fileName = geaImagineRapporto.getNome_file();
+        String fileName = geaImmagineRapporto.getNome_file();
 
-        File imageFile = new File(geaImagineRapporto.getFilePath());
+        File imageFile = new File(geaImmagineRapporto.getFilePath());
         //double fileSize = imageFile.length();
         String strMediaType = ImageUtils.getMimeTypeOfUri(context, Uri.fromFile(imageFile));
 
@@ -228,8 +277,8 @@ public class NetworkUtils
                 .setType(MultipartBody.FORM)
 
                 .addFormDataPart("file", fileName, RequestBody.create(MediaType.parse(strMediaType), imageFile))
-                .addFormDataPart("id_immagine_rapporto", String.valueOf(geaImagineRapporto.getId_immagine_rapporto()))
-                .addFormDataPart("id_rapporto_sopralluogo", String.valueOf(geaImagineRapporto.getId_rapporto_sopralluogo()))
+                .addFormDataPart("id_immagine_rapporto", String.valueOf(geaImmagineRapporto.getId_immagine_rapporto()))
+                .addFormDataPart("id_rapporto_sopralluogo", String.valueOf(geaImmagineRapporto.getId_rapporto_sopralluogo()))
                 .addFormDataPart("file_nome", fileName)
                 .build();
 

@@ -295,7 +295,7 @@ public class LoginCompanyFragment extends Fragment implements View.OnClickListen
                     loginCommunicator.onLoginSucceeded();
                 } else
                 {
-                    showToastMessage("Login non è riuscito");
+                    showToastMessage(getString(R.string.LoginFailedCheckInternetConnection));
                 }
             } else
             {

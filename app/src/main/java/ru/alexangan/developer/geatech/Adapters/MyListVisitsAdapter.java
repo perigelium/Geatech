@@ -123,6 +123,7 @@ public class MyListVisitsAdapter extends BaseAdapter
         {
             techName = technicianItem.getFullNameTehnic();
         }
+
         String productType = productData.getProductType();
 
         String clientName = clientData.getName();
@@ -142,7 +143,7 @@ public class MyListVisitsAdapter extends BaseAdapter
 
         boolean ownReport = selectedTech.getId() == tech_id;
         TextView tvTechName = (TextView) row.findViewById(R.id.tvTechName);
-
+        tvTechName.setText(techName);
 
 /*        realm.beginTransaction();
         ReportStates reportStates = realm.where(ReportStates.class).equalTo("company_id", company_id).equalTo("tech_id", selectedTech.getId())
@@ -167,8 +168,6 @@ public class MyListVisitsAdapter extends BaseAdapter
 
         if (tech_id != 0)
         {
-            tvTechName.setText(techName);
-
             Calendar calendar = Calendar.getInstance();
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
 

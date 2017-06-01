@@ -144,7 +144,7 @@ public class ClimatizzazioneReportFragment extends Fragment
                 realm.beginTransaction();
 
                 Calendar calendarNow = Calendar.getInstance();
-                SimpleDateFormat sdf = new SimpleDateFormat("dd-mm-yyyy hh:mm", Locale.ENGLISH);
+                SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy hh:mm", Locale.ENGLISH);
                 String strDateTime = sdf.format(calendarNow.getTime());
 
                 reportStates.setDataOraRaportoCompletato(strDateTime);
