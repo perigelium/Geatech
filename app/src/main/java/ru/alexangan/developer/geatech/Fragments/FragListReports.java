@@ -24,8 +24,9 @@ import ru.alexangan.developer.geatech.Adapters.MyListVisitsAdapter;
 import ru.alexangan.developer.geatech.Interfaces.Communicator;
 import ru.alexangan.developer.geatech.Models.GeaImmagineRapportoSopralluogo;
 import ru.alexangan.developer.geatech.Models.GeaItemRapportoSopralluogo;
-import ru.alexangan.developer.geatech.Models.GeaRapportoSopralluogo;
+import ru.alexangan.developer.geatech.Models.GeaRapporto;
 import ru.alexangan.developer.geatech.Models.GeaSopralluogo;
+import ru.alexangan.developer.geatech.Models.ReportItem;
 import ru.alexangan.developer.geatech.Models.ReportStates;
 import ru.alexangan.developer.geatech.Models.VisitItem;
 import ru.alexangan.developer.geatech.R;
@@ -37,7 +38,7 @@ import static ru.alexangan.developer.geatech.Models.GlobalConstants.realm;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.selectedTech;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.visitItems;
 
-public class FragListReportsNotSent extends ListFragment
+public class FragListReports extends ListFragment
 {
     private Communicator mCommunicator;
     SwipeDetector swipeDetector;
@@ -112,22 +113,26 @@ public class FragListReportsNotSent extends ListFragment
             RealmList<GeaImmagineRapportoSopralluogo> rl_ImmaginiRapportoSopralluogo = visitItem.getGea_immagini_rapporto_sopralluogo();
 
             realm.beginTransaction();
-            ReportStates reportStates = realm.where(ReportStates.class).equalTo("company_id", company_id).equalTo("tech_id", selectedTech.getId())
+            ReportItem reportItem = realm.where(ReportItem.class).equalTo("company_id", company_id).equalTo("tech_id", selectedTech.getId())
                     .equalTo("id_sopralluogo", idSopralluogo).findFirst();
             realm.commitTransaction();
 
             boolean reportCompleteNotSent = false;
 
-            if (reportStates != null)
+            if (reportItem != null)
             {
-                reportCompleteNotSent = reportStates.getGeneralInfoCompletionState() == ReportStates.GENERAL_INFO_DATETIME_AND_COORDS_SET
-                        && reportStates.getReportCompletionState() == ReportStates.REPORT_COMPLETED
-                        && reportStates.getPhotoAddedNumber() >= ReportStates.PHOTOS_MIN_ADDED
-                        && reportStates.getData_ora_invio_rapporto() == null;
+                int generalInfoCompletionState = reportItem.getReportStates().getGeneralInfoCompletionState();
+                int reportCompletionState = reportItem.getReportStates().getReportCompletionState();
+                int photosAddedNumber = reportItem.getReportStates().getPhotosAddedNumber();
 
-                GeaRapportoSopralluogo gea_rapporto_sopralluogo = visitItem.getGeaRapportoSopralluogo();
+                reportCompleteNotSent = generalInfoCompletionState == ReportStates.GENERAL_INFO_DATETIME_AND_COORDS_SET
+                        && reportCompletionState == ReportStates.REPORT_COMPLETED
+                        && photosAddedNumber >= ReportStates.PHOTOS_MIN_ADDED
+                        && reportItem.getGea_rapporto().getData_ora_invio_rapporto() == null;
+
+                GeaRapporto gea_rapporto_sopralluogo = visitItem.getGeaRapporto();
                 String techName = gea_rapporto_sopralluogo.getNome_tecnico();
-                String data_ora_sopralluogo = reportStates.getData_ora_sopralluogo();
+                String data_ora_sopralluogo = reportItem.getGeaSopralluogo().getData_ora_sopralluogo();
 /*                int id_tecnico = visitItem.getGeaSopralluogo().getId_tecnico();
                 boolean ownVisit = selectedTech.getId() == id_tecnico;*/
 

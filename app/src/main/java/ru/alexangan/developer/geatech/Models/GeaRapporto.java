@@ -1,7 +1,9 @@
 package ru.alexangan.developer.geatech.Models;
 
 
-public class GeaRapporto
+import io.realm.RealmObject;
+
+public class GeaRapporto extends RealmObject
 {
     private int id_rapporto_sopralluogo;
     private int id_sopralluogo;
@@ -9,81 +11,17 @@ public class GeaRapporto
     private String data_ora_invio_rapporto; // data_ora_invio_rapporto
     private int completion_percent;
     private String nome_tecnico;
-    private int altitudine; // altitudine
-    private double latitudine; // latitudine
-    private double longitudine; // longitudine
+    private String altitudine; // altitudine
+    private String latitudine; // latitudine
+    private String longitudine; // longitudine
     private String note_tecnico;
 
     public GeaRapporto() {}
 
-    public String getDataOraRaportoCompletato()
-    {
-        return data_ora_compilazione_rapporto;
-    }
-
-    public void setDataOraRaportoCompletato(String dataOraRaportoCompletato)
-    {
-        this.data_ora_compilazione_rapporto = dataOraRaportoCompletato;
-    }
-
-    public String getData_ora_invio_rapporto()
-    {
-        return data_ora_invio_rapporto;
-    }
-
-    public void setData_ora_invio_rapporto(String data_ora_invio_rapporto)
-    {
-        this.data_ora_invio_rapporto = data_ora_invio_rapporto;
-    }
-
-    public int getId_sopralluogo()
-    {
-        return id_sopralluogo;
-    }
-
-    public void setId_sopralluogo(int id_sopralluogo)
+    public GeaRapporto(int id_sopralluogo, int id_rapporto_sopralluogo)
     {
         this.id_sopralluogo = id_sopralluogo;
-    }
-
-    public double getLongitudine()
-    {
-        return longitudine;
-    }
-
-    public void setLongitudine(double longitudine)
-    {
-        this.longitudine = longitudine;
-    }
-
-    public double getLatitudine()
-    {
-        return latitudine;
-    }
-
-    public void setLatitudine(double latitudine)
-    {
-        this.latitudine = latitudine;
-    }
-
-    public double getAltitudine()
-    {
-        return altitudine;
-    }
-
-    public void setAltitudine(int altitudine)
-    {
-        this.altitudine = altitudine;
-    }
-
-    public String getNome_tecnico()
-    {
-        return nome_tecnico;
-    }
-
-    public void setNome_tecnico(String nome_tecnico)
-    {
-        this.nome_tecnico = nome_tecnico;
+        this.id_rapporto_sopralluogo = id_rapporto_sopralluogo;
     }
 
     public int getId_rapporto_sopralluogo()
@@ -91,8 +29,93 @@ public class GeaRapporto
         return id_rapporto_sopralluogo;
     }
 
-    public void setId_rapporto_sopralluogo(int id_rapporto_sopralluogo)
+    public String getDataOraRaportoCompletato()
     {
-        this.id_rapporto_sopralluogo = id_rapporto_sopralluogo;
+        return data_ora_compilazione_rapporto;
+    }
+
+    public String getData_ora_invio_rapporto()
+    {
+        return data_ora_invio_rapporto;
+    }
+
+    public int getId_sopralluogo()
+    {
+        return id_sopralluogo;
+    }
+
+    public String getLongitudine()
+    {
+        return longitudine;
+    }
+
+    public String getLatitudine()
+    {
+        return latitudine;
+    }
+
+    public String getAltitudine()
+    {
+        return altitudine;
+    }
+
+    public String getNome_tecnico()
+    {
+        return nome_tecnico;
+    }
+
+    public String getData_ora_compilazione_rapporto()
+    {
+        return data_ora_compilazione_rapporto;
+    }
+
+    public int getCompletion_percent()
+    {
+        return completion_percent;
+    }
+
+    public String getNote_tecnico()
+    {
+        return note_tecnico;
+    }
+
+    public void setData_ora_compilazione_rapporto(String data_ora_compilazione_rapporto)
+    {
+        this.data_ora_compilazione_rapporto = data_ora_compilazione_rapporto;
+    }
+
+    public void setData_ora_invio_rapporto(String data_ora_invio_rapporto)
+    {
+        this.data_ora_invio_rapporto = data_ora_invio_rapporto;
+    }
+
+    public void setCompletion_percent(int completion_percent)
+    {
+        this.completion_percent = completion_percent;
+    }
+
+    public void setNome_tecnico(String nome_tecnico)
+    {
+        this.nome_tecnico = nome_tecnico;
+    }
+
+    public void setAltitudine(String altitudine)
+    {
+        this.altitudine = altitudine;
+    }
+
+    public void setLatitudine(String latitudine)
+    {
+        this.latitudine = latitudine;
+    }
+
+    public void setLongitudine(String longitudine)
+    {
+        this.longitudine = longitudine;
+    }
+
+    public void setNote_tecnico(String note_tecnico)
+    {
+        this.note_tecnico = note_tecnico;
     }
 }

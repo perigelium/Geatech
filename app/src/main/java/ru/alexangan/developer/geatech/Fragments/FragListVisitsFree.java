@@ -117,15 +117,15 @@ public class FragListVisitsFree extends ListFragment
             if(ownReport)
             {
 *//*                realm.beginTransaction();
-                ReportStates reportStates = realm.where(ReportStates.class)
+                ReportStates reportItem = realm.where(ReportStates.class)
                         .equalTo("company_id", company_id).equalTo("tech_id", selectedTech.getId())
                         .equalTo("id_sopralluogo", id_sopralluogo).findFirst();
                 realm.commitTransaction();*//*
 
-*//*                if (reportStates != null)
+*//*                if (reportItem != null)
                 {
                     realm.beginTransaction();
-                    if(reportStates.getId_rapporto_sopralluogo() != 0)
+                    if(reportItem.getId_sopralluogo() != 0)
                     {*//*
                         visitItemsFiltered.add(visitItem);
 *//*                    }

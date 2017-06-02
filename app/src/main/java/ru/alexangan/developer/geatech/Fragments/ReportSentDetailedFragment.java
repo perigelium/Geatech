@@ -22,7 +22,10 @@ import io.realm.RealmResults;
 import ru.alexangan.developer.geatech.Adapters.GridViewAdapter;
 import ru.alexangan.developer.geatech.Models.GeaItemModelliRapporto;
 import ru.alexangan.developer.geatech.Models.GeaItemRapporto;
+import ru.alexangan.developer.geatech.Models.GeaSopralluogo;
+import ru.alexangan.developer.geatech.Models.ReportItem;
 import ru.alexangan.developer.geatech.Models.ReportStates;
+import ru.alexangan.developer.geatech.Models.VisitItem;
 import ru.alexangan.developer.geatech.R;
 import ru.alexangan.developer.geatech.Utils.ImageUtils;
 import ru.alexangan.developer.geatech.Utils.ViewUtils;
@@ -30,12 +33,13 @@ import ru.alexangan.developer.geatech.Utils.ViewUtils;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.company_id;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.realm;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.selectedTech;
+import static ru.alexangan.developer.geatech.Models.GlobalConstants.visitItems;
 
 // Created by Alex Angan on 11/10/2016 .
 
 public class ReportSentDetailedFragment extends Fragment
 {
-    private int id_rapporto_sopralluogo;
+    private int sel_index;
     List<String> reportItems;
     GridView gvPhotoGallery;
     private ProgressDialog loadingImagesDialog;
@@ -53,7 +57,7 @@ public class ReportSentDetailedFragment extends Fragment
 
         if (getArguments() != null)
         {
-            id_rapporto_sopralluogo = getArguments().getInt("selectedIndex");
+            sel_index = getArguments().getInt("selectedIndex");
         }
 
         activity = getActivity();
@@ -79,19 +83,24 @@ public class ReportSentDetailedFragment extends Fragment
         TextView tvTechName = (TextView) rootView.findViewById(R.id.tvTechName);
         tvTechName.setText(selectedTech.getFullNameTehnic());
 
+        VisitItem visitItem = visitItems.get(sel_index);
+        GeaSopralluogo geaSopralluogo = visitItem.getGeaSopralluogo();
+        int idSopralluogo = geaSopralluogo.getId_sopralluogo();
+
         realm.beginTransaction();
-        ReportStates reportStates = realm.where(ReportStates.class).equalTo("id_rapporto_sopralluogo", id_rapporto_sopralluogo).findFirst();
+        ReportItem reportItem = realm.where(ReportItem.class).equalTo("company_id", company_id).equalTo("tech_id", selectedTech.getId())
+                .equalTo("id_sopralluogo", idSopralluogo).findFirst();
         realm.commitTransaction();
 
-        if (reportStates != null)
+        if (reportItem != null)
         {
-            photosFolderName = "photos" + reportStates.getId_sopralluogo();
+            photosFolderName = "photos" + idSopralluogo;
 
-            String product_type = reportStates.getProductType();
-            int id_rapporto_sopralluogo = reportStates.getId_rapporto_sopralluogo();
+            String product_type = visitItem.getProductData().getProductType();
+            int id_rapporto_sopralluogo = reportItem.getGea_rapporto().getId_rapporto_sopralluogo();
 
             List<GeaItemRapporto> geaItemsRapporto = realm.where(GeaItemRapporto.class).equalTo("company_id", company_id)
-                    .equalTo("tech_id", selectedTech.getId()).equalTo("id_rapporto_sopralluogo", id_rapporto_sopralluogo).findAll();
+                    .equalTo("tech_id", selectedTech.getId()).equalTo("sel_index", id_rapporto_sopralluogo).findAll();
 
             if (geaItemsRapporto.size() != 0)
             {
@@ -132,36 +141,36 @@ public class ReportSentDetailedFragment extends Fragment
                     }
                 }
 
-                tvdataOraSopralluogo.setText(reportStates.getData_ora_sopralluogo());
-                tvdataOraRaportoCompletato.setText(reportStates.getDataOraRaportoCompletato());
-                tvdataOraRaportoInviato.setText(reportStates.getData_ora_invio_rapporto());
+                tvdataOraSopralluogo.setText(reportItem.getGeaSopralluogo().getData_ora_sopralluogo());
+                tvdataOraRaportoCompletato.setText(reportItem.getGea_rapporto().getDataOraRaportoCompletato());
+                tvdataOraRaportoInviato.setText(reportItem.getGea_rapporto().getData_ora_invio_rapporto());
             }
 
 
             TextView clientNameTextView = (TextView) rootView.findViewById(R.id.tvClientName);
-            clientNameTextView.setText(reportStates.getClientName());
+            clientNameTextView.setText(visitItem.getClientData().getName());
 
             TextView clientPhoneTextView = (TextView) rootView.findViewById(R.id.tvClientPhone);
-            clientPhoneTextView.setText(reportStates.getClientMobile());
+            clientPhoneTextView.setText(visitItem.getClientData().getMobile());
 
             TextView clientAddressTextView = (TextView) rootView.findViewById(R.id.tvClientAddress);
-            clientAddressTextView.setText(reportStates.getClientAddress());
+            clientAddressTextView.setText(visitItem.getClientData().getAddress());
 
 
             TextView tvCoordNord = (TextView) rootView.findViewById(R.id.etCoordNord);
             TextView tvCoordEst = (TextView) rootView.findViewById(R.id.etCoordEst);
             TextView tvAltitude = (TextView) rootView.findViewById(R.id.etAltitude);
 
-            double latitude = reportStates.getLatitudine();
-            double longitude = reportStates.getLongitudine();
-            double altitude = reportStates.getAltitude();
+            String latitude = reportItem.getGea_rapporto().getLatitudine();
+            String longitude = reportItem.getGea_rapporto().getLongitudine();
+            String altitude = reportItem.getGea_rapporto().getAltitudine();
 
             tvCoordNord.setText(String.valueOf(latitude));
             tvCoordEst.setText(String.valueOf(longitude));
 
-            if (altitude != ReportStates.ALTITUDE_UNKNOWN)
+            if (altitude != null)
             {
-                tvAltitude.setText(String.valueOf((int) altitude));
+                tvAltitude.setText(altitude);
             } else
             {
                 tvAltitude.setText(R.string.Unknown);

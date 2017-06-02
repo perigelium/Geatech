@@ -19,6 +19,7 @@ import java.util.Locale;
 import ru.alexangan.developer.geatech.Models.GeaModelloRapporto;
 import ru.alexangan.developer.geatech.Models.GeaSopralluogo;
 import ru.alexangan.developer.geatech.Models.ProductData;
+import ru.alexangan.developer.geatech.Models.ReportItem;
 import ru.alexangan.developer.geatech.Models.ReportStates;
 import ru.alexangan.developer.geatech.Models.VisitItem;
 import ru.alexangan.developer.geatech.R;
@@ -33,9 +34,9 @@ import static ru.alexangan.developer.geatech.Models.GlobalConstants.visitItems;
 public class DomoticaReportFragment extends Fragment
 {
     private int selectedIndex;
-    int idSopralluogo;
+    int id_sopralluogo;
     int id_rapporto_sopralluogo;
-    ReportStates reportStates;
+    ReportItem reportItem;
     View rootView;
     Context context;
     ViewUtils viewUtils;
@@ -61,7 +62,7 @@ public class DomoticaReportFragment extends Fragment
         VisitItem visitItem = visitItems.get(selectedIndex);
         GeaSopralluogo geaSopralluogo = visitItem.getGeaSopralluogo();
         ProductData productData = visitItem.getProductData();
-        idSopralluogo = geaSopralluogo.getId_sopralluogo();
+        id_sopralluogo = geaSopralluogo.getId_sopralluogo();
         int id_product_type = productData.getIdProductType();
 
         realm.beginTransaction();
@@ -74,11 +75,12 @@ public class DomoticaReportFragment extends Fragment
         }
 
         realm.beginTransaction();
+        reportItem = realm.where(ReportItem.class).equalTo("company_id", company_id).equalTo("tech_id", selectedTech.getId())
+                .equalTo("id_sopralluogo", id_sopralluogo).findFirst();
+        realm.commitTransaction();
 
-        reportStates = realm.where(ReportStates.class).equalTo("company_id", company_id).equalTo("tech_id", selectedTech.getId())
-                .equalTo("id_sopralluogo", idSopralluogo).findFirst();
-
-        id_rapporto_sopralluogo = reportStates != null ? reportStates.getId_rapporto_sopralluogo() : -1;
+        realm.beginTransaction();
+        id_rapporto_sopralluogo = reportItem != null ? reportItem.getGea_rapporto().getId_rapporto_sopralluogo() : -1;
 
         realm.commitTransaction();
     }
@@ -141,7 +143,7 @@ public class DomoticaReportFragment extends Fragment
     {
         super.onPause();
 
-        if (reportStates != null)
+        if (reportItem != null)
         {
             int idItem = viewUtils.getIdItemStart();
 
@@ -176,13 +178,13 @@ public class DomoticaReportFragment extends Fragment
                 SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy hh:mm", Locale.ENGLISH);
                 String strDateTime = sdf.format(calendarNow.getTime());
 
-                reportStates.setDataOraRaportoCompletato(strDateTime);
+                reportItem.getGea_rapporto().setData_ora_compilazione_rapporto(strDateTime);
 
                 realm.commitTransaction();
             }
 
             realm.beginTransaction();
-            reportStates.setReportCompletionState(completionState);
+            reportItem.getReportStates().setReportCompletionState(completionState);
             realm.commitTransaction();
         }
     }
@@ -255,7 +257,7 @@ public class DomoticaReportFragment extends Fragment
 
             idItem = viewUtils.fillSeveralEdits(idItem, 3);
 
-            if(reportStates!=null && reportStates.hasTriedToSendReport())
+            if(reportItem !=null && reportItem.getReportStates().hasTriedToSendReport())
             {
                 viewUtils.markSectionsWithNotFilledItems(id_rapporto_sopralluogo);
             }

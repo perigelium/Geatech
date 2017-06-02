@@ -19,11 +19,13 @@ import ru.alexangan.developer.geatech.Models.GeaSopralluogo;
 import ru.alexangan.developer.geatech.Models.GlobalConstants;
 import ru.alexangan.developer.geatech.Models.ItalianMonths;
 import ru.alexangan.developer.geatech.Models.ProductData;
+import ru.alexangan.developer.geatech.Models.ReportItem;
 import ru.alexangan.developer.geatech.Models.ReportStates;
 import ru.alexangan.developer.geatech.Models.TechnicianItem;
 import ru.alexangan.developer.geatech.Models.VisitItem;
 import ru.alexangan.developer.geatech.R;
 
+import static ru.alexangan.developer.geatech.Models.GlobalConstants.company_id;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.realm;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.selectedTech;
 
@@ -116,7 +118,7 @@ public class InWorkListVisitsAdapter extends BaseAdapter
         ClientData clientData = visitItem.getClientData();
         ProductData productData = visitItem.getProductData();
         GeaSopralluogo geaSopralluogo = visitItem.getGeaSopralluogo();
-        int idSopralluogo = geaSopralluogo.getId_sopralluogo();
+        int id_sopralluogo = geaSopralluogo.getId_sopralluogo();
         //int tech_id = geaSopralluogo.getId_tecnico();
 
         String productType = productData.getProductType();
@@ -140,31 +142,36 @@ public class InWorkListVisitsAdapter extends BaseAdapter
         TextView tvTechName = (TextView) row.findViewById(R.id.tvTechName);
 
         realm.beginTransaction();
-        ReportStates reportStates = realm.where(ReportStates.class).equalTo("company_id", GlobalConstants.company_id).equalTo("tech_id", selectedTech.getId())
-                .equalTo("id_sopralluogo", idSopralluogo).findFirst(); //.greaterThan("id_rapporto_sopralluogo", -1)
+        ReportItem reportItem = realm.where(ReportItem.class).equalTo("company_id", company_id).equalTo("tech_id", selectedTech.getId())
+                .equalTo("id_sopralluogo", id_sopralluogo).findFirst();
         realm.commitTransaction();
 
-        if (reportStates != null)
+        realm.beginTransaction();
+        int id_rapporto_sopralluogo = reportItem != null ? reportItem.getGea_rapporto().getId_rapporto_sopralluogo() : -1;
+
+        realm.commitTransaction();
+
+        if (reportItem != null)
         {
-            int tech_id = reportStates.getTech_id();
-            String techName = reportStates.getNome_tecnico();
+            int tech_id = reportItem.getTech_id();
+            String techName = reportItem.getGea_rapporto().getNome_tecnico();
 
-            tvDateTimeHasSet.setText(reportStates.getGeneralInfoCompletionStateString().Value());
-            tvTecnicalReportState.setText(reportStates.getReportCompletionStateString().Value());
+            tvDateTimeHasSet.setText(reportItem.getReportStates().getGeneralInfoCompletionStateString().Value());
+            tvTecnicalReportState.setText(reportItem.getReportStates().getReportCompletionStateString().Value());
 
-            int photoAddedNumber = reportStates.getPhotoAddedNumber();
+            int photoAddedNumber = reportItem.getReportStates().getPhotosAddedNumber();
             String photoAddedNumberStr;
 
             if (photoAddedNumber == 0)
             {
-                photoAddedNumberStr = reportStates.getPhotoAddedNumberString(photoAddedNumber).Value();
+                photoAddedNumberStr = reportItem.getReportStates().getPhotoAddedNumberString(photoAddedNumber).Value();
             } else
             {
-                photoAddedNumberStr = photoAddedNumber + reportStates.getPhotoAddedNumberString(photoAddedNumber).Value();
+                photoAddedNumberStr = photoAddedNumber + reportItem.getReportStates().getPhotoAddedNumberString(photoAddedNumber).Value();
             }
 
             tvPhotosQuant.setText(photoAddedNumberStr);
-            String dataOraSopralluogo = reportStates.getData_ora_sopralluogo();
+            String dataOraSopralluogo = reportItem.getGeaSopralluogo().getData_ora_sopralluogo();
 
             if (tech_id != 0)
             {

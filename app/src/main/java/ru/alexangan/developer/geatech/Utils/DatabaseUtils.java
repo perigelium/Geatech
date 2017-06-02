@@ -3,7 +3,9 @@ package ru.alexangan.developer.geatech.Utils;
 import java.util.ArrayList;
 
 import io.realm.RealmResults;
+import ru.alexangan.developer.geatech.Models.GeaImmagineRapporto;
 import ru.alexangan.developer.geatech.Models.GeaItemRapporto;
+import ru.alexangan.developer.geatech.Models.ReportItem;
 import ru.alexangan.developer.geatech.Models.ReportStates;
 
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.company_id;
@@ -69,11 +71,11 @@ public class DatabaseUtils
 
         realm.beginTransaction();
 
-        ReportStates reportStates = realm.where(ReportStates.class).equalTo("company_id", company_id).equalTo("tech_id", selectedTech.getId())
+        ReportItem reportItem = realm.where(ReportItem.class).equalTo("company_id", company_id)
+                .equalTo("tech_id", selectedTech.getId())
                 .equalTo("id_rapporto_sopralluogo", id_rapporto_sopralluogo).findFirst();
 
-
-        reportStates.setCompletion_percent(completionPercent);
+        reportItem.getGea_rapporto().setCompletion_percent(completionPercent);
 
         realm.commitTransaction();
 
@@ -132,6 +134,32 @@ public class DatabaseUtils
         } else
         {
             return "";
+        }
+    }
+
+    public void cleanUpReportData(ReportItem reportItem)
+    {
+        if(reportItem != null)
+        {
+            realm.beginTransaction();
+
+            RealmResults geaItemsRapporto = realm.where(GeaItemRapporto.class)
+                    .equalTo("company_id", company_id)
+                    .equalTo("tech_id", selectedTech.getId())
+                    .equalTo("id_rapporto_sopralluogo", reportItem.getGea_rapporto().getId_rapporto_sopralluogo())
+                    .findAll();
+
+            RealmResults<GeaImmagineRapporto> listReportImages = realm.where(GeaImmagineRapporto.class)
+                    .equalTo("company_id", company_id)
+                    .equalTo("tech_id", selectedTech.getId())
+                    .equalTo("id_rapporto_sopralluogo", reportItem.getGea_rapporto().getId_rapporto_sopralluogo())
+                    .findAll();
+
+            geaItemsRapporto.deleteAllFromRealm();
+            listReportImages.deleteAllFromRealm();
+            reportItem.deleteFromRealm();
+
+            realm.commitTransaction();
         }
     }
 }

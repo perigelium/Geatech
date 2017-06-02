@@ -45,7 +45,7 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
-import io.realm.RealmResults;
+import io.realm.RealmList;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
@@ -56,8 +56,10 @@ import ru.alexangan.developer.geatech.Models.ClientData;
 import ru.alexangan.developer.geatech.Models.GeaImmagineRapporto;
 import ru.alexangan.developer.geatech.Models.GeaItemRapporto;
 import ru.alexangan.developer.geatech.Models.GeaModelloRapporto;
+import ru.alexangan.developer.geatech.Models.GeaRapporto;
 import ru.alexangan.developer.geatech.Models.GeaSopralluogo;
 import ru.alexangan.developer.geatech.Models.ProductData;
+import ru.alexangan.developer.geatech.Models.ReportItem;
 import ru.alexangan.developer.geatech.Models.ReportStates;
 import ru.alexangan.developer.geatech.Models.SubproductItem;
 import ru.alexangan.developer.geatech.Models.VisitItem;
@@ -91,7 +93,7 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
     LocationRetriever locationRetriever;
     Activity activity;
     Location mLastLocation;
-    ReportStates reportStates;
+    ReportItem reportItem;
     Communicator communicator;
     private ProgressDialog requestServerDialog;
     ClientData clientData;
@@ -116,7 +118,8 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
     private Button btnGetCurrentCoords;
     private FrameLayout flSetDateTimeSubmit;
     private LinearLayout llSetDateTime;
-    boolean datetime_set, coords_set;
+    private ProductData productData;
+    private TextView tvListSottprodottiTitle;
 
 
     public SetDateTimeFragment()
@@ -240,9 +243,82 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
     {
         super.onViewCreated(view, savedInstanceState);
 
-        //svVisitInfoScrollView.fullScroll(ScrollView.FOCUS_DOWN);
-        //svVisitInfoScrollView.smoothScrollTo(0, llSetDateTime.getBottom());
-        //btnGetCurrentCoords.getParent().requestChildFocus(btnGetCurrentCoords, btnGetCurrentCoords);
+        visitItem = visitItems.get(selectedIndex);
+        clientData = visitItem.getClientData();
+        productData = visitItem.getProductData();
+        int id_product_type = productData.getIdProductType();
+
+        realm.beginTransaction();
+        GeaModelloRapporto geaModello = realm.where(GeaModelloRapporto.class).equalTo("id_product_type", id_product_type).findFirst();
+        realm.commitTransaction();
+
+        if(geaModello != null)
+        {
+            product_type = geaModello.getNome_modello();
+        }
+
+        GeaSopralluogo geaSopralluogo = visitItem.getGeaSopralluogo();
+        idSopralluogo = geaSopralluogo.getId_sopralluogo();
+        List<SubproductItem> listSubproducts = productData.getSubItem();
+
+        realm.beginTransaction();
+        reportItem = realm.where(ReportItem.class).equalTo("company_id", company_id).equalTo("tech_id", selectedTech.getId())
+                .equalTo("id_sopralluogo", idSopralluogo).findFirst();
+        realm.commitTransaction();
+
+        String dataOraSopralluogo = null;
+
+        SetVisitDateTimeListAdapter adapter = new SetVisitDateTimeListAdapter(getActivity(), listSubproducts);
+
+        ListView listView = (ListView) rootView.findViewById(R.id.listSubproducts);
+        listView.setAdapter(adapter);
+
+        if(adapter.getCount() != 0)
+        {
+            ViewUtils.setListViewHeightBasedOnChildren(listView);
+        }
+        else
+        {
+            tvListSottprodottiTitle.setText("");
+        }
+
+        calendarNow = Calendar.getInstance();
+        calendar = Calendar.getInstance();
+
+        //strDateTimeNow = sdf.format(calendarNow.getTime());
+
+        if(reportItem!=null)
+        {
+            dataOraSopralluogo = reportItem.getGea_sopralluoghi().getData_ora_sopralluogo();
+        }
+
+        if(dataOraSopralluogo!=null && dataOraSopralluogo.length() > 4)
+        {
+            SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy hh:mm", Locale.ITALIAN);
+
+            try
+            {
+                calendar.setTime(sdf.parse(dataOraSopralluogo));
+
+                tvdataOraSopralluogo.setText(dataOraSopralluogo);
+                tvTechnicianName.setVisibility(View.VISIBLE);
+                flSetDateTimeSubmit.setVisibility(View.GONE);
+
+            } catch (ParseException e)
+            {
+                e.printStackTrace();
+            }
+        }
+        else
+        {
+            tvTechnicianName.setVisibility(View.GONE);
+        }
+
+        mYear = calendar.get(Calendar.YEAR);
+        mMonth = calendar.get(Calendar.MONTH) + 1;
+        mDay = calendar.get(Calendar.DAY_OF_MONTH);
+        mHour = calendar.get(Calendar.HOUR_OF_DAY);
+        mMinute = calendar.get(Calendar.MINUTE);
     }
 
     @Override
@@ -250,11 +326,11 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
     {
         super.onResume();
 
-        if (reportStates != null)
+        if (reportItem != null)
         {
-            latitude = reportStates.getLatitudine();
-            longitude = reportStates.getLongitudine();
-            altitude = reportStates.getAltitude();
+            latitude = Double.parseDouble(reportItem.getGea_rapporto().getLatitudine());
+            longitude = Double.parseDouble(reportItem.getGea_rapporto().getLongitudine());
+            altitude = Integer.parseInt(reportItem.getGea_rapporto().getAltitudine());
 
             //coordsUnchanged = latitude != 0 && longitude != 0;// && altitude != ReportStates.ALTITUDE_UNKNOWN;
 
@@ -294,12 +370,19 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
         //tvSetDateTime.setPaintFlags(tvSetDateTime.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
 
         llSetDateTime = (LinearLayout) rootView.findViewById(R.id.llSetDateTime);
-        btnSetDateTimeSubmit = (TextView) rootView.findViewById(R.id.btnSetDateTimeSubmit);
         flSetDateTimeSubmit = (FrameLayout) rootView.findViewById(R.id.flSetDateTimeSubmit);
+
+        btnSetDateTimeSubmit = (TextView) rootView.findViewById(R.id.btnSetDateTimeSubmit);
+        btnSetDateTimeSubmit.setOnClickListener(this);
+
         btnOpenMap = (Button) rootView.findViewById(R.id.btnOpenMap);
+        btnOpenMap.setOnClickListener(this);
+
         btnOpenDialer = (Button) rootView.findViewById(R.id.btnOpenDialer);
+        btnOpenDialer.setOnClickListener(this);
+
         tvdataOraSopralluogo = (TextView) rootView.findViewById(R.id.tvdataOraSopralluogo);
-        TextView tvListSottprodottiTitle = (TextView) rootView.findViewById(R.id.tvListSottprodottiTitle);
+        tvListSottprodottiTitle = (TextView) rootView.findViewById(R.id.tvListSottprodottiTitle);
         svVisitInfoScrollView = (ScrollView) rootView.findViewById(R.id.svVisitInfoScrollView);
 
         tvTechnicianName = (TextView) rootView.findViewById(R.id.tvTechnicianName);
@@ -317,45 +400,6 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
         TextView tvTechnicianName = (TextView) rootView.findViewById(R.id.tvTechnicianName);
         tvTechnicianName.setText(selectedTech.getFullNameTehnic());
 
-        visitItem = visitItems.get(selectedIndex);
-        clientData = visitItem.getClientData();
-        ProductData productData = visitItem.getProductData();
-        int id_product_type = productData.getIdProductType();
-
-        realm.beginTransaction();
-        GeaModelloRapporto geaModello = realm.where(GeaModelloRapporto.class).equalTo("id_product_type", id_product_type).findFirst();
-        realm.commitTransaction();
-
-        if(geaModello != null)
-        {
-            product_type = geaModello.getNome_modello();
-        }
-
-        GeaSopralluogo geaSopralluogo = visitItem.getGeaSopralluogo();
-        idSopralluogo = geaSopralluogo.getId_sopralluogo();
-        List<SubproductItem> listSubproducts = productData.getSubItem();
-
-        realm.beginTransaction();
-        reportStates = realm.where(ReportStates.class).equalTo("company_id", company_id).equalTo("tech_id", selectedTech.getId())
-                .equalTo("id_sopralluogo", idSopralluogo).findFirst();
-        realm.commitTransaction();
-
-        String dataOraSopralluogo = null;
-
-        SetVisitDateTimeListAdapter adapter = new SetVisitDateTimeListAdapter(getActivity(), listSubproducts);
-
-        ListView listView = (ListView) rootView.findViewById(R.id.listSubproducts);
-        listView.setAdapter(adapter);
-
-        if(adapter.getCount() != 0)
-        {
-            ViewUtils.setListViewHeightBasedOnChildren(listView);
-        }
-        else
-        {
-            tvListSottprodottiTitle.setText("");
-        }
-
         TextView clientNameTextView = (TextView) rootView.findViewById(R.id.tvClientName);
         clientNameTextView.setText(clientData.getName());
 
@@ -371,50 +415,7 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
         TextView clientAddressTextView = (TextView) rootView.findViewById(R.id.tvClientAddress);
         clientAddressTextView.setText(clientData.getAddress());
 
-        //String visitDateTime = reportStates!=null ? reportStates.getData_ora_sopralluogo() : " ";
-
-        calendarNow = Calendar.getInstance();
-        calendar = Calendar.getInstance();
-
-        //strDateTimeNow = sdf.format(calendarNow.getTime());
-
-        if(reportStates!=null)
-        {
-            dataOraSopralluogo = reportStates.getData_ora_sopralluogo();
-        }
-
-        if(dataOraSopralluogo!=null && dataOraSopralluogo.length() > 4)
-        {
-            datetime_set = true;
-            SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy hh:mm", Locale.ITALIAN);
-
-            try
-            {
-                calendar.setTime(sdf.parse(dataOraSopralluogo));
-
-                tvdataOraSopralluogo.setText(dataOraSopralluogo);
-                tvTechnicianName.setVisibility(View.VISIBLE);
-                flSetDateTimeSubmit.setVisibility(View.GONE);
-
-            } catch (ParseException e)
-            {
-                e.printStackTrace();
-            }
-        }
-        else
-        {
-            tvTechnicianName.setVisibility(View.GONE);
-        }
-
-        mYear = calendar.get(Calendar.YEAR);
-        mMonth = calendar.get(Calendar.MONTH) + 1;
-        mDay = calendar.get(Calendar.DAY_OF_MONTH);
-        mHour = calendar.get(Calendar.HOUR_OF_DAY);
-        mMinute = calendar.get(Calendar.MINUTE);
-
-        btnSetDateTimeSubmit.setOnClickListener(this);
-        btnOpenMap.setOnClickListener(this);
-        btnOpenDialer.setOnClickListener(this);
+        //String visitDateTime = reportItem!=null ? reportItem.getData_ora_sopralluogo() : " ";
 
         return rootView;
     }
@@ -658,62 +659,76 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
                                             String str_id_rapporto_sopralluogo = jsonObject.getString("id_rapporto_sopralluogo");
                                             int id_rapporto_sopralluogo = Integer.valueOf(str_id_rapporto_sopralluogo);
 
-                                            if (reportStates == null)
-                                            {
-                                                realm.beginTransaction();
-                                                reportStates = new ReportStates(company_id, selectedTech.getId(), idSopralluogo, id_rapporto_sopralluogo);
-                                                realm.copyToRealm(reportStates);
-                                                realm.commitTransaction();
-                                            }
+                                            GeaSopralluogo gea_sopralluoghi = new GeaSopralluogo(idSopralluogo, selectedTech.getId(),
+                                                    strDateTimeNow, strDateTimeSet);
+                                            GeaRapporto gea_rapporto = new GeaRapporto(idSopralluogo, id_rapporto_sopralluogo);
 
-                                            if (stakedOut == 1)
+                                            realm.beginTransaction();
+                                            ReportItem reportItem = new ReportItem(company_id, selectedTech.getId(), idSopralluogo,
+                                                    new ReportStates(ReportStates.GENERAL_INFO_DATETIME_SET), gea_sopralluoghi,
+                                                    gea_rapporto, new RealmList<GeaItemRapporto>(),
+                                                    new RealmList<GeaImmagineRapporto>());
+                                            realm.copyToRealm(reportItem);
+                                            realm.commitTransaction();
+
+/*                                            if (reportItem == null)
                                             {
                                                 realm.beginTransaction();
-                                                reportStates = realm.where(ReportStates.class)
+                                                reportItem = new ReportStates(company_id, selectedTech.getId(), id_sopralluogo, id_rapporto_sopralluogo);
+                                                realm.copyToRealm(reportItem);
+                                                realm.commitTransaction();
+                                            }*/
+
+/*                                            if (stakedOut == 1)
+                                            {
+                                                realm.beginTransaction();
+                                                reportItem = realm.where(ReportStates.class)
                                                         .equalTo("company_id", company_id).equalTo("tech_id", selectedTech.getId())
-                                                        .equalTo("id_sopralluogo", idSopralluogo).findFirst();
+                                                        .equalTo("id_sopralluogo", id_sopralluogo).findFirst();
                                                 realm.commitTransaction();
 
-                                                if (reportStates != null)
+                                                if (reportItem != null)
                                                 {
                                                     realm.beginTransaction();
-                                                    reportStates.setId_rapporto_sopralluogo(id_rapporto_sopralluogo);
-                                                    reportStates.setData_ora_sopralluogo(strDateTimeSet);
-                                                    reportStates.setData_ora_presa_appuntamento(strDateTimeNow);
-                                                    reportStates.setNome_tecnico(selectedTech.getFullNameTehnic());
+                                                    reportItem.setId_rapporto_sopralluogo(id_rapporto_sopralluogo);
+                                                    reportItem.setData_ora_sopralluogo(strDateTimeSet);
+                                                    reportItem.setData_ora_presa_appuntamento(strDateTimeNow);
+                                                    reportItem.setNome_tecnico(selectedTech.getFullNameTehnic());
 
-                                                    reportStates.setClientName(visitItem.getClientData().getName());
-                                                    reportStates.setClientMobile(visitItem.getClientData().getMobile());
-                                                    reportStates.setClientAddress(visitItem.getClientData().getAddress());
-                                                    reportStates.setProductType(product_type);
+                                                    reportItem.setClientName(visitItem.getClientData().getName());
+                                                    reportItem.setClientMobile(visitItem.getClientData().getMobile());
+                                                    reportItem.setClientAddress(visitItem.getClientData().getAddress());
+                                                    reportItem.setProductType(product_type);
 
-                                                    reportStates.setGeneral_info_datetime_set(1);
-                                                    realm.commitTransaction();
+                                                    reportItem.setGeneral_info_datetime_set(1);
+                                                    realm.commitTransaction();*/
 
                                                     tvdataOraSopralluogo.setText(strDateTimeSet);
                                                     tvTechnicianName.setVisibility(View.VISIBLE);
                                                     flSetDateTimeSubmit.setVisibility(View.GONE);
-                                                }
+                                                //}
+
+
 
                                                 btnGetCurrentCoords.getParent().requestChildFocus(btnGetCurrentCoords, btnGetCurrentCoords);
 
                                                 showToastMessage(getString(R.string.DateTimeSetSuccessfully));//, server ritorna: " + strVisitDateTimeResponse
-                                            }
+                                            //}
                                         } catch (JSONException e)
                                         {
                                             e.printStackTrace();
                                         }
                                     }
 
-                                    if (stakedOut == 0)
+/*                                    if (stakedOut == 0)
                                     {
-                                        if (reportStates != null)
+                                        if (reportItem != null)
                                         {
                                             cleanUpOldReportData();
                                         }
 
                                         showToastMessage(getString(R.string.VisitHasCancelled));
-                                    }
+                                    }*/
 
                                     enableInput();
 
@@ -745,27 +760,6 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
                     });
                 }
             }
-        }
-    }
-
-    private void cleanUpOldReportData()
-    {
-        if(reportStates != null)
-        {
-            realm.beginTransaction();
-
-            RealmResults geaItemsRapporto = realm.where(GeaItemRapporto.class).equalTo("company_id", company_id)
-                    .equalTo("tech_id", selectedTech.getId()).equalTo("id_rapporto_sopralluogo", reportStates.getId_rapporto_sopralluogo()).findAll();
-
-            RealmResults<GeaImmagineRapporto> listReportImages = realm.where(GeaImmagineRapporto.class)
-                    .equalTo("company_id", company_id).equalTo("tech_id", selectedTech.getId())
-                    .equalTo("id_rapporto_sopralluogo", reportStates.getId_rapporto_sopralluogo()).findAll();
-
-            geaItemsRapporto.deleteAllFromRealm();
-            listReportImages.deleteAllFromRealm();
-            reportStates.deleteFromRealm();
-
-            realm.commitTransaction();
         }
     }
 
@@ -834,28 +828,28 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
     {
         super.onDestroy();
 
-        if (reportStates != null)
+        if (reportItem != null)
         {
             realm.beginTransaction();
 
             if (latitude != 0)
             {
-                reportStates.setLatitudine(Double.valueOf(etCoordNord.getText().toString()));
+                reportItem.getGea_rapporto().setLatitudine(etCoordNord.getText().toString());
             }
             if (longitude != 0)
             {
-                reportStates.setLongitudine(Double.valueOf(etCoordEst.getText().toString()));
+                reportItem.getGea_rapporto().setLongitudine(etCoordEst.getText().toString());
             }
 
             if (altitude != ReportStates.ALTITUDE_UNKNOWN)
             {
-                reportStates.setAltitude(Integer.valueOf(etAltitude.getText().toString()));
-                reportStates.setAltitudine(etAltitude.getText().toString());
+                reportItem.getGea_rapporto().setAltitudine((etAltitude.getText().toString()));
             }
 
-            if (reportStates != null && reportStates.getLatitudine() != 0 && reportStates.getLongitudine() != 0) // && altitude != -999
+            if (reportItem.getGea_rapporto().getLatitudine() != null
+                    && reportItem.getGea_rapporto().getLongitudine() != null) // && altitude != -999
             {
-                reportStates.setGeneral_info_coords_set(1);
+                reportItem.getReportStates().setGeneral_info_coords_set(ReportStates.GENERAL_INFO_COORDS_SET);
             }
 
             realm.commitTransaction();

@@ -8,22 +8,18 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.lang.reflect.Type;
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
 
 import io.realm.RealmList;
 import ru.alexangan.developer.geatech.Models.ClientData;
 import ru.alexangan.developer.geatech.Models.GeaImmagineRapportoSopralluogo;
 import ru.alexangan.developer.geatech.Models.GeaItemRapportoSopralluogo;
-import ru.alexangan.developer.geatech.Models.GeaRapportoSopralluogo;
+import ru.alexangan.developer.geatech.Models.GeaRapporto;
 import ru.alexangan.developer.geatech.Models.GeaSopralluogo;
 import ru.alexangan.developer.geatech.Models.Gea_supplier;
 import ru.alexangan.developer.geatech.Models.ProductData;
 import ru.alexangan.developer.geatech.Models.SubproductItem;
 import ru.alexangan.developer.geatech.Models.VisitItem;
-
-import static ru.alexangan.developer.geatech.Models.GlobalConstants.realm;
 
 /**
  * Created by user on 12/2/2016.*/
@@ -57,7 +53,7 @@ public class JSON_to_model
                 int id_practice = visit_data.getInt("id_practice");
 
 
-                GeaSopralluogo geaSopralluogo = new GeaSopralluogo(id_sopralluogo, id_tecnico, data_ora_presa_appuntamento, data_ora_sopralluogo, id_practice);
+                GeaSopralluogo geaSopralluogo = new GeaSopralluogo(id_sopralluogo, id_tecnico, data_ora_presa_appuntamento, data_ora_sopralluogo);
 
                 // gea_client
                 JSONObject client_data = (JSONObject) visit_items.get("gea_client");
@@ -105,7 +101,7 @@ public class JSON_to_model
                 // gea_rapporto_sopralluogo
                 JSONObject rapporto_sopralluogo_data = (JSONObject) visit_items.get("gea_rapporto_sopralluogo");
 
-                GeaRapportoSopralluogo gea_rapporto_sopralluogo = gson.fromJson(String.valueOf(rapporto_sopralluogo_data), GeaRapportoSopralluogo.class);
+                GeaRapporto gea_rapporto_sopralluogo = gson.fromJson(String.valueOf(rapporto_sopralluogo_data), GeaRapporto.class);
 
                 //
                 JSONArray data_items_rapporto_sopralluogo = (JSONArray) visit_items.get("gea_items_rapporto_sopralluogo");

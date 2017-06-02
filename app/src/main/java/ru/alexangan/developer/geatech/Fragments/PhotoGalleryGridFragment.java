@@ -45,6 +45,7 @@ import io.realm.RealmResults;
 import ru.alexangan.developer.geatech.Adapters.GridViewAdapter;
 import ru.alexangan.developer.geatech.Interfaces.Communicator;
 import ru.alexangan.developer.geatech.Models.GeaImmagineRapporto;
+import ru.alexangan.developer.geatech.Models.ReportItem;
 import ru.alexangan.developer.geatech.Models.ReportStates;
 import ru.alexangan.developer.geatech.R;
 import ru.alexangan.developer.geatech.Utils.ImageUtils;
@@ -75,7 +76,7 @@ public class PhotoGalleryGridFragment extends Fragment
     Activity activity;
     private int PERMISSION_REQUEST_CODE = 12;
     private ProgressDialog progressLoadingImages;
-    ReportStates reportStates;
+    ReportItem reportItem;
     Bitmap bm;
     String fullSizeImgPath;
     private FloatingActionButton fabAddPhoto;
@@ -125,7 +126,7 @@ public class PhotoGalleryGridFragment extends Fragment
             }
 
             realm.beginTransaction();
-            reportStates = realm.where(ReportStates.class).equalTo("company_id", company_id).equalTo("tech_id", selectedTech.getId())
+            reportItem = realm.where(ReportItem.class).equalTo("company_id", company_id).equalTo("tech_id", selectedTech.getId())
                     .equalTo("id_sopralluogo", id_sopralluogo).findFirst();
             realm.commitTransaction();
 
@@ -441,14 +442,14 @@ public class PhotoGalleryGridFragment extends Fragment
     {
         super.onDestroy();
 
-        if (reportStates == null)
+        if (reportItem == null)
         {
             return;
         }
 
         realm.beginTransaction();
 
-        int id_rapporto_sopralluogo = reportStates.getId_rapporto_sopralluogo();
+        int id_rapporto_sopralluogo = reportItem.getGea_rapporto().getId_rapporto_sopralluogo();
 
         RealmResults<GeaImmagineRapporto> reportImages = realm.where(GeaImmagineRapporto.class).equalTo("company_id", company_id)
                 .equalTo("tech_id", selectedTech.getId()).equalTo("id_rapporto_sopralluogo", id_rapporto_sopralluogo).findAll();
@@ -457,7 +458,7 @@ public class PhotoGalleryGridFragment extends Fragment
         alPathItems.clear();
         alPathItems.addAll(Arrays.asList(photosDir.listFiles()));
 
-        reportStates.setPhotoAddedNumber(alPathItems.size());
+        reportItem.getReportStates().setPhotosAddedNumber(alPathItems.size());
 
         realm.commitTransaction();
 

@@ -38,8 +38,7 @@ import ru.alexangan.developer.geatech.Fragments.DomoticaReportFragment;
 import ru.alexangan.developer.geatech.Fragments.EmptyReportFragment;
 import ru.alexangan.developer.geatech.Fragments.FotovoltaicoReportFragment;
 import ru.alexangan.developer.geatech.Fragments.FragListInWorkVisits;
-import ru.alexangan.developer.geatech.Fragments.FragListReportsNotSent;
-import ru.alexangan.developer.geatech.Fragments.FragListReportsSent;
+import ru.alexangan.developer.geatech.Fragments.FragListReports;
 import ru.alexangan.developer.geatech.Fragments.FragListVisitsFree;
 import ru.alexangan.developer.geatech.Fragments.FragListVisitsOther;
 import ru.alexangan.developer.geatech.Fragments.FragListVisitsToday;
@@ -61,7 +60,7 @@ import ru.alexangan.developer.geatech.Models.GeaSezioneModelliRapporto;
 import ru.alexangan.developer.geatech.Models.GeaSopralluogo;
 import ru.alexangan.developer.geatech.Models.GlobalConstants;
 import ru.alexangan.developer.geatech.Models.ProductData;
-import ru.alexangan.developer.geatech.Models.ReportStates;
+import ru.alexangan.developer.geatech.Models.ReportItem;
 import ru.alexangan.developer.geatech.Models.VisitItem;
 import ru.alexangan.developer.geatech.Network.NetworkUtils;
 import ru.alexangan.developer.geatech.R;
@@ -98,8 +97,7 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
     FragListVisitsToday fragListVisitsToday;
     FragListVisitsOther fragListVisitsOther;
     FragListInWorkVisits fragListInWorkVisits;
-    FragListReportsNotSent fragListReportsNotSent;
-    FragListReportsSent fragListReportsSent;
+    FragListReports fragListReports;
 
     private ProgressDialog requestServerDialog;
     Handler handler;
@@ -207,8 +205,7 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
         fragListVisitsToday = new FragListVisitsToday();
         fragListVisitsOther = new FragListVisitsOther();
         fragListInWorkVisits = new FragListInWorkVisits();
-        fragListReportsNotSent = new FragListReportsNotSent();
-        fragListReportsSent = new FragListReportsSent();
+        fragListReports = new FragListReports();
 
         reportDetailedFragment = new ReportSentDetailedFragment();
         sendReportFragment = new SendReportFragment();
@@ -342,17 +339,17 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
             else
             {
                 FragmentTransaction mFragmentTransaction = mFragmentManager.beginTransaction();
-                if (!fragListReportsNotSent.isAdded())
+                if (!fragListReports.isAdded())
                 {
-                    mFragmentTransaction.add(innerFragContainer, fragListReportsNotSent);
-                    mFragmentTransaction.addToBackStack(fragListReportsNotSent.getTag());
+                    mFragmentTransaction.add(innerFragContainer, fragListReports);
+                    mFragmentTransaction.addToBackStack(fragListReports.getTag());
                 }
 
-                if (!fragListReportsSent.isAdded())
+/*                if (!fragListReportsSent.isAdded())
                 {
                     mFragmentTransaction.add(innerFragContainer, fragListReportsSent);
                     mFragmentTransaction.addToBackStack(fragListReportsSent.getTag());
-                }
+                }*/
 
                 mFragmentTransaction.commit();
 
@@ -438,17 +435,16 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
                 VisitItem visitItem = visitItems.get(currentSelIndex);
                 GeaSopralluogo geaSopralluogo = visitItem.getGeaSopralluogo();
                 int idSopralluogo = geaSopralluogo.getId_sopralluogo();
-                ReportStates reportStates = realm.where(ReportStates.class).equalTo("company_id", company_id).equalTo("tech_id", selectedTech.getId())
+
+                ReportItem reportItem = realm.where(ReportItem.class).equalTo("company_id", company_id).equalTo("tech_id", selectedTech.getId())
                         .equalTo("id_sopralluogo", idSopralluogo).findFirst();
 
                 realm.commitTransaction();
 
-                if (reportStates != null)
+                if (reportItem != null)
                 {
-                    int id_sopralluogo = reportStates.getId_sopralluogo();
-
                     Bundle args = frag.getArguments() != null ? frag.getArguments() : new Bundle();
-                    args.putInt("id_sopralluogo", id_sopralluogo);
+                    args.putInt("id_sopralluogo", idSopralluogo);
                     photoGalleryGridFragment.setArguments(args);
 
                     if (!photoGalleryGridFragment.isAdded())

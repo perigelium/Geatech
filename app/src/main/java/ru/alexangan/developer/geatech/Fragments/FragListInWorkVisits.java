@@ -22,6 +22,7 @@ import java.util.TreeMap;
 import ru.alexangan.developer.geatech.Adapters.InWorkListVisitsAdapter;
 import ru.alexangan.developer.geatech.Interfaces.Communicator;
 import ru.alexangan.developer.geatech.Models.GeaSopralluogo;
+import ru.alexangan.developer.geatech.Models.ReportItem;
 import ru.alexangan.developer.geatech.Models.ReportStates;
 import ru.alexangan.developer.geatech.Models.VisitItem;
 import ru.alexangan.developer.geatech.R;
@@ -106,22 +107,26 @@ public class FragListInWorkVisits extends ListFragment
             //String data_ora_sopralluogo = visitItem.getGeaSopralluogo().getData_ora_sopralluogo();
             VisitItem visitItem = visitItems.get(i);
             GeaSopralluogo geaSopralluogo = visitItem.getGeaSopralluogo();
-            int idSopralluogo = geaSopralluogo.getId_sopralluogo();
+            int id_sopralluogo = geaSopralluogo.getId_sopralluogo();
 
             realm.beginTransaction();
-            ReportStates reportStates = realm.where(ReportStates.class).equalTo("company_id", company_id).equalTo("tech_id", selectedTech.getId())
-                    .equalTo("id_sopralluogo", idSopralluogo).findFirst();
+            ReportItem reportItem = realm.where(ReportItem.class).equalTo("company_id", company_id).equalTo("tech_id", selectedTech.getId())
+                    .equalTo("id_sopralluogo", id_sopralluogo).findFirst();
             realm.commitTransaction();
 
             boolean reportStartedNotCompleted = false;
 
-            if (reportStates != null)
+            if (reportItem != null)
             {
-                String data_ora_sopralluogo = reportStates.getData_ora_sopralluogo();
+                String data_ora_sopralluogo = reportItem.getGeaSopralluogo().getData_ora_sopralluogo();
 
-                reportStartedNotCompleted = reportStates.getGeneralInfoCompletionState() == ReportStates.GENERAL_INFO_DATETIME_AND_COORDS_SET
-                && ((reportStates.getReportCompletionState() >= ReportStates.REPORT_INITIATED && reportStates.getReportCompletionState() < ReportStates.REPORT_COMPLETED
-                || (reportStates.getPhotoAddedNumber() > 0 && reportStates.getPhotoAddedNumber() < ReportStates.PHOTOS_MIN_ADDED)));
+                int generalInfoCompletionState = reportItem.getReportStates().getGeneralInfoCompletionState();
+                int reportCompletionState = reportItem.getReportStates().getReportCompletionState();
+                int photosAddedNumber = reportItem.getReportStates().getPhotosAddedNumber();
+
+                reportStartedNotCompleted = generalInfoCompletionState == ReportStates.GENERAL_INFO_DATETIME_AND_COORDS_SET
+                && ((reportCompletionState >= ReportStates.REPORT_INITIATED && reportCompletionState < ReportStates.REPORT_COMPLETED
+                || (photosAddedNumber > 0 && photosAddedNumber < ReportStates.PHOTOS_MIN_ADDED)));
 
                 if (data_ora_sopralluogo!=null)
                 {
