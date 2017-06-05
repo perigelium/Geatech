@@ -21,6 +21,8 @@ import java.util.TreeMap;
 
 import ru.alexangan.developer.geatech.Adapters.MyListVisitsAdapter;
 import ru.alexangan.developer.geatech.Interfaces.Communicator;
+import ru.alexangan.developer.geatech.Models.GeaSopralluogo;
+import ru.alexangan.developer.geatech.Models.ReportItem;
 import ru.alexangan.developer.geatech.Models.ReportStates;
 import ru.alexangan.developer.geatech.Models.VisitItem;
 import ru.alexangan.developer.geatech.R;
@@ -104,7 +106,14 @@ public class FragListVisitsToday extends ListFragment
         for (VisitItem visitItem : visitItems)
         //for (int i = 0; i < visitItems.size(); i++)
         {
-            String data_ora_sopralluogo = visitItem.getGeaSopralluogo().getData_ora_sopralluogo();
+            GeaSopralluogo geaSopralluogo = visitItem.getGeaSopralluogo();
+            String data_ora_sopralluogo = geaSopralluogo.getData_ora_sopralluogo();
+
+            if(data_ora_sopralluogo == null)
+            {
+                continue;
+            }
+
             int id_tecnico = visitItem.getGeaSopralluogo().getId_tecnico();
             boolean ownVisit = selectedTech.getId() == id_tecnico;
 
@@ -167,7 +176,7 @@ public class FragListVisitsToday extends ListFragment
                 int id_tecnico = visitItemsFiltered.get(position).getGeaSopralluogo().getId_tecnico();
 
                 realm.beginTransaction();
-                ReportStates reportStates = realm.where(ReportStates.class)
+                ReportItem reportItem = realm.where(ReportItem.class)
                         .equalTo("company_id", company_id).equalTo("tech_id", selectedTech.getId())
                         .equalTo("id_sopralluogo", idSopralluogo).findFirst();
                 realm.commitTransaction();
@@ -181,14 +190,14 @@ public class FragListVisitsToday extends ListFragment
                     {
                         if (swipeDetector.getAction() == SwipeDetector.Action.LR)
                         {
-                            mCommunicator.OnVisitListItemSwiped(idVisit, ownVisit && reportStates!=null);
+                            mCommunicator.OnVisitListItemSwiped(idVisit, ownVisit && reportItem!=null);
                         } else if (swipeDetector.getAction() == SwipeDetector.Action.RL)
                         {
                             mCommunicator.OnVisitListItemSwiped(idVisit, false);
                         }
                     } else
                     {
-                        mCommunicator.OnVisitListItemSelected(idVisit, ownVisit && reportStates!=null);
+                        mCommunicator.OnVisitListItemSelected(idVisit, ownVisit && reportItem!=null);
                     }
                 }
             }

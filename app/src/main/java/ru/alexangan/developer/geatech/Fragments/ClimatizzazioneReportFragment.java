@@ -146,7 +146,7 @@ public class ClimatizzazioneReportFragment extends Fragment
                 realm.beginTransaction();
 
                 Calendar calendarNow = Calendar.getInstance();
-                SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy hh:mm", Locale.ENGLISH);
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
                 String strDateTime = sdf.format(calendarNow.getTime());
 
                 reportItem.getGea_rapporto().setData_ora_compilazione_rapporto(strDateTime);
@@ -155,7 +155,7 @@ public class ClimatizzazioneReportFragment extends Fragment
             }
 
             realm.beginTransaction();
-            reportItem.getReportStates().setReportCompletionState(completionState);
+            reportItem.getGea_rapporto().setCompletion_percent(completionState);
             realm.commitTransaction();
         }
     }

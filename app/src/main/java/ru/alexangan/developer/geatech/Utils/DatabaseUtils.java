@@ -69,16 +69,6 @@ public class DatabaseUtils
 
         int completionPercent = partiallyComplete * 100 / geaItemRapportoResults.size();
 
-        realm.beginTransaction();
-
-        ReportItem reportItem = realm.where(ReportItem.class).equalTo("company_id", company_id)
-                .equalTo("tech_id", selectedTech.getId())
-                .equalTo("id_rapporto_sopralluogo", id_rapporto_sopralluogo).findFirst();
-
-        reportItem.getGea_rapporto().setCompletion_percent(completionPercent);
-
-        realm.commitTransaction();
-
         if (reportComplete)
         {
             return ReportStates.REPORT_COMPLETED;

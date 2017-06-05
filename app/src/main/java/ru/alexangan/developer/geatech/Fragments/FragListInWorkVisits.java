@@ -89,7 +89,7 @@ public class FragListInWorkVisits extends ListFragment
 
         TreeMap<Long, VisitItem> unsortedVisits = new TreeMap<>();
         long n = 0;
-        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy hh:mm", Locale.ITALIAN);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ITALIAN);
         Calendar calendarNow = Calendar.getInstance(Locale.ITALY);
         String strMonth = calendarNow.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.ITALY);
         //String dateString = " " + calendarNow.get(Calendar.DAY_OF_MONTH) + " " + strMonth;

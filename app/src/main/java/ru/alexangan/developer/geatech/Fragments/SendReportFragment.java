@@ -141,7 +141,7 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
         if (reportItem != null)
         {
             int generalInfoCompletionState = reportItem.getReportStates().getGeneralInfoCompletionState();
-            int reportCompletionState = reportItem.getReportStates().getReportCompletionState();
+            int reportCompletionState = reportItem.getGea_rapporto().getCompletion_percent();
             int photosAddedNumber = reportItem.getReportStates().getPhotosAddedNumber();
 
             reportComplete = generalInfoCompletionState == ReportStates.GENERAL_INFO_DATETIME_AND_COORDS_SET
@@ -255,7 +255,7 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
         id_rapporto_sopralluogo = reportItem.getGea_rapporto().getId_rapporto_sopralluogo();*/
 
 /*        Calendar calendarNow = Calendar.getInstance();
-        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy hh:mm", Locale.ENGLISH);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
         String strDateTime = sdf.format(calendarNow.getTime());*/
 
         //sentVisitItems.add(visitItems.get(selectedIndex));
@@ -452,7 +452,7 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
                             public void run()
                             {
                                 Calendar calendarNow = Calendar.getInstance();
-                                SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy hh:mm", Locale.ENGLISH);
+                                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
                                 String strDateTime = sdf.format(calendarNow.getTime());
 
                                 if (objectsSentSuccessfully == imagesArray.size())
@@ -546,7 +546,7 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
                                             public void run()
                                             {
                                                 Calendar calendarNow = Calendar.getInstance();
-                                                SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy hh:mm", Locale.ENGLISH);
+                                                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
                                                 String strDateTime = sdf.format(calendarNow.getTime());
 
                                                 if (objectsSentSuccessfully == imagesArray.size())

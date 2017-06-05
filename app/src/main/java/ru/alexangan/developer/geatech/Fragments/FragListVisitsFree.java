@@ -19,6 +19,7 @@ import java.util.TreeMap;
 
 import ru.alexangan.developer.geatech.Adapters.MyListVisitsAdapter;
 import ru.alexangan.developer.geatech.Interfaces.Communicator;
+import ru.alexangan.developer.geatech.Models.GeaSopralluogo;
 import ru.alexangan.developer.geatech.Models.ReportStates;
 import ru.alexangan.developer.geatech.Models.VisitItem;
 import ru.alexangan.developer.geatech.R;
@@ -77,24 +78,35 @@ public class FragListVisitsFree extends ListFragment
         for (VisitItem visitItem : visitItems)
         //for (int i = 0; i < visitItems.size(); i++)
         {
-            String data_ora_sopralluogo = visitItem.getGeaSopralluogo().getData_ora_sopralluogo();
+            GeaSopralluogo geaSopralluogo = visitItem.getGeaSopralluogo();
+            String data_ora_sopralluogo = geaSopralluogo.getData_ora_sopralluogo();
             int id_tecnico = visitItem.getGeaSopralluogo().getId_tecnico();
-            SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy hh:mm", Locale.ITALIAN);
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ITALIAN);
 
             if ((!timeNotSetItemsOnly) || (timeNotSetItemsOnly && id_tecnico == 0))
             {
                 try
                 {
-                    Date date = sdf.parse(data_ora_sopralluogo);
-                    long time = date.getTime();
-                    //Log.d("DEBUG", String.valueOf(time));
-
-                    while(unsortedVisits.get(time) != null)
+                    if(data_ora_sopralluogo != null)
                     {
-                        time++;
-                    }
-                    unsortedVisits.put(time, visitItem);
+                        Date date = sdf.parse(data_ora_sopralluogo);
+                        long time = date.getTime();
+                        //Log.d("DEBUG", String.valueOf(time));
 
+                        while (unsortedVisits.get(time) != null)
+                        {
+                            time++;
+                        }
+                        unsortedVisits.put(time, visitItem);
+                    }
+                    else
+                    {
+                        while(unsortedVisits.get(n) != null)
+                        {
+                            n++;
+                        }
+                        unsortedVisits.put(n++, visitItem);
+                    }
                 } catch (ParseException e)
                 {
                     while(unsortedVisits.get(n) != null)

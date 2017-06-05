@@ -21,6 +21,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.text.format.DateFormat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -120,6 +121,7 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
     private LinearLayout llSetDateTime;
     private ProductData productData;
     private TextView tvListSottprodottiTitle;
+    private TextView tvClientName, tvTypeOfService, tvProductModel, tvClientPhone, tvClientAddress;
 
 
     public SetDateTimeFragment()
@@ -210,7 +212,7 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
                 elapsedDays = periodMilliSeconds / 1000 / 60 / 60 / 24;
             }
 
-            SimpleDateFormat sdfDate = new SimpleDateFormat("dd-MM-yyyy hh:mm", Locale.ITALIAN);
+            SimpleDateFormat sdfDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ITALIAN);
             String dateTimeStr = sdfDate.format(calendar.getTime());
             tvdataOraSopralluogo.setText(dateTimeStr);
             tvTechnicianName.setVisibility(View.VISIBLE);
@@ -229,7 +231,7 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
             }
 
             stakedOut = 1;
-            SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy hh:mm", Locale.ENGLISH);
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
             strDateTimeSet = sdf.format(calendar.getTime());
 
             disableInput();
@@ -266,6 +268,12 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
                 .equalTo("id_sopralluogo", idSopralluogo).findFirst();
         realm.commitTransaction();
 
+        tvClientName.setText(clientData.getName());
+        tvClientPhone.setText(clientData.getMobile());
+        tvClientAddress.setText(clientData.getAddress());
+        tvTypeOfService.setText(productData.getProductType());
+        tvProductModel.setText(productData.getProduct());
+
         String dataOraSopralluogo = null;
 
         SetVisitDateTimeListAdapter adapter = new SetVisitDateTimeListAdapter(getActivity(), listSubproducts);
@@ -294,7 +302,7 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
 
         if(dataOraSopralluogo!=null && dataOraSopralluogo.length() > 4)
         {
-            SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy hh:mm", Locale.ITALIAN);
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ITALIAN);
 
             try
             {
@@ -328,9 +336,18 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
 
         if (reportItem != null)
         {
-            latitude = Double.parseDouble(reportItem.getGea_rapporto().getLatitudine());
-            longitude = Double.parseDouble(reportItem.getGea_rapporto().getLongitudine());
-            altitude = Integer.parseInt(reportItem.getGea_rapporto().getAltitudine());
+            GeaRapporto geaRapporto = reportItem.getGea_rapporto();
+
+            try
+            {
+                latitude = Double.parseDouble(geaRapporto.getLatitudine());
+                longitude = Double.parseDouble(geaRapporto.getLongitudine());
+                altitude = Integer.parseInt(geaRapporto.getAltitudine());
+            }
+            catch (NullPointerException e)
+            {
+                Log.d("DEBUG", "Parse double exception.");
+            }
 
             //coordsUnchanged = latitude != 0 && longitude != 0;// && altitude != ReportStates.ALTITUDE_UNKNOWN;
 
@@ -400,20 +417,15 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
         TextView tvTechnicianName = (TextView) rootView.findViewById(R.id.tvTechnicianName);
         tvTechnicianName.setText(selectedTech.getFullNameTehnic());
 
-        TextView clientNameTextView = (TextView) rootView.findViewById(R.id.tvClientName);
-        clientNameTextView.setText(clientData.getName());
+        tvClientName = (TextView) rootView.findViewById(R.id.tvClientName);
 
-        TextView clientPhoneTextView = (TextView) rootView.findViewById(R.id.tvClientPhone);
-        clientPhoneTextView.setText(clientData.getMobile());
+        tvClientPhone = (TextView) rootView.findViewById(R.id.tvClientPhone);
 
-        TextView serviceTypeTextView = (TextView) rootView.findViewById(R.id.tvVisitTOS);
-        serviceTypeTextView.setText(productData.getProductType());
+        tvTypeOfService = (TextView) rootView.findViewById(R.id.tvTypeOfService);
 
-        TextView tvProductModel = (TextView) rootView.findViewById(R.id.tvProductModel);
-        tvProductModel.setText(productData.getProduct());
+        tvProductModel = (TextView) rootView.findViewById(R.id.tvProductModel);
 
-        TextView clientAddressTextView = (TextView) rootView.findViewById(R.id.tvClientAddress);
-        clientAddressTextView.setText(clientData.getAddress());
+        tvClientAddress = (TextView) rootView.findViewById(R.id.tvClientAddress);
 
         //String visitDateTime = reportItem!=null ? reportItem.getData_ora_sopralluogo() : " ";
 
