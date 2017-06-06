@@ -17,9 +17,11 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.TreeMap;
 
+import io.realm.Realm;
 import ru.alexangan.developer.geatech.Adapters.MyListVisitsAdapter;
 import ru.alexangan.developer.geatech.Interfaces.Communicator;
 import ru.alexangan.developer.geatech.Models.GeaSopralluogo;
+import ru.alexangan.developer.geatech.Models.ReportItem;
 import ru.alexangan.developer.geatech.Models.ReportStates;
 import ru.alexangan.developer.geatech.Models.VisitItem;
 import ru.alexangan.developer.geatech.R;
@@ -27,7 +29,7 @@ import ru.alexangan.developer.geatech.Utils.SwipeDetector;
 import ru.alexangan.developer.geatech.Utils.ViewUtils;
 
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.company_id;
-import static ru.alexangan.developer.geatech.Models.GlobalConstants.realm;
+
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.selectedTech;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.visitItems;
 
@@ -40,6 +42,7 @@ public class FragListVisitsFree extends ListFragment
     MyListVisitsAdapter myListAdapter;
     ListView lv;
     Activity activity;
+    private Realm realm;
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState)
@@ -55,6 +58,7 @@ public class FragListVisitsFree extends ListFragment
         super.onCreate(savedInstanceState);
 
         mCommunicator = (Communicator) getActivity();
+        realm = Realm.getDefaultInstance();
         swipeDetector = new SwipeDetector();
 
         timeNotSetItemsOnly = false;
@@ -87,7 +91,7 @@ public class FragListVisitsFree extends ListFragment
             {
                 try
                 {
-                    if(data_ora_sopralluogo != null)
+                    if (data_ora_sopralluogo != null)
                     {
                         Date date = sdf.parse(data_ora_sopralluogo);
                         long time = date.getTime();
@@ -98,10 +102,9 @@ public class FragListVisitsFree extends ListFragment
                             time++;
                         }
                         unsortedVisits.put(time, visitItem);
-                    }
-                    else
+                    } else
                     {
-                        while(unsortedVisits.get(n) != null)
+                        while (unsortedVisits.get(n) != null)
                         {
                             n++;
                         }
@@ -109,7 +112,7 @@ public class FragListVisitsFree extends ListFragment
                     }
                 } catch (ParseException e)
                 {
-                    while(unsortedVisits.get(n) != null)
+                    while (unsortedVisits.get(n) != null)
                     {
                         n++;
                     }
@@ -129,7 +132,7 @@ public class FragListVisitsFree extends ListFragment
             if(ownReport)
             {
 *//*                realm.beginTransaction();
-                ReportStates reportItem = realm.where(ReportStates.class)
+                ReportStates reportItem = realm.where(ReportItem.class)
                         .equalTo("company_id", company_id).equalTo("tech_id", selectedTech.getId())
                         .equalTo("id_sopralluogo", id_sopralluogo).findFirst();
                 realm.commitTransaction();*//*
@@ -152,7 +155,7 @@ public class FragListVisitsFree extends ListFragment
             int id_tecnico = visitItem.getGeaSopralluogo().getId_tecnico();
             boolean ownReport = selectedTech.getId() == id_tecnico;
 
-            if(!ownReport && id_tecnico == 0)
+            if (!ownReport && id_tecnico == 0)
             {
                 visitItemsFiltered.add(visitItem);
             }
@@ -185,11 +188,13 @@ public class FragListVisitsFree extends ListFragment
                 int idVisit = visitItemsFiltered.get(position).getId();
 
                 int id_tecnico = visitItemsFiltered.get(position).getGeaSopralluogo().getId_tecnico();
+                int id_rapporto_sopralluogo = visitItemsFiltered.get(position).getGeaRapporto().getId_rapporto_sopralluogo();
 
                 realm.beginTransaction();
-                ReportStates reportStates = realm.where(ReportStates.class)
+                ReportItem reportItem = realm.where(ReportItem.class)
                         .equalTo("company_id", company_id).equalTo("tech_id", selectedTech.getId())
-                        .equalTo("id_sopralluogo", idSopralluogo).findFirst();
+                        .equalTo("id_sopralluogo", idSopralluogo)
+                        .equalTo("id_rapporto_sopralluogo", id_rapporto_sopralluogo).findFirst();
                 realm.commitTransaction();
 
                 boolean ownVisit = selectedTech.getId() == id_tecnico;
@@ -201,14 +206,14 @@ public class FragListVisitsFree extends ListFragment
                     {
                         if (swipeDetector.getAction() == SwipeDetector.Action.LR)
                         {
-                            mCommunicator.OnVisitListItemSwiped(idVisit, ownVisit && reportStates!=null);
+                            mCommunicator.OnVisitListItemSwiped(idVisit, ownVisit && reportItem != null);
                         } else if (swipeDetector.getAction() == SwipeDetector.Action.RL)
                         {
                             mCommunicator.OnVisitListItemSwiped(idVisit, false);
                         }
                     } else
                     {
-                        mCommunicator.OnVisitListItemSelected(idVisit, ownVisit && reportStates!=null);
+                        mCommunicator.OnVisitListItemSelected(idVisit, ownVisit && reportItem != null);
                     }
                 }
             }

@@ -60,5 +60,13 @@ public class GeaSopralluogo extends RealmObject
         return id_tecnico;
     }
 
+    public void setData_ora_presa_appuntamento(String data_ora_presa_appuntamento)
+    {
+        this.data_ora_presa_appuntamento = data_ora_presa_appuntamento;
+    }
 
+    public void setData_ora_sopralluogo(String data_ora_sopralluogo)
+    {
+        this.data_ora_sopralluogo = data_ora_sopralluogo;
+    }
 }

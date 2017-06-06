@@ -26,6 +26,7 @@ import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.List;
 
+import io.realm.Realm;
 import io.realm.RealmResults;
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -38,7 +39,8 @@ import ru.alexangan.developer.geatech.Fragments.DomoticaReportFragment;
 import ru.alexangan.developer.geatech.Fragments.EmptyReportFragment;
 import ru.alexangan.developer.geatech.Fragments.FotovoltaicoReportFragment;
 import ru.alexangan.developer.geatech.Fragments.FragListInWorkVisits;
-import ru.alexangan.developer.geatech.Fragments.FragListReports;
+import ru.alexangan.developer.geatech.Fragments.FragListReportsNotSent;
+import ru.alexangan.developer.geatech.Fragments.FragListReportsSent;
 import ru.alexangan.developer.geatech.Fragments.FragListVisitsFree;
 import ru.alexangan.developer.geatech.Fragments.FragListVisitsOther;
 import ru.alexangan.developer.geatech.Fragments.FragListVisitsToday;
@@ -78,7 +80,7 @@ import static ru.alexangan.developer.geatech.Models.GlobalConstants.inVisitItems
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.listReportsIsObsolete;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.listVisitsIsObsolete;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.mSettings;
-import static ru.alexangan.developer.geatech.Models.GlobalConstants.realm;
+
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.selectedTech;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.tokenStr;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.visitItems;
@@ -86,6 +88,7 @@ import static ru.alexangan.developer.geatech.R.id.innerFragContainer;
 
 public class MainActivity extends Activity implements Communicator, Callback, ScrollViewListener
 {
+    Realm realm;
     private FragmentManager mFragmentManager;
     SwipeDetector swipeDetector;
 
@@ -97,7 +100,8 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
     FragListVisitsToday fragListVisitsToday;
     FragListVisitsOther fragListVisitsOther;
     FragListInWorkVisits fragListInWorkVisits;
-    FragListReports fragListReports;
+    FragListReportsNotSent fragListReportsNotSent;
+    FragListReportsSent fragListReportsSent;
 
     private ProgressDialog requestServerDialog;
     Handler handler;
@@ -118,7 +122,7 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
     Fragment frag;
 
     NotificationBarFragment notificationBarFragment;
-    int currentSelIndex;
+    int currentVisitId;
     boolean ctrlBtnChkChanged;
     private Call callVisits, callModels;
     NetworkUtils networkUtils;
@@ -174,12 +178,13 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
+        realm = Realm.getDefaultInstance();
         setContentView(R.layout.work_window);
 
         ScrollViewExt svInnerFragContainer = (ScrollViewExt) findViewById(R.id.svInnerFragContainer);
         svInnerFragContainer.setScrollViewListener(this);
 
-        currentSelIndex = -1;
+        currentVisitId = -1;
         curSelBottomBtnId = 0;
         ctrlBtnChkChanged = true;
         firstStart = true;
@@ -205,7 +210,8 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
         fragListVisitsToday = new FragListVisitsToday();
         fragListVisitsOther = new FragListVisitsOther();
         fragListInWorkVisits = new FragListInWorkVisits();
-        fragListReports = new FragListReports();
+        fragListReportsNotSent = new FragListReportsNotSent();
+        fragListReportsSent = new FragListReportsSent();
 
         reportDetailedFragment = new ReportSentDetailedFragment();
         sendReportFragment = new SendReportFragment();
@@ -276,7 +282,7 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
     @Override
     public void onCtrlBtnsBottomClicked(int btnId)
     {
-        currentSelIndex = -1;
+        currentVisitId = -1;
         mFragmentManager.popBackStack();
 
         if (!notificationBarFragment.isAdded())
@@ -332,24 +338,23 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
 
             //GlobalConstants.listReportsIsObsolete = true;
 
-            if(GlobalConstants.listReportsIsObsolete)
+            if (GlobalConstants.listReportsIsObsolete)
             {
                 refreshReportsList();
-            }
-            else
+            } else
             {
                 FragmentTransaction mFragmentTransaction = mFragmentManager.beginTransaction();
-                if (!fragListReports.isAdded())
+                if (!fragListReportsNotSent.isAdded())
                 {
-                    mFragmentTransaction.add(innerFragContainer, fragListReports);
-                    mFragmentTransaction.addToBackStack(fragListReports.getTag());
+                    mFragmentTransaction.add(innerFragContainer, fragListReportsNotSent);
+                    mFragmentTransaction.addToBackStack(fragListReportsNotSent.getTag());
                 }
 
-/*                if (!fragListReportsSent.isAdded())
+                if (!fragListReportsSent.isAdded())
                 {
                     mFragmentTransaction.add(innerFragContainer, fragListReportsSent);
                     mFragmentTransaction.addToBackStack(fragListReportsSent.getTag());
-                }*/
+                }
 
                 mFragmentTransaction.commit();
 
@@ -375,7 +380,7 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
     @Override
     public void onCtrlBtnsSopralluogoClicked(int btnId)
     {
-        if (currentSelIndex == -1)
+        if (currentVisitId == -1)
         {
             return;
         }
@@ -395,7 +400,7 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
             if (!setDateTimeFragment.isAdded())
             {
                 Bundle args = new Bundle();
-                args.putInt("selectedIndex", currentSelIndex);
+                args.putInt("selectedVisitId", currentVisitId);
                 setDateTimeFragment.setArguments(args);
 
                 setVisitsListContent(setDateTimeFragment);
@@ -404,7 +409,7 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
 
         if (btnId == R.id.btnFillReport)
         {
-            VisitItem visitItem = visitItems.get(currentSelIndex);
+            VisitItem visitItem = visitItems.get(currentVisitId);
             ProductData productData = visitItem.getProductData();
             String productType = productData.getProductType();
 
@@ -416,7 +421,7 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
             if (!frag.isAdded())
             {
                 Bundle args = frag.getArguments() != null ? frag.getArguments() : new Bundle();
-                args.putInt("selectedIndex", currentSelIndex);
+                args.putInt("selectedVisitId", currentVisitId);
 
                 frag.setArguments(args);
 
@@ -432,12 +437,15 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
             {
                 realm.beginTransaction();
 
-                VisitItem visitItem = visitItems.get(currentSelIndex);
+                VisitItem visitItem = visitItems.get(currentVisitId);
                 GeaSopralluogo geaSopralluogo = visitItem.getGeaSopralluogo();
                 int idSopralluogo = geaSopralluogo.getId_sopralluogo();
+                int id_rapporto_sopralluogo = visitItem.getGeaRapporto().getId_rapporto_sopralluogo();
 
-                ReportItem reportItem = realm.where(ReportItem.class).equalTo("company_id", company_id).equalTo("tech_id", selectedTech.getId())
-                        .equalTo("id_sopralluogo", idSopralluogo).findFirst();
+                ReportItem reportItem = realm.where(ReportItem.class).equalTo("company_id", company_id)
+                        .equalTo("tech_id", selectedTech.getId())
+                        .equalTo("id_sopralluogo", idSopralluogo)
+                        .equalTo("id_rapporto_sopralluogo", id_rapporto_sopralluogo).findFirst();
 
                 realm.commitTransaction();
 
@@ -465,7 +473,7 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
             if (!sendReportFragment.isAdded())
             {
                 Bundle args = new Bundle();
-                args.putInt("selectedIndex", currentSelIndex);
+                args.putInt("selectedVisitId", currentVisitId);
                 sendReportFragment.setArguments(args);
 
                 setVisitsListContent(sendReportFragment);
@@ -486,9 +494,9 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
     }
 
     @Override
-    public void OnVisitListItemSelected(int itemIndex, boolean dateTimeHasSet)
+    public void OnVisitListItemSelected(int itemId, boolean dateTimeHasSet)
     {
-        currentSelIndex = itemIndex;
+        currentVisitId = itemId;
 
         mFragmentManager.popBackStack();
 
@@ -503,7 +511,7 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
         if (!setDateTimeFragment.isAdded())
         {
             Bundle args = new Bundle();
-            args.putInt("selectedIndex", itemIndex);
+            args.putInt("selectedVisitId", itemId);
             setDateTimeFragment.setArguments(args);
 
             ctrlBtnsSopralluogo.setCheckedBtnId(R.id.btnSopralluogoInfo);
@@ -513,7 +521,7 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
     @Override
     public void onDateTimeSetReturned(int itemIndex)
     {
-        currentSelIndex = itemIndex;
+        currentVisitId = itemIndex;
         listVisitsIsObsolete = true;
         ctrlBtnsSopralluogo.setCheckedBtnId(R.id.btnSopralluogoInfo);
     }
@@ -537,7 +545,7 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
 
             Bundle args = reportDetailedFragment.getArguments() != null ? reportDetailedFragment.getArguments() : new Bundle();
 
-            args.putInt("selectedIndex", itemIndex);
+            args.putInt("selectedVisitId", itemIndex);
             reportDetailedFragment.setArguments(args);
 
             setVisitsListContent(reportDetailedFragment);
@@ -769,13 +777,11 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
 
             response.body().close();
 
-            GlobalConstants.listReportsIsObsolete = false;
-
             runOnUiThread(new Runnable()
             {
                 public void run()
                 {
-/*                    realm.beginTransaction();
+                    realm.beginTransaction();
 
                     inVisitItems = JSON_to_model.getVisitTtemsList(reportsJSONData);
 
@@ -795,7 +801,7 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
                     visitItems = realm.where(VisitItem.class).findAll();
                     realm.commitTransaction();
 
-                    onCtrlBtnsBottomClicked(R.id.btnVisits);*/
+                    onCtrlBtnsBottomClicked(R.id.btnCompletedReports);
 
                     requestServerDialog.dismiss();
                     //ctrlBtnsBottom.setCheckedBtnId(R.id.btnVisits);
@@ -950,7 +956,7 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
 
         callReports = networkUtils.getData(this, GET_VISITS_URL_SUFFIX, tokenStr);
 
-        //listReportsIsObsolete = false;
+        listReportsIsObsolete = false;
     }
 
     @Override
@@ -986,15 +992,18 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
     @Override
     public void onScrollChanged(ScrollViewExt scrollView, int x, int y, int oldx, int oldy)
     {
-        // We take the last son in the scrollview
-        View view = (View) scrollView.getChildAt(scrollView.getChildCount() - 1);
-        int diff = (view.getTop() - (scrollView.getHeight() + scrollView.getScrollY()));
+        View view = scrollView.getChildAt(0);
+        int diff = view.getTop() - scrollView.getScrollY();
 
-        // if diff is zero, then the bottom has been reached
+        // if diff is zero, then the top has been reached
         if (diff == 0 && fragListVisitsOther.isAdded())
         {
             refreshVisitsList();
-            //showToastMessage("bottom is reached !");
+        }
+
+        if (diff == 0 && fragListReportsNotSent.isAdded())
+        {
+            refreshReportsList();
         }
     }
 }

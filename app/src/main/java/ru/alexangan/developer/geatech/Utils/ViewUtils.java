@@ -24,27 +24,30 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import io.realm.Realm;
 import ru.alexangan.developer.geatech.Models.GeaItemModelliRapporto;
+import ru.alexangan.developer.geatech.Models.GeaItemRapporto;
 import ru.alexangan.developer.geatech.Models.GeaModelloRapporto;
 import ru.alexangan.developer.geatech.Models.GeaSezioneModelliRapporto;
-import ru.alexangan.developer.geatech.Models.GeaSopralluogo;
 import ru.alexangan.developer.geatech.Models.ProductData;
-import ru.alexangan.developer.geatech.Models.ReportStates;
+import ru.alexangan.developer.geatech.Models.ReportItem;
 import ru.alexangan.developer.geatech.Models.VisitItem;
 import ru.alexangan.developer.geatech.R;
 
-import static ru.alexangan.developer.geatech.Models.GlobalConstants.realm;
+import static ru.alexangan.developer.geatech.Models.GlobalConstants.company_id;
+
+import static ru.alexangan.developer.geatech.Models.GlobalConstants.selectedTech;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.visitItems;
 
 public class ViewUtils
 {
-    public int selectedIndex;
-    int idItemStart, idItemEnd;
-    int headerNumber;
-    int idModello;
-    int idSopralluogo;
-    int id_rapporto_sopralluogo;
-    View rootView;
+    private final Realm realm;
+
+    private ReportItem reportItem;
+    private List<GeaItemRapporto> l_geaItemRapporto;
+    private int idItemStart, idItemEnd;
+    private int headerNumber;
+    private View rootView;
 
     boolean[] allSectionsCollapsed;
     GeaModelloRapporto geaModello;
@@ -61,13 +64,10 @@ public class ViewUtils
 
     Map<Integer, GeaItemModelliRapporto> itemModelli;
 
-    public ViewUtils(View rootView, int id_rapporto_sopralluogo, int selectedIndex)
+    public ViewUtils(View rootView, int id_rapporto_sopralluogo, int selectedVisitId)
     {
         this.rootView = rootView;
-        this.id_rapporto_sopralluogo = id_rapporto_sopralluogo;
-        this.selectedIndex = selectedIndex;
         headerNumber = 0;
-        idModello = 0;
         idItemStart = 99999;
         idItemEnd = 0;
 
@@ -82,11 +82,12 @@ public class ViewUtils
         llHeaderSections = new ArrayList<>();
         allSectionsCollapsed = new boolean[]{false, false, false, false, false, false, false};
 
-        VisitItem visitItem = visitItems.get(selectedIndex);
-        GeaSopralluogo geaSopralluogo = visitItem.getGeaSopralluogo();
+        VisitItem visitItem = visitItems.get(selectedVisitId);
+        //GeaSopralluogo geaSopralluogo = visitItem.getGeaSopralluogo();
         ProductData productData = visitItem.getProductData();
-        idSopralluogo = geaSopralluogo.getId_sopralluogo();
         int id_product_type = productData.getIdProductType();
+
+        realm = Realm.getDefaultInstance();
 
         realm.beginTransaction();
         geaModello = realm.where(GeaModelloRapporto.class).equalTo("id_product_type", id_product_type).findFirst();
@@ -125,6 +126,13 @@ public class ViewUtils
                 idItemEnd = curItemModello;
             }
         }
+
+        realm.beginTransaction();
+        reportItem = realm.where(ReportItem.class).equalTo("company_id", company_id).equalTo("tech_id", selectedTech.getId())
+                .equalTo("id_rapporto_sopralluogo", id_rapporto_sopralluogo).findFirst();
+        realm.commitTransaction();
+
+        l_geaItemRapporto = reportItem.getGea_items_rapporto();
     }
 
     public View getRootView()
@@ -2207,10 +2215,10 @@ public class ViewUtils
         headerNumber++;
     }
 
-    public void markSectionsWithNotFilledItems(int id_rapporto_sopralluogo)
+    public void markSectionsWithNotFilledItems(int id_sopralluogo, int id_rapporto_sopralluogo)
     {
-        //int completionState = DatabaseUtils.getReportInitializationState(id_rapporto_sopralluogo);
-        ArrayList<Integer> notSetItems = DatabaseUtils.getNotSetItems(id_rapporto_sopralluogo);
+        //int completionState = DatabaseUtils.getReportInitializationState(id_sopralluogo, id_rapporto_sopralluogo);
+        ArrayList<Integer> notSetItems = DatabaseUtils.getNotSetItems(id_sopralluogo, id_rapporto_sopralluogo);
 
 /*        for (Map.Entry entry : Switches.entrySet())
         {
@@ -2315,7 +2323,7 @@ public class ViewUtils
             EditText et = EditTexts.get(idItem);
             str_id_item = et.getText().toString();
         }
-        DatabaseUtils.insertStringInReportItem(id_rapporto_sopralluogo, idItem, str_id_item);
+        DatabaseUtils.insertStringInReportItem(l_geaItemRapporto, idItem, str_id_item);
 
         return ++idItem;
     }
@@ -2341,7 +2349,7 @@ public class ViewUtils
                 str_id_item = radioButton.getText().toString();
             }
         }
-        DatabaseUtils.insertStringInReportItem(id_rapporto_sopralluogo, idItem, str_id_item);
+        DatabaseUtils.insertStringInReportItem(l_geaItemRapporto, idItem, str_id_item);
 
         return ++idItem;
     }
@@ -2366,7 +2374,7 @@ public class ViewUtils
             EditText et = EditTexts.get(idItem);
             str_Id_item = et.getText().toString();
         }
-        DatabaseUtils.insertStringInReportItem(id_rapporto_sopralluogo, idItem, str_Id_item);
+        DatabaseUtils.insertStringInReportItem(l_geaItemRapporto, idItem, str_Id_item);
 
         return ++idItem;
     }
@@ -2384,7 +2392,7 @@ public class ViewUtils
         {
             str_Id_item = chk.getText().toString();
         }
-        DatabaseUtils.insertStringInReportItem(id_rapporto_sopralluogo, idItem, str_Id_item);
+        DatabaseUtils.insertStringInReportItem(l_geaItemRapporto, idItem, str_Id_item);
 
         return ++idItem;
     }
@@ -2407,7 +2415,7 @@ public class ViewUtils
                 str_Id_item += alChks.get(i).isChecked() ? alChks.get(i).getText().toString() + "||" : "";
             }
         }
-        DatabaseUtils.insertStringInReportItem(id_rapporto_sopralluogo, idItem, str_Id_item);
+        DatabaseUtils.insertStringInReportItem(l_geaItemRapporto, idItem, str_Id_item);
 
         return ++idItem;
     }
@@ -2426,7 +2434,7 @@ public class ViewUtils
                 str_Id_item = "NO";
             }
 
-            DatabaseUtils.insertStringInReportItem(id_rapporto_sopralluogo, idItem, str_Id_item);
+            DatabaseUtils.insertStringInReportItem(l_geaItemRapporto, idItem, str_Id_item);
             idItem++;
         }
 
@@ -2468,7 +2476,7 @@ public class ViewUtils
 
                 str_id_item = et.getText().toString(); // + unit;
             }
-            DatabaseUtils.insertStringInReportItem(id_rapporto_sopralluogo, idItem, str_id_item);
+            DatabaseUtils.insertStringInReportItem(l_geaItemRapporto, idItem, str_id_item);
             idItem++;
         }
 
@@ -2480,7 +2488,7 @@ public class ViewUtils
     public int fillSeveralRadiosAndEdit(int idItem)
     {
         int i;
-        String strId_item = DatabaseUtils.getValueFromReportItem(id_rapporto_sopralluogo, idItem);
+        String strId_item = DatabaseUtils.getValueFromReportItem(l_geaItemRapporto, idItem);
 
         RadioGroup radiogroup = RadioGroups.get(idItem);
 
@@ -2509,7 +2517,7 @@ public class ViewUtils
     public int fillSeveralRadios(int idItem)
     {
         int i;
-        String strId_item = DatabaseUtils.getValueFromReportItem(id_rapporto_sopralluogo, idItem);
+        String strId_item = DatabaseUtils.getValueFromReportItem(l_geaItemRapporto, idItem);
 
         RadioGroup radiogroup = RadioGroups.get(idItem);
 
@@ -2533,7 +2541,7 @@ public class ViewUtils
     {
         for (int i = 0; i < quant; i++)
         {
-            String str_id_item = DatabaseUtils.getValueFromReportItem(id_rapporto_sopralluogo, idItem);
+            String str_id_item = DatabaseUtils.getValueFromReportItem(l_geaItemRapporto, idItem);
             EditTexts.get(idItem).setText(str_id_item);
             idItem++;
         }
@@ -2545,7 +2553,7 @@ public class ViewUtils
     {
         for (int i = 0; i < quant; i++)
         {
-            String str_id_item = DatabaseUtils.getValueFromReportItem(id_rapporto_sopralluogo, idItem);
+            String str_id_item = DatabaseUtils.getValueFromReportItem(l_geaItemRapporto, idItem);
             Switch sw = Switches.get(idItem);
 
             if (str_id_item.equals("SI"))
@@ -2560,7 +2568,7 @@ public class ViewUtils
 
     public int fillSeveralChkboxes(int idItem)
     {
-        String str_id_item = DatabaseUtils.getValueFromReportItem(id_rapporto_sopralluogo, idItem);
+        String str_id_item = DatabaseUtils.getValueFromReportItem(l_geaItemRapporto, idItem);
 
         String[] strChkArray = str_id_item.split("\\|\\|");
 
@@ -2588,7 +2596,7 @@ public class ViewUtils
 
     public int fillChkboxAndEdit(int idItem)
     {
-        String str_id_item = DatabaseUtils.getValueFromReportItem(id_rapporto_sopralluogo, idItem);
+        String str_id_item = DatabaseUtils.getValueFromReportItem(l_geaItemRapporto, idItem);
 
         CheckBox chkbox = CheckBoxes.get(idItem).get(0);
         EditText et = EditTexts.get(idItem);
@@ -2607,7 +2615,7 @@ public class ViewUtils
 
     public int fillSeveralChkboxesAndEdit(int idItem)
     {
-        String str_id_item = DatabaseUtils.getValueFromReportItem(id_rapporto_sopralluogo, idItem);
+        String str_id_item = DatabaseUtils.getValueFromReportItem(l_geaItemRapporto, idItem);
 
         String[] strChkArray = str_id_item.split("\\|\\|");
 

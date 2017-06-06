@@ -16,6 +16,7 @@ public class ReportItem extends RealmObject
     private int company_id;
     private int tech_id;
     private int id_sopralluogo;
+    private int id_rapporto_sopralluogo;
 
     private long lastChangeUnixTime;
     private GeaSopralluogo gea_sopralluoghi;
@@ -27,7 +28,8 @@ public class ReportItem extends RealmObject
     public ReportItem()
     {}
 
-    public ReportItem(int company_id, int tech_id, int id_sopralluogo, ReportStates reportStates, GeaSopralluogo gea_sopralluoghi,
+    public ReportItem(int company_id, int tech_id, int id_sopralluogo, int id_rapporto_sopralluogo,
+                      ReportStates reportStates, GeaSopralluogo gea_sopralluoghi,
                       GeaRapporto gea_rapporto,
                       RealmList<GeaItemRapporto> gea_items_rapporto,
                       RealmList<GeaImmagineRapporto> gea_immagini_rapporto)
@@ -35,6 +37,7 @@ public class ReportItem extends RealmObject
         this.company_id = company_id;
         this.tech_id = tech_id;
         this.id_sopralluogo = id_sopralluogo;
+        this.id_rapporto_sopralluogo = id_rapporto_sopralluogo;
         Calendar calendarNow = Calendar.getInstance(Locale.ITALY);
         lastChangeUnixTime = calendarNow.getTimeInMillis();
         this.gea_sopralluoghi = gea_sopralluoghi;
@@ -99,14 +102,9 @@ public class ReportItem extends RealmObject
         return reportStates;
     }
 
-    public void setReportStates(ReportStates reportStates)
+    public void setReportStates(ReportItem reportItem)
     {
         this.reportStates = reportStates;
-    }
-
-    public GeaSopralluogo getGea_sopralluoghi()
-    {
-        return gea_sopralluoghi;
     }
 
     public int getId_sopralluogo()
@@ -117,5 +115,10 @@ public class ReportItem extends RealmObject
     public int getTech_id()
     {
         return tech_id;
+    }
+
+    public int getId_rapporto_sopralluogo()
+    {
+        return id_rapporto_sopralluogo;
     }
 }

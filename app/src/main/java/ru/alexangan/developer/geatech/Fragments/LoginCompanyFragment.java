@@ -22,6 +22,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 
+import io.realm.Realm;
 import io.realm.RealmResults;
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -33,7 +34,7 @@ import ru.alexangan.developer.geatech.R;
 
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.company_id;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.mSettings;
-import static ru.alexangan.developer.geatech.Models.GlobalConstants.realm;
+
 
 public class LoginCompanyFragment extends Fragment implements View.OnClickListener, Callback
 {
@@ -50,6 +51,7 @@ public class LoginCompanyFragment extends Fragment implements View.OnClickListen
     private ProgressDialog downloadingDialog;
     LinearLayout llLogin, llPassword;
     boolean initialized;
+    private Realm realm;
 
     public LoginCompanyFragment()
     {
@@ -62,6 +64,7 @@ public class LoginCompanyFragment extends Fragment implements View.OnClickListen
         super.onCreate(savedInstanceState);
 
         activity = getActivity();
+        realm = Realm.getDefaultInstance();
         networkUtils = new NetworkUtils();
 
         downloadingDialog = new ProgressDialog(getActivity());

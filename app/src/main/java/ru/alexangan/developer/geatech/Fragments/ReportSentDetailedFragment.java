@@ -18,6 +18,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.realm.Realm;
 import io.realm.RealmResults;
 import ru.alexangan.developer.geatech.Adapters.GridViewAdapter;
 import ru.alexangan.developer.geatech.Models.GeaItemModelliRapporto;
@@ -31,7 +32,7 @@ import ru.alexangan.developer.geatech.Utils.ImageUtils;
 import ru.alexangan.developer.geatech.Utils.ViewUtils;
 
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.company_id;
-import static ru.alexangan.developer.geatech.Models.GlobalConstants.realm;
+
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.selectedTech;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.visitItems;
 
@@ -49,6 +50,7 @@ public class ReportSentDetailedFragment extends Fragment
     private String photosFolderName;
     ArrayList<Bitmap> imageThumbnails;
     ArrayList<File> pathItems;
+    private Realm realm;
 
     @Override
     public void onCreate(Bundle savedInstanceState)
@@ -57,10 +59,11 @@ public class ReportSentDetailedFragment extends Fragment
 
         if (getArguments() != null)
         {
-            sel_index = getArguments().getInt("selectedIndex");
+            sel_index = getArguments().getInt("selectedVisitId");
         }
 
         activity = getActivity();
+        realm = Realm.getDefaultInstance();
         reportItems = new ArrayList<>();
 
         loadingImagesDialog = new ProgressDialog(getActivity());
@@ -86,10 +89,11 @@ public class ReportSentDetailedFragment extends Fragment
         VisitItem visitItem = visitItems.get(sel_index);
         GeaSopralluogo geaSopralluogo = visitItem.getGeaSopralluogo();
         int idSopralluogo = geaSopralluogo.getId_sopralluogo();
+        int id_rapporto_sopralluogo = visitItem.getGeaRapporto().getId_rapporto_sopralluogo();
 
         realm.beginTransaction();
         ReportItem reportItem = realm.where(ReportItem.class).equalTo("company_id", company_id).equalTo("tech_id", selectedTech.getId())
-                .equalTo("id_sopralluogo", idSopralluogo).findFirst();
+                .equalTo("id_sopralluogo", idSopralluogo).equalTo("id_rapporto_sopralluogo", id_rapporto_sopralluogo).findFirst();
         realm.commitTransaction();
 
         if (reportItem != null)
@@ -97,10 +101,8 @@ public class ReportSentDetailedFragment extends Fragment
             photosFolderName = "photos" + idSopralluogo;
 
             String product_type = visitItem.getProductData().getProductType();
-            int id_rapporto_sopralluogo = reportItem.getGea_rapporto().getId_rapporto_sopralluogo();
 
-            List<GeaItemRapporto> geaItemsRapporto = realm.where(GeaItemRapporto.class).equalTo("company_id", company_id)
-                    .equalTo("tech_id", selectedTech.getId()).equalTo("sel_index", id_rapporto_sopralluogo).findAll();
+            List<GeaItemRapporto> geaItemsRapporto = reportItem.getGea_items_rapporto();
 
             if (geaItemsRapporto.size() != 0)
             {

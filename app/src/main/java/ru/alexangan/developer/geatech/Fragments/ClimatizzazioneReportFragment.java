@@ -12,6 +12,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
 
+import io.realm.Realm;
 import ru.alexangan.developer.geatech.Models.GeaModelloRapporto;
 import ru.alexangan.developer.geatech.Models.GeaSopralluogo;
 import ru.alexangan.developer.geatech.Models.ProductData;
@@ -23,13 +24,13 @@ import ru.alexangan.developer.geatech.Utils.DatabaseUtils;
 import ru.alexangan.developer.geatech.Utils.ViewUtils;
 
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.company_id;
-import static ru.alexangan.developer.geatech.Models.GlobalConstants.realm;
+
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.selectedTech;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.visitItems;
 
 public class ClimatizzazioneReportFragment extends Fragment
 {
-    private int selectedIndex;
+    private int selectedVisitId;
     int id_sopralluogo;
     int id_rapporto_sopralluogo;
     ReportItem reportItem;
@@ -38,6 +39,7 @@ public class ClimatizzazioneReportFragment extends Fragment
     ViewUtils viewUtils;
 
     GeaModelloRapporto geaModello;
+    private Realm realm;
 
     public ClimatizzazioneReportFragment()
     {
@@ -47,15 +49,16 @@ public class ClimatizzazioneReportFragment extends Fragment
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
+        realm = Realm.getDefaultInstance();
 
         context = getActivity();
 
         if (getArguments() != null)
         {
-            selectedIndex = getArguments().getInt("selectedIndex");
+            selectedVisitId = getArguments().getInt("selectedVisitId");
         }
 
-        VisitItem visitItem = visitItems.get(selectedIndex);
+        VisitItem visitItem = visitItems.get(selectedVisitId);
         GeaSopralluogo geaSopralluogo = visitItem.getGeaSopralluogo();
         ProductData productData = visitItem.getProductData();
         id_sopralluogo = geaSopralluogo.getId_sopralluogo();
@@ -86,7 +89,7 @@ public class ClimatizzazioneReportFragment extends Fragment
     {
         rootView = inflater.inflate(R.layout.climatizzazione_report, container, false);
 
-        viewUtils = new ViewUtils(rootView, id_rapporto_sopralluogo, selectedIndex);
+        viewUtils = new ViewUtils(rootView, id_rapporto_sopralluogo, selectedVisitId);
 
         TextView tvReportTitle = (TextView) rootView.findViewById(R.id.tvReportTitle);
         tvReportTitle.setText(geaModello.getNome_modello());
@@ -139,7 +142,7 @@ public class ClimatizzazioneReportFragment extends Fragment
             
             // Completion state
 
-            int completionState = DatabaseUtils.getReportInitializationState(id_rapporto_sopralluogo);
+            int completionState = DatabaseUtils.getReportInitializationState(id_sopralluogo, id_rapporto_sopralluogo);
 
             if (completionState == ReportStates.REPORT_COMPLETED)
             {
@@ -186,7 +189,7 @@ public class ClimatizzazioneReportFragment extends Fragment
 
             if(reportItem !=null && reportItem.getReportStates().hasTriedToSendReport())
             {
-                viewUtils.markSectionsWithNotFilledItems(id_rapporto_sopralluogo);
+                viewUtils.markSectionsWithNotFilledItems(id_sopralluogo, id_rapporto_sopralluogo);
             }
         }
     }

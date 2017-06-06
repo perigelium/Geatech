@@ -33,6 +33,7 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.realm.Realm;
 import io.realm.RealmResults;
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -53,7 +54,7 @@ import static ru.alexangan.developer.geatech.Models.GlobalConstants.GET_VISITS_U
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.company_id;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.inVisitItems;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.mSettings;
-import static ru.alexangan.developer.geatech.Models.GlobalConstants.realm;
+
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.tokenStr;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.visitItems;
 
@@ -81,6 +82,7 @@ public class LoginTechSelectionFragment extends Fragment implements View.OnClick
     ArrayList<String> saTecnicianList;
     int geaItemModelliSize;
     private ProgressDialog downloadingDialog;
+    private Realm realm;
 
     public LoginTechSelectionFragment()
     {
@@ -109,6 +111,7 @@ public class LoginTechSelectionFragment extends Fragment implements View.OnClick
         networkUtils = new NetworkUtils();
         saTecnicianList = new ArrayList<>();
         activity = getActivity();
+        realm = Realm.getDefaultInstance();
 
         downloadingDialog = new ProgressDialog(getActivity());
         downloadingDialog.setTitle("");

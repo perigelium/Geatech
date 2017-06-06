@@ -30,6 +30,7 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
+import io.realm.Realm;
 import io.realm.RealmList;
 import io.realm.RealmResults;
 import okhttp3.Call;
@@ -49,7 +50,7 @@ import ru.alexangan.developer.geatech.R;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.SEND_DATA_URL_SUFFIX;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.company_id;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.listVisitsIsObsolete;
-import static ru.alexangan.developer.geatech.Models.GlobalConstants.realm;
+
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.selectedTech;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.tokenStr;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.visitItems;
@@ -60,7 +61,7 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
     private Communicator mCommunicator;
 
     private Button btnSendReportNow;
-    private int selectedIndex;
+    private int selectedVisitId;
     ReportItem reportItem;
 
     String reportSendResponse;
@@ -74,6 +75,7 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
     AlertDialog alert;
     int id_rapporto_sopralluogo;
     private boolean reportComplete;
+    private Realm realm;
 
     public SendReportFragment()
     {
@@ -93,10 +95,11 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
         super.onCreate(savedInstanceState);
 
         activity = getActivity();
+        realm = Realm.getDefaultInstance();
 
         if (getArguments() != null)
         {
-            selectedIndex = getArguments().getInt("selectedIndex");
+            selectedVisitId = getArguments().getInt("selectedVisitId");
         }
 
         callSendImagesList = new ArrayList<>();
@@ -123,42 +126,43 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
         ImageView ivReportFilledCheckmark = (ImageView) rootView.findViewById(R.id.ivReportFilledCheckmark);
         ImageView ivPhotosAddedCheckmark = (ImageView) rootView.findViewById(R.id.ivPhotosAddedCheckmark);
 
-        VisitItem visitItem = visitItems.get(selectedIndex);
+        VisitItem visitItem = visitItems.get(selectedVisitId);
         GeaSopralluogo geaSopralluogo = visitItem.getGeaSopralluogo();
         //ProductData productData = visitItem.getProductData();
         //String productType = productData.getProductType();
         //int idProductType = productData.getIdProductType();
         int idSopralluogo = geaSopralluogo.getId_sopralluogo();
+        id_rapporto_sopralluogo = visitItem.getGeaRapporto().getId_rapporto_sopralluogo();
         //idRapportoSopralluogo = id_sopralluogo;
 
         //Class modelClass = ModelsMapping.assignClassModel(productType);
 
         realm.beginTransaction();
         reportItem = realm.where(ReportItem.class).equalTo("company_id", company_id).equalTo("tech_id", selectedTech.getId())
-                .equalTo("id_sopralluogo", idSopralluogo).findFirst();
+                .equalTo("id_sopralluogo", idSopralluogo).equalTo("id_rapporto_sopralluogo", id_rapporto_sopralluogo).findFirst();
         realm.commitTransaction();
 
         if (reportItem != null)
         {
             int generalInfoCompletionState = reportItem.getReportStates().getGeneralInfoCompletionState();
-            int reportCompletionState = reportItem.getGea_rapporto().getCompletion_percent();
+            int reportCompletionState = reportItem.getReportStates().getReportCompletionState();
             int photosAddedNumber = reportItem.getReportStates().getPhotosAddedNumber();
 
             reportComplete = generalInfoCompletionState == ReportStates.GENERAL_INFO_DATETIME_AND_COORDS_SET
                     && reportCompletionState == ReportStates.REPORT_COMPLETED
                     && photosAddedNumber >= ReportStates.PHOTOS_MIN_ADDED;
 
-            if(generalInfoCompletionState == ReportStates.GENERAL_INFO_DATETIME_AND_COORDS_SET)
+            if (generalInfoCompletionState == ReportStates.GENERAL_INFO_DATETIME_AND_COORDS_SET)
             {
                 ivCoordsSetCheckmark.setImageResource(R.drawable.green_filter_checkmark);
             }
 
-            if(reportCompletionState == ReportStates.REPORT_COMPLETED)
+            if (reportCompletionState == ReportStates.REPORT_COMPLETED)
             {
                 ivReportFilledCheckmark.setImageResource(R.drawable.green_filter_checkmark);
             }
 
-            if(photosAddedNumber >= ReportStates.PHOTOS_MIN_ADDED)
+            if (photosAddedNumber >= ReportStates.PHOTOS_MIN_ADDED)
             {
                 ivPhotosAddedCheckmark.setImageResource(R.drawable.green_filter_checkmark);
             }
@@ -173,8 +177,10 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
                 btnSendReportNow.setEnabled(false);
             }*/
 
+            String strPhotosAddedNumber = photosAddedNumber == 0 ? reportItem.getReportStates().getPhotoAddedNumberString(photosAddedNumber).Value()
+                    : photosAddedNumber + reportItem.getReportStates().getPhotoAddedNumberString(photosAddedNumber).Value();
             TextView tvPhotosPresent = (TextView) rootView.findViewById(R.id.tvPhotosQuant);
-            tvPhotosPresent.setText(reportItem.getReportStates().getPhotoAddedNumberString(photosAddedNumber).Value());
+            tvPhotosPresent.setText(strPhotosAddedNumber);
 
             TextView tvGeneralInfo = (TextView) rootView.findViewById(R.id.tvGeneralInfo);
             tvGeneralInfo.setText(reportItem.getReportStates().getGeneralInfoCompletionStateString().Value());
@@ -183,12 +189,11 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
             tvTecnicalReportState.setText(reportItem.getReportStates().getReportCompletionStateString().Value());
         }
 
-        if(reportComplete)
+        if (reportComplete)
         {
             btnSendReportNow.setBackgroundResource(R.drawable.button_green_oval);
             btnSendReportNow.setTextColor(Color.parseColor("#ffffffff"));
-        }
-        else
+        } else
         {
             btnSendReportNow.setBackgroundResource(R.drawable.button_grey_border);
             btnSendReportNow.setTextColor(Color.parseColor("#ff666666"));
@@ -202,7 +207,7 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
     {
         if (view.getId() == R.id.btnSendReport)
         {
-            if(reportComplete)
+            if (reportComplete)
             {
                 if (!NetworkUtils.isNetworkAvailable(activity))
                 {
@@ -212,11 +217,10 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
                 disableInputAndShowProgressDialog();
 
                 objectsSentSuccessfully = 0;
-                sendReportItem(selectedIndex);
-            }
-            else
+                sendReportItem(selectedVisitId);
+            } else
             {
-                if(reportItem!=null)
+                if (reportItem != null)
                 {
                     realm.beginTransaction();
                     reportItem.getReportStates().setTriedToSendReport(true);
@@ -227,13 +231,13 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
         }
     }
 
-    private void sendReportItem(int selectedIndex)
+    private void sendReportItem(int selectedVisitId)
     {
         realm.beginTransaction();
 
         Gson gson = new Gson();
 
-        VisitItem visitItem = visitItems.get(selectedIndex);
+        VisitItem visitItem = visitItems.get(selectedVisitId);
         GeaSopralluogo geaSopralluogo = visitItem.getGeaSopralluogo();
         int idSopralluogo = geaSopralluogo.getId_sopralluogo();
 
@@ -241,7 +245,7 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
         reportItem.setGeaSopralluogo(geaSopralluogoUnmanaged);*/
 
         reportItem = realm.where(ReportItem.class).equalTo("company_id", company_id).equalTo("tech_id", selectedTech.getId())
-                .equalTo("id_sopralluogo", idSopralluogo).findFirst();
+                .equalTo("id_sopralluogo", idSopralluogo).equalTo("id_rapporto_sopralluogo", id_rapporto_sopralluogo).findFirst();
 
         realm.commitTransaction();
 
@@ -258,10 +262,10 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
         String strDateTime = sdf.format(calendarNow.getTime());*/
 
-        //sentVisitItems.add(visitItems.get(selectedIndex));
+        //sentVisitItems.add(visitItems.get(selectedVisitId));
         //reportItem.setData_ora_invio_rapporto(strDateTime);
 
-/*        ReportStates reportStatesUnmanaged = realm.copyFromRealm(reportItem);
+/*        ReportItem reportItemUnmanaged = realm.copyFromRealm(reportItem);
         String strReportStatesUnmanaged = gson.toJson(reportStatesUnmanaged);
         GeaRapporto gea_rapporto = gson.fromJson(strReportStatesUnmanaged, GeaRapporto.class);
 
@@ -524,11 +528,11 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
                                 if (!strSuccess.equals("0"))
                                 {
                                     objectsSentSuccessfully++;
-                                    requestServerDialog.setProgress(objectsSentSuccessfully*100/imagesArray.size());
+                                    requestServerDialog.setProgress(objectsSentSuccessfully * 100 / imagesArray.size());
 
                                     //showToastMessage("immagine " + (i + 1) + " di " + callSendImagesList.size() + " inviato");
 
-                                    if(i == callSendImagesList.size() - 1)
+                                    if (i == callSendImagesList.size() - 1)
                                     {
                                         activity.runOnUiThread(new Runnable()
                                         {

@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Locale;
 
+import io.realm.Realm;
 import ru.alexangan.developer.geatech.Models.ClientData;
 import ru.alexangan.developer.geatech.Models.GeaSopralluogo;
 import ru.alexangan.developer.geatech.Models.ItalianMonths;
@@ -22,7 +23,7 @@ import ru.alexangan.developer.geatech.Models.TechnicianItem;
 import ru.alexangan.developer.geatech.Models.VisitItem;
 import ru.alexangan.developer.geatech.R;
 
-import static ru.alexangan.developer.geatech.Models.GlobalConstants.realm;
+
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.selectedTech;
 
 /**
@@ -30,6 +31,7 @@ import static ru.alexangan.developer.geatech.Models.GlobalConstants.selectedTech
 
 public class MyListVisitsAdapter extends BaseAdapter
 {
+    private final Realm realm;
     private Context mContext;
     private ArrayList<VisitItem> visitItems;
     private int layout_id;
@@ -41,6 +43,7 @@ public class MyListVisitsAdapter extends BaseAdapter
         mContext = context;
         this.visitItems = visitItems;
         this.layout_id = layout_id;
+        realm = Realm.getDefaultInstance();
     }
 
     @Override
@@ -146,8 +149,8 @@ public class MyListVisitsAdapter extends BaseAdapter
         tvTechName.setText(techName);
 
 /*        realm.beginTransaction();
-        ReportStates reportStates = realm.where(ReportStates.class).equalTo("company_id", company_id).equalTo("tech_id", selectedTech.getId())
-                .equalTo("id_sopralluogo", idSopralluogo).findFirst(); //.greaterThan("id_rapporto_sopralluogo", -1)
+        ReportItem reportItem = realm.where(ReportItem.class).equalTo("company_id", company_id).equalTo("tech_id", selectedTech.getId())
+                .equalTo("id_sopralluogo", idSopralluogo)                .equalTo("id_rapporto_sopralluogo", id_rapporto_sopralluogo).findFirst() //.greaterThan("id_rapporto_sopralluogo", -1)
         realm.commitTransaction();
 
         if (reportStates != null)

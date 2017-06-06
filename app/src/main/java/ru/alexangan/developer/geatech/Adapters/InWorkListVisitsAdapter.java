@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Locale;
 
+import io.realm.Realm;
 import ru.alexangan.developer.geatech.Models.ClientData;
 import ru.alexangan.developer.geatech.Models.GeaSopralluogo;
 import ru.alexangan.developer.geatech.Models.GlobalConstants;
@@ -26,7 +27,7 @@ import ru.alexangan.developer.geatech.Models.VisitItem;
 import ru.alexangan.developer.geatech.R;
 
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.company_id;
-import static ru.alexangan.developer.geatech.Models.GlobalConstants.realm;
+
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.selectedTech;
 
 /**
@@ -35,6 +36,7 @@ import static ru.alexangan.developer.geatech.Models.GlobalConstants.selectedTech
 
 public class InWorkListVisitsAdapter extends BaseAdapter
 {
+    private final Realm realm;
     private Context mContext;
     private ArrayList<VisitItem> visitItems;
     private int layout_id;
@@ -46,6 +48,7 @@ public class InWorkListVisitsAdapter extends BaseAdapter
         mContext = context;
         this.visitItems = visitItems;
         this.layout_id = layout_id;
+        realm = Realm.getDefaultInstance();
     }
 
     @Override

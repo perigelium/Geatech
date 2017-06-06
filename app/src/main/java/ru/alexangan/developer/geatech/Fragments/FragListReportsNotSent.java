@@ -20,8 +20,12 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import io.realm.Realm;
-import ru.alexangan.developer.geatech.Adapters.InWorkListVisitsAdapter;
+import io.realm.RealmList;
+import ru.alexangan.developer.geatech.Adapters.MyListVisitsAdapter;
 import ru.alexangan.developer.geatech.Interfaces.Communicator;
+import ru.alexangan.developer.geatech.Models.GeaImmagineRapportoSopralluogo;
+import ru.alexangan.developer.geatech.Models.GeaItemRapportoSopralluogo;
+import ru.alexangan.developer.geatech.Models.GeaRapporto;
 import ru.alexangan.developer.geatech.Models.GeaSopralluogo;
 import ru.alexangan.developer.geatech.Models.ReportItem;
 import ru.alexangan.developer.geatech.Models.ReportStates;
@@ -35,16 +39,18 @@ import static ru.alexangan.developer.geatech.Models.GlobalConstants.company_id;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.selectedTech;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.visitItems;
 
-public class FragListInWorkVisits extends ListFragment
+public class FragListReportsNotSent extends ListFragment
 {
     private Communicator mCommunicator;
     SwipeDetector swipeDetector;
     boolean timeNotSetItemsOnly;
-    ArrayList<VisitItem> visitItemsFiltered;
+    ArrayList<VisitItem> visitItemsFilteredNotSent, visitItemsFilteredSent;
+    MyListVisitsAdapter myListAdapterNotSent, myListAdapterSent;
     ListView lv;
     Activity activity;
     TextView tvListVisitsTodayDate;
     private Realm realm;
+    private boolean reportCompleteAndSent;
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState)
@@ -68,13 +74,14 @@ public class FragListInWorkVisits extends ListFragment
         {
             timeNotSetItemsOnly = getArguments().getBoolean("ownVisitsOnly", false);
         }
+
         realm = Realm.getDefaultInstance();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
-        View rootView = inflater.inflate(R.layout.list_visits_fragment, container, false);
+        View rootView = inflater.inflate(R.layout.list_reports_not_sent, container, false);
 
         //tvListVisitsTodayDate = (TextView) rootView.findViewById(R.id.tvListVisitsTodayDate);
 
@@ -86,10 +93,11 @@ public class FragListInWorkVisits extends ListFragment
     {
         super.onViewCreated(view, savedInstanceState);
 
+        visitItemsFilteredNotSent = new ArrayList<>();
+        visitItemsFilteredSent = new ArrayList<>();
 
-        visitItemsFiltered = new ArrayList<>();
-
-        TreeMap<Long, VisitItem> unsortedVisits = new TreeMap<>();
+        TreeMap<Long, VisitItem> unsortedVisitsNotSent = new TreeMap<>();
+        TreeMap<Long, VisitItem> unsortedVisitsSent = new TreeMap<>();
         long n = 0;
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ITALIAN);
         Calendar calendarNow = Calendar.getInstance(Locale.ITALY);
@@ -103,34 +111,41 @@ public class FragListInWorkVisits extends ListFragment
         calendarNow.set(Calendar.SECOND, 59);
         long lastMilliSecondsOfToday = calendarNow.getTimeInMillis();
 
-        //for (VisitItem visitItem : visitItems)
-        for (int i = 0; i < visitItems.size(); i++)
+        for (VisitItem visitItem : visitItems)
+        //for (int i = 0; i < visitItems.size(); i++)
         {
-            //String data_ora_sopralluogo = visitItem.getGeaSopralluogo().getData_ora_sopralluogo();
-            VisitItem visitItem = visitItems.get(i);
             GeaSopralluogo geaSopralluogo = visitItem.getGeaSopralluogo();
-            int id_sopralluogo = geaSopralluogo.getId_sopralluogo();
+            int idSopralluogo = geaSopralluogo.getId_sopralluogo();
+            int id_rapporto_sopralluogo = visitItem.getGeaRapporto().getId_rapporto_sopralluogo();
+            RealmList<GeaItemRapportoSopralluogo> rl_ItemsRapportoSopralluogo = visitItem.getGea_items_rapporto_sopralluogo();
+            RealmList<GeaImmagineRapportoSopralluogo> rl_ImmaginiRapportoSopralluogo = visitItem.getGea_immagini_rapporto_sopralluogo();
 
             realm.beginTransaction();
             ReportItem reportItem = realm.where(ReportItem.class).equalTo("company_id", company_id).equalTo("tech_id", selectedTech.getId())
-                    .equalTo("id_sopralluogo", id_sopralluogo).findFirst();
+                    .equalTo("id_sopralluogo", idSopralluogo)
+                    .equalTo("id_rapporto_sopralluogo", id_rapporto_sopralluogo).findFirst();
             realm.commitTransaction();
 
-            boolean reportStartedNotCompleted = false;
+            boolean reportCompleteNotSent = false;
 
             if (reportItem != null)
             {
-                String data_ora_sopralluogo = reportItem.getGeaSopralluogo().getData_ora_sopralluogo();
-
                 int generalInfoCompletionState = reportItem.getReportStates().getGeneralInfoCompletionState();
                 int reportCompletionState = reportItem.getReportStates().getReportCompletionState();
                 int photosAddedNumber = reportItem.getReportStates().getPhotosAddedNumber();
 
-                reportStartedNotCompleted = generalInfoCompletionState == ReportStates.GENERAL_INFO_DATETIME_AND_COORDS_SET
-                        && ((reportCompletionState >= ReportStates.REPORT_INITIATED && reportCompletionState < ReportStates.REPORT_COMPLETED
-                        || (photosAddedNumber > 0 && photosAddedNumber < ReportStates.PHOTOS_MIN_ADDED)));
+                reportCompleteNotSent = generalInfoCompletionState == ReportStates.GENERAL_INFO_DATETIME_AND_COORDS_SET
+                        && reportCompletionState == ReportStates.REPORT_COMPLETED
+                        && photosAddedNumber >= ReportStates.PHOTOS_MIN_ADDED
+                        && reportItem.getGea_rapporto().getData_ora_invio_rapporto() == null;
 
-                if (data_ora_sopralluogo != null)
+                GeaRapporto gea_rapporto_sopralluogo = visitItem.getGeaRapporto();
+                String techName = gea_rapporto_sopralluogo.getNome_tecnico();
+                String data_ora_sopralluogo = reportItem.getGeaSopralluogo().getData_ora_sopralluogo();
+/*                int id_tecnico = visitItem.getGeaSopralluogo().getId_tecnico();
+                boolean ownVisit = selectedTech.getId() == id_tecnico;*/
+
+                if (reportCompleteNotSent)
                 {
                     try
                     {
@@ -138,14 +153,43 @@ public class FragListInWorkVisits extends ListFragment
                         long time = date.getTime();
                         //Log.d("DEBUG", String.valueOf(time));
 
-                        while (unsortedVisits.get(time) != null) // item with the same time already exists
+                        while (unsortedVisitsNotSent.get(time) != null) // item with the same time already exists
                         {
                             time++;
                         }
 
-                        if (reportStartedNotCompleted)
+                        if (true)
                         {
-                            unsortedVisits.put(time, visitItem);
+                            unsortedVisitsNotSent.put(time, visitItem);
+                        }
+
+                    } catch (ParseException e)
+                    {
+/*                    while(unsortedVisits.get(n) != null)
+                    {
+                        n++;
+                    }
+                    unsortedVisits.put(n++, visitItem);*/
+                        e.printStackTrace();
+                    }
+                }
+
+                if (reportCompleteAndSent)
+                {
+                    try
+                    {
+                        Date date = sdf.parse(data_ora_sopralluogo);
+                        long time = date.getTime();
+                        //Log.d("DEBUG", String.valueOf(time));
+
+                        while (unsortedVisitsSent.get(time) != null) // item with the same time already exists
+                        {
+                            time++;
+                        }
+
+                        if (true)
+                        {
+                            unsortedVisitsSent.put(time, visitItem);
                         }
 
                     } catch (ParseException e)
@@ -161,16 +205,16 @@ public class FragListInWorkVisits extends ListFragment
             }
         }
 
-        for (Map.Entry entry : unsortedVisits.entrySet())
+        for (Map.Entry entry : unsortedVisitsNotSent.entrySet())
         {
             VisitItem visitItem = (VisitItem) entry.getValue();
             {
-                visitItemsFiltered.add(visitItem);
+                visitItemsFilteredNotSent.add(visitItem);
             }
         }
 
-        InWorkListVisitsAdapter inWorkListVisitsAdapter = new InWorkListVisitsAdapter(getActivity(), R.layout.in_work_list_visits_fragment_row, visitItemsFiltered);
-        setListAdapter(inWorkListVisitsAdapter);
+        myListAdapterNotSent = new MyListVisitsAdapter(getActivity(), R.layout.list_visits_fragment_row, visitItemsFilteredNotSent);
+        setListAdapter(myListAdapterNotSent);
 
         lv = getListView();
 
@@ -182,11 +226,11 @@ public class FragListInWorkVisits extends ListFragment
         {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id)
             {
-                int idSopralluogo = visitItemsFiltered.get(position).getGeaSopralluogo().getId_sopralluogo();
-                int id_rapporto_sopralluogo = visitItemsFiltered.get(position).getGeaRapporto().getId_rapporto_sopralluogo();
+                int idSopralluogo = visitItemsFilteredNotSent.get(position).getGeaSopralluogo().getId_sopralluogo();
 
-                int idVisit = visitItemsFiltered.get(position).getId();
-                int id_tecnico = visitItemsFiltered.get(position).getGeaSopralluogo().getId_tecnico();
+                int idVisit = visitItemsFilteredNotSent.get(position).getId();
+                int id_tecnico = visitItemsFilteredNotSent.get(position).getGeaSopralluogo().getId_tecnico();
+                int id_rapporto_sopralluogo = visitItemsFilteredNotSent.get(position).getGeaRapporto().getId_rapporto_sopralluogo();
 
                 realm.beginTransaction();
                 ReportItem reportItem = realm.where(ReportItem.class)

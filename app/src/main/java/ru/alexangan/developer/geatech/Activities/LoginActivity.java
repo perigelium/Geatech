@@ -14,11 +14,11 @@ import ru.alexangan.developer.geatech.Fragments.LoginCompanyFragment;
 import ru.alexangan.developer.geatech.Fragments.LoginPasswordRecoverFragment;
 import ru.alexangan.developer.geatech.Fragments.LoginTechSelectionFragment;
 import ru.alexangan.developer.geatech.Interfaces.LoginCommunicator;
+import ru.alexangan.developer.geatech.Models.GlobalConstants;
 import ru.alexangan.developer.geatech.R;
 
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.APP_PREFERENCES;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.mSettings;
-import static ru.alexangan.developer.geatech.Models.GlobalConstants.realm;
 
 
 public class LoginActivity extends Activity implements LoginCommunicator
@@ -28,6 +28,7 @@ public class LoginActivity extends Activity implements LoginCommunicator
     LoginPasswordRecoverFragment loginPasswordRecoverFragment;
     LoginCompanyFragment loginCompanyFragment;
     LoginTechSelectionFragment loginTechSelectionFragment;
+    Realm realm;
 
     @Override
     protected void onDestroy()
@@ -76,29 +77,7 @@ public class LoginActivity extends Activity implements LoginCommunicator
         mFragmentTransaction.add(R.id.loginFragContainer, loginCompanyFragment);
 
         mFragmentTransaction.commit();
-
-        Realm.init(getApplicationContext());
-        RealmConfiguration realmConfiguration = new RealmConfiguration
-                .Builder()
-                .deleteRealmIfMigrationNeeded()
-                .build();
-
-        try
-        {
-            realm = Realm.getInstance(realmConfiguration);
-        } catch (RealmMigrationNeededException e)
-        {
-            try
-            {
-                Realm.deleteRealm(realmConfiguration);
-                //Realm file has been deleted.
-                realm = Realm.getInstance(realmConfiguration);
-            } catch (Exception ex)
-            {
-                throw ex;
-                //No Realm file to remove.
-            }
-        }
+        realm = Realm.getDefaultInstance();
     }
 
     @Override

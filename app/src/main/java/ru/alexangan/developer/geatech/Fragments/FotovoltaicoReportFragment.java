@@ -18,6 +18,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
 
+import io.realm.Realm;
 import ru.alexangan.developer.geatech.Models.GeaModelloRapporto;
 import ru.alexangan.developer.geatech.Models.GeaSopralluogo;
 import ru.alexangan.developer.geatech.Models.ProductData;
@@ -29,13 +30,13 @@ import ru.alexangan.developer.geatech.Utils.DatabaseUtils;
 import ru.alexangan.developer.geatech.Utils.ViewUtils;
 
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.company_id;
-import static ru.alexangan.developer.geatech.Models.GlobalConstants.realm;
+
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.selectedTech;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.visitItems;
 
 public class FotovoltaicoReportFragment extends Fragment
 {
-    private int selectedIndex;
+    private int selectedVisitId;
     int id_sopralluogo;
     int id_rapporto_sopralluogo;
     ReportItem reportItem;
@@ -44,6 +45,7 @@ public class FotovoltaicoReportFragment extends Fragment
     ViewUtils viewUtils;
 
     GeaModelloRapporto geaModello;
+    private Realm realm;
 
     public FotovoltaicoReportFragment()
     {
@@ -55,13 +57,14 @@ public class FotovoltaicoReportFragment extends Fragment
         super.onCreate(savedInstanceState);
 
         context = getActivity();
+        realm = Realm.getDefaultInstance();
 
         if (getArguments() != null)
         {
-            selectedIndex = getArguments().getInt("selectedIndex");
+            selectedVisitId = getArguments().getInt("selectedVisitId");
         }
 
-        VisitItem visitItem = visitItems.get(selectedIndex);
+        VisitItem visitItem = visitItems.get(selectedVisitId);
         GeaSopralluogo geaSopralluogo = visitItem.getGeaSopralluogo();
         ProductData productData = visitItem.getProductData();
         id_sopralluogo = geaSopralluogo.getId_sopralluogo();
@@ -92,7 +95,7 @@ public class FotovoltaicoReportFragment extends Fragment
     {
         rootView = inflater.inflate(R.layout.fotovoltaico_report, container, false);
 
-        viewUtils = new ViewUtils(rootView, id_rapporto_sopralluogo, selectedIndex);
+        viewUtils = new ViewUtils(rootView, id_rapporto_sopralluogo, selectedVisitId);
 
         TextView tvReportTitle = (TextView) rootView.findViewById(R.id.tvReportTitle);
         tvReportTitle.setText(geaModello.getNome_modello());
@@ -191,7 +194,7 @@ public class FotovoltaicoReportFragment extends Fragment
 
             // Completion state
 
-            int completionState = DatabaseUtils.getReportInitializationState(id_rapporto_sopralluogo);
+            int completionState = DatabaseUtils.getReportInitializationState(id_sopralluogo, id_rapporto_sopralluogo);
 
             if (completionState == ReportStates.REPORT_COMPLETED)
             {
@@ -207,7 +210,7 @@ public class FotovoltaicoReportFragment extends Fragment
             }
 
             realm.beginTransaction();
-reportItem.getGea_rapporto().setCompletion_percent(completionState);
+            reportItem.getReportStates().setReportCompletionState(completionState);
             realm.commitTransaction();
         }
     }
@@ -335,7 +338,7 @@ reportItem.getGea_rapporto().setCompletion_percent(completionState);
 
             if(reportItem !=null && reportItem.getReportStates().hasTriedToSendReport())
             {
-                viewUtils.markSectionsWithNotFilledItems(id_rapporto_sopralluogo);
+                viewUtils.markSectionsWithNotFilledItems(id_sopralluogo, id_rapporto_sopralluogo);
             }
         }
     }

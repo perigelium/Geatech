@@ -40,7 +40,9 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.ConcurrentModificationException;
 import java.util.Date;
+import java.util.List;
 
+import io.realm.Realm;
 import io.realm.RealmResults;
 import ru.alexangan.developer.geatech.Adapters.GridViewAdapter;
 import ru.alexangan.developer.geatech.Interfaces.Communicator;
@@ -55,7 +57,7 @@ import static android.app.Activity.RESULT_OK;
 import static android.os.Environment.DIRECTORY_PICTURES;
 import static android.support.v4.content.PermissionChecker.checkSelfPermission;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.company_id;
-import static ru.alexangan.developer.geatech.Models.GlobalConstants.realm;
+
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.selectedTech;
 
 public class PhotoGalleryGridFragment extends Fragment
@@ -83,6 +85,7 @@ public class PhotoGalleryGridFragment extends Fragment
     AlertDialog alert;
     private ImageView ivTrashCan;
     private Communicator mCommunicator;
+    private Realm realm;
 
 /*    private Handler handler;
     private Runnable runnable;*/
@@ -113,6 +116,7 @@ public class PhotoGalleryGridFragment extends Fragment
         super.onCreate(savedInstanceState);
 
         activity = getActivity();
+        realm = Realm.getDefaultInstance();
         int id_sopralluogo;
         mCommunicator = (Communicator) getActivity();
 
@@ -451,9 +455,7 @@ public class PhotoGalleryGridFragment extends Fragment
 
         int id_rapporto_sopralluogo = reportItem.getGea_rapporto().getId_rapporto_sopralluogo();
 
-        RealmResults<GeaImmagineRapporto> reportImages = realm.where(GeaImmagineRapporto.class).equalTo("company_id", company_id)
-                .equalTo("tech_id", selectedTech.getId()).equalTo("id_rapporto_sopralluogo", id_rapporto_sopralluogo).findAll();
-        reportImages.deleteAllFromRealm();
+        reportItem.getGea_immagini_rapporto().clear();
 
         alPathItems.clear();
         alPathItems.addAll(Arrays.asList(photosDir.listFiles()));
@@ -462,7 +464,7 @@ public class PhotoGalleryGridFragment extends Fragment
 
         realm.commitTransaction();
 
-        int reportImagesSize = reportImages.size();
+        int reportImagesSize = 0;
 
         try
         {
@@ -474,7 +476,7 @@ public class PhotoGalleryGridFragment extends Fragment
 
                 GeaImmagineRapporto gea_immagine = new GeaImmagineRapporto(
                         company_id, selectedTech.getId(), id_rapporto_sopralluogo, reportImagesSize++, imageFile.getAbsolutePath(), fileName);
-                realm.copyToRealm(gea_immagine);
+                reportItem.getGea_immagini_rapporto().add(gea_immagine);
 
                 realm.commitTransaction();
             }

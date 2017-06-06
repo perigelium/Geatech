@@ -22,7 +22,7 @@ import ru.alexangan.developer.geatech.Models.GeaImmagineRapporto;
 import ru.alexangan.developer.geatech.Utils.ImageUtils;
 
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.LOGIN_URL_SUFFIX;
-import static ru.alexangan.developer.geatech.Models.GlobalConstants.REST_URL;
+import static ru.alexangan.developer.geatech.Models.GlobalConstants.REST_SRV_URL;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.SEND_IMAGE_URL;
 
 /**
@@ -94,7 +94,7 @@ public class NetworkUtils
         RequestBody body = RequestBody.create(JSON, String.valueOf(jsonObject));
 
         Request request = new Request.Builder()
-                .url(REST_URL + LOGIN_URL_SUFFIX)
+                .url(REST_SRV_URL + LOGIN_URL_SUFFIX)
                 .post(body)
                 .build();
 
@@ -128,7 +128,7 @@ public class NetworkUtils
         RequestBody body = RequestBody.create(JSON, String.valueOf(jsonToken));
 
         Request request = new Request.Builder()
-                .url(REST_URL + urlSuffix)
+                .url(REST_SRV_URL + urlSuffix)
                 .post(body)
                 .build();
 
@@ -177,7 +177,7 @@ public class NetworkUtils
         RequestBody body = RequestBody.create(JSON, String.valueOf(jsonToken));
 
         Request request = new Request.Builder()
-                .url(REST_URL + urlSuffix)
+                .url(REST_SRV_URL + urlSuffix)
                 .post(body)
                 .build();
 
@@ -216,7 +216,7 @@ public class NetworkUtils
         RequestBody body = RequestBody.create(JSON, String.valueOf(jsonObject));
 
         Request request = new Request.Builder()
-                .url(REST_URL + urlSuffix)
+                .url(REST_SRV_URL + urlSuffix)
                 .post(body)
                 .build();
 
@@ -249,7 +249,7 @@ public class NetworkUtils
         RequestBody body = RequestBody.create(JSON, String.valueOf(jsonObject));
 
         Request request = new Request.Builder()
-                .url(REST_URL + urlSuffix)
+                .url(REST_SRV_URL + urlSuffix)
                 .post(body)
                 .build();
 
