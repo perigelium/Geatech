@@ -1,17 +1,21 @@
 package ru.alexangan.developer.geatech.Activities;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.Html;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EdgeEffect;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,6 +27,7 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.lang.reflect.Type;
 import java.util.List;
 
@@ -128,7 +133,6 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
     NetworkUtils networkUtils;
     private boolean firstStart;
     private int curSelBottomBtnId;
-    private Call callReports;
 
     @Override
     protected void onPause()
@@ -183,6 +187,17 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
 
         ScrollViewExt svInnerFragContainer = (ScrollViewExt) findViewById(R.id.svInnerFragContainer);
         svInnerFragContainer.setScrollViewListener(this);
+
+        setEdgeEffectL(svInnerFragContainer, Color.parseColor("#ffb2b2b2"));
+
+        svInnerFragContainer.setOnTouchListener(new View.OnTouchListener()
+        {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent)
+            {
+                return false;
+            }
+        });
 
         currentVisitId = -1;
         curSelBottomBtnId = 0;
@@ -244,8 +259,9 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
         requestServerDialog.setMessage(getString(R.string.DownloadingDataPleaseWait));
         requestServerDialog.setIndeterminate(true);
 
-        listVisitsIsObsolete = false;
-        listReportsIsObsolete = false;
+        GlobalConstants.listVisitsIsObsolete = false;
+        GlobalConstants.listReportsIsObsolete = false;
+        GlobalConstants.ownReportMode = true;
 
         handler = new Handler();
 
@@ -263,6 +279,8 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
     @Override
     public void onBackPressed()
     {
+        GlobalConstants.ownReportMode = true;
+
         if (curSelBottomBtnId != 0)
         {
             ctrlBtnsBottom.setCheckedBtnId(curSelBottomBtnId);
@@ -283,7 +301,7 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
     public void onCtrlBtnsBottomClicked(int btnId)
     {
         currentVisitId = -1;
-        mFragmentManager.popBackStack();
+        mFragmentManager.popBackStackImmediate();
 
         if (!notificationBarFragment.isAdded())
         {
@@ -334,13 +352,9 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
 
         if (btnId == R.id.btnCompletedReports)
         {
-            mFragmentManager.popBackStack();
-
-            //GlobalConstants.listReportsIsObsolete = true;
-
             if (GlobalConstants.listReportsIsObsolete)
             {
-                refreshReportsList();
+                refreshVisitsList();
             } else
             {
                 FragmentTransaction mFragmentTransaction = mFragmentManager.beginTransaction();
@@ -395,7 +409,7 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
 
         if (btnId == R.id.btnSopralluogoInfo)
         {
-            mFragmentManager.popBackStack();
+            mFragmentManager.popBackStackImmediate();
 
             if (!setDateTimeFragment.isAdded())
             {
@@ -407,7 +421,7 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
             }
         }
 
-        if (btnId == R.id.btnFillReport)
+        if (GlobalConstants.ownReportMode && btnId == R.id.btnFillReport)
         {
             VisitItem visitItem = visitItems.get(currentVisitId);
             ProductData productData = visitItem.getProductData();
@@ -429,7 +443,7 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
             }
         }
 
-        if (btnId == R.id.btnAddPhotos)
+        if (GlobalConstants.ownReportMode && btnId == R.id.btnAddPhotos)
         {
             mFragmentManager.popBackStack();
 
@@ -466,7 +480,7 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
             }
         }
 
-        if (btnId == R.id.btnSendReport)
+        if (GlobalConstants.ownReportMode && btnId == R.id.btnSendReport)
         {
             mFragmentManager.popBackStack();
 
@@ -478,6 +492,13 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
 
                 setVisitsListContent(sendReportFragment);
             }
+        }
+
+        if( ! GlobalConstants.ownReportMode)
+        {
+            ctrlBtnsSopralluogo.setCheckedBtnId(R.id.btnSopralluogoInfo);
+
+            showToastMessage(getString(R.string.YouCanEditYourOwnReportsOnly));
         }
     }
 
@@ -682,22 +703,10 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
     {
         if (call == callVisits)
         {
+            listVisitsIsObsolete = false;
+            listReportsIsObsolete = false;
+
             showToastMessage(getString(R.string.ListVisitsReceiveFailed));
-
-            runOnUiThread(new Runnable()
-            {
-                public void run()
-                {
-                    requestServerDialog.dismiss();
-                }
-            });
-
-            handler.removeCallbacks(runnable);
-        }
-
-        if (call == callReports)
-        {
-            showToastMessage(getString(R.string.ListReportsReceiveFailed));
 
             runOnUiThread(new Runnable()
             {
@@ -761,7 +770,17 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
                     visitItems = realm.where(VisitItem.class).findAll();
                     realm.commitTransaction();
 
-                    onCtrlBtnsBottomClicked(R.id.btnVisits);
+                    if(listVisitsIsObsolete)
+                    {
+                        listVisitsIsObsolete = false;
+                        onCtrlBtnsBottomClicked(R.id.btnVisits);
+                    }
+
+                    if(listReportsIsObsolete)
+                    {
+                        listReportsIsObsolete = false;
+                        onCtrlBtnsBottomClicked(R.id.btnCompletedReports);
+                    }
 
                     requestServerDialog.dismiss();
                     //ctrlBtnsBottom.setCheckedBtnId(R.id.btnVisits);
@@ -769,7 +788,7 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
             });
         }
 
-        if (call == callReports)
+/*        if (call == callReports)
         {
             handler.removeCallbacks(runnable);
 
@@ -807,7 +826,7 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
                     //ctrlBtnsBottom.setCheckedBtnId(R.id.btnVisits);
                 }
             });
-        }
+        }*/
 
         if (call == callModels)
         {
@@ -944,11 +963,9 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
         handler.postDelayed(runnable, 30000);
 
         callVisits = networkUtils.getData(this, GET_VISITS_URL_SUFFIX, tokenStr);
-
-        listVisitsIsObsolete = false;
     }
 
-    private void refreshReportsList()
+/*    private void refreshReportsList()
     {
         requestServerDialog.show();
 
@@ -956,8 +973,8 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
 
         callReports = networkUtils.getData(this, GET_VISITS_URL_SUFFIX, tokenStr);
 
-        listReportsIsObsolete = false;
-    }
+
+    }*/
 
     @Override
     public void refreshGeaModels()
@@ -989,6 +1006,25 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
         fragmentTransaction.commit();
     }
 
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    private static void setEdgeEffectL(View scrollableView, int color) {
+        final String[] edgeGlows = {"mEdgeGlowTop", "mEdgeGlowBottom", "mEdgeGlowLeft", "mEdgeGlowRight"};
+        for (String edgeGlow : edgeGlows) {
+            Class<?> clazz = scrollableView.getClass();
+            while (clazz != null) {
+                try {
+                    final Field edgeGlowField = clazz.getDeclaredField(edgeGlow);
+                    edgeGlowField.setAccessible(true);
+                    final EdgeEffect edgeEffect = (EdgeEffect) edgeGlowField.get(scrollableView);
+                    edgeEffect.setColor(color);
+                    break;
+                } catch (Exception e) {
+                    clazz = clazz.getSuperclass();
+                }
+            }
+        }
+    }
+
     @Override
     public void onScrollChanged(ScrollViewExt scrollView, int x, int y, int oldx, int oldy)
     {
@@ -996,14 +1032,19 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
         int diff = view.getTop() - scrollView.getScrollY();
 
         // if diff is zero, then the top has been reached
-        if (diff == 0 && fragListVisitsOther.isAdded())
+        if (diff == 0)
         {
-            refreshVisitsList();
-        }
+            if(fragListVisitsOther.isAdded())
+            {
+                listVisitsIsObsolete = true;
+                refreshVisitsList();
+            }
 
-        if (diff == 0 && fragListReportsNotSent.isAdded())
-        {
-            refreshReportsList();
+            if(fragListReportsNotSent.isAdded())
+            {
+                listReportsIsObsolete = true;
+                refreshVisitsList();
+            }
         }
     }
 }

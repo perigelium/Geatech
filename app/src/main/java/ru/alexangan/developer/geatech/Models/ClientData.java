@@ -11,9 +11,9 @@ public class ClientData extends RealmObject
     private String address;
     private String phone;
     private String mobile;
-    public double coordNord;
-    public double coordEst;
-    public int altitude;
+    private double coordNord;
+    private double coordEst;
+    private int altitude;
 
     public ClientData() {}
 

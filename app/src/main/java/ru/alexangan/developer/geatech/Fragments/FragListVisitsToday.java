@@ -188,7 +188,7 @@ public class FragListVisitsToday extends ListFragment
                 boolean ownVisit = selectedTech.getId() == id_tecnico;
                 boolean freeVisit = (id_tecnico == 0);
 
-                if (ownVisit || freeVisit) //
+                //if (ownVisit || freeVisit) //
                 {
                     if (swipeDetector.swipeDetected())
                     {

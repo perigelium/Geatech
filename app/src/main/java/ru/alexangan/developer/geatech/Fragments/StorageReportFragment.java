@@ -16,6 +16,7 @@ import java.util.Locale;
 
 import io.realm.Realm;
 import ru.alexangan.developer.geatech.Models.GeaModelloRapporto;
+import ru.alexangan.developer.geatech.Models.GeaRapporto;
 import ru.alexangan.developer.geatech.Models.GeaSopralluogo;
 import ru.alexangan.developer.geatech.Models.ProductData;
 import ru.alexangan.developer.geatech.Models.ReportItem;
@@ -81,8 +82,7 @@ public class StorageReportFragment extends Fragment
         realm.commitTransaction();
 
         realm.beginTransaction();
-        id_rapporto_sopralluogo = reportItem != null ? reportItem.getGea_rapporto().getId_rapporto_sopralluogo() : -1;
-
+        id_rapporto_sopralluogo = reportItem != null ? reportItem.getGea_rapporto().getId_rapporto_sopralluogo() : 0;
         realm.commitTransaction();
     }
 
@@ -224,7 +224,7 @@ public class StorageReportFragment extends Fragment
             }
 
             realm.beginTransaction();
-reportItem.getGea_rapporto().setCompletion_percent(completionState);
+            reportItem.getReportStates().setReportCompletionState(completionState);
             realm.commitTransaction();
         }
     }

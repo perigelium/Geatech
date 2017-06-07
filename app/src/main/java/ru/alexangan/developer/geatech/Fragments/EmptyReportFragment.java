@@ -140,7 +140,7 @@ public class EmptyReportFragment extends Fragment
             }
 
             realm.beginTransaction();
-reportItem.getGea_rapporto().setCompletion_percent(completionState);
+            reportItem.getReportStates().setReportCompletionState(completionState);
             realm.commitTransaction();
         }
     }

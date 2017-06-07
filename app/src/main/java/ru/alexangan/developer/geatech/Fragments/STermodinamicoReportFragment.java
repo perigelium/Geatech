@@ -19,6 +19,7 @@ import java.util.Locale;
 
 import io.realm.Realm;
 import ru.alexangan.developer.geatech.Models.GeaModelloRapporto;
+import ru.alexangan.developer.geatech.Models.GeaRapporto;
 import ru.alexangan.developer.geatech.Models.GeaSopralluogo;
 import ru.alexangan.developer.geatech.Models.ProductData;
 import ru.alexangan.developer.geatech.Models.ReportItem;
@@ -84,9 +85,10 @@ public class STermodinamicoReportFragment extends Fragment
         realm.commitTransaction();
 
         realm.beginTransaction();
-        id_rapporto_sopralluogo = reportItem != null ? reportItem.getGea_rapporto().getId_rapporto_sopralluogo() : -1;
 
+        id_rapporto_sopralluogo = reportItem != null ? reportItem.getGea_rapporto().getId_rapporto_sopralluogo() : 0;
         realm.commitTransaction();
+
     }
 
     @Override
@@ -123,17 +125,17 @@ public class STermodinamicoReportFragment extends Fragment
 
         idItem = viewUtils.createViewThreeEdits(idItem, R.id.three_edits2);
 
-        EditText et1 = viewUtils.getEditTexts().get(idItem-1);
+        EditText et1 = viewUtils.getEditTexts().get(idItem - 1);
         et1.setInputType(InputType.TYPE_CLASS_TEXT);
 
-        EditText et2 = viewUtils.getEditTexts().get(idItem-2);
+        EditText et2 = viewUtils.getEditTexts().get(idItem - 2);
         et2.setInputType(InputType.TYPE_CLASS_TEXT);
 
         idItem = viewUtils.createViewThreeRadios(idItem, R.id.three_radios1);
 
         idItem = viewUtils.createViewEdit(idItem, R.id.edit1);
 
-        EditText et3 = viewUtils.getEditTexts().get(idItem-1);
+        EditText et3 = viewUtils.getEditTexts().get(idItem - 1);
         et3.setInputType(InputType.TYPE_CLASS_TEXT);
 
         // SectionHeader1
@@ -179,7 +181,7 @@ public class STermodinamicoReportFragment extends Fragment
         if (reportItem != null)
         {
             int idItem = viewUtils.getIdItemStart();
-            
+
             idItem = viewUtils.saveSeveralRadiosAndEdit(idItem);
 
             idItem = viewUtils.saveSeveralRadios(idItem);
@@ -215,8 +217,8 @@ public class STermodinamicoReportFragment extends Fragment
             idItem = viewUtils.saveSeveralEdits(idItem, 2);
 
             idItem = viewUtils.saveSeveralSwitches(idItem, 5);
-            
-            
+
+
             // Completion state
 
             int completionState = DatabaseUtils.getReportInitializationState(id_sopralluogo, id_rapporto_sopralluogo);
@@ -235,7 +237,7 @@ public class STermodinamicoReportFragment extends Fragment
             }
 
             realm.beginTransaction();
-reportItem.getGea_rapporto().setCompletion_percent(completionState);
+            reportItem.getReportStates().setReportCompletionState(completionState);
             realm.commitTransaction();
         }
     }
@@ -278,21 +280,20 @@ reportItem.getGea_rapporto().setCompletion_percent(completionState);
             idItem = viewUtils.fillSeveralSwitches(idItem, 1);
 
             final Switch sw1TwoRadiosAndSwitch = viewUtils.getSwitches().get(idItem - 3);
-            final Pair <LinearLayout, LinearLayout> llPair = viewUtils.getLinearLayouts().get(idItem - 2);
+            final Pair<LinearLayout, LinearLayout> llPair = viewUtils.getLinearLayouts().get(idItem - 2);
 
             sw1TwoRadiosAndSwitch.setOnClickListener(new View.OnClickListener()
             {
                 @Override
                 public void onClick(View view)
                 {
-                    if(sw1TwoRadiosAndSwitch.isChecked())
+                    if (sw1TwoRadiosAndSwitch.isChecked())
                     {
                         llPair.first.setVisibility(View.VISIBLE);
                         llPair.second.setVisibility(View.VISIBLE);
                         llPair.first.setEnabled(true);
                         llPair.second.setEnabled(true);
-                    }
-                    else
+                    } else
                     {
                         llPair.first.setVisibility(View.GONE);
                         llPair.second.setVisibility(View.GONE);
@@ -306,19 +307,18 @@ reportItem.getGea_rapporto().setCompletion_percent(completionState);
 
             idItem = viewUtils.fillSeveralSwitches(idItem, 5);
 
-            if(reportItem!=null && reportItem.getReportStates().hasTriedToSendReport())
+            if (reportItem != null && reportItem.getReportStates().hasTriedToSendReport())
             {
                 viewUtils.markSectionsWithNotFilledItems(id_sopralluogo, id_rapporto_sopralluogo);
             }
 
-            if(sw1TwoRadiosAndSwitch.isChecked())
+            if (sw1TwoRadiosAndSwitch.isChecked())
             {
                 llPair.first.setVisibility(View.VISIBLE);
                 llPair.second.setVisibility(View.VISIBLE);
                 llPair.first.setEnabled(true);
                 llPair.second.setEnabled(true);
-            }
-            else
+            } else
             {
                 llPair.first.setVisibility(View.GONE);
                 llPair.second.setVisibility(View.GONE);

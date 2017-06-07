@@ -6,8 +6,6 @@ import io.realm.RealmObject;
 
 public class ReportStates extends RealmObject
 {
-    public static int ALTITUDE_UNKNOWN = -999;
-
     private int reportCompletionState;
     public static int REPORT_NON_INITIATED = 0;
     public static int REPORT_INITIATED = 1;

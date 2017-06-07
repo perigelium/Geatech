@@ -26,6 +26,17 @@ public class ScrollViewExt extends ScrollView
         super(context, attrs, defStyle);
     }
 
+    @Override
+    protected void onOverScrolled(int scrollX, int scrollY, boolean clampedX, boolean clampedY)
+    {
+        super.onOverScrolled(scrollX, scrollY, clampedX, clampedY);
+
+        if (scrollViewListener != null)
+        {
+            scrollViewListener.onScrollChanged(ScrollViewExt.this, scrollX, scrollY, 0, 0);
+        }
+    }
+
     public ScrollViewExt(Context context, AttributeSet attrs)
     {
         super(context, attrs);
@@ -34,15 +45,5 @@ public class ScrollViewExt extends ScrollView
     public void setScrollViewListener(MainActivity scrollViewListener)
     {
         this.scrollViewListener = scrollViewListener;
-    }
-
-    @Override
-    protected void onScrollChanged(int l, int t, int oldl, int oldt)
-    {
-        super.onScrollChanged(l, t, oldl, oldt);
-        if (scrollViewListener != null)
-        {
-            scrollViewListener.onScrollChanged(ScrollViewExt.this, l, t, oldl, oldt);
-        }
     }
 }

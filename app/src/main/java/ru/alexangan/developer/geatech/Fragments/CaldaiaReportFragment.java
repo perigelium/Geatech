@@ -205,9 +205,9 @@ public class CaldaiaReportFragment extends Fragment
 
             // Completion state
 
-            int completionPercent = DatabaseUtils.getReportInitializationState(id_sopralluogo, id_rapporto_sopralluogo);
+            int completionState = DatabaseUtils.getReportInitializationState(id_sopralluogo, id_rapporto_sopralluogo);
 
-            if (completionPercent == ReportStates.REPORT_COMPLETED)
+            if (completionState == ReportStates.REPORT_COMPLETED)
             {
                 realm.beginTransaction();
 
@@ -221,7 +221,7 @@ public class CaldaiaReportFragment extends Fragment
             }
 
             realm.beginTransaction();
-            reportItem.getReportStates().setReportCompletionState(completionPercent);
+            reportItem.getReportStates().setReportCompletionState(completionState);
             realm.commitTransaction();
         }
     }
