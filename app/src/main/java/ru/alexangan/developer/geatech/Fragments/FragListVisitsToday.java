@@ -24,7 +24,6 @@ import ru.alexangan.developer.geatech.Adapters.MyListVisitsAdapter;
 import ru.alexangan.developer.geatech.Interfaces.Communicator;
 import ru.alexangan.developer.geatech.Models.GeaSopralluogo;
 import ru.alexangan.developer.geatech.Models.ReportItem;
-import ru.alexangan.developer.geatech.Models.ReportStates;
 import ru.alexangan.developer.geatech.Models.VisitItem;
 import ru.alexangan.developer.geatech.R;
 import ru.alexangan.developer.geatech.Utils.SwipeDetector;
@@ -32,7 +31,6 @@ import ru.alexangan.developer.geatech.Utils.ViewUtils;
 
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.company_id;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.mSettings;
-
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.selectedTech;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.visitItems;
 
@@ -165,7 +163,7 @@ public class FragListVisitsToday extends ListFragment
 
         lv = getListView();
 
-        ViewUtils.setListViewHeightBasedOnChildren(lv);
+        //ViewUtils.setListViewHeightBasedOnChildren(lv);
 
         lv.setOnTouchListener(swipeDetector);
 

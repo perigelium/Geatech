@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:id="@+id/list_visits_free"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
               android:layout_marginTop="12dp"
@@ -8,17 +7,16 @@
               android:orientation="vertical">
 
     <TextView
-        android:id="@+id/listVisitsFreeTitle"
+        android:id="@+id/tvTitleListVisits"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="start"
         android:layout_marginBottom="6dp"
         android:layout_marginLeft="12dp"
-        android:gravity="center"
-        android:text="@string/VisitsFree">
+        android:gravity="center">
     </TextView>
 
-    <ListView
+    <ru.alexangan.developer.geatech.Models.ListViewEx
         android:id="@id/android:list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -26,7 +24,7 @@
         android:choiceMode="singleChoice"
         android:divider="@android:color/transparent"
         android:focusable="true">
-    </ListView>
+    </ru.alexangan.developer.geatech.Models.ListViewEx>
 
     <TextView
         android:id="@id/android:empty"

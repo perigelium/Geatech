@@ -8,13 +8,10 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import io.realm.Realm;
-import io.realm.RealmConfiguration;
-import io.realm.exceptions.RealmMigrationNeededException;
 import ru.alexangan.developer.geatech.Fragments.LoginCompanyFragment;
 import ru.alexangan.developer.geatech.Fragments.LoginPasswordRecoverFragment;
 import ru.alexangan.developer.geatech.Fragments.LoginTechSelectionFragment;
 import ru.alexangan.developer.geatech.Interfaces.LoginCommunicator;
-import ru.alexangan.developer.geatech.Models.GlobalConstants;
 import ru.alexangan.developer.geatech.R;
 
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.APP_PREFERENCES;

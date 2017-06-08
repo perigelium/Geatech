@@ -19,7 +19,6 @@ import java.util.Locale;
 
 import io.realm.Realm;
 import ru.alexangan.developer.geatech.Models.GeaModelloRapporto;
-import ru.alexangan.developer.geatech.Models.GeaRapporto;
 import ru.alexangan.developer.geatech.Models.GeaSopralluogo;
 import ru.alexangan.developer.geatech.Models.ProductData;
 import ru.alexangan.developer.geatech.Models.ReportItem;
@@ -30,7 +29,6 @@ import ru.alexangan.developer.geatech.Utils.DatabaseUtils;
 import ru.alexangan.developer.geatech.Utils.ViewUtils;
 
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.company_id;
-
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.selectedTech;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.visitItems;
 

@@ -1,13 +1,9 @@
 package ru.alexangan.developer.geatech.Models;
 
-import android.content.Context;
 import android.content.SharedPreferences;
 
-import io.realm.Realm;
-import io.realm.RealmConfiguration;
 import io.realm.RealmList;
 import io.realm.RealmResults;
-import io.realm.exceptions.RealmMigrationNeededException;
 
 /**
  * Created by user on 13.02.2017.
@@ -18,6 +14,7 @@ public class GlobalConstants
     public static SharedPreferences mSettings;
     public static final String APP_PREFERENCES = "mysettings";
     public static int company_id;
+    public static String gea_supplier;
     public static TechnicianItem selectedTech;
     public static RealmResults<VisitItem> visitItems;
     public static RealmList<VisitItem> inVisitItems;

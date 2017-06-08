@@ -163,7 +163,7 @@
         </FrameLayout>
 
         <TextView
-            android:id="@+id/tvVisitTOS"
+            android:id="@+id/tvTypeOfService"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="start|center_vertical"
@@ -195,13 +195,12 @@
             android:textColor="#ff666666"
             android:text="Eventualli sottoprodotti:"/>
 
-        <ListView
+        <ru.alexangan.developer.geatech.Models.ListViewEx
             android:id="@+id/listSubproducts"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="9dp"
-            android:layout="@layout/visits_day_time_set_list_row">
-        </ListView>
+            android:layout_marginTop="9dp">
+        </ru.alexangan.developer.geatech.Models.ListViewEx>
 
         <View
             android:layout_width="match_parent"
@@ -309,6 +308,7 @@
         </LinearLayout>
 
         <FrameLayout
+            android:id="@+id/flGetCurrentCoords"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"

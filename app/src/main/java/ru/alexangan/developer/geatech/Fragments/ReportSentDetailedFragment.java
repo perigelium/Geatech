@@ -25,14 +25,12 @@ import ru.alexangan.developer.geatech.Models.GeaItemModelliRapporto;
 import ru.alexangan.developer.geatech.Models.GeaItemRapporto;
 import ru.alexangan.developer.geatech.Models.GeaSopralluogo;
 import ru.alexangan.developer.geatech.Models.ReportItem;
-import ru.alexangan.developer.geatech.Models.ReportStates;
 import ru.alexangan.developer.geatech.Models.VisitItem;
 import ru.alexangan.developer.geatech.R;
 import ru.alexangan.developer.geatech.Utils.ImageUtils;
 import ru.alexangan.developer.geatech.Utils.ViewUtils;
 
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.company_id;
-
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.selectedTech;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.visitItems;
 
@@ -185,7 +183,7 @@ public class ReportSentDetailedFragment extends Fragment
 
         listView.setAdapter(adapter);
 
-        ViewUtils.setListViewHeightBasedOnChildren(listView);
+        //ViewUtils.setListViewHeightBasedOnChildren(listView);
 
         imageThumbnails = new ArrayList<>();
         pathItems = new ArrayList<>();

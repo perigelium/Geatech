@@ -309,13 +309,13 @@
 
         </LinearLayout>
 
-        <ListView
+        <ru.alexangan.developer.geatech.Models.ListViewEx
             android:id="@+id/listItemsSentReport"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:divider="@color/colorLightGrayF5"
             android:dividerHeight="1dp">
-        </ListView>
+        </ru.alexangan.developer.geatech.Models.ListViewEx>
 
         <View
             android:layout_width="match_parent"

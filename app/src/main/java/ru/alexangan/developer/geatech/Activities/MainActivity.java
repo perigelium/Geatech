@@ -45,9 +45,12 @@ import ru.alexangan.developer.geatech.Fragments.EmptyReportFragment;
 import ru.alexangan.developer.geatech.Fragments.FotovoltaicoReportFragment;
 import ru.alexangan.developer.geatech.Fragments.FragListInWorkVisits;
 import ru.alexangan.developer.geatech.Fragments.FragListReportsNotSent;
+import ru.alexangan.developer.geatech.Fragments.FragListReportsReminded;
 import ru.alexangan.developer.geatech.Fragments.FragListReportsSent;
 import ru.alexangan.developer.geatech.Fragments.FragListVisitsFree;
 import ru.alexangan.developer.geatech.Fragments.FragListVisitsOther;
+import ru.alexangan.developer.geatech.Fragments.FragListVisitsOverdue;
+import ru.alexangan.developer.geatech.Fragments.FragListVisitsReminded;
 import ru.alexangan.developer.geatech.Fragments.FragListVisitsToday;
 import ru.alexangan.developer.geatech.Fragments.NotificationBarFragment;
 import ru.alexangan.developer.geatech.Fragments.PhotoGalleryGridFragment;
@@ -59,7 +62,7 @@ import ru.alexangan.developer.geatech.Fragments.SetDateTimeFragment;
 import ru.alexangan.developer.geatech.Fragments.SettingsFragment;
 import ru.alexangan.developer.geatech.Fragments.StorageReportFragment;
 import ru.alexangan.developer.geatech.Interfaces.Communicator;
-import ru.alexangan.developer.geatech.Interfaces.ScrollViewExt;
+import ru.alexangan.developer.geatech.Models.ScrollViewEx;
 import ru.alexangan.developer.geatech.Interfaces.ScrollViewListener;
 import ru.alexangan.developer.geatech.Models.GeaItemModelliRapporto;
 import ru.alexangan.developer.geatech.Models.GeaModelloRapporto;
@@ -85,7 +88,6 @@ import static ru.alexangan.developer.geatech.Models.GlobalConstants.inVisitItems
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.listReportsIsObsolete;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.listVisitsIsObsolete;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.mSettings;
-
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.selectedTech;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.tokenStr;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.visitItems;
@@ -104,7 +106,10 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
     FragListVisitsFree fragListVisitsFree;
     FragListVisitsToday fragListVisitsToday;
     FragListVisitsOther fragListVisitsOther;
+    FragListVisitsOverdue fragListVisitsOverdue;
     FragListInWorkVisits fragListInWorkVisits;
+    FragListVisitsReminded fragListVisitsReminded;
+    FragListReportsReminded fragListReportsReminded;
     FragListReportsNotSent fragListReportsNotSent;
     FragListReportsSent fragListReportsSent;
 
@@ -185,10 +190,10 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
         realm = Realm.getDefaultInstance();
         setContentView(R.layout.work_window);
 
-        ScrollViewExt svInnerFragContainer = (ScrollViewExt) findViewById(R.id.svInnerFragContainer);
+        ScrollViewEx svInnerFragContainer = (ScrollViewEx) findViewById(R.id.svInnerFragContainer);
         svInnerFragContainer.setScrollViewListener(this);
 
-        setEdgeEffectL(svInnerFragContainer, Color.parseColor("#ffb2b2b2"));
+        setEdgeEffectL(svInnerFragContainer, Color.parseColor("#fff5f5f5"));
 
         svInnerFragContainer.setOnTouchListener(new View.OnTouchListener()
         {
@@ -224,7 +229,10 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
         fragListVisitsFree = new FragListVisitsFree();
         fragListVisitsToday = new FragListVisitsToday();
         fragListVisitsOther = new FragListVisitsOther();
+        fragListVisitsOverdue = new FragListVisitsOverdue();
         fragListInWorkVisits = new FragListInWorkVisits();
+        fragListVisitsReminded = new FragListVisitsReminded();
+        fragListReportsReminded = new FragListReportsReminded();
         fragListReportsNotSent = new FragListReportsNotSent();
         fragListReportsSent = new FragListReportsSent();
 
@@ -348,11 +356,25 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
 
             TextView tvWindowTitle = (TextView) findViewById(R.id.tvWindowTitle);
             tvWindowTitle.setText("Notifiche");
+
+            FragmentTransaction mFragmentTransaction = mFragmentManager.beginTransaction();
+
+            if (!fragListVisitsReminded.isAdded())
+            {
+                mFragmentTransaction.add(innerFragContainer, fragListVisitsReminded);
+            }
+
+            if (!fragListReportsReminded.isAdded())
+            {
+                mFragmentTransaction.add(innerFragContainer, fragListReportsReminded);
+            }
+            mFragmentTransaction.addToBackStack(fragListReportsReminded.getTag());
+            mFragmentTransaction.commit();
         }
 
         if (btnId == R.id.btnCompletedReports)
         {
-            if (GlobalConstants.listReportsIsObsolete)
+            if (GlobalConstants.listReportsIsObsolete && NetworkUtils.isNetworkAvailable(this))
             {
                 refreshVisitsList();
             } else
@@ -597,6 +619,11 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
         {
             mSettings.edit().putBoolean("ownVisitsOnly", false).apply();
 
+            if (!fragListVisitsOverdue.isAdded())
+            {
+                mFragmentTransaction.add(innerFragContainer, fragListVisitsOverdue);
+            }
+
             if (!fragListVisitsFree.isAdded())
             {
                 mFragmentTransaction.add(innerFragContainer, fragListVisitsFree);
@@ -620,6 +647,11 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
         if (mode == LIST_VISITS_MODE_MY)
         {
             mSettings.edit().putBoolean("ownVisitsOnly", true).apply();
+
+            if (!fragListVisitsOverdue.isAdded())
+            {
+                mFragmentTransaction.add(innerFragContainer, fragListVisitsOverdue);
+            }
 
             if (!fragListVisitsToday.isAdded())
             {
@@ -1026,13 +1058,13 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
     }
 
     @Override
-    public void onScrollChanged(ScrollViewExt scrollView, int x, int y, int oldx, int oldy)
+    public void onScrollChanged(ScrollViewEx scrollView, int x, int y, int oldx, int oldy)
     {
         View view = scrollView.getChildAt(0);
         int diff = view.getTop() - scrollView.getScrollY();
 
         // if diff is zero, then the top has been reached
-        if (diff == 0)
+        if (diff == 0 && NetworkUtils.isNetworkAvailable(this))
         {
             if(fragListVisitsOther.isAdded())
             {

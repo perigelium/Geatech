@@ -28,6 +28,7 @@ import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
 import ru.alexangan.developer.geatech.Interfaces.LoginCommunicator;
+import ru.alexangan.developer.geatech.Models.GlobalConstants;
 import ru.alexangan.developer.geatech.Models.LoginCredentials;
 import ru.alexangan.developer.geatech.Network.NetworkUtils;
 import ru.alexangan.developer.geatech.R;
@@ -374,6 +375,8 @@ public class LoginCompanyFragment extends Fragment implements View.OnClickListen
                 try
                 {
                     String technicianStr = jsonObject.getString("data_tehnic");
+                    String gea_supplier = jsonObject.getString("gea_supplier");
+                    GlobalConstants.gea_supplier = gea_supplier;
 
                     mSettings.edit().putString("technician_list_json", technicianStr).apply();
 

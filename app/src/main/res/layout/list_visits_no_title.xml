@@ -4,14 +4,14 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
-    <ListView
+    <ru.alexangan.developer.geatech.Models.ListViewEx
         android:id="@id/android:list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:choiceMode="singleChoice"
         android:focusable="true"
         android:background="#fff5f5f5" >
-    </ListView>
+    </ru.alexangan.developer.geatech.Models.ListViewEx>
 
     <TextView
         android:id="@id/android:empty"

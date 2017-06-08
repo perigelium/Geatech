@@ -20,6 +20,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -54,7 +55,6 @@ import static ru.alexangan.developer.geatech.Models.GlobalConstants.GET_VISITS_U
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.company_id;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.inVisitItems;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.mSettings;
-
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.tokenStr;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.visitItems;
 
@@ -199,6 +199,9 @@ public class LoginTechSelectionFragment extends Fragment implements View.OnClick
                              Bundle savedInstanceState)
     {
         View rootView = inflater.inflate(R.layout.login_tech_selection_fragment, container, false);
+
+        TextView tvSupplierName = (TextView) rootView.findViewById(R.id.tvSupplierName);
+        tvSupplierName.setText(GlobalConstants.gea_supplier);
 
         btnNewTechnician = (Button) rootView.findViewById(R.id.btnNewTechnician);
         btnNewTechnician.setOnClickListener(this);

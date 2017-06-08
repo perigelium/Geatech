@@ -256,7 +256,7 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
 
         if (adapter.getCount() != 0)
         {
-            ViewUtils.setListViewHeightBasedOnChildren(listView);
+            //ViewUtils.setListViewHeightBasedOnChildren(listView);
         } else
         {
             tvListSottprodottiTitle.setText("");

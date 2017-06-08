@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="colorPrimary">#ffffffff</color>
     <color name="colorWhite">#ffffffff</color>
     <color name="colorLightGrayF5">#fff5f5f5</color>
-<!--    <color name="colorLightGratEE">#ffeeeeee</color>
+    <color name="colorLightGratEE">#ffeeeeee</color>
     <color name="colorLightGrayDD">#ffdddddd</color>
-    <color name="colorLightGrayCC">#ffcccccc</color>-->
+    <color name="colorLightGrayCC">#ffcccccc</color>
     <color name="colorLightGrayB2">#ffb2b2b2</color>
     <color name="colorTextLightGray80">#ff808080</color>
     <color name="colorTextLightGray66">#ff666666</color>

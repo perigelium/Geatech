@@ -16,6 +16,7 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.RelativeLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 
@@ -35,7 +36,6 @@ import ru.alexangan.developer.geatech.Models.VisitItem;
 import ru.alexangan.developer.geatech.R;
 
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.company_id;
-
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.selectedTech;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.visitItems;
 
@@ -252,8 +252,7 @@ public class ViewUtils
                     chk1FourChkboxes.setChecked(true);
 
                     tv1FourChkboxes.setTextColor(Color.parseColor("#ff29b352"));
-                }
-                else
+                } else
                 {
                     tv1FourChkboxes.setTextColor(Color.parseColor("#ff808080"));
                 }
@@ -277,8 +276,7 @@ public class ViewUtils
                     chk2FourChkboxes.setChecked(true);
 
                     tv2FourChkboxes.setTextColor(Color.parseColor("#ff29b352"));
-                }
-                else
+                } else
                 {
                     tv2FourChkboxes.setTextColor(Color.parseColor("#ff808080"));
                 }
@@ -302,8 +300,7 @@ public class ViewUtils
                     chk3FourChkboxes.setChecked(true);
 
                     tv3FourChkboxes.setTextColor(Color.parseColor("#ff29b352"));
-                }
-                else
+                } else
                 {
                     tv3FourChkboxes.setTextColor(Color.parseColor("#ff808080"));
                 }
@@ -327,8 +324,7 @@ public class ViewUtils
                     chk4FourChkboxes.setChecked(true);
 
                     tv4FourChkboxes.setTextColor(Color.parseColor("#ff29b352"));
-                }
-                else
+                } else
                 {
                     tv4FourChkboxes.setTextColor(Color.parseColor("#ff808080"));
                 }
@@ -419,8 +415,7 @@ public class ViewUtils
                 if (chk1FiveChkboxes.isChecked())
                 {
                     tv1FiveChkboxes.setTextColor(Color.parseColor("#ff29b352"));
-                }
-                else
+                } else
                 {
                     tv1FiveChkboxes.setTextColor(Color.parseColor("#ff808080"));
                 }
@@ -437,8 +432,7 @@ public class ViewUtils
                 if (chk2FiveChkboxes.isChecked())
                 {
                     tv2FiveChkboxes.setTextColor(Color.parseColor("#ff29b352"));
-                }
-                else
+                } else
                 {
                     tv2FiveChkboxes.setTextColor(Color.parseColor("#ff808080"));
                 }
@@ -455,8 +449,7 @@ public class ViewUtils
                 if (chk3FiveChkboxes.isChecked())
                 {
                     tv3FiveChkboxes.setTextColor(Color.parseColor("#ff29b352"));
-                }
-                else
+                } else
                 {
                     tv3FiveChkboxes.setTextColor(Color.parseColor("#ff808080"));
                 }
@@ -473,8 +466,7 @@ public class ViewUtils
                 if (chk4FiveChkboxes.isChecked())
                 {
                     tv4FiveChkboxes.setTextColor(Color.parseColor("#ff29b352"));
-                }
-                else
+                } else
                 {
                     tv4FiveChkboxes.setTextColor(Color.parseColor("#ff808080"));
                 }
@@ -491,8 +483,7 @@ public class ViewUtils
                 if (chk5FiveChkboxes.isChecked())
                 {
                     tv5FiveChkboxes.setTextColor(Color.parseColor("#ff29b352"));
-                }
-                else
+                } else
                 {
                     tv5FiveChkboxes.setTextColor(Color.parseColor("#ff808080"));
                 }
@@ -674,8 +665,7 @@ public class ViewUtils
                     et1ThreeChkboxesAndEdit.setText("");
                     et1ThreeChkboxesAndEdit.clearFocus();
                     tv1ThreeChkboxesAndEdit.setTextColor(Color.parseColor("#ff29b352"));
-                }
-                else
+                } else
                 {
                     tv1ThreeChkboxesAndEdit.setTextColor(Color.parseColor("#ff808080"));
                 }
@@ -694,8 +684,7 @@ public class ViewUtils
                     et1ThreeChkboxesAndEdit.setText("");
                     et1ThreeChkboxesAndEdit.clearFocus();
                     tv2ThreeChkboxesAndEdit.setTextColor(Color.parseColor("#ff29b352"));
-                }
-                else
+                } else
                 {
                     tv2ThreeChkboxesAndEdit.setTextColor(Color.parseColor("#ff808080"));
                 }
@@ -714,8 +703,7 @@ public class ViewUtils
                     et1ThreeChkboxesAndEdit.setText("");
                     et1ThreeChkboxesAndEdit.clearFocus();
                     tv3ThreeChkboxesAndEdit.setTextColor(Color.parseColor("#ff29b352"));
-                }
-                else
+                } else
                 {
                     tv3ThreeChkboxesAndEdit.setTextColor(Color.parseColor("#ff808080"));
                 }
@@ -810,8 +798,7 @@ public class ViewUtils
                     et1ChkboxAndEdit.setText("");
                     et1ChkboxAndEdit.clearFocus();
                     tv1ChkboxAndEdit.setTextColor(Color.parseColor("#ff29b352"));
-                }
-                else
+                } else
                 {
                     tv1ChkboxAndEdit.setTextColor(Color.parseColor("#ff808080"));
                 }
@@ -1575,7 +1562,7 @@ public class ViewUtils
             @Override
             public void onCheckedChanged(RadioGroup radioGroup, int checkedId)
             {
-                if(checkedId != -1)
+                if (checkedId != -1)
                 {
                     et1ThreeRadiosAndEdit.setText("");
                 }
@@ -1710,7 +1697,7 @@ public class ViewUtils
             @Override
             public void onCheckedChanged(RadioGroup radioGroup, int checkedId)
             {
-                if(checkedId != -1)
+                if (checkedId != -1)
                 {
                     et1TwoRadiosAndEdit.setText("");
                 }
@@ -1889,7 +1876,7 @@ public class ViewUtils
             @Override
             public void onCheckedChanged(RadioGroup radioGroup, int checkedId)
             {
-                if(checkedId != -1)
+                if (checkedId != -1)
                 {
                     et1FourRadiosAndTwoEdits.setText("");
                 }
@@ -1982,7 +1969,7 @@ public class ViewUtils
             @Override
             public void onCheckedChanged(RadioGroup radioGroup, int checkedId)
             {
-                if(checkedId != -1)
+                if (checkedId != -1)
                 {
                     et1FourRadiosAndEdit.setText("");
                 }
@@ -2164,15 +2151,15 @@ public class ViewUtils
         final ImageView ivArrowSectionHeader = (ImageView) header.findViewById(R.id.ivArrowSectionHeader);
         final int curHeader = headerNumber;
 
-        if(geaSezioniModelli == null)
+        if (geaSezioniModelli == null)
         {
             return;
         }
-            realm.beginTransaction();
-            final List<GeaItemModelliRapporto> itemModelli = realm.where(GeaItemModelliRapporto.class)
-                    .between("id_sezione", geaSezioniModelli.get(0).getId_sezione(), geaSezioniModelli.get(geaSezioniModelli.size() - 1).getId_sezione())
-                    .equalTo("ordine", geaSezioniModelli.get(headerNumber).getOrdine()).findAll();
-            realm.commitTransaction();
+        realm.beginTransaction();
+        final List<GeaItemModelliRapporto> itemModelli = realm.where(GeaItemModelliRapporto.class)
+                .between("id_sezione", geaSezioniModelli.get(0).getId_sezione(), geaSezioniModelli.get(geaSezioniModelli.size() - 1).getId_sezione())
+                .equalTo("ordine", geaSezioniModelli.get(headerNumber).getOrdine()).findAll();
+        realm.commitTransaction();
 
 
         flSectionHeader.setOnClickListener(new View.OnClickListener()
@@ -2193,7 +2180,7 @@ public class ViewUtils
                     int idItem = itemModelli.get(i).getId_item_modello();
                     ImageView ivSection = ImageViews.get(idItem);
 
-                    if(ivSection!=null)
+                    if (ivSection != null)
                     {
                         ivSection.setImageResource(allSectionsCollapsed[curHeader]
                                 ? R.drawable.report_green_up : R.drawable.report_green_down);
@@ -2248,7 +2235,7 @@ public class ViewUtils
                         {
                             llSections = getLinearLayouts().get(idItem);
 
-                            if(llSections != null)
+                            if (llSections != null)
                             {
                                 LinearLayout llSection1 = llSections.second;
                                 LinearLayout llSection0 = llSections.first;
@@ -2281,12 +2268,12 @@ public class ViewUtils
                                 llSection = llSection1;
                             }*/
 
-                            if (ll.equals(llSection))
-                            {
-                                //ll.setVisibility(View.VISIBLE);
-                                ll.setBackgroundResource(R.drawable.shape_red_border_rect);
-                                break;
-                            }
+                        if (ll.equals(llSection))
+                        {
+                            //ll.setVisibility(View.VISIBLE);
+                            ll.setBackgroundResource(R.drawable.shape_red_border_rect);
+                            break;
+                        }
                         //}
                     }
 
@@ -2404,12 +2391,11 @@ public class ViewUtils
 
         LinearLayout ll = LinearLayouts.get(idItem).first;
 
-        if (ll.isEnabled() == false)
+        if (!ll.isEnabled())
         {
             str_Id_item = "Non applicabile";
         } else
         {
-
             for (int i = 0; i < alChks.size(); i++)
             {
                 str_Id_item += alChks.get(i).isChecked() ? alChks.get(i).getText().toString() + "||" : "";
@@ -2452,7 +2438,7 @@ public class ViewUtils
             ll = llPair.first;
         }
 
-        if (ll != null && ll.isEnabled() == false)
+        if (ll != null && !ll.isEnabled())
         {
             llDisabled = true;
         }
@@ -2574,19 +2560,19 @@ public class ViewUtils
 
         ArrayList<CheckBox> al_Chks = CheckBoxes.get(idItem);
 
-        for (CheckBox chkbox : al_Chks)
+        for (CheckBox chkBox : al_Chks)
         {
-            String chkBoxText = chkbox.getText().toString();
+            String chkBoxText = chkBox.getText().toString();
 
             for (int i = 0; i < strChkArray.length; i++)
             {
-                if (chkBoxText.length()!=0 && strChkArray[i].contains(chkBoxText))
+                if (chkBoxText.length() != 0 && strChkArray[i].contains(chkBoxText))
                 {
-                    chkbox.setChecked(true);
+                    chkBox.setChecked(true);
                     break;
                 } else
                 {
-                    chkbox.setChecked(false);
+                    chkBox.setChecked(false);
                 }
             }
         }
@@ -2598,15 +2584,16 @@ public class ViewUtils
     {
         String str_id_item = DatabaseUtils.getValueFromReportItem(l_geaItemRapporto, idItem);
 
-        CheckBox chkbox = CheckBoxes.get(idItem).get(0);
+        CheckBox chkBox = CheckBoxes.get(idItem).get(0);
         EditText et = EditTexts.get(idItem);
+        String chkBoxText = chkBox.getText().toString();
 
-        if (str_id_item.contains(chkbox.getText()))
+        if (chkBoxText.length() != 0 && str_id_item.contains(chkBoxText))
         {
-            chkbox.setChecked(true);
+            chkBox.setChecked(true);
         } else
         {
-            chkbox.setChecked(false);
+            chkBox.setChecked(false);
             et.setText(str_id_item);
         }
 
@@ -2627,8 +2614,8 @@ public class ViewUtils
         {
             for (int i = 0; i < strChkArray.length; i++)
             {
-
-                if (str_id_item.contains(chkBox.getText()))
+                String chkBoxText = chkBox.getText().toString();
+                if (chkBoxText.length() != 0 && str_id_item.contains(chkBox.getText()))
                 {
                     chkBox.setChecked(true);
                     checkedChkboxes = true;
@@ -2648,7 +2635,7 @@ public class ViewUtils
         return ++idItem;
     }
 
-    public static void setListViewHeightBasedOnChildren(ListView listView)
+/*    public static void setListViewHeightBasedOnChildren(ListView listView)
     {
         ListAdapter listAdapter = listView.getAdapter();
         if (listAdapter == null)
@@ -2664,12 +2651,44 @@ public class ViewUtils
                 view.setLayoutParams(new ViewGroup.LayoutParams(desiredWidth, ViewGroup.LayoutParams.WRAP_CONTENT));
 
             view.measure(desiredWidth, View.MeasureSpec.UNSPECIFIED);
-            totalHeight += (view.getMeasuredHeight() + 18);
+            totalHeight += (view.getMeasuredHeight());
         }
         ViewGroup.LayoutParams params = listView.getLayoutParams();
         params.height = totalHeight + (listView.getDividerHeight() * (listAdapter.getCount() - 1) + 20);
         listView.setLayoutParams(params);
-    }
+    }*/
+
+/*    public static void setListViewHeightBasedOnChildren(ListView listView)
+    {
+        ListAdapter listAdapter = listView.getAdapter();
+        if (listAdapter == null)
+        {
+            // pre-condition
+            return;
+        }
+
+        int totalHeight = listView.getPaddingTop() + listView.getPaddingBottom();
+        int desiredWidth = View.MeasureSpec.makeMeasureSpec(listView.getWidth(), View.MeasureSpec.AT_MOST);
+        for (int i = 0; i < listAdapter.getCount(); i++)
+        {
+            View listItem = listAdapter.getView(i, null, listView);
+
+            if (listItem != null)
+            {
+                // This next line is needed before you call measure or else you won't get measured height at all.
+                // The listitem needs to be drawn first to know the height.
+                listItem.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
+                        ViewGroup.LayoutParams.WRAP_CONTENT));
+                listItem.measure(desiredWidth, View.MeasureSpec.UNSPECIFIED);
+                totalHeight += listItem.getMeasuredHeight();
+            }
+        }
+
+        ViewGroup.LayoutParams params = listView.getLayoutParams();
+        params.height = totalHeight + (listView.getDividerHeight() * (listAdapter.getCount() - 1));
+        listView.setLayoutParams(params);
+        listView.requestLayout();
+    }*/
 
     public static void setGridViewHeight(GridView gridView)
     {

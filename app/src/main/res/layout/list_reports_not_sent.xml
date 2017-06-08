@@ -13,17 +13,17 @@
         android:layout_gravity="start"
         android:layout_marginBottom="6dp"
         android:layout_marginLeft="12dp"
-        android:text="Rapporti non inviati :">
+        android:text="Rapporti non inviati">
     </TextView>
 
-    <ListView
+    <ru.alexangan.developer.geatech.Models.ListViewEx
         android:id="@id/android:list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:choiceMode="singleChoice"
         android:divider="@android:color/transparent"
         android:focusable="true">
-    </ListView>
+    </ru.alexangan.developer.geatech.Models.ListViewEx>
 
     <TextView
         android:id="@id/android:empty"

@@ -42,9 +42,12 @@
     <string name="ApplicationUpdateFailed">Aggiornamento di applicazione non riuscito</string>
     <string name="ApplicationUpdateSucceeded">Aggiornamento di applicazione completato</string>
     <string name="VisitsFree">Sopralluoghi da fissare</string>
-    <string name="VisitsOfToday">Sopralluoghi di oggi:</string>
+    <string name="VisitsOfToday">Sopralluoghi di oggi</string>
     <string name="VisitsComing">Prossimi sopralluoghi</string>
     <string name="ComingVisitsList">Elenco dei prossimi sopralluoghi</string>
     <string name="ReportDetailed">Dettagli di rapporto inviato</string>
     <string name="NullString"></string>
+    <string name="ReadOnlyMode">Modalità di sola lettura</string>
+    <string name="SetDateAndTimeFirst">Imposta la data e l\'ora prima</string>
+    <string name="YouCanEditYourOwnReportsOnly">È possibile modificare solo i propri rapporti</string>
 </resources>

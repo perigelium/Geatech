@@ -6,51 +6,62 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:background="#29b352">
+        android:background="#29b352"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tvSupplierName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="20dp"
+            android:maxLines="3"
+            android:maxWidth="200dp"
+            android:text="Supplier nome"
+            android:textColor="#ffffff"
+            android:textSize="13sp"/>
 
         <Button
             android:id="@+id/btnNewTechnician"
+            style="@android:style/Widget.Button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            style="@android:style/Widget.Button"
             android:layout_gravity="center_vertical"
-            android:background="@drawable/button_border_transparent"
             android:layout_marginBottom="20dp"
             android:layout_marginLeft="20dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="9dp"
+            android:background="@drawable/button_border_transparent"
             android:padding="9dp"
             android:text="@string/RegisterAnNewTechnician"
             android:textColor="#ffffff"
             android:textSize="15sp"/>
 
-            <FrameLayout
-                android:id="@+id/flTechnicianAdded"
+        <FrameLayout
+            android:id="@+id/flTechnicianAdded"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp">
+
+            <TextView
+                android:id="@+id/tvNoteTecnicianAdded"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="9dp">
+                android:maxLines="3"
+                android:maxWidth="200dp"
+                android:text="@string/TechnicianAddedSelectFromListBelow"
+                android:textColor="#ffffff"
+                android:textSize="16sp"/>
 
-                <TextView
-                    android:id="@+id/tvNoteTecnicianAdded"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/TechnicianAddedSelectFromListBelow"
-                    android:maxLines="3"
-                    android:maxWidth="200dp"
-                    android:textColor="#ffffff"
-                    android:textSize="16sp"/>
+            <ImageButton
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_gravity="center_vertical|right"
+                android:layout_marginRight="20dp"
+                android:background="@android:color/transparent"
+                android:scaleType="centerInside"
+                android:src="@drawable/login_success"/>
 
-                <ImageButton
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:layout_gravity="center_vertical|right"
-                    android:layout_marginRight="20dp"
-                    android:background="@android:color/transparent"
-                    android:scaleType="centerInside"
-                    android:src="@drawable/login_success"/>
-
-            </FrameLayout>
-
+        </FrameLayout>
 
 
         <LinearLayout
@@ -65,11 +76,11 @@
                 android:id="@+id/etTechNome"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:minHeight="40dp"
-                android:ems="10"
                 android:background="@android:color/transparent"
+                android:ems="10"
                 android:hint="Nome"
                 android:inputType="textEmailAddress"
+                android:minHeight="40dp"
                 android:textColor="#ffffff"
                 android:textColorHint="#cccccc"/>
 
@@ -86,7 +97,6 @@
                 android:layout_height="wrap_content">
 
                 <EditText
-                    android:minHeight="40dp"
                     android:id="@+id/etTechCognome"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -94,6 +104,7 @@
                     android:ems="10"
                     android:hint="Cognome"
                     android:inputType="textEmailAddress"
+                    android:minHeight="40dp"
                     android:textColor="#ffffff"
                     android:textColorHint="#cccccc"/>
 
@@ -121,7 +132,6 @@
         </LinearLayout>
 
 
-
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -143,10 +153,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="6dp"
                 android:background="#ff22A04B"
-                android:popupBackground="#ff8bc24a"
                 android:ems="10"
                 android:minHeight="50dp"
-                android:minWidth="200dp"/>
+                android:minWidth="200dp"
+                android:popupBackground="#ff8bc24a"/>
 
             <ImageView
                 android:layout_width="20dp"
@@ -172,11 +182,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="9dp"
-            android:text=" Tecnico predefinito"
             android:button="@drawable/login_checkbox_selector"
+            android:enabled="false"
+            android:text=" Tecnico predefinito"
             android:textColor="#93D8A8"
-            android:textSize="17sp"
-            android:enabled="false"/>
+            android:textSize="17sp"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -225,11 +235,11 @@
                     style="@android:style/Widget.Button"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:minWidth="90dp"
                     android:layout_margin="6dp"
                     android:layout_weight="1"
                     android:background="@drawable/button_border_white"
                     android:drawableRight="@drawable/login_seleziona_20px"
+                    android:minWidth="90dp"
                     android:paddingRight="25dip"
                     android:text="Seleziona "
                     android:textColor="#29b352"

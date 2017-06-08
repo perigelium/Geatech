@@ -12,6 +12,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Locale;
 
 import io.realm.Realm;
@@ -22,7 +23,6 @@ import ru.alexangan.developer.geatech.Models.ProductData;
 import ru.alexangan.developer.geatech.Models.TechnicianItem;
 import ru.alexangan.developer.geatech.Models.VisitItem;
 import ru.alexangan.developer.geatech.R;
-
 
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.selectedTech;
 
@@ -35,6 +35,7 @@ public class MyListVisitsAdapter extends BaseAdapter
     private Context mContext;
     private ArrayList<VisitItem> visitItems;
     private int layout_id;
+    private boolean overdueVisit;
     //ViewHolder holder;
 
     public MyListVisitsAdapter(Context context, int layout_id, ArrayList<VisitItem> visitItems)
@@ -69,6 +70,8 @@ public class MyListVisitsAdapter extends BaseAdapter
     {
         LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View row = inflater.inflate(layout_id, parent, false);
+
+        overdueVisit = false;
 
 /*        View row = convertView;
 
@@ -148,31 +151,34 @@ public class MyListVisitsAdapter extends BaseAdapter
         TextView tvTechName = (TextView) row.findViewById(R.id.tvTechName);
         tvTechName.setText(techName);
 
-/*        realm.beginTransaction();
-        ReportItem reportItem = realm.where(ReportItem.class).equalTo("company_id", company_id).equalTo("tech_id", selectedTech.getId())
-                .equalTo("id_sopralluogo", idSopralluogo)                .equalTo("id_rapporto_sopralluogo", id_rapporto_sopralluogo).findFirst() //.greaterThan("id_rapporto_sopralluogo", -1)
-        realm.commitTransaction();
+        Calendar calendarTodayFirstMin = Calendar.getInstance(Locale.ITALY);
 
-        if (reportStates != null)
+        calendarTodayFirstMin.set(Calendar.HOUR_OF_DAY, 0);
+        calendarTodayFirstMin.set(Calendar.MINUTE, 0);
+        calendarTodayFirstMin.set(Calendar.SECOND, 0);
+
+        long firstMilliSecondsOfToday = calendarTodayFirstMin.getTimeInMillis();
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss", Locale.ITALIAN);
+        Date date = null;
+        try
         {
-            int techOfReport = reportStates.getTech_id();
+            date = sdf.parse(dataOraSopralluogo);
+            long time = date.getTime();
 
-            if (techOfReport == selectedTech.getId() && initialized)
+            if (time < firstMilliSecondsOfToday)
             {
-                ownReport = true;
+                overdueVisit = true;
             }
-        }*/
-
-/*        if (tech_id == 0)
+        } catch (ParseException e)
         {
-            serviceTypeTextView.setText(serviceTypeTextView.getText() + String.valueOf(geaSopralluogo.getId_sopralluogo()) + geaSopralluogo.getId_practice());
-        }*/
+            e.printStackTrace();
+        }
 
 
         if (tech_id != 0)
         {
             Calendar calendar = Calendar.getInstance();
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
 
             try
             {
@@ -185,7 +191,14 @@ public class MyListVisitsAdapter extends BaseAdapter
 
             if (ownReport)
             {
-                ivReportStatus.setBackgroundResource(R.drawable.dot_green);
+                if(overdueVisit)
+                {
+                    ivReportStatus.setBackgroundResource(R.drawable.red_oval_shape);
+                }
+                else
+                {
+                    ivReportStatus.setBackgroundResource(R.drawable.dot_green);
+                }
 
             } else
             {

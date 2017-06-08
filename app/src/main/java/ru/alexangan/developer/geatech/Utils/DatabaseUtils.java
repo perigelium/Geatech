@@ -4,14 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.realm.Realm;
-import io.realm.RealmResults;
-import ru.alexangan.developer.geatech.Models.GeaImmagineRapporto;
 import ru.alexangan.developer.geatech.Models.GeaItemRapporto;
 import ru.alexangan.developer.geatech.Models.ReportItem;
 import ru.alexangan.developer.geatech.Models.ReportStates;
 
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.company_id;
-
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.selectedTech;
 
 /**

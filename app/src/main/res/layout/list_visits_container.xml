@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
-    <include android:id="@+id/list_visits_free" layout="@layout/list_visits_free"/>
+    <include android:id="@+id/list_visits_free" layout="@layout/list_visits_with_title"/>
 
     <include android:id="@+id/list_visits_today" layout="@layout/list_visits_today"/>
 

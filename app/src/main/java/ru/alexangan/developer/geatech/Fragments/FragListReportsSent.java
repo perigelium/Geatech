@@ -35,7 +35,6 @@ import ru.alexangan.developer.geatech.Utils.SwipeDetector;
 import ru.alexangan.developer.geatech.Utils.ViewUtils;
 
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.company_id;
-
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.selectedTech;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.visitItems;
 
@@ -81,7 +80,7 @@ public class FragListReportsSent extends ListFragment
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
-        View rootView = inflater.inflate(R.layout.list_reports_not_sent, container, false);
+        View rootView = inflater.inflate(R.layout.list_reports_sent, container, false);
 
         //tvListVisitsTodayDate = (TextView) rootView.findViewById(R.id.tvListVisitsTodayDate);
 
@@ -189,7 +188,7 @@ public class FragListReportsSent extends ListFragment
 
         lv = getListView();
 
-        ViewUtils.setListViewHeightBasedOnChildren(lv);
+        //ViewUtils.setListViewHeightBasedOnChildren(lv);
 
         lv.setOnTouchListener(swipeDetector);
 
