@@ -14,7 +14,6 @@
         android:layout_gravity="left"
         android:layout_marginBottom="6dp"
         android:layout_marginLeft="12dp"
-        android:gravity="center"
         android:text="Rapporti inviati">
     </TextView>
 
@@ -33,7 +32,6 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:maxLines="1"
-        android:background="#ffffffff"
         android:text="Vuoto">
     </TextView>
 

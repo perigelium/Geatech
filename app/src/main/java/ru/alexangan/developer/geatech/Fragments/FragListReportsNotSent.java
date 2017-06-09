@@ -32,7 +32,6 @@ import ru.alexangan.developer.geatech.Models.ReportStates;
 import ru.alexangan.developer.geatech.Models.VisitItem;
 import ru.alexangan.developer.geatech.R;
 import ru.alexangan.developer.geatech.Utils.SwipeDetector;
-import ru.alexangan.developer.geatech.Utils.ViewUtils;
 
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.company_id;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.selectedTech;
@@ -43,13 +42,11 @@ public class FragListReportsNotSent extends ListFragment
     private Communicator mCommunicator;
     SwipeDetector swipeDetector;
     boolean timeNotSetItemsOnly;
-    ArrayList<VisitItem> visitItemsFilteredNotSent, visitItemsFilteredSent;
-    MyListVisitsAdapter myListAdapterNotSent, myListAdapterSent;
+    ArrayList<VisitItem> visitItemsFilteredNotSent;
+    MyListVisitsAdapter myListAdapterNotSent;
     ListView lv;
     Activity activity;
-    TextView tvListVisitsTodayDate;
     private Realm realm;
-    private boolean reportCompleteAndSent;
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState)
@@ -82,8 +79,6 @@ public class FragListReportsNotSent extends ListFragment
     {
         View rootView = inflater.inflate(R.layout.list_reports_not_sent, container, false);
 
-        //tvListVisitsTodayDate = (TextView) rootView.findViewById(R.id.tvListVisitsTodayDate);
-
         return rootView;
     }
 
@@ -93,31 +88,19 @@ public class FragListReportsNotSent extends ListFragment
         super.onViewCreated(view, savedInstanceState);
 
         visitItemsFilteredNotSent = new ArrayList<>();
-        visitItemsFilteredSent = new ArrayList<>();
 
         TreeMap<Long, VisitItem> unsortedVisitsNotSent = new TreeMap<>();
-        TreeMap<Long, VisitItem> unsortedVisitsSent = new TreeMap<>();
         long n = 0;
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ITALIAN);
-        Calendar calendarNow = Calendar.getInstance(Locale.ITALY);
-        String strMonth = calendarNow.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.ITALY);
-        //String dateString = " " + calendarNow.get(Calendar.DAY_OF_MONTH) + " " + strMonth;
-
-        //tvListVisitsTodayDate.setText(dateString);
-
-        calendarNow.set(Calendar.HOUR_OF_DAY, 23);
-        calendarNow.set(Calendar.MINUTE, 59);
-        calendarNow.set(Calendar.SECOND, 59);
-        long lastMilliSecondsOfToday = calendarNow.getTimeInMillis();
 
         for (VisitItem visitItem : visitItems)
         //for (int i = 0; i < visitItems.size(); i++)
         {
             GeaSopralluogo geaSopralluogo = visitItem.getGeaSopralluogo();
+            GeaRapporto geaRapporto = visitItem.getGeaRapporto();
             int idSopralluogo = geaSopralluogo.getId_sopralluogo();
             int id_rapporto_sopralluogo = visitItem.getGeaRapporto().getId_rapporto_sopralluogo();
-            RealmList<GeaItemRapportoSopralluogo> rl_ItemsRapportoSopralluogo = visitItem.getGea_items_rapporto_sopralluogo();
-            RealmList<GeaImmagineRapportoSopralluogo> rl_ImmaginiRapportoSopralluogo = visitItem.getGea_immagini_rapporto_sopralluogo();
+            String data_ora_sopralluogo = geaSopralluogo.getData_ora_sopralluogo();
 
             realm.beginTransaction();
             ReportItem reportItem = realm.where(ReportItem.class).equalTo("company_id", company_id).equalTo("tech_id", selectedTech.getId())
@@ -125,7 +108,7 @@ public class FragListReportsNotSent extends ListFragment
                     .equalTo("id_rapporto_sopralluogo", id_rapporto_sopralluogo).findFirst();
             realm.commitTransaction();
 
-            boolean reportCompleteNotSent = false;
+            boolean reportCompleteNotSent;
 
             if (reportItem != null)
             {
@@ -136,13 +119,7 @@ public class FragListReportsNotSent extends ListFragment
                 reportCompleteNotSent = generalInfoCompletionState == ReportStates.GENERAL_INFO_DATETIME_AND_COORDS_SET
                         && reportCompletionState == ReportStates.REPORT_COMPLETED
                         && photosAddedNumber >= ReportStates.PHOTOS_MIN_ADDED
-                        && reportItem.getGea_rapporto().getData_ora_invio_rapporto() == null;
-
-                GeaRapporto gea_rapporto_sopralluogo = visitItem.getGeaRapporto();
-                String techName = gea_rapporto_sopralluogo.getNome_tecnico();
-                String data_ora_sopralluogo = reportItem.getGeaSopralluogo().getData_ora_sopralluogo();
-/*                int id_tecnico = visitItem.getGeaSopralluogo().getId_tecnico();
-                boolean ownVisit = selectedTech.getId() == id_tecnico;*/
+                        && reportItem.getGea_rapporto_sopralluogo().getData_ora_invio_rapporto() == null;
 
                 if (reportCompleteNotSent)
                 {
@@ -160,35 +137,6 @@ public class FragListReportsNotSent extends ListFragment
                         if (true)
                         {
                             unsortedVisitsNotSent.put(time, visitItem);
-                        }
-
-                    } catch (ParseException e)
-                    {
-/*                    while(unsortedVisits.get(n) != null)
-                    {
-                        n++;
-                    }
-                    unsortedVisits.put(n++, visitItem);*/
-                        e.printStackTrace();
-                    }
-                }
-
-                if (reportCompleteAndSent)
-                {
-                    try
-                    {
-                        Date date = sdf.parse(data_ora_sopralluogo);
-                        long time = date.getTime();
-                        //Log.d("DEBUG", String.valueOf(time));
-
-                        while (unsortedVisitsSent.get(time) != null) // item with the same time already exists
-                        {
-                            time++;
-                        }
-
-                        if (true)
-                        {
-                            unsortedVisitsSent.put(time, visitItem);
                         }
 
                     } catch (ParseException e)
@@ -225,36 +173,20 @@ public class FragListReportsNotSent extends ListFragment
         {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id)
             {
-                int idSopralluogo = visitItemsFilteredNotSent.get(position).getGeaSopralluogo().getId_sopralluogo();
-
                 int idVisit = visitItemsFilteredNotSent.get(position).getId();
                 int id_tecnico = visitItemsFilteredNotSent.get(position).getGeaSopralluogo().getId_tecnico();
-                int id_rapporto_sopralluogo = visitItemsFilteredNotSent.get(position).getGeaRapporto().getId_rapporto_sopralluogo();
-
-                realm.beginTransaction();
-                ReportItem reportItem = realm.where(ReportItem.class)
-                        .equalTo("company_id", company_id).equalTo("tech_id", selectedTech.getId())
-                        .equalTo("id_sopralluogo", idSopralluogo)
-                        .equalTo("id_rapporto_sopralluogo", id_rapporto_sopralluogo).findFirst();
-                realm.commitTransaction();
 
                 boolean ownVisit = selectedTech.getId() == id_tecnico;
-                boolean freeVisit = (id_tecnico == 0);
 
-                if (ownVisit || freeVisit) //
+                if (ownVisit)
                 {
                     if (swipeDetector.swipeDetected())
                     {
-                        if (swipeDetector.getAction() == SwipeDetector.Action.LR)
-                        {
-                            mCommunicator.OnVisitListItemSwiped(idVisit, ownVisit && reportItem != null);
-                        } else if (swipeDetector.getAction() == SwipeDetector.Action.RL)
-                        {
-                            mCommunicator.OnVisitListItemSwiped(idVisit, false);
-                        }
+                            mCommunicator.OnVisitListItemSwiped(idVisit, true);
+
                     } else
                     {
-                        mCommunicator.OnVisitListItemSelected(idVisit, ownVisit && reportItem != null);
+                        mCommunicator.OnVisitListItemSelected(idVisit, true);
                     }
                 }
             }

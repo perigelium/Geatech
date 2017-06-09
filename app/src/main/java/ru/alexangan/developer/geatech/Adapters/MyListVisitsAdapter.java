@@ -27,7 +27,8 @@ import ru.alexangan.developer.geatech.R;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.selectedTech;
 
 /**
- * Created by user on 11/21/2016.*/
+ * Created by user on 11/21/2016.
+ */
 
 public class MyListVisitsAdapter extends BaseAdapter
 {
@@ -124,8 +125,8 @@ public class MyListVisitsAdapter extends BaseAdapter
 
         String techName = "";
         TechnicianItem technicianItem = realm.where(TechnicianItem.class).equalTo("id", tech_id).findFirst();
-        
-        if(technicianItem!=null)
+
+        if (technicianItem != null)
         {
             techName = technicianItem.getFullNameTehnic();
         }
@@ -161,22 +162,25 @@ public class MyListVisitsAdapter extends BaseAdapter
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss", Locale.ITALIAN);
         Date date = null;
-        try
-        {
-            date = sdf.parse(dataOraSopralluogo);
-            long time = date.getTime();
 
-            if (time < firstMilliSecondsOfToday)
+        if (dataOraSopralluogo != null)
+        {
+            try
             {
-                overdueVisit = true;
+                date = sdf.parse(dataOraSopralluogo);
+                long time = date.getTime();
+
+                if (time < firstMilliSecondsOfToday)
+                {
+                    overdueVisit = true;
+                }
+            } catch (ParseException e)
+            {
+                e.printStackTrace();
             }
-        } catch (ParseException e)
-        {
-            e.printStackTrace();
+
         }
-
-
-        if (tech_id != 0)
+        if (tech_id != 0 && dataOraSopralluogo != null)
         {
             Calendar calendar = Calendar.getInstance();
 
@@ -191,11 +195,10 @@ public class MyListVisitsAdapter extends BaseAdapter
 
             if (ownReport)
             {
-                if(overdueVisit)
+                if (overdueVisit)
                 {
                     ivReportStatus.setBackgroundResource(R.drawable.red_oval_shape);
-                }
-                else
+                } else
                 {
                     ivReportStatus.setBackgroundResource(R.drawable.dot_green);
                 }
@@ -232,8 +235,8 @@ public class MyListVisitsAdapter extends BaseAdapter
         }
 
 
-    return row;
-}
+        return row;
+    }
 
 /*static class ViewHolder
 {

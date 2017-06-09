@@ -13,10 +13,8 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
-import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.RelativeLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 
@@ -132,7 +130,7 @@ public class ViewUtils
                 .equalTo("id_rapporto_sopralluogo", id_rapporto_sopralluogo).findFirst();
         realm.commitTransaction();
 
-        l_geaItemRapporto = reportItem.getGea_items_rapporto();
+        l_geaItemRapporto = reportItem.getGea_items_rapporto_sopralluogo();
     }
 
     public View getRootView()

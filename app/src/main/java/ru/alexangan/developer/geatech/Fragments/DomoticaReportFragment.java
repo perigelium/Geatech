@@ -82,7 +82,7 @@ public class DomoticaReportFragment extends Fragment
         realm.commitTransaction();
 
         realm.beginTransaction();
-        id_rapporto_sopralluogo = reportItem != null ? reportItem.getGea_rapporto().getId_rapporto_sopralluogo() : -1;
+        id_rapporto_sopralluogo = reportItem != null ? reportItem.getGea_rapporto_sopralluogo().getId_rapporto_sopralluogo() : -1;
 
         realm.commitTransaction();
     }
@@ -180,7 +180,7 @@ public class DomoticaReportFragment extends Fragment
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
                 String strDateTime = sdf.format(calendarNow.getTime());
 
-                reportItem.getGea_rapporto().setData_ora_compilazione_rapporto(strDateTime);
+                reportItem.getGea_rapporto_sopralluogo().setData_ora_compilazione_rapporto(strDateTime);
 
                 realm.commitTransaction();
             }

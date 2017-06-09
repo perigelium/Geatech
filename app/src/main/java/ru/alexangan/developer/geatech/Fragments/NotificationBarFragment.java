@@ -17,6 +17,7 @@ import java.util.ArrayList;
 
 import ru.alexangan.developer.geatech.Adapters.CustomSpinnerAdapter;
 import ru.alexangan.developer.geatech.Interfaces.Communicator;
+import ru.alexangan.developer.geatech.Models.GlobalConstants;
 import ru.alexangan.developer.geatech.Models.SpinnerItemData;
 import ru.alexangan.developer.geatech.R;
 
@@ -55,29 +56,9 @@ public class NotificationBarFragment extends Fragment implements View.OnClickLis
         String[] listItemsArray = {"Tutti i sopralluoghi", "I miei sopralluoghi", "Sopralluoghi da fissare"};
         Integer[] icons = new Integer[]{R.drawable.transparent21px, R.drawable.transparent21px, R.drawable.transparent21px};
 
-        mSettings.edit().putInt("listVisitsFilterMode", LIST_VISITS_MODE_ALL).apply();
-
-/*        TextView tvTechName = (TextView) rootView.findViewById(R.id.tvTechName);
-        tvTechName.setText(selectedTech.getFullNameTehnic());
-
-        Button btnNotifTimeNotSetVisits = (Button) rootView.findViewById(R.id.btnNotifTimeNotSetVisits);
-        btnNotifTimeNotSetVisits.setOnClickListener(this);
-
-        Button btnNotifUrgentReports = (Button) rootView.findViewById(R.id.btnNotifUrgentReports);
-        btnNotifUrgentReports.setOnClickListener(this);
-
-        Button btnAppSettings = (Button) rootView.findViewById(R.id.btnAppSettings);
-        btnAppSettings.setOnClickListener(this);*/
-
         tvWindowTitle = (TextView) rootView.findViewById(R.id.tvWindowTitle);
         ivLogoSmall = (ImageView) rootView.findViewById(R.id.ivLogoSmall);
         ivVisitsListsFilter = (ImageView) rootView.findViewById(R.id.ivVisitsListsFilter);
-
-/*        TextView tvListFilterName = (TextView) rootView.findViewById(R.id.tvListFilterName);
-        tvListFilterName.setText("Tutti i sopralluoghi");*/
-
-        //Button btnListFilters = (Button) rootView.findViewById(R.id.btnVisitsListFilter);
-        //btnListFilters.setOnClickListener(this);
 
         spVisitsFilter = (Spinner) rootView.findViewById(R.id.spVisitsFilter);
 
@@ -110,8 +91,8 @@ public class NotificationBarFragment extends Fragment implements View.OnClickLis
                 {
                     return;
                 }
-
                 mSettings.edit().putInt("listVisitsFilterMode", position).apply();
+                //GlobalConstants.listVisitsFilterMode = position;
                 mCommunicator.onNotificationReportReturned(position);
 
                 spinnerCurItem = position;

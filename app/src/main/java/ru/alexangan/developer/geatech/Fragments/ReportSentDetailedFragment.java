@@ -100,7 +100,7 @@ public class ReportSentDetailedFragment extends Fragment
 
             String product_type = visitItem.getProductData().getProductType();
 
-            List<GeaItemRapporto> geaItemsRapporto = reportItem.getGea_items_rapporto();
+            List<GeaItemRapporto> geaItemsRapporto = reportItem.getGea_items_rapporto_sopralluogo();
 
             if (geaItemsRapporto.size() != 0)
             {
@@ -142,8 +142,8 @@ public class ReportSentDetailedFragment extends Fragment
                 }
 
                 tvdataOraSopralluogo.setText(reportItem.getGeaSopralluogo().getData_ora_sopralluogo());
-                tvdataOraRaportoCompletato.setText(reportItem.getGea_rapporto().getDataOraRaportoCompletato());
-                tvdataOraRaportoInviato.setText(reportItem.getGea_rapporto().getData_ora_invio_rapporto());
+                tvdataOraRaportoCompletato.setText(reportItem.getGea_rapporto_sopralluogo().getDataOraRaportoCompletato());
+                tvdataOraRaportoInviato.setText(reportItem.getGea_rapporto_sopralluogo().getData_ora_invio_rapporto());
             }
 
 
@@ -161,9 +161,9 @@ public class ReportSentDetailedFragment extends Fragment
             TextView tvCoordEst = (TextView) rootView.findViewById(R.id.etCoordEst);
             TextView tvAltitude = (TextView) rootView.findViewById(R.id.etAltitude);
 
-            String latitude = reportItem.getGea_rapporto().getLatitudine();
-            String longitude = reportItem.getGea_rapporto().getLongitudine();
-            String altitude = reportItem.getGea_rapporto().getAltitudine();
+            String latitude = reportItem.getGea_rapporto_sopralluogo().getLatitudine();
+            String longitude = reportItem.getGea_rapporto_sopralluogo().getLongitudine();
+            String altitude = reportItem.getGea_rapporto_sopralluogo().getAltitudine();
 
             tvCoordNord.setText(String.valueOf(latitude));
             tvCoordEst.setText(String.valueOf(longitude));
@@ -192,6 +192,12 @@ public class ReportSentDetailedFragment extends Fragment
         loadImagesTask.execute();
 
         return rootView;
+    }
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState)
+    {
+        super.onViewCreated(view, savedInstanceState);
     }
 
     private void getImagesArray()
@@ -237,7 +243,15 @@ public class ReportSentDetailedFragment extends Fragment
         @Override
         protected Void doInBackground(Void... voids)
         {
-            getImagesArray(); // Long time operation
+            try
+            {
+                getImagesArray(); // Long time operation
+            }
+            catch (Exception e)
+            {
+                loadingImagesDialog.dismiss();
+            }
+
             return null;
         }
 

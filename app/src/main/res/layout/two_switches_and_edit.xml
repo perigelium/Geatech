@@ -132,7 +132,6 @@
                     android:layout_marginLeft="6dp"
                     android:background="@android:color/transparent"
                     android:hint="Inserire"
-                    android:inputType="number"
                     android:text=""
                     android:textColor="#ff29b352"
                     android:textColorHint="#cccccc"/>

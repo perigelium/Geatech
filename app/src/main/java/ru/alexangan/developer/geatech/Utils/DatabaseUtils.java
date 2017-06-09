@@ -27,7 +27,7 @@ public class DatabaseUtils
                 .findFirst();
         realm.commitTransaction();
 
-        List<GeaItemRapporto> l_geaItemRapporto = reportItem.getGea_items_rapporto();
+        List<GeaItemRapporto> l_geaItemRapporto = reportItem.getGea_items_rapporto_sopralluogo();
 
         ArrayList<Integer> notSetItems = new ArrayList<>();
 
@@ -60,7 +60,7 @@ public class DatabaseUtils
             return ReportStates.REPORT_NON_INITIATED;
         }
 
-        List<GeaItemRapporto> l_geaItemRapporto = reportItem.getGea_items_rapporto();
+        List<GeaItemRapporto> l_geaItemRapporto = reportItem.getGea_items_rapporto_sopralluogo();
 
         if (l_geaItemRapporto.size() == 0)
         {
@@ -83,6 +83,10 @@ public class DatabaseUtils
 
         int completionPercent = partiallyComplete * 100 / l_geaItemRapporto.size();
 
+        realm.beginTransaction();
+        reportItem.getGea_rapporto_sopralluogo().setCompletion_percent(completionPercent);
+        realm.commitTransaction();
+
         if (reportComplete)
         {
             return ReportStates.REPORT_COMPLETED;
@@ -102,10 +106,6 @@ public class DatabaseUtils
         {
             return ReportStates.REPORT_INITIATED;
         }
-
-        realm.beginTransaction();
-        reportItem.getGea_rapporto().setCompletion_percent(completionPercent);
-        realm.commitTransaction();
 
         return ReportStates.REPORT_NON_INITIATED;
     }
@@ -168,13 +168,13 @@ public class DatabaseUtils
             RealmResults geaItemsRapporto = realm.where(GeaItemRapporto.class)
                     .equalTo("company_id", company_id)
                     .equalTo("tech_id", selectedTech.getId())
-                    .equalTo("id_rapporto_sopralluogo", reportItem.getGea_rapporto().getId_rapporto_sopralluogo())
+                    .equalTo("id_rapporto_sopralluogo", reportItem.getGea_rapporto_sopralluogo().getId_rapporto_sopralluogo())
                     .findAll();
 
             RealmResults<GeaImmagineRapporto> listReportImages = realm.where(GeaImmagineRapporto.class)
                     .equalTo("company_id", company_id)
                     .equalTo("tech_id", selectedTech.getId())
-                    .equalTo("id_rapporto_sopralluogo", reportItem.getGea_rapporto().getId_rapporto_sopralluogo())
+                    .equalTo("id_rapporto_sopralluogo", reportItem.getGea_rapporto_sopralluogo().getId_rapporto_sopralluogo())
                     .findAll();
 
             geaItemsRapporto.deleteAllFromRealm();

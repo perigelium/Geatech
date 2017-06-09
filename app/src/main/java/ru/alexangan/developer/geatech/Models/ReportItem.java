@@ -20,19 +20,19 @@ public class ReportItem extends RealmObject
 
     private long lastChangeUnixTime;
     private GeaSopralluogo gea_sopralluoghi;
-    private GeaRapporto gea_rapporto;
+    private GeaRapporto gea_rapporto_sopralluogo;
     private ReportStates reportStates;
-    private RealmList<GeaItemRapporto> gea_items_rapporto;
-    private RealmList<GeaImmagineRapporto> gea_immagini_rapporto;
+    private RealmList<GeaItemRapporto> gea_items_rapporto_sopralluogo;
+    private RealmList<GeaImmagineRapporto> gea_immagini_rapporto_sopralluogo;
 
     public ReportItem()
     {}
 
     public ReportItem(int company_id, int tech_id, int id_sopralluogo, int id_rapporto_sopralluogo,
                       ReportStates reportStates, GeaSopralluogo gea_sopralluoghi,
-                      GeaRapporto gea_rapporto,
-                      RealmList<GeaItemRapporto> gea_items_rapporto,
-                      RealmList<GeaImmagineRapporto> gea_immagini_rapporto)
+                      GeaRapporto gea_rapporto_sopralluogo,
+                      RealmList<GeaItemRapporto> gea_items_rapporto_sopralluogo,
+                      RealmList<GeaImmagineRapporto> gea_immagini_rapporto_sopralluogo)
     {
         this.company_id = company_id;
         this.tech_id = tech_id;
@@ -42,9 +42,9 @@ public class ReportItem extends RealmObject
         lastChangeUnixTime = calendarNow.getTimeInMillis();
         this.gea_sopralluoghi = gea_sopralluoghi;
         this.reportStates = reportStates;
-        this.gea_rapporto = gea_rapporto;
-        this.gea_items_rapporto = gea_items_rapporto;
-        this.gea_immagini_rapporto = gea_immagini_rapporto;
+        this.gea_rapporto_sopralluogo = gea_rapporto_sopralluogo;
+        this.gea_items_rapporto_sopralluogo = gea_items_rapporto_sopralluogo;
+        this.gea_immagini_rapporto_sopralluogo = gea_immagini_rapporto_sopralluogo;
     }
 
     public GeaSopralluogo getGeaSopralluogo()
@@ -57,34 +57,34 @@ public class ReportItem extends RealmObject
         this.gea_sopralluoghi = geaSopralluogo;
     }
 
-    public GeaRapporto getGea_rapporto()
+    public GeaRapporto getGea_rapporto_sopralluogo()
     {
-        return gea_rapporto;
+        return gea_rapporto_sopralluogo;
     }
 
-    public void setGea_rapporto(GeaRapporto gea_rapporto)
+    public void setGea_rapporto_sopralluogo(GeaRapporto gea_rapporto_sopralluogo)
     {
-        this.gea_rapporto = gea_rapporto;
+        this.gea_rapporto_sopralluogo = gea_rapporto_sopralluogo;
     }
 
-    public List<GeaImmagineRapporto> getGea_immagini_rapporto()
+    public List<GeaImmagineRapporto> getGea_immagini_rapporto_sopralluogo()
     {
-        return gea_immagini_rapporto;
+        return gea_immagini_rapporto_sopralluogo;
     }
 
-    public void setGea_immagini_rapporto(RealmList<GeaImmagineRapporto> gea_immagini_rapporto)
+    public void setGea_immagini_rapporto_sopralluogo(RealmList<GeaImmagineRapporto> gea_immagini_rapporto_sopralluogo)
     {
-        this.gea_immagini_rapporto = gea_immagini_rapporto;
+        this.gea_immagini_rapporto_sopralluogo = gea_immagini_rapporto_sopralluogo;
     }
 
-    public List<GeaItemRapporto> getGea_items_rapporto()
+    public List<GeaItemRapporto> getGea_items_rapporto_sopralluogo()
     {
-        return gea_items_rapporto;
+        return gea_items_rapporto_sopralluogo;
     }
 
-    public void setGea_items_rapporto(RealmList<GeaItemRapporto> gea_items_rapporto)
+    public void setGea_items_rapporto_sopralluogo(RealmList<GeaItemRapporto> gea_items_rapporto_sopralluogo)
     {
-        this.gea_items_rapporto = gea_items_rapporto;
+        this.gea_items_rapporto_sopralluogo = gea_items_rapporto_sopralluogo;
     }
 
     public long getLastChangeUnixTime()
@@ -102,7 +102,7 @@ public class ReportItem extends RealmObject
         return reportStates;
     }
 
-    public void setReportStates(ReportItem reportItem)
+    public void setReportStates(ReportStates reportStates)
     {
         this.reportStates = reportStates;
     }

@@ -20,9 +20,9 @@ public class GlobalConstants
     public static RealmList<VisitItem> inVisitItems;
 
     public static String tokenStr;
-    public static boolean listVisitsIsObsolete;
-    public static boolean listReportsIsObsolete;
-    public static boolean ownReportMode;
+    public static boolean visitsListIsObsolete;
+    public static boolean reportsListIsObsolete;
+    public static boolean reminderListIsObsolete;
 
     public static int LIST_VISITS_MODE_ALL = 0;
     public static int LIST_VISITS_MODE_MY = 1;

@@ -9,6 +9,8 @@ public class GeaSopralluogo extends RealmObject
     private int id_sopralluogo;
     private int id_tecnico;
 
+    private int completion_percent;
+
     //private int id_fornitore;
     //private int id_practice;
     //private String data_ora_assegnazione;
@@ -80,5 +82,10 @@ public class GeaSopralluogo extends RealmObject
     public String getData_sollecito_rapporto()
     {
         return data_sollecito_rapporto;
+    }
+
+    public int getCompletion_percent()
+    {
+        return completion_percent;
     }
 }

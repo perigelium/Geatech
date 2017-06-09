@@ -87,16 +87,17 @@ public class FragListReportsReminded extends ListFragment
             GeaRapporto geaRapporto = visitItem.getGeaRapporto();
             String data_invio_rapporto = geaRapporto.getData_ora_invio_rapporto();
             String data_sollecito_rapporto = geaSopralluogo.getData_sollecito_rapporto();
+            String data_ora_sopralluogo = geaSopralluogo.getData_ora_sopralluogo();
 
             boolean remindedVisit = data_invio_rapporto == null && data_sollecito_rapporto != null;
             int id_tecnico = visitItem.getGeaSopralluogo().getId_tecnico();
             boolean ownVisit = selectedTech.getId() == id_tecnico;
 
-            if (data_sollecito_rapporto != null && ownVisit)
+            if (data_sollecito_rapporto != null && data_ora_sopralluogo !=null && ownVisit)
             {
                 try
                 {
-                    Date date = sdf.parse(data_sollecito_rapporto);
+                    Date date = sdf.parse(data_ora_sopralluogo);
                     long time = date.getTime();
                     //Log.d("DEBUG", String.valueOf(time));
 

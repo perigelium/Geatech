@@ -146,14 +146,14 @@ public class InWorkListVisitsAdapter extends BaseAdapter
         realm.commitTransaction();
 
         realm.beginTransaction();
-        int id_rapporto_sopralluogo = reportItem != null ? reportItem.getGea_rapporto().getId_rapporto_sopralluogo() : -1;
+        int id_rapporto_sopralluogo = reportItem != null ? reportItem.getGea_rapporto_sopralluogo().getId_rapporto_sopralluogo() : -1;
 
         realm.commitTransaction();
 
         if (reportItem != null)
         {
             int tech_id = reportItem.getTech_id();
-            String techName = reportItem.getGea_rapporto().getNome_tecnico();
+            String techName = reportItem.getGea_rapporto_sopralluogo().getNome_tecnico();
 
             tvDateTimeHasSet.setText(reportItem.getReportStates().getGeneralInfoCompletionStateString().Value());
             tvTecnicalReportState.setText(reportItem.getReportStates().getReportCompletionStateString().Value());

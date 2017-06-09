@@ -67,7 +67,6 @@ import ru.alexangan.developer.geatech.Interfaces.ScrollViewListener;
 import ru.alexangan.developer.geatech.Models.GeaItemModelliRapporto;
 import ru.alexangan.developer.geatech.Models.GeaModelloRapporto;
 import ru.alexangan.developer.geatech.Models.GeaSezioneModelliRapporto;
-import ru.alexangan.developer.geatech.Models.GeaSopralluogo;
 import ru.alexangan.developer.geatech.Models.GlobalConstants;
 import ru.alexangan.developer.geatech.Models.ProductData;
 import ru.alexangan.developer.geatech.Models.ReportItem;
@@ -85,13 +84,12 @@ import static ru.alexangan.developer.geatech.Models.GlobalConstants.LIST_VISITS_
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.LIST_VISITS_MODE_MY;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.company_id;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.inVisitItems;
-import static ru.alexangan.developer.geatech.Models.GlobalConstants.listReportsIsObsolete;
-import static ru.alexangan.developer.geatech.Models.GlobalConstants.listVisitsIsObsolete;
+import static ru.alexangan.developer.geatech.Models.GlobalConstants.visitsListIsObsolete;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.mSettings;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.selectedTech;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.tokenStr;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.visitItems;
-import static ru.alexangan.developer.geatech.R.id.innerFragContainer;
+import static ru.alexangan.developer.geatech.R.id.llInnerFragContainer;
 
 public class MainActivity extends Activity implements Communicator, Callback, ScrollViewListener
 {
@@ -138,6 +136,8 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
     NetworkUtils networkUtils;
     private boolean firstStart;
     private int curSelBottomBtnId;
+
+    ScrollViewEx scrvInnerFragContainer;
 
     @Override
     protected void onPause()
@@ -190,12 +190,12 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
         realm = Realm.getDefaultInstance();
         setContentView(R.layout.work_window);
 
-        ScrollViewEx svInnerFragContainer = (ScrollViewEx) findViewById(R.id.svInnerFragContainer);
-        svInnerFragContainer.setScrollViewListener(this);
+        scrvInnerFragContainer = (ScrollViewEx) findViewById(R.id.svInnerFragContainer);
+        scrvInnerFragContainer.setScrollViewListener(this);
 
-        setEdgeEffectL(svInnerFragContainer, Color.parseColor("#fff5f5f5"));
+        setEdgeEffectL(scrvInnerFragContainer, Color.parseColor("#ffcccccc"));
 
-        svInnerFragContainer.setOnTouchListener(new View.OnTouchListener()
+        scrvInnerFragContainer.setOnTouchListener(new View.OnTouchListener()
         {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent)
@@ -267,9 +267,10 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
         requestServerDialog.setMessage(getString(R.string.DownloadingDataPleaseWait));
         requestServerDialog.setIndeterminate(true);
 
-        GlobalConstants.listVisitsIsObsolete = false;
-        GlobalConstants.listReportsIsObsolete = false;
-        GlobalConstants.ownReportMode = true;
+        GlobalConstants.visitsListIsObsolete = false;
+        GlobalConstants.reportsListIsObsolete = false;
+        GlobalConstants.reminderListIsObsolete = false;
+        mSettings.edit().putInt("listVisitsFilterMode", LIST_VISITS_MODE_ALL).apply();
 
         handler = new Handler();
 
@@ -287,13 +288,12 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
     @Override
     public void onBackPressed()
     {
-        GlobalConstants.ownReportMode = true;
-
         if (curSelBottomBtnId != 0)
         {
             ctrlBtnsBottom.setCheckedBtnId(curSelBottomBtnId);
             curSelBottomBtnId = 0;
-        } else if (!fragListVisitsOther.isAdded())
+        } else if (!fragListVisitsToday.isAdded() && !fragListVisitsOther.isAdded()
+                && !fragListVisitsFree.isAdded() && !fragListVisitsOverdue.isAdded())
         {
             Button btn = (Button) findViewById(R.id.btnVisits);
             btn.setSelected(false);
@@ -322,13 +322,14 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
 
         if (btnId == R.id.btnVisits)
         {
-            if (listVisitsIsObsolete)
+            if (visitsListIsObsolete)
             {
                 refreshVisitsList();
             } else
             {
                 int mode = mSettings.getInt("listVisitsFilterMode", 0);
                 showSelectedVisitsList(mode);
+                scrvInnerFragContainer.getParent().requestChildFocus(scrvInnerFragContainer, scrvInnerFragContainer);
             }
         } else
         {
@@ -341,7 +342,7 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
 
             if (!fragListInWorkVisits.isAdded())
             {
-                mFragmentTransaction.add(innerFragContainer, fragListInWorkVisits);
+                mFragmentTransaction.add(llInnerFragContainer, fragListInWorkVisits);
                 mFragmentTransaction.addToBackStack(fragListInWorkVisits.getTag());
             }
             mFragmentTransaction.commit();
@@ -352,56 +353,14 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
 
         if (btnId == R.id.btnNotifications)
         {
-            //setVisitsListContent(fragNotifications);
-
-            TextView tvWindowTitle = (TextView) findViewById(R.id.tvWindowTitle);
-            tvWindowTitle.setText("Notifiche");
-
-            FragmentTransaction mFragmentTransaction = mFragmentManager.beginTransaction();
-
-            if (!fragListVisitsReminded.isAdded())
-            {
-                mFragmentTransaction.add(innerFragContainer, fragListVisitsReminded);
-            }
-
-            if (!fragListReportsReminded.isAdded())
-            {
-                mFragmentTransaction.add(innerFragContainer, fragListReportsReminded);
-            }
-            mFragmentTransaction.addToBackStack(fragListReportsReminded.getTag());
-            mFragmentTransaction.commit();
+            showNotifVisitsLists();
+            scrvInnerFragContainer.getParent().requestChildFocus(scrvInnerFragContainer, scrvInnerFragContainer);
         }
 
         if (btnId == R.id.btnCompletedReports)
         {
-            if (GlobalConstants.listReportsIsObsolete && NetworkUtils.isNetworkAvailable(this))
-            {
-                refreshVisitsList();
-            } else
-            {
-                FragmentTransaction mFragmentTransaction = mFragmentManager.beginTransaction();
-                if (!fragListReportsNotSent.isAdded())
-                {
-                    mFragmentTransaction.add(innerFragContainer, fragListReportsNotSent);
-                    mFragmentTransaction.addToBackStack(fragListReportsNotSent.getTag());
-                }
-
-                if (!fragListReportsSent.isAdded())
-                {
-                    mFragmentTransaction.add(innerFragContainer, fragListReportsSent);
-                    mFragmentTransaction.addToBackStack(fragListReportsSent.getTag());
-                }
-
-                mFragmentTransaction.commit();
-
-                //mFragmentManager.executePendingTransactions();
-
-/*            int mode = mSettings.getInt("listVisitsFilterMode", 0);
-            showSelectedVisitsList(mode);*/
-
-                TextView tvWindowTitle = (TextView) findViewById(R.id.tvWindowTitle);
-                tvWindowTitle.setText("Compilazioni completate");
-            }
+            showCompletedReportsLists();
+            scrvInnerFragContainer.getParent().requestChildFocus(scrvInnerFragContainer, scrvInnerFragContainer);
         }
 
         if (btnId == R.id.btnAppSettings)
@@ -410,6 +369,59 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
 
             TextView tvWindowTitle = (TextView) findViewById(R.id.tvWindowTitle);
             tvWindowTitle.setText("Impostazioni");
+        }
+    }
+
+    private void showCompletedReportsLists()
+    {
+        if (GlobalConstants.reportsListIsObsolete && NetworkUtils.isNetworkAvailable(this))
+        {
+            refreshVisitsList();
+        } else
+        {
+            FragmentTransaction mFragmentTransaction = mFragmentManager.beginTransaction();
+            if (!fragListReportsNotSent.isAdded())
+            {
+                mFragmentTransaction.add(llInnerFragContainer, fragListReportsNotSent);
+                mFragmentTransaction.addToBackStack(fragListReportsNotSent.getTag());
+            }
+
+            if (!fragListReportsSent.isAdded())
+            {
+                mFragmentTransaction.add(llInnerFragContainer, fragListReportsSent);
+                mFragmentTransaction.addToBackStack(fragListReportsSent.getTag());
+            }
+
+            mFragmentTransaction.commit();
+
+            TextView tvWindowTitle = (TextView) findViewById(R.id.tvWindowTitle);
+            tvWindowTitle.setText("Compilazioni completate");
+        }
+    }
+
+    private void showNotifVisitsLists()
+    {
+        if (GlobalConstants.reminderListIsObsolete && NetworkUtils.isNetworkAvailable(this))
+        {
+            refreshVisitsList();
+        } else
+        {
+            TextView tvWindowTitle = (TextView) findViewById(R.id.tvWindowTitle);
+            tvWindowTitle.setText("Notifiche");
+
+            FragmentTransaction mFragmentTransaction = mFragmentManager.beginTransaction();
+
+            if (!fragListVisitsReminded.isAdded())
+            {
+                mFragmentTransaction.add(llInnerFragContainer, fragListVisitsReminded);
+            }
+
+            if (!fragListReportsReminded.isAdded())
+            {
+                mFragmentTransaction.add(llInnerFragContainer, fragListReportsReminded);
+            }
+            mFragmentTransaction.addToBackStack(fragListReportsReminded.getTag());
+            mFragmentTransaction.commit();
         }
     }
 
@@ -443,15 +455,18 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
             }
         }
 
-        if (GlobalConstants.ownReportMode && btnId == R.id.btnFillReport)
-        {
-            VisitItem visitItem = visitItems.get(currentVisitId);
-            ProductData productData = visitItem.getProductData();
-            String productType = productData.getProductType();
+        VisitItem visitItem = visitItems.get(currentVisitId);
+        int tech_id = visitItem.getGeaSopralluogo().getId_tecnico();
+        boolean ownReportMode = tech_id == GlobalConstants.selectedTech.getId();
+        ProductData productData = visitItem.getProductData();
+        int product_id = productData.getId();
 
+        if (ownReportMode && btnId == R.id.btnFillReport)
+        {
             mFragmentManager.popBackStack();
 
             frag = null;
+            String productType = productData.getProductType();
             frag = assignFragmentModel(productType);
 
             if (!frag.isAdded())
@@ -465,7 +480,7 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
             }
         }
 
-        if (GlobalConstants.ownReportMode && btnId == R.id.btnAddPhotos)
+        if (ownReportMode && btnId == R.id.btnAddPhotos)
         {
             mFragmentManager.popBackStack();
 
@@ -473,9 +488,7 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
             {
                 realm.beginTransaction();
 
-                VisitItem visitItem = visitItems.get(currentVisitId);
-                GeaSopralluogo geaSopralluogo = visitItem.getGeaSopralluogo();
-                int idSopralluogo = geaSopralluogo.getId_sopralluogo();
+                int idSopralluogo = visitItem.getGeaSopralluogo().getId_sopralluogo();
                 int id_rapporto_sopralluogo = visitItem.getGeaRapporto().getId_rapporto_sopralluogo();
 
                 ReportItem reportItem = realm.where(ReportItem.class).equalTo("company_id", company_id)
@@ -499,10 +512,14 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
                         vFragmentTransaction.commit();
                     }
                 }
+                else
+                {
+                    showToastMessage("This report have not been initialized.");
+                }
             }
         }
 
-        if (GlobalConstants.ownReportMode && btnId == R.id.btnSendReport)
+        if (ownReportMode && btnId == R.id.btnSendReport)
         {
             mFragmentManager.popBackStack();
 
@@ -516,7 +533,7 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
             }
         }
 
-        if( ! GlobalConstants.ownReportMode)
+        if( ! ownReportMode)
         {
             ctrlBtnsSopralluogo.setCheckedBtnId(R.id.btnSopralluogoInfo);
 
@@ -530,7 +547,7 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
         {
             mFragmentManager.popBackStack();
             FragmentTransaction vFragmentTransaction = mFragmentManager.beginTransaction();
-            vFragmentTransaction.add(innerFragContainer, fragment);
+            vFragmentTransaction.add(llInnerFragContainer, fragment);
             vFragmentTransaction.addToBackStack(fragment.getTag());
             vFragmentTransaction.commit();
         }
@@ -565,14 +582,14 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
     public void onDateTimeSetReturned(int itemIndex)
     {
         currentVisitId = itemIndex;
-        listVisitsIsObsolete = true;
+        refreshVisitsList();
         ctrlBtnsSopralluogo.setCheckedBtnId(R.id.btnSopralluogoInfo);
     }
 
     @Override
-    public void onSendReportReturned(int id_rapporto_sopralluogo)
+    public void onSendReportReturned(int itemIndex)
     {
-        OnReportListItemSelected(id_rapporto_sopralluogo);
+        OnReportListItemSelected(itemIndex);
     }
 
     @Override
@@ -609,8 +626,6 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
     {
         mFragmentManager.popBackStackImmediate();
 
-        mSettings.edit().putInt("listVisitsFilterMode", mode).apply();
-
         notificationBarFragment.setView(R.string.ComingVisitsList, View.VISIBLE, View.VISIBLE);
 
         FragmentTransaction mFragmentTransaction = mFragmentManager.beginTransaction();
@@ -621,22 +636,22 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
 
             if (!fragListVisitsOverdue.isAdded())
             {
-                mFragmentTransaction.add(innerFragContainer, fragListVisitsOverdue);
+                mFragmentTransaction.add(llInnerFragContainer, fragListVisitsOverdue);
             }
 
             if (!fragListVisitsFree.isAdded())
             {
-                mFragmentTransaction.add(innerFragContainer, fragListVisitsFree);
+                mFragmentTransaction.add(llInnerFragContainer, fragListVisitsFree);
             }
 
             if (!fragListVisitsToday.isAdded())
             {
-                mFragmentTransaction.add(innerFragContainer, fragListVisitsToday);
+                mFragmentTransaction.add(llInnerFragContainer, fragListVisitsToday);
             }
 
             if (!fragListVisitsOther.isAdded())
             {
-                mFragmentTransaction.add(innerFragContainer, fragListVisitsOther);
+                mFragmentTransaction.add(llInnerFragContainer, fragListVisitsOther);
             }
 
 /*            mFragmentTransaction.show(fragListVisitsFree);
@@ -650,17 +665,17 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
 
             if (!fragListVisitsOverdue.isAdded())
             {
-                mFragmentTransaction.add(innerFragContainer, fragListVisitsOverdue);
+                mFragmentTransaction.add(llInnerFragContainer, fragListVisitsOverdue);
             }
 
             if (!fragListVisitsToday.isAdded())
             {
-                mFragmentTransaction.add(innerFragContainer, fragListVisitsToday);
+                mFragmentTransaction.add(llInnerFragContainer, fragListVisitsToday);
             }
 
             if (!fragListVisitsOther.isAdded())
             {
-                mFragmentTransaction.add(innerFragContainer, fragListVisitsOther);
+                mFragmentTransaction.add(llInnerFragContainer, fragListVisitsOther);
             }
 
 /*            mFragmentTransaction.hide(fragListVisitsFree);
@@ -672,7 +687,7 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
         {
             if (!fragListVisitsFree.isAdded())
             {
-                mFragmentTransaction.add(innerFragContainer, fragListVisitsFree);
+                mFragmentTransaction.add(llInnerFragContainer, fragListVisitsFree);
             }
 /*
             mFragmentTransaction.show(fragListVisitsFree);
@@ -735,8 +750,9 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
     {
         if (call == callVisits)
         {
-            listVisitsIsObsolete = false;
-            listReportsIsObsolete = false;
+            GlobalConstants.visitsListIsObsolete = false;
+            GlobalConstants.reportsListIsObsolete = false;
+            GlobalConstants.reminderListIsObsolete = false;
 
             showToastMessage(getString(R.string.ListVisitsReceiveFailed));
 
@@ -802,16 +818,22 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
                     visitItems = realm.where(VisitItem.class).findAll();
                     realm.commitTransaction();
 
-                    if(listVisitsIsObsolete)
+                    if(GlobalConstants.visitsListIsObsolete)
                     {
-                        listVisitsIsObsolete = false;
+                        GlobalConstants.visitsListIsObsolete = false;
                         onCtrlBtnsBottomClicked(R.id.btnVisits);
                     }
 
-                    if(listReportsIsObsolete)
+                    if(GlobalConstants.reportsListIsObsolete)
                     {
-                        listReportsIsObsolete = false;
+                        GlobalConstants.reportsListIsObsolete = false;
                         onCtrlBtnsBottomClicked(R.id.btnCompletedReports);
+                    }
+
+                    if(GlobalConstants.reminderListIsObsolete)
+                    {
+                        GlobalConstants.reminderListIsObsolete = false;
+                        onCtrlBtnsBottomClicked(R.id.btnNotifications);
                     }
 
                     requestServerDialog.dismiss();
@@ -1017,7 +1039,7 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
 
         callModels = networkUtils.getData(this, GET_MODELS_URL_SUFFIX, tokenStr);
 
-        listVisitsIsObsolete = false;
+        visitsListIsObsolete = false;
     }
 
     @Override
@@ -1066,15 +1088,22 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
         // if diff is zero, then the top has been reached
         if (diff == 0 && NetworkUtils.isNetworkAvailable(this))
         {
-            if(fragListVisitsOther.isAdded())
+            if(fragListVisitsToday.isAdded() || fragListVisitsOther.isAdded()
+                    || fragListVisitsFree.isAdded() || fragListVisitsOverdue.isAdded())
             {
-                listVisitsIsObsolete = true;
+                GlobalConstants.visitsListIsObsolete = true;
                 refreshVisitsList();
             }
 
-            if(fragListReportsNotSent.isAdded())
+            if(fragListReportsNotSent.isAdded() || fragListReportsSent.isAdded())
             {
-                listReportsIsObsolete = true;
+                GlobalConstants.reportsListIsObsolete = true;
+                refreshVisitsList();
+            }
+
+            if(fragListVisitsReminded.isAdded() || fragListReportsReminded.isAdded())
+            {
+                GlobalConstants.reminderListIsObsolete = true;
                 refreshVisitsList();
             }
         }

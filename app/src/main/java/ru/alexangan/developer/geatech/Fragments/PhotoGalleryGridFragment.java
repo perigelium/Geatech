@@ -449,9 +449,9 @@ public class PhotoGalleryGridFragment extends Fragment
 
         realm.beginTransaction();
 
-        int id_rapporto_sopralluogo = reportItem.getGea_rapporto().getId_rapporto_sopralluogo();
+        int id_rapporto_sopralluogo = reportItem.getGea_rapporto_sopralluogo().getId_rapporto_sopralluogo();
 
-        reportItem.getGea_immagini_rapporto().clear();
+        reportItem.getGea_immagini_rapporto_sopralluogo().clear();
 
         alPathItems.clear();
         alPathItems.addAll(Arrays.asList(photosDir.listFiles()));
@@ -470,9 +470,9 @@ public class PhotoGalleryGridFragment extends Fragment
 
                 realm.beginTransaction();
 
-                GeaImmagineRapporto gea_immagine = new GeaImmagineRapporto(
-                        company_id, selectedTech.getId(), id_rapporto_sopralluogo, reportImagesSize++, imageFile.getAbsolutePath(), fileName);
-                reportItem.getGea_immagini_rapporto().add(gea_immagine);
+                GeaImmagineRapporto gea_immagine =
+                        new GeaImmagineRapporto(id_rapporto_sopralluogo, reportImagesSize++, imageFile.getAbsolutePath(), fileName);
+                reportItem.getGea_immagini_rapporto_sopralluogo().add(gea_immagine);
 
                 realm.commitTransaction();
             }

@@ -12,8 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="start"
         android:layout_marginBottom="6dp"
-        android:layout_marginLeft="12dp"
-        android:gravity="center">
+        android:layout_marginLeft="12dp">
     </TextView>
 
     <ru.alexangan.developer.geatech.Models.ListViewEx

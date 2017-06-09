@@ -10,19 +10,14 @@ public class GeaImmagineRapporto extends RealmObject
 {
 
     private int id_immagine_rapporto;
-    private int company_id;
-    private int tech_id;
-
     private int id_rapporto_sopralluogo;
     private String nome_file;
 
     private String filePath;
 
     public GeaImmagineRapporto
-            (int company_id, int tech_id, int id_rapporto_sopralluogo, int id_immagine_rapporto, String filePath, String nome_file)
+            (int id_rapporto_sopralluogo, int id_immagine_rapporto, String filePath, String nome_file)
     {
-        this.company_id = company_id;
-        this.tech_id = tech_id;
         this.id_rapporto_sopralluogo = id_rapporto_sopralluogo;
         this.id_immagine_rapporto = id_immagine_rapporto;
         this.filePath = filePath;
@@ -58,7 +53,7 @@ public class GeaImmagineRapporto extends RealmObject
         this.id_immagine_rapporto = id_immagine_rapporto;
     }
 
-    public void setfilePath(String filePath)
+    public void setFilePath(String filePath)
     {
         this.filePath = filePath;
     }
