@@ -138,6 +138,7 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
     private int curSelBottomBtnId;
 
     ScrollViewEx scrvInnerFragContainer;
+    private TextView tvWindowTitle;
 
     @Override
     protected void onPause()
@@ -169,6 +170,8 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
     protected void onStart()
     {
         super.onStart();
+
+        tvWindowTitle = (TextView) findViewById(R.id.tvWindowTitle);
 
         if (firstStart)
         {
@@ -347,7 +350,6 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
             }
             mFragmentTransaction.commit();
 
-            TextView tvWindowTitle = (TextView) findViewById(R.id.tvWindowTitle);
             tvWindowTitle.setText("Compilazioni in corso");
         }
 
@@ -367,7 +369,6 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
         {
             setVisitsListContent(settingsFragment);
 
-            TextView tvWindowTitle = (TextView) findViewById(R.id.tvWindowTitle);
             tvWindowTitle.setText("Impostazioni");
         }
     }
@@ -383,18 +384,15 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
             if (!fragListReportsNotSent.isAdded())
             {
                 mFragmentTransaction.add(llInnerFragContainer, fragListReportsNotSent);
-                mFragmentTransaction.addToBackStack(fragListReportsNotSent.getTag());
             }
 
             if (!fragListReportsSent.isAdded())
             {
                 mFragmentTransaction.add(llInnerFragContainer, fragListReportsSent);
-                mFragmentTransaction.addToBackStack(fragListReportsSent.getTag());
             }
-
+            mFragmentTransaction.addToBackStack(fragListReportsSent.getTag());
             mFragmentTransaction.commit();
 
-            TextView tvWindowTitle = (TextView) findViewById(R.id.tvWindowTitle);
             tvWindowTitle.setText("Compilazioni completate");
         }
     }
@@ -406,7 +404,6 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
             refreshVisitsList();
         } else
         {
-            TextView tvWindowTitle = (TextView) findViewById(R.id.tvWindowTitle);
             tvWindowTitle.setText("Notifiche");
 
             FragmentTransaction mFragmentTransaction = mFragmentManager.beginTransaction();
@@ -587,13 +584,13 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
     }
 
     @Override
-    public void onSendReportReturned(int itemIndex)
+    public void onSendReportReturned(int id_rapporto_sopralluogo)
     {
-        OnReportListItemSelected(itemIndex);
+        OnReportListItemSelected(id_rapporto_sopralluogo);
     }
 
     @Override
-    public void OnReportListItemSelected(int itemIndex)
+    public void OnReportListItemSelected(int id_rapporto_sopralluogo)
     {
         mFragmentManager.popBackStackImmediate();
 
@@ -601,11 +598,13 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
         {
             notificationBarFragment.setView(R.string.ReportDetailed, View.GONE, View.GONE);
 
+            curSelBottomBtnId = ctrlBtnsBottom.getSelectedButtonId();
             ctrlBtnsBottom.unselectAllButtons();
 
-            Bundle args = reportDetailedFragment.getArguments() != null ? reportDetailedFragment.getArguments() : new Bundle();
+            Bundle args =
+                    reportDetailedFragment.getArguments() != null ? reportDetailedFragment.getArguments() : new Bundle();
 
-            args.putInt("selectedVisitId", itemIndex);
+            args.putInt("id_rapporto_sopralluogo", id_rapporto_sopralluogo);
             reportDetailedFragment.setArguments(args);
 
             setVisitsListContent(reportDetailedFragment);
@@ -677,6 +676,8 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
             {
                 mFragmentTransaction.add(llInnerFragContainer, fragListVisitsOther);
             }
+
+            notificationBarFragment.setView(R.string.MyVisitsList, View.VISIBLE, View.VISIBLE);
 
 /*            mFragmentTransaction.hide(fragListVisitsFree);
             mFragmentTransaction.show(fragListVisitsToday);

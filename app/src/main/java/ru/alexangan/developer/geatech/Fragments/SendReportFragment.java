@@ -237,6 +237,7 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
 
         realm.beginTransaction();
         reportItemUnmanaged.setReportStates(null);
+        reportItemUnmanaged.setClientData(null);
         realm.commitTransaction();
 
         realm.beginTransaction();
@@ -394,7 +395,7 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
                             public void run()
                             {
                                 Calendar calendarNow = Calendar.getInstance();
-                                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
+                                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ITALIAN);
                                 String strDateTime = sdf.format(calendarNow.getTime());
 
                                 if (objectsSentSuccessfully == imagesArray.size())
@@ -411,7 +412,7 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
                                     showToastMessage(getString(R.string.SendingReportFailed));
                                 }
                                 requestServerDialog.dismiss();
-                                mCommunicator.onSendReportReturned(selectedVisitId);
+                                mCommunicator.onSendReportReturned(id_rapporto_sopralluogo);
                             }
                         });
                     }
@@ -505,7 +506,7 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
                                                     showToastMessage(getString(R.string.SendingReportFailed));
                                                 }
                                                 requestServerDialog.dismiss();
-                                                mCommunicator.onSendReportReturned(selectedVisitId);
+                                                mCommunicator.onSendReportReturned(id_rapporto_sopralluogo);
                                             }
                                         });
                                     }

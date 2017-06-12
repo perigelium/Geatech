@@ -76,6 +76,7 @@
                 android:background="@drawable/checkbox_selector"
                 android:button="@null"
                 android:clickable="false"
+                android:textColor="#00ffffff"
                 android:text=""/>
 
         </FrameLayout>
@@ -104,6 +105,7 @@
                 android:background="@drawable/checkbox_selector"
                 android:button="@null"
                 android:clickable="false"
+                android:textColor="#00ffffff"
                 android:text=""/>
 
         </FrameLayout>
@@ -132,6 +134,7 @@
                 android:background="@drawable/checkbox_selector"
                 android:button="@null"
                 android:clickable="false"
+                android:textColor="#00ffffff"
                 android:text=""/>
 
         </FrameLayout>
@@ -160,6 +163,7 @@
                 android:background="@drawable/checkbox_selector"
                 android:button="@null"
                 android:clickable="false"
+                android:textColor="#00ffffff"
                 android:text=""/>
 
         </FrameLayout>
@@ -188,6 +192,7 @@
                 android:background="@drawable/checkbox_selector"
                 android:button="@null"
                 android:clickable="false"
+                android:textColor="#00ffffff"
                 android:text=""/>
 
         </FrameLayout>

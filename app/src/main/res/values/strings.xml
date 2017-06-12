@@ -50,4 +50,5 @@
     <string name="ReadOnlyMode">Modalità di sola lettura</string>
     <string name="SetDateAndTimeFirst">Imposta la data e l\'ora prima</string>
     <string name="YouCanEditYourOwnReportsOnly">È possibile modificare solo i propri rapporti</string>
+    <string name="MyVisitsList">I miei sopralluoghi</string>
 </resources>

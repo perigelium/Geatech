@@ -61,7 +61,7 @@
                 android:layout_gravity="end|center_vertical"
                 android:background="@android:color/transparent"
                 android:hint="Inserire"
-                android:inputType="number"
+                android:inputType="none"
                 android:text=""
                 android:layout_marginLeft="6dp"
                 android:textColor="#ff29b352"

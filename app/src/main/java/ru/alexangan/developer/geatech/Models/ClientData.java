@@ -6,7 +6,6 @@ import io.realm.RealmObject;
 
 public class ClientData extends RealmObject
 {
-    private int id;
     private String name;
     private String address;
     private String phone;
@@ -15,19 +14,19 @@ public class ClientData extends RealmObject
     private double coordEst;
     private int altitude;
 
+    private String id_product_type;
+    private String product;
+
     public ClientData() {}
 
-    public ClientData(int id, String name, String address, String phone, String mobile, double coordNord, double coordEst)
+    public ClientData(String name, String address, String phone, String mobile, String product)
     {
-        this.id = id;
         this.name = name;
         this.address = address;
         this.phone = phone;
         this.mobile = mobile;
-        this.coordNord = coordNord;
-        this.coordEst = coordEst;
+        this.product = product;
     }
-
 
     public String getName() {
         return name;
@@ -60,8 +59,13 @@ public class ClientData extends RealmObject
         return altitude;
     }
 
-    public int getId()
+    public String getProduct()
     {
-        return id;
+        return product;
+    }
+
+    public String getId_product_type()
+    {
+        return id_product_type;
     }
 }

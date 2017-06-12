@@ -125,9 +125,9 @@ public class FragListInWorkVisits extends ListFragment
                 int reportCompletionState = reportItem.getReportStates().getReportCompletionState();
                 int photosAddedNumber = reportItem.getReportStates().getPhotosAddedNumber();
 
-                reportStartedNotCompleted = generalInfoCompletionState == ReportStates.GENERAL_INFO_DATETIME_AND_COORDS_SET
+                reportStartedNotCompleted = generalInfoCompletionState >= ReportStates.GENERAL_INFO_DATETIME_SET
                         && ((reportCompletionState >= ReportStates.REPORT_INITIATED && reportCompletionState < ReportStates.REPORT_COMPLETED
-                        || (photosAddedNumber > 0 && photosAddedNumber < ReportStates.PHOTOS_MIN_ADDED)));
+                        || (photosAddedNumber >= 0 && photosAddedNumber < ReportStates.PHOTOS_MIN_ADDED)));
 
                 if (data_ora_sopralluogo != null)
                 {

@@ -16,7 +16,7 @@ public class ReportStates extends RealmObject
     private int general_info_coords_set;
     private int general_info_datetime_set;
 
-    public static int GENERAL_INFO_NOT_INITIATED = 0;
+    public static int GENERAL_INFO_COORDS_NOT_SET = 0;
     public static int GENERAL_INFO_COORDS_SET = 1;
     public static int GENERAL_INFO_DATETIME_SET = 1;
     public static int GENERAL_INFO_DATETIME_AND_COORDS_SET = 2;

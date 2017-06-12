@@ -43,33 +43,12 @@ public class JSON_to_model
                 // gea_sopralluoghi
                 JSONObject jsonObj_gea_sopralluoghi = (JSONObject) visit_items.get("gea_sopralluoghi");
 
-/*                Integer id_sopralluogo = visit_data.getInt("id_sopralluogo");
-                int id_tecnico = visit_data.getInt("id_tecnico");
-                //String data_ora_assegnazione = visit_data.getString("data_ora_assegnazione");
-                String data_ora_presa_appuntamento = visit_data.getString("data_ora_presa_appuntamento");
-                String data_sollecito_appuntamento = visit_data.getString("data_sollecito_appuntamento");
-                String data_ora_sopralluogo = visit_data.getString("data_ora_sopralluogo");
-
-                int id_practice = visit_data.getInt("id_practice");
-
-
-                GeaSopralluogo geaSopralluogo = new GeaSopralluogo(id_sopralluogo, id_tecnico, data_ora_presa_appuntamento, data_ora_sopralluogo);*/
-
                 GeaSopralluogo geaSopralluogo = gson.fromJson(String.valueOf(jsonObj_gea_sopralluoghi), GeaSopralluogo.class);
 
                 // gea_client
                 JSONObject client_data = (JSONObject) visit_items.get("gea_client");
 
-/*                String name = client_data.getString("name");
-                String address = client_data.getString("address");
-                String phone = client_data.getString("phone");
-                String mobile = client_data.getString("mobile");
-                double coordNord = client_data.getDouble("lat");
-                double coordEst = client_data.getDouble("lng");*/
-
                 ClientData clientData = gson.fromJson(String.valueOf(client_data), ClientData.class);
-
-                //ClientData clientData = new ClientData(i, name,  address,  phone,  mobile, coordNord, coordEst);
 
                 String productType = client_data.getString("product_type");
                 int idProductType = client_data.getInt("id_product_type");
@@ -84,12 +63,6 @@ public class JSON_to_model
                 {
 
                     JSONObject subproduct_dataJSONObject = subproducts.getJSONObject(j);
-
-/*                    String subproduct = subproduct_dataJSONObject.getString("subproduct");
-                    String subproduct_type = subproduct_dataJSONObject.getString("product_type");
-                    Integer pieces_nr = subproduct_dataJSONObject.getInt("pieces_nr");
-
-                    SubproductItem item = new SubproductItem(i, subproduct, subproduct_type, pieces_nr);*/
 
                     SubproductItem item = gson.fromJson(String.valueOf(subproduct_dataJSONObject), SubproductItem.class);
 
@@ -134,8 +107,6 @@ public class JSON_to_model
                 visitItems.add(visitItem);
 
             }
-
-            ////Log.d("DEBUG", String.valueOf(visitItems.size()));
 
         } catch (JSONException e)
         {

@@ -330,8 +330,8 @@ public class PompaDiCaloreReportFragment extends Fragment
 
             idItem = viewUtils.fillSeveralEdits(idItem, 4);
 
-            final EditText et3 = viewUtils.getEditTexts().get(idItem-2);
-            et3.setInputType(InputType.TYPE_CLASS_TEXT);
+/*            final EditText et3 = viewUtils.getEditTexts().get(idItem-2);
+            et3.setInputType(InputType.TYPE_CLASS_TEXT);*/
 
             idItem = viewUtils.fillSeveralRadios(idItem);
 

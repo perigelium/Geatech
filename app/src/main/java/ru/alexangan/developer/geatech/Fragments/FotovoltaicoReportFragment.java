@@ -298,7 +298,6 @@ public class FotovoltaicoReportFragment extends Fragment
             idItem = viewUtils.fillSeveralEdits(idItem, 1);
 
             final EditText et3 = viewUtils.getEditTexts().get(idItem - 1);
-            et3.setInputType(InputType.TYPE_CLASS_NUMBER);
             final Switch sw1 = viewUtils.getSwitches().get(idItem - 2);
             final LinearLayout llEdit1 = viewUtils.getLinearLayouts().get(idItem - 1).first;
 

@@ -8,46 +8,36 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Map;
 import java.util.TreeMap;
 
 import io.realm.Realm;
-import io.realm.RealmList;
+import io.realm.RealmResults;
 import ru.alexangan.developer.geatech.Adapters.MyListVisitsAdapter;
+import ru.alexangan.developer.geatech.Adapters.ReportsListAdapter;
 import ru.alexangan.developer.geatech.Interfaces.Communicator;
-import ru.alexangan.developer.geatech.Models.GeaImmagineRapportoSopralluogo;
-import ru.alexangan.developer.geatech.Models.GeaItemRapportoSopralluogo;
-import ru.alexangan.developer.geatech.Models.GeaRapporto;
-import ru.alexangan.developer.geatech.Models.GeaSopralluogo;
 import ru.alexangan.developer.geatech.Models.ReportItem;
-import ru.alexangan.developer.geatech.Models.ReportStates;
-import ru.alexangan.developer.geatech.Models.VisitItem;
 import ru.alexangan.developer.geatech.R;
 import ru.alexangan.developer.geatech.Utils.SwipeDetector;
 
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.company_id;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.selectedTech;
-import static ru.alexangan.developer.geatech.Models.GlobalConstants.visitItems;
 
 public class FragListReportsSent extends ListFragment
 {
     private Communicator mCommunicator;
     SwipeDetector swipeDetector;
-    boolean timeNotSetItemsOnly;
-    ArrayList<VisitItem> visitItemsFilteredSent;
-    MyListVisitsAdapter myListAdapterSent;
+    ArrayList<ReportItem> reportItemsFilteredSent;
+    ReportsListAdapter myListAdapterSent;
     ListView lv;
     Activity activity;
     private Realm realm;
-    private ReportItem reportItem;
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState)
@@ -65,12 +55,10 @@ public class FragListReportsSent extends ListFragment
         mCommunicator = (Communicator) getActivity();
         swipeDetector = new SwipeDetector();
 
-        timeNotSetItemsOnly = false;
-
-        if (getArguments() != null)
+/*        if (getArguments() != null)
         {
-            timeNotSetItemsOnly = getArguments().getBoolean("ownVisitsOnly", false);
-        }
+            id_rapporto_sopralluogo = getArguments().getInt("id_rapporto_sopralluogo", 0);
+        }*/
 
         realm = Realm.getDefaultInstance();
     }
@@ -90,44 +78,43 @@ public class FragListReportsSent extends ListFragment
     {
         super.onViewCreated(view, savedInstanceState);
 
-        visitItemsFilteredSent = new ArrayList<>();
+        reportItemsFilteredSent = new ArrayList<>();
 
-        TreeMap<Long, VisitItem> unsortedVisitsSent = new TreeMap<>();
+        TreeMap<Long, ReportItem> unsortedReportsSent = new TreeMap<>();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ITALIAN);
 
-        for (VisitItem visitItem : visitItems)
+        realm.beginTransaction();
+        RealmResults<ReportItem> reportItems = realm.where(ReportItem.class).equalTo("company_id", company_id)
+                .equalTo("tech_id", selectedTech.getId())
+                .findAll();
+        realm.commitTransaction();
+
+        for (ReportItem reportItem : reportItems)
         //for (int i = 0; i < visitItems.size(); i++)
         {
-            GeaSopralluogo geaSopralluogo = visitItem.getGeaSopralluogo();
+/*            GeaSopralluogo geaSopralluogo = visitItem.getGeaSopralluogo();
             GeaRapporto geaRapporto = visitItem.getGeaRapporto();
             String data_ora_sopralluogo = geaSopralluogo.getData_ora_sopralluogo();
             int idSopralluogo = geaSopralluogo.getId_sopralluogo();
             int id_rapporto_sopralluogo = visitItem.getGeaRapporto().getId_rapporto_sopralluogo();
-            int completion_percent = geaRapporto.getCompletion_percent();
+            int completion_percent = geaRapporto.getCompletion_percent();*/
 
-            realm.beginTransaction();
-            reportItem = realm.where(ReportItem.class).equalTo("company_id", company_id).equalTo("tech_id", selectedTech.getId())
-                    .equalTo("id_sopralluogo", idSopralluogo)
-                    .equalTo("id_rapporto_sopralluogo", id_rapporto_sopralluogo).findFirst();
-            realm.commitTransaction();
+            String data_ora_sopralluogo = reportItem.getGeaSopralluogo().getData_ora_sopralluogo();
 
-            boolean reportCompleteAndSent = false;
+            boolean isReportSent;
 
-            if (reportItem != null)
+            //if (reportItem != null)
             {
-                int generalInfoCompletionState = reportItem.getReportStates().getGeneralInfoCompletionState();
+/*                int generalInfoCompletionState = reportItem.getReportStates().getGeneralInfoCompletionState();
                 int reportCompletionState = reportItem.getReportStates().getReportCompletionState();
-                int photosAddedNumber = reportItem.getReportStates().getPhotosAddedNumber();
+                int photosAddedNumber = reportItem.getReportStates().getPhotosAddedNumber();*/
 
-                reportCompleteAndSent = generalInfoCompletionState == ReportStates.GENERAL_INFO_DATETIME_AND_COORDS_SET
-                        && reportCompletionState == ReportStates.REPORT_COMPLETED
-                        && photosAddedNumber >= ReportStates.PHOTOS_MIN_ADDED
-                        && reportItem.getGea_rapporto_sopralluogo().getData_ora_invio_rapporto() != null;
+                isReportSent = reportItem.getGea_rapporto_sopralluogo().getData_ora_invio_rapporto() != null;
 
 /*                int id_tecnico = visitItem.getGeaSopralluogo().getId_tecnico();
                 boolean ownVisit = selectedTech.getId() == id_tecnico;*/
 
-                if (reportCompleteAndSent)
+                if (isReportSent)
                 {
                     try
                     {
@@ -135,14 +122,14 @@ public class FragListReportsSent extends ListFragment
                         long time = date.getTime();
                         //Log.d("DEBUG", String.valueOf(time));
 
-                        while (unsortedVisitsSent.get(time) != null) // item with the same time already exists
+                        while (unsortedReportsSent.get(time) != null) // item with the same time already exists
                         {
                             time++;
                         }
 
                         if (true)
                         {
-                            unsortedVisitsSent.put(time, visitItem);
+                            unsortedReportsSent.put(time, reportItem);
                         }
 
                     } catch (ParseException e)
@@ -158,15 +145,15 @@ public class FragListReportsSent extends ListFragment
             }
         }
 
-        for (Map.Entry entry : unsortedVisitsSent.entrySet())
+        for (Map.Entry entry : unsortedReportsSent.entrySet())
         {
-            VisitItem visitItem = (VisitItem) entry.getValue();
+            ReportItem reportItem = (ReportItem) entry.getValue();
             {
-                visitItemsFilteredSent.add(visitItem);
+                reportItemsFilteredSent.add(reportItem);
             }
         }
 
-        myListAdapterSent = new MyListVisitsAdapter(getActivity(), R.layout.list_visits_fragment_row, visitItemsFilteredSent);
+        myListAdapterSent = new ReportsListAdapter(getActivity(), R.layout.list_visits_fragment_row, reportItemsFilteredSent);
         setListAdapter(myListAdapterSent);
 
         lv = getListView();
@@ -180,8 +167,9 @@ public class FragListReportsSent extends ListFragment
             public void onItemClick(AdapterView<?> parent, View view, int position, long id)
             {
 
-                int idVisit = visitItemsFilteredSent.get(position).getId();
-                int id_tecnico = visitItemsFilteredSent.get(position).getGeaSopralluogo().getId_tecnico();
+                //int idVisit = reportItemsFilteredSent.get(position).getId();
+                int id_tecnico = reportItemsFilteredSent.get(position).getGeaSopralluogo().getId_tecnico();
+                int id_rapporto_sopralluogo = reportItemsFilteredSent.get(position).getId_rapporto_sopralluogo();
 
                 boolean ownVisit = selectedTech.getId() == id_tecnico;
 
@@ -189,11 +177,11 @@ public class FragListReportsSent extends ListFragment
                 {
                     if (swipeDetector.swipeDetected())
                     {
-                        mCommunicator.onSendReportReturned(idVisit);
+                        mCommunicator.onSendReportReturned(id_rapporto_sopralluogo);
 
                     } else
                     {
-                        mCommunicator.onSendReportReturned(idVisit);
+                        mCommunicator.onSendReportReturned(id_rapporto_sopralluogo);
                     }
                 }
             }

@@ -20,6 +20,7 @@ public class ReportItem extends RealmObject
 
     private long lastChangeUnixTime;
     private GeaSopralluogo gea_sopralluoghi;
+    private ClientData clientData;
     private GeaRapporto gea_rapporto_sopralluogo;
     private ReportStates reportStates;
     private RealmList<GeaItemRapporto> gea_items_rapporto_sopralluogo;
@@ -30,6 +31,7 @@ public class ReportItem extends RealmObject
 
     public ReportItem(int company_id, int tech_id, int id_sopralluogo, int id_rapporto_sopralluogo,
                       ReportStates reportStates, GeaSopralluogo gea_sopralluoghi,
+                      ClientData clientData,
                       GeaRapporto gea_rapporto_sopralluogo,
                       RealmList<GeaItemRapporto> gea_items_rapporto_sopralluogo,
                       RealmList<GeaImmagineRapporto> gea_immagini_rapporto_sopralluogo)
@@ -41,6 +43,7 @@ public class ReportItem extends RealmObject
         Calendar calendarNow = Calendar.getInstance(Locale.ITALY);
         lastChangeUnixTime = calendarNow.getTimeInMillis();
         this.gea_sopralluoghi = gea_sopralluoghi;
+        this.clientData = clientData;
         this.reportStates = reportStates;
         this.gea_rapporto_sopralluogo = gea_rapporto_sopralluogo;
         this.gea_items_rapporto_sopralluogo = gea_items_rapporto_sopralluogo;
@@ -120,5 +123,20 @@ public class ReportItem extends RealmObject
     public int getId_rapporto_sopralluogo()
     {
         return id_rapporto_sopralluogo;
+    }
+
+    public ClientData getClientData()
+    {
+        return clientData;
+    }
+
+    public GeaSopralluogo getGea_sopralluoghi()
+    {
+        return gea_sopralluoghi;
+    }
+
+    public void setClientData(ClientData clientData)
+    {
+        this.clientData = clientData;
     }
 }

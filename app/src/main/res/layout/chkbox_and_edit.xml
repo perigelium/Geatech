@@ -75,6 +75,7 @@
                 android:background="@drawable/checkbox_selector"
                 android:button="@null"
                 android:clickable="false"
+                android:textColor="#00ffffff"
                 android:text=""/>
 
         </FrameLayout>
@@ -106,7 +107,7 @@
                     android:layout_marginLeft="6dp"
                     android:background="@android:color/transparent"
                     android:hint="Inserire"
-                    android:inputType="number"
+                    android:inputType="none"
                     android:text=""
                     android:textColor="#ff29b352"
                     android:textColorHint="#cccccc"/>

@@ -21,7 +21,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.text.format.DateFormat;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,12 +28,13 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.FrameLayout;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
+
+import com.google.gson.Gson;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -66,7 +66,6 @@ import ru.alexangan.developer.geatech.Models.ProductData;
 import ru.alexangan.developer.geatech.Models.ReportItem;
 import ru.alexangan.developer.geatech.Models.ReportStates;
 import ru.alexangan.developer.geatech.Models.SubproductItem;
-import ru.alexangan.developer.geatech.Models.TechnicianItem;
 import ru.alexangan.developer.geatech.Models.VisitItem;
 import ru.alexangan.developer.geatech.Network.LocationRetriever;
 import ru.alexangan.developer.geatech.Network.NetworkUtils;
@@ -103,7 +102,8 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
     private int PERMISSION_REQUEST_CODE = 11;
     ScrollView svVisitInfoScrollView;
     String dataOraSopralluogo;
-    GeaRapporto reportData;
+    GeaRapporto geaRapportoSopralluogo;
+    String strNotKnown;
 
     private TextView btnSetDateTimeSubmit;
 
@@ -167,6 +167,8 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
         requestServerDialog.setTitle("");
         requestServerDialog.setMessage(getString(R.string.DownloadingDataPleaseWait));
         requestServerDialog.setIndeterminate(true);
+
+        strNotKnown = getString(R.string.Unknown);
     }
 
     @Override
@@ -226,13 +228,13 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
         GeaSopralluogo geaSopralluogo = visitItem.getGeaSopralluogo();
         clientData = visitItem.getClientData();
         productData = visitItem.getProductData();
-        reportData = visitItem.getGeaRapporto();
+        geaRapportoSopralluogo = visitItem.getGeaRapporto();
 
         tech_id = geaSopralluogo.getId_tecnico();
-        tech_name = reportData.getNome_tecnico();
+        tech_name = geaRapportoSopralluogo.getNome_tecnico();
         int id_product_type = productData.getIdProductType();
         idSopralluogo = geaSopralluogo.getId_sopralluogo();
-        id_rapporto_sopralluogo = reportData.getId_rapporto_sopralluogo();
+        id_rapporto_sopralluogo = geaRapportoSopralluogo.getId_rapporto_sopralluogo();
         List<SubproductItem> listSubproducts = productData.getSubItem();
         dataOraSopralluogo = geaSopralluogo.getData_ora_sopralluogo();
 
@@ -256,10 +258,7 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
         ListView listView = (ListView) rootView.findViewById(R.id.listSubproducts);
         listView.setAdapter(adapter);
 
-        if (adapter.getCount() != 0)
-        {
-            //ViewUtils.setListViewHeightBasedOnChildren(listView);
-        } else
+        if (adapter.getCount() == 0)
         {
             tvListSottprodottiTitle.setText("");
         }
@@ -305,11 +304,13 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
                         strDateTimeVisitSet, dataOraSopralluogo);
                 GeaRapporto gea_rapporto = new GeaRapporto(idSopralluogo, id_rapporto_sopralluogo);
 
+                ClientData clientDataEx = realm.copyFromRealm(visitItem.getClientData());
+
                 realm.beginTransaction();
                 ReportItem reportItem = new ReportItem(company_id, selectedTech.getId(),
                         idSopralluogo, id_rapporto_sopralluogo,
                         new ReportStates(ReportStates.GENERAL_INFO_DATETIME_SET),
-                        gea_sopralluoghi, gea_rapporto,
+                        gea_sopralluoghi, clientDataEx, gea_rapporto,
                         new RealmList<GeaItemRapporto>(),
                         new RealmList<GeaImmagineRapporto>());
                 realm.copyToRealm(reportItem);
@@ -320,7 +321,7 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
             flGetCurrentCoords.setVisibility(View.GONE);
         }
 
-        if(dataOraSopralluogo != null)
+        if (dataOraSopralluogo != null)
         {
             try
             {
@@ -344,15 +345,9 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
         {
             GeaRapporto geaRapporto = reportItem.getGea_rapporto_sopralluogo();
 
-            try
-            {
-                latitude = geaRapporto.getLatitudine();
-                longitude = geaRapporto.getLongitudine();
-                altitude = geaRapporto.getAltitudine();
-            } catch (NullPointerException e)
-            {
-                Log.d("DEBUG", "Parse double exception.");
-            }
+            latitude = geaRapporto.getLatitudine();
+            longitude = geaRapporto.getLongitudine();
+            altitude = geaRapporto.getAltitudine();
 
             //coordsUnchanged = latitude != 0 && longitude != 0;// && altitude != ReportStates.ALTITUDE_UNKNOWN;
 
@@ -365,23 +360,31 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
             {
                 longitude = String.valueOf(clientData.getCoordEst());
             }
-
-            etCoordNord.setText(latitude);
-            etCoordEst.setText(longitude);
-
-            if (altitude != null)
-            {
-                etAltitude.setText(altitude);
-            } else
-            {
-                etAltitude.setText(R.string.Unknown);
-            }
         } else
         {
             latitude = String.valueOf(clientData.getCoordNord());
             longitude = String.valueOf(clientData.getCoordEst());
-            altitude = reportData.getAltitudine();
+            altitude = geaRapportoSopralluogo.getAltitudine();
         }
+
+        if (latitude.equals("0.0"))
+        {
+            latitude = strNotKnown;
+        }
+
+        if (longitude.equals("0.0"))
+        {
+            longitude = strNotKnown;
+        }
+
+        if (altitude == null || altitude.length() == 0)
+        {
+            altitude = strNotKnown;
+        }
+
+        etCoordNord.setText(latitude);
+        etCoordEst.setText(longitude);
+        etAltitude.setText(altitude);
 
         if (tech_id != 0)
         {
@@ -389,8 +392,7 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
             tvTechnicianName.setText(tech_name);
             tvTechnicianName.setVisibility(View.VISIBLE);
             flSetDateTimeSubmit.setVisibility(View.GONE);
-        }
-        else
+        } else
         {
             tvTechnicianName.setVisibility(View.GONE);
             flSetDateTimeSubmit.setVisibility(View.VISIBLE);
@@ -476,7 +478,7 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
     {
         if (v.getId() == R.id.btnGetCurrentCoords)
         {
-            if (! ownReportMode)
+            if (!ownReportMode)
             {
                 showToastMessage(getString(R.string.SetDateAndTimeFirst));
                 return;
@@ -719,16 +721,20 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
                                             {
                                                 String str_id_rapporto_sopralluogo = jsonObject.getString("id_rapporto_sopralluogo");
                                                 int id_rapporto_sopralluogo = Integer.valueOf(str_id_rapporto_sopralluogo);
+                                                tech_id = GlobalConstants.selectedTech.getId();
 
                                                 GeaSopralluogo gea_sopralluoghi = new GeaSopralluogo(idSopralluogo, selectedTech.getId(),
                                                         strDateTimeNow, strDateTimeSet);
+
+                                                ClientData clientDataEx = realm.copyFromRealm(visitItem.getClientData());
+
                                                 GeaRapporto gea_rapporto = new GeaRapporto(idSopralluogo, id_rapporto_sopralluogo);
 
                                                 realm.beginTransaction();
-                                                ReportItem reportItem = new ReportItem(company_id, selectedTech.getId(),
+                                                ReportItem reportItem = new ReportItem(company_id, tech_id,
                                                         idSopralluogo, id_rapporto_sopralluogo,
                                                         new ReportStates(ReportStates.GENERAL_INFO_DATETIME_SET),
-                                                        gea_sopralluoghi, gea_rapporto,
+                                                        gea_sopralluoghi, clientDataEx, gea_rapporto,
                                                         new RealmList<GeaItemRapporto>(),
                                                         new RealmList<GeaImmagineRapporto>());
                                                 realm.copyToRealm(reportItem);
@@ -740,12 +746,12 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
                                                 reportItem.getGeaSopralluogo().setData_ora_sopralluogo(strDateTimeSet);
                                                 realm.commitTransaction();
                                             }
-                                            tvdataOraSopralluogo.setText(strDateTimeSet);
+                                            tvTechnicianName.setText(tech_name);
                                             tvTechnicianName.setVisibility(View.VISIBLE);
+                                            tvdataOraSopralluogo.setText(strDateTimeSet);
                                             flSetDateTimeSubmit.setVisibility(View.GONE);
-                                            btnGetCurrentCoords.getParent().requestChildFocus(btnGetCurrentCoords, btnGetCurrentCoords);
-
                                             btnGetCurrentCoords.setVisibility(View.VISIBLE);
+                                            btnGetCurrentCoords.getParent().requestChildFocus(btnGetCurrentCoords, btnGetCurrentCoords);
 
                                             showToastMessage(getString(R.string.DateTimeSetSuccessfully));//, server ritorna: " + strVisitDateTimeResponse
                                         } catch (JSONException e)
@@ -880,10 +886,13 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
                 geaRapporto.setAltitudine((etAltitude.getText().toString()));
             }
 
-            if (geaRapporto.getLatitudine() != null
-                    && geaRapporto.getLongitudine() != null) // && altitude != -999
+            if (geaRapporto.getLatitudine() != null && !geaRapporto.getLatitudine().equals(strNotKnown)
+                    && geaRapporto.getLongitudine() != null && !geaRapporto.getLongitudine().equals(strNotKnown))
             {
                 reportItem.getReportStates().setGeneral_info_coords_set(ReportStates.GENERAL_INFO_COORDS_SET);
+            } else
+            {
+                reportItem.getReportStates().setGeneral_info_coords_set(ReportStates.GENERAL_INFO_COORDS_NOT_SET);
             }
 
             realm.commitTransaction();

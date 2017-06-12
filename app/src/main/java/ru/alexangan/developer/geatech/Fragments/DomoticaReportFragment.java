@@ -217,6 +217,11 @@ public class DomoticaReportFragment extends Fragment
 
             idItem = viewUtils.fillSeveralEdits(idItem, 3);
 
+            final EditText et0 = viewUtils.getEditTexts().get(idItem-3);
+            et0.setInputType(InputType.TYPE_CLASS_NUMBER);
+            final EditText et1 = viewUtils.getEditTexts().get(idItem-2);
+            et1.setInputType(InputType.TYPE_CLASS_NUMBER);
+
             idItem = viewUtils.fillSeveralSwitches(idItem, 1);
 
             idItem = viewUtils.fillSeveralEdits(idItem, 1);
@@ -265,5 +270,4 @@ public class DomoticaReportFragment extends Fragment
             }
         }
     }
-
 }

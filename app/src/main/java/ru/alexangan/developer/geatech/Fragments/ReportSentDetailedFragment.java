@@ -23,23 +23,19 @@ import io.realm.RealmResults;
 import ru.alexangan.developer.geatech.Adapters.GridViewAdapter;
 import ru.alexangan.developer.geatech.Models.GeaItemModelliRapporto;
 import ru.alexangan.developer.geatech.Models.GeaItemRapporto;
-import ru.alexangan.developer.geatech.Models.GeaSopralluogo;
 import ru.alexangan.developer.geatech.Models.ReportItem;
-import ru.alexangan.developer.geatech.Models.VisitItem;
 import ru.alexangan.developer.geatech.R;
 import ru.alexangan.developer.geatech.Utils.ImageUtils;
 import ru.alexangan.developer.geatech.Utils.ViewUtils;
 
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.company_id;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.selectedTech;
-import static ru.alexangan.developer.geatech.Models.GlobalConstants.visitItems;
 
 // Created by Alex Angan on 11/10/2016 .
 
 public class ReportSentDetailedFragment extends Fragment
 {
-    private int sel_index;
-    List<String> reportItems;
+    private int id_rapporto_sopralluogo;
     GridView gvPhotoGallery;
     private ProgressDialog loadingImagesDialog;
     Activity activity;
@@ -49,6 +45,13 @@ public class ReportSentDetailedFragment extends Fragment
     ArrayList<Bitmap> imageThumbnails;
     ArrayList<File> pathItems;
     private Realm realm;
+    private List<String> reportListStrValues;
+    private TextView tvTechName, tvdataOraSopralluogo, tvdataOraRaportoInviato;
+    private TextView tvdataOraRaportoCompletato;
+    private TextView tvReportName, clientNameTextView;
+    private TextView clientPhoneTextView, clientAddressTextView;
+    private TextView tvCoordNord, tvCoordEst, tvAltitude;
+    private ListView listView;
 
     @Override
     public void onCreate(Bundle savedInstanceState)
@@ -57,12 +60,11 @@ public class ReportSentDetailedFragment extends Fragment
 
         if (getArguments() != null)
         {
-            sel_index = getArguments().getInt("selectedVisitId");
+            id_rapporto_sopralluogo = getArguments().getInt("id_rapporto_sopralluogo");
         }
 
         activity = getActivity();
         realm = Realm.getDefaultInstance();
-        reportItems = new ArrayList<>();
 
         loadingImagesDialog = new ProgressDialog(getActivity());
         loadingImagesDialog.setTitle("");
@@ -76,29 +78,46 @@ public class ReportSentDetailedFragment extends Fragment
 
         gvPhotoGallery = (GridView) rootView.findViewById(R.id.gvPhotoGallery);
 
-        TextView tvdataOraSopralluogo = (TextView) rootView.findViewById(R.id.tvdataOraSopralluogo);
-        TextView tvdataOraRaportoCompletato = (TextView) rootView.findViewById(R.id.tvdataOraRaportoCompletato);
-        TextView tvdataOraRaportoInviato = (TextView) rootView.findViewById(R.id.tvdataOraRaportoInviato);
-        TextView tvReportName = (TextView) rootView.findViewById(R.id.tvReportName);
+        tvdataOraSopralluogo = (TextView) rootView.findViewById(R.id.tvdataOraSopralluogo);
+        tvdataOraRaportoCompletato = (TextView) rootView.findViewById(R.id.tvdataOraRaportoCompletato);
+        tvdataOraRaportoInviato = (TextView) rootView.findViewById(R.id.tvdataOraRaportoInviato);
+        tvReportName = (TextView) rootView.findViewById(R.id.tvReportName);
 
-        TextView tvTechName = (TextView) rootView.findViewById(R.id.tvTechName);
+        clientNameTextView = (TextView) rootView.findViewById(R.id.tvClientName);
+        clientPhoneTextView = (TextView) rootView.findViewById(R.id.tvClientPhone);
+        clientAddressTextView = (TextView) rootView.findViewById(R.id.tvClientAddress);
+
+        tvCoordNord = (TextView) rootView.findViewById(R.id.etCoordNord);
+        tvCoordEst = (TextView) rootView.findViewById(R.id.etCoordEst);
+        tvAltitude = (TextView) rootView.findViewById(R.id.etAltitude);
+
+        tvTechName = (TextView) rootView.findViewById(R.id.tvTechName);
+
+        listView = (ListView) rootView.findViewById(R.id.listItemsSentReport);
+
+        return rootView;
+    }
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState)
+    {
+        super.onViewCreated(view, savedInstanceState);
+
+        reportListStrValues = new ArrayList<>();
         tvTechName.setText(selectedTech.getFullNameTehnic());
 
-        VisitItem visitItem = visitItems.get(sel_index);
-        GeaSopralluogo geaSopralluogo = visitItem.getGeaSopralluogo();
-        int idSopralluogo = geaSopralluogo.getId_sopralluogo();
-        int id_rapporto_sopralluogo = visitItem.getGeaRapporto().getId_rapporto_sopralluogo();
-
         realm.beginTransaction();
-        ReportItem reportItem = realm.where(ReportItem.class).equalTo("company_id", company_id).equalTo("tech_id", selectedTech.getId())
-                .equalTo("id_sopralluogo", idSopralluogo).equalTo("id_rapporto_sopralluogo", id_rapporto_sopralluogo).findFirst();
+        ReportItem reportItem = realm.where(ReportItem.class).equalTo("company_id", company_id)
+                .equalTo("tech_id", selectedTech.getId())
+                .equalTo("id_rapporto_sopralluogo", id_rapporto_sopralluogo)
+                .findFirst();
         realm.commitTransaction();
 
         if (reportItem != null)
         {
-            photosFolderName = "photos" + idSopralluogo;
+            photosFolderName = "photos" + reportItem.getId_sopralluogo();
 
-            String product_type = visitItem.getProductData().getProductType();
+            String product_type = reportItem.getClientData().getProduct();
 
             List<GeaItemRapporto> geaItemsRapporto = reportItem.getGea_items_rapporto_sopralluogo();
 
@@ -136,7 +155,7 @@ public class ReportSentDetailedFragment extends Fragment
                     {
                         if (geaItemModelli.get(i).getId_item_modello() == geaItemsRapporto.get(j).getId_item_modello())
                         {
-                            reportItems.add(String.valueOf(geaItemModelli.get(i).getDescrizione_item()) + " : " + geaItemsRapporto.get(j).getValore());
+                            reportListStrValues.add(String.valueOf(geaItemModelli.get(i).getDescrizione_item()) + " : " + geaItemsRapporto.get(j).getValore());
                         }
                     }
                 }
@@ -146,20 +165,13 @@ public class ReportSentDetailedFragment extends Fragment
                 tvdataOraRaportoInviato.setText(reportItem.getGea_rapporto_sopralluogo().getData_ora_invio_rapporto());
             }
 
-
-            TextView clientNameTextView = (TextView) rootView.findViewById(R.id.tvClientName);
-            clientNameTextView.setText(visitItem.getClientData().getName());
-
-            TextView clientPhoneTextView = (TextView) rootView.findViewById(R.id.tvClientPhone);
-            clientPhoneTextView.setText(visitItem.getClientData().getMobile());
-
-            TextView clientAddressTextView = (TextView) rootView.findViewById(R.id.tvClientAddress);
-            clientAddressTextView.setText(visitItem.getClientData().getAddress());
+            clientNameTextView.setText(reportItem.getClientData().getName());
 
 
-            TextView tvCoordNord = (TextView) rootView.findViewById(R.id.etCoordNord);
-            TextView tvCoordEst = (TextView) rootView.findViewById(R.id.etCoordEst);
-            TextView tvAltitude = (TextView) rootView.findViewById(R.id.etAltitude);
+            clientPhoneTextView.setText(reportItem.getClientData().getMobile());
+
+
+            clientAddressTextView.setText(reportItem.getClientData().getAddress());
 
             String latitude = reportItem.getGea_rapporto_sopralluogo().getLatitudine();
             String longitude = reportItem.getGea_rapporto_sopralluogo().getLongitudine();
@@ -167,37 +179,18 @@ public class ReportSentDetailedFragment extends Fragment
 
             tvCoordNord.setText(String.valueOf(latitude));
             tvCoordEst.setText(String.valueOf(longitude));
-
-            if (altitude != null)
-            {
-                tvAltitude.setText(altitude);
-            } else
-            {
-                tvAltitude.setText(R.string.Unknown);
-            }
+            tvAltitude.setText(altitude);
         }
 
-        ListView listView = (ListView) rootView.findViewById(R.id.listItemsSentReport);
-
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), R.layout.report_sent_detailed_item_row, R.id.tvReportDataItem, reportItems);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), R.layout.report_sent_detailed_item_row, R.id.tvReportDataItem, reportListStrValues);
 
         listView.setAdapter(adapter);
-
-        //ViewUtils.setListViewHeightBasedOnChildren(listView);
 
         imageThumbnails = new ArrayList<>();
         pathItems = new ArrayList<>();
 
         LoadImagesTask loadImagesTask = new LoadImagesTask();
         loadImagesTask.execute();
-
-        return rootView;
-    }
-
-    @Override
-    public void onViewCreated(View view, Bundle savedInstanceState)
-    {
-        super.onViewCreated(view, savedInstanceState);
     }
 
     private void getImagesArray()
@@ -246,8 +239,7 @@ public class ReportSentDetailedFragment extends Fragment
             try
             {
                 getImagesArray(); // Long time operation
-            }
-            catch (Exception e)
+            } catch (Exception e)
             {
                 loadingImagesDialog.dismiss();
             }

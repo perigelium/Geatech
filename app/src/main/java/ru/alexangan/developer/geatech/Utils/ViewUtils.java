@@ -204,18 +204,16 @@ public class ViewUtils
             }
         });
 
-        final ArrayList<CheckBox> al_chkBoxes = new ArrayList<>();
-
         final CheckBox chk1FourChkboxes = (CheckBox) four_chkboxes.findViewById(R.id.chk1FourChkboxes);
-        al_chkBoxes.add(chk1FourChkboxes);
         final CheckBox chk2FourChkboxes = (CheckBox) four_chkboxes.findViewById(R.id.chk2FourChkboxes);
-        al_chkBoxes.add(chk2FourChkboxes);
         final CheckBox chk3FourChkboxes = (CheckBox) four_chkboxes.findViewById(R.id.chk3FourChkboxes);
-        al_chkBoxes.add(chk3FourChkboxes);
         final CheckBox chk4FourChkboxes = (CheckBox) four_chkboxes.findViewById(R.id.chk4FourChkboxes);
-        al_chkBoxes.add(chk4FourChkboxes);
 
-        CheckBoxes.put(idItem, al_chkBoxes);
+        final ArrayList<CheckBox> al_chkBoxes = new ArrayList<>();
+        al_chkBoxes.add(chk1FourChkboxes);
+        al_chkBoxes.add(chk2FourChkboxes);
+        al_chkBoxes.add(chk3FourChkboxes);
+        al_chkBoxes.add(chk4FourChkboxes);
 
         final TextView tv1FourChkboxes = (TextView) four_chkboxes.findViewById(R.id.tv1FourChkboxes);
         final TextView tv2FourChkboxes = (TextView) four_chkboxes.findViewById(R.id.tv2FourChkboxes);
@@ -334,8 +332,11 @@ public class ViewUtils
 
         for (int i = 0; i < al_TextViews.size(); i++)
         {
+            al_chkBoxes.get(i).setText(fields[i]);
             al_TextViews.get(i).setText(fields[i]);
         }
+
+        CheckBoxes.put(idItem, al_chkBoxes);
 
         return ++idItem;
     }
@@ -369,20 +370,19 @@ public class ViewUtils
             }
         });
 
-        ArrayList<CheckBox> al_chkBoxes = new ArrayList<>();
-
         final CheckBox chk1FiveChkboxes = (CheckBox) five_chkboxes.findViewById(R.id.chk1FiveChkboxes);
-        al_chkBoxes.add(chk1FiveChkboxes);
         final CheckBox chk2FiveChkboxes = (CheckBox) five_chkboxes.findViewById(R.id.chk2FiveChkboxes);
-        al_chkBoxes.add(chk2FiveChkboxes);
         final CheckBox chk3FiveChkboxes = (CheckBox) five_chkboxes.findViewById(R.id.chk3FiveChkboxes);
-        al_chkBoxes.add(chk3FiveChkboxes);
         final CheckBox chk4FiveChkboxes = (CheckBox) five_chkboxes.findViewById(R.id.chk4FiveChkboxes);
-        al_chkBoxes.add(chk4FiveChkboxes);
         final CheckBox chk5FiveChkboxes = (CheckBox) five_chkboxes.findViewById(R.id.chk5FiveChkboxes);
-        al_chkBoxes.add(chk5FiveChkboxes);
 
-        CheckBoxes.put(idItem, al_chkBoxes);
+
+        ArrayList<CheckBox> al_chkBoxes = new ArrayList<>();
+        al_chkBoxes.add(chk1FiveChkboxes);
+        al_chkBoxes.add(chk2FiveChkboxes);
+        al_chkBoxes.add(chk3FiveChkboxes);
+        al_chkBoxes.add(chk4FiveChkboxes);
+        al_chkBoxes.add(chk5FiveChkboxes);
 
         final TextView tv1FiveChkboxes = (TextView) five_chkboxes.findViewById(R.id.tv1FiveChkboxes);
         final TextView tv2FiveChkboxes = (TextView) five_chkboxes.findViewById(R.id.tv2FiveChkboxes);
@@ -493,8 +493,10 @@ public class ViewUtils
 
         for (int i = 0; i < al_TextViews.size(); i++)
         {
+            al_chkBoxes.get(i).setText(fields[i]);
             al_TextViews.get(i).setText(fields[i]);
         }
+        CheckBoxes.put(idItem, al_chkBoxes);
 
         return ++idItem;
     }
@@ -636,9 +638,10 @@ public class ViewUtils
 
         for (i = 0; i < al_TextViews.size(); i++)
         {
-            CheckBoxes.put(idItem, al_Chkboxes);
+            al_Chkboxes.get(i).setText(fields[i]);
             al_TextViews.get(i).setText(fields[i]);
         }
+        CheckBoxes.put(idItem, al_Chkboxes);
 
         TextView tvEditThreeChkboxesAndEdit = (TextView) three_chkboxes_and_edit.findViewById(R.id.tvEditThreeChkboxesAndEdit);
         tvEditThreeChkboxesAndEdit.setText(fields[i]);
@@ -769,8 +772,9 @@ public class ViewUtils
 
         for (int i = 0; i < al_Chkboxes.size(); i++)
         {
-            CheckBoxes.put(idItem, al_Chkboxes);
+            al_Chkboxes.get(i).setText(fields[i]);
         }
+        CheckBoxes.put(idItem, al_Chkboxes);
 
         final TextView tv1ChkboxAndEdit = (TextView) chkbox_and_edit.findViewById(R.id.tv1ChkboxAndEdit);
         tv1ChkboxAndEdit.setText(fields[0]);
@@ -2168,6 +2172,11 @@ public class ViewUtils
                 for (LinearLayout ll : al_llHeaderSections.get(curHeader))
                 {
                     ll.setVisibility(!allSectionsCollapsed[curHeader] ? View.GONE : View.VISIBLE);
+
+                    if(allSectionsCollapsed[curHeader])
+                    {
+                        ll.getParent().requestChildFocus(ll, ll);
+                    }
                 }
 
                 ivArrowSectionHeader.setImageResource(allSectionsCollapsed[curHeader]
