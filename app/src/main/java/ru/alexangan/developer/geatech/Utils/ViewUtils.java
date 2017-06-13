@@ -2573,7 +2573,7 @@ public class ViewUtils
 
             for (int i = 0; i < strChkArray.length; i++)
             {
-                if (chkBoxText.length() != 0 && strChkArray[i].contains(chkBoxText))
+                if (chkBoxText.length() != 0 && strChkArray[i].equals(chkBoxText))
                 {
                     chkBox.setChecked(true);
                     break;
@@ -2595,7 +2595,7 @@ public class ViewUtils
         EditText et = EditTexts.get(idItem);
         String chkBoxText = chkBox.getText().toString();
 
-        if (chkBoxText.length() != 0 && str_id_item.contains(chkBoxText))
+        if (chkBoxText.length() != 0 && str_id_item.equals(chkBoxText))
         {
             chkBox.setChecked(true);
         } else
@@ -2622,7 +2622,7 @@ public class ViewUtils
             for (int i = 0; i < strChkArray.length; i++)
             {
                 String chkBoxText = chkBox.getText().toString();
-                if (chkBoxText.length() != 0 && str_id_item.contains(chkBox.getText()))
+                if (chkBoxText.length() != 0 && strChkArray[i].equals(chkBox.getText()))
                 {
                     chkBox.setChecked(true);
                     checkedChkboxes = true;

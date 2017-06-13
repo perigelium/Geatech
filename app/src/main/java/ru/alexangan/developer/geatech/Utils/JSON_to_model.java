@@ -1,5 +1,8 @@
 package ru.alexangan.developer.geatech.Utils;
 
+import android.os.Build;
+import android.text.Html;
+
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -53,6 +56,14 @@ public class JSON_to_model
                 String productType = client_data.getString("product_type");
                 int idProductType = client_data.getInt("id_product_type");
                 String product = client_data.getString("product");
+
+                if (Build.VERSION.SDK_INT >= 24)
+                {
+                    product = String.valueOf(Html.fromHtml(product, Html.FROM_HTML_MODE_LEGACY));
+                } else
+                {
+                    product = String.valueOf(Html.fromHtml(product));
+                }
 
                 // gea_products
                 JSONArray subproducts = (JSONArray) visit_items.get("gea_products");

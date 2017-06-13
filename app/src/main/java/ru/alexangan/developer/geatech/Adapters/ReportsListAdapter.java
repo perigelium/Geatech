@@ -144,7 +144,7 @@ public class ReportsListAdapter extends BaseAdapter
             clientNameTextView.setText(builder.toString());
             clientAddressTextView.setText(clientData.getAddress());
 
-            String productType = clientData.getProduct();
+            String productType = clientData.getProduct_type();
             serviceTypeTextView.setText(productType);
         }
 
@@ -167,7 +167,7 @@ public class ReportsListAdapter extends BaseAdapter
                 e.printStackTrace();
             }
 
-            ivReportStatus.setBackgroundResource(R.drawable.dot_green);
+            ivReportStatus.setBackgroundResource(R.drawable.green_oval_shape);
 
             tvVisitDay.setVisibility(View.VISIBLE);
             tvVisitMonth.setVisibility(View.VISIBLE);

@@ -104,9 +104,6 @@ public class ClimatizzazioneReportFragment extends Fragment
 
         idItem = viewUtils.createViewThreeChkboxesAndEdit(idItem, R.id.three_chkboxes_and_edit1);
 
-/*        EditText et = viewUtils.getEditTexts().get(idItem - 1);
-        et.setInputType(InputType.TYPE_CLASS_NUMBER);*/
-
         // SectionHeader1
         viewUtils.createViewSectionHeader(R.id.header1);
 

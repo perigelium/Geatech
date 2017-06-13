@@ -14,19 +14,19 @@ public class ProductData extends RealmObject
     private String productType;
     private int idProductType;
     private String product;
-    private RealmList<SubproductItem> subItem = new RealmList<>();
+    private RealmList<SubproductItem> subproductItems = new RealmList<>();
 
     public ProductData()
     {
     }
 
-    public ProductData(int id, String productType, int idProductType, String product, RealmList<SubproductItem> subItem)
+    public ProductData(int id, String productType, int idProductType, String product, RealmList<SubproductItem> subproductItems)
     {
         this.id = id;
         this.productType = productType;
         this.idProductType = idProductType;
         this.product = product;
-        this.subItem = subItem;
+        this.subproductItems = subproductItems;
     }
 
     public String getProductType()
@@ -47,9 +47,9 @@ public class ProductData extends RealmObject
     }
 
 
-    public RealmList<SubproductItem> getSubItem()
+    public RealmList<SubproductItem> getSubproductItems()
     {
-        return subItem;
+        return subproductItems;
     }
 
 

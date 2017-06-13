@@ -117,7 +117,7 @@ public class ReportSentDetailedFragment extends Fragment
         {
             photosFolderName = "photos" + reportItem.getId_sopralluogo();
 
-            String product_type = reportItem.getClientData().getProduct();
+            String product_type = reportItem.getClientData().getProduct_type();
 
             List<GeaItemRapporto> geaItemsRapporto = reportItem.getGea_items_rapporto_sopralluogo();
 
@@ -166,11 +166,7 @@ public class ReportSentDetailedFragment extends Fragment
             }
 
             clientNameTextView.setText(reportItem.getClientData().getName());
-
-
             clientPhoneTextView.setText(reportItem.getClientData().getMobile());
-
-
             clientAddressTextView.setText(reportItem.getClientData().getAddress());
 
             String latitude = reportItem.getGea_rapporto_sopralluogo().getLatitudine();

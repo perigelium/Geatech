@@ -115,7 +115,7 @@ public class PompaDiCaloreReportFragment extends Fragment
         idItem = viewUtils.createViewEdit(idItem, R.id.edit2);
 
         EditText et0 = viewUtils.getEditTexts().get(idItem-1);
-        et0.setInputType(InputType.TYPE_CLASS_NUMBER);
+        et0.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
 
         idItem = viewUtils.createViewFourRadios(idItem, R.id.four_radios1);
 
@@ -133,7 +133,7 @@ public class PompaDiCaloreReportFragment extends Fragment
         idItem = viewUtils.createViewEdit(idItem, R.id.edit3);
 
         EditText et1 = viewUtils.getEditTexts().get(idItem-1);
-        et1.setInputType(InputType.TYPE_CLASS_NUMBER);
+        et1.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
 
         idItem = viewUtils.createViewSwitch(idItem, R.id.switch_1);
 
@@ -142,17 +142,17 @@ public class PompaDiCaloreReportFragment extends Fragment
         idItem = viewUtils.createViewEdit(idItem, R.id.edit4);
 
         EditText et2 = viewUtils.getEditTexts().get(idItem-1);
-        et2.setInputType(InputType.TYPE_CLASS_NUMBER);
+        et2.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
 
         idItem = viewUtils.createViewTwoEdits(idItem, R.id.two_edits1);
 
         EditText et3 = viewUtils.getEditTexts().get(idItem-2);
-        et3.setInputType(InputType.TYPE_CLASS_NUMBER);
+        et3.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
 
         idItem = viewUtils.createViewEdit(idItem, R.id.edit5);
 
         EditText et4 = viewUtils.getEditTexts().get(idItem-1);
-        et4.setInputType(InputType.TYPE_CLASS_NUMBER);
+        et4.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
 
         idItem = viewUtils.createViewThreeRadios(idItem, R.id.three_radios4);
 
@@ -165,7 +165,7 @@ public class PompaDiCaloreReportFragment extends Fragment
         idItem = viewUtils.createViewEdit(idItem, R.id.edit6);
 
         EditText et5 = viewUtils.getEditTexts().get(idItem-1);
-        et5.setInputType(InputType.TYPE_CLASS_NUMBER);
+        et5.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
 
 
         idItem = viewUtils.createViewTwoRadios(idItem, R.id.two_radios4);
@@ -182,13 +182,13 @@ public class PompaDiCaloreReportFragment extends Fragment
         idItem = viewUtils.createViewEdit(idItem, R.id.edit7);
 
         EditText et6 = viewUtils.getEditTexts().get(idItem-1);
-        et6.setInputType(InputType.TYPE_CLASS_NUMBER);
+        et6.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
 
         idItem = viewUtils.createViewThreeRadios(idItem, R.id.three_radios6);
         idItem = viewUtils.createViewEdit(idItem, R.id.edit8);
 
         EditText et7 = viewUtils.getEditTexts().get(idItem-1);
-        et7.setInputType(InputType.TYPE_CLASS_NUMBER);
+        et7.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
 
         idItem = viewUtils.createViewChkboxAndEdit(idItem, R.id.chkbox_and_edit1);
 
@@ -345,7 +345,7 @@ public class PompaDiCaloreReportFragment extends Fragment
             idItem = viewUtils.fillSeveralEdits(idItem, 1);
 
             final EditText et4 = viewUtils.getEditTexts().get(idItem-1);
-            et4.setInputType(InputType.TYPE_CLASS_NUMBER);
+            //et4.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
             final Switch sw1 = viewUtils.getSwitches().get(idItem-2);
             final LinearLayout llEdit1 = viewUtils.getLinearLayouts().get(idItem-1).first;
 

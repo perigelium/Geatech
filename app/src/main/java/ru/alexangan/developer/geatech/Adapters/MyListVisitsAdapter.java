@@ -200,12 +200,12 @@ public class MyListVisitsAdapter extends BaseAdapter
                     ivReportStatus.setBackgroundResource(R.drawable.red_oval_shape);
                 } else
                 {
-                    ivReportStatus.setBackgroundResource(R.drawable.dot_green);
+                    ivReportStatus.setBackgroundResource(R.drawable.green_oval_shape);
                 }
 
             } else
             {
-                ivReportStatus.setBackgroundResource(R.drawable.dot_gray);
+                ivReportStatus.setBackgroundResource(R.drawable.gray_oval_shape);
             }
 
             tvVisitDay.setVisibility(View.VISIBLE);
@@ -225,7 +225,7 @@ public class MyListVisitsAdapter extends BaseAdapter
             tvVisitTime.setText(Integer.toString(calendar.get(Calendar.HOUR_OF_DAY)) + ":" + minuteStr);
         } else
         {
-            ivReportStatus.setBackgroundResource(R.drawable.dot_yellow);
+            ivReportStatus.setBackgroundResource(R.drawable.yellow_oval_shape);
             tvVisitDay.setText("");
             tvVisitMonth.setText("");
             tvVisitTime.setText("");

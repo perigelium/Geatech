@@ -51,4 +51,9 @@
     <string name="SetDateAndTimeFirst">Imposta la data e l\'ora prima</string>
     <string name="YouCanEditYourOwnReportsOnly">È possibile modificare solo i propri rapporti</string>
     <string name="MyVisitsList">I miei sopralluoghi</string>
+    <string name="FreeVisits">I sopralluoghi da fissare</string>
+    <string name="Notifications">Notifiche</string>
+    <string name="CompletedReports">Compilazioni completate</string>
+    <string name="Settings">Impostazioni</string>
+    <string name="InWorkCompilations">Compilazioni in corso</string>
 </resources>

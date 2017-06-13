@@ -97,7 +97,7 @@ public class EmptyReportFragment extends Fragment
 
 
 /*        EditText et = viewUtils.getEditTexts().get(idItem - 1);
-        et.setInputType(InputType.TYPE_CLASS_NUMBER);*/
+        et.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);*/
 
         // SectionHeader1
         //viewUtils.createViewSectionHeader(R.id.header1);

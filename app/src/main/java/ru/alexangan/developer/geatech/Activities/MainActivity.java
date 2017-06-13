@@ -138,7 +138,6 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
     private int curSelBottomBtnId;
 
     ScrollViewEx scrvInnerFragContainer;
-    private TextView tvWindowTitle;
 
     @Override
     protected void onPause()
@@ -171,8 +170,6 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
     {
         super.onStart();
 
-        tvWindowTitle = (TextView) findViewById(R.id.tvWindowTitle);
-
         if (firstStart)
         {
             ctrlBtnsBottom.setCheckedBtnId(R.id.btnVisits);
@@ -196,7 +193,7 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
         scrvInnerFragContainer = (ScrollViewEx) findViewById(R.id.svInnerFragContainer);
         scrvInnerFragContainer.setScrollViewListener(this);
 
-        setEdgeEffectL(scrvInnerFragContainer, Color.parseColor("#ffcccccc"));
+        setEdgeBounceEffect(scrvInnerFragContainer, Color.parseColor("#ffcccccc"));
 
         scrvInnerFragContainer.setOnTouchListener(new View.OnTouchListener()
         {
@@ -350,7 +347,7 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
             }
             mFragmentTransaction.commit();
 
-            tvWindowTitle.setText("Compilazioni in corso");
+            notificationBarFragment.setView(R.string.InWorkCompilations, View.GONE, View.GONE);
         }
 
         if (btnId == R.id.btnNotifications)
@@ -369,7 +366,7 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
         {
             setVisitsListContent(settingsFragment);
 
-            tvWindowTitle.setText("Impostazioni");
+            notificationBarFragment.setView(R.string.Settings, View.GONE, View.GONE);
         }
     }
 
@@ -393,7 +390,7 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
             mFragmentTransaction.addToBackStack(fragListReportsSent.getTag());
             mFragmentTransaction.commit();
 
-            tvWindowTitle.setText("Compilazioni completate");
+            notificationBarFragment.setView(R.string.CompletedReports, View.GONE, View.GONE);
         }
     }
 
@@ -404,8 +401,6 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
             refreshVisitsList();
         } else
         {
-            tvWindowTitle.setText("Notifiche");
-
             FragmentTransaction mFragmentTransaction = mFragmentManager.beginTransaction();
 
             if (!fragListVisitsReminded.isAdded())
@@ -419,6 +414,8 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
             }
             mFragmentTransaction.addToBackStack(fragListReportsReminded.getTag());
             mFragmentTransaction.commit();
+
+            notificationBarFragment.setView(R.string.Notifications, View.GONE, View.GONE);
         }
     }
 
@@ -433,6 +430,7 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
         if (btnId == R.id.btnSopralluogoReturn)
         {
             onBackPressed();
+            return;
         }
 
         curSelBottomBtnId = ctrlBtnsBottom.getSelectedButtonId();
@@ -530,7 +528,7 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
             }
         }
 
-        if( ! ownReportMode)
+        if(btnId != R.id.btnSopralluogoInfo &&  ! ownReportMode)
         {
             ctrlBtnsSopralluogo.setCheckedBtnId(R.id.btnSopralluogoInfo);
 
@@ -652,10 +650,6 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
             {
                 mFragmentTransaction.add(llInnerFragContainer, fragListVisitsOther);
             }
-
-/*            mFragmentTransaction.show(fragListVisitsFree);
-            mFragmentTransaction.show(fragListVisitsToday);
-            mFragmentTransaction.show(fragListVisitsOther);*/
         }
 
         if (mode == LIST_VISITS_MODE_MY)
@@ -678,10 +672,6 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
             }
 
             notificationBarFragment.setView(R.string.MyVisitsList, View.VISIBLE, View.VISIBLE);
-
-/*            mFragmentTransaction.hide(fragListVisitsFree);
-            mFragmentTransaction.show(fragListVisitsToday);
-            mFragmentTransaction.show(fragListVisitsOther);*/
         }
 
         if (mode == LIST_VISITS_MODE_FREE)
@@ -690,10 +680,8 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
             {
                 mFragmentTransaction.add(llInnerFragContainer, fragListVisitsFree);
             }
-/*
-            mFragmentTransaction.show(fragListVisitsFree);
-            mFragmentTransaction.hide(fragListVisitsToday);
-            mFragmentTransaction.hide(fragListVisitsOther);*/
+
+            notificationBarFragment.setView(R.string.FreeVisits, View.VISIBLE, View.VISIBLE);
         }
         mFragmentTransaction.addToBackStack(null);
         mFragmentTransaction.commit();
@@ -743,7 +731,7 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
 
     public void showToastMessage(final String msg)
     {
-        Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
+        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -838,56 +826,13 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
                     }
 
                     requestServerDialog.dismiss();
-                    //ctrlBtnsBottom.setCheckedBtnId(R.id.btnVisits);
                 }
             });
         }
 
-/*        if (call == callReports)
-        {
-            handler.removeCallbacks(runnable);
-
-            final String reportsJSONData = response.body().string();
-
-            response.body().close();
-
-            runOnUiThread(new Runnable()
-            {
-                public void run()
-                {
-                    realm.beginTransaction();
-
-                    inVisitItems = JSON_to_model.getVisitTtemsList(reportsJSONData);
-
-                    visitItems = realm.where(VisitItem.class).findAll();
-                    visitItems.deleteAllFromRealm();
-
-                    if (inVisitItems != null && inVisitItems.size() > 0)
-                    {
-                        for (VisitItem visitItem : inVisitItems)
-                        {
-                            realm.copyToRealmOrUpdate(visitItem);
-                        }
-                    }
-                    realm.commitTransaction();
-
-                    realm.beginTransaction();
-                    visitItems = realm.where(VisitItem.class).findAll();
-                    realm.commitTransaction();
-
-                    onCtrlBtnsBottomClicked(R.id.btnCompletedReports);
-
-                    requestServerDialog.dismiss();
-                    //ctrlBtnsBottom.setCheckedBtnId(R.id.btnVisits);
-                }
-            });
-        }*/
-
         if (call == callModels)
         {
             String modelsJSONData = response.body().string();
-
-            //Log.d("DEBUG", modelsJSONData);
 
             JSONObject jsonObject;
 
@@ -1013,23 +958,19 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
 
     private void refreshVisitsList()
     {
-        requestServerDialog.show();
+        if(NetworkUtils.isNetworkAvailable(this))
+        {
+            requestServerDialog.show();
 
-        handler.postDelayed(runnable, 30000);
+            handler.postDelayed(runnable, 30000);
 
-        callVisits = networkUtils.getData(this, GET_VISITS_URL_SUFFIX, tokenStr);
+            callVisits = networkUtils.getData(this, GET_VISITS_URL_SUFFIX, tokenStr);
+        }
+        else
+        {
+            showToastMessage(getString(R.string.CheckInternetConnection));
+        }
     }
-
-/*    private void refreshReportsList()
-    {
-        requestServerDialog.show();
-
-        handler.postDelayed(runnable, 30000);
-
-        callReports = networkUtils.getData(this, GET_VISITS_URL_SUFFIX, tokenStr);
-
-
-    }*/
 
     @Override
     public void refreshGeaModels()
@@ -1062,7 +1003,7 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    private static void setEdgeEffectL(View scrollableView, int color) {
+    private static void setEdgeBounceEffect(View scrollableView, int color) {
         final String[] edgeGlows = {"mEdgeGlowTop", "mEdgeGlowBottom", "mEdgeGlowLeft", "mEdgeGlowRight"};
         for (String edgeGlow : edgeGlows) {
             Class<?> clazz = scrollableView.getClass();

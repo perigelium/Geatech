@@ -31,7 +31,7 @@
                 android:id="@+id/llInnerFragContainer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="#ffffffff"
+                android:background="#fff5f5f5"
                 android:orientation="vertical">
             </LinearLayout>
         </ru.alexangan.developer.geatech.Models.ScrollViewEx>

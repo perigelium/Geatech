@@ -14,19 +14,20 @@ public class ClientData extends RealmObject
     private double coordEst;
     private int altitude;
 
+    private String product_type;
     private String id_product_type;
     private String product;
 
     public ClientData() {}
 
-    public ClientData(String name, String address, String phone, String mobile, String product)
+/*    public ClientData(String name, String address, String phone, String mobile, String product)
     {
         this.name = name;
         this.address = address;
         this.phone = phone;
         this.mobile = mobile;
         this.product = product;
-    }
+    }*/
 
     public String getName() {
         return name;
@@ -62,6 +63,11 @@ public class ClientData extends RealmObject
     public String getProduct()
     {
         return product;
+    }
+
+    public String getProduct_type()
+    {
+        return product_type;
     }
 
     public String getId_product_type()

@@ -99,15 +99,11 @@ public class DomoticaReportFragment extends Fragment
 
         int idItem = viewUtils.getIdItemStart();
 
-
         idItem = viewUtils.createViewTwoRadios(idItem, R.id.two_radios1);
 
         idItem = viewUtils.createViewTwoRadios(idItem, R.id.two_radios2);
 
         idItem = viewUtils.createViewEdit(idItem, R.id.edit1);
-
-        EditText et0 = viewUtils.getEditTexts().get(idItem - 1);
-        et0.setInputType(InputType.TYPE_CLASS_TEXT);
 
         idItem = viewUtils.createViewTwoSwitches(idItem, R.id.two_switches1);
 
@@ -115,16 +111,7 @@ public class DomoticaReportFragment extends Fragment
 
         idItem = viewUtils.createViewTwoEdits(idItem, R.id.two_edits1);
 
-/*        EditText et0 = viewUtils.getEditTexts().get(idItem - 1);
-        et0.setInputType(InputType.TYPE_CLASS_NUMBER);
-
-        EditText et1 = viewUtils.getEditTexts().get(idItem - 2);
-        et1.setInputType(InputType.TYPE_CLASS_NUMBER);*/
-
         idItem = viewUtils.createViewEdit(idItem, R.id.edit2);
-
-        EditText et1 = viewUtils.getEditTexts().get(idItem - 1);
-        et1.setInputType(InputType.TYPE_CLASS_TEXT);
 
         idItem = viewUtils.createViewSwitchAndEdit(idItem, R.id.switch_and_edit1);
 
@@ -218,9 +205,9 @@ public class DomoticaReportFragment extends Fragment
             idItem = viewUtils.fillSeveralEdits(idItem, 3);
 
             final EditText et0 = viewUtils.getEditTexts().get(idItem-3);
-            et0.setInputType(InputType.TYPE_CLASS_NUMBER);
+            et0.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
             final EditText et1 = viewUtils.getEditTexts().get(idItem-2);
-            et1.setInputType(InputType.TYPE_CLASS_NUMBER);
+            et1.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
 
             idItem = viewUtils.fillSeveralSwitches(idItem, 1);
 
@@ -228,8 +215,8 @@ public class DomoticaReportFragment extends Fragment
 
             final Switch sw = viewUtils.getSwitches().get(idItem-2);
             final LinearLayout llEdit = viewUtils.getLinearLayouts().get(idItem-1).first;
-            final EditText et3 = viewUtils.getEditTexts().get(idItem-1);
-            et3.setInputType(InputType.TYPE_CLASS_NUMBER);
+            final EditText et2 = viewUtils.getEditTexts().get(idItem-1);
+            et2.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
 
             if(sw.isChecked())
             {
@@ -251,13 +238,13 @@ public class DomoticaReportFragment extends Fragment
                     {
                         llEdit.setVisibility(View.VISIBLE);
                         llEdit.setEnabled(true);
-                        et3.setText("");
+                        et2.setText("");
                     }
                     else
                     {
                         llEdit.setVisibility(View.GONE);
                         llEdit.setEnabled(false);
-                        et3.setText("Non applicabile");
+                        et2.setText("Non applicabile");
                     }
                 }
             });

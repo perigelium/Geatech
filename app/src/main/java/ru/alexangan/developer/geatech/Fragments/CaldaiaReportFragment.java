@@ -112,24 +112,18 @@ public class CaldaiaReportFragment extends Fragment
 
 /*        idItem = viewUtils.createViewEdit(idItem, R.id.Edit1);
         EditText et = viewUtils.getEditTexts().get(idItem-1);
-        et.setInputType(InputType.TYPE_CLASS_NUMBER);*/
+        et.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);*/
 
         idItem = viewUtils.createViewThreeRadiosAndEdit(idItem, R.id.three_radios_and_edit1);
 
         idItem = viewUtils.createViewThreeEdits(idItem, R.id.three_edits1);
-
-        EditText et0 = viewUtils.getEditTexts().get(idItem-1);
-        et0.setInputType(InputType.TYPE_CLASS_TEXT);
-
-        EditText et1 = viewUtils.getEditTexts().get(idItem-3);
-        et1.setInputType(InputType.TYPE_CLASS_TEXT);
 
         idItem = viewUtils.createViewTwoRadiosAndEdit(idItem, R.id.two_radios_and_edit2);
 
         idItem = viewUtils.createViewThreeRadiosAndEditObl(idItem, R.id.three_radios_and_edit2);
 
         EditText et2 = viewUtils.getEditTexts().get(idItem-1);
-        et2.setInputType(InputType.TYPE_CLASS_NUMBER);
+        et2.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
 
         idItem = viewUtils.createViewSwitchAndEdit(idItem, R.id.switch_and_edit1);
 
@@ -137,7 +131,7 @@ public class CaldaiaReportFragment extends Fragment
 
         idItem = viewUtils.createViewFourRadiosAndTwoEdits(idItem, R.id.four_radios_and_two_edits1);
         EditText et4 = viewUtils.getEditTexts().get(idItem-1);
-        et4.setInputType(InputType.TYPE_CLASS_NUMBER);
+        et4.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
 
         idItem = viewUtils.createViewTwoRadios(idItem, R.id.two_radios1);
 
@@ -237,6 +231,9 @@ public class CaldaiaReportFragment extends Fragment
 
             idItem = viewUtils.fillSeveralEdits(idItem, 3);
 
+            final EditText et2 = viewUtils.getEditTexts().get(idItem-2);
+            et2.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
+
             idItem = viewUtils.fillSeveralRadiosAndEdit(idItem);
 
             idItem = viewUtils.fillSeveralRadios(idItem);
@@ -248,7 +245,7 @@ public class CaldaiaReportFragment extends Fragment
             idItem = viewUtils.fillSeveralEdits(idItem, 1);
 
             final EditText et3 = viewUtils.getEditTexts().get(idItem-1);
-            et3.setInputType(InputType.TYPE_CLASS_NUMBER);
+            et3.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
             final Switch sw1 = viewUtils.getSwitches().get(idItem-2);
             final LinearLayout llEdit1 = viewUtils.getLinearLayouts().get(idItem-1).first;
 

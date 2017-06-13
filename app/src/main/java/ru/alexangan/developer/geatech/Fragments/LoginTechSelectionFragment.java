@@ -784,7 +784,7 @@ public class LoginTechSelectionFragment extends Fragment implements View.OnClick
         {
             public void run()
             {
-                Toast.makeText(activity, msg, Toast.LENGTH_LONG).show();
+                Toast.makeText(activity, msg, Toast.LENGTH_SHORT).show();
             }
         });
     }

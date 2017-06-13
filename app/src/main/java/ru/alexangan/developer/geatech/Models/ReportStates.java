@@ -17,9 +17,9 @@ public class ReportStates extends RealmObject
     private int general_info_datetime_set;
 
     public static int GENERAL_INFO_COORDS_NOT_SET = 0;
-    public static int GENERAL_INFO_COORDS_SET = 1;
     public static int GENERAL_INFO_DATETIME_SET = 1;
-    public static int GENERAL_INFO_DATETIME_AND_COORDS_SET = 2;
+    public static int GENERAL_INFO_COORDS_SET = 2;
+    public static int GENERAL_INFO_DATETIME_AND_COORDS_SET = 3;
 
     private boolean triedToSendReport;
 
@@ -49,7 +49,7 @@ public class ReportStates extends RealmObject
         generalInfoCompletionStatuses = new RealmList<>();
         generalInfoCompletionStatuses.add(new RealmString("Non iniziato"));
         generalInfoCompletionStatuses.add(new RealmString("Iniziato"));
-        //generalInfoCompletionStatuses.add(new RealmString( "Parziamente completato") );
+        generalInfoCompletionStatuses.add(new RealmString("Iniziato"));
         generalInfoCompletionStatuses.add(new RealmString("Completato"));
 
         sendingReportFailedStatuses = new RealmList<>();
@@ -155,5 +155,10 @@ public class ReportStates extends RealmObject
     public void setPhotosAddedNumber(int photosAddedNumber)
     {
         this.photosAddedNumber = photosAddedNumber;
+    }
+
+    public int getGeneral_info_coords_set()
+    {
+        return general_info_coords_set;
     }
 }

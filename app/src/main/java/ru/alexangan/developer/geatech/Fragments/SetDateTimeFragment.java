@@ -34,8 +34,6 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -204,8 +202,6 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
         etAltitude = (EditText) rootView.findViewById(R.id.etAltitude);
         //etAltitude.setOnTouchListener(this);
 
-        tvTechnicianName = (TextView) rootView.findViewById(R.id.tvTechnicianName);
-
         tvClientName = (TextView) rootView.findViewById(R.id.tvClientName);
 
         tvClientPhone = (TextView) rootView.findViewById(R.id.tvClientPhone);
@@ -235,7 +231,7 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
         int id_product_type = productData.getIdProductType();
         idSopralluogo = geaSopralluogo.getId_sopralluogo();
         id_rapporto_sopralluogo = geaRapportoSopralluogo.getId_rapporto_sopralluogo();
-        List<SubproductItem> listSubproducts = productData.getSubItem();
+        List<SubproductItem> listSubproducts = productData.getSubproductItems();
         dataOraSopralluogo = geaSopralluogo.getData_ora_sopralluogo();
 
         realm.beginTransaction();
@@ -278,10 +274,13 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
 
         if (tech_id == 0)
         {
-            tvdataOraSopralluogo.setVisibility(View.GONE);
-            tvTechnicianName.setVisibility(View.GONE);
+            tvTechnicianName.setText("");
             flSetDateTimeSubmit.setVisibility(View.VISIBLE);
             return;
+        }
+        else
+        {
+            tvTechnicianName.setText(tech_name);
         }
 
         if (tech_id == GlobalConstants.selectedTech.getId())
@@ -390,11 +389,10 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
         {
             tvdataOraSopralluogo.setText(formattedDate);
             tvTechnicianName.setText(tech_name);
-            tvTechnicianName.setVisibility(View.VISIBLE);
             flSetDateTimeSubmit.setVisibility(View.GONE);
         } else
         {
-            tvTechnicianName.setVisibility(View.GONE);
+            tvTechnicianName.setText("");
             flSetDateTimeSubmit.setVisibility(View.VISIBLE);
         }
     }
@@ -722,6 +720,7 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
                                                 String str_id_rapporto_sopralluogo = jsonObject.getString("id_rapporto_sopralluogo");
                                                 int id_rapporto_sopralluogo = Integer.valueOf(str_id_rapporto_sopralluogo);
                                                 tech_id = GlobalConstants.selectedTech.getId();
+                                                tech_name = GlobalConstants.selectedTech.getFullNameTehnic();
 
                                                 GeaSopralluogo gea_sopralluoghi = new GeaSopralluogo(idSopralluogo, selectedTech.getId(),
                                                         strDateTimeNow, strDateTimeSet);
@@ -747,7 +746,6 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
                                                 realm.commitTransaction();
                                             }
                                             tvTechnicianName.setText(tech_name);
-                                            tvTechnicianName.setVisibility(View.VISIBLE);
                                             tvdataOraSopralluogo.setText(strDateTimeSet);
                                             flSetDateTimeSubmit.setVisibility(View.GONE);
                                             btnGetCurrentCoords.setVisibility(View.VISIBLE);
@@ -808,7 +806,7 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
         {
             public void run()
             {
-                Toast.makeText(activity, msg, Toast.LENGTH_LONG).show();
+                Toast.makeText(activity, msg, Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -872,18 +870,18 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
             GeaRapporto geaRapporto = reportItem.getGea_rapporto_sopralluogo();
             realm.beginTransaction();
 
-            if (latitude != null)
+            if (etCoordNord.getText().toString().length() != 0)
             {
                 geaRapporto.setLatitudine(etCoordNord.getText().toString());
             }
-            if (longitude != null)
+            if (etCoordEst.getText().toString().length() != 0)
             {
                 geaRapporto.setLongitudine(etCoordEst.getText().toString());
             }
 
-            if (altitude != null)
+            if (etAltitude.getText().toString().length() != 0)
             {
-                geaRapporto.setAltitudine((etAltitude.getText().toString()));
+                geaRapporto.setAltitudine(etAltitude.getText().toString());
             }
 
             if (geaRapporto.getLatitudine() != null && !geaRapporto.getLatitudine().equals(strNotKnown)

@@ -109,9 +109,8 @@ public class STermodinamicoReportFragment extends Fragment
 
         int idItem = viewUtils.getIdItemStart();
 
-        /*
-        EditText et1 = viewUtils.getEditTexts().get(idItem-2);
-        et1.setInputType(InputType.TYPE_CLASS_NUMBER);*/
+/*        EditText et1 = viewUtils.getEditTexts().get(idItem-2);
+        et1.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);*/
 
         idItem = viewUtils.createViewThreeRadiosAndEdit(idItem, R.id.three_radios_and_edit1);
 
@@ -123,18 +122,9 @@ public class STermodinamicoReportFragment extends Fragment
 
         idItem = viewUtils.createViewThreeEdits(idItem, R.id.three_edits2);
 
-        EditText et1 = viewUtils.getEditTexts().get(idItem - 1);
-        et1.setInputType(InputType.TYPE_CLASS_TEXT);
-
-        EditText et2 = viewUtils.getEditTexts().get(idItem - 2);
-        et2.setInputType(InputType.TYPE_CLASS_TEXT);
-
         idItem = viewUtils.createViewThreeRadios(idItem, R.id.three_radios1);
 
         idItem = viewUtils.createViewEdit(idItem, R.id.edit1);
-
-        EditText et3 = viewUtils.getEditTexts().get(idItem - 1);
-        et3.setInputType(InputType.TYPE_CLASS_TEXT);
 
         // SectionHeader1
         viewUtils.createViewSectionHeader(R.id.header1);
@@ -254,7 +244,19 @@ public class STermodinamicoReportFragment extends Fragment
 
             idItem = viewUtils.fillSeveralEdits(idItem, 3);
 
+            final EditText et0 = viewUtils.getEditTexts().get(idItem-3);
+            et0.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
+
+            final EditText et1 = viewUtils.getEditTexts().get(idItem-2);
+            et1.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
+
+            final EditText et2 = viewUtils.getEditTexts().get(idItem-1);
+            et2.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
+
             idItem = viewUtils.fillSeveralEdits(idItem, 3);
+
+            final EditText et3 = viewUtils.getEditTexts().get(idItem-3);
+            et3.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
 
             idItem = viewUtils.fillSeveralRadios(idItem);
 

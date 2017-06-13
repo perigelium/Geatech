@@ -107,7 +107,7 @@ public class FotovoltaicoReportFragment extends Fragment
         idItem = viewUtils.createViewEdit(idItem, R.id.edit1);
 
         EditText et = viewUtils.getEditTexts().get(idItem - 1);
-        et.setInputType(InputType.TYPE_CLASS_NUMBER);
+        et.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
 
         idItem = viewUtils.createViewFiveChkboxes(idItem, R.id.five_chkboxes1);
 

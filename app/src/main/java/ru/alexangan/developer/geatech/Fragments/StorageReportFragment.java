@@ -107,17 +107,11 @@ public class StorageReportFragment extends Fragment
 
         idItem = viewUtils.createViewEdit(idItem, R.id.edit1);
 
-        EditText et0 = viewUtils.getEditTexts().get(idItem-1);
-        et0.setInputType(InputType.TYPE_CLASS_NUMBER);
-
         idItem = viewUtils.createViewTwoRadios(idItem, R.id.two_radios1);
 
         idItem = viewUtils.createViewTwoRadios(idItem, R.id.two_radios2);
 
         idItem = viewUtils.createViewEdit(idItem, R.id.edit2);
-
-        EditText et01 = viewUtils.getEditTexts().get(idItem-1);
-        et01.setInputType(InputType.TYPE_CLASS_NUMBER);
 
         idItem = viewUtils.createViewThreeRadiosAndEdit(idItem, R.id.three_radios_and_edit1);
 
@@ -127,18 +121,9 @@ public class StorageReportFragment extends Fragment
 
         idItem = viewUtils.createViewThreeEdits(idItem, R.id.three_edits1);
 
-        EditText et1 = viewUtils.getEditTexts().get(idItem-2);
-        et1.setInputType(InputType.TYPE_CLASS_TEXT);
-
         idItem = viewUtils.createViewThreeEdits(idItem, R.id.three_edits2);
 
-        EditText et2 = viewUtils.getEditTexts().get(idItem-2);
-        et2.setInputType(InputType.TYPE_CLASS_TEXT);
-
         idItem = viewUtils.createViewTwoEdits(idItem, R.id.two_edits1);
-
-        EditText et3 = viewUtils.getEditTexts().get(idItem-1);
-        et3.setInputType(InputType.TYPE_CLASS_TEXT);
 
         idItem = viewUtils.createViewFourRadiosAndEdit(idItem, R.id.four_radios_and_edit1);
 
@@ -235,12 +220,18 @@ public class StorageReportFragment extends Fragment
         {
             idItem = viewUtils.fillSeveralEdits(idItem, 1);
 
+            final EditText et13 = viewUtils.getEditTexts().get(idItem-1);
+            et13.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
+
             idItem = viewUtils.fillSeveralRadios(idItem);
 
             idItem = viewUtils.fillSeveralRadios(idItem);
 
             idItem = viewUtils.fillSeveralEdits(idItem, 1);
 
+            final EditText et12 = viewUtils.getEditTexts().get(idItem-1);
+            et12.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
+
             idItem = viewUtils.fillSeveralRadiosAndEdit(idItem);
 
             idItem = viewUtils.fillSeveralSwitches(idItem, 1);
@@ -249,15 +240,35 @@ public class StorageReportFragment extends Fragment
 
             idItem = viewUtils.fillSeveralEdits(idItem, 3);
 
+            final EditText et10 = viewUtils.getEditTexts().get(idItem-3);
+            et10.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
+            final EditText et11 = viewUtils.getEditTexts().get(idItem-1);
+            et11.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
+
             idItem = viewUtils.fillSeveralEdits(idItem, 3);
+
+            final EditText et0 = viewUtils.getEditTexts().get(idItem-3);
+            et0.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
+            final EditText et1 = viewUtils.getEditTexts().get(idItem-1);
+            et1.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
 
             idItem = viewUtils.fillSeveralEdits(idItem, 2);
 
+            final EditText et2 = viewUtils.getEditTexts().get(idItem-2);
+            et2.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
+
             idItem = viewUtils.fillSeveralRadiosAndEdit(idItem);
 
             idItem = viewUtils.fillSeveralSwitches(idItem, 1);
 
             idItem = viewUtils.fillSeveralEdits(idItem, 3);
+
+            final EditText et3 = viewUtils.getEditTexts().get(idItem-3);
+            et3.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
+            final EditText et4 = viewUtils.getEditTexts().get(idItem-2);
+            et4.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
+            final EditText et5 = viewUtils.getEditTexts().get(idItem-1);
+            et5.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
 
             idItem = viewUtils.fillSeveralEdits(idItem, 4);
 
