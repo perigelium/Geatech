@@ -42,6 +42,7 @@ public class ViewUtils
     private final Realm realm;
 
     private ReportItem reportItem;
+    private int id_rapporto_sopralluogo;
     private List<GeaItemRapporto> l_geaItemRapporto;
     private int idItemStart, idItemEnd;
     private int headerNumber;
@@ -65,6 +66,7 @@ public class ViewUtils
     public ViewUtils(View rootView, int id_rapporto_sopralluogo, int selectedVisitId)
     {
         this.rootView = rootView;
+        this.id_rapporto_sopralluogo = id_rapporto_sopralluogo;
         headerNumber = 0;
         idItemStart = 99999;
         idItemEnd = 0;
@@ -2317,7 +2319,7 @@ public class ViewUtils
             EditText et = EditTexts.get(idItem);
             str_id_item = et.getText().toString();
         }
-        DatabaseUtils.insertStringInReportItem(l_geaItemRapporto, idItem, str_id_item);
+        DatabaseUtils.insertStringInReportItem(id_rapporto_sopralluogo, l_geaItemRapporto, idItem, str_id_item);
 
         return ++idItem;
     }
@@ -2343,7 +2345,7 @@ public class ViewUtils
                 str_id_item = radioButton.getText().toString();
             }
         }
-        DatabaseUtils.insertStringInReportItem(l_geaItemRapporto, idItem, str_id_item);
+        DatabaseUtils.insertStringInReportItem(id_rapporto_sopralluogo, l_geaItemRapporto, idItem, str_id_item);
 
         return ++idItem;
     }
@@ -2368,7 +2370,7 @@ public class ViewUtils
             EditText et = EditTexts.get(idItem);
             str_Id_item = et.getText().toString();
         }
-        DatabaseUtils.insertStringInReportItem(l_geaItemRapporto, idItem, str_Id_item);
+        DatabaseUtils.insertStringInReportItem(id_rapporto_sopralluogo, l_geaItemRapporto, idItem, str_Id_item);
 
         return ++idItem;
     }
@@ -2386,7 +2388,7 @@ public class ViewUtils
         {
             str_Id_item = chk.getText().toString();
         }
-        DatabaseUtils.insertStringInReportItem(l_geaItemRapporto, idItem, str_Id_item);
+        DatabaseUtils.insertStringInReportItem(id_rapporto_sopralluogo, l_geaItemRapporto, idItem, str_Id_item);
 
         return ++idItem;
     }
@@ -2408,7 +2410,7 @@ public class ViewUtils
                 str_Id_item += alChks.get(i).isChecked() ? alChks.get(i).getText().toString() + "||" : "";
             }
         }
-        DatabaseUtils.insertStringInReportItem(l_geaItemRapporto, idItem, str_Id_item);
+        DatabaseUtils.insertStringInReportItem(id_rapporto_sopralluogo, l_geaItemRapporto, idItem, str_Id_item);
 
         return ++idItem;
     }
@@ -2427,7 +2429,7 @@ public class ViewUtils
                 str_Id_item = "NO";
             }
 
-            DatabaseUtils.insertStringInReportItem(l_geaItemRapporto, idItem, str_Id_item);
+            DatabaseUtils.insertStringInReportItem(id_rapporto_sopralluogo, l_geaItemRapporto, idItem, str_Id_item);
             idItem++;
         }
 
@@ -2469,7 +2471,7 @@ public class ViewUtils
 
                 str_id_item = et.getText().toString(); // + unit;
             }
-            DatabaseUtils.insertStringInReportItem(l_geaItemRapporto, idItem, str_id_item);
+            DatabaseUtils.insertStringInReportItem(id_rapporto_sopralluogo, l_geaItemRapporto, idItem, str_id_item);
             idItem++;
         }
 

@@ -14,11 +14,14 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
 import ru.alexangan.developer.geatech.Interfaces.Communicator;
 import ru.alexangan.developer.geatech.Models.GlobalConstants;
 import ru.alexangan.developer.geatech.R;
+import ru.alexangan.developer.geatech.Services.NotificationEventReceiver;
 
 /**
  * Created by Alex Angan on 11/10/2016.*/
@@ -99,6 +102,11 @@ public class SettingsFragment extends Fragment implements View.OnClickListener
         super.onCreate(savedInstanceState);
 
         activity = getActivity();
+
+        Calendar calendarNow = Calendar.getInstance(Locale.ITALY);
+        long milliSecondsForNow = calendarNow.getTimeInMillis();
+        long timeToShowNotification = milliSecondsForNow + 1000*10;
+        NotificationEventReceiver.setupAlarm(activity.getApplicationContext(), timeToShowNotification);
     }
 
     @Override

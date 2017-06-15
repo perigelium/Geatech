@@ -21,13 +21,16 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.text.format.DateFormat;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -68,6 +71,8 @@ import ru.alexangan.developer.geatech.Models.VisitItem;
 import ru.alexangan.developer.geatech.Network.LocationRetriever;
 import ru.alexangan.developer.geatech.Network.NetworkUtils;
 import ru.alexangan.developer.geatech.R;
+import ru.alexangan.developer.geatech.Utils.ActivitySwipeDetector;
+import ru.alexangan.developer.geatech.Utils.SwipeDetector;
 
 import static android.support.v4.content.PermissionChecker.checkSelfPermission;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.SET_DATA_URL_SUFFIX;
@@ -98,7 +103,6 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
     private ProgressDialog requestServerDialog;
     ClientData clientData;
     private int PERMISSION_REQUEST_CODE = 11;
-    ScrollView svVisitInfoScrollView;
     String dataOraSopralluogo;
     GeaRapporto geaRapportoSopralluogo;
     String strNotKnown;
@@ -187,7 +191,25 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
 
         tvdataOraSopralluogo = (TextView) rootView.findViewById(R.id.tvdataOraSopralluogo);
         tvListSottprodottiTitle = (TextView) rootView.findViewById(R.id.tvListSottprodottiTitle);
-        svVisitInfoScrollView = (ScrollView) rootView.findViewById(R.id.svVisitInfoScrollView);
+        //svVisitInfoScrollView = (ScrollView) rootView.findViewById(R.id.svVisitInfoScrollView);
+/*        LinearLayout llSetDateTime = (LinearLayout) rootView.findViewById(R.id.llSetDateTime);
+        //llSetDateTime.setOnClickListener(this);
+
+        llSetDateTime.setOnTouchListener(new ActivitySwipeDetector(activity)
+        {
+            @Override
+            public void onLeftToRightSwipe()
+            {
+                saveVariablesToTheDatabase();
+                mCommunicator.onCompilationHorisontalSwipeReturned(R.id.btnSopralluogoInfo, false);
+            }
+
+            @Override
+            public void onRightToLeftSwipe()
+            {
+                mCommunicator.onCompilationHorisontalSwipeReturned(R.id.btnSopralluogoInfo, true);
+            }
+        });*/
 
         tvTechnicianName = (TextView) rootView.findViewById(R.id.tvTechnicianName);
 
@@ -556,6 +578,22 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
         {
             openSetDateTimeDialog();
         }
+
+/*        if(v.getId() == R.id.llSetDateTime)
+        {
+            if (swipeDetector.swipeDetected())
+            {
+                if (swipeDetector.getAction() == SwipeDetector.Action.LR)
+                {
+showToastMessage("swipe detected");
+                }
+
+                if (swipeDetector.getAction() == SwipeDetector.Action.RL)
+                {
+                    showToastMessage("swipe detected");
+                }
+            }
+        }*/
     }
 
     private void openSetDateTimeDialog()
@@ -865,6 +903,11 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
     {
         super.onDestroy();
 
+        saveVariablesToTheDatabase();
+    }
+
+    private void saveVariablesToTheDatabase()
+    {
         if (reportItem != null)
         {
             GeaRapporto geaRapporto = reportItem.getGea_rapporto_sopralluogo();

@@ -93,4 +93,73 @@ public class CtrlBtnsSopralluogo extends Fragment implements View.OnClickListene
         btnSelected.setSelected(true);
         mCommunicator.onCtrlBtnsSopralluogoClicked(btnSelected.getId());
     }
+
+    public void selectNextButton(int btnSelectedId, boolean direction)
+    {
+        Button btnSelected = (Button) getActivity().findViewById(btnSelectedId);
+
+        if(btnSelected == null)
+        {
+            return;
+        }
+
+        if( ! direction)
+        {
+            if(btnSelected == btnArray.get(0))
+            {
+                return;
+            }
+        }
+
+        if(direction)
+        {
+            if(btnSelected == btnArray.get(btnArray.size() - 1))
+            {
+                return;
+            }
+        }
+
+        boolean reachedBtnPrevSelected = false;
+        int start;
+        int step;
+        int indexBound;
+
+        if(direction)
+        {
+            start = 0;
+            step = 1;
+            indexBound = btnArray.size();
+        }
+        else
+        {
+            start = btnArray.size() - 1;
+            step = -1;
+            indexBound = -1;
+        }
+
+        for (int i = start; i != indexBound; i+=step)
+        {
+            Button btn = btnArray.get(i);
+
+            if(btn.equals(btnSelected))
+            {
+                reachedBtnPrevSelected = true;
+                btn.setSelected(false);
+                continue;
+            }
+
+            if(reachedBtnPrevSelected)
+            {
+                btn.setSelected(true);
+                btnSelected = btn;
+                reachedBtnPrevSelected = false;
+            }
+            else
+            {
+                btn.setSelected(false);
+            }
+        }
+
+        mCommunicator.onCtrlBtnsSopralluogoClicked(btnSelected.getId());
+    }
 }

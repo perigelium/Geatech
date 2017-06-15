@@ -110,7 +110,8 @@ public class DatabaseUtils
         return ReportStates.REPORT_NON_INITIATED;
     }
 
-    public static void insertStringInReportItem(List<GeaItemRapporto> l_geaItemRapporto, int idItem, String strData)
+    public static void insertStringInReportItem(
+            int id_rapporto_sopralluogo, List<GeaItemRapporto> l_geaItemRapporto, int idItem, String strData)
     {
         Realm realm = Realm.getDefaultInstance();
 
@@ -128,7 +129,7 @@ public class DatabaseUtils
 
         if (i == l_geaItemRapporto.size())
         {
-            GeaItemRapporto geaItem = new GeaItemRapporto(idItem, strData);
+            GeaItemRapporto geaItem = new GeaItemRapporto(id_rapporto_sopralluogo, idItem, strData);
 
             l_geaItemRapporto.add(geaItem);
         } else

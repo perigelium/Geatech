@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.Switch;
 import android.widget.TextView;
 
@@ -17,6 +18,7 @@ import java.util.Calendar;
 import java.util.Locale;
 
 import io.realm.Realm;
+import ru.alexangan.developer.geatech.Interfaces.Communicator;
 import ru.alexangan.developer.geatech.Models.GeaModelloRapporto;
 import ru.alexangan.developer.geatech.Models.GeaSopralluogo;
 import ru.alexangan.developer.geatech.Models.ProductData;
@@ -24,6 +26,7 @@ import ru.alexangan.developer.geatech.Models.ReportItem;
 import ru.alexangan.developer.geatech.Models.ReportStates;
 import ru.alexangan.developer.geatech.Models.VisitItem;
 import ru.alexangan.developer.geatech.R;
+import ru.alexangan.developer.geatech.Utils.ActivitySwipeDetector;
 import ru.alexangan.developer.geatech.Utils.DatabaseUtils;
 import ru.alexangan.developer.geatech.Utils.ViewUtils;
 
@@ -41,6 +44,15 @@ public class CaldaiaReportFragment extends Fragment
     Context context;
     ViewUtils viewUtils;
     private Realm realm;
+    private Communicator mCommunicator;
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState)
+    {
+        super.onActivityCreated(savedInstanceState);
+
+        mCommunicator = (Communicator) getActivity();
+    }
 
     GeaModelloRapporto geaModello;
 
@@ -100,6 +112,27 @@ public class CaldaiaReportFragment extends Fragment
     {
         rootView = inflater.inflate(R.layout.caldaia_report, container, false);
 
+/*        ScrollView svCaldaiaReport = (ScrollView) rootView.findViewById(R.id.svCaldaiaReport);
+        LinearLayout llCaldaiaReport = (LinearLayout) rootView.findViewById(R.id.llCaldaiaReport);
+        //llSetDateTime.setOnClickListener(this);
+
+        svCaldaiaReport.setOnTouchListener(new ActivitySwipeDetector(getActivity())
+        {
+            @Override
+            public void onLeftToRightSwipe()
+            {
+                saveDataToTheDatabase();
+                mCommunicator.onCompilationHorisontalSwipeReturned(R.id.btnFillReport, false);
+            }
+
+            @Override
+            public void onRightToLeftSwipe()
+            {
+                saveDataToTheDatabase();
+                mCommunicator.onCompilationHorisontalSwipeReturned(R.id.btnFillReport, true);
+            }
+        });*/
+
         viewUtils = new ViewUtils(rootView, id_rapporto_sopralluogo, selectedVisitId);
 
         TextView tvReportTitle = (TextView) rootView.findViewById(R.id.tvReportTitle);
@@ -157,10 +190,15 @@ public class CaldaiaReportFragment extends Fragment
     {
         super.onPause();
 
+        saveDataToTheDatabase();
+    }
+
+    private void saveDataToTheDatabase()
+    {
         if (reportItem != null)
         {
             int idItem = viewUtils.getIdItemStart();
-            
+
             idItem = viewUtils.saveSeveralRadiosAndEdit(idItem);
 
             idItem = viewUtils.saveSeveralRadiosAndEdit(idItem);
@@ -194,7 +232,7 @@ public class CaldaiaReportFragment extends Fragment
             idItem = viewUtils.saveSeveralRadiosAndEdit(idItem);
 
             idItem = viewUtils.saveSeveralEdits(idItem, 2);
-            
+
 
             // Completion state
 

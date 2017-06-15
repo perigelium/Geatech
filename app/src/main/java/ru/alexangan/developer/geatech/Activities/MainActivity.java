@@ -582,6 +582,12 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
     }
 
     @Override
+    public void onCompilationHorisontalSwipeReturned(int btnId, boolean swipeDirection)
+    {
+        ctrlBtnsSopralluogo.selectNextButton(btnId, swipeDirection);
+    }
+
+    @Override
     public void onSendReportReturned(int id_rapporto_sopralluogo)
     {
         OnReportListItemSelected(id_rapporto_sopralluogo);
@@ -591,6 +597,15 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
     public void OnReportListItemSelected(int id_rapporto_sopralluogo)
     {
         mFragmentManager.popBackStackImmediate();
+
+        if (!notificationBarFragment.isAdded())
+        {
+            FragmentTransaction vFragmentTransaction = mFragmentManager.beginTransaction();
+            vFragmentTransaction.replace(R.id.headerFragContainer, notificationBarFragment);
+            vFragmentTransaction.commit();
+
+            mFragmentManager.executePendingTransactions();
+        }
 
         if (!reportDetailedFragment.isAdded())
         {
@@ -852,12 +867,10 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
 
                         if (Build.VERSION.SDK_INT >= 24)
                         {
-                            //str_gea_modelli = String.valueOf(Html.fromHtml(str_gea_modelli, Html.FROM_HTML_MODE_LEGACY));
                             str_gea_sezioni_modelli = String.valueOf(Html.fromHtml(str_gea_sezioni_modelli, Html.FROM_HTML_MODE_LEGACY));
                             str_gea_items_modelli = String.valueOf(Html.fromHtml(str_gea_items_modelli, Html.FROM_HTML_MODE_LEGACY));
                         } else
                         {
-                            //str_gea_modelli = String.valueOf(Html.fromHtml(str_gea_modelli));
                             str_gea_sezioni_modelli = String.valueOf(Html.fromHtml(str_gea_sezioni_modelli));
                             str_gea_items_modelli = String.valueOf(Html.fromHtml(str_gea_items_modelli));
                         }
