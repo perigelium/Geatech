@@ -71,7 +71,7 @@ public class FragListVisitsOverdue extends ListFragment
         View rootView = inflater.inflate(R.layout.list_visits_with_title, container, false);
 
         TextView tvTitleListVisits = (TextView) rootView.findViewById(R.id.tvTitleListVisits);
-        tvTitleListVisits.setText("Sopralluoghi in ritardo");
+        tvTitleListVisits.setText("Sopralluoghi/Rapporti in ritardo");
 
         return rootView;
     }
@@ -108,11 +108,12 @@ public class FragListVisitsOverdue extends ListFragment
                 continue;
             }
 
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss", Locale.ITALIAN);
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ITALIAN);
             int id_tecnico = visitItem.getGeaSopralluogo().getId_tecnico();
             boolean ownVisit = selectedTech.getId() == id_tecnico;
+            boolean reportNotSent = visitItem.getGeaRapporto().getData_ora_invio_rapporto() == null;
 
-            if (!ownVisitsOnly || (ownVisitsOnly && ownVisit))
+            if (reportNotSent && ownVisit)
             {
                 try
                 {

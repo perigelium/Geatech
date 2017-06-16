@@ -118,7 +118,7 @@ public class FragListVisitsToday extends ListFragment
             int id_tecnico = visitItem.getGeaSopralluogo().getId_tecnico();
             boolean ownVisit = selectedTech.getId() == id_tecnico;
 
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss", Locale.ITALIAN);
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ITALIAN);
 
             if (!ownVisitsOnly || (ownVisitsOnly && ownVisit))
             {
@@ -158,7 +158,7 @@ public class FragListVisitsToday extends ListFragment
             }
         }
 
-        myListAdapter = new MyListVisitsAdapter(getActivity(), R.layout.list_visits_fragment_row, visitItemsFiltered);
+        myListAdapter = new MyListVisitsAdapter(getActivity(), R.layout.own_visits_fragment_row, visitItemsFiltered);
         setListAdapter(myListAdapter);
 
         lv = getListView();

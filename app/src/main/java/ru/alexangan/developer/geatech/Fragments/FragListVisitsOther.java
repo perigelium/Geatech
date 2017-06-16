@@ -114,7 +114,7 @@ public class FragListVisitsOther extends ListFragment
                 continue;
             }
 
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss", Locale.ITALIAN);
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ITALIAN);
             int id_tecnico = visitItem.getGeaSopralluogo().getId_tecnico();
             boolean ownVisit = selectedTech.getId() == id_tecnico;
 

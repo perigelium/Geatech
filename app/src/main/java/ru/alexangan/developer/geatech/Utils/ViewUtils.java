@@ -1,12 +1,15 @@
 package ru.alexangan.developer.geatech.Utils;
 
+import android.annotation.TargetApi;
 import android.graphics.Color;
+import android.os.Build;
 import android.text.InputType;
 import android.util.Pair;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.EdgeEffect;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.GridView;
@@ -18,6 +21,7 @@ import android.widget.RadioGroup;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -2729,4 +2733,27 @@ public class ViewUtils
         gridView.setLayoutParams(params);
     }
 
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    public static void setEdgeBounceEffect(View scrollableView, int color)
+    {
+        final String[] edgeGlows = {"mEdgeGlowTop", "mEdgeGlowBottom", "mEdgeGlowLeft", "mEdgeGlowRight"};
+        for (String edgeGlow : edgeGlows)
+        {
+            Class<?> clazz = scrollableView.getClass();
+            while (clazz != null)
+            {
+                try
+                {
+                    final Field edgeGlowField = clazz.getDeclaredField(edgeGlow);
+                    edgeGlowField.setAccessible(true);
+                    final EdgeEffect edgeEffect = (EdgeEffect) edgeGlowField.get(scrollableView);
+                    edgeEffect.setColor(color);
+                    break;
+                } catch (Exception e)
+                {
+                    clazz = clazz.getSuperclass();
+                }
+            }
+        }
+    }
 }

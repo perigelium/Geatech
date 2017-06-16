@@ -119,9 +119,16 @@ public class MyListVisitsAdapter extends BaseAdapter
         ClientData clientData = visitItem.getClientData();
         ProductData productData = visitItem.getProductData();
         GeaSopralluogo geaSopralluogo = visitItem.getGeaSopralluogo();
-        String dataOraSopralluogo = geaSopralluogo.getData_ora_sopralluogo();
+        String data_ora_sopralluogo = geaSopralluogo.getData_ora_sopralluogo();
         //int idSopralluogo = geaSopralluogo.getId_sopralluogo();
         int tech_id = geaSopralluogo.getId_tecnico();
+
+        String data_sollecito_appuntamento = geaSopralluogo.getData_sollecito_appuntamento();
+        boolean remindedVisit = data_ora_sopralluogo == null && data_sollecito_appuntamento != null;
+
+        String data_invio_rapporto = visitItem.getGeaRapporto().getData_ora_invio_rapporto();
+        String data_sollecito_rapporto = geaSopralluogo.getData_sollecito_rapporto();
+        boolean remindedReport = data_invio_rapporto == null && data_sollecito_rapporto != null;
 
         String techName = "";
         TechnicianItem technicianItem = realm.where(TechnicianItem.class).equalTo("id", tech_id).findFirst();
@@ -160,14 +167,14 @@ public class MyListVisitsAdapter extends BaseAdapter
 
         long firstMilliSecondsOfToday = calendarTodayFirstMin.getTimeInMillis();
 
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss", Locale.ITALIAN);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ITALIAN);
         Date date = null;
 
-        if (dataOraSopralluogo != null)
+        if (data_ora_sopralluogo != null)
         {
             try
             {
-                date = sdf.parse(dataOraSopralluogo);
+                date = sdf.parse(data_ora_sopralluogo);
                 long time = date.getTime();
 
                 if (time < firstMilliSecondsOfToday)
@@ -180,13 +187,13 @@ public class MyListVisitsAdapter extends BaseAdapter
             }
 
         }
-        if (tech_id != 0 && dataOraSopralluogo != null)
+        if (tech_id != 0 && data_ora_sopralluogo != null)
         {
             Calendar calendar = Calendar.getInstance();
 
             try
             {
-                calendar.setTime(sdf.parse(dataOraSopralluogo));
+                calendar.setTime(sdf.parse(data_ora_sopralluogo));
 
             } catch (ParseException e)
             {
@@ -195,7 +202,7 @@ public class MyListVisitsAdapter extends BaseAdapter
 
             if (ownReport)
             {
-                if (overdueVisit)
+                if (overdueVisit || remindedReport)
                 {
                     ivReportStatus.setBackgroundResource(R.drawable.red_oval_shape);
                 } else
@@ -225,7 +232,15 @@ public class MyListVisitsAdapter extends BaseAdapter
             tvVisitTime.setText(Integer.toString(calendar.get(Calendar.HOUR_OF_DAY)) + ":" + minuteStr);
         } else
         {
-            ivReportStatus.setBackgroundResource(R.drawable.yellow_oval_shape);
+            if(remindedVisit)
+            {
+                ivReportStatus.setBackgroundResource(R.drawable.red_oval_shape);
+            }
+            else
+            {
+                ivReportStatus.setBackgroundResource(R.drawable.yellow_oval_shape);
+            }
+
             tvVisitDay.setText("");
             tvVisitMonth.setText("");
             tvVisitTime.setText("");
@@ -233,7 +248,6 @@ public class MyListVisitsAdapter extends BaseAdapter
 /*            ivPersonTimeUnset.setVisibility(View.VISIBLE);
             ivPersonTimeSet.setVisibility(View.GONE);*/
         }
-
 
         return row;
     }

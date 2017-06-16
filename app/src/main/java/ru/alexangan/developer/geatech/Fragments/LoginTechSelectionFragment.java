@@ -309,7 +309,7 @@ public class LoginTechSelectionFragment extends Fragment implements View.OnClick
                             }
                         }
 
-                        ArrayAdapter <String> technicianListAdapter = new ArrayAdapter<>(activity, R.layout.spinner_tech_selection_row, R.id.tvSpinnerTechSelItem, saTecnicianList);
+                        ArrayAdapter<String> technicianListAdapter = new ArrayAdapter<>(activity, R.layout.spinner_tech_selection_row, R.id.tvSpinnerTechSelItem, saTecnicianList);
                         spTecnicianList.setAdapter(technicianListAdapter);
 
                         spTecnicianList.setSelection(selectedTechPos);
@@ -523,22 +523,20 @@ public class LoginTechSelectionFragment extends Fragment implements View.OnClick
                         {
                             try
                             {
-
-
                                 callVisits = networkUtils.getData(this, GET_VISITS_URL_SUFFIX, tokenStr);
 
-                                //callModels = networkUtils.getData(this, GET_MODELS_URL_SUFFIX, tokenStr);
+                                boolean geaModelsIsObsolete = mSettings.getBoolean("geaModelsIsObsolete", true);
 
-                                if (geaItemModelliSize == 0)
+                                //if (geaItemModelliSize == 0 || geaModelsIsObsolete)
                                 {
                                     callModels = networkUtils.getData(this, GET_MODELS_URL_SUFFIX, tokenStr);
                                 }
 
-                            }catch (Exception e)
+                            } catch (Exception e)
                             {
                                 e.printStackTrace();
 
-                                showToastMessage("ERROR in data received from server.");
+                                showToastMessage(getString(R.string.ReceivedDataError));
 
                                 activity.runOnUiThread(new Runnable()
                                 {
@@ -590,10 +588,10 @@ public class LoginTechSelectionFragment extends Fragment implements View.OnClick
                         }
                     }
                 }
-            } catch (JSONException e)
+            } catch (Exception e)
             {
                 e.printStackTrace();
-                showToastMessage("JSON parse error");
+                showToastMessage(getString(R.string.ReceivedDataError));
 
                 activity.runOnUiThread(new Runnable()
                 {
@@ -609,38 +607,51 @@ public class LoginTechSelectionFragment extends Fragment implements View.OnClick
         {
             visitsJSONData = response.body().string();
 
-            //Log.d("DEBUG", visitsJSONData);
-
-            activity.runOnUiThread(new Runnable()
+            try
             {
-                public void run()
+                activity.runOnUiThread(new Runnable()
                 {
-
-                    realm.beginTransaction();
-
-                    inVisitItems = JSON_to_model.getVisitTtemsList(visitsJSONData);
-
-                    visitItems = realm.where(VisitItem.class).findAll();
-                    visitItems.deleteAllFromRealm();
-
-                    if (inVisitItems != null && inVisitItems.size() > 0)
+                    public void run()
                     {
-                        for (VisitItem visitItem : inVisitItems)
+
+                        realm.beginTransaction();
+
+                        inVisitItems = JSON_to_model.getVisitTtemsList(visitsJSONData);
+
+                        visitItems = realm.where(VisitItem.class).findAll();
+                        visitItems.deleteAllFromRealm();
+
+                        if (inVisitItems != null && inVisitItems.size() > 0)
                         {
-                            realm.copyToRealmOrUpdate(visitItem);
+                            for (VisitItem visitItem : inVisitItems)
+                            {
+                                realm.copyToRealmOrUpdate(visitItem);
+                            }
+                        }
+                        realm.commitTransaction();
+
+                        if (geaItemModelliSize != 0)
+                        {
+                            downloadingDialog.dismiss();
+
+                            loginCommunicator.onTechSelectedAndApplied();
                         }
                     }
-                    realm.commitTransaction();
+                });
+            } catch (Exception e)
+            {
+                e.printStackTrace();
 
+                showToastMessage(getString(R.string.ReceivedDataError));
 
-                    if (geaItemModelliSize != 0)
+                activity.runOnUiThread(new Runnable()
+                {
+                    public void run()
                     {
-                        downloadingDialog.dismiss();
-
-                        loginCommunicator.onTechSelectedAndApplied();
+                        enableInput();
                     }
-                }
-            });
+                });
+            }
         }
 
         if (call == callModels)
@@ -655,92 +666,107 @@ public class LoginTechSelectionFragment extends Fragment implements View.OnClick
             {
                 jsonObject = new JSONObject(modelsJSONData);
 
-                if (jsonObject.has("type_report_data"))
+                if (jsonObject.has("models_is_uptodate"))
                 {
                     try
                     {
-                        JSONObject type_report_data = jsonObject.getJSONObject("type_report_data");
+                        String models_is_uptodate = jsonObject.getString("models_is_uptodate");
 
-                        String str_gea_modelli = type_report_data.getString("gea_modelli_rapporto_sopralluogo");
-                        String str_gea_sezioni_modelli = type_report_data.getString("gea_sezioni_modelli_rapporto_sopralluogo");
-                        String str_gea_items_modelli = type_report_data.getString("gea_items_modelli_rapporto_sopralluogo");
-
-
-                        if (Build.VERSION.SDK_INT >= 24)
+                        if (models_is_uptodate.equals("1"))
                         {
-                            //str_gea_modelli = String.valueOf(Html.fromHtml(str_gea_modelli, Html.FROM_HTML_MODE_LEGACY));
-                            str_gea_sezioni_modelli = String.valueOf(Html.fromHtml(str_gea_sezioni_modelli, Html.FROM_HTML_MODE_LEGACY));
-                            str_gea_items_modelli = String.valueOf(Html.fromHtml(str_gea_items_modelli, Html.FROM_HTML_MODE_LEGACY));
-                        } else
-                        {
-                            //str_gea_modelli = String.valueOf(Html.fromHtml(str_gea_modelli));
-                            str_gea_sezioni_modelli = String.valueOf(Html.fromHtml(str_gea_sezioni_modelli));
-                            str_gea_items_modelli = String.valueOf(Html.fromHtml(str_gea_items_modelli));
+                            downloadingDialog.dismiss();
+
+                            mSettings.edit().putBoolean("geaModelsIsObsolete", false).apply();
+
+                            loginCommunicator.onTechSelectedAndApplied();
                         }
 
-                        Gson gson = new Gson();
-
-                        Type typeGeaModelli = new TypeToken<List<GeaModelloRapporto>>()
+                        if (jsonObject.has("type_report_data"))
                         {
-                        }.getType();
-                        final List<GeaModelloRapporto> l_geaModelli = gson.fromJson(str_gea_modelli, typeGeaModelli);
+                            JSONObject type_report_data = jsonObject.getJSONObject("type_report_data");
 
-                        Type typeGeaSezioniModelli = new TypeToken<List<GeaSezioneModelliRapporto>>()
-                        {
-                        }.getType();
-                        final List<GeaSezioneModelliRapporto> l_geaSezioniModelli = gson.fromJson(str_gea_sezioni_modelli, typeGeaSezioniModelli);
+                            String str_gea_modelli = type_report_data.getString("gea_modelli_rapporto_sopralluogo");
+                            String str_gea_sezioni_modelli = type_report_data.getString("gea_sezioni_modelli_rapporto_sopralluogo");
+                            String str_gea_items_modelli = type_report_data.getString("gea_items_modelli_rapporto_sopralluogo");
 
-                        Type typeGeaItemsModelli = new TypeToken<List<GeaItemModelliRapporto>>()
-                        {
-                        }.getType();
-                        final List<GeaItemModelliRapporto> l_geaItemsModelli = gson.fromJson(str_gea_items_modelli, typeGeaItemsModelli);
 
-                        activity.runOnUiThread(new Runnable()
-                        {
-                            public void run()
+                            if (Build.VERSION.SDK_INT >= 24)
                             {
-                                realm.beginTransaction();
-                                RealmResults<GeaModelloRapporto> geaModelli = realm.where(GeaModelloRapporto.class).findAll();
-                                geaModelli.deleteAllFromRealm();
-                                realm.commitTransaction();
-
-                                for (GeaModelloRapporto gm : l_geaModelli)
-                                {
-                                    realm.beginTransaction();
-                                    realm.copyToRealm(gm);
-                                    realm.commitTransaction();
-                                }
-
-                                realm.beginTransaction();
-                                RealmResults<GeaSezioneModelliRapporto> geaSezioniModelli = realm.where(GeaSezioneModelliRapporto.class).findAll();
-                                geaSezioniModelli.deleteAllFromRealm();
-                                realm.commitTransaction();
-
-                                for (GeaSezioneModelliRapporto gs : l_geaSezioniModelli)
-                                {
-                                    realm.beginTransaction();
-                                    realm.copyToRealm(gs);
-                                    realm.commitTransaction();
-                                }
-
-                                realm.beginTransaction();
-                                RealmResults<GeaItemModelliRapporto> geaItemModelli = realm.where(GeaItemModelliRapporto.class).findAll();
-                                geaItemModelli.deleteAllFromRealm();
-                                realm.commitTransaction();
-
-                                for (GeaItemModelliRapporto gi : l_geaItemsModelli)
-                                {
-                                    realm.beginTransaction();
-                                    realm.copyToRealm(gi);
-                                    realm.commitTransaction();
-                                }
-
-                                downloadingDialog.dismiss();
-
-                                loginCommunicator.onTechSelectedAndApplied();
+                                //str_gea_modelli = String.valueOf(Html.fromHtml(str_gea_modelli, Html.FROM_HTML_MODE_LEGACY));
+                                str_gea_sezioni_modelli = String.valueOf(Html.fromHtml(str_gea_sezioni_modelli, Html.FROM_HTML_MODE_LEGACY));
+                                str_gea_items_modelli = String.valueOf(Html.fromHtml(str_gea_items_modelli, Html.FROM_HTML_MODE_LEGACY));
+                            } else
+                            {
+                                //str_gea_modelli = String.valueOf(Html.fromHtml(str_gea_modelli));
+                                str_gea_sezioni_modelli = String.valueOf(Html.fromHtml(str_gea_sezioni_modelli));
+                                str_gea_items_modelli = String.valueOf(Html.fromHtml(str_gea_items_modelli));
                             }
-                        });
 
+                            Gson gson = new Gson();
+
+                            Type typeGeaModelli = new TypeToken<List<GeaModelloRapporto>>()
+                            {
+                            }.getType();
+                            final List<GeaModelloRapporto> l_geaModelli = gson.fromJson(str_gea_modelli, typeGeaModelli);
+
+                            Type typeGeaSezioniModelli = new TypeToken<List<GeaSezioneModelliRapporto>>()
+                            {
+                            }.getType();
+                            final List<GeaSezioneModelliRapporto> l_geaSezioniModelli = gson.fromJson(str_gea_sezioni_modelli, typeGeaSezioniModelli);
+
+                            Type typeGeaItemsModelli = new TypeToken<List<GeaItemModelliRapporto>>()
+                            {
+                            }.getType();
+                            final List<GeaItemModelliRapporto> l_geaItemsModelli = gson.fromJson(str_gea_items_modelli, typeGeaItemsModelli);
+
+                            activity.runOnUiThread(new Runnable()
+                            {
+                                public void run()
+                                {
+                                    realm.beginTransaction();
+                                    RealmResults<GeaModelloRapporto> geaModelli = realm.where(GeaModelloRapporto.class).findAll();
+                                    geaModelli.deleteAllFromRealm();
+                                    realm.commitTransaction();
+
+                                    for (GeaModelloRapporto gm : l_geaModelli)
+                                    {
+                                        realm.beginTransaction();
+                                        realm.copyToRealm(gm);
+                                        realm.commitTransaction();
+                                    }
+
+                                    realm.beginTransaction();
+                                    RealmResults<GeaSezioneModelliRapporto> geaSezioniModelli = realm.where(GeaSezioneModelliRapporto.class).findAll();
+                                    geaSezioniModelli.deleteAllFromRealm();
+                                    realm.commitTransaction();
+
+                                    for (GeaSezioneModelliRapporto gs : l_geaSezioniModelli)
+                                    {
+                                        realm.beginTransaction();
+                                        realm.copyToRealm(gs);
+                                        realm.commitTransaction();
+                                    }
+
+                                    realm.beginTransaction();
+                                    RealmResults<GeaItemModelliRapporto> geaItemModelli = realm.where(GeaItemModelliRapporto.class).findAll();
+                                    geaItemModelli.deleteAllFromRealm();
+                                    realm.commitTransaction();
+
+                                    for (GeaItemModelliRapporto gi : l_geaItemsModelli)
+                                    {
+                                        realm.beginTransaction();
+                                        realm.copyToRealm(gi);
+                                        realm.commitTransaction();
+                                    }
+
+                                    downloadingDialog.dismiss();
+
+                                    mSettings.edit().putBoolean("geaModelsIsObsolete", false).apply();
+
+                                    loginCommunicator.onTechSelectedAndApplied();
+                                }
+                            });
+                        }
                     } catch (Exception e)
                     {
                         e.printStackTrace();
@@ -763,9 +789,11 @@ public class LoginTechSelectionFragment extends Fragment implements View.OnClick
                         }
                     });
                 }
-            } catch (JSONException e)
+            } catch (Exception e)
             {
                 e.printStackTrace();
+
+                showToastMessage(getString(R.string.ReceivedDataError));
 
                 activity.runOnUiThread(new Runnable()
                 {

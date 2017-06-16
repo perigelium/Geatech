@@ -29,6 +29,4 @@ public interface Communicator
     void showHeaderAndFooter();
 
     void onLogoutCommand();
-
-    void refreshGeaModels();
 }

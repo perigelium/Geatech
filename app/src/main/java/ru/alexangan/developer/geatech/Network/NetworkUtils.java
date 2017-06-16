@@ -9,6 +9,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.Call;
@@ -114,9 +117,15 @@ public class NetworkUtils
 
         JSONObject jsonToken = new JSONObject();
 
+        Calendar calendarNow = Calendar.getInstance(Locale.ITALY);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ITALIAN);
+        String strTimeNow = sdf.format(calendarNow.getTime());
+
         try
         {
             jsonToken.put("token", tokenStr);
+            jsonToken.put("last_update", strTimeNow);
+            jsonToken.put("state", "all");
 
         } catch (JSONException e)
         {

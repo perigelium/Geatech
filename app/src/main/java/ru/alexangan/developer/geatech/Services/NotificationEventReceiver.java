@@ -17,7 +17,7 @@ public class NotificationEventReceiver extends WakefulBroadcastReceiver
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         PendingIntent alarmIntent = getStartPendingIntent(context);
 
-        alarmManager.set(AlarmManager.RTC, timeToShowNotification, alarmIntent);
+        alarmManager.set(AlarmManager.RTC_WAKEUP, timeToShowNotification, alarmIntent);
     }
 
     @Override

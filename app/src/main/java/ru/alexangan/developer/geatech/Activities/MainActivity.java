@@ -75,6 +75,7 @@ import ru.alexangan.developer.geatech.Network.NetworkUtils;
 import ru.alexangan.developer.geatech.R;
 import ru.alexangan.developer.geatech.Utils.JSON_to_model;
 import ru.alexangan.developer.geatech.Utils.SwipeDetector;
+import ru.alexangan.developer.geatech.Utils.ViewUtils;
 
 import static android.os.Environment.DIRECTORY_PICTURES;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.GET_MODELS_URL_SUFFIX;
@@ -193,7 +194,7 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
         scrvInnerFragContainer = (ScrollViewEx) findViewById(R.id.svInnerFragContainer);
         scrvInnerFragContainer.setScrollViewListener(this);
 
-        setEdgeBounceEffect(scrvInnerFragContainer, Color.parseColor("#ffcccccc"));
+        ViewUtils.setEdgeBounceEffect(scrvInnerFragContainer, Color.parseColor("#ffcccccc"));
 
         scrvInnerFragContainer.setOnTouchListener(new View.OnTouchListener()
         {
@@ -506,8 +507,7 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
                         vFragmentTransaction.addToBackStack(photoGalleryGridFragment.getTag());
                         vFragmentTransaction.commit();
                     }
-                }
-                else
+                } else
                 {
                     showToastMessage("This report have not been initialized.");
                 }
@@ -528,7 +528,7 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
             }
         }
 
-        if(btnId != R.id.btnSopralluogoInfo &&  ! ownReportMode)
+        if (btnId != R.id.btnSopralluogoInfo && !ownReportMode)
         {
             ctrlBtnsSopralluogo.setCheckedBtnId(R.id.btnSopralluogoInfo);
 
@@ -561,6 +561,7 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
             vFragmentTransaction.replace(R.id.headerFragContainer, ctrlBtnsSopralluogo);
             vFragmentTransaction.commit();
         }
+
         mFragmentManager.executePendingTransactions();
 
         if (!setDateTimeFragment.isAdded())
@@ -771,7 +772,7 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
             handler.removeCallbacks(runnable);
         }
 
-        if (call == callModels)
+/*        if (call == callModels)
         {
             showToastMessage(getString(R.string.ApplicationUpdateFailed));
 
@@ -784,7 +785,7 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
             });
 
             handler.removeCallbacks(runnable);
-        }
+        }*/
     }
 
     @Override
@@ -798,157 +799,62 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
 
             response.body().close();
 
-            runOnUiThread(new Runnable()
-            {
-                public void run()
-                {
-                    realm.beginTransaction();
-
-                    inVisitItems = JSON_to_model.getVisitTtemsList(visitsJSONData);
-
-                    visitItems = realm.where(VisitItem.class).findAll();
-                    visitItems.deleteAllFromRealm();
-
-                    if (inVisitItems != null && inVisitItems.size() > 0)
-                    {
-                        for (VisitItem visitItem : inVisitItems)
-                        {
-                            realm.copyToRealmOrUpdate(visitItem);
-                        }
-                    }
-                    realm.commitTransaction();
-
-                    realm.beginTransaction();
-                    visitItems = realm.where(VisitItem.class).findAll();
-                    realm.commitTransaction();
-
-                    if(GlobalConstants.visitsListIsObsolete)
-                    {
-                        GlobalConstants.visitsListIsObsolete = false;
-                        onCtrlBtnsBottomClicked(R.id.btnVisits);
-                    }
-
-                    if(GlobalConstants.reportsListIsObsolete)
-                    {
-                        GlobalConstants.reportsListIsObsolete = false;
-                        onCtrlBtnsBottomClicked(R.id.btnCompletedReports);
-                    }
-
-                    if(GlobalConstants.reminderListIsObsolete)
-                    {
-                        GlobalConstants.reminderListIsObsolete = false;
-                        onCtrlBtnsBottomClicked(R.id.btnNotifications);
-                    }
-
-                    requestServerDialog.dismiss();
-                }
-            });
-        }
-
-        if (call == callModels)
-        {
-            String modelsJSONData = response.body().string();
-
-            JSONObject jsonObject;
-
             try
             {
-                jsonObject = new JSONObject(modelsJSONData);
-
-                if (jsonObject.has("type_report_data"))
+                runOnUiThread(new Runnable()
                 {
-                    try
+                    public void run()
                     {
-                        JSONObject type_report_data = jsonObject.getJSONObject("type_report_data");
+                        realm.beginTransaction();
 
-                        String str_gea_modelli = type_report_data.getString("gea_modelli_rapporto_sopralluogo");
-                        String str_gea_sezioni_modelli = type_report_data.getString("gea_sezioni_modelli_rapporto_sopralluogo");
-                        String str_gea_items_modelli = type_report_data.getString("gea_items_modelli_rapporto_sopralluogo");
+                        inVisitItems = JSON_to_model.getVisitTtemsList(visitsJSONData);
 
-                        if (Build.VERSION.SDK_INT >= 24)
+                        visitItems = realm.where(VisitItem.class).findAll();
+                        visitItems.deleteAllFromRealm();
+
+                        if (inVisitItems != null && inVisitItems.size() > 0)
                         {
-                            str_gea_sezioni_modelli = String.valueOf(Html.fromHtml(str_gea_sezioni_modelli, Html.FROM_HTML_MODE_LEGACY));
-                            str_gea_items_modelli = String.valueOf(Html.fromHtml(str_gea_items_modelli, Html.FROM_HTML_MODE_LEGACY));
-                        } else
+                            for (VisitItem visitItem : inVisitItems)
+                            {
+                                realm.copyToRealmOrUpdate(visitItem);
+                            }
+                        }
+                        realm.commitTransaction();
+
+                        realm.beginTransaction();
+                        visitItems = realm.where(VisitItem.class).findAll();
+                        realm.commitTransaction();
+
+                        if (GlobalConstants.visitsListIsObsolete)
                         {
-                            str_gea_sezioni_modelli = String.valueOf(Html.fromHtml(str_gea_sezioni_modelli));
-                            str_gea_items_modelli = String.valueOf(Html.fromHtml(str_gea_items_modelli));
+                            GlobalConstants.visitsListIsObsolete = false;
+                            onCtrlBtnsBottomClicked(R.id.btnVisits);
                         }
 
-                        Gson gson = new Gson();
-
-                        Type typeGeaModelli = new TypeToken<List<GeaModelloRapporto>>()
+                        if (GlobalConstants.reportsListIsObsolete)
                         {
-                        }.getType();
-                        final List<GeaModelloRapporto> l_geaModelli = gson.fromJson(str_gea_modelli, typeGeaModelli);
+                            GlobalConstants.reportsListIsObsolete = false;
+                            onCtrlBtnsBottomClicked(R.id.btnCompletedReports);
+                        }
 
-                        Type typeGeaSezioniModelli = new TypeToken<List<GeaSezioneModelliRapporto>>()
+                        if (GlobalConstants.reminderListIsObsolete)
                         {
-                        }.getType();
-                        final List<GeaSezioneModelliRapporto> l_geaSezioniModelli = gson.fromJson(str_gea_sezioni_modelli, typeGeaSezioniModelli);
+                            GlobalConstants.reminderListIsObsolete = false;
+                            onCtrlBtnsBottomClicked(R.id.btnNotifications);
+                        }
 
-                        Type typeGeaItemsModelli = new TypeToken<List<GeaItemModelliRapporto>>()
-                        {
-                        }.getType();
-                        final List<GeaItemModelliRapporto> l_geaItemsModelli = gson.fromJson(str_gea_items_modelli, typeGeaItemsModelli);
-
-                        runOnUiThread(new Runnable()
-                        {
-                            public void run()
-                            {
-                                realm.beginTransaction();
-                                RealmResults<GeaModelloRapporto> geaModelli = realm.where(GeaModelloRapporto.class).findAll();
-                                geaModelli.deleteAllFromRealm();
-                                realm.commitTransaction();
-
-                                for (GeaModelloRapporto gm : l_geaModelli)
-                                {
-                                    realm.beginTransaction();
-                                    realm.copyToRealm(gm);
-                                    realm.commitTransaction();
-                                }
-
-                                realm.beginTransaction();
-                                RealmResults<GeaSezioneModelliRapporto> geaSezioniModelli = realm.where(GeaSezioneModelliRapporto.class).findAll();
-                                geaSezioniModelli.deleteAllFromRealm();
-                                realm.commitTransaction();
-
-                                for (GeaSezioneModelliRapporto gs : l_geaSezioniModelli)
-                                {
-                                    realm.beginTransaction();
-                                    realm.copyToRealm(gs);
-                                    realm.commitTransaction();
-                                }
-
-                                realm.beginTransaction();
-                                RealmResults<GeaItemModelliRapporto> geaItemModelli = realm.where(GeaItemModelliRapporto.class).findAll();
-                                geaItemModelli.deleteAllFromRealm();
-                                realm.commitTransaction();
-
-                                for (GeaItemModelliRapporto gi : l_geaItemsModelli)
-                                {
-                                    realm.beginTransaction();
-                                    realm.copyToRealm(gi);
-                                    realm.commitTransaction();
-                                }
-
-                                requestServerDialog.dismiss();
-                                showToastMessage(getString(R.string.ApplicationUpdateSucceeded));
-                                logout();
-                            }
-                        });
-
-                    } catch (Exception e)
-                    {
-                        e.printStackTrace();
+                        requestServerDialog.dismiss();
                     }
-                }
-            } catch (JSONException e)
+                });
+
+            } catch (Exception e)
             {
                 e.printStackTrace();
-            }
 
-            requestServerDialog.dismiss();
+                showToastMessage(getString(R.string.ReceivedDataError));
+
+                requestServerDialog.dismiss();
+            }
         }
     }
 
@@ -971,21 +877,20 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
 
     private void refreshVisitsList()
     {
-        if(NetworkUtils.isNetworkAvailable(this))
+        if (NetworkUtils.isNetworkAvailable(this))
         {
             requestServerDialog.show();
 
             handler.postDelayed(runnable, 30000);
 
             callVisits = networkUtils.getData(this, GET_VISITS_URL_SUFFIX, tokenStr);
-        }
-        else
+        } else
         {
             showToastMessage(getString(R.string.CheckInternetConnection));
         }
     }
 
-    @Override
+/*    @Override
     public void refreshGeaModels()
     {
         requestServerDialog.show();
@@ -995,7 +900,7 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
         callModels = networkUtils.getData(this, GET_MODELS_URL_SUFFIX, tokenStr);
 
         visitsListIsObsolete = false;
-    }
+    }*/
 
     @Override
     public void hideHeaderAndFooter()
@@ -1015,25 +920,6 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
         fragmentTransaction.commit();
     }
 
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    private static void setEdgeBounceEffect(View scrollableView, int color) {
-        final String[] edgeGlows = {"mEdgeGlowTop", "mEdgeGlowBottom", "mEdgeGlowLeft", "mEdgeGlowRight"};
-        for (String edgeGlow : edgeGlows) {
-            Class<?> clazz = scrollableView.getClass();
-            while (clazz != null) {
-                try {
-                    final Field edgeGlowField = clazz.getDeclaredField(edgeGlow);
-                    edgeGlowField.setAccessible(true);
-                    final EdgeEffect edgeEffect = (EdgeEffect) edgeGlowField.get(scrollableView);
-                    edgeEffect.setColor(color);
-                    break;
-                } catch (Exception e) {
-                    clazz = clazz.getSuperclass();
-                }
-            }
-        }
-    }
-
     @Override
     public void onScrollChanged(ScrollViewEx scrollView, int x, int y, int oldx, int oldy)
     {
@@ -1043,20 +929,20 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
         // if diff is zero, then the top has been reached
         if (diff == 0 && NetworkUtils.isNetworkAvailable(this))
         {
-            if(fragListVisitsToday.isAdded() || fragListVisitsOther.isAdded()
+            if (fragListVisitsToday.isAdded() || fragListVisitsOther.isAdded()
                     || fragListVisitsFree.isAdded() || fragListVisitsOverdue.isAdded())
             {
                 GlobalConstants.visitsListIsObsolete = true;
                 refreshVisitsList();
             }
 
-            if(fragListReportsNotSent.isAdded() || fragListReportsSent.isAdded())
+            if (fragListReportsNotSent.isAdded() || fragListReportsSent.isAdded())
             {
                 GlobalConstants.reportsListIsObsolete = true;
                 refreshVisitsList();
             }
 
-            if(fragListVisitsReminded.isAdded() || fragListReportsReminded.isAdded())
+            if (fragListVisitsReminded.isAdded() || fragListReportsReminded.isAdded())
             {
                 GlobalConstants.reminderListIsObsolete = true;
                 refreshVisitsList();
