@@ -8,23 +8,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Map;
 import java.util.TreeMap;
 
 import io.realm.Realm;
-import io.realm.RealmList;
 import ru.alexangan.developer.geatech.Adapters.MyListVisitsAdapter;
 import ru.alexangan.developer.geatech.Interfaces.Communicator;
-import ru.alexangan.developer.geatech.Models.GeaImmagineRapportoSopralluogo;
-import ru.alexangan.developer.geatech.Models.GeaItemRapportoSopralluogo;
 import ru.alexangan.developer.geatech.Models.GeaRapporto;
 import ru.alexangan.developer.geatech.Models.GeaSopralluogo;
 import ru.alexangan.developer.geatech.Models.ReportItem;
@@ -160,7 +155,7 @@ public class FragListReportsNotSent extends ListFragment
             }
         }
 
-        myListAdapterNotSent = new MyListVisitsAdapter(getActivity(), R.layout.list_visits_fragment_row, visitItemsFilteredNotSent);
+        myListAdapterNotSent = new MyListVisitsAdapter(getActivity(), R.layout.list_visits_fragment_row, visitItemsFilteredNotSent, null);
         setListAdapter(myListAdapterNotSent);
 
         lv = getListView();

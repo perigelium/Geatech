@@ -17,11 +17,9 @@ import java.util.ArrayList;
 
 import ru.alexangan.developer.geatech.Adapters.CustomSpinnerAdapter;
 import ru.alexangan.developer.geatech.Interfaces.Communicator;
-import ru.alexangan.developer.geatech.Models.GlobalConstants;
 import ru.alexangan.developer.geatech.Models.SpinnerItemData;
 import ru.alexangan.developer.geatech.R;
 
-import static ru.alexangan.developer.geatech.Models.GlobalConstants.LIST_VISITS_MODE_ALL;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.mSettings;
 
 /**

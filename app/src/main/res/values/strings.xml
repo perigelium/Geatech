@@ -49,11 +49,12 @@
     <string name="NullString"></string>
     <string name="ReadOnlyMode">Modalità di sola lettura</string>
     <string name="SetDateAndTimeFirst">Imposta la data e l\'ora prima</string>
-    <string name="YouCanEditYourOwnReportsOnly">È possibile modificare solo i propri rapporti</string>
+    <string name="YouCanEditYourOwnReportsOnly">È possibile modificare solo i propri compilazioni</string>
     <string name="MyVisitsList">I miei sopralluoghi</string>
     <string name="FreeVisits">I sopralluoghi da fissare</string>
     <string name="Notifications">Notifiche</string>
     <string name="CompletedReports">Compilazioni completate</string>
     <string name="Settings">Impostazioni</string>
     <string name="InWorkCompilations">Compilazioni in corso</string>
+    <string name="YouCanEditActualReportsOnly">È possibile modificare solo i compilazioni attuale</string>
 </resources>

@@ -19,7 +19,7 @@
             android:orientation="vertical">
         </LinearLayout>
 
-        <ru.alexangan.developer.geatech.Models.ScrollViewEx
+        <ru.alexangan.developer.geatech.Overrides.ScrollViewEx
             android:id="@+id/svInnerFragContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -34,7 +34,7 @@
                 android:background="#fff5f5f5"
                 android:orientation="vertical">
             </LinearLayout>
-        </ru.alexangan.developer.geatech.Models.ScrollViewEx>
+        </ru.alexangan.developer.geatech.Overrides.ScrollViewEx>
 
         <FrameLayout
             android:id="@+id/photosFragContainer"

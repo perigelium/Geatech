@@ -13,13 +13,17 @@ import android.widget.TextView;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.TreeMap;
 
 import io.realm.Realm;
+import io.realm.RealmResults;
 import ru.alexangan.developer.geatech.Adapters.MyListVisitsAdapter;
 import ru.alexangan.developer.geatech.Interfaces.Communicator;
 import ru.alexangan.developer.geatech.Models.GeaSopralluogo;
@@ -27,7 +31,6 @@ import ru.alexangan.developer.geatech.Models.ReportItem;
 import ru.alexangan.developer.geatech.Models.VisitItem;
 import ru.alexangan.developer.geatech.R;
 import ru.alexangan.developer.geatech.Utils.SwipeDetector;
-import ru.alexangan.developer.geatech.Utils.ViewUtils;
 
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.company_id;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.mSettings;
@@ -40,6 +43,7 @@ public class FragListVisitsToday extends ListFragment
     SwipeDetector swipeDetector;
     boolean ownVisitsOnly;
     ArrayList<VisitItem> visitItemsFiltered;
+    List<ReportItem> reportItems;
     MyListVisitsAdapter myListAdapter;
     ListView lv;
     Activity activity;
@@ -52,7 +56,6 @@ public class FragListVisitsToday extends ListFragment
         super.onActivityCreated(savedInstanceState);
 
         activity = getActivity();
-        realm = Realm.getDefaultInstance();
     }
 
     @Override
@@ -64,6 +67,8 @@ public class FragListVisitsToday extends ListFragment
         swipeDetector = new SwipeDetector();
 
         ownVisitsOnly = mSettings.getBoolean("ownVisitsOnly", false);
+
+        realm = Realm.getDefaultInstance();
     }
 
     @Override
@@ -82,6 +87,14 @@ public class FragListVisitsToday extends ListFragment
         super.onViewCreated(view, savedInstanceState);
 
         visitItemsFiltered = new ArrayList<>();
+        realm.beginTransaction();
+        RealmResults <ReportItem> rr_reportItems = realm.where(ReportItem.class).equalTo("company_id", company_id)
+                .equalTo("tech_id", selectedTech.getId())
+                .findAll();
+        realm.commitTransaction();
+
+        reportItems = new ArrayList<>();
+        reportItems.addAll(rr_reportItems);
 
         TreeMap<Long, VisitItem> unsortedVisits = new TreeMap<>();
         long n = 0;
@@ -158,7 +171,7 @@ public class FragListVisitsToday extends ListFragment
             }
         }
 
-        myListAdapter = new MyListVisitsAdapter(getActivity(), R.layout.own_visits_fragment_row, visitItemsFiltered);
+        myListAdapter = new MyListVisitsAdapter(getActivity(), R.layout.list_visits_fragment_row, visitItemsFiltered, reportItems);
         setListAdapter(myListAdapter);
 
         lv = getListView();

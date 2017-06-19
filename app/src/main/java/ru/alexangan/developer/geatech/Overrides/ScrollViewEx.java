@@ -1,4 +1,4 @@
-package ru.alexangan.developer.geatech.Models;
+package ru.alexangan.developer.geatech.Overrides;
 
 import android.content.Context;
 import android.util.AttributeSet;

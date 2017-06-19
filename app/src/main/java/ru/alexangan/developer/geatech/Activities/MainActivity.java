@@ -1,6 +1,5 @@
 package ru.alexangan.developer.geatech.Activities;
 
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
@@ -8,31 +7,22 @@ import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.text.Html;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EdgeEffect;
-import android.widget.TextView;
 import android.widget.Toast;
-
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Field;
-import java.lang.reflect.Type;
-import java.util.List;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 
 import io.realm.Realm;
-import io.realm.RealmResults;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
@@ -62,14 +52,12 @@ import ru.alexangan.developer.geatech.Fragments.SetDateTimeFragment;
 import ru.alexangan.developer.geatech.Fragments.SettingsFragment;
 import ru.alexangan.developer.geatech.Fragments.StorageReportFragment;
 import ru.alexangan.developer.geatech.Interfaces.Communicator;
-import ru.alexangan.developer.geatech.Models.ScrollViewEx;
 import ru.alexangan.developer.geatech.Interfaces.ScrollViewListener;
-import ru.alexangan.developer.geatech.Models.GeaItemModelliRapporto;
-import ru.alexangan.developer.geatech.Models.GeaModelloRapporto;
-import ru.alexangan.developer.geatech.Models.GeaSezioneModelliRapporto;
+import ru.alexangan.developer.geatech.Models.GeaSopralluogo;
 import ru.alexangan.developer.geatech.Models.GlobalConstants;
 import ru.alexangan.developer.geatech.Models.ProductData;
 import ru.alexangan.developer.geatech.Models.ReportItem;
+import ru.alexangan.developer.geatech.Overrides.ScrollViewEx;
 import ru.alexangan.developer.geatech.Models.VisitItem;
 import ru.alexangan.developer.geatech.Network.NetworkUtils;
 import ru.alexangan.developer.geatech.R;
@@ -78,18 +66,17 @@ import ru.alexangan.developer.geatech.Utils.SwipeDetector;
 import ru.alexangan.developer.geatech.Utils.ViewUtils;
 
 import static android.os.Environment.DIRECTORY_PICTURES;
-import static ru.alexangan.developer.geatech.Models.GlobalConstants.GET_MODELS_URL_SUFFIX;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.GET_VISITS_URL_SUFFIX;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.LIST_VISITS_MODE_ALL;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.LIST_VISITS_MODE_FREE;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.LIST_VISITS_MODE_MY;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.company_id;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.inVisitItems;
-import static ru.alexangan.developer.geatech.Models.GlobalConstants.visitsListIsObsolete;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.mSettings;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.selectedTech;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.tokenStr;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.visitItems;
+import static ru.alexangan.developer.geatech.Models.GlobalConstants.visitsListIsObsolete;
 import static ru.alexangan.developer.geatech.R.id.llInnerFragContainer;
 
 public class MainActivity extends Activity implements Communicator, Callback, ScrollViewListener
@@ -133,7 +120,7 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
     NotificationBarFragment notificationBarFragment;
     int currentVisitId;
     boolean ctrlBtnChkChanged;
-    private Call callVisits, callModels;
+    private Call callVisits;
     NetworkUtils networkUtils;
     private boolean firstStart;
     private int curSelBottomBtnId;
@@ -349,18 +336,21 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
             mFragmentTransaction.commit();
 
             notificationBarFragment.setView(R.string.InWorkCompilations, View.GONE, View.GONE);
+            return;
         }
 
         if (btnId == R.id.btnNotifications)
         {
             showNotifVisitsLists();
             scrvInnerFragContainer.getParent().requestChildFocus(scrvInnerFragContainer, scrvInnerFragContainer);
+            return;
         }
 
         if (btnId == R.id.btnCompletedReports)
         {
             showCompletedReportsLists();
             scrvInnerFragContainer.getParent().requestChildFocus(scrvInnerFragContainer, scrvInnerFragContainer);
+            return;
         }
 
         if (btnId == R.id.btnAppSettings)
@@ -368,6 +358,7 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
             setVisitsListContent(settingsFragment);
 
             notificationBarFragment.setView(R.string.Settings, View.GONE, View.GONE);
+            return;
         }
     }
 
@@ -448,91 +439,127 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
                 setDateTimeFragment.setArguments(args);
 
                 setVisitsListContent(setDateTimeFragment);
+                return;
             }
         }
-
-        VisitItem visitItem = visitItems.get(currentVisitId);
-        int tech_id = visitItem.getGeaSopralluogo().getId_tecnico();
-        boolean ownReportMode = tech_id == GlobalConstants.selectedTech.getId();
-        ProductData productData = visitItem.getProductData();
-        int product_id = productData.getId();
-
-        if (ownReportMode && btnId == R.id.btnFillReport)
+        else
         {
-            mFragmentManager.popBackStack();
+            VisitItem visitItem = visitItems.get(currentVisitId);
+            GeaSopralluogo geaSopralluogo = visitItem.getGeaSopralluogo();
+            int tech_id = geaSopralluogo.getId_tecnico();
+            boolean ownReportMode = tech_id == GlobalConstants.selectedTech.getId();
 
-            frag = null;
-            String productType = productData.getProductType();
-            frag = assignFragmentModel(productType);
+            boolean todayOrPastVisit = false;
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ITALIAN);
+            String data_ora_sopralluogo = geaSopralluogo.getData_ora_sopralluogo();
 
-            if (!frag.isAdded())
+            Calendar calendarTodayLastMin = Calendar.getInstance(Locale.ITALY);
+            calendarTodayLastMin.set(Calendar.HOUR_OF_DAY, 23);
+            calendarTodayLastMin.set(Calendar.MINUTE, 59);
+            calendarTodayLastMin.set(Calendar.SECOND, 59);
+            long lastMilliSecondsOfToday = calendarTodayLastMin.getTimeInMillis();
+            Date date;
+
+            if (data_ora_sopralluogo != null)
             {
-                Bundle args = frag.getArguments() != null ? frag.getArguments() : new Bundle();
-                args.putInt("selectedVisitId", currentVisitId);
-
-                frag.setArguments(args);
-
-                setVisitsListContent(frag);
-            }
-        }
-
-        if (ownReportMode && btnId == R.id.btnAddPhotos)
-        {
-            mFragmentManager.popBackStack();
-
-            if (!photoGalleryGridFragment.isAdded())
-            {
-                realm.beginTransaction();
-
-                int idSopralluogo = visitItem.getGeaSopralluogo().getId_sopralluogo();
-                int id_rapporto_sopralluogo = visitItem.getGeaRapporto().getId_rapporto_sopralluogo();
-
-                ReportItem reportItem = realm.where(ReportItem.class).equalTo("company_id", company_id)
-                        .equalTo("tech_id", selectedTech.getId())
-                        .equalTo("id_sopralluogo", idSopralluogo)
-                        .equalTo("id_rapporto_sopralluogo", id_rapporto_sopralluogo).findFirst();
-
-                realm.commitTransaction();
-
-                if (reportItem != null)
+                try
                 {
-                    Bundle args = frag.getArguments() != null ? frag.getArguments() : new Bundle();
-                    args.putInt("id_sopralluogo", idSopralluogo);
-                    photoGalleryGridFragment.setArguments(args);
+                    date = sdf.parse(data_ora_sopralluogo);
+                    long time = date.getTime();
 
-                    if (!photoGalleryGridFragment.isAdded())
+                    if (time <= lastMilliSecondsOfToday)
                     {
-                        FragmentTransaction vFragmentTransaction = mFragmentManager.beginTransaction();
-                        vFragmentTransaction.add(R.id.photosFragContainer, photoGalleryGridFragment);
-                        vFragmentTransaction.addToBackStack(photoGalleryGridFragment.getTag());
-                        vFragmentTransaction.commit();
+                        todayOrPastVisit = true;
                     }
-                } else
+                } catch (ParseException e)
                 {
-                    showToastMessage("This report have not been initialized.");
+                    e.printStackTrace();
                 }
             }
-        }
 
-        if (ownReportMode && btnId == R.id.btnSendReport)
-        {
-            mFragmentManager.popBackStack();
-
-            if (!sendReportFragment.isAdded())
+            if (!ownReportMode)
             {
-                Bundle args = new Bundle();
-                args.putInt("selectedVisitId", currentVisitId);
-                sendReportFragment.setArguments(args);
-
-                setVisitsListContent(sendReportFragment);
+                ctrlBtnsSopralluogo.setCheckedBtnId(R.id.btnSopralluogoInfo);
+                showToastMessage(getString(R.string.YouCanEditYourOwnReportsOnly));
+                return;
+            } else if (!todayOrPastVisit)
+            {
+                ctrlBtnsSopralluogo.setCheckedBtnId(R.id.btnSopralluogoInfo);
+                showToastMessage(getString(R.string.YouCanEditActualReportsOnly));
+                return;
             }
-        }
 
-        if (btnId != R.id.btnSopralluogoInfo && !ownReportMode)
-        {
-            ctrlBtnsSopralluogo.setCheckedBtnId(R.id.btnSopralluogoInfo);
+            if (btnId == R.id.btnFillReport)
+            {
+                mFragmentManager.popBackStack();
 
-            showToastMessage(getString(R.string.YouCanEditYourOwnReportsOnly));
+                frag = null;
+                ProductData productData = visitItem.getProductData();
+                String productType = productData.getProductType();
+                frag = assignFragmentModel(productType);
+
+                if (!frag.isAdded())
+                {
+                    Bundle args = frag.getArguments() != null ? frag.getArguments() : new Bundle();
+                    args.putInt("selectedVisitId", currentVisitId);
+
+                    frag.setArguments(args);
+
+                    setVisitsListContent(frag);
+                }
+            }
+
+            if (btnId == R.id.btnAddPhotos)
+            {
+                mFragmentManager.popBackStack();
+
+                if (!photoGalleryGridFragment.isAdded())
+                {
+                    realm.beginTransaction();
+
+                    int idSopralluogo = visitItem.getGeaSopralluogo().getId_sopralluogo();
+                    int id_rapporto_sopralluogo = visitItem.getGeaRapporto().getId_rapporto_sopralluogo();
+
+                    ReportItem reportItem = realm.where(ReportItem.class).equalTo("company_id", company_id)
+                            .equalTo("tech_id", selectedTech.getId())
+                            .equalTo("id_sopralluogo", idSopralluogo)
+                            .equalTo("id_rapporto_sopralluogo", id_rapporto_sopralluogo).findFirst();
+
+                    realm.commitTransaction();
+
+                    if (reportItem != null)
+                    {
+                        Bundle args = frag.getArguments() != null ? frag.getArguments() : new Bundle();
+                        args.putInt("id_sopralluogo", idSopralluogo);
+                        photoGalleryGridFragment.setArguments(args);
+
+                        if (!photoGalleryGridFragment.isAdded())
+                        {
+                            FragmentTransaction vFragmentTransaction = mFragmentManager.beginTransaction();
+                            vFragmentTransaction.add(R.id.photosFragContainer, photoGalleryGridFragment);
+                            vFragmentTransaction.addToBackStack(photoGalleryGridFragment.getTag());
+                            vFragmentTransaction.commit();
+                        }
+                    } else
+                    {
+                        showToastMessage("This report have not been initialized.");
+                    }
+                }
+            }
+
+            if (btnId == R.id.btnSendReport)
+            {
+                mFragmentManager.popBackStack();
+
+                if (!sendReportFragment.isAdded())
+                {
+                    Bundle args = new Bundle();
+                    args.putInt("selectedVisitId", currentVisitId);
+                    sendReportFragment.setArguments(args);
+
+                    setVisitsListContent(sendReportFragment);
+                }
+            }
         }
     }
 
@@ -771,21 +798,6 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
 
             handler.removeCallbacks(runnable);
         }
-
-/*        if (call == callModels)
-        {
-            showToastMessage(getString(R.string.ApplicationUpdateFailed));
-
-            runOnUiThread(new Runnable()
-            {
-                public void run()
-                {
-                    requestServerDialog.dismiss();
-                }
-            });
-
-            handler.removeCallbacks(runnable);
-        }*/
     }
 
     @Override
@@ -889,18 +901,6 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
             showToastMessage(getString(R.string.CheckInternetConnection));
         }
     }
-
-/*    @Override
-    public void refreshGeaModels()
-    {
-        requestServerDialog.show();
-
-        handler.postDelayed(runnable, 30000);
-
-        callModels = networkUtils.getData(this, GET_MODELS_URL_SUFFIX, tokenStr);
-
-        visitsListIsObsolete = false;
-    }*/
 
     @Override
     public void hideHeaderAndFooter()

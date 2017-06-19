@@ -28,7 +28,6 @@ import ru.alexangan.developer.geatech.Models.ReportStates;
 import ru.alexangan.developer.geatech.Models.VisitItem;
 import ru.alexangan.developer.geatech.R;
 import ru.alexangan.developer.geatech.Utils.SwipeDetector;
-import ru.alexangan.developer.geatech.Utils.ViewUtils;
 
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.company_id;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.selectedTech;
@@ -115,8 +114,6 @@ public class FragListInWorkVisits extends ListFragment
                     .equalTo("id_sopralluogo", id_sopralluogo).findFirst();
             realm.commitTransaction();
 
-            boolean reportStartedNotCompleted = false;
-
             if (reportItem != null)
             {
                 String data_ora_sopralluogo = reportItem.getGeaSopralluogo().getData_ora_sopralluogo();
@@ -126,9 +123,9 @@ public class FragListInWorkVisits extends ListFragment
                 int reportCompletionState = reportItem.getReportStates().getReportCompletionState();
                 int photosAddedNumber = reportItem.getReportStates().getPhotosAddedNumber();
 
-                reportStartedNotCompleted = generalInfoCoordSet == ReportStates.GENERAL_INFO_COORDS_SET
-                        || reportCompletionState > ReportStates.REPORT_NON_INITIATED && reportCompletionState < ReportStates.REPORT_COMPLETED
-                        || photosAddedNumber > 0 && photosAddedNumber < ReportStates.PHOTOS_MIN_ADDED;
+                boolean reportStartedNotCompleted = generalInfoCoordSet == ReportStates.GENERAL_INFO_COORDS_SET
+                        && ((reportCompletionState > ReportStates.REPORT_NON_INITIATED && reportCompletionState < ReportStates.REPORT_COMPLETED)
+                        || (photosAddedNumber > 0 && photosAddedNumber < ReportStates.PHOTOS_MIN_ADDED));
 
                 if (data_ora_sopralluogo != null)
                 {

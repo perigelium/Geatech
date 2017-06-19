@@ -21,18 +21,14 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.text.format.DateFormat;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.FrameLayout;
-import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -70,9 +66,8 @@ import ru.alexangan.developer.geatech.Models.SubproductItem;
 import ru.alexangan.developer.geatech.Models.VisitItem;
 import ru.alexangan.developer.geatech.Network.LocationRetriever;
 import ru.alexangan.developer.geatech.Network.NetworkUtils;
+import ru.alexangan.developer.geatech.Overrides.CustomTimePickerDialog;
 import ru.alexangan.developer.geatech.R;
-import ru.alexangan.developer.geatech.Utils.ActivitySwipeDetector;
-import ru.alexangan.developer.geatech.Utils.SwipeDetector;
 
 import static android.support.v4.content.PermissionChecker.checkSelfPermission;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.SET_DATA_URL_SUFFIX;
@@ -299,8 +294,7 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
             tvTechnicianName.setText("");
             flSetDateTimeSubmit.setVisibility(View.VISIBLE);
             return;
-        }
-        else
+        } else
         {
             tvTechnicianName.setText(tech_name);
         }
@@ -344,16 +338,22 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
 
         if (dataOraSopralluogo != null)
         {
-            try
-            {
-                SimpleDateFormat sdfSopralluogo = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ITALIAN);
-                Date dateSopralluogo = sdfSopralluogo.parse(dataOraSopralluogo);
-                sdfSopralluogo = new SimpleDateFormat("dd-MM-yyyy HH:mm", Locale.ITALIAN);
-                formattedDate = sdfSopralluogo.format(dateSopralluogo);
-            } catch (ParseException e)
-            {
-                e.printStackTrace();
-            }
+            reformatDateTime();
+        }
+    }
+
+    private void reformatDateTime()
+    {
+        SimpleDateFormat sdfSopralluogo = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ITALIAN);
+        Date dateSopralluogo;
+        try
+        {
+            dateSopralluogo = sdfSopralluogo.parse(dataOraSopralluogo);
+            sdfSopralluogo = new SimpleDateFormat("dd-MM-yyyy HH:mm", Locale.ITALIAN);
+            formattedDate = sdfSopralluogo.format(dateSopralluogo);
+        } catch (ParseException e)
+        {
+            e.printStackTrace();
         }
     }
 
@@ -450,6 +450,7 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
             calendar.set(Calendar.HOUR_OF_DAY, mHour);
             mMinute = selectedMinute;
             calendar.set(Calendar.MINUTE, mMinute);
+            calendar.set(Calendar.SECOND, 0);
 
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
             strDateTimeSet = sdf.format(calendar.getTime());
@@ -470,7 +471,7 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
                 elapsedDays = periodMilliSeconds / 1000 / 60 / 60 / 24;
             }*/
 
-            tvdataOraSopralluogo.setText(strDateTimeSet);
+            //tvdataOraSopralluogo.setText(strDateTimeSet);
             //tvTechnicianName.setVisibility(View.VISIBLE);
 
             if (!NetworkUtils.isNetworkAvailable(activity))
@@ -598,7 +599,7 @@ showToastMessage("swipe detected");
 
     private void openSetDateTimeDialog()
     {
-        TimePickerDialog DialogTimePicker = new TimePickerDialog(getActivity(), timePickerListener,
+        TimePickerDialog DialogTimePicker = new CustomTimePickerDialog(getActivity(), timePickerListener,
                 mHour, mMinute, DateFormat.is24HourFormat(getActivity()));
         DialogTimePicker.show();
 
@@ -784,7 +785,12 @@ showToastMessage("swipe detected");
                                                 realm.commitTransaction();
                                             }
                                             tvTechnicianName.setText(tech_name);
-                                            tvdataOraSopralluogo.setText(strDateTimeSet);
+
+                                            reformatDateTime();
+                                            if (formattedDate != null)
+                                            {
+                                                tvdataOraSopralluogo.setText(formattedDate);
+                                            }
                                             flSetDateTimeSubmit.setVisibility(View.GONE);
                                             btnGetCurrentCoords.setVisibility(View.VISIBLE);
                                             btnGetCurrentCoords.getParent().requestChildFocus(btnGetCurrentCoords, btnGetCurrentCoords);
@@ -977,22 +983,27 @@ showToastMessage("swipe detected");
             }
         } else
         {
-            String uri = String.format(Locale.ENGLISH, "http://maps.google.com/maps?daddr=%f,%f (%s)", latitude, longitude, "Where the party is at");
-            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
-            intent.setClassName("com.google.android.apps.maps", "com.google.android.maps.MapsActivity");
+            if(!latitude.equals("Sconosciuto") && !longitude.equals("Sconosciuto"))
+            {
+                Float fLatitude = Float.valueOf(latitude);
+                Float fLongitude = Float.valueOf(longitude);
+                String uri = String.format(Locale.ENGLISH, "http://maps.google.com/maps?daddr=%f,%f (%s)", fLatitude, fLongitude, "Where the party is at");
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
+                intent.setClassName("com.google.android.apps.maps", "com.google.android.maps.MapsActivity");
 
-            try
-            {
-                startActivity(intent);
-            } catch (ActivityNotFoundException ex)
-            {
                 try
                 {
-                    Intent unrestrictedIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
-                    startActivity(unrestrictedIntent);
-                } catch (ActivityNotFoundException innerEx)
+                    startActivity(intent);
+                } catch (ActivityNotFoundException ex)
                 {
-                    Toast.makeText(getActivity(), R.string.InstallMapApp, Toast.LENGTH_LONG).show();
+                    try
+                    {
+                        Intent unrestrictedIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
+                        startActivity(unrestrictedIntent);
+                    } catch (ActivityNotFoundException innerEx)
+                    {
+                        Toast.makeText(getActivity(), R.string.InstallMapApp, Toast.LENGTH_LONG).show();
+                    }
                 }
             }
 

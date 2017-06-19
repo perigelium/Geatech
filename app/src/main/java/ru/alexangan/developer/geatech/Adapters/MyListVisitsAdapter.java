@@ -1,6 +1,7 @@
 package ru.alexangan.developer.geatech.Adapters;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 import io.realm.Realm;
@@ -20,30 +22,29 @@ import ru.alexangan.developer.geatech.Models.ClientData;
 import ru.alexangan.developer.geatech.Models.GeaSopralluogo;
 import ru.alexangan.developer.geatech.Models.ItalianMonths;
 import ru.alexangan.developer.geatech.Models.ProductData;
+import ru.alexangan.developer.geatech.Models.ReportItem;
+import ru.alexangan.developer.geatech.Models.ReportStates;
 import ru.alexangan.developer.geatech.Models.TechnicianItem;
 import ru.alexangan.developer.geatech.Models.VisitItem;
 import ru.alexangan.developer.geatech.R;
 
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.selectedTech;
 
-/**
- * Created by user on 11/21/2016.
- */
-
 public class MyListVisitsAdapter extends BaseAdapter
 {
     private final Realm realm;
     private Context mContext;
     private ArrayList<VisitItem> visitItems;
+    private List<ReportItem> reportItems;
     private int layout_id;
-    private boolean overdueVisit;
     //ViewHolder holder;
 
-    public MyListVisitsAdapter(Context context, int layout_id, ArrayList<VisitItem> visitItems)
+    public MyListVisitsAdapter(Context context, int layout_id, ArrayList<VisitItem> visitItems, List<ReportItem> reportItems)
     {
         //super(context, textViewResourceId, objects);
         mContext = context;
         this.visitItems = visitItems;
+        this.reportItems = reportItems;
         this.layout_id = layout_id;
         realm = Realm.getDefaultInstance();
     }
@@ -72,7 +73,7 @@ public class MyListVisitsAdapter extends BaseAdapter
         LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View row = inflater.inflate(layout_id, parent, false);
 
-        overdueVisit = false;
+        boolean overdueVisit = false;
 
 /*        View row = convertView;
 
@@ -104,12 +105,10 @@ public class MyListVisitsAdapter extends BaseAdapter
 
 
         ImageView ivReportStatus = (ImageView) row.findViewById(R.id.ivReportStatus);
-        //View vVisitDateView = row.findViewById(R.id.vVisitDateCell);
+        TextView tvReportStatus = (TextView) row.findViewById(R.id.tvReportStatus);
         TextView tvVisitDay = (TextView) row.findViewById(R.id.tvVisitDay);
         TextView tvVisitMonth = (TextView) row.findViewById(R.id.tvVisitMonth);
         TextView tvVisitTime = (TextView) row.findViewById(R.id.tvVisitTime);
-        //ImageView ivPersonTimeSet = (ImageView) row.findViewById(R.id.ivPersonTimeSet);
-        //ImageView ivPersonTimeUnset = (ImageView) row.findViewById(R.id.ivPersonTimeUnset);
 
         TextView clientNameTextView = (TextView) row.findViewById(R.id.tvClientName);
         TextView serviceTypeTextView = (TextView) row.findViewById(R.id.tvVisitTOS);
@@ -120,7 +119,7 @@ public class MyListVisitsAdapter extends BaseAdapter
         ProductData productData = visitItem.getProductData();
         GeaSopralluogo geaSopralluogo = visitItem.getGeaSopralluogo();
         String data_ora_sopralluogo = geaSopralluogo.getData_ora_sopralluogo();
-        //int idSopralluogo = geaSopralluogo.getId_sopralluogo();
+        int id_sopralluogo = geaSopralluogo.getId_sopralluogo();
         int tech_id = geaSopralluogo.getId_tecnico();
 
         String data_sollecito_appuntamento = geaSopralluogo.getData_sollecito_appuntamento();
@@ -168,13 +167,12 @@ public class MyListVisitsAdapter extends BaseAdapter
         long firstMilliSecondsOfToday = calendarTodayFirstMin.getTimeInMillis();
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ITALIAN);
-        Date date = null;
 
         if (data_ora_sopralluogo != null)
         {
             try
             {
-                date = sdf.parse(data_ora_sopralluogo);
+                Date date = sdf.parse(data_ora_sopralluogo);
                 long time = date.getTime();
 
                 if (time < firstMilliSecondsOfToday)
@@ -210,6 +208,48 @@ public class MyListVisitsAdapter extends BaseAdapter
                     ivReportStatus.setBackgroundResource(R.drawable.green_oval_shape);
                 }
 
+                if (reportItems != null)
+                {
+                    for (int i = 0; i < reportItems.size(); i++)
+                    {
+                        ReportItem reportItem = reportItems.get(i);
+
+                        if (reportItem.getId_sopralluogo() == id_sopralluogo)
+                        {
+                            int generalInfoCoordSet = reportItem.getReportStates().getGeneral_info_coords_set();
+                            int reportCompletionState = reportItem.getReportStates().getReportCompletionState();
+                            int photosAddedNumber = reportItem.getReportStates().getPhotosAddedNumber();
+
+                            boolean reportStartedNotCompleted = generalInfoCoordSet == ReportStates.GENERAL_INFO_COORDS_SET
+                                    && ((reportCompletionState > ReportStates.REPORT_NON_INITIATED && reportCompletionState < ReportStates.REPORT_COMPLETED)
+                                    || (photosAddedNumber > 0 && photosAddedNumber < ReportStates.PHOTOS_MIN_ADDED));
+
+                            boolean reportCompleteNotSent = generalInfoCoordSet == ReportStates.GENERAL_INFO_COORDS_SET
+                                    && reportCompletionState == ReportStates.REPORT_COMPLETED
+                                    && photosAddedNumber >= ReportStates.PHOTOS_MIN_ADDED
+                                    && reportItem.getGea_rapporto_sopralluogo().getData_ora_invio_rapporto() == null;
+
+                            if (reportStartedNotCompleted)
+                            {
+                                tvReportStatus.setVisibility(View.VISIBLE);
+                                tvReportStatus.setTextColor(Color.parseColor("#ffffd100"));
+                                tvReportStatus.setText("Compilazione in corso del rapporto");
+                            } else if (reportCompleteNotSent)
+                            {
+                                tvReportStatus.setVisibility(View.VISIBLE);
+                                tvReportStatus.setTextColor(Color.parseColor("#ffff0000"));
+                                tvReportStatus.setText("Rapporto compilato ma non inviato");
+                            }
+                            else
+                            {
+                                tvReportStatus.setVisibility(View.VISIBLE);
+                                tvReportStatus.setTextColor(Color.parseColor("#ff808080"));
+                                tvReportStatus.setText("Rapporto da compilare");
+                            }
+                            break;
+                        }
+                    }
+                }
             } else
             {
                 ivReportStatus.setBackgroundResource(R.drawable.gray_oval_shape);
@@ -220,7 +260,8 @@ public class MyListVisitsAdapter extends BaseAdapter
 /*            ivPersonTimeSet.setVisibility(View.VISIBLE);
             ivPersonTimeUnset.setVisibility(View.GONE);*/
 
-            tvVisitDay.setText(Integer.toString(calendar.get(Calendar.DAY_OF_MONTH)));
+            //tvVisitDay.setText(Integer.toString(calendar.get(Calendar.DAY_OF_MONTH)));
+            tvVisitDay.setText(String.format(Locale.ITALIAN, "%d", calendar.get(Calendar.DAY_OF_MONTH)));
             tvVisitMonth.setText(ItalianMonths.numToString(calendar.get(Calendar.MONTH) + 1));
 
             String minuteStr = Integer.toString(calendar.get(Calendar.MINUTE));
@@ -232,11 +273,10 @@ public class MyListVisitsAdapter extends BaseAdapter
             tvVisitTime.setText(Integer.toString(calendar.get(Calendar.HOUR_OF_DAY)) + ":" + minuteStr);
         } else
         {
-            if(remindedVisit)
+            if (remindedVisit)
             {
                 ivReportStatus.setBackgroundResource(R.drawable.red_oval_shape);
-            }
-            else
+            } else
             {
                 ivReportStatus.setBackgroundResource(R.drawable.yellow_oval_shape);
             }

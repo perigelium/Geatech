@@ -27,7 +27,6 @@ import ru.alexangan.developer.geatech.Models.GeaSopralluogo;
 import ru.alexangan.developer.geatech.Models.VisitItem;
 import ru.alexangan.developer.geatech.R;
 import ru.alexangan.developer.geatech.Utils.SwipeDetector;
-import ru.alexangan.developer.geatech.Utils.ViewUtils;
 
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.selectedTech;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.visitItems;
@@ -66,7 +65,7 @@ public class FragListReportsReminded extends ListFragment
         View rootView = inflater.inflate(R.layout.list_visits_with_title, container, false);
 
         TextView  tvTitleListVisits = (TextView) rootView.findViewById(R.id.tvTitleListVisits);
-        tvTitleListVisits.setText("Rapporti sollecitati");
+        tvTitleListVisits.setText("Compilazioni sollecitati");
 
         return rootView;
     }
@@ -99,7 +98,6 @@ public class FragListReportsReminded extends ListFragment
                 {
                     Date date = sdf.parse(data_ora_sopralluogo);
                     long time = date.getTime();
-                    //Log.d("DEBUG", String.valueOf(time));
 
                     while (unsortedVisits.get(time) != null) // item with the same time already exists
                     {
@@ -113,11 +111,6 @@ public class FragListReportsReminded extends ListFragment
 
                 } catch (ParseException e)
                 {
-/*                    while(unsortedVisits.get(n) != null)
-                    {
-                        n++;
-                    }
-                    unsortedVisits.put(n++, visitItem);*/
                     e.printStackTrace();
                 }
             }
@@ -132,13 +125,11 @@ public class FragListReportsReminded extends ListFragment
             }
         }
 
-        ListAdapter myListAdapter = new MyListVisitsAdapter(getActivity(), R.layout.list_visits_fragment_row, visitItemsFiltered);
+        ListAdapter myListAdapter = new MyListVisitsAdapter(getActivity(), R.layout.list_visits_fragment_row, visitItemsFiltered, null);
 
         setListAdapter(myListAdapter);
 
         lv = getListView();
-
-        ////ViewUtils.setListViewHeightBasedOnChildren(lv);
 
         lv.setOnTouchListener(swipeDetector);
 

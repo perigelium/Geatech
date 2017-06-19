@@ -57,11 +57,14 @@ public class GridViewAdapter extends ArrayAdapter<Bitmap>
             holder = (ViewHolder) row.getTag();
         }
 
-        Bitmap item = imagesArrayList.get(position);
-        holder.image.setImageBitmap(item);
+        if(imagesArrayList.size() != 0)
+        {
+            Bitmap item = imagesArrayList.get(position);
+            holder.image.setImageBitmap(item);
 
-        // scale type within view area
-        holder.image.setScaleType(ImageView.ScaleType.FIT_XY);
+            // scale type within view area
+            holder.image.setScaleType(ImageView.ScaleType.FIT_XY);
+        }
 
         return row;
     }

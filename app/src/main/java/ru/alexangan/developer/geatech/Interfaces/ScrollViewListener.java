@@ -1,6 +1,6 @@
 package ru.alexangan.developer.geatech.Interfaces;
 
-import ru.alexangan.developer.geatech.Models.ScrollViewEx;
+import ru.alexangan.developer.geatech.Overrides.ScrollViewEx;
 
 /**
  * Created by user on 31.05.2017.

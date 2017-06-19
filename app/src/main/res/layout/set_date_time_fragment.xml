@@ -196,12 +196,12 @@
             android:textColor="#ff666666"
             android:text="Eventualli sottoprodotti:"/>
 
-        <ru.alexangan.developer.geatech.Models.ListViewEx
+        <ru.alexangan.developer.geatech.Overrides.ListViewEx
             android:id="@+id/listSubproducts"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="9dp">
-        </ru.alexangan.developer.geatech.Models.ListViewEx>
+        </ru.alexangan.developer.geatech.Overrides.ListViewEx>
 
         <View
             android:layout_width="match_parent"
