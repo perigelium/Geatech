@@ -38,7 +38,7 @@
     <string name="ReportNotAlreadySent">Rapporto non è stato ancora inviato</string>
     <string name="TechnicianAddedSelectFromListBelow">"Il tecnico è stato aggiunto. \nPuoi selezionarlo qui sotto e cliccare sul pulsante \"Seleziona\""</string>
     <string name="RegisterAnNewTechnician">Aggiungi un nuovo tecnico</string>
-    <string name="ReceivedDataError">Error in dato ricevuto</string>
+    <string name="ReceivedDataError">Error in dato ricevuto dal server</string>
     <string name="ApplicationUpdateFailed">Aggiornamento di applicazione non riuscito</string>
     <string name="ApplicationUpdateSucceeded">Aggiornamento di applicazione completato</string>
     <string name="VisitsFree">Sopralluoghi da fissare</string>
@@ -57,4 +57,13 @@
     <string name="Settings">Impostazioni</string>
     <string name="InWorkCompilations">Compilazioni in corso</string>
     <string name="YouCanEditActualReportsOnly">È possibile modificare solo i compilazioni attuale</string>
+    <string name="PhotosSavingFailedTryLater">Salvare gli immagini non riuscito, riprova di nuovo</string>
+    <string name="RemindedVisits">Sopralluoghi sollecitati</string>
+    <string name="VisitsReportsOverdue">Sopralluoghi/Rapporti in ritardo</string>
+    <string name="ComingVisits">Prossimi sopralluoghi</string>
+    <string name="NotTimeSetVisits">Sopralluoghi da fissare</string>
+    <string name="RemindedCompilations">Compilazioni sollecitati</string>
+    <string name="NotInitiatedCompilation">Rapporto da compilare</string>
+    <string name="CompletedNotSentReport">Rapporto compilato ma non inviato</string>
+    <string name="NoCompletedCompilation">Compilazione in corso del rapporto</string>
 </resources>

@@ -85,14 +85,13 @@ public class FragListReportsNotSent extends ListFragment
         visitItemsFilteredNotSent = new ArrayList<>();
 
         TreeMap<Long, VisitItem> unsortedVisitsNotSent = new TreeMap<>();
-        long n = 0;
+
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ITALIAN);
 
         for (VisitItem visitItem : visitItems)
         //for (int i = 0; i < visitItems.size(); i++)
         {
             GeaSopralluogo geaSopralluogo = visitItem.getGeaSopralluogo();
-            GeaRapporto geaRapporto = visitItem.getGeaRapporto();
             int idSopralluogo = geaSopralluogo.getId_sopralluogo();
             int id_rapporto_sopralluogo = visitItem.getGeaRapporto().getId_rapporto_sopralluogo();
             String data_ora_sopralluogo = geaSopralluogo.getData_ora_sopralluogo();
@@ -122,25 +121,16 @@ public class FragListReportsNotSent extends ListFragment
                     {
                         Date date = sdf.parse(data_ora_sopralluogo);
                         long time = date.getTime();
-                        //Log.d("DEBUG", String.valueOf(time));
 
                         while (unsortedVisitsNotSent.get(time) != null) // item with the same time already exists
                         {
                             time++;
                         }
 
-                        if (true)
-                        {
-                            unsortedVisitsNotSent.put(time, visitItem);
-                        }
+                        unsortedVisitsNotSent.put(time, visitItem);
 
                     } catch (ParseException e)
                     {
-/*                    while(unsortedVisits.get(n) != null)
-                    {
-                        n++;
-                    }
-                    unsortedVisits.put(n++, visitItem);*/
                         e.printStackTrace();
                     }
                 }
@@ -160,8 +150,6 @@ public class FragListReportsNotSent extends ListFragment
 
         lv = getListView();
 
-        ////ViewUtils.setListViewHeightBasedOnChildren(lv);
-
         lv.setOnTouchListener(swipeDetector);
 
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener()
@@ -169,21 +157,8 @@ public class FragListReportsNotSent extends ListFragment
             public void onItemClick(AdapterView<?> parent, View view, int position, long id)
             {
                 int idVisit = visitItemsFilteredNotSent.get(position).getId();
-                int id_tecnico = visitItemsFilteredNotSent.get(position).getGeaSopralluogo().getId_tecnico();
 
-                boolean ownVisit = selectedTech.getId() == id_tecnico;
-
-                if (ownVisit)
-                {
-                    if (swipeDetector.swipeDetected())
-                    {
-                            mCommunicator.OnVisitListItemSwiped(idVisit, true);
-
-                    } else
-                    {
-                        mCommunicator.OnVisitListItemSelected(idVisit, true);
-                    }
-                }
+                mCommunicator.OnVisitListItemSelected(idVisit);
             }
         });
     }

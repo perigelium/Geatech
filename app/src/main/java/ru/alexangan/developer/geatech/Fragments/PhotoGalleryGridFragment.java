@@ -40,6 +40,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.ConcurrentModificationException;
 import java.util.Date;
+import java.util.Locale;
 
 import io.realm.Realm;
 import ru.alexangan.developer.geatech.Adapters.GridViewAdapter;
@@ -122,7 +123,7 @@ public class PhotoGalleryGridFragment extends Fragment
 
             if (id_sopralluogo == 0)
             {
-                showToastMessage("id_sopralluogo equal 0 !");
+                showToastMessage("id_sopralluogo equals 0 !");
             }
 
             realm.beginTransaction();
@@ -255,7 +256,7 @@ public class PhotoGalleryGridFragment extends Fragment
                         }
                     } else
                     {
-                        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd_HH_mm_ss");
+                        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd_HH_mm_ss", Locale.ENGLISH);
                         String fileName = dateFormat.format(new Date()) + ".jpg";
                         File file = new File(activity.getExternalFilesDir(DIRECTORY_PICTURES).getAbsolutePath(), fileName);
 
@@ -297,8 +298,6 @@ public class PhotoGalleryGridFragment extends Fragment
         });
 
         //Resources resources = getResources();
-        //bmpCameraAddButton = BitmapFactory.decodeResource(resources, R.drawable.photo_add);
-        //bmpGalleryAddButton = BitmapFactory.decodeResource(resources, R.drawable.galerea_photo_add);
 
         alImgThumbs = new ArrayList<>();
         alPathItems = new ArrayList<>();
@@ -313,8 +312,7 @@ public class PhotoGalleryGridFragment extends Fragment
 
                 currentPicPos = position;
 
-                //if (currentPicPos != alImgThumbs.size() - 1 && currentPicPos != alImgThumbs.size() - 2)
-                {  // remove item
+                  // remove item
                     currentPicPos = position;
 
                     if (alPathItems.get(currentPicPos).delete())
@@ -334,7 +332,7 @@ public class PhotoGalleryGridFragment extends Fragment
                     alPathItems.removeAll(Collections.singleton(null)); // remove all null items
 
                     gvPhotoGallery.setAdapter(gridAdapter);
-                }
+
                 return true;
             }
         });
@@ -345,58 +343,6 @@ public class PhotoGalleryGridFragment extends Fragment
             {
                 currentPicPos = position;
 
-/*                if (currentPicPos == alImgThumbs.size() - 1)
-                { // open Camera
-                    if (checkSelfPermission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
-                            || checkSelfPermission(activity, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED)
-                    {
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
-                        {
-                            String[] permissions = new String[]
-                                    {
-                                            Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE
-                                    };
-
-                            requestMultiplePermissions(permissions);
-                        }
-                    } else
-                    {
-                        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd_HH_mm_ss");
-                        String fileName = dateFormat.format(new Date()) + ".jpg";
-                        File file = new File(activity.getExternalFilesDir(DIRECTORY_PICTURES).getAbsolutePath(), fileName);
-
-                        fullSizeImgPath = file.getAbsolutePath();
-                        Uri uriFullSizeCameraImage = Uri.fromFile(file);
-
-                        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                        intent.putExtra(MediaStore.EXTRA_OUTPUT, uriFullSizeCameraImage);
-                        startActivityForResult(intent, PICK_CAMERA_IMAGE);
-                    }
-                } else if (currentPicPos == alImgThumbs.size() - 2)
-                { // open Gallery
-
-                    if (checkSelfPermission(activity, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)
-                    {
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
-                        {
-
-                            String[] permissions = new String[]
-                                    {
-                                            Manifest.permission.READ_EXTERNAL_STORAGE,
-                                    };
-
-                            requestMultiplePermissions(permissions);
-                        }
-                    } else
-                    {
-                        Intent pickIntent = new Intent();
-                        pickIntent.setType("image*//*");
-                        pickIntent.setAction(Intent.ACTION_PICK);
-
-                        startActivityForResult(pickIntent, PICK_GALLERY_IMAGE);
-                    }
-
-                } else*/
                 { // show full-size image
                     bmpFullSize = null;
 
@@ -479,7 +425,7 @@ public class PhotoGalleryGridFragment extends Fragment
         }
         catch (ConcurrentModificationException e)
         {
-            showToastMessage("Salvare immagini non riuscito, provare anche una volta");
+            showToastMessage(getString(R.string.PhotosSavingFailedTryLater));
         }
     }
 
@@ -497,12 +443,7 @@ public class PhotoGalleryGridFragment extends Fragment
                 if (imgFile.exists())
                 {
                     saveReturnedImage(fullSizeImgPath);
-                }/* else
-                {
-                    String filePath = MediaUtils.getLastShotImagePath(activity);
-                    //Uri uri = Uri.parse(new File(filePath).toString());
-                    saveReturnedImage(filePath);
-                }*/
+                }
             }
             break;
 
@@ -517,7 +458,6 @@ public class PhotoGalleryGridFragment extends Fragment
                 }
                 break;
         }
-        //super.onActivityResult(requestCode, resultCode, imageReturnedIntent);
     }
 
     private void saveReturnedImage(String srcImagePath)
@@ -693,11 +633,6 @@ public class PhotoGalleryGridFragment extends Fragment
             {
                 alPathItems.set(alPathItems.size() - 1, fileDst);
                 //alPathItems.add(fileDst);
-
-/*                if(!fileSrc.delete())
-                {
-                    Log.d("DEBUG", "File not deleted !");
-                }*/
             }
         }
     }
@@ -764,12 +699,6 @@ public class PhotoGalleryGridFragment extends Fragment
             super.onPostExecute(aVoid);
 
             progressLoadingImages.dismiss();
-
-            //alImgThumbs.add(bmpGalleryAddButton);
-            //alImgThumbs.add(bmpCameraAddButton);
-
-            //alPathItems.add(new File("bmpGalleryAddButton"));
-            //alPathItems.add(new File("bmpCameraAddButton"));
 
             gridAdapter = new GridViewAdapter(activity, R.layout.grid_item_layout, alImgThumbs);
 

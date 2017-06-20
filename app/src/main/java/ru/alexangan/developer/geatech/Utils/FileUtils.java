@@ -2,9 +2,7 @@ package ru.alexangan.developer.geatech.Utils;
 
 import java.io.File;
 
-/**
- * Created by user on 11.04.2017.
- */
+//Created by user on 11.04.2017.
 
 public class FileUtils
 {

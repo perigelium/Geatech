@@ -45,7 +45,6 @@ public class ReportSentDetailedFragment extends Fragment
     ArrayList<Bitmap> imageThumbnails;
     ArrayList<File> pathItems;
     private Realm realm;
-    private List<String> reportListStrValues;
     private TextView tvTechName, tvdataOraSopralluogo, tvdataOraRaportoInviato;
     private TextView tvdataOraRaportoCompletato;
     private TextView tvReportName, clientNameTextView;
@@ -103,7 +102,7 @@ public class ReportSentDetailedFragment extends Fragment
     {
         super.onViewCreated(view, savedInstanceState);
 
-        reportListStrValues = new ArrayList<>();
+        List<String> reportListStrValues = new ArrayList<>();
         tvTechName.setText(selectedTech.getFullNameTehnic());
 
         realm.beginTransaction();

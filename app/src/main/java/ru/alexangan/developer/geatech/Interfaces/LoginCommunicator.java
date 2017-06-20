@@ -13,9 +13,5 @@ public interface LoginCommunicator
 
     void onReturnToLoginScreen();
 
-    void onPasswordSentReturned();
-
-    void onRecoverPasswordClicked();
-
     void onLoginFailed();
 }

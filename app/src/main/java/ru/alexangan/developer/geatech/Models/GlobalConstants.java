@@ -2,12 +2,12 @@ package ru.alexangan.developer.geatech.Models;
 
 import android.content.SharedPreferences;
 
+import java.util.List;
+
 import io.realm.RealmList;
 import io.realm.RealmResults;
 
-/**
- * Created by user on 13.02.2017.
- */
+// Created by user on 13.02.2017.
 
 public class GlobalConstants
 {
@@ -16,12 +16,12 @@ public class GlobalConstants
     public static int company_id;
     public static String gea_supplier;
     public static TechnicianItem selectedTech;
-    public static RealmResults<VisitItem> visitItems;
+    public static List<VisitItem> visitItems;
     public static RealmList<VisitItem> inVisitItems;
 
     public static String tokenStr;
     public static boolean visitsListIsObsolete;
-    public static boolean reportsListIsObsolete;
+    //public static boolean reportsListIsObsolete;
     public static boolean reminderListIsObsolete;
 
     public static int LIST_VISITS_MODE_ALL = 0;
@@ -36,30 +36,4 @@ public class GlobalConstants
     public static String SEND_DATA_URL_SUFFIX = "?case=send_data";
     public static String SEND_IMAGE_URL = "http://www.bludelego.com/dev/geatech/send_image.php";
     public static String REST_SRV_URL = "http://www.bludelego.com/dev/geatech/gea.php";
-
-/*    public GlobalConstants(Context appContext)
-    {
-        Realm.init(appContext);
-        RealmConfiguration realmConfiguration = new RealmConfiguration
-                .Builder()
-                .deleteRealmIfMigrationNeeded()
-                .build();
-
-        try
-        {
-            realm = Realm.getInstance(realmConfiguration);
-        } catch (RealmMigrationNeededException e)
-        {
-            try
-            {
-                Realm.deleteRealm(realmConfiguration);
-                //Realm file has been deleted.
-                realm = Realm.getInstance(realmConfiguration);
-            } catch (Exception ex)
-            {
-                throw ex;
-                //No Realm file to remove.
-            }
-        }
-    }*/
 }

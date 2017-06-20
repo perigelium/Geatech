@@ -40,7 +40,7 @@ import static ru.alexangan.developer.geatech.Models.GlobalConstants.mSettings;
 public class LoginCompanyFragment extends Fragment implements View.OnClickListener, Callback
 {
     Activity activity;
-    Button btnLogin, btnPasswordRecover;
+    Button btnLogin;
     EditText etLogin, etPassword;
     LoginCommunicator loginCommunicator;
     public static final String CHKBOX_REMEMBER_ME_STATE = "rememberMeState";
@@ -118,9 +118,6 @@ public class LoginCompanyFragment extends Fragment implements View.OnClickListen
         View rootView = inflater.inflate(R.layout.login_company_fragment, container, false);
 
         btnLogin = (Button) rootView.findViewById(R.id.btnLogin);
-
-/*        btnPasswordRecover = (Button) rootView.findViewById(R.id.btnPasswordRecover);
-        btnPasswordRecover.setOnClickListener(this);*/
 
         llLogin = (LinearLayout) rootView.findViewById(R.id.llLogin);
         etLogin = (EditText) rootView.findViewById(R.id.etLogin);
@@ -249,9 +246,6 @@ public class LoginCompanyFragment extends Fragment implements View.OnClickListen
     {
         if (view.getId() == R.id.btnLogin)
         {
-/*            btnLogin.setAlpha(.4f);
-            btnLogin.setEnabled(false);*/
-
             realm.beginTransaction();
             RealmResults<LoginCredentials> loginCredentialses = realm.where(LoginCredentials.class).findAll();
 
@@ -262,11 +256,7 @@ public class LoginCompanyFragment extends Fragment implements View.OnClickListen
             credentialsesFound = false;
             strLogin = etLogin.getText().toString();
 
-/*            if (!android.util.Patterns.EMAIL_ADDRESS.matcher(strLogin).matches())
-            {
-                showToastMessage(getString(R.string.InvalidLogin));
-                return;
-            }*/
+//            if (!android.util.Patterns.EMAIL_ADDRESS.matcher(strLogin).matches())
 
             strPassword = etPassword.getText().toString();
 
@@ -308,11 +298,6 @@ public class LoginCompanyFragment extends Fragment implements View.OnClickListen
                 callTechnicianList = networkUtils.loginRequest(this, strLogin, strPassword, null, -1);
             }
         }
-
-/*        if (view.getId() == R.id.btnPasswordRecover)
-        {
-            loginCommunicator.onRecoverPasswordClicked();
-        }*/
     }
 
     @Override
@@ -375,8 +360,7 @@ public class LoginCompanyFragment extends Fragment implements View.OnClickListen
                 try
                 {
                     String technicianStr = jsonObject.getString("data_tehnic");
-                    String gea_supplier = jsonObject.getString("gea_supplier");
-                    GlobalConstants.gea_supplier = gea_supplier;
+                    GlobalConstants.gea_supplier = jsonObject.getString("gea_supplier");
 
                     mSettings.edit().putString("technician_list_json", technicianStr).apply();
 

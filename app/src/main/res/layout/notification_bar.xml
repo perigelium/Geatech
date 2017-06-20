@@ -64,6 +64,21 @@
             android:src="@drawable/filter_icon"/>
 
     </FrameLayout>
+
+    <SearchView
+        android:id="@+id/etSearchReports"
+        android:layout_width="250dp"
+        android:layout_height="40dp"
+        android:layout_gravity="center"
+        android:layout_margin="9dp"
+        android:background="@android:color/transparent"
+        android:ems="8"
+        android:queryHint="Search..."
+        android:submitBackground="@color/colorPrimary"
+        android:queryBackground="@color/colorPrimary"
+        android:textColorHint="@color/colorPrimary"
+        android:gravity="center" >
+    </SearchView>
 <!--    <Button
         android:id="@+id/btnVisitsListFilter"
         android:layout_width="22dp"

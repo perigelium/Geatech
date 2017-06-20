@@ -8,12 +8,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Map;
@@ -41,7 +39,6 @@ public class FragListInWorkVisits extends ListFragment
     ArrayList<VisitItem> visitItemsFiltered;
     ListView lv;
     Activity activity;
-    TextView tvListVisitsTodayDate;
     private Realm realm;
 
     @Override
@@ -88,9 +85,10 @@ public class FragListInWorkVisits extends ListFragment
         visitItemsFiltered = new ArrayList<>();
 
         TreeMap<Long, VisitItem> unsortedVisits = new TreeMap<>();
-        long n = 0;
+
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ITALIAN);
-        Calendar calendarNow = Calendar.getInstance(Locale.ITALY);
+
+/*        Calendar calendarNow = Calendar.getInstance(Locale.ITALY);
         String strMonth = calendarNow.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.ITALY);
         //String dateString = " " + calendarNow.get(Calendar.DAY_OF_MONTH) + " " + strMonth;
 
@@ -99,12 +97,11 @@ public class FragListInWorkVisits extends ListFragment
         calendarNow.set(Calendar.HOUR_OF_DAY, 23);
         calendarNow.set(Calendar.MINUTE, 59);
         calendarNow.set(Calendar.SECOND, 59);
-        long lastMilliSecondsOfToday = calendarNow.getTimeInMillis();
+        long lastMilliSecondsOfToday = calendarNow.getTimeInMillis();*/
 
         //for (VisitItem visitItem : visitItems)
         for (int i = 0; i < visitItems.size(); i++)
         {
-            //String data_ora_sopralluogo = visitItem.getGeaSopralluogo().getData_ora_sopralluogo();
             VisitItem visitItem = visitItems.get(i);
             GeaSopralluogo geaSopralluogo = visitItem.getGeaSopralluogo();
             int id_sopralluogo = geaSopralluogo.getId_sopralluogo();
@@ -119,7 +116,6 @@ public class FragListInWorkVisits extends ListFragment
                 String data_ora_sopralluogo = reportItem.getGeaSopralluogo().getData_ora_sopralluogo();
 
                 int generalInfoCoordSet = reportItem.getReportStates().getGeneral_info_coords_set();
-                int generalInfoCompletionState = reportItem.getReportStates().getGeneralInfoCompletionState();
                 int reportCompletionState = reportItem.getReportStates().getReportCompletionState();
                 int photosAddedNumber = reportItem.getReportStates().getPhotosAddedNumber();
 
@@ -133,7 +129,6 @@ public class FragListInWorkVisits extends ListFragment
                     {
                         Date date = sdf.parse(data_ora_sopralluogo);
                         long time = date.getTime();
-                        //Log.d("DEBUG", String.valueOf(time));
 
                         while (unsortedVisits.get(time) != null) // item with the same time already exists
                         {
@@ -147,11 +142,6 @@ public class FragListInWorkVisits extends ListFragment
 
                     } catch (ParseException e)
                     {
-/*                    while(unsortedVisits.get(n) != null)
-                    {
-                        n++;
-                    }
-                    unsortedVisits.put(n++, visitItem);*/
                         e.printStackTrace();
                     }
                 }
@@ -171,46 +161,15 @@ public class FragListInWorkVisits extends ListFragment
 
         lv = getListView();
 
-        ////ViewUtils.setListViewHeightBasedOnChildren(lv);
-
         lv.setOnTouchListener(swipeDetector);
 
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener()
         {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id)
             {
-                int idSopralluogo = visitItemsFiltered.get(position).getGeaSopralluogo().getId_sopralluogo();
-                int id_rapporto_sopralluogo = visitItemsFiltered.get(position).getGeaRapporto().getId_rapporto_sopralluogo();
 
                 int idVisit = visitItemsFiltered.get(position).getId();
-                int id_tecnico = visitItemsFiltered.get(position).getGeaSopralluogo().getId_tecnico();
-
-                realm.beginTransaction();
-                ReportItem reportItem = realm.where(ReportItem.class)
-                        .equalTo("company_id", company_id).equalTo("tech_id", selectedTech.getId())
-                        .equalTo("id_sopralluogo", idSopralluogo)
-                        .equalTo("id_rapporto_sopralluogo", id_rapporto_sopralluogo).findFirst();
-                realm.commitTransaction();
-
-                boolean ownVisit = selectedTech.getId() == id_tecnico;
-                boolean freeVisit = (id_tecnico == 0);
-
-                if (ownVisit || freeVisit) //
-                {
-                    if (swipeDetector.swipeDetected())
-                    {
-                        if (swipeDetector.getAction() == SwipeDetector.Action.LR)
-                        {
-                            mCommunicator.OnVisitListItemSwiped(idVisit, ownVisit && reportItem != null);
-                        } else if (swipeDetector.getAction() == SwipeDetector.Action.RL)
-                        {
-                            mCommunicator.OnVisitListItemSwiped(idVisit, false);
-                        }
-                    } else
-                    {
-                        mCommunicator.OnVisitListItemSelected(idVisit, ownVisit && reportItem != null);
-                    }
-                }
+                mCommunicator.OnVisitListItemSelected(idVisit);
             }
         });
     }

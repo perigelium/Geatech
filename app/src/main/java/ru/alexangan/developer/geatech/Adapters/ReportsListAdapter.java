@@ -24,10 +24,6 @@ import ru.alexangan.developer.geatech.R;
 
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.selectedTech;
 
-/**
- * Created by user on 11/21/2016.
- */
-
 public class ReportsListAdapter extends BaseAdapter
 {
     private final Realm realm;
@@ -99,12 +95,9 @@ public class ReportsListAdapter extends BaseAdapter
 
 
         ImageView ivReportStatus = (ImageView) row.findViewById(R.id.ivReportStatus);
-        //View vVisitDateView = row.findViewById(R.id.vVisitDateCell);
         TextView tvVisitDay = (TextView) row.findViewById(R.id.tvVisitDay);
         TextView tvVisitMonth = (TextView) row.findViewById(R.id.tvVisitMonth);
         TextView tvVisitTime = (TextView) row.findViewById(R.id.tvVisitTime);
-        //ImageView ivPersonTimeSet = (ImageView) row.findViewById(R.id.ivPersonTimeSet);
-        //ImageView ivPersonTimeUnset = (ImageView) row.findViewById(R.id.ivPersonTimeUnset);
 
         TextView clientNameTextView = (TextView) row.findViewById(R.id.tvClientName);
         TextView serviceTypeTextView = (TextView) row.findViewById(R.id.tvVisitTOS);
@@ -114,7 +107,6 @@ public class ReportsListAdapter extends BaseAdapter
         ClientData clientData = reportItem.getClientData();
         GeaSopralluogo geaSopralluogo = reportItem.getGeaSopralluogo();
         String dataOraSopralluogo = geaSopralluogo.getData_ora_sopralluogo();
-        //int idSopralluogo = geaSopralluogo.getId_sopralluogo();
         int tech_id = geaSopralluogo.getId_tecnico();
 
         String techName = "";
@@ -168,10 +160,8 @@ public class ReportsListAdapter extends BaseAdapter
 
             tvVisitDay.setVisibility(View.VISIBLE);
             tvVisitMonth.setVisibility(View.VISIBLE);
-/*            ivPersonTimeSet.setVisibility(View.VISIBLE);
-            ivPersonTimeUnset.setVisibility(View.GONE);*/
 
-            tvVisitDay.setText(Integer.toString(calendar.get(Calendar.DAY_OF_MONTH)));
+            tvVisitDay.setText(String.format(Locale.ITALIAN, "%d", calendar.get(Calendar.DAY_OF_MONTH)));
             tvVisitMonth.setText(ItalianMonths.numToString(calendar.get(Calendar.MONTH) + 1));
 
             String minuteStr = Integer.toString(calendar.get(Calendar.MINUTE));

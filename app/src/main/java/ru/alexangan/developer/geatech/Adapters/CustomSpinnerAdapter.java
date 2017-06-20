@@ -2,6 +2,7 @@ package ru.alexangan.developer.geatech.Adapters;
 
 import android.app.Activity;
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,21 +21,21 @@ import static ru.alexangan.developer.geatech.Models.GlobalConstants.mSettings;
 
 public class CustomSpinnerAdapter extends ArrayAdapter<SpinnerItemData>
 {
-    int groupid;
-    Activity activity;
-    ArrayList<SpinnerItemData> list;
-    LayoutInflater inflater;
+    private int groupid;
+    private ArrayList<SpinnerItemData> list;
+    private LayoutInflater inflater;
 
     public CustomSpinnerAdapter(Activity activity, int groupid, int id, ArrayList<SpinnerItemData> list)
     {
         super(activity, id, list);
+
         this.list = list;
-        this.activity = activity;
         inflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         this.groupid = groupid;
     }
 
-    public View getView(int position, View convertView, ViewGroup parent)
+    @NonNull
+    public View getView(int position, View convertView, @NonNull ViewGroup parent)
     {
         View itemView = inflater.inflate(groupid, parent, false);
         ImageView imageView = (ImageView) itemView.findViewById(R.id.ivVisitsFilterDialogItem);
@@ -54,7 +55,7 @@ public class CustomSpinnerAdapter extends ArrayAdapter<SpinnerItemData>
         return itemView;
     }
 
-    public View getDropDownView(int position, View convertView, ViewGroup parent)
+    public View getDropDownView(int position, View convertView, @NonNull ViewGroup parent)
     {
         return getView(position, convertView, parent);
 

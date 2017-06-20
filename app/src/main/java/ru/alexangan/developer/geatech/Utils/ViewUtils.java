@@ -1,6 +1,7 @@
 package ru.alexangan.developer.geatech.Utils;
 
 import android.annotation.TargetApi;
+import android.content.Context;
 import android.graphics.Color;
 import android.os.Build;
 import android.text.InputType;
@@ -44,32 +45,32 @@ import static ru.alexangan.developer.geatech.Models.GlobalConstants.visitItems;
 public class ViewUtils
 {
     private final Realm realm;
+    private Context context;
 
-    private ReportItem reportItem;
     private int id_rapporto_sopralluogo;
     private List<GeaItemRapporto> l_geaItemRapporto;
     private int idItemStart, idItemEnd;
     private int headerNumber;
     private View rootView;
 
-    boolean[] allSectionsCollapsed;
-    GeaModelloRapporto geaModello;
-    List<GeaSezioneModelliRapporto> geaSezioniModelli;
-    ArrayList<ArrayList<LinearLayout>> al_llHeaderSections;
-    ArrayList<LinearLayout> llHeaderSections;
+    private boolean[] allSectionsCollapsed;
+    private List<GeaSezioneModelliRapporto> geaSezioniModelli;
+    private ArrayList<ArrayList<LinearLayout>> al_llHeaderSections;
+    private ArrayList<LinearLayout> llHeaderSections;
 
-    Map<Integer, ImageView> ImageViews;
-    Map<Integer, Pair<LinearLayout, LinearLayout>> LinearLayouts;
-    Map<Integer, RadioGroup> RadioGroups;
-    Map<Integer, EditText> EditTexts;
-    Map<Integer, Switch> Switches;
-    Map<Integer, ArrayList<CheckBox>> CheckBoxes;
+    private Map<Integer, ImageView> ImageViews;
+    private Map<Integer, Pair<LinearLayout, LinearLayout>> LinearLayouts;
+    private Map<Integer, RadioGroup> RadioGroups;
+    private Map<Integer, EditText> EditTexts;
+    private Map<Integer, Switch> Switches;
+    private Map<Integer, ArrayList<CheckBox>> CheckBoxes;
 
-    Map<Integer, GeaItemModelliRapporto> itemModelli;
+    private Map<Integer, GeaItemModelliRapporto> itemModelli;
 
-    public ViewUtils(View rootView, int id_rapporto_sopralluogo, int selectedVisitId)
+    public ViewUtils(Context context, View rootView, int id_rapporto_sopralluogo, int selectedVisitId)
     {
         this.rootView = rootView;
+        this.context = context;
         this.id_rapporto_sopralluogo = id_rapporto_sopralluogo;
         headerNumber = 0;
         idItemStart = 99999;
@@ -87,14 +88,13 @@ public class ViewUtils
         allSectionsCollapsed = new boolean[]{false, false, false, false, false, false, false};
 
         VisitItem visitItem = visitItems.get(selectedVisitId);
-        //GeaSopralluogo geaSopralluogo = visitItem.getGeaSopralluogo();
         ProductData productData = visitItem.getProductData();
         int id_product_type = productData.getIdProductType();
 
         realm = Realm.getDefaultInstance();
 
         realm.beginTransaction();
-        geaModello = realm.where(GeaModelloRapporto.class).equalTo("id_product_type", id_product_type).findFirst();
+        GeaModelloRapporto geaModello = realm.where(GeaModelloRapporto.class).equalTo("id_product_type", id_product_type).findFirst();
         realm.commitTransaction();
 
         if (geaModello == null)
@@ -132,7 +132,7 @@ public class ViewUtils
         }
 
         realm.beginTransaction();
-        reportItem = realm.where(ReportItem.class).equalTo("company_id", company_id).equalTo("tech_id", selectedTech.getId())
+        ReportItem reportItem = realm.where(ReportItem.class).equalTo("company_id", company_id).equalTo("tech_id", selectedTech.getId())
                 .equalTo("id_rapporto_sopralluogo", id_rapporto_sopralluogo).findFirst();
         realm.commitTransaction();
 
@@ -856,25 +856,11 @@ public class ViewUtils
             }
         });
 
-        //ArrayList<TextView> al_TextViews = new ArrayList<>();
-
-        //TextView tv1SwitchAndEdit = (TextView) switch_and_edit.findViewById(R.id.tv1SwitchAndEdit);
-        //al_TextViews.add(tv1SwitchAndEdit);
-
         final Switch sw1SwitchAndEdit = (Switch) switch_and_edit.findViewById(R.id.sw1SwitchAndEdit);
         sw1SwitchAndEdit.setText(itemModelli.get(idItem).getDescrizione_item());
 
 
         Switches.put(idItem, sw1SwitchAndEdit);
-
-/*        ArrayList<Switch> al_Switches = new ArrayList<>();
-        al_Switches.add(sw1SwitchAndEdit);
-
-        for (int i = 0; i < al_Switches.size(); i++)
-        {
-            Switches.put(idItem, al_Switches.get(i));
-
-        }*/
 
         idItem++;
         TextView tv1SwitchAndEdit = (TextView) switch_and_edit.findViewById(R.id.tv1SwitchAndEdit);
@@ -1008,26 +994,6 @@ public class ViewUtils
 
         final EditText et1TwoSwitchesAndEdit = (EditText) two_switches_and_edit.findViewById(R.id.et1TwoSwitchesAndEdit);
 
-/*        sw2TwoSwitchesAndEdit.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View view)
-            {
-                if (sw2TwoSwitchesAndEdit.isChecked())
-                {
-                    tv3TwoSwitchesAndEdit.setVisibility(View.VISIBLE);
-                    et1TwoSwitchesAndEdit.setVisibility(View.VISIBLE);
-                    et1TwoSwitchesAndEdit.setText("");
-                }
-                else
-                {
-                    tv3TwoSwitchesAndEdit.setVisibility(View.GONE);
-                    et1TwoSwitchesAndEdit.setVisibility(View.GONE);
-                    et1TwoSwitchesAndEdit.setText("Non applicabile");
-                }
-            }
-        });*/
-
         final LinearLayout llEdit = (LinearLayout) two_switches_and_edit.findViewById(R.id.llEditTwoSwitchesAndEdit);
 
         LinearLayouts.put(idItem, new Pair<>(llEdit, llEdit));
@@ -1126,13 +1092,6 @@ public class ViewUtils
         TextView tv5FiveSwitches = (TextView) five_switches.findViewById(R.id.tv5FiveSwitches);
 
         Switch sw5FiveSwitches = (Switch) five_switches.findViewById(R.id.sw5FiveSwitches);
-
-/*        ArrayList<Switch> al_Switches = new ArrayList<>();
-        al_Switches.add(sw1FiveSwitches);
-        al_Switches.add(sw2FiveSwitches);
-        al_Switches.add(sw3FiveSwitches);
-        al_Switches.add(sw4FiveSwitches);
-        al_Switches.add(sw5FiveSwitches);*/
 
         Switches.put(idItem, sw1FiveSwitches);
         tv1FiveSwitches.setText(itemModelli.get(idItem++).getDescrizione_item());
@@ -1291,16 +1250,6 @@ public class ViewUtils
 
         final LinearLayout llEditFourRadiosAndEdit = (LinearLayout) four_radios_and_edit.findViewById(R.id.llEditFourRadiosAndEdit);
 
-/*        et1FourRadiosAndEdit.setOnTouchListener(new View.OnTouchListener()
-        {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent)
-            {
-                rg1FourRadiosAndEdit.clearCheck();
-                return false;
-            }
-        });*/
-
         if (fields.length >= rg1FourRadiosAndEdit.getChildCount())
         {
             for (int i = 0; i < rg1FourRadiosAndEdit.getChildCount(); i++)
@@ -1308,31 +1257,13 @@ public class ViewUtils
                 RadioButton rb = (RadioButton) rg1FourRadiosAndEdit.getChildAt(i);
 
                 rb.setText(fields[i]);
-
-/*                rb.setOnClickListener(new View.OnClickListener()
-                {
-                    @Override
-                    public void onClick(View view)
-                    {
-                        if(rg1FourRadiosAndEdit.getCheckedRadioButtonId() == rg1FourRadiosAndEdit.getChildAt(1).getId()) //second radio
-                        {
-                            llEditFourRadiosAndEdit.setVisibility(View.VISIBLE);
-                            et1FourRadiosAndEdit.setText("");
-                        }
-                        else
-                        {
-                            llEditFourRadiosAndEdit.setVisibility(View.GONE);
-                            et1FourRadiosAndEdit.setText("Non applicabile");
-                        }
-                    }
-                });*/
             }
         }
 
         idItem++;
         LinearLayouts.put(idItem, new Pair<>(llEditFourRadiosAndEdit, llEditFourRadiosAndEdit));
         tv1FourRadiosAndEdit.setText(itemModelli.get(idItem).getDescrizione_item());
-        et1FourRadiosAndEdit.setText("Non applicabile");
+        et1FourRadiosAndEdit.setText(context.getString(R.string.NotApplicable));
         et1FourRadiosAndEdit.setHint(itemModelli.get(idItem).getUnita_misura());
         EditTexts.put(idItem, et1FourRadiosAndEdit);
 
@@ -1384,16 +1315,6 @@ public class ViewUtils
 
         final LinearLayout llEditThreeRadiosAndEdit = (LinearLayout) three_radios_and_edit.findViewById(R.id.llEditThreeRadiosAndEdit);
 
-/*        et1ThreeRadiosAndEdit.setOnTouchListener(new View.OnTouchListener()
-        {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent)
-            {
-                rg1ThreeRadiosAndEdit.clearCheck();
-                return false;
-            }
-        });*/
-
         if (fields.length >= rg1ThreeRadiosAndEdit.getChildCount())
         {
             for (int i = 0; i < rg1ThreeRadiosAndEdit.getChildCount(); i++)
@@ -1401,24 +1322,6 @@ public class ViewUtils
                 RadioButton rb = (RadioButton) rg1ThreeRadiosAndEdit.getChildAt(i);
 
                 rb.setText(fields[i]);
-
-/*                rb.setOnClickListener(new View.OnClickListener()
-                {
-                    @Override
-                    public void onClick(View view)
-                    {
-                        if(rg1ThreeRadiosAndEdit.getCheckedRadioButtonId() == rg1ThreeRadiosAndEdit.getChildAt(1).getId()) //second radio
-                        {
-                            llEditThreeRadiosAndEdit.setVisibility(View.VISIBLE);
-                            et1ThreeRadiosAndEdit.setText("");
-                        }
-                        else
-                        {
-                            llEditThreeRadiosAndEdit.setVisibility(View.GONE);
-                            et1ThreeRadiosAndEdit.setText("Non applicabile");
-                        }
-                    }
-                });*/
             }
         }
 
@@ -1426,7 +1329,7 @@ public class ViewUtils
         LinearLayouts.put(idItem, new Pair<>(llEditThreeRadiosAndEdit, llEditThreeRadiosAndEdit));
         tv1ThreeRadiosAndEdit.setText(itemModelli.get(idItem).getDescrizione_item());
         et1ThreeRadiosAndEdit.setInputType(InputType.TYPE_CLASS_NUMBER);
-        et1ThreeRadiosAndEdit.setText("Non applicabile");
+        et1ThreeRadiosAndEdit.setText(context.getString(R.string.NotApplicable));
         et1ThreeRadiosAndEdit.setHint(itemModelli.get(idItem).getUnita_misura());
         EditTexts.put(idItem, et1ThreeRadiosAndEdit);
 
@@ -1485,30 +1388,9 @@ public class ViewUtils
 
         final EditText et1ThreeRadiosAndEdit = (EditText) three_radios_and_edit.findViewById(R.id.et1ThreeRadiosAndEdit);
 
-/*        et1ThreeRadiosAndEdit.setOnTouchListener(new View.OnTouchListener()
-        {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent)
-            {
-                rg1ThreeRadiosAndEdit.clearCheck();
-                return false;
-            }
-        });*/
-
         tv1ThreeRadiosAndEdit.setText(itemModelli.get(idItem).getDescrizione_item());
         et1ThreeRadiosAndEdit.setHint(itemModelli.get(idItem).getUnita_misura());
         EditTexts.put(idItem, et1ThreeRadiosAndEdit);
-        //et1ThreeRadiosAndEdit.setBackgroundColor(Color.RED);
-        //et1ThreeRadiosAndEdit.getBackground().setColorFilter(Color.RED, PorterDuff.Mode.SRC_IN);
-
-/*        rg1ThreeRadiosAndEdit.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener()
-        {
-            @Override
-            public void onCheckedChanged(RadioGroup radioGroup, int i)
-            {
-                et1ThreeRadiosAndEdit.setText("");
-            }
-        });*/
 
         return ++idItem;
     }
@@ -2217,7 +2099,6 @@ public class ViewUtils
 
     public void markSectionsWithNotFilledItems(int id_sopralluogo, int id_rapporto_sopralluogo)
     {
-        //int completionState = DatabaseUtils.getReportInitializationState(id_sopralluogo, id_rapporto_sopralluogo);
         ArrayList<Integer> notSetItems = DatabaseUtils.getNotSetItems(id_sopralluogo, id_rapporto_sopralluogo);
 
 /*        for (Map.Entry entry : Switches.entrySet())
@@ -2241,7 +2122,7 @@ public class ViewUtils
                     for (i = 0; i < notSetItems.size(); i++)
                     {
                         LinearLayout llSection = null;
-                        Pair<LinearLayout, LinearLayout> llSections = null;
+                        Pair<LinearLayout, LinearLayout> llSections;
                         int idItem = notSetItems.get(i);
 
                         do
@@ -2263,43 +2144,14 @@ public class ViewUtils
 
                         } while (idItem != 0);
 
-/*                        if(llSections != null)
-                        {
-                            LinearLayout llSection1 = llSections.second;
-                            LinearLayout llSection0 = llSections.first;
-
-                            if (llSection1.equals(llSection0))
-                            {
-                                Pair<LinearLayout, LinearLayout> llpreviousSections = getLinearLayouts().get(idItem);
-
-                                if (llpreviousSections != null)
-                                {
-                                    llSection = llpreviousSections.second;
-                                }
-                            } else
-                            {
-                                llSection = llSection1;
-                            }*/
-
                         if (ll.equals(llSection))
                         {
                             //ll.setVisibility(View.VISIBLE);
                             ll.setBackgroundResource(R.drawable.shape_red_border_rect);
                             break;
                         }
-                        //}
                     }
-
-/*                    if (i == notSetItems.size())
-                    {
-                        //ll.setVisibility(View.GONE);
-                        ll.setBackgroundResource(R.drawable.shape_transparent_border_rect);
-                    }*/
-                } /*else
-                {
-                    ll.setBackgroundResource(R.drawable.shape_transparent_border_rect);
-                    //ll.setVisibility(View.VISIBLE);
-                }*/
+                }
             }
         }
     }
@@ -2335,9 +2187,9 @@ public class ViewUtils
 
         LinearLayout ll = LinearLayouts.get(idItem).first;
 
-        if (ll.isEnabled() == false)
+        if ( ! ll.isEnabled())
         {
-            str_id_item = "Non applicabile";
+            str_id_item = context.getString(R.string.NotApplicable);
         } else
         {
             int checkedBtnId = rg.getCheckedRadioButtonId();
@@ -2406,7 +2258,7 @@ public class ViewUtils
 
         if (!ll.isEnabled())
         {
-            str_Id_item = "Non applicabile";
+            str_Id_item = context.getString(R.string.NotApplicable);
         } else
         {
             for (int i = 0; i < alChks.size(); i++)
@@ -2428,7 +2280,7 @@ public class ViewUtils
             Switch sw = Switches.get(idItem);
             str_Id_item = sw.isChecked() ? "SI" : "NO";
 
-            if (sw.isEnabled() == false)
+            if ( ! sw.isEnabled())
             {
                 str_Id_item = "NO";
             }
@@ -2460,7 +2312,7 @@ public class ViewUtils
         {
             if (llDisabled)
             {
-                str_id_item = "Non applicabile";
+                str_id_item = context.getString(R.string.NotApplicable);
             } else
             {
                 EditText et = EditTexts.get(idItem);
@@ -2712,13 +2564,12 @@ public class ViewUtils
             return;
         }
 
-        int totalHeight = 0;
         int items = gridViewAdapter.getCount();
         int rows = 0;
 
         View listItem = gridViewAdapter.getView(0, null, gridView);
         listItem.measure(0, 0);
-        totalHeight = listItem.getMeasuredHeight();
+        int totalHeight = listItem.getMeasuredHeight();
 
         float x = 1;
         if (items > 3)

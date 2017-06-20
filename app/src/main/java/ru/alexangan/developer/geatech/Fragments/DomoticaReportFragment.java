@@ -92,7 +92,7 @@ public class DomoticaReportFragment extends Fragment
     {
         rootView = inflater.inflate(R.layout.domotica_report, container, false);
 
-        viewUtils = new ViewUtils(rootView, id_rapporto_sopralluogo, selectedVisitId);
+        viewUtils = new ViewUtils(context, rootView, id_rapporto_sopralluogo, selectedVisitId);
 
         TextView tvReportTitle = (TextView) rootView.findViewById(R.id.tvReportTitle);
         tvReportTitle.setText(geaModello.getNome_modello());
@@ -244,7 +244,7 @@ public class DomoticaReportFragment extends Fragment
                     {
                         llEdit.setVisibility(View.GONE);
                         llEdit.setEnabled(false);
-                        et2.setText("Non applicabile");
+                        et2.setText(getString(R.string.NotApplicable));
                     }
                 }
             });

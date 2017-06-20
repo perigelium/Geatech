@@ -19,16 +19,13 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.TreeMap;
 
-import io.realm.Realm;
 import ru.alexangan.developer.geatech.Adapters.MyListVisitsAdapter;
 import ru.alexangan.developer.geatech.Interfaces.Communicator;
 import ru.alexangan.developer.geatech.Models.GeaSopralluogo;
-import ru.alexangan.developer.geatech.Models.ReportItem;
 import ru.alexangan.developer.geatech.Models.VisitItem;
 import ru.alexangan.developer.geatech.R;
 import ru.alexangan.developer.geatech.Utils.SwipeDetector;
 
-import static ru.alexangan.developer.geatech.Models.GlobalConstants.company_id;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.mSettings;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.selectedTech;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.visitItems;
@@ -42,7 +39,7 @@ public class FragListVisitsOverdue extends ListFragment
     MyListVisitsAdapter myListAdapter;
     ListView lv;
     Activity activity;
-    private Realm realm;
+    //private Realm realm;
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState)
@@ -50,7 +47,7 @@ public class FragListVisitsOverdue extends ListFragment
         super.onActivityCreated(savedInstanceState);
 
         activity = getActivity();
-        realm = Realm.getDefaultInstance();
+        //realm = Realm.getDefaultInstance();
     }
 
     @Override
@@ -70,7 +67,7 @@ public class FragListVisitsOverdue extends ListFragment
         View rootView = inflater.inflate(R.layout.list_visits_with_title, container, false);
 
         TextView tvTitleListVisits = (TextView) rootView.findViewById(R.id.tvTitleListVisits);
-        tvTitleListVisits.setText("Sopralluoghi/Rapporti in ritardo");
+        tvTitleListVisits.setText(R.string.VisitsReportsOverdue);
 
         return rootView;
     }
@@ -94,8 +91,6 @@ public class FragListVisitsOverdue extends ListFragment
 
         long firstMilliSecondsOfToday = calendarTodayFirstMin.getTimeInMillis();
 
-        long n = 0;
-
         for (VisitItem visitItem : visitItems)
         //for (int i = 0; i < visitItems.size(); i++)
         {
@@ -112,13 +107,12 @@ public class FragListVisitsOverdue extends ListFragment
             boolean ownVisit = selectedTech.getId() == id_tecnico;
             boolean reportNotSent = visitItem.getGeaRapporto().getData_ora_invio_rapporto() == null;
 
-            if (reportNotSent && ownVisit)
+            if (reportNotSent)
             {
                 try
                 {
                     Date date = sdf.parse(data_ora_sopralluogo);
                     long time = date.getTime();
-                    //Log.d("DEBUG", String.valueOf(time));
 
                     if(ownVisit)
                     {
@@ -176,11 +170,12 @@ public class FragListVisitsOverdue extends ListFragment
         {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id)
             {
-                int idSopralluogo = visitItemsFiltered.get(position).getGeaSopralluogo().getId_sopralluogo();
+                //int idSopralluogo = visitItemsFiltered.get(position).getGeaSopralluogo().getId_sopralluogo();
 
                 int idVisit = visitItemsFiltered.get(position).getId();
+                mCommunicator.OnVisitListItemSelected(idVisit);
 
-                int id_tecnico = visitItemsFiltered.get(position).getGeaSopralluogo().getId_tecnico();
+/*                int id_tecnico = visitItemsFiltered.get(position).getGeaSopralluogo().getId_tecnico();
                 int id_rapporto_sopralluogo = visitItemsFiltered.get(position).getGeaRapporto().getId_rapporto_sopralluogo();
 
                 realm.beginTransaction();
@@ -207,7 +202,7 @@ public class FragListVisitsOverdue extends ListFragment
                     {
                         mCommunicator.OnVisitListItemSelected(idVisit, ownVisit && reportItem != null);
                     }
-                }
+                }*/
             }
         });
     }

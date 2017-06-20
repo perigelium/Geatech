@@ -72,7 +72,6 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
     private Button btnSendReportNow;
     private ImageView ivCoordsSetCheckmark, ivReportFilledCheckmark, ivPhotosAddedCheckmark;
     private TextView tvGeneralInfo, tvTecnicalReportState, tvPhotosPresent;
-    private VisitItem visitItem;
 
     public SendReportFragment()
     {
@@ -135,7 +134,7 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
     {
         super.onViewCreated(view, savedInstanceState);
 
-        visitItem = visitItems.get(selectedVisitId);
+        VisitItem visitItem = visitItems.get(selectedVisitId);
         GeaSopralluogo geaSopralluogo = visitItem.getGeaSopralluogo();
         int idSopralluogo = geaSopralluogo.getId_sopralluogo();
         id_rapporto_sopralluogo = visitItem.getGeaRapporto().getId_rapporto_sopralluogo();

@@ -16,9 +16,7 @@ public interface Communicator
 
     void onCtrlBtnsSopralluogoClicked(int btnId);
 
-    void OnVisitListItemSwiped(int itemIndex, boolean dateTimeHasSet);
-
-    void OnVisitListItemSelected(int itemIndex, boolean dateTimeHasSet);
+    void OnVisitListItemSelected(int itemIndex);
 
     void OnReportListItemSelected(int itemIndex);
 

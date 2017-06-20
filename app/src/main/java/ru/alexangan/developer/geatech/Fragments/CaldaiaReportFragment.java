@@ -131,7 +131,7 @@ public class CaldaiaReportFragment extends Fragment
             }
         });*/
 
-        viewUtils = new ViewUtils(rootView, id_rapporto_sopralluogo, selectedVisitId);
+        viewUtils = new ViewUtils(context, rootView, id_rapporto_sopralluogo, selectedVisitId);
 
         TextView tvReportTitle = (TextView) rootView.findViewById(R.id.tvReportTitle);
         tvReportTitle.setText(geaModello.getNome_modello());

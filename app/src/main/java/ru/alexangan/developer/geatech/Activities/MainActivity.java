@@ -18,6 +18,7 @@ import java.io.File;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
@@ -57,7 +58,7 @@ import ru.alexangan.developer.geatech.Models.GeaSopralluogo;
 import ru.alexangan.developer.geatech.Models.GlobalConstants;
 import ru.alexangan.developer.geatech.Models.ProductData;
 import ru.alexangan.developer.geatech.Models.ReportItem;
-import ru.alexangan.developer.geatech.Overrides.ScrollViewEx;
+import ru.alexangan.developer.geatech.ViewOverrides.ScrollViewEx;
 import ru.alexangan.developer.geatech.Models.VisitItem;
 import ru.alexangan.developer.geatech.Network.NetworkUtils;
 import ru.alexangan.developer.geatech.R;
@@ -197,9 +198,18 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
         ctrlBtnChkChanged = true;
         firstStart = true;
 
-        realm.beginTransaction();
+/*        realm.beginTransaction();
         visitItems = realm.where(VisitItem.class).findAll();
-        realm.commitTransaction();
+        realm.commitTransaction();*/
+
+        if (visitItems == null && inVisitItems != null && inVisitItems.size() > 0)
+        {
+            visitItems = new ArrayList<>();
+            for (VisitItem visitItem : inVisitItems)
+            {
+                visitItems.add(visitItem);
+            }
+        }
 
         if (visitItems.size() == 0)
         {
@@ -256,7 +266,7 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
         requestServerDialog.setIndeterminate(true);
 
         GlobalConstants.visitsListIsObsolete = false;
-        GlobalConstants.reportsListIsObsolete = false;
+        //GlobalConstants.reportsListIsObsolete = false;
         GlobalConstants.reminderListIsObsolete = false;
         mSettings.edit().putInt("listVisitsFilterMode", LIST_VISITS_MODE_ALL).apply();
 
@@ -364,11 +374,11 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
 
     private void showCompletedReportsLists()
     {
-        if (GlobalConstants.reportsListIsObsolete && NetworkUtils.isNetworkAvailable(this))
+/*        if (GlobalConstants.reportsListIsObsolete && NetworkUtils.isNetworkAvailable(this))
         {
             refreshVisitsList();
         } else
-        {
+        {*/
             FragmentTransaction mFragmentTransaction = mFragmentManager.beginTransaction();
             if (!fragListReportsNotSent.isAdded())
             {
@@ -383,7 +393,7 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
             mFragmentTransaction.commit();
 
             notificationBarFragment.setView(R.string.CompletedReports, View.GONE, View.GONE);
-        }
+        //}
     }
 
     private void showNotifVisitsLists()
@@ -576,7 +586,7 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
     }
 
     @Override
-    public void OnVisitListItemSelected(int itemId, boolean dateTimeHasSet)
+    public void OnVisitListItemSelected(int itemId)
     {
         currentVisitId = itemId;
 
@@ -736,7 +746,7 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
         logout();
     }
 
-    @Override
+/*    @Override
     public void OnVisitListItemSwiped(int itemIndex, boolean dateTimeHasSet)
     {
         if (!dateTimeHasSet)
@@ -746,7 +756,7 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
         {
             OnVisitListItemSelected(itemIndex, true);
         }
-    }
+    }*/
 
     public Fragment assignFragmentModel(String productType)
     {
@@ -783,7 +793,7 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
         if (call == callVisits)
         {
             GlobalConstants.visitsListIsObsolete = false;
-            GlobalConstants.reportsListIsObsolete = false;
+            //GlobalConstants.reportsListIsObsolete = false;
             GlobalConstants.reminderListIsObsolete = false;
 
             showToastMessage(getString(R.string.ListVisitsReceiveFailed));
@@ -817,25 +827,24 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
                 {
                     public void run()
                     {
-                        realm.beginTransaction();
 
                         inVisitItems = JSON_to_model.getVisitTtemsList(visitsJSONData);
 
-                        visitItems = realm.where(VisitItem.class).findAll();
-                        visitItems.deleteAllFromRealm();
+                        //visitItems = realm.where(VisitItem.class).findAll();
 
                         if (inVisitItems != null && inVisitItems.size() > 0)
                         {
+                            visitItems = new ArrayList<>();
                             for (VisitItem visitItem : inVisitItems)
                             {
-                                realm.copyToRealmOrUpdate(visitItem);
+                                //realm.copyToRealmOrUpdate(visitItem);
+                                visitItems.add(visitItem);
                             }
                         }
-                        realm.commitTransaction();
 
-                        realm.beginTransaction();
+/*                        realm.beginTransaction();
                         visitItems = realm.where(VisitItem.class).findAll();
-                        realm.commitTransaction();
+                        realm.commitTransaction();*/
 
                         if (GlobalConstants.visitsListIsObsolete)
                         {
@@ -843,11 +852,11 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
                             onCtrlBtnsBottomClicked(R.id.btnVisits);
                         }
 
-                        if (GlobalConstants.reportsListIsObsolete)
+/*                        if (GlobalConstants.reportsListIsObsolete)
                         {
                             GlobalConstants.reportsListIsObsolete = false;
                             onCtrlBtnsBottomClicked(R.id.btnCompletedReports);
-                        }
+                        }*/
 
                         if (GlobalConstants.reminderListIsObsolete)
                         {
@@ -895,7 +904,7 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
 
             handler.postDelayed(runnable, 30000);
 
-            callVisits = networkUtils.getData(this, GET_VISITS_URL_SUFFIX, tokenStr);
+            callVisits = networkUtils.getData(this, GET_VISITS_URL_SUFFIX, tokenStr, false);
         } else
         {
             showToastMessage(getString(R.string.CheckInternetConnection));
@@ -936,11 +945,11 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
                 refreshVisitsList();
             }
 
-            if (fragListReportsNotSent.isAdded() || fragListReportsSent.isAdded())
+/*            if (fragListReportsNotSent.isAdded() || fragListReportsSent.isAdded())
             {
                 GlobalConstants.reportsListIsObsolete = true;
                 refreshVisitsList();
-            }
+            }*/
 
             if (fragListVisitsReminded.isAdded() || fragListReportsReminded.isAdded())
             {

@@ -1,7 +1,6 @@
 package ru.alexangan.developer.geatech.Fragments;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -26,17 +25,15 @@ import static ru.alexangan.developer.geatech.Models.GlobalConstants.mSettings;
  * Created by user on 11/10/2016
  */
 
-public class NotificationBarFragment extends Fragment implements View.OnClickListener
+public class NotificationBarFragment extends Fragment
 {
     private Communicator mCommunicator;
     private Activity activity;
-    AlertDialog alert;
     Spinner spVisitsFilter;
     private TextView tvWindowTitle;
     private ImageView ivLogoSmall;
     private ImageView ivVisitsListsFilter;
     int spinnerCurItem;
-
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState)
@@ -70,8 +67,6 @@ public class NotificationBarFragment extends Fragment implements View.OnClickLis
                 new CustomSpinnerAdapter(activity, R.layout.alert_visits_filter_item_custom, R.id.tvVisitsFilterDialogItem, list);
         spVisitsFilter.setAdapter(adapter);
 
-        //CustomSpinnerAdapter adapter = new CustomSpinnerAdapter(activity, R.layout.alert_visits_filter_item_custom, map);
-
         return rootView;
     }
 
@@ -90,7 +85,7 @@ public class NotificationBarFragment extends Fragment implements View.OnClickLis
                     return;
                 }
                 mSettings.edit().putInt("listVisitsFilterMode", position).apply();
-                //GlobalConstants.listVisitsFilterMode = position;
+
                 mCommunicator.onNotificationReportReturned(position);
 
                 spinnerCurItem = position;
@@ -129,64 +124,6 @@ public class NotificationBarFragment extends Fragment implements View.OnClickLis
     {
         super.onResume();
     }
-
-    @Override
-    public void onClick(View view)
-    {
-/*        if(view.getId() == R.id.btnVisitsListFilter)
-        {
-            showVisitsFilterDialog();
-        }*/
-
-/*        if(view.getId() == R.id.btnNotifTimeNotSetVisits)
-        {
-            mCommunicator.onNotificationReportReturned(view);
-        }
-
-        if(view.getId() == R.id.btnNotifUrgentReports)
-        {
-            mCommunicator.onNotificationReportReturned(view);
-        }
-
-        if(view.getId() == R.id.btnAppSettings)
-        {
-            mCommunicator.onNotificationReportReturned(view);
-        }*/
-    }
-
-/*    private void showVisitsFilterDialog()
-    {
-        String[] listItemsArray = {"Tutti i sopralluoghi", "I miei sopralluoghi", "Sopralluoghi da fissare"};
-        Integer[] icons = new Integer[]{R.drawable.three_balls, R.drawable.two_balls, R.drawable.yellow_ball};
-
-        //ContextThemeWrapper themedContext = new ContextThemeWrapper
-        // (this, android.R.style.Theme_DeviceDefault_Light_Dialog_NoActionBar);
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-
-        LayoutInflater inflater = activity.getLayoutInflater();
-        View layout = inflater.inflate(R.layout.alert_dialog_custom, null);
-
-        ListView listView = (ListView) layout.findViewById(R.id.alertList);
-        //ArrayAdapter<String> listAdapter = new ArrayAdapter<>(activity, R.layout.alert_visits_filter_item_custom, R.id.tvVisitsFilterDialogItem, listItemsArray);
-        //VisitsListFilterAdapter visitsListFilterAdapter = new VisitsListFilterAdapter(activity, alertDialogResources);
-        ListAdapter adapter = new ArrayAdapterWithIcons(getActivity(), listItemsArray, icons);
-        listView.setAdapter(adapter);
-
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener()
-        {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int which, long id)
-            {
-
-                mCommunicator.onNotificationReportReturned(which);
-            }
-        });
-
-        builder.setView(layout);
-        alert = builder.create();
-        alert.show();
-    }*/
 
     public void setView(int tvWindowTitleString, int ivLogoSmallVisibility, int ivVisitsListsFilterVisibility)
     {

@@ -19,7 +19,6 @@ import java.util.TreeMap;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
-import ru.alexangan.developer.geatech.Adapters.MyListVisitsAdapter;
 import ru.alexangan.developer.geatech.Adapters.ReportsListAdapter;
 import ru.alexangan.developer.geatech.Interfaces.Communicator;
 import ru.alexangan.developer.geatech.Models.ReportItem;
@@ -55,11 +54,6 @@ public class FragListReportsSent extends ListFragment
         mCommunicator = (Communicator) getActivity();
         swipeDetector = new SwipeDetector();
 
-/*        if (getArguments() != null)
-        {
-            id_rapporto_sopralluogo = getArguments().getInt("id_rapporto_sopralluogo", 0);
-        }*/
-
         realm = Realm.getDefaultInstance();
     }
 
@@ -92,27 +86,11 @@ public class FragListReportsSent extends ListFragment
         for (ReportItem reportItem : reportItems)
         //for (int i = 0; i < visitItems.size(); i++)
         {
-/*            GeaSopralluogo geaSopralluogo = visitItem.getGeaSopralluogo();
-            GeaRapporto geaRapporto = visitItem.getGeaRapporto();
-            String data_ora_sopralluogo = geaSopralluogo.getData_ora_sopralluogo();
-            int idSopralluogo = geaSopralluogo.getId_sopralluogo();
-            int id_rapporto_sopralluogo = visitItem.getGeaRapporto().getId_rapporto_sopralluogo();
-            int completion_percent = geaRapporto.getCompletion_percent();*/
-
             String data_ora_sopralluogo = reportItem.getGeaSopralluogo().getData_ora_sopralluogo();
 
             boolean isReportSent;
 
-            //if (reportItem != null)
-            {
-/*                int generalInfoCompletionState = reportItem.getReportStates().getGeneralInfoCompletionState();
-                int reportCompletionState = reportItem.getReportStates().getReportCompletionState();
-                int photosAddedNumber = reportItem.getReportStates().getPhotosAddedNumber();*/
-
                 isReportSent = reportItem.getGea_rapporto_sopralluogo().getData_ora_invio_rapporto() != null;
-
-/*                int id_tecnico = visitItem.getGeaSopralluogo().getId_tecnico();
-                boolean ownVisit = selectedTech.getId() == id_tecnico;*/
 
                 if (isReportSent)
                 {
@@ -120,29 +98,19 @@ public class FragListReportsSent extends ListFragment
                     {
                         Date date = sdf.parse(data_ora_sopralluogo);
                         long time = date.getTime();
-                        //Log.d("DEBUG", String.valueOf(time));
 
                         while (unsortedReportsSent.get(time) != null) // item with the same time already exists
                         {
                             time++;
                         }
-
-                        if (true)
-                        {
                             unsortedReportsSent.put(time, reportItem);
-                        }
 
                     } catch (ParseException e)
                     {
-/*                    while(unsortedVisits.get(n) != null)
-                    {
-                        n++;
-                    }
-                    unsortedVisits.put(n++, visitItem);*/
                         e.printStackTrace();
                     }
                 }
-            }
+
         }
 
         for (Map.Entry entry : unsortedReportsSent.entrySet())
@@ -158,8 +126,6 @@ public class FragListReportsSent extends ListFragment
 
         lv = getListView();
 
-        //ViewUtils.setListViewHeightBasedOnChildren(lv);
-
         lv.setOnTouchListener(swipeDetector);
 
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener()
@@ -167,23 +133,8 @@ public class FragListReportsSent extends ListFragment
             public void onItemClick(AdapterView<?> parent, View view, int position, long id)
             {
 
-                //int idVisit = reportItemsFilteredSent.get(position).getId();
-                int id_tecnico = reportItemsFilteredSent.get(position).getGeaSopralluogo().getId_tecnico();
                 int id_rapporto_sopralluogo = reportItemsFilteredSent.get(position).getId_rapporto_sopralluogo();
-
-                boolean ownVisit = selectedTech.getId() == id_tecnico;
-
-                if (ownVisit)
-                {
-                    if (swipeDetector.swipeDetected())
-                    {
-                        mCommunicator.onSendReportReturned(id_rapporto_sopralluogo);
-
-                    } else
-                    {
-                        mCommunicator.onSendReportReturned(id_rapporto_sopralluogo);
-                    }
-                }
+                mCommunicator.onSendReportReturned(id_rapporto_sopralluogo);
             }
         });
     }

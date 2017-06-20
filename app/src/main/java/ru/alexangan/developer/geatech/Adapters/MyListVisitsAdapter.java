@@ -233,18 +233,18 @@ public class MyListVisitsAdapter extends BaseAdapter
                             {
                                 tvReportStatus.setVisibility(View.VISIBLE);
                                 tvReportStatus.setTextColor(Color.parseColor("#ffffd100"));
-                                tvReportStatus.setText("Compilazione in corso del rapporto");
+                                tvReportStatus.setText(R.string.NoCompletedCompilation);
                             } else if (reportCompleteNotSent)
                             {
                                 tvReportStatus.setVisibility(View.VISIBLE);
                                 tvReportStatus.setTextColor(Color.parseColor("#ffff0000"));
-                                tvReportStatus.setText("Rapporto compilato ma non inviato");
+                                tvReportStatus.setText(R.string.CompletedNotSentReport);
                             }
                             else
                             {
                                 tvReportStatus.setVisibility(View.VISIBLE);
                                 tvReportStatus.setTextColor(Color.parseColor("#ff808080"));
-                                tvReportStatus.setText("Rapporto da compilare");
+                                tvReportStatus.setText(R.string.NotInitiatedCompilation);
                             }
                             break;
                         }

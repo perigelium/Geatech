@@ -11,9 +11,7 @@ import ru.alexangan.developer.geatech.Models.ReportStates;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.company_id;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.selectedTech;
 
-/**
- * Created by user on 17.02.2017.
- */
+//Created by user on 17.02.2017.
 
 public class DatabaseUtils
 {

@@ -19,7 +19,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.TreeMap;
 
-import io.realm.Realm;
 import ru.alexangan.developer.geatech.Adapters.MyListVisitsAdapter;
 import ru.alexangan.developer.geatech.Interfaces.Communicator;
 import ru.alexangan.developer.geatech.Models.GeaRapporto;
@@ -38,7 +37,7 @@ public class FragListReportsReminded extends ListFragment
     ArrayList<VisitItem> visitItemsFiltered;
     ListView lv;
     Activity activity;
-    private Realm realm;
+    //private Realm realm;
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState)
@@ -56,7 +55,7 @@ public class FragListReportsReminded extends ListFragment
         mCommunicator = (Communicator) getActivity();
         swipeDetector = new SwipeDetector();
 
-        realm = Realm.getDefaultInstance();
+        //realm = Realm.getDefaultInstance();
     }
 
     @Override
@@ -65,7 +64,7 @@ public class FragListReportsReminded extends ListFragment
         View rootView = inflater.inflate(R.layout.list_visits_with_title, container, false);
 
         TextView  tvTitleListVisits = (TextView) rootView.findViewById(R.id.tvTitleListVisits);
-        tvTitleListVisits.setText("Compilazioni sollecitati");
+        tvTitleListVisits.setText(R.string.RemindedCompilations);
 
         return rootView;
     }
@@ -139,7 +138,9 @@ public class FragListReportsReminded extends ListFragment
             {
                 int idVisit = visitItemsFiltered.get(position).getId();
 
-                if (swipeDetector.swipeDetected())
+                mCommunicator.OnVisitListItemSelected(idVisit);
+
+/*                if (swipeDetector.swipeDetected())
                 {
                     if (swipeDetector.getAction() == SwipeDetector.Action.LR)
                     {
@@ -151,7 +152,7 @@ public class FragListReportsReminded extends ListFragment
                 } else
                 {
                     mCommunicator.OnVisitListItemSelected(idVisit, false);
-                }
+                }*/
 
             }
         });

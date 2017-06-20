@@ -18,16 +18,13 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.TreeMap;
 
-import io.realm.Realm;
 import ru.alexangan.developer.geatech.Adapters.MyListVisitsAdapter;
 import ru.alexangan.developer.geatech.Interfaces.Communicator;
 import ru.alexangan.developer.geatech.Models.GeaSopralluogo;
-import ru.alexangan.developer.geatech.Models.ReportItem;
 import ru.alexangan.developer.geatech.Models.VisitItem;
 import ru.alexangan.developer.geatech.R;
 import ru.alexangan.developer.geatech.Utils.SwipeDetector;
 
-import static ru.alexangan.developer.geatech.Models.GlobalConstants.company_id;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.selectedTech;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.visitItems;
 
@@ -40,7 +37,7 @@ public class FragListVisitsFree extends ListFragment
     MyListVisitsAdapter myListAdapter;
     ListView lv;
     Activity activity;
-    private Realm realm;
+    //private Realm realm;
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState)
@@ -56,7 +53,7 @@ public class FragListVisitsFree extends ListFragment
         super.onCreate(savedInstanceState);
 
         mCommunicator = (Communicator) getActivity();
-        realm = Realm.getDefaultInstance();
+        //realm = Realm.getDefaultInstance();
         swipeDetector = new SwipeDetector();
 
         timeNotSetItemsOnly = false;
@@ -73,7 +70,7 @@ public class FragListVisitsFree extends ListFragment
         View rootView = inflater.inflate(R.layout.list_visits_with_title, container, false);
 
         TextView tvTitleListVisits = (TextView) rootView.findViewById(R.id.tvTitleListVisits);
-        tvTitleListVisits.setText("Sopralluoghi da fissare");
+        tvTitleListVisits.setText(R.string.NotTimeSetVisits);
 
         visitItemsFiltered = new ArrayList<>();
 
@@ -184,10 +181,11 @@ public class FragListVisitsFree extends ListFragment
         {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id)
             {
-                int idSopralluogo = visitItemsFiltered.get(position).getGeaSopralluogo().getId_sopralluogo();
+                //int idSopralluogo = visitItemsFiltered.get(position).getGeaSopralluogo().getId_sopralluogo();
 
                 int idVisit = visitItemsFiltered.get(position).getId();
-
+                mCommunicator.OnVisitListItemSelected(idVisit);
+/*
                 int id_tecnico = visitItemsFiltered.get(position).getGeaSopralluogo().getId_tecnico();
                 int id_rapporto_sopralluogo = visitItemsFiltered.get(position).getGeaRapporto().getId_rapporto_sopralluogo();
 
@@ -214,9 +212,9 @@ public class FragListVisitsFree extends ListFragment
                         }
                     } else
                     {
-                        mCommunicator.OnVisitListItemSelected(idVisit, ownVisit && reportItem != null);
+
                     }
-                }
+                }*/
             }
         });
     }

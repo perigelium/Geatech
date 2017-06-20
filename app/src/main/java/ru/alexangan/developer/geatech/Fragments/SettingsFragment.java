@@ -40,9 +40,7 @@ public class SettingsFragment extends Fragment implements View.OnClickListener
 
     FrameLayout flTermsOfUse, flLogout;
     private Communicator mCommunicator;
-    private TextView tvTechnicianName;
     private LinearLayout llTermsOfUse, llSettings;
-    private Button btnTermsOfUseOk;
     Spinner spVisitRemindTime;
     Activity activity;
     Calendar calendarNow;
@@ -78,11 +76,11 @@ public class SettingsFragment extends Fragment implements View.OnClickListener
 
         llTermsOfUse = (LinearLayout) rootView.findViewById(R.id.llTermsOfUse);
         llTermsOfUse.setVisibility(View.GONE);
-        btnTermsOfUseOk = (Button) rootView.findViewById(R.id.btnTermsOfUseOk);
+        Button btnTermsOfUseOk = (Button) rootView.findViewById(R.id.btnTermsOfUseOk);
         btnTermsOfUseOk.setOnClickListener(this);
 
 
-        tvTechnicianName = (TextView) rootView.findViewById(R.id.tvTechnicianName);
+        TextView tvTechnicianName = (TextView) rootView.findViewById(R.id.tvTechnicianName);
         tvTechnicianName.setText(selectedTech.getFullNameTehnic());
 
         flTermsOfUse = (FrameLayout) rootView.findViewById(R.id.flTermsOfUse);
@@ -108,10 +106,7 @@ public class SettingsFragment extends Fragment implements View.OnClickListener
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l)
             {
-                if (curReminderPos == position)
-                {
-                    return;
-                } else
+                if (curReminderPos != position)
                 {
                     curReminderPos = position;
                 }
@@ -166,9 +161,9 @@ public class SettingsFragment extends Fragment implements View.OnClickListener
             return;
         }
 
-        mSettings.edit().putString("reminderDelayHours", strRemindTimeDelays[curReminderPos]).apply();
+        mSettings.edit().putLong("reminderDelayHours", remindTimeDelays[curReminderPos]).apply();
 
-        milliSecondsForNow = calendarNow.getTimeInMillis();
+/*        milliSecondsForNow = calendarNow.getTimeInMillis();
 
         for (VisitItem visitItem : visitItems)
         //for (int i = 0; i < visitItems.size(); i++)
@@ -191,8 +186,8 @@ public class SettingsFragment extends Fragment implements View.OnClickListener
                 try
                 {
                     Date date = sdf.parse(data_ora_sopralluogo);
-                    long time = date.getTime();
-                    long timeToShowNotification = time + remindTimeDelays[curReminderPos];
+                    long timeVisit = date.getTime();
+                    long timeToShowNotification = timeVisit - remindTimeDelays[curReminderPos];
 
                     if (timeToShowNotification > milliSecondsForNow)
                     {
@@ -204,7 +199,7 @@ public class SettingsFragment extends Fragment implements View.OnClickListener
                     e.printStackTrace();
                 }
             }
-        }
+        }*/
     }
 
     @Override
@@ -218,7 +213,7 @@ public class SettingsFragment extends Fragment implements View.OnClickListener
             llSettings.setVisibility(View.GONE);
             llTermsOfUse.setVisibility(View.VISIBLE);
 
-            mSettings.edit().putBoolean("geaModelsIsObsolete", true).apply();
+            //mSettings.edit().putBoolean("geaModelsIsObsolete", true).apply();
         }
 
         if(view.getId() == R.id.flLogout)

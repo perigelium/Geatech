@@ -310,13 +310,13 @@
 
         </LinearLayout>
 
-        <ru.alexangan.developer.geatech.Overrides.ListViewEx
+        <ru.alexangan.developer.geatech.ViewOverrides.ListViewEx
             android:id="@+id/listItemsSentReport"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:divider="@color/colorLightGrayF5"
             android:dividerHeight="1dp">
-        </ru.alexangan.developer.geatech.Overrides.ListViewEx>
+        </ru.alexangan.developer.geatech.ViewOverrides.ListViewEx>
 
         <View
             android:layout_width="match_parent"

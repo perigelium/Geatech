@@ -5,9 +5,7 @@ import android.app.Application;
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
 
-/**
- * Created by user on 06.06.2017.
- */
+// Created by user on 06.06.2017.
 
 public class GeatechApp extends Application
 {

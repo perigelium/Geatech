@@ -9,7 +9,6 @@ import android.os.Bundle;
 
 import io.realm.Realm;
 import ru.alexangan.developer.geatech.Fragments.LoginCompanyFragment;
-import ru.alexangan.developer.geatech.Fragments.LoginPasswordRecoverFragment;
 import ru.alexangan.developer.geatech.Fragments.LoginTechSelectionFragment;
 import ru.alexangan.developer.geatech.Interfaces.LoginCommunicator;
 import ru.alexangan.developer.geatech.R;
@@ -22,7 +21,6 @@ public class LoginActivity extends Activity implements LoginCommunicator
 {
     private FragmentManager mFragmentManager;
 
-    LoginPasswordRecoverFragment loginPasswordRecoverFragment;
     LoginCompanyFragment loginCompanyFragment;
     LoginTechSelectionFragment loginTechSelectionFragment;
     Realm realm;
@@ -43,15 +41,7 @@ public class LoginActivity extends Activity implements LoginCommunicator
         if (getIntent().getBooleanExtra("Exit app", false))
         {
             finish();
-            return;
         }
-
-/*        if (getIntent().getBooleanExtra("Password recover", false))
-        {
-            FragmentTransaction cFragmentTransaction = mFragmentManager.beginTransaction();
-            cFragmentTransaction.replace(R.id.loginFragContainer, loginPasswordRecoverFragment);
-            cFragmentTransaction.commit();
-        }*/
     }
 
     @Override
@@ -64,7 +54,6 @@ public class LoginActivity extends Activity implements LoginCommunicator
         mSettings = getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
 
         loginCompanyFragment = new LoginCompanyFragment();
-        loginPasswordRecoverFragment = new LoginPasswordRecoverFragment();
         loginTechSelectionFragment = new LoginTechSelectionFragment();
 
         mFragmentManager = getFragmentManager();
@@ -100,21 +89,21 @@ public class LoginActivity extends Activity implements LoginCommunicator
         mFragmentTransaction.commit();
     }
 
-    @Override
+/*    @Override
     public void onPasswordSentReturned()
     {
         FragmentTransaction mFragmentTransaction = mFragmentManager.beginTransaction();
         mFragmentTransaction.replace(R.id.loginFragContainer, loginCompanyFragment);
         mFragmentTransaction.commit();
-    }
+    }*/
 
-    @Override
+/*    @Override
     public void onRecoverPasswordClicked()
     {
         FragmentTransaction mFragmentTransaction = mFragmentManager.beginTransaction();
         mFragmentTransaction.replace(R.id.loginFragContainer, loginPasswordRecoverFragment);
         mFragmentTransaction.commit();
-    }
+    }*/
 
     @Override
     public void onLoginFailed()

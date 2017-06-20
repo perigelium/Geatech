@@ -26,10 +26,6 @@ import ru.alexangan.developer.geatech.R;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.company_id;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.selectedTech;
 
-/**
- * Created by user on 11/21/2016.
- */
-
 public class InWorkListVisitsAdapter extends BaseAdapter
 {
     private final Realm realm;
@@ -100,7 +96,7 @@ public class InWorkListVisitsAdapter extends BaseAdapter
             holder = (ViewHolder) row.getTag();*/
 
 
-        ImageView ivReportStatus = (ImageView) row.findViewById(R.id.ivReportStatus);
+        //ImageView ivReportStatus = (ImageView) row.findViewById(R.id.ivReportStatus);
         TextView tvVisitDay = (TextView) row.findViewById(R.id.tvVisitDay);
         TextView tvVisitMonth = (TextView) row.findViewById(R.id.tvVisitMonth);
         TextView tvVisitTime = (TextView) row.findViewById(R.id.tvVisitTime);
@@ -146,7 +142,7 @@ public class InWorkListVisitsAdapter extends BaseAdapter
         realm.commitTransaction();
 
         realm.beginTransaction();
-        int id_rapporto_sopralluogo = reportItem != null ? reportItem.getGea_rapporto_sopralluogo().getId_rapporto_sopralluogo() : -1;
+        //int id_rapporto_sopralluogo = reportItem != null ? reportItem.getGea_rapporto_sopralluogo().getId_rapporto_sopralluogo() : -1;
 
         realm.commitTransaction();
 

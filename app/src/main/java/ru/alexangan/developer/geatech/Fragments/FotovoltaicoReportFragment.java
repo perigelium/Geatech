@@ -94,7 +94,7 @@ public class FotovoltaicoReportFragment extends Fragment
     {
         rootView = inflater.inflate(R.layout.fotovoltaico_report, container, false);
 
-        viewUtils = new ViewUtils(rootView, id_rapporto_sopralluogo, selectedVisitId);
+        viewUtils = new ViewUtils(context, rootView, id_rapporto_sopralluogo, selectedVisitId);
 
         TextView tvReportTitle = (TextView) rootView.findViewById(R.id.tvReportTitle);
         tvReportTitle.setText(geaModello.getNome_modello());
@@ -286,7 +286,7 @@ public class FotovoltaicoReportFragment extends Fragment
                         {
                             llEditThreeRadiosAndEdit.setVisibility(View.GONE);
                             llEditThreeRadiosAndEdit.setEnabled(false);
-                            et1ThreeRadiosAndEdit.setText("Non applicabile");
+                            et1ThreeRadiosAndEdit.setText(getString(R.string.NotApplicable));
                         }
                     }
                 });
@@ -325,7 +325,7 @@ public class FotovoltaicoReportFragment extends Fragment
                     {
                         llEdit1.setVisibility(View.GONE);
                         llEdit1.setEnabled(false);
-                        et3.setText("Non applicabile");
+                        et3.setText(getString(R.string.NotApplicable));
                     }
                 }
             });

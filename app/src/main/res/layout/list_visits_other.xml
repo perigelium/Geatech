@@ -18,7 +18,7 @@
         android:text="@string/VisitsComing">
     </TextView>
 
-    <ru.alexangan.developer.geatech.Overrides.ListViewEx
+    <ru.alexangan.developer.geatech.ViewOverrides.ListViewEx
         android:id="@id/android:list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -26,7 +26,7 @@
         android:choiceMode="singleChoice"
         android:divider="@android:color/transparent"
         android:focusable="true">
-    </ru.alexangan.developer.geatech.Overrides.ListViewEx>
+    </ru.alexangan.developer.geatech.ViewOverrides.ListViewEx>
 
     <TextView
         android:id="@id/android:empty"

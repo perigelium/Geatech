@@ -1,10 +1,8 @@
 package ru.alexangan.developer.geatech.Interfaces;
 
-import ru.alexangan.developer.geatech.Overrides.ScrollViewEx;
+import ru.alexangan.developer.geatech.ViewOverrides.ScrollViewEx;
 
-/**
- * Created by user on 31.05.2017.
- */
+// Created by user on 31.05.2017.
 
 public interface ScrollViewListener {
     void onScrollChanged(ScrollViewEx scrollView,

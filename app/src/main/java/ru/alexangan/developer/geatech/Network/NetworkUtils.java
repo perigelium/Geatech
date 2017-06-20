@@ -107,7 +107,7 @@ public class NetworkUtils
         return call;
     }
 
-    public Call getData(Callback callback, String urlSuffix, String tokenStr)
+    public Call getData(Callback callback, String urlSuffix, String tokenStr, boolean updateData)
     {
         OkHttpClient.Builder defaultHttpClient = new OkHttpClient.Builder();
         defaultHttpClient.connectTimeout(4, TimeUnit.SECONDS);
@@ -116,16 +116,20 @@ public class NetworkUtils
         OkHttpClient okHttpClient = defaultHttpClient.build();
 
         JSONObject jsonToken = new JSONObject();
+        String strTimeNow = "";
 
-        Calendar calendarNow = Calendar.getInstance(Locale.ITALY);
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ITALIAN);
-        String strTimeNow = sdf.format(calendarNow.getTime());
+        if(updateData)
+        {
+            Calendar calendarNow = Calendar.getInstance(Locale.ITALY);
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ITALIAN);
+            strTimeNow = sdf.format(calendarNow.getTime());
+        }
 
         try
         {
             jsonToken.put("token", tokenStr);
             jsonToken.put("last_update", strTimeNow);
-            jsonToken.put("state", "all");
+            jsonToken.put("state", "incomplete");
 
         } catch (JSONException e)
         {
@@ -146,55 +150,6 @@ public class NetworkUtils
 
         return call;
     }
-
-/*    public Call getReports(Callback callback, String urlSuffix, String tokenStr)
-    {
-        OkHttpClient.Builder defaultHttpClient = new OkHttpClient.Builder();
-        defaultHttpClient.connectTimeout(4, TimeUnit.SECONDS);
-        defaultHttpClient.readTimeout(10, TimeUnit.SECONDS);
-        defaultHttpClient.writeTimeout(10, TimeUnit.SECONDS);
-        OkHttpClient okHttpClient = defaultHttpClient.build();
-
-        JSONObject jsonToken = new JSONObject();
-
-        realm.beginTransaction();
-        LoginCredentials loginCredentials = realm.where(LoginCredentials.class).findFirst();
-        realm.commitTransaction();
-
-        if (loginCredentials == null)
-        {
-            return null;
-        }
-        String strLogin = loginCredentials.getLogin();
-        String strPassword = loginCredentials.getPassword();
-
-        try
-        {
-            jsonToken.put("token", tokenStr);
-            jsonToken.put("login", strLogin);
-            jsonToken.put("password", strPassword);
-            jsonToken.put("id", GlobalConstants.selectedTech.getId());
-            jsonToken.put("full_name_tehnic", GlobalConstants.selectedTech.getFullNameTehnic());
-
-        } catch (JSONException e)
-        {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-            return null;
-        }
-
-        RequestBody body = RequestBody.create(JSON, String.valueOf(jsonToken));
-
-        Request request = new Request.Builder()
-                .url(REST_SRV_URL + urlSuffix)
-                .post(body)
-                .build();
-
-        Call call = okHttpClient.newCall(request);
-        call.enqueue(callback);
-
-        return call;
-    }*/
 
     public Call sendData(Callback callback, String urlSuffix, String tokenStr, String gsonStr)
     {

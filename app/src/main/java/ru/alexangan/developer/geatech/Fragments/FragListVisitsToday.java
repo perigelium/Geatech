@@ -13,9 +13,7 @@ import android.widget.TextView;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -97,7 +95,7 @@ public class FragListVisitsToday extends ListFragment
         reportItems.addAll(rr_reportItems);
 
         TreeMap<Long, VisitItem> unsortedVisits = new TreeMap<>();
-        long n = 0;
+
         Calendar calendarTodayLastMin = Calendar.getInstance(Locale.ITALY);
         String strMonth = calendarTodayLastMin.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.ITALY);
         String dateString = " " + calendarTodayLastMin.get(Calendar.DAY_OF_MONTH) + " " + strMonth;
@@ -139,7 +137,6 @@ public class FragListVisitsToday extends ListFragment
                 {
                     Date date = sdf.parse(data_ora_sopralluogo);
                     long time = date.getTime();
-                    //Log.d("DEBUG", String.valueOf(time));
 
                     while (unsortedVisits.get(time) != null) // item with the same time already exists
                     {
@@ -153,11 +150,6 @@ public class FragListVisitsToday extends ListFragment
 
                 } catch (ParseException e)
                 {
-/*                    while(unsortedVisits.get(n) != null)
-                    {
-                        n++;
-                    }
-                    unsortedVisits.put(n++, visitItem);*/
                     e.printStackTrace();
                 }
             }
@@ -176,18 +168,16 @@ public class FragListVisitsToday extends ListFragment
 
         lv = getListView();
 
-        //ViewUtils.setListViewHeightBasedOnChildren(lv);
-
         lv.setOnTouchListener(swipeDetector);
 
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener()
         {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id)
             {
-                int idSopralluogo = visitItemsFiltered.get(position).getGeaSopralluogo().getId_sopralluogo();
+                //int idSopralluogo = visitItemsFiltered.get(position).getGeaSopralluogo().getId_sopralluogo();
 
                 int idVisit = visitItemsFiltered.get(position).getId();
-                int id_tecnico = visitItemsFiltered.get(position).getGeaSopralluogo().getId_tecnico();
+/*                int id_tecnico = visitItemsFiltered.get(position).getGeaSopralluogo().getId_tecnico();
                 int id_rapporto_sopralluogo = visitItemsFiltered.get(position).getGeaRapporto().getId_rapporto_sopralluogo();
 
                 realm.beginTransaction();
@@ -196,12 +186,11 @@ public class FragListVisitsToday extends ListFragment
                         .equalTo("id_sopralluogo", idSopralluogo).equalTo("id_rapporto_sopralluogo", id_rapporto_sopralluogo).findFirst();
                 realm.commitTransaction();
 
-                boolean ownVisit = selectedTech.getId() == id_tecnico;
-                boolean freeVisit = (id_tecnico == 0);
+                boolean ownVisit = selectedTech.getId() == id_tecnico;*/
 
-                //if (ownVisit || freeVisit) //
-                {
-                    if (swipeDetector.swipeDetected())
+                mCommunicator.OnVisitListItemSelected(idVisit);
+
+/*                    if (swipeDetector.swipeDetected())
                     {
                         if (swipeDetector.getAction() == SwipeDetector.Action.LR)
                         {
@@ -213,8 +202,8 @@ public class FragListVisitsToday extends ListFragment
                     } else
                     {
                         mCommunicator.OnVisitListItemSelected(idVisit, ownVisit && reportItem != null);
-                    }
-                }
+                    }*/
+
             }
         });
     }

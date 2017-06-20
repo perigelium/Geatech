@@ -16,11 +16,11 @@ import ru.alexangan.developer.geatech.R;
 /**
  * Created by user on 11/15/2016.*/
 
-public class SetVisitDateTimeListAdapter extends ArrayAdapter
+public class SubProductsListAdapter extends ArrayAdapter
 {
     private List<SubproductItem> subproductItems;
 
-    public SetVisitDateTimeListAdapter
+    public SubProductsListAdapter
             (Context context, List<SubproductItem> subproductItems)
     {
 
