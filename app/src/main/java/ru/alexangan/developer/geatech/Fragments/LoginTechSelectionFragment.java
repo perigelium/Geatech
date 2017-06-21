@@ -499,7 +499,7 @@ public class LoginTechSelectionFragment extends Fragment implements View.OnClick
                             {
                                 boolean geaModelsProcessUpdate = geaItemModelliSize != 0;
 
-                                callModels = networkUtils.getData(this, GET_MODELS_URL_SUFFIX, tokenStr, geaModelsProcessUpdate);
+                                callModels = networkUtils.getData(this, GET_MODELS_URL_SUFFIX, tokenStr, null, geaModelsProcessUpdate);
 
                             } catch (Exception e)
                             {
@@ -590,7 +590,7 @@ public class LoginTechSelectionFragment extends Fragment implements View.OnClick
 
                         if (models_is_uptodate.equals("1") && geaItemModelliSize != 0)
                         {
-                            callVisits = networkUtils.getData(this, GET_VISITS_URL_SUFFIX, tokenStr, false);
+                            callVisits = networkUtils.getData(this, GET_VISITS_URL_SUFFIX, tokenStr, null, false);
 
                             //mSettings.edit().putBoolean("geaModelsIsObsolete", false).apply();
 
@@ -686,7 +686,7 @@ public class LoginTechSelectionFragment extends Fragment implements View.OnClick
 
                             if (geaItemModelliSize != 0)
                             {
-                                callVisits = networkUtils.getData(this, GET_VISITS_URL_SUFFIX, tokenStr, false);
+                                callVisits = networkUtils.getData(this, GET_VISITS_URL_SUFFIX, tokenStr, null, false);
                             }
                             else
                             {
@@ -725,17 +725,19 @@ public class LoginTechSelectionFragment extends Fragment implements View.OnClick
                     {
                         inVisitItems = JSON_to_model.getVisitTtemsList(visitsJSONData);
 
-                        //visitItems = realm.where(VisitItem.class).findAll();
-                        //visitItems.deleteAllFromRealm();
-
                         if (inVisitItems != null && inVisitItems.size() > 0)
                         {
-                            visitItems = new ArrayList<>();
+                            realm.beginTransaction();
+                            RealmResults<VisitItem> dVisitItems = realm.where(VisitItem.class).findAll();
+                            dVisitItems.deleteAllFromRealm();
+                            realm.commitTransaction();
+
+                            realm.beginTransaction();
                             for (VisitItem visitItem : inVisitItems)
                             {
-                                //realm.copyToRealmOrUpdate(visitItem);
-                                visitItems.add(visitItem);
+                                realm.copyToRealmOrUpdate(visitItem);
                             }
+                            realm.commitTransaction();
                         }
 
                         downloadingDialog.dismiss();

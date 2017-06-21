@@ -968,7 +968,7 @@ showToastMessage("swipe detected");
                 reportItem.getReportStates().setGeneral_info_coords_set(ReportStates.GENERAL_INFO_COORDS_SET);
             } else
             {
-                reportItem.getReportStates().setGeneral_info_coords_set(ReportStates.GENERAL_INFO_COORDS_NOT_SET);
+                reportItem.getReportStates().setGeneral_info_coords_set(ReportStates.GENERAL_INFO_NOT_SET);
             }
 
             realm.commitTransaction();

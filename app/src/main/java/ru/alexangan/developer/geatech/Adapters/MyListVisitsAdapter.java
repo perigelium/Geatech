@@ -216,15 +216,18 @@ public class MyListVisitsAdapter extends BaseAdapter
 
                         if (reportItem.getId_sopralluogo() == id_sopralluogo)
                         {
-                            int generalInfoCoordSet = reportItem.getReportStates().getGeneral_info_coords_set();
+                            int generalInfoCompletionState = reportItem.getReportStates().getGeneralInfoCompletionState();
                             int reportCompletionState = reportItem.getReportStates().getReportCompletionState();
                             int photosAddedNumber = reportItem.getReportStates().getPhotosAddedNumber();
 
-                            boolean reportStartedNotCompleted = generalInfoCoordSet == ReportStates.GENERAL_INFO_COORDS_SET
-                                    && ((reportCompletionState > ReportStates.REPORT_NON_INITIATED && reportCompletionState < ReportStates.REPORT_COMPLETED)
-                                    || (photosAddedNumber > 0 && photosAddedNumber < ReportStates.PHOTOS_MIN_ADDED));
+                            boolean reportStartedNotCompleted =
+                                    (generalInfoCompletionState > ReportStates.GENERAL_INFO_DATETIME_SET
+                                            &&
+                                            (! (generalInfoCompletionState == ReportStates.GENERAL_INFO_DATETIME_AND_COORDS_SET
+                                                    && reportCompletionState == ReportStates.REPORT_COMPLETED
+                                                    && photosAddedNumber >= ReportStates.PHOTOS_MIN_ADDED)));
 
-                            boolean reportCompleteNotSent = generalInfoCoordSet == ReportStates.GENERAL_INFO_COORDS_SET
+                            boolean reportCompleteNotSent = generalInfoCompletionState == ReportStates.GENERAL_INFO_DATETIME_AND_COORDS_SET
                                     && reportCompletionState == ReportStates.REPORT_COMPLETED
                                     && photosAddedNumber >= ReportStates.PHOTOS_MIN_ADDED
                                     && reportItem.getGea_rapporto_sopralluogo().getData_ora_invio_rapporto() == null;
@@ -239,8 +242,7 @@ public class MyListVisitsAdapter extends BaseAdapter
                                 tvReportStatus.setVisibility(View.VISIBLE);
                                 tvReportStatus.setTextColor(Color.parseColor("#ffff0000"));
                                 tvReportStatus.setText(R.string.CompletedNotSentReport);
-                            }
-                            else
+                            } else
                             {
                                 tvReportStatus.setVisibility(View.VISIBLE);
                                 tvReportStatus.setTextColor(Color.parseColor("#ff808080"));

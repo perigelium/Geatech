@@ -24,6 +24,7 @@ import java.util.Date;
 import java.util.Locale;
 
 import io.realm.Realm;
+import io.realm.RealmResults;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
@@ -202,12 +203,16 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
         visitItems = realm.where(VisitItem.class).findAll();
         realm.commitTransaction();*/
 
-        if (visitItems == null && inVisitItems != null && inVisitItems.size() > 0)
+        visitItems = new ArrayList<>();
+
+        if (visitItems.size() == 0)
         {
-            visitItems = new ArrayList<>();
-            for (VisitItem visitItem : inVisitItems)
+            RealmResults<VisitItem> rrVisitItems = realm.where(VisitItem.class).findAll();
+
+            for (VisitItem visitItem : rrVisitItems)
             {
-                visitItems.add(visitItem);
+                VisitItem visitItemEx = realm.copyFromRealm(visitItem);
+                visitItems.add(visitItemEx);
             }
         }
 
@@ -329,10 +334,10 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
                 showSelectedVisitsList(mode);
                 scrvInnerFragContainer.getParent().requestChildFocus(scrvInnerFragContainer, scrvInnerFragContainer);
             }
-        } else
+        } /*else
         {
             notificationBarFragment.setView(R.string.NullString, View.GONE, View.GONE);
-        }
+        }*/
 
         if (btnId == R.id.btnInWorkVisits)
         {
@@ -345,13 +350,14 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
             }
             mFragmentTransaction.commit();
 
-            notificationBarFragment.setView(R.string.InWorkCompilations, View.GONE, View.GONE);
+            notificationBarFragment.setView(R.string.InWorkCompilations, View.GONE, View.GONE, View.GONE);
             return;
         }
 
         if (btnId == R.id.btnNotifications)
         {
             showNotifVisitsLists();
+
             scrvInnerFragContainer.getParent().requestChildFocus(scrvInnerFragContainer, scrvInnerFragContainer);
             return;
         }
@@ -359,6 +365,7 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
         if (btnId == R.id.btnCompletedReports)
         {
             showCompletedReportsLists();
+
             scrvInnerFragContainer.getParent().requestChildFocus(scrvInnerFragContainer, scrvInnerFragContainer);
             return;
         }
@@ -367,33 +374,27 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
         {
             setVisitsListContent(settingsFragment);
 
-            notificationBarFragment.setView(R.string.Settings, View.GONE, View.GONE);
+            notificationBarFragment.setView(R.string.Settings, View.GONE, View.GONE, View.GONE);
             return;
         }
     }
 
     private void showCompletedReportsLists()
     {
-/*        if (GlobalConstants.reportsListIsObsolete && NetworkUtils.isNetworkAvailable(this))
+        FragmentTransaction mFragmentTransaction = mFragmentManager.beginTransaction();
+        if (!fragListReportsNotSent.isAdded())
         {
-            refreshVisitsList();
-        } else
-        {*/
-            FragmentTransaction mFragmentTransaction = mFragmentManager.beginTransaction();
-            if (!fragListReportsNotSent.isAdded())
-            {
-                mFragmentTransaction.add(llInnerFragContainer, fragListReportsNotSent);
-            }
+            mFragmentTransaction.add(llInnerFragContainer, fragListReportsNotSent);
+        }
 
-            if (!fragListReportsSent.isAdded())
-            {
-                mFragmentTransaction.add(llInnerFragContainer, fragListReportsSent);
-            }
-            mFragmentTransaction.addToBackStack(fragListReportsSent.getTag());
-            mFragmentTransaction.commit();
+        if (!fragListReportsSent.isAdded())
+        {
+            mFragmentTransaction.add(llInnerFragContainer, fragListReportsSent);
+        }
+        mFragmentTransaction.addToBackStack(fragListReportsSent.getTag());
+        mFragmentTransaction.commit();
 
-            notificationBarFragment.setView(R.string.CompletedReports, View.GONE, View.GONE);
-        //}
+        notificationBarFragment.setView(R.string.CompletedCompilations, View.GONE, View.GONE, View.VISIBLE);
     }
 
     private void showNotifVisitsLists()
@@ -417,7 +418,7 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
             mFragmentTransaction.addToBackStack(fragListReportsReminded.getTag());
             mFragmentTransaction.commit();
 
-            notificationBarFragment.setView(R.string.Notifications, View.GONE, View.GONE);
+            notificationBarFragment.setView(R.string.Notifications, View.GONE, View.GONE, View.GONE);
         }
     }
 
@@ -451,8 +452,7 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
                 setVisitsListContent(setDateTimeFragment);
                 return;
             }
-        }
-        else
+        } else
         {
             VisitItem visitItem = visitItems.get(currentVisitId);
             GeaSopralluogo geaSopralluogo = visitItem.getGeaSopralluogo();
@@ -647,7 +647,7 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
 
         if (!reportDetailedFragment.isAdded())
         {
-            notificationBarFragment.setView(R.string.ReportDetailed, View.GONE, View.GONE);
+            notificationBarFragment.setView(R.string.ReportDetailed, View.GONE, View.GONE, View.GONE);
 
             curSelBottomBtnId = ctrlBtnsBottom.getSelectedButtonId();
             ctrlBtnsBottom.unselectAllButtons();
@@ -676,7 +676,7 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
     {
         mFragmentManager.popBackStackImmediate();
 
-        notificationBarFragment.setView(R.string.ComingVisitsList, View.VISIBLE, View.VISIBLE);
+        notificationBarFragment.setView(R.string.ComingVisitsList, View.VISIBLE, View.VISIBLE, View.GONE);
 
         FragmentTransaction mFragmentTransaction = mFragmentManager.beginTransaction();
 
@@ -724,7 +724,7 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
                 mFragmentTransaction.add(llInnerFragContainer, fragListVisitsOther);
             }
 
-            notificationBarFragment.setView(R.string.MyVisitsList, View.VISIBLE, View.VISIBLE);
+            notificationBarFragment.setView(R.string.MyVisitsList, View.VISIBLE, View.VISIBLE, View.GONE);
         }
 
         if (mode == LIST_VISITS_MODE_FREE)
@@ -734,7 +734,7 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
                 mFragmentTransaction.add(llInnerFragContainer, fragListVisitsFree);
             }
 
-            notificationBarFragment.setView(R.string.FreeVisits, View.VISIBLE, View.VISIBLE);
+            notificationBarFragment.setView(R.string.FreeVisits, View.VISIBLE, View.VISIBLE, View.GONE);
         }
         mFragmentTransaction.addToBackStack(null);
         mFragmentTransaction.commit();
@@ -830,21 +830,32 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
 
                         inVisitItems = JSON_to_model.getVisitTtemsList(visitsJSONData);
 
-                        //visitItems = realm.where(VisitItem.class).findAll();
-
                         if (inVisitItems != null && inVisitItems.size() > 0)
                         {
-                            visitItems = new ArrayList<>();
+                            realm.beginTransaction();
+                            RealmResults<VisitItem> dVisitItems = realm.where(VisitItem.class).findAll();
+                            dVisitItems.deleteAllFromRealm();
+                            realm.commitTransaction();
+
+                            // copy in persistent storage
+                            realm.beginTransaction();
                             for (VisitItem visitItem : inVisitItems)
                             {
-                                //realm.copyToRealmOrUpdate(visitItem);
-                                visitItems.add(visitItem);
+                                realm.copyToRealmOrUpdate(visitItem);
+                            }
+                            realm.commitTransaction();
+
+                            // create unmanaged array for working with
+                            visitItems.clear();
+
+                            RealmResults<VisitItem> rrVisitItems = realm.where(VisitItem.class).findAll();
+
+                            for (VisitItem visitItem : rrVisitItems)
+                            {
+                                VisitItem visitItemEx = realm.copyFromRealm(visitItem);
+                                visitItems.add(visitItemEx);
                             }
                         }
-
-/*                        realm.beginTransaction();
-                        visitItems = realm.where(VisitItem.class).findAll();
-                        realm.commitTransaction();*/
 
                         if (GlobalConstants.visitsListIsObsolete)
                         {
@@ -904,7 +915,7 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
 
             handler.postDelayed(runnable, 30000);
 
-            callVisits = networkUtils.getData(this, GET_VISITS_URL_SUFFIX, tokenStr, false);
+            callVisits = networkUtils.getData(this, GET_VISITS_URL_SUFFIX, tokenStr, null, false);
         } else
         {
             showToastMessage(getString(R.string.CheckInternetConnection));

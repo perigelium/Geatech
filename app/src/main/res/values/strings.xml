@@ -53,7 +53,7 @@
     <string name="MyVisitsList">I miei sopralluoghi</string>
     <string name="FreeVisits">I sopralluoghi da fissare</string>
     <string name="Notifications">Notifiche</string>
-    <string name="CompletedReports">Compilazioni completate</string>
+    <string name="CompletedCompilations">Compilazioni completate</string>
     <string name="Settings">Impostazioni</string>
     <string name="InWorkCompilations">Compilazioni in corso</string>
     <string name="YouCanEditActualReportsOnly">È possibile modificare solo i compilazioni attuale</string>
@@ -66,4 +66,5 @@
     <string name="NotInitiatedCompilation">Rapporto da compilare</string>
     <string name="CompletedNotSentReport">Rapporto compilato ma non inviato</string>
     <string name="NoCompletedCompilation">Compilazione in corso del rapporto</string>
+    <string name="SearchReport">ricerca il rapporto...</string>
 </resources>

@@ -107,7 +107,7 @@ public class NetworkUtils
         return call;
     }
 
-    public Call getData(Callback callback, String urlSuffix, String tokenStr, boolean updateData)
+    public Call getData(Callback callback, String urlSuffix, String tokenStr, String queryString, boolean updateData)
     {
         OkHttpClient.Builder defaultHttpClient = new OkHttpClient.Builder();
         defaultHttpClient.connectTimeout(4, TimeUnit.SECONDS);
@@ -128,6 +128,7 @@ public class NetworkUtils
         try
         {
             jsonToken.put("token", tokenStr);
+            jsonToken.put("word", queryString);
             jsonToken.put("last_update", strTimeNow);
             jsonToken.put("state", "incomplete");
 
