@@ -174,8 +174,8 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
 
         flSetDateTimeSubmit = (FrameLayout) rootView.findViewById(R.id.flSetDateTimeSubmit);
 
-        btnSetDateTimeSubmit = (TextView) rootView.findViewById(R.id.btnSetDateTimeSubmit);
-        btnSetDateTimeSubmit.setOnClickListener(this);
+        //btnSetDateTimeSubmit = (TextView) rootView.findViewById(R.id.btnSetDateTimeSubmit);
+        flSetDateTimeSubmit.setOnClickListener(this);
 
         Button btnOpenMap = (Button) rootView.findViewById(R.id.btnOpenMap);
         btnOpenMap.setOnClickListener(this);
@@ -575,8 +575,20 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
             startActivity(intent);
         }
 
-        if (v.getId() == R.id.btnSetDateTimeSubmit)
+        if (v.getId() == R.id.flSetDateTimeSubmit)
         {
+
+            if (!NetworkUtils.isNetworkAvailable(activity))
+            {
+                showToastMessage(getString(R.string.CheckInternetConnection));
+                return;
+            }
+
+            if(tokenStr == null)
+            {
+                alertDialog("Info", getString(R.string.OfflineModeShowLoginScreenQuestion));
+            }
+
             openSetDateTimeDialog();
         }
 

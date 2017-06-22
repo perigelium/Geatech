@@ -1,12 +1,12 @@
 package ru.alexangan.developer.geatech.Fragments;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Handler;
-import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,23 +18,38 @@ import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
 
+import io.realm.Realm;
+import io.realm.RealmResults;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
 import ru.alexangan.developer.geatech.Adapters.CustomSpinnerAdapter;
 import ru.alexangan.developer.geatech.Interfaces.Communicator;
+import ru.alexangan.developer.geatech.Models.ClientData;
+import ru.alexangan.developer.geatech.Models.ReportItem;
+import ru.alexangan.developer.geatech.Models.ReportsSearchResultItem;
 import ru.alexangan.developer.geatech.Models.SpinnerItemData;
 import ru.alexangan.developer.geatech.Network.NetworkUtils;
 import ru.alexangan.developer.geatech.R;
 
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.SEARCH_VISITS_URL_SUFFIX;
+import static ru.alexangan.developer.geatech.Models.GlobalConstants.company_id;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.mSettings;
+import static ru.alexangan.developer.geatech.Models.GlobalConstants.selectedTech;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.tokenStr;
 
 /**
@@ -55,6 +70,7 @@ public class NotificationBarFragment extends Fragment implements SearchView.OnQu
     private Runnable runnable;
     private Call callSearchReports;
     private ProgressDialog requestServerDialog;
+    AlertDialog alert;
 
     @Override
     public void onCreate(Bundle savedInstanceState)
@@ -137,7 +153,7 @@ public class NotificationBarFragment extends Fragment implements SearchView.OnQu
                 }
                 mSettings.edit().putInt("listVisitsFilterMode", position).apply();
 
-                mCommunicator.onNotificationReportReturned(position);
+                mCommunicator.onListVisitsDisplayModeSelected(position);
 
                 spinnerCurItem = position;
             }
@@ -168,7 +184,8 @@ public class NotificationBarFragment extends Fragment implements SearchView.OnQu
         super.onResume();
     }
 
-    public void setView(int tvWindowTitleString, int ivLogoSmallVisibility, int ivVisitsListsFilterVisibility, int searchBarVisibility)
+    public void setView
+            (int tvWindowTitleString, int ivLogoSmallVisibility, int ivVisitsListsFilterVisibility, int searchBarVisibility)
     {
         tvWindowTitle.setText(tvWindowTitleString);
         ivLogoSmall.setVisibility(ivLogoSmallVisibility);
@@ -179,12 +196,75 @@ public class NotificationBarFragment extends Fragment implements SearchView.OnQu
     @Override
     public boolean onQueryTextSubmit(String queryString)
     {
-        if (NetworkUtils.isNetworkAvailable(activity))
+        mSettings.edit().putString("reportSearchLastQueryString", queryString).apply();
+
+        Realm realm = Realm.getDefaultInstance();
+
+        if (!NetworkUtils.isNetworkAvailable(activity))
         {
-            NetworkUtils networkUtils = new NetworkUtils();
-            callSearchReports = networkUtils.getData(this, SEARCH_VISITS_URL_SUFFIX, tokenStr, queryString, false);
+            alertDialog("Info", getString(R.string.OfflineMode));
+
+            realm.beginTransaction();
+            RealmResults<ReportItem> reportItems = realm.where(ReportItem.class).equalTo("company_id", company_id)
+                    .equalTo("tech_id", selectedTech.getId())
+                    .findAll();
+            realm.commitTransaction();
+
+            List<ReportsSearchResultItem> reportsSearchResultItems = new ArrayList<>();
+
+            for (ReportItem reportItem : reportItems)
+            //for (int i = 0; i < visitItems.size(); i++)
+            {
+                boolean isReportSent;
+                isReportSent = reportItem.getGea_rapporto_sopralluogo().getData_ora_invio_rapporto() != null;
+
+                if (isReportSent)
+                {
+                    int id_sopralluogo = reportItem.getId_sopralluogo();
+                    int id_rapporto_sopralluogo = reportItem.getId_rapporto_sopralluogo();
+                    ClientData clientData = reportItem.getClientData();
+                    String clentName = clientData.getName();
+                    String clientMobile = clientData.getMobile();
+                    String clientPhone = clientData.getPhone();
+                    String clientAddress = clientData.getAddress();
+                    String productType = clientData.getProduct_type();
+                    String data_ora_sopralluogo = reportItem.getGeaSopralluogo().getData_ora_sopralluogo();
+
+                    ReportsSearchResultItem reportsSearchResultItem = new ReportsSearchResultItem
+                            (id_sopralluogo, id_rapporto_sopralluogo, clentName, clientMobile, clientPhone, clientAddress, productType, data_ora_sopralluogo);
+                    reportsSearchResultItems.add(reportsSearchResultItem);
+                }
+            }
+
+            Gson gson = new Gson();
+            String reportsSearchResultItemsJSON = gson.toJson(reportsSearchResultItems);
+
+            JSONObject jsonObject = new JSONObject();
+            try
+            {
+                jsonObject.put("arr_case", reportsSearchResultItemsJSON);
+            } catch (JSONException e)
+            {
+                e.printStackTrace();
+            }
+
+            String strReportsSearchResultItemsJSON = gson.toJson(jsonObject);
+
+            mCommunicator.onReportsSearchResultsReturned(strReportsSearchResultItemsJSON);
+
+            return true;
         }
-        return false;
+
+        if (tokenStr == null)
+        {
+            alertDialog("Info", getString(R.string.OfflineModeShowLoginScreenQuestion));
+            return true;
+        }
+
+        NetworkUtils networkUtils = new NetworkUtils();
+        callSearchReports = networkUtils.getData(this, SEARCH_VISITS_URL_SUFFIX, tokenStr, queryString, false);
+
+        return true;
     }
 
     @Override
@@ -205,7 +285,7 @@ public class NotificationBarFragment extends Fragment implements SearchView.OnQu
     {
         if (call == callSearchReports)
         {
-            showToastMessage(getString(R.string.ListVisitsReceiveFailed));
+            showToastMessage(getString(R.string.ServerAnswerNotReceived));
 
             activity.runOnUiThread(new Runnable()
             {
@@ -226,9 +306,7 @@ public class NotificationBarFragment extends Fragment implements SearchView.OnQu
         {
             handler.removeCallbacks(runnable);
 
-            final String visitsJSONData = response.body().string();
-
-            Log.d("DEBUG", visitsJSONData);
+            final String reportsSearchResultsJSON = response.body().string();
 
             response.body().close();
 
@@ -236,40 +314,42 @@ public class NotificationBarFragment extends Fragment implements SearchView.OnQu
 
             try
             {
-                jsonObject = new JSONObject(visitsJSONData);
+                jsonObject = new JSONObject(reportsSearchResultsJSON);
             } catch (JSONException e)
             {
                 e.printStackTrace();
                 return;
             }
 
+
+            if (jsonObject.has("error"))
             {
-                if (jsonObject.has("error"))
+                final String errorStr;
+
+                try
                 {
-                    final String errorStr;
-
-                    try
+                    errorStr = jsonObject.getString("error");
+                    if (errorStr.length() != 0)
                     {
-                        errorStr = jsonObject.getString("error");
-                        if (errorStr.length() != 0)
-                        {
-                            showToastMessage(errorStr);
-                        }
-
-                    } catch (JSONException e)
-                    {
-                        e.printStackTrace();
+                        showToastMessage(errorStr);
+                        alertDialog("Info", getString(R.string.OfflineModeShowLoginScreenQuestion));
                     }
-                } else
+
+                } catch (JSONException e)
                 {
-                    showToastMessage(visitsJSONData);
-
-/*                    SubProductsListAdapter adapter = new SubProductsListAdapter(getActivity(), listSubproducts);
-
-                    ListView listView = (ListView) rootView.findViewById(R.id.listSubproducts);
-                    listView.setAdapter(adapter);*/
+                    e.printStackTrace();
                 }
+            } else
+            {
+                activity.runOnUiThread(new Runnable()
+                {
+                    public void run()
+                    {
+                        mCommunicator.onReportsSearchResultsReturned(reportsSearchResultsJSON);
+                    }
+                });
             }
+
         }
     }
 
@@ -282,5 +362,34 @@ public class NotificationBarFragment extends Fragment implements SearchView.OnQu
                 Toast.makeText(activity, msg, Toast.LENGTH_LONG).show();
             }
         });
+    }
+
+    private void alertDialog(String title, String message)
+    {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+
+        builder.setTitle(title)
+                .setMessage(message)
+                .setIcon(android.R.drawable.ic_dialog_info)
+                .setPositiveButton("Si",
+                        new DialogInterface.OnClickListener()
+                        {
+                            public void onClick(DialogInterface dialog, int id)
+                            {
+                                mCommunicator.onLogoutCommand();
+                            }
+                        })
+                .setNegativeButton("No",
+                        new DialogInterface.OnClickListener()
+                        {
+                            public void onClick(DialogInterface dialog, int id)
+                            {
+                                alert.dismiss();
+                            }
+                        });
+
+        alert = builder.create();
+
+        alert.show();
     }
 }

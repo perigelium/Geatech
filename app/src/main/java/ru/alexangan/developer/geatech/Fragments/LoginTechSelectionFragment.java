@@ -56,7 +56,6 @@ import static ru.alexangan.developer.geatech.Models.GlobalConstants.company_id;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.inVisitItems;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.mSettings;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.tokenStr;
-import static ru.alexangan.developer.geatech.Models.GlobalConstants.visitItems;
 
 public class LoginTechSelectionFragment extends Fragment implements View.OnClickListener, Callback
 {
@@ -128,6 +127,52 @@ public class LoginTechSelectionFragment extends Fragment implements View.OnClick
     }
 
     @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState)
+    {
+        View rootView = inflater.inflate(R.layout.login_tech_selection_fragment, container, false);
+
+        TextView tvSupplierName = (TextView) rootView.findViewById(R.id.tvSupplierName);
+        tvSupplierName.setText(GlobalConstants.gea_supplier);
+
+        btnNewTechnician = (Button) rootView.findViewById(R.id.btnNewTechnician);
+        btnNewTechnician.setOnClickListener(this);
+
+        llTechnNameAndSurname = (LinearLayout) rootView.findViewById(R.id.llTechnNameAndSurname);
+
+        flTechnicianAdded = (FrameLayout) rootView.findViewById(R.id.flTechnicianAdded);
+        flTechnicianAdded.setVisibility(View.GONE);
+
+        etTechNome = (EditText) rootView.findViewById(R.id.etTechNome);
+        etTechCognome = (EditText) rootView.findViewById(R.id.etTechCognome);
+
+        ibtnAddTechnician = (ImageButton) rootView.findViewById(R.id.ibtnAddTechnician);
+        ibtnAddTechnician.setOnClickListener(this);
+
+        chkboxRememberTech = (CheckBox) rootView.findViewById(R.id.chkboxRememberTech);
+
+        btnSessionDisconnect = (Button) rootView.findViewById(R.id.btnSessionDisconnect);
+        btnSessionDisconnect.setOnClickListener(this);
+
+        btnApplyAndEnterApp = (Button) rootView.findViewById(R.id.btnApplyAndEnterApp);
+        btnApplyAndEnterApp.setOnClickListener(this);
+
+
+        spTecnicianList = (Spinner) rootView.findViewById(R.id.spTecnicianList);
+
+        realm.beginTransaction();
+        RealmResults<GeaItemModelliRapporto> geaItemModelli = realm.where(GeaItemModelliRapporto.class).findAll();
+        geaItemModelliSize = geaItemModelli.size();
+        realm.commitTransaction();
+
+        String technician_list = mSettings.getString("technician_list_json", null);
+
+        FillTechnicianList(technician_list);
+
+        return rootView;
+    }
+
+    @Override
     public void onViewCreated(View view, Bundle savedInstanceState)
     {
         super.onViewCreated(view, savedInstanceState);
@@ -172,52 +217,6 @@ public class LoginTechSelectionFragment extends Fragment implements View.OnClick
             {
             }
         });
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState)
-    {
-        View rootView = inflater.inflate(R.layout.login_tech_selection_fragment, container, false);
-
-        TextView tvSupplierName = (TextView) rootView.findViewById(R.id.tvSupplierName);
-        tvSupplierName.setText(GlobalConstants.gea_supplier);
-
-        btnNewTechnician = (Button) rootView.findViewById(R.id.btnNewTechnician);
-        btnNewTechnician.setOnClickListener(this);
-
-        llTechnNameAndSurname = (LinearLayout) rootView.findViewById(R.id.llTechnNameAndSurname);
-
-        flTechnicianAdded = (FrameLayout) rootView.findViewById(R.id.flTechnicianAdded);
-        flTechnicianAdded.setVisibility(View.GONE);
-
-        etTechNome = (EditText) rootView.findViewById(R.id.etTechNome);
-        etTechCognome = (EditText) rootView.findViewById(R.id.etTechCognome);
-
-        ibtnAddTechnician = (ImageButton) rootView.findViewById(R.id.ibtnAddTechnician);
-        ibtnAddTechnician.setOnClickListener(this);
-
-        chkboxRememberTech = (CheckBox) rootView.findViewById(R.id.chkboxRememberTech);
-
-        btnSessionDisconnect = (Button) rootView.findViewById(R.id.btnSessionDisconnect);
-        btnSessionDisconnect.setOnClickListener(this);
-
-        btnApplyAndEnterApp = (Button) rootView.findViewById(R.id.btnApplyAndEnterApp);
-        btnApplyAndEnterApp.setOnClickListener(this);
-
-
-        spTecnicianList = (Spinner) rootView.findViewById(R.id.spTecnicianList);
-
-        realm.beginTransaction();
-        RealmResults<GeaItemModelliRapporto> geaItemModelli = realm.where(GeaItemModelliRapporto.class).findAll();
-        geaItemModelliSize = geaItemModelli.size();
-        realm.commitTransaction();
-
-        String technician_list = mSettings.getString("technician_list_json", null);
-
-        FillTechnicianList(technician_list);
-
-        return rootView;
     }
 
     private void FillTechnicianList(String technician_list)
@@ -367,6 +366,9 @@ public class LoginTechSelectionFragment extends Fragment implements View.OnClick
                         lastSelectedTech.getFullNameTehnic(), lastSelectedTech.getId());
             } else
             {
+                btnApplyAndEnterApp.setAlpha(.4f);
+                btnApplyAndEnterApp.setEnabled(false);
+
                 loginCommunicator.onTechSelectedAndApplied();
             }
         }
@@ -385,7 +387,7 @@ public class LoginTechSelectionFragment extends Fragment implements View.OnClick
 
         if (call == callLoginToken)
         {
-            showToastMessage(getString(R.string.TokenReceiveFailed));
+            showToastMessage(getString(R.string.ServerError));
             loginCommunicator.onLoginFailed();
         }
 

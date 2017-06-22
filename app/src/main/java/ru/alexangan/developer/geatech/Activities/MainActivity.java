@@ -44,6 +44,7 @@ import ru.alexangan.developer.geatech.Fragments.FragListVisitsOther;
 import ru.alexangan.developer.geatech.Fragments.FragListVisitsOverdue;
 import ru.alexangan.developer.geatech.Fragments.FragListVisitsReminded;
 import ru.alexangan.developer.geatech.Fragments.FragListVisitsToday;
+import ru.alexangan.developer.geatech.Fragments.FragReportsSearchResults;
 import ru.alexangan.developer.geatech.Fragments.NotificationBarFragment;
 import ru.alexangan.developer.geatech.Fragments.PhotoGalleryGridFragment;
 import ru.alexangan.developer.geatech.Fragments.PompaDiCaloreReportFragment;
@@ -100,6 +101,7 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
     FragListReportsReminded fragListReportsReminded;
     FragListReportsNotSent fragListReportsNotSent;
     FragListReportsSent fragListReportsSent;
+    FragReportsSearchResults fragReportsSearchResults;
 
     private ProgressDialog requestServerDialog;
     Handler handler;
@@ -238,6 +240,7 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
         fragListReportsReminded = new FragListReportsReminded();
         fragListReportsNotSent = new FragListReportsNotSent();
         fragListReportsSent = new FragListReportsSent();
+        fragReportsSearchResults = new FragReportsSearchResults();
 
         reportDetailedFragment = new ReportSentDetailedFragment();
         sendReportFragment = new SendReportFragment();
@@ -663,7 +666,7 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
     }
 
     @Override
-    public void onNotificationReportReturned(int mode)
+    public void onListVisitsDisplayModeSelected(int mode)
     {
         if (!firstStart)
         {
@@ -746,17 +749,28 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
         logout();
     }
 
-/*    @Override
-    public void OnVisitListItemSwiped(int itemIndex, boolean dateTimeHasSet)
+    @Override
+    public void onReportsSearchResultsReturned(String reportsSearchResultsJSON)
     {
-        if (!dateTimeHasSet)
+        currentVisitId = -1;
+        mFragmentManager.popBackStackImmediate();
+
+        FragmentTransaction mFragmentTransaction = mFragmentManager.beginTransaction();
+
+        if (!fragReportsSearchResults.isAdded())
         {
-            OnVisitListItemSelected(itemIndex, false);
-        } else
-        {
-            OnVisitListItemSelected(itemIndex, true);
+            Bundle args = new Bundle();
+            args.putString("reportsSearchResultsJSON", reportsSearchResultsJSON);
+            fragReportsSearchResults.setArguments(args);
+
+            mFragmentTransaction.add(llInnerFragContainer, fragReportsSearchResults);
         }
-    }*/
+
+        mFragmentTransaction.addToBackStack(fragReportsSearchResults.getTag());
+        mFragmentTransaction.commit();
+
+        notificationBarFragment.setView(R.string.CompletedCompilations, View.GONE, View.GONE, View.VISIBLE);
+    }
 
     public Fragment assignFragmentModel(String productType)
     {

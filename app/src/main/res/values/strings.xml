@@ -10,6 +10,7 @@
     <string name="TransmittingDataPleaseWait">Trasmissione dati in corso, attendere...</string>
     <string name="CheckInternetConnection">Verifica connessione internet</string>
     <string name="OfflineModeShowLoginScreenQuestion">Sei offline,\n per connetterti fai login</string>
+    <string name="OfflineMode">Sei offline</string>
     <string name="DateTimeSetSuccessfully">Data e ora è stato impostato</string>
     <string name="VisitHasCancelled">Il sopralluogo è stato annullato</string>
     <string name="NotApplicable">Non applicabile</string>
@@ -20,7 +21,7 @@
     <string name="InvalidLogin">Login non valido.</string>
     <string name="ListVisitsReceiveFailed">Elenco sopralluoghi non ricevuto</string>
     <string name="ListReportsReceiveFailed">Elenco rapporti non ricevuto</string>
-    <string name="TokenReceiveFailed">Server error</string>
+    <string name="ServerError">Server error</string>
     <string name="SelectTechPlease">Seleziona il tecnico</string>
     <string name="InsertNameAndSurnameFirst">Inserisci il nome e cognome</string>
     <string name="NoUrgentReportsFound">Non ci sono solleciti rapporti</string>
@@ -66,5 +67,5 @@
     <string name="NotInitiatedCompilation">Rapporto da compilare</string>
     <string name="CompletedNotSentReport">Rapporto compilato ma non inviato</string>
     <string name="NoCompletedCompilation">Compilazione in corso del rapporto</string>
-    <string name="SearchReport">ricerca il rapporto...</string>
+    <string name="SearchReport">Ricerca...</string>
 </resources>

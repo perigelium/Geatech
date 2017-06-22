@@ -159,7 +159,7 @@ public class FragListInWorkVisits extends ListFragment
             }
         }
 
-        InWorkListVisitsAdapter inWorkListVisitsAdapter = new InWorkListVisitsAdapter(getActivity(), R.layout.in_work_list_visits_fragment_row, visitItemsFiltered);
+        InWorkListVisitsAdapter inWorkListVisitsAdapter = new InWorkListVisitsAdapter(getActivity(), R.layout.in_work_list_visits_row, visitItemsFiltered);
         setListAdapter(inWorkListVisitsAdapter);
 
         lv = getListView();

@@ -184,11 +184,11 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
 
         if (reportComplete)
         {
-            btnSendReportNow.setBackgroundResource(R.drawable.button_green_oval);
+            btnSendReportNow.setBackgroundResource(R.drawable.button_green);
             btnSendReportNow.setTextColor(Color.parseColor("#ffffffff"));
         } else
         {
-            btnSendReportNow.setBackgroundResource(R.drawable.button_grey_border);
+            btnSendReportNow.setBackgroundResource(R.drawable.button_transparent_grey_border);
             btnSendReportNow.setTextColor(Color.parseColor("#ff666666"));
         }
     }
@@ -205,6 +205,12 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
                     showToastMessage(getString(R.string.CheckInternetConnection));
                     return;
                 }
+
+                if(tokenStr == null)
+                {
+                    alertDialog("Info", getString(R.string.OfflineModeShowLoginScreenQuestion));
+                }
+
                 disableInputAndShowProgressDialog();
 
                 objectsSentSuccessfully = 0;

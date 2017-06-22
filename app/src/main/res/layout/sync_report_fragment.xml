@@ -202,9 +202,9 @@
             android:layout_marginBottom="70dp"
             android:layout_gravity="center_horizontal|bottom"
             android:text="Invia"
-            android:background="@drawable/button_grey_border"
+            android:background="@drawable/button_transparent_grey_border"
             android:textColor="#ff666666"/>
-<!--        android:background="@drawable/button_green_oval"
+<!--        android:background="@drawable/button_green"
         android:textColor="#ffffffff"/>-->
 
     </LinearLayout>

@@ -169,7 +169,7 @@
                 android:textColor="#29b352"
                 android:drawableTop="@drawable/accedi"
                 android:paddingTop="18dp"
-                android:background="@drawable/button_border_white"/>
+                android:background="@drawable/button_white"/>
 
         </FrameLayout>
 

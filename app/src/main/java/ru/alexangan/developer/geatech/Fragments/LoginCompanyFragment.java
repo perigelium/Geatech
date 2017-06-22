@@ -286,6 +286,9 @@ public class LoginCompanyFragment extends Fragment implements View.OnClickListen
             {
                 if (credentialsesFound)
                 {
+                    btnLogin.setAlpha(0.4f);
+                    btnLogin.setEnabled(false);
+
                     loginCommunicator.onLoginSucceeded();
                 } else
                 {

@@ -67,7 +67,7 @@
 
     <SearchView
         android:id="@+id/searchViewReports"
-        android:layout_width="300dp"
+        android:layout_width="330dp"
         android:layout_height="50dp"
         android:layout_gravity="center"
         android:background="@android:color/transparent"

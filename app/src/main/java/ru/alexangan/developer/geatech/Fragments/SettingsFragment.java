@@ -14,23 +14,16 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
 import ru.alexangan.developer.geatech.Interfaces.Communicator;
-import ru.alexangan.developer.geatech.Models.GeaSopralluogo;
-import ru.alexangan.developer.geatech.Models.VisitItem;
 import ru.alexangan.developer.geatech.R;
-import ru.alexangan.developer.geatech.Services.NotificationEventReceiver;
 
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.mSettings;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.selectedTech;
-import static ru.alexangan.developer.geatech.Models.GlobalConstants.visitItems;
 
 /**
  * Created by Alex Angan on 11/10/2016.*/
@@ -122,7 +115,7 @@ public class SettingsFragment extends Fragment implements View.OnClickListener
         List<String> saRemindTimePoints = Arrays.asList(strRemindTimeDelays);
 
         ArrayAdapter<String> visitRemindTimeListAdapter =
-                new ArrayAdapter<>(activity, R.layout.spinner_visit_reminder_time_row, R.id.tvSpinnerVisitItem, saRemindTimePoints);
+                new ArrayAdapter<>(activity, R.layout.spinner_visit_reminder_row, R.id.tvSpinnerVisitItem, saRemindTimePoints);
         spVisitRemindTime.setAdapter(visitRemindTimeListAdapter);
 
         return rootView;

@@ -12,7 +12,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="9dp"
-        android:clickable="true"
         android:orientation="vertical">
 
         <LinearLayout
@@ -83,7 +82,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:background="@drawable/button_border_transparent"/>
+                    android:background="@drawable/button_transparent_white_border"/>
             </FrameLayout>
 
             <FrameLayout
@@ -104,7 +103,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:background="@drawable/button_border_transparent"/>
+                    android:background="@drawable/button_transparent_white_border"/>
 
             </FrameLayout>
 
@@ -143,22 +142,22 @@
         <FrameLayout
             android:id="@+id/flSetDateTimeSubmit"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="50dp"
             android:layout_margin="6dp"
-            android:background="@drawable/button_green_oval">
+            android:background="@drawable/button_green">
 
-            <Button
+<!--            <Button
                 android:id="@+id/btnSetDateTimeSubmit"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
-                android:background="@android:color/transparent"/>
+                android:background="@android:color/transparent"/>-->
 
             <ImageView
                 android:layout_width="196dp"
                 android:layout_height="24dp"
                 android:layout_gravity="center"
-                android:background="@drawable/button_green_oval"
+                android:background="@android:color/transparent"
                 android:scaleType="centerInside"
                 android:src="@drawable/android_fissa"/>
         </FrameLayout>
@@ -333,7 +332,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:background="@drawable/button_border_transparent"/>
+                android:background="@drawable/button_transparent_white_border"/>
 
         </FrameLayout>
 

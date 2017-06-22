@@ -20,11 +20,13 @@ public interface Communicator
 
     void OnReportListItemSelected(int itemIndex);
 
-    void onNotificationReportReturned(int mode);
+    void onListVisitsDisplayModeSelected(int mode);
 
     void hideHeaderAndFooter();
 
     void showHeaderAndFooter();
 
     void onLogoutCommand();
+
+    void onReportsSearchResultsReturned(String reportsSearchResultsJSON);
 }
