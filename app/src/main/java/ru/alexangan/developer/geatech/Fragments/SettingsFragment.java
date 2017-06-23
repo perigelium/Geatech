@@ -154,7 +154,8 @@ public class SettingsFragment extends Fragment implements View.OnClickListener
             return;
         }
 
-        mSettings.edit().putLong("reminderDelayHours", remindTimeDelays[curReminderPos]).apply();
+        String strReminderDelayHours = Long.toString(remindTimeDelays[curReminderPos]);
+        mSettings.edit().putString("reminderDelayHours", strReminderDelayHours).apply();
 
 /*        milliSecondsForNow = calendarNow.getTimeInMillis();
 

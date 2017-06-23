@@ -46,7 +46,7 @@ public class FragListVisitsToday extends ListFragment
     ListView lv;
     Activity activity;
     TextView tvListVisitsTodayDate;
-    private Realm realm;
+    
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState)
@@ -65,8 +65,6 @@ public class FragListVisitsToday extends ListFragment
         swipeDetector = new SwipeDetector();
 
         ownVisitsOnly = mSettings.getBoolean("ownVisitsOnly", false);
-
-        realm = Realm.getDefaultInstance();
     }
 
     @Override
@@ -84,6 +82,7 @@ public class FragListVisitsToday extends ListFragment
     {
         super.onViewCreated(view, savedInstanceState);
 
+        Realm realm = Realm.getDefaultInstance();
         visitItemsFiltered = new ArrayList<>();
         realm.beginTransaction();
         RealmResults <ReportItem> rr_reportItems = realm.where(ReportItem.class).equalTo("company_id", company_id)
@@ -206,6 +205,7 @@ public class FragListVisitsToday extends ListFragment
 
             }
         });
+        realm.close();
     }
 
 /*    private void showToastMessage(final String msg)
@@ -214,7 +214,7 @@ public class FragListVisitsToday extends ListFragment
         {
             public void run()
             {
-                Toast.makeText(activity, msg, Toast.LENGTH_LONG).show();
+                Toast.makeText(activity, msg, Toast.LENGTH_SHORT).show();
             }
         });
     }*/

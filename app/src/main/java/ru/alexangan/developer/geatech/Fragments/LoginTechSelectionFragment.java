@@ -81,7 +81,6 @@ public class LoginTechSelectionFragment extends Fragment implements View.OnClick
     ArrayList<String> saTecnicianList;
     int geaItemModelliSize;
     private ProgressDialog downloadingDialog;
-    private Realm realm;
 
     public LoginTechSelectionFragment()
     {
@@ -110,7 +109,6 @@ public class LoginTechSelectionFragment extends Fragment implements View.OnClick
         networkUtils = new NetworkUtils();
         saTecnicianList = new ArrayList<>();
         activity = getActivity();
-        realm = Realm.getDefaultInstance();
 
         downloadingDialog = new ProgressDialog(getActivity());
         downloadingDialog.setTitle("");
@@ -160,6 +158,7 @@ public class LoginTechSelectionFragment extends Fragment implements View.OnClick
 
         spTecnicianList = (Spinner) rootView.findViewById(R.id.spTecnicianList);
 
+        Realm realm = Realm.getDefaultInstance();
         realm.beginTransaction();
         RealmResults<GeaItemModelliRapporto> geaItemModelli = realm.where(GeaItemModelliRapporto.class).findAll();
         geaItemModelliSize = geaItemModelli.size();
@@ -187,6 +186,7 @@ public class LoginTechSelectionFragment extends Fragment implements View.OnClick
                     return;
                 } else
                 {
+                    Realm realm = Realm.getDefaultInstance();
                     String selectedItem = parent.getItemAtPosition(position).toString();
                     realm.beginTransaction();
                     lastSelectedTech = realm.where(TechnicianItem.class).equalTo("full_name_tehnic", selectedItem).findFirst();
@@ -234,6 +234,7 @@ public class LoginTechSelectionFragment extends Fragment implements View.OnClick
             {
                 public void run()
                 {
+                    Realm realm = Realm.getDefaultInstance();
                     realm.beginTransaction();
                     RealmResults<TechnicianItem> techModelListOld = realm.where(TechnicianItem.class).equalTo("company_id", company_id).findAll();
                     techModelListOld.deleteAllFromRealm();
@@ -258,10 +259,10 @@ public class LoginTechSelectionFragment extends Fragment implements View.OnClick
                     }
 
                     realm.beginTransaction();
-                    RealmResults<TechnicianItem> techModelList = realm.where(TechnicianItem.class).equalTo("company_id", company_id).findAll();
+                    RealmResults<TechnicianItem> techModelListLast = realm.where(TechnicianItem.class).equalTo("company_id", company_id).findAll();
                     realm.commitTransaction();
 
-                    if (techModelList.size() != 0)
+                    if (techModelListLast.size() != 0)
                     {
                         saTecnicianList.clear();
                         saTecnicianList.add("");
@@ -270,12 +271,12 @@ public class LoginTechSelectionFragment extends Fragment implements View.OnClick
                         String fullNameTechnic = "";
                         int i;
 
-                        for (i = 0; i < techModelList.size(); i++)
+                        for (i = 0; i < techModelListLast.size(); i++)
                         {
-                            String fullTechName = techModelList.get(i).getFullNameTehnic();
+                            String fullTechName = techModelListLast.get(i).getFullNameTehnic();
                             saTecnicianList.add(fullTechName);
 
-                            if (idPredefinedTech != -1 && techModelList.get(i).getId() == idPredefinedTech)
+                            if (idPredefinedTech != -1 && techModelListLast.get(i).getId() == idPredefinedTech)
                             {
                                 selectedTechPos = i + 1;
                                 chkboxRememberTech.setChecked(true);
@@ -306,6 +307,7 @@ public class LoginTechSelectionFragment extends Fragment implements View.OnClick
                             lastSelectedTech = null;
                         }
                     }
+                    realm.close();
                 }
             });
         }
@@ -413,6 +415,7 @@ public class LoginTechSelectionFragment extends Fragment implements View.OnClick
         {
             mSettings.edit().putInt("idPredefinedTech", -1).apply();
         }
+        flTechnicianAdded.setVisibility(View.GONE);
     }
 
     @Override
@@ -501,7 +504,7 @@ public class LoginTechSelectionFragment extends Fragment implements View.OnClick
                             {
                                 boolean geaModelsProcessUpdate = geaItemModelliSize != 0;
 
-                                callModels = networkUtils.getData(this, GET_MODELS_URL_SUFFIX, tokenStr, null, geaModelsProcessUpdate);
+                                callModels = networkUtils.getData(this, GET_MODELS_URL_SUFFIX, tokenStr, null, null, geaModelsProcessUpdate);
 
                             } catch (Exception e)
                             {
@@ -592,7 +595,7 @@ public class LoginTechSelectionFragment extends Fragment implements View.OnClick
 
                         if (models_is_uptodate.equals("1") && geaItemModelliSize != 0)
                         {
-                            callVisits = networkUtils.getData(this, GET_VISITS_URL_SUFFIX, tokenStr, null, false);
+                            callVisits = networkUtils.getData(this, GET_VISITS_URL_SUFFIX, tokenStr, null, null, false);
 
                             //mSettings.edit().putBoolean("geaModelsIsObsolete", false).apply();
 
@@ -620,9 +623,6 @@ public class LoginTechSelectionFragment extends Fragment implements View.OnClick
                             }
 
                             Gson gson = new Gson();
-                            Realm realm;
-                            realm = Realm.getDefaultInstance();
-                            realm.beginTransaction();
 
                             Type typeGeaModelli = new TypeToken<List<GeaModelloRapporto>>()
                             {
@@ -639,10 +639,8 @@ public class LoginTechSelectionFragment extends Fragment implements View.OnClick
                             }.getType();
                             final List<GeaItemModelliRapporto> l_geaItemsModelli = gson.fromJson(str_gea_items_modelli, typeGeaItemsModelli);
 
-/*                            activity.runOnUiThread(new Runnable()
-                            {
-                                public void run()
-                                {*/
+                            Realm realm = Realm.getDefaultInstance();
+                            realm.beginTransaction();
 
                             RealmResults<GeaModelloRapporto> geaModelli = realm.where(GeaModelloRapporto.class).findAll();
                             geaModelli.deleteAllFromRealm();
@@ -679,18 +677,12 @@ public class LoginTechSelectionFragment extends Fragment implements View.OnClick
                             }
                             realm.commitTransaction();
 
-                            //downloadingDialog.dismiss();
-
-/*                                }
-                            });*/
-
                             geaItemModelliSize = l_geaItemsModelli.size();
 
                             if (geaItemModelliSize != 0)
                             {
-                                callVisits = networkUtils.getData(this, GET_VISITS_URL_SUFFIX, tokenStr, null, false);
-                            }
-                            else
+                                callVisits = networkUtils.getData(this, GET_VISITS_URL_SUFFIX, tokenStr, null, null, false);
+                            } else
                             {
                                 activity.runOnUiThread(new Runnable()
                                 {
@@ -700,6 +692,7 @@ public class LoginTechSelectionFragment extends Fragment implements View.OnClick
                                     }
                                 });
                             }
+                            realm.close();
                         }
                     } catch (Exception e)
                     {
@@ -721,27 +714,30 @@ public class LoginTechSelectionFragment extends Fragment implements View.OnClick
 
             try
             {
+
+                inVisitItems = JSON_to_model.getVisitTtemsList(visitsJSONData);
+
+                if (inVisitItems != null && inVisitItems.size() > 0)
+                {
+                    Realm realm = Realm.getDefaultInstance();
+                    realm.beginTransaction();
+                    RealmResults<VisitItem> dVisitItems = realm.where(VisitItem.class).findAll();
+                    dVisitItems.deleteAllFromRealm();
+                    realm.commitTransaction();
+
+                    realm.beginTransaction();
+                    for (VisitItem visitItem : inVisitItems)
+                    {
+                        realm.copyToRealmOrUpdate(visitItem);
+                    }
+                    realm.commitTransaction();
+                    realm.close();
+                }
+
                 activity.runOnUiThread(new Runnable()
                 {
                     public void run()
                     {
-                        inVisitItems = JSON_to_model.getVisitTtemsList(visitsJSONData);
-
-                        if (inVisitItems != null && inVisitItems.size() > 0)
-                        {
-                            realm.beginTransaction();
-                            RealmResults<VisitItem> dVisitItems = realm.where(VisitItem.class).findAll();
-                            dVisitItems.deleteAllFromRealm();
-                            realm.commitTransaction();
-
-                            realm.beginTransaction();
-                            for (VisitItem visitItem : inVisitItems)
-                            {
-                                realm.copyToRealmOrUpdate(visitItem);
-                            }
-                            realm.commitTransaction();
-                        }
-
                         downloadingDialog.dismiss();
 
                         //if (geaItemModelliSize != 0)

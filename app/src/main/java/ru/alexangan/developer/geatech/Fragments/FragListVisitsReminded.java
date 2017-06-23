@@ -35,7 +35,7 @@ public class FragListVisitsReminded extends ListFragment
     ArrayList<VisitItem> visitItemsFiltered;
     ListView lv;
     Activity activity;
-    //private Realm realm;
+    //
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState)
@@ -166,7 +166,7 @@ public class FragListVisitsReminded extends ListFragment
         {
             public void run()
             {
-                Toast.makeText(activity, msg, Toast.LENGTH_LONG).show();
+                Toast.makeText(activity, msg, Toast.LENGTH_SHORT).show();
             }
         });
     }*/

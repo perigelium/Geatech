@@ -8,6 +8,7 @@ import io.realm.RealmObject;
 
 public class GeaItemRapporto extends RealmObject
 {
+    private int id_item_rapporto;
     private int id_rapporto_sopralluogo;
     private int id_item_modello;
     private String valore;

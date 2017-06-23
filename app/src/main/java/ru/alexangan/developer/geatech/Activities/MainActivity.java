@@ -84,7 +84,6 @@ import static ru.alexangan.developer.geatech.R.id.llInnerFragContainer;
 
 public class MainActivity extends Activity implements Communicator, Callback, ScrollViewListener
 {
-    Realm realm;
     private FragmentManager mFragmentManager;
     SwipeDetector swipeDetector;
 
@@ -179,7 +178,6 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        realm = Realm.getDefaultInstance();
         setContentView(R.layout.work_window);
 
         scrvInnerFragContainer = (ScrollViewEx) findViewById(R.id.svInnerFragContainer);
@@ -209,6 +207,7 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
 
         if (visitItems.size() == 0)
         {
+            Realm realm = Realm.getDefaultInstance();
             RealmResults<VisitItem> rrVisitItems = realm.where(VisitItem.class).findAll();
 
             for (VisitItem visitItem : rrVisitItems)
@@ -216,11 +215,12 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
                 VisitItem visitItemEx = realm.copyFromRealm(visitItem);
                 visitItems.add(visitItemEx);
             }
+            realm.close();
         }
 
         if (visitItems.size() == 0)
         {
-            Toast.makeText(this, R.string.ListVisitsIsEmpty, Toast.LENGTH_LONG).show();
+            Toast.makeText(this, R.string.ListVisitsIsEmpty, Toast.LENGTH_SHORT).show();
 
             this.finish();
         }
@@ -528,6 +528,7 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
 
                 if (!photoGalleryGridFragment.isAdded())
                 {
+                    Realm realm = Realm.getDefaultInstance();
                     realm.beginTransaction();
 
                     int idSopralluogo = visitItem.getGeaSopralluogo().getId_sopralluogo();
@@ -539,6 +540,7 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
                             .equalTo("id_rapporto_sopralluogo", id_rapporto_sopralluogo).findFirst();
 
                     realm.commitTransaction();
+                    realm.close();
 
                     if (reportItem != null)
                     {
@@ -837,40 +839,41 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
 
             try
             {
+                inVisitItems = JSON_to_model.getVisitTtemsList(visitsJSONData);
+
+                if (inVisitItems != null && inVisitItems.size() > 0)
+                {
+                    Realm realm = Realm.getDefaultInstance();
+                    realm.beginTransaction();
+                    RealmResults<VisitItem> dVisitItems = realm.where(VisitItem.class).findAll();
+                    dVisitItems.deleteAllFromRealm();
+                    realm.commitTransaction();
+
+                    // copy in persistent storage
+                    realm.beginTransaction();
+                    for (VisitItem visitItem : inVisitItems)
+                    {
+                        realm.copyToRealmOrUpdate(visitItem);
+                    }
+                    realm.commitTransaction();
+
+                    // create unmanaged array for working with
+                    visitItems.clear();
+
+                    RealmResults<VisitItem> rrVisitItems = realm.where(VisitItem.class).findAll();
+
+                    for (VisitItem visitItem : rrVisitItems)
+                    {
+                        VisitItem visitItemEx = realm.copyFromRealm(visitItem);
+                        visitItems.add(visitItemEx);
+                    }
+                    realm.close();
+                }
+
                 runOnUiThread(new Runnable()
                 {
                     public void run()
                     {
-
-                        inVisitItems = JSON_to_model.getVisitTtemsList(visitsJSONData);
-
-                        if (inVisitItems != null && inVisitItems.size() > 0)
-                        {
-                            realm.beginTransaction();
-                            RealmResults<VisitItem> dVisitItems = realm.where(VisitItem.class).findAll();
-                            dVisitItems.deleteAllFromRealm();
-                            realm.commitTransaction();
-
-                            // copy in persistent storage
-                            realm.beginTransaction();
-                            for (VisitItem visitItem : inVisitItems)
-                            {
-                                realm.copyToRealmOrUpdate(visitItem);
-                            }
-                            realm.commitTransaction();
-
-                            // create unmanaged array for working with
-                            visitItems.clear();
-
-                            RealmResults<VisitItem> rrVisitItems = realm.where(VisitItem.class).findAll();
-
-                            for (VisitItem visitItem : rrVisitItems)
-                            {
-                                VisitItem visitItemEx = realm.copyFromRealm(visitItem);
-                                visitItems.add(visitItemEx);
-                            }
-                        }
-
                         if (GlobalConstants.visitsListIsObsolete)
                         {
                             GlobalConstants.visitsListIsObsolete = false;
@@ -890,6 +893,7 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
                         }
 
                         requestServerDialog.dismiss();
+
                     }
                 });
 
@@ -929,7 +933,7 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
 
             handler.postDelayed(runnable, 30000);
 
-            callVisits = networkUtils.getData(this, GET_VISITS_URL_SUFFIX, tokenStr, null, false);
+            callVisits = networkUtils.getData(this, GET_VISITS_URL_SUFFIX, tokenStr, null, null, false);
         } else
         {
             showToastMessage(getString(R.string.CheckInternetConnection));

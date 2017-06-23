@@ -41,7 +41,7 @@ public class CaldaiaReportFragment extends Fragment
     View rootView;
     Context context;
     ViewUtils viewUtils;
-    private Realm realm;
+    
     private Communicator mCommunicator;
 
     @Override
@@ -64,7 +64,7 @@ public class CaldaiaReportFragment extends Fragment
         super.onCreate(savedInstanceState);
 
         context = getActivity();
-        realm = Realm.getDefaultInstance();
+        Realm realm = Realm.getDefaultInstance();
 
         if (getArguments() != null)
         {
@@ -95,6 +95,7 @@ public class CaldaiaReportFragment extends Fragment
         id_rapporto_sopralluogo = reportItem != null ? reportItem.getGea_rapporto_sopralluogo().getId_rapporto_sopralluogo() : -1;
 
         realm.commitTransaction();
+        realm.close();
     }
 
     @Override
@@ -236,6 +237,7 @@ public class CaldaiaReportFragment extends Fragment
 
             int completionState = DatabaseUtils.getReportInitializationState(id_sopralluogo, id_rapporto_sopralluogo);
 
+            Realm realm = Realm.getDefaultInstance();
             if (completionState == ReportStates.REPORT_COMPLETED)
             {
                 realm.beginTransaction();
@@ -252,6 +254,7 @@ public class CaldaiaReportFragment extends Fragment
             realm.beginTransaction();
             reportItem.getReportStates().setReportCompletionState(completionState);
             realm.commitTransaction();
+            realm.close();
         }
     }
 

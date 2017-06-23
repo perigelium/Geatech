@@ -41,7 +41,7 @@ public class FragListReportsNotSent extends ListFragment
     MyListVisitsAdapter myListAdapterNotSent;
     ListView lv;
     Activity activity;
-    private Realm realm;
+    
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState)
@@ -65,8 +65,6 @@ public class FragListReportsNotSent extends ListFragment
         {
             timeNotSetItemsOnly = getArguments().getBoolean("ownVisitsOnly", false);
         }
-
-        realm = Realm.getDefaultInstance();
     }
 
     @Override
@@ -96,6 +94,7 @@ public class FragListReportsNotSent extends ListFragment
             int id_rapporto_sopralluogo = visitItem.getGeaRapporto().getId_rapporto_sopralluogo();
             String data_ora_sopralluogo = geaSopralluogo.getData_ora_sopralluogo();
 
+            Realm realm = Realm.getDefaultInstance();
             realm.beginTransaction();
             ReportItem reportItem = realm.where(ReportItem.class).equalTo("company_id", company_id).equalTo("tech_id", selectedTech.getId())
                     .equalTo("id_sopralluogo", idSopralluogo)
@@ -135,6 +134,7 @@ public class FragListReportsNotSent extends ListFragment
                     }
                 }
             }
+            realm.close();
         }
 
         for (Map.Entry entry : unsortedVisitsNotSent.entrySet())
@@ -169,7 +169,7 @@ public class FragListReportsNotSent extends ListFragment
         {
             public void run()
             {
-                Toast.makeText(activity, msg, Toast.LENGTH_LONG).show();
+                Toast.makeText(activity, msg, Toast.LENGTH_SHORT).show();
             }
         });
     }*/

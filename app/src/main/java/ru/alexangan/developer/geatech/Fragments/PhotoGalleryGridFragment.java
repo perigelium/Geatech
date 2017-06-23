@@ -82,7 +82,6 @@ public class PhotoGalleryGridFragment extends Fragment
     AlertDialog alert;
     private ImageView ivTrashCan;
     private Communicator mCommunicator;
-    private Realm realm;
 
 /*    private Handler handler;
     private Runnable runnable;*/
@@ -113,7 +112,7 @@ public class PhotoGalleryGridFragment extends Fragment
         super.onCreate(savedInstanceState);
 
         activity = getActivity();
-        realm = Realm.getDefaultInstance();
+        Realm realm = Realm.getDefaultInstance();
         int id_sopralluogo;
         mCommunicator = (Communicator) getActivity();
 
@@ -393,6 +392,7 @@ public class PhotoGalleryGridFragment extends Fragment
             return;
         }
 
+        Realm realm = Realm.getDefaultInstance();
         realm.beginTransaction();
 
         int id_rapporto_sopralluogo = reportItem.getGea_rapporto_sopralluogo().getId_rapporto_sopralluogo();
@@ -427,6 +427,7 @@ public class PhotoGalleryGridFragment extends Fragment
         {
             showToastMessage(getString(R.string.PhotosSavingFailedTryLater));
         }
+        realm.close();
     }
 
     @Override

@@ -38,7 +38,7 @@ public class ClimatizzazioneReportFragment extends Fragment
     ViewUtils viewUtils;
 
     GeaModelloRapporto geaModello;
-    private Realm realm;
+    
 
     public ClimatizzazioneReportFragment()
     {
@@ -48,7 +48,7 @@ public class ClimatizzazioneReportFragment extends Fragment
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        realm = Realm.getDefaultInstance();
+        Realm realm = Realm.getDefaultInstance();
 
         context = getActivity();
 
@@ -81,6 +81,7 @@ public class ClimatizzazioneReportFragment extends Fragment
         id_rapporto_sopralluogo = reportItem != null ? reportItem.getGea_rapporto_sopralluogo().getId_rapporto_sopralluogo() : -1;
 
         realm.commitTransaction();
+        realm.close();
     }
 
     @Override
@@ -140,6 +141,7 @@ public class ClimatizzazioneReportFragment extends Fragment
 
             int completionState = DatabaseUtils.getReportInitializationState(id_sopralluogo, id_rapporto_sopralluogo);
 
+            Realm realm = Realm.getDefaultInstance();
             if (completionState == ReportStates.REPORT_COMPLETED)
             {
                 realm.beginTransaction();
@@ -156,6 +158,7 @@ public class ClimatizzazioneReportFragment extends Fragment
             realm.beginTransaction();
             reportItem.getReportStates().setReportCompletionState(completionState);
             realm.commitTransaction();
+            realm.close();
         }
     }
 

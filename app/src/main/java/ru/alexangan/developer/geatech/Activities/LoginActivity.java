@@ -23,14 +23,11 @@ public class LoginActivity extends Activity implements LoginCommunicator
 
     LoginCompanyFragment loginCompanyFragment;
     LoginTechSelectionFragment loginTechSelectionFragment;
-    Realm realm;
 
     @Override
     protected void onDestroy()
     {
         super.onDestroy();
-
-        realm.close();
     }
 
     @Override
@@ -63,7 +60,6 @@ public class LoginActivity extends Activity implements LoginCommunicator
         mFragmentTransaction.add(R.id.loginFragContainer, loginCompanyFragment);
 
         mFragmentTransaction.commit();
-        realm = Realm.getDefaultInstance();
     }
 
     @Override

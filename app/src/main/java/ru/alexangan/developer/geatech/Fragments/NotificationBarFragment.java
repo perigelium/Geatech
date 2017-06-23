@@ -19,18 +19,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
@@ -78,11 +75,6 @@ public class NotificationBarFragment extends Fragment implements SearchView.OnQu
         super.onCreate(savedInstanceState);
 
         activity = getActivity();
-
-        requestServerDialog = new ProgressDialog(activity);
-        requestServerDialog.setTitle("");
-        requestServerDialog.setMessage(getString(R.string.DownloadingDataPleaseWait));
-        requestServerDialog.setIndeterminate(true);
 
         handler = new Handler();
 
@@ -142,6 +134,11 @@ public class NotificationBarFragment extends Fragment implements SearchView.OnQu
     {
         super.onViewCreated(view, savedInstanceState);
 
+        requestServerDialog = new ProgressDialog(activity);
+        requestServerDialog.setTitle("");
+        requestServerDialog.setMessage(getString(R.string.DownloadingDataPleaseWait));
+        requestServerDialog.setIndeterminate(true);
+
         spVisitsFilter.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
         {
             @Override
@@ -196,13 +193,15 @@ public class NotificationBarFragment extends Fragment implements SearchView.OnQu
     @Override
     public boolean onQueryTextSubmit(String queryString)
     {
-        mSettings.edit().putString("reportSearchLastQueryString", queryString).apply();
+        mSettings.edit().putString("reportSearchLastQueryString", queryString).commit();
 
         Realm realm = Realm.getDefaultInstance();
 
+        String strQueryLower = queryString.toLowerCase();
+
         if (!NetworkUtils.isNetworkAvailable(activity))
         {
-            alertDialog("Info", getString(R.string.OfflineMode));
+            showToastMessage(getString(R.string.OfflineModeSeekInLocalReportsOnly));
 
             realm.beginTransaction();
             RealmResults<ReportItem> reportItems = realm.where(ReportItem.class).equalTo("company_id", company_id)
@@ -220,49 +219,62 @@ public class NotificationBarFragment extends Fragment implements SearchView.OnQu
 
                 if (isReportSent)
                 {
-                    int id_sopralluogo = reportItem.getId_sopralluogo();
-                    int id_rapporto_sopralluogo = reportItem.getId_rapporto_sopralluogo();
                     ClientData clientData = reportItem.getClientData();
-                    String clentName = clientData.getName();
+                    String clientName = clientData.getName();
                     String clientMobile = clientData.getMobile();
                     String clientPhone = clientData.getPhone();
                     String clientAddress = clientData.getAddress();
-                    String productType = clientData.getProduct_type();
                     String data_ora_sopralluogo = reportItem.getGeaSopralluogo().getData_ora_sopralluogo();
 
-                    ReportsSearchResultItem reportsSearchResultItem = new ReportsSearchResultItem
-                            (id_sopralluogo, id_rapporto_sopralluogo, clentName, clientMobile, clientPhone, clientAddress, productType, data_ora_sopralluogo);
-                    reportsSearchResultItems.add(reportsSearchResultItem);
+                    if(clientName.toLowerCase().contains(strQueryLower) || clientMobile.toLowerCase().contains(strQueryLower)
+                            || clientPhone.toLowerCase().contains(strQueryLower) || clientAddress.toLowerCase().contains(strQueryLower)
+                            || data_ora_sopralluogo.toLowerCase().contains(strQueryLower))
+                    {
+                        int id_sopralluogo = reportItem.getId_sopralluogo();
+                        int id_rapporto_sopralluogo = reportItem.getId_rapporto_sopralluogo();
+                        String productType = clientData.getProduct_type();
+
+
+                        ReportsSearchResultItem reportsSearchResultItem = new ReportsSearchResultItem
+                                (id_sopralluogo, id_rapporto_sopralluogo, clientName, clientMobile, clientPhone, clientAddress, productType, data_ora_sopralluogo);
+                        reportsSearchResultItems.add(reportsSearchResultItem);
+                    }
                 }
             }
 
             Gson gson = new Gson();
-            String reportsSearchResultItemsJSON = gson.toJson(reportsSearchResultItems);
 
-            JSONObject jsonObject = new JSONObject();
+            String listString = gson.toJson(reportsSearchResultItems, new TypeToken<ArrayList<ReportsSearchResultItem>>() {}.getType());
+
             try
             {
-                jsonObject.put("arr_case", reportsSearchResultItemsJSON);
+                JSONArray jsonArray = new JSONArray(listString);
+
+                JSONObject jsonObject = new JSONObject();
+                try
+                {
+                    jsonObject.put("arr_case", jsonArray);
+
+                    mCommunicator.onReportsSearchResultsReturned(jsonObject.toString());
+
+                } catch (JSONException e)
+                {
+                    e.printStackTrace();
+                }
             } catch (JSONException e)
             {
                 e.printStackTrace();
             }
 
-            String strReportsSearchResultItemsJSON = gson.toJson(jsonObject);
-
-            mCommunicator.onReportsSearchResultsReturned(strReportsSearchResultItemsJSON);
-
             return true;
-        }
-
-        if (tokenStr == null)
+        } else if (tokenStr == null)
         {
             alertDialog("Info", getString(R.string.OfflineModeShowLoginScreenQuestion));
             return true;
         }
 
         NetworkUtils networkUtils = new NetworkUtils();
-        callSearchReports = networkUtils.getData(this, SEARCH_VISITS_URL_SUFFIX, tokenStr, queryString, false);
+        callSearchReports = networkUtils.getData(this, SEARCH_VISITS_URL_SUFFIX, tokenStr, queryString, null, false);
 
         return true;
     }
@@ -332,7 +344,6 @@ public class NotificationBarFragment extends Fragment implements SearchView.OnQu
                     if (errorStr.length() != 0)
                     {
                         showToastMessage(errorStr);
-                        alertDialog("Info", getString(R.string.OfflineModeShowLoginScreenQuestion));
                     }
 
                 } catch (JSONException e)
@@ -359,7 +370,7 @@ public class NotificationBarFragment extends Fragment implements SearchView.OnQu
         {
             public void run()
             {
-                Toast.makeText(activity, msg, Toast.LENGTH_LONG).show();
+                Toast.makeText(activity, msg, Toast.LENGTH_SHORT).show();
             }
         });
     }

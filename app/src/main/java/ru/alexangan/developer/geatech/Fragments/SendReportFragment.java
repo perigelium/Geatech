@@ -67,7 +67,6 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
     AlertDialog alert;
     int id_rapporto_sopralluogo;
     private boolean reportComplete;
-    private Realm realm;
 
     private Button btnSendReportNow;
     private ImageView ivCoordsSetCheckmark, ivReportFilledCheckmark, ivPhotosAddedCheckmark;
@@ -91,7 +90,6 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
         super.onCreate(savedInstanceState);
 
         activity = getActivity();
-        realm = Realm.getDefaultInstance();
 
         if (getArguments() != null)
         {
@@ -141,10 +139,12 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
 
         //Class modelClass = ModelsMapping.assignClassModel(productType);
 
+        Realm realm = Realm.getDefaultInstance();
         realm.beginTransaction();
         reportItem = realm.where(ReportItem.class).equalTo("company_id", company_id).equalTo("tech_id", selectedTech.getId())
                 .equalTo("id_sopralluogo", idSopralluogo).equalTo("id_rapporto_sopralluogo", id_rapporto_sopralluogo).findFirst();
         realm.commitTransaction();
+        realm.close();
 
         if (reportItem != null)
         {
@@ -206,7 +206,7 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
                     return;
                 }
 
-                if(tokenStr == null)
+                if (tokenStr == null)
                 {
                     alertDialog("Info", getString(R.string.OfflineModeShowLoginScreenQuestion));
                 }
@@ -219,9 +219,11 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
 
             } else
             {
+                Realm realm = Realm.getDefaultInstance();
                 realm.beginTransaction();
                 reportItem.getReportStates().setTriedToSendReport(true);
                 realm.commitTransaction();
+                realm.close();
 
                 showToastMessage("Rapporto non ancora completato.");
             }
@@ -237,6 +239,7 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
         String strDateTime = sdf.format(calendarNow.getTime());
         reportItem.setData_ora_invio_rapporto(strDateTime);*/
 
+        Realm realm = Realm.getDefaultInstance();
         ReportItem reportItemUnmanaged = realm.copyFromRealm(reportItem);
         ReportItem reportItemExRealm = realm.copyFromRealm(reportItem);
 
@@ -259,6 +262,7 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
             Log.d("DEBUG", String.valueOf(fileLength));*/
         }
         realm.commitTransaction();
+        realm.close();
 
         requestServerDialog.setMax(100);
 
@@ -395,27 +399,30 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
 
                     if (objectsSentSuccessfully == imagesArray.size())
                     {
+                        Calendar calendarNow = Calendar.getInstance();
+                        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ITALIAN);
+                        String strDateTime = sdf.format(calendarNow.getTime());
+
+                        if (objectsSentSuccessfully == imagesArray.size())
+                        {
+                            Realm realm = Realm.getDefaultInstance();
+                            realm.beginTransaction();
+                            reportItem.getGea_rapporto_sopralluogo().setData_ora_invio_rapporto(strDateTime);
+                            realm.commitTransaction();
+                            realm.close();
+
+                            Toast.makeText(activity, R.string.ReportSent, Toast.LENGTH_SHORT).show();
+
+                            visitsListIsObsolete = true;
+                        } else
+                        {
+                            showToastMessage(getString(R.string.SendingReportFailed));
+                        }
+
                         activity.runOnUiThread(new Runnable()
                         {
                             public void run()
                             {
-                                Calendar calendarNow = Calendar.getInstance();
-                                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ITALIAN);
-                                String strDateTime = sdf.format(calendarNow.getTime());
-
-                                if (objectsSentSuccessfully == imagesArray.size())
-                                {
-                                    realm.beginTransaction();
-                                    reportItem.getGea_rapporto_sopralluogo().setData_ora_invio_rapporto(strDateTime);
-                                    realm.commitTransaction();
-
-                                    Toast.makeText(activity, R.string.ReportSent, Toast.LENGTH_LONG).show();
-
-                                    visitsListIsObsolete = true;
-                                } else
-                                {
-                                    showToastMessage(getString(R.string.SendingReportFailed));
-                                }
                                 requestServerDialog.dismiss();
                                 mCommunicator.onSendReportReturned(id_rapporto_sopralluogo);
                             }
@@ -440,7 +447,7 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
             {
                 public void run()
                 {
-                    Toast.makeText(activity, R.string.ReportSent + ", server ritornato: " + reportSendResponse, Toast.LENGTH_LONG).show(); //
+                    Toast.makeText(activity, R.string.ReportSent + ", server ritornato: " + reportSendResponse, Toast.LENGTH_SHORT).show(); //
                 }
             });*/
 
@@ -499,11 +506,13 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
 
                                                 if (objectsSentSuccessfully == imagesArray.size())
                                                 {
+                                                    Realm realm = Realm.getDefaultInstance();
                                                     realm.beginTransaction();
                                                     reportItem.getGea_rapporto_sopralluogo().setData_ora_invio_rapporto(strDateTime);
                                                     realm.commitTransaction();
+                                                    realm.close();
 
-                                                    Toast.makeText(activity, R.string.ReportSent, Toast.LENGTH_LONG).show();
+                                                    Toast.makeText(activity, R.string.ReportSent, Toast.LENGTH_SHORT).show();
 
                                                     visitsListIsObsolete = true;
                                                 } else

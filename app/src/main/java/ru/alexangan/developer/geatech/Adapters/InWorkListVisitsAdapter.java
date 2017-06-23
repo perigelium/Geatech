@@ -28,7 +28,6 @@ import static ru.alexangan.developer.geatech.Models.GlobalConstants.selectedTech
 
 public class InWorkListVisitsAdapter extends BaseAdapter
 {
-    private final Realm realm;
     private Context mContext;
     private ArrayList<VisitItem> visitItems;
     private int layout_id;
@@ -40,7 +39,6 @@ public class InWorkListVisitsAdapter extends BaseAdapter
         mContext = context;
         this.visitItems = visitItems;
         this.layout_id = layout_id;
-        realm = Realm.getDefaultInstance();
     }
 
     @Override
@@ -136,6 +134,7 @@ public class InWorkListVisitsAdapter extends BaseAdapter
         //boolean ownReport = selectedTech.getId() == tech_id;
         TextView tvTechName = (TextView) row.findViewById(R.id.tvTechName);
 
+        Realm realm = Realm.getDefaultInstance();
         realm.beginTransaction();
         ReportItem reportItem = realm.where(ReportItem.class).equalTo("company_id", company_id).equalTo("tech_id", selectedTech.getId())
                 .equalTo("id_sopralluogo", id_sopralluogo).findFirst();
@@ -217,7 +216,7 @@ public class InWorkListVisitsAdapter extends BaseAdapter
                 tvVisitTime.setText("");
             }*/
         }
-
+        realm.close();
 
         return row;
     }

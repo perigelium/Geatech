@@ -82,7 +82,7 @@ public class LocationRetriever implements ConnectionCallbacks, OnConnectionFaile
         {
             if (googleAPI.isUserResolvableError(result))
             {
-                //Toast.makeText(context, "context device is not supported.", Toast.LENGTH_LONG).show();
+                //Toast.makeText(context, "context device is not supported.", Toast.LENGTH_SHORT).show();
                 return false;
             }
 

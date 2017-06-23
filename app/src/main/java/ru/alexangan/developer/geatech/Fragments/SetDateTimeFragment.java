@@ -80,7 +80,6 @@ import static ru.alexangan.developer.geatech.Models.GlobalConstants.visitItems;
 
 public class SetDateTimeFragment extends Fragment implements View.OnClickListener, Callback, LocationRetrievedEvents
 {
-    Realm realm;
     Calendar calendarNow;
     Calendar calendar;
     String strDateTimeSet, strDateTimeNow;
@@ -103,8 +102,6 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
     String dataOraSopralluogo;
     GeaRapporto geaRapportoSopralluogo;
     String strNotKnown;
-
-    private TextView btnSetDateTimeSubmit;
 
     private int mYear, mMonth, mDay, mHour, mMinute;
 
@@ -145,7 +142,6 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
         super.onCreate(savedInstanceState);
 
         activity = getActivity();
-        realm = Realm.getDefaultInstance();
 
         if (getArguments() != null)
         {
@@ -173,8 +169,6 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
         rootView = inflater.inflate(R.layout.set_date_time_fragment, container, false);
 
         flSetDateTimeSubmit = (FrameLayout) rootView.findViewById(R.id.flSetDateTimeSubmit);
-
-        //btnSetDateTimeSubmit = (TextView) rootView.findViewById(R.id.btnSetDateTimeSubmit);
         flSetDateTimeSubmit.setOnClickListener(this);
 
         Button btnOpenMap = (Button) rootView.findViewById(R.id.btnOpenMap);
@@ -250,9 +244,11 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
         List<SubproductItem> listSubproducts = productData.getSubproductItems();
         dataOraSopralluogo = geaSopralluogo.getData_ora_sopralluogo();
 
+        Realm realm = Realm.getDefaultInstance();
         realm.beginTransaction();
         GeaModelloRapporto geaModello = realm.where(GeaModelloRapporto.class).equalTo("id_product_type", id_product_type).findFirst();
         realm.commitTransaction();
+        realm.close();
 
         if (geaModello != null)
         {
@@ -562,7 +558,7 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
                     startActivity(unrestrictedIntent);
                 } catch (ActivityNotFoundException innerEx)
                 {
-                    Toast.makeText(getActivity(), R.string.InstallMapApp, Toast.LENGTH_LONG).show();
+                    Toast.makeText(getActivity(), R.string.InstallMapApp, Toast.LENGTH_SHORT).show();
                 }
             }
         }
@@ -821,13 +817,13 @@ showToastMessage("swipe detected");
 
     private void createOrUpdateReportItem(int id_rapporto_sopralluogo)
     {
+        Realm realm = Realm.getDefaultInstance();
         realm.beginTransaction();
         reportItem = realm.where(ReportItem.class).equalTo("company_id", company_id).equalTo("tech_id", selectedTech.getId())
                 .equalTo("id_sopralluogo", idSopralluogo)
                 .equalTo("id_rapporto_sopralluogo", id_rapporto_sopralluogo)
                 .findFirst();
         realm.commitTransaction();
-
         if (reportItem == null)
         {
             tech_id = GlobalConstants.selectedTech.getId();
@@ -856,6 +852,7 @@ showToastMessage("swipe detected");
             reportItem.getGeaSopralluogo().setData_ora_sopralluogo(strDateTimeSet);
             realm.commitTransaction();
         }
+        realm.close();
     }
 
     private void setReminderNotification()
@@ -898,8 +895,8 @@ showToastMessage("swipe detected");
 
     private void disableInput()
     {
-        btnSetDateTimeSubmit.setEnabled(false);
-        btnSetDateTimeSubmit.setAlpha(.4f);
+        flSetDateTimeSubmit.setEnabled(false);
+        flSetDateTimeSubmit.setAlpha(.4f);
         btnGetCurrentCoords.setEnabled(false);
         btnGetCurrentCoords.setAlpha(.4f);
 
@@ -908,8 +905,8 @@ showToastMessage("swipe detected");
 
     private void enableInput()
     {
-        btnSetDateTimeSubmit.setEnabled(true);
-        btnSetDateTimeSubmit.setAlpha(1.0f);
+        flSetDateTimeSubmit.setEnabled(true);
+        flSetDateTimeSubmit.setAlpha(1.0f);
         btnGetCurrentCoords.setEnabled(true);
         btnGetCurrentCoords.setAlpha(1.0f);
 
@@ -958,6 +955,7 @@ showToastMessage("swipe detected");
         if (reportItem != null)
         {
             GeaRapporto geaRapporto = reportItem.getGea_rapporto_sopralluogo();
+            Realm realm = Realm.getDefaultInstance();
             realm.beginTransaction();
 
             if (etCoordNord.getText().toString().length() != 0)
@@ -984,6 +982,7 @@ showToastMessage("swipe detected");
             }
 
             realm.commitTransaction();
+            realm.close();
         }
     }
 
@@ -1043,7 +1042,7 @@ showToastMessage("swipe detected");
                         startActivity(unrestrictedIntent);
                     } catch (ActivityNotFoundException innerEx)
                     {
-                        Toast.makeText(getActivity(), R.string.InstallMapApp, Toast.LENGTH_LONG).show();
+                        Toast.makeText(getActivity(), R.string.InstallMapApp, Toast.LENGTH_SHORT).show();
                     }
                 }
             }

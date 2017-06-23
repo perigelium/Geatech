@@ -44,7 +44,6 @@ import static ru.alexangan.developer.geatech.Models.GlobalConstants.visitItems;
 
 public class ViewUtils
 {
-    private final Realm realm;
     private Context context;
 
     private int id_rapporto_sopralluogo;
@@ -91,7 +90,7 @@ public class ViewUtils
         ProductData productData = visitItem.getProductData();
         int id_product_type = productData.getIdProductType();
 
-        realm = Realm.getDefaultInstance();
+        Realm realm = Realm.getDefaultInstance();
 
         realm.beginTransaction();
         GeaModelloRapporto geaModello = realm.where(GeaModelloRapporto.class).equalTo("id_product_type", id_product_type).findFirst();
@@ -137,6 +136,7 @@ public class ViewUtils
         realm.commitTransaction();
 
         l_geaItemRapporto = reportItem.getGea_items_rapporto_sopralluogo();
+        realm.close();
     }
 
     public View getRootView()
@@ -2045,12 +2045,13 @@ public class ViewUtils
         {
             return;
         }
+        Realm realm = Realm.getDefaultInstance();
         realm.beginTransaction();
         final List<GeaItemModelliRapporto> itemModelli = realm.where(GeaItemModelliRapporto.class)
                 .between("id_sezione", geaSezioniModelli.get(0).getId_sezione(), geaSezioniModelli.get(geaSezioniModelli.size() - 1).getId_sezione())
                 .equalTo("ordine", geaSezioniModelli.get(headerNumber).getOrdine()).findAll();
         realm.commitTransaction();
-
+        realm.close();
 
         flSectionHeader.setOnClickListener(new View.OnClickListener()
         {

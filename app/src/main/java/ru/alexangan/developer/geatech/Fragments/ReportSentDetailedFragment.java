@@ -44,7 +44,6 @@ public class ReportSentDetailedFragment extends Fragment
     private String photosFolderName;
     ArrayList<Bitmap> imageThumbnails;
     ArrayList<File> pathItems;
-    private Realm realm;
     private TextView tvTechName, tvdataOraSopralluogo, tvdataOraRaportoInviato;
     private TextView tvdataOraRaportoCompletato;
     private TextView tvReportName, clientNameTextView;
@@ -63,7 +62,6 @@ public class ReportSentDetailedFragment extends Fragment
         }
 
         activity = getActivity();
-        realm = Realm.getDefaultInstance();
 
         loadingImagesDialog = new ProgressDialog(getActivity());
         loadingImagesDialog.setTitle("");
@@ -105,6 +103,7 @@ public class ReportSentDetailedFragment extends Fragment
         List<String> reportListStrValues = new ArrayList<>();
         tvTechName.setText(selectedTech.getFullNameTehnic());
 
+        Realm realm = Realm.getDefaultInstance();
         realm.beginTransaction();
         ReportItem reportItem = realm.where(ReportItem.class).equalTo("company_id", company_id)
                 .equalTo("tech_id", selectedTech.getId())
@@ -180,6 +179,8 @@ public class ReportSentDetailedFragment extends Fragment
         ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), R.layout.report_sent_detailed_item_row, R.id.tvReportDataItem, reportListStrValues);
 
         listView.setAdapter(adapter);
+
+        realm.close();
 
         imageThumbnails = new ArrayList<>();
         pathItems = new ArrayList<>();

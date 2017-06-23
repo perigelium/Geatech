@@ -40,7 +40,6 @@ public class StorageReportFragment extends Fragment
     ViewUtils viewUtils;
 
     GeaModelloRapporto geaModello;
-    private Realm realm;
 
     public StorageReportFragment()
     {
@@ -52,7 +51,7 @@ public class StorageReportFragment extends Fragment
         super.onCreate(savedInstanceState);
 
         context = getActivity();
-        realm = Realm.getDefaultInstance();
+        Realm realm = Realm.getDefaultInstance();
 
         if (getArguments() != null)
         {
@@ -82,6 +81,7 @@ public class StorageReportFragment extends Fragment
         realm.beginTransaction();
         id_rapporto_sopralluogo = reportItem != null ? reportItem.getGea_rapporto_sopralluogo().getId_rapporto_sopralluogo() : 0;
         realm.commitTransaction();
+        realm.close();
     }
 
     @Override
@@ -193,6 +193,7 @@ public class StorageReportFragment extends Fragment
 
             int completionState = DatabaseUtils.getReportInitializationState(id_sopralluogo, id_rapporto_sopralluogo);
 
+            Realm realm = Realm.getDefaultInstance();
             if (completionState == ReportStates.REPORT_COMPLETED)
             {
                 realm.beginTransaction();
@@ -209,6 +210,7 @@ public class StorageReportFragment extends Fragment
             realm.beginTransaction();
             reportItem.getReportStates().setReportCompletionState(completionState);
             realm.commitTransaction();
+            realm.close();
         }
     }
 

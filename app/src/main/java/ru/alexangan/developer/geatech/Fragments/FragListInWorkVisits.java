@@ -39,7 +39,7 @@ public class FragListInWorkVisits extends ListFragment
     ArrayList<VisitItem> visitItemsFiltered;
     ListView lv;
     Activity activity;
-    private Realm realm;
+    
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState)
@@ -63,7 +63,6 @@ public class FragListInWorkVisits extends ListFragment
         {
             timeNotSetItemsOnly = getArguments().getBoolean("ownVisitsOnly", false);
         }
-        realm = Realm.getDefaultInstance();
     }
 
     @Override
@@ -106,10 +105,12 @@ public class FragListInWorkVisits extends ListFragment
             GeaSopralluogo geaSopralluogo = visitItem.getGeaSopralluogo();
             int id_sopralluogo = geaSopralluogo.getId_sopralluogo();
 
+            Realm realm = Realm.getDefaultInstance();
             realm.beginTransaction();
             ReportItem reportItem = realm.where(ReportItem.class).equalTo("company_id", company_id).equalTo("tech_id", selectedTech.getId())
                     .equalTo("id_sopralluogo", id_sopralluogo).findFirst();
             realm.commitTransaction();
+            realm.close();
 
             if (reportItem != null)
             {
@@ -183,7 +184,7 @@ public class FragListInWorkVisits extends ListFragment
         {
             public void run()
             {
-                Toast.makeText(activity, msg, Toast.LENGTH_LONG).show();
+                Toast.makeText(activity, msg, Toast.LENGTH_SHORT).show();
             }
         });
     }*/

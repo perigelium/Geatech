@@ -36,7 +36,7 @@ public class FragListReportsSent extends ListFragment
     ReportsListAdapter myListAdapterSent;
     ListView lv;
     Activity activity;
-    private Realm realm;
+    
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState)
@@ -53,8 +53,6 @@ public class FragListReportsSent extends ListFragment
 
         mCommunicator = (Communicator) getActivity();
         swipeDetector = new SwipeDetector();
-
-        realm = Realm.getDefaultInstance();
     }
 
     @Override
@@ -77,6 +75,7 @@ public class FragListReportsSent extends ListFragment
         TreeMap<Long, ReportItem> unsortedReportsSent = new TreeMap<>();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ITALIAN);
 
+        Realm realm = Realm.getDefaultInstance();
         realm.beginTransaction();
         RealmResults<ReportItem> reportItems = realm.where(ReportItem.class).equalTo("company_id", company_id)
                 .equalTo("tech_id", selectedTech.getId())
@@ -137,6 +136,7 @@ public class FragListReportsSent extends ListFragment
                 mCommunicator.onSendReportReturned(id_rapporto_sopralluogo);
             }
         });
+        realm.close();
     }
 
 /*    private void showToastMessage(final String msg)
@@ -145,7 +145,7 @@ public class FragListReportsSent extends ListFragment
         {
             public void run()
             {
-                Toast.makeText(activity, msg, Toast.LENGTH_LONG).show();
+                Toast.makeText(activity, msg, Toast.LENGTH_SHORT).show();
             }
         });
     }*/

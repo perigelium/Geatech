@@ -52,7 +52,6 @@ public class LoginCompanyFragment extends Fragment implements View.OnClickListen
     private ProgressDialog downloadingDialog;
     LinearLayout llLogin, llPassword;
     boolean initialized;
-    private Realm realm;
 
     public LoginCompanyFragment()
     {
@@ -65,7 +64,6 @@ public class LoginCompanyFragment extends Fragment implements View.OnClickListen
         super.onCreate(savedInstanceState);
 
         activity = getActivity();
-        realm = Realm.getDefaultInstance();
         networkUtils = new NetworkUtils();
 
         downloadingDialog = new ProgressDialog(getActivity());
@@ -96,6 +94,7 @@ public class LoginCompanyFragment extends Fragment implements View.OnClickListen
 
             if (chkboxRememberMeState)
             {
+                Realm realm = Realm.getDefaultInstance();
                 realm.beginTransaction();
                 LoginCredentials loginCredentials = realm.where(LoginCredentials.class).findFirst();
                 realm.commitTransaction();
@@ -107,6 +106,7 @@ public class LoginCompanyFragment extends Fragment implements View.OnClickListen
                     String strPassword = loginCredentials.getPassword();
                     etPassword.setText(strPassword);
                 }
+                realm.close();
             }
         }
     }
@@ -246,6 +246,7 @@ public class LoginCompanyFragment extends Fragment implements View.OnClickListen
     {
         if (view.getId() == R.id.btnLogin)
         {
+            Realm realm = Realm.getDefaultInstance();
             realm.beginTransaction();
             RealmResults<LoginCredentials> loginCredentialses = realm.where(LoginCredentials.class).findAll();
 
@@ -300,6 +301,7 @@ public class LoginCompanyFragment extends Fragment implements View.OnClickListen
 
                 callTechnicianList = networkUtils.loginRequest(this, strLogin, strPassword, null, -1);
             }
+            realm.close();
         }
     }
 
@@ -345,19 +347,14 @@ public class LoginCompanyFragment extends Fragment implements View.OnClickListen
             {
                 if (!credentialsesFound && strLogin != null && strPassword != null)
                 {
-                    activity.runOnUiThread(new Runnable()
-                    {
-                        public void run()
-                        {
-                            realm.beginTransaction();
-                            RealmResults<LoginCredentials> loginCredentialses = realm.where(LoginCredentials.class).findAll();
-                            loginCredentialses.deleteAllFromRealm();
-                            company_id = loginCredentialses.size();
-                            LoginCredentials loginCredentials = new LoginCredentials(company_id, strLogin, strPassword);
-                            realm.copyToRealm(loginCredentials);
-                            realm.commitTransaction();
-                        }
-                    });
+                    Realm realm = Realm.getDefaultInstance();
+                    realm.beginTransaction();
+                    RealmResults<LoginCredentials> loginCredentialses = realm.where(LoginCredentials.class).findAll();
+                    loginCredentialses.deleteAllFromRealm();
+                    company_id = loginCredentialses.size();
+                    LoginCredentials loginCredentials = new LoginCredentials(company_id, strLogin, strPassword);
+                    realm.copyToRealm(loginCredentials);
+                    realm.commitTransaction();
                 }
 
                 try

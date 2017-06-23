@@ -32,7 +32,6 @@ import static ru.alexangan.developer.geatech.Models.GlobalConstants.selectedTech
 
 public class MyListVisitsAdapter extends BaseAdapter
 {
-    private final Realm realm;
     private Context mContext;
     private ArrayList<VisitItem> visitItems;
     private List<ReportItem> reportItems;
@@ -46,7 +45,6 @@ public class MyListVisitsAdapter extends BaseAdapter
         this.visitItems = visitItems;
         this.reportItems = reportItems;
         this.layout_id = layout_id;
-        realm = Realm.getDefaultInstance();
     }
 
     @Override
@@ -130,7 +128,11 @@ public class MyListVisitsAdapter extends BaseAdapter
         boolean remindedReport = data_invio_rapporto == null && data_sollecito_rapporto != null;
 
         String techName = "";
+        Realm realm = Realm.getDefaultInstance();
+        realm.beginTransaction();
         TechnicianItem technicianItem = realm.where(TechnicianItem.class).equalTo("id", tech_id).findFirst();
+        realm.commitTransaction();
+        realm.close();
 
         if (technicianItem != null)
         {

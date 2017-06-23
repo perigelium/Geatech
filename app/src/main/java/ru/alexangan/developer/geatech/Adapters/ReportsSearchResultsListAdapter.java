@@ -160,7 +160,9 @@ public class ReportsSearchResultsListAdapter extends BaseAdapter
             tvVisitMonth.setVisibility(View.VISIBLE);
 
             tvVisitDay.setText(String.format(Locale.ITALIAN, "%d", calendar.get(Calendar.DAY_OF_MONTH)));
-            tvVisitMonth.setText(ItalianMonths.numToString(calendar.get(Calendar.MONTH) + 1));
+
+            String month = ItalianMonths.numToString(calendar.get(Calendar.MONTH) + 1);
+            tvVisitMonth.setText(month);
 
             String minuteStr = Integer.toString(calendar.get(Calendar.MINUTE));
             if (minuteStr.length() == 1)

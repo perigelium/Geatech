@@ -21,14 +21,14 @@ public class VisitItem extends RealmObject
     private ProductData productData;
     private Gea_supplier geaSupplier;
     private GeaRapporto geaRapporto;
-    private RealmList<GeaImmagineRapportoSopralluogo> gea_immagini_rapporto_sopralluogo;
-    private RealmList<GeaItemRapportoSopralluogo> gea_items_rapporto_sopralluogo;
+    private RealmList<GeaImmagineRapporto> gea_immagini_rapporto_sopralluogo;
+    private RealmList<GeaItemRapporto> gea_items_rapporto_sopralluogo;
 
     public VisitItem() {
     }
 
     public VisitItem(int id, GeaSopralluogo geaSopralluogo, ClientData clientData, ProductData productData, Gea_supplier geaSupplier,
-                     GeaRapporto geaRapporto, RealmList<GeaItemRapportoSopralluogo> gea_items_rapporto_sopralluogo, RealmList<GeaImmagineRapportoSopralluogo> gea_immagini_rapporto_sopralluogo)
+                     GeaRapporto geaRapporto, RealmList<GeaItemRapporto> gea_items_rapporto_sopralluogo, RealmList<GeaImmagineRapporto> gea_immagini_rapporto_sopralluogo)
     {
         this.id = id;
         Calendar calendarNow = Calendar.getInstance(Locale.ITALY);
@@ -69,12 +69,12 @@ public class VisitItem extends RealmObject
         return geaRapporto;
     }
 
-    public RealmList<GeaImmagineRapportoSopralluogo> getGea_immagini_rapporto_sopralluogo()
+    public RealmList<GeaImmagineRapporto> getGea_immagini_rapporto_sopralluogo()
     {
         return gea_immagini_rapporto_sopralluogo;
     }
 
-    public RealmList<GeaItemRapportoSopralluogo> getGea_items_rapporto_sopralluogo()
+    public RealmList<GeaItemRapporto> getGea_items_rapporto_sopralluogo()
     {
         return gea_items_rapporto_sopralluogo;
     }

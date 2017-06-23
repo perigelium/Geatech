@@ -26,7 +26,6 @@ import static ru.alexangan.developer.geatech.Models.GlobalConstants.selectedTech
 
 public class ReportsListAdapter extends BaseAdapter
 {
-    private final Realm realm;
     private Context mContext;
     private ArrayList<ReportItem> reportItems;
     private int layout_id;
@@ -38,7 +37,6 @@ public class ReportsListAdapter extends BaseAdapter
         mContext = context;
         this.reportItems = reportItems;
         this.layout_id = layout_id;
-        realm = Realm.getDefaultInstance();
     }
 
     @Override
@@ -110,7 +108,11 @@ public class ReportsListAdapter extends BaseAdapter
         int tech_id = geaSopralluogo.getId_tecnico();
 
         String techName = "";
+        Realm realm = Realm.getDefaultInstance();
+        realm.beginTransaction();
         TechnicianItem technicianItem = realm.where(TechnicianItem.class).equalTo("id", tech_id).findFirst();
+        realm.commitTransaction();
+        realm.close();
 
         if (technicianItem != null)
         {
