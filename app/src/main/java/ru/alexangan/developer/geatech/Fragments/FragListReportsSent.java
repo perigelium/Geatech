@@ -133,7 +133,7 @@ public class FragListReportsSent extends ListFragment
             {
 
                 int id_rapporto_sopralluogo = reportItemsFilteredSent.get(position).getId_rapporto_sopralluogo();
-                mCommunicator.onSendReportReturned(id_rapporto_sopralluogo);
+                mCommunicator.showDetailedReport(id_rapporto_sopralluogo);
             }
         });
         realm.close();

@@ -69,4 +69,5 @@
     <string name="NoCompletedCompilation">Compilazione in corso del rapporto</string>
     <string name="SearchReport">Ricerca...</string>
     <string name="OfflineModeSeekInLocalReportsOnly">Modalità offline, cercando solo in rapporti locali.</string>
+    <string name="ZeroReportID">Rapporto ID uquale zero</string>
 </resources>

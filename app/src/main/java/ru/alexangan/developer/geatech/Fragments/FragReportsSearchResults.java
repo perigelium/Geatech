@@ -4,9 +4,6 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ListFragment;
 import android.app.ProgressDialog;
-import android.content.DialogInterface;
-import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.LayoutInflater;
@@ -30,16 +27,12 @@ import java.io.IOException;
 import java.io.Writer;
 import java.lang.reflect.Type;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import io.realm.Realm;
 import io.realm.RealmList;
 import okhttp3.Call;
 import okhttp3.Callback;
-import okhttp3.OkHttpClient;
 import okhttp3.Response;
 import ru.alexangan.developer.geatech.Adapters.ReportsSearchResultsListAdapter;
 import ru.alexangan.developer.geatech.Interfaces.Communicator;
@@ -77,11 +70,10 @@ public class FragReportsSearchResults extends ListFragment implements Callback
     private Handler handler;
     private Runnable runnable;
     private Call callGetReport;
-    List<Call> callDownloadImagesList;
     private ProgressDialog requestServerDialog;
     AlertDialog alert;
     String image_base_url;
-    List<ImgCallAttrs> imgCallAttrs;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState)
@@ -156,6 +148,8 @@ public class FragReportsSearchResults extends ListFragment implements Callback
         requestServerDialog.setMessage(getString(R.string.DownloadingDataPleaseWait));
         requestServerDialog.setIndeterminate(true);
 
+        final int tech_id = GlobalConstants.selectedTech.getId();
+
         if (reportsSearchResultItems != null)
         {
             myReportsSearchResultsAdapter =
@@ -168,32 +162,43 @@ public class FragReportsSearchResults extends ListFragment implements Callback
             {
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id)
                 {
-                    int id_rapporto_sopralluogo = reportsSearchResultItems.get(position).getId_rapporto_sopralluogo();
+                    int id_sopralluogo = reportsSearchResultItems.get(position).getId_sopralluogo();
+                    int id_rapporto_sopralluogo = 0;
+
+                    if (id_sopralluogo == 0)
+                    {
+                        showToastMessage(getString(R.string.ZeroReportID));
+                        return;
+                    }
+
+                    Realm realm = Realm.getDefaultInstance();
+                    realm.beginTransaction();
+                    ReportItem reportItemOld = realm.where(ReportItem.class).equalTo("company_id", company_id).equalTo("tech_id", tech_id)
+                            .equalTo("id_sopralluogo", id_sopralluogo)
+                            .findFirst();
+                    realm.commitTransaction();
+
+                    if (reportItemOld != null)
+                    {
+                        id_rapporto_sopralluogo = reportItemOld.getGea_rapporto_sopralluogo().getId_rapporto_sopralluogo();
+                    }
 
                     if (!NetworkUtils.isNetworkAvailable(activity))
                     {
-                        mCommunicator.onSendReportReturned(id_rapporto_sopralluogo);
+                        if (reportItemOld != null)
+                        {
+                            mSettings.edit().putBoolean("searchMode", true).commit();
+                            mCommunicator.showDetailedReport(id_rapporto_sopralluogo);
+                        }
                     } else
                     {
-                        int id_sopralluogo = reportsSearchResultItems.get(position).getId_sopralluogo();
-
-                        Realm realm = Realm.getDefaultInstance();
-                        realm.beginTransaction();
-                        ReportItem reportItem = realm.where(ReportItem.class).equalTo("company_id", company_id).equalTo("tech_id", selectedTech.getId())
-                                .equalTo("id_rapporto_sopralluogo", id_rapporto_sopralluogo)
-                                .findFirst();
-                        realm.commitTransaction();
-
-                        if (reportItem != null)
-                        {
-                            mCommunicator.onSendReportReturned(id_rapporto_sopralluogo);
-                        } else
-                        {
                             NetworkUtils networkUtils = new NetworkUtils();
+
                             callGetReport = networkUtils.getData
                                     (FragReportsSearchResults.this, GET_VISITS_URL_SUFFIX, tokenStr, null, Integer.toString(id_sopralluogo), false);
-                        }
+
                     }
+                    realm.close();
                 }
             });
         }
@@ -271,6 +276,7 @@ public class FragReportsSearchResults extends ListFragment implements Callback
                 try
                 {
                     image_base_url = jsonObject.getString("image_base_url");
+                    mSettings.edit().putString("image_base_url", image_base_url).commit();
 
                 } catch (JSONException e)
                 {
@@ -289,6 +295,8 @@ public class FragReportsSearchResults extends ListFragment implements Callback
 
                 if (visitItem != null)
                 {
+                    Realm realm = Realm.getDefaultInstance();
+
                     GeaSopralluogo geaSopralluogo = visitItem.getGeaSopralluogo();
                     ClientData clientData = visitItem.getClientData();
                     GeaRapporto geaRapporto = visitItem.getGeaRapporto();
@@ -297,8 +305,6 @@ public class FragReportsSearchResults extends ListFragment implements Callback
                     final int id_rapporto_sopralluogo = geaRapporto.getId_rapporto_sopralluogo();
                     RealmList<GeaItemRapporto> rl_ItemsRapportoSopralluogo = visitItem.getGea_items_rapporto_sopralluogo();
                     RealmList<GeaImmagineRapporto> rl_ImaginesRapportoSopralluogo = visitItem.getGea_immagini_rapporto_sopralluogo();
-
-                    Realm realm = Realm.getDefaultInstance();
 
                     realm.beginTransaction();
                     ReportItem reportItem = new ReportItem(company_id, tech_id,
@@ -310,66 +316,17 @@ public class FragReportsSearchResults extends ListFragment implements Callback
 
                     realm.copyToRealm(reportItem);
                     realm.commitTransaction();
+                    realm.close();
 
-                    callDownloadImagesList = new ArrayList<>();
-                    imgCallAttrs = new ArrayList<>();
-                    NetworkUtils networkUtils = new NetworkUtils();
-
-                    for (int i = 0; i < rl_ImaginesRapportoSopralluogo.size(); i++)
-                    {
-                        String imageName = rl_ImaginesRapportoSopralluogo.get(i).getNome_file();
-                        String pathSuffix = Integer.toString(id_rapporto_sopralluogo) + "/" + imageName;
-
-                        callDownloadImagesList.add(networkUtils.downloadURL(this, image_base_url + pathSuffix));
-
-                        imgCallAttrs.add(new ImgCallAttrs(callDownloadImagesList.get(callDownloadImagesList.size() - 1), idSopralluogo, imageName));
-                    }
+                    mSettings.edit().putBoolean("searchMode", true).commit();
 
                     activity.runOnUiThread(new Runnable()
                     {
                         public void run()
                         {
-                            mCommunicator.onSendReportReturned(id_rapporto_sopralluogo);
+                            mCommunicator.showDetailedReport(id_rapporto_sopralluogo);
                         }
                     });
-                }
-            }
-        } else
-        {
-            for (int i = 0; i < callDownloadImagesList.size(); i++)
-            {
-                if (call == callDownloadImagesList.get(i))
-                {
-                    String reportSendResponse = response.body().string();
-
-                    response.body().close();
-
-                    for (int j = 0; j < callDownloadImagesList.size(); j++)
-                    {
-                        if (call == imgCallAttrs.get(i).getCall())
-                        {
-                            int id_sopralluogo = imgCallAttrs.get(i).getId_sopralluogo();
-                            String fileName = imgCallAttrs.get(i).getFileName();
-
-                            String photosFolderName = "photos" + id_sopralluogo;
-
-                            File photosDir = new File(activity.getFilesDir(), photosFolderName);
-
-                            if (!photosDir.exists())
-                            {
-                                photosDir.mkdir();
-                            }
-
-                            Writer output;
-                            File file = new File(photosDir, fileName);
-                            output = new BufferedWriter(new FileWriter(file));
-                            output.write(reportSendResponse);
-                            output.close();
-
-                            break;
-                        }
-                    }
-
                 }
             }
         }

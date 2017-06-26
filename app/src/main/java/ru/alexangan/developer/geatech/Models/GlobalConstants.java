@@ -21,8 +21,8 @@ public class GlobalConstants
 
     public static String tokenStr;
     public static boolean visitsListIsObsolete;
-    //public static boolean reportsListIsObsolete;
     public static boolean reminderListIsObsolete;
+    public static String lastSearchResults;
 
     public static int LIST_VISITS_MODE_ALL = 0;
     public static int LIST_VISITS_MODE_MY = 1;

@@ -5,12 +5,14 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.Toast;
 
@@ -129,6 +131,7 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
     private int curSelBottomBtnId;
 
     ScrollViewEx scrvInnerFragContainer;
+    private boolean searchMode;
 
     @Override
     protected void onPause()
@@ -198,6 +201,7 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
         curSelBottomBtnId = 0;
         ctrlBtnChkChanged = true;
         firstStart = true;
+        searchMode = false;
 
 /*        realm.beginTransaction();
         visitItems = realm.where(VisitItem.class).findAll();
@@ -276,7 +280,7 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
         GlobalConstants.visitsListIsObsolete = false;
         //GlobalConstants.reportsListIsObsolete = false;
         GlobalConstants.reminderListIsObsolete = false;
-        mSettings.edit().putInt("listVisitsFilterMode", LIST_VISITS_MODE_ALL).apply();
+        //mSettings.edit().putInt("listVisitsFilterMode", LIST_VISITS_MODE_ALL).apply();
 
         handler = new Handler();
 
@@ -294,26 +298,39 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
     @Override
     public void onBackPressed()
     {
-        if (curSelBottomBtnId != 0)
+        boolean searchMode = mSettings.getBoolean("searchMode", false);
+
+        if(searchMode)
         {
-            ctrlBtnsBottom.setCheckedBtnId(curSelBottomBtnId);
-            curSelBottomBtnId = 0;
-        } else if (!fragListVisitsToday.isAdded() && !fragListVisitsOther.isAdded()
-                && !fragListVisitsFree.isAdded() && !fragListVisitsOverdue.isAdded())
+            mSettings.edit().putBoolean("searchMode", false).commit();
+            showReportsSearchResults(GlobalConstants.lastSearchResults);
+        }
+        else
         {
-            Button btn = (Button) findViewById(R.id.btnVisits);
-            btn.setSelected(false);
-            ctrlBtnsBottom.setCheckedBtnId(R.id.btnVisits);
-        } else
-        {
-            //super.onBackPressed();
-            this.finish();
+            if (curSelBottomBtnId != 0)
+            {
+                ctrlBtnsBottom.setCheckedBtnId(curSelBottomBtnId);
+                curSelBottomBtnId = 0;
+
+            } else if (!fragListVisitsToday.isAdded() && !fragListVisitsOther.isAdded()
+                    && !fragListVisitsFree.isAdded() && !fragListVisitsOverdue.isAdded())
+            {
+                Button btn = (Button) findViewById(R.id.btnVisits);
+                btn.setSelected(false);
+                ctrlBtnsBottom.setCheckedBtnId(R.id.btnVisits);
+            } else
+            {
+                //super.onBackPressed();
+                this.finish();
+            }
         }
     }
 
     @Override
     public void onCtrlBtnsBottomClicked(int btnId)
     {
+        disableSoftKeyboard();
+
         currentVisitId = -1;
         mFragmentManager.popBackStackImmediate();
 
@@ -353,7 +370,7 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
             }
             mFragmentTransaction.commit();
 
-            notificationBarFragment.setView(R.string.InWorkCompilations, View.GONE, View.GONE, View.GONE);
+            notificationBarFragment.setView(R.string.InWorkCompilations, View.GONE, View.GONE, View.GONE, true);
             return;
         }
 
@@ -377,7 +394,7 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
         {
             setVisitsListContent(settingsFragment);
 
-            notificationBarFragment.setView(R.string.Settings, View.GONE, View.GONE, View.GONE);
+            notificationBarFragment.setView(R.string.Settings, View.GONE, View.GONE, View.GONE, true);
             return;
         }
     }
@@ -397,7 +414,7 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
         mFragmentTransaction.addToBackStack(fragListReportsSent.getTag());
         mFragmentTransaction.commit();
 
-        notificationBarFragment.setView(R.string.CompletedCompilations, View.GONE, View.GONE, View.VISIBLE);
+        notificationBarFragment.setView(R.string.CompletedCompilations, View.GONE, View.GONE, View.VISIBLE, true);
     }
 
     private void showNotifVisitsLists()
@@ -421,13 +438,15 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
             mFragmentTransaction.addToBackStack(fragListReportsReminded.getTag());
             mFragmentTransaction.commit();
 
-            notificationBarFragment.setView(R.string.Notifications, View.GONE, View.GONE, View.GONE);
+            notificationBarFragment.setView(R.string.Notifications, View.GONE, View.GONE, View.GONE, true);
         }
     }
 
     @Override
     public void onCtrlBtnsSopralluogoClicked(int btnId)
     {
+        disableSoftKeyboard();
+
         if (currentVisitId == -1)
         {
             return;
@@ -591,6 +610,32 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
     }
 
     @Override
+    public void OnNotSentListItemSelected(int itemId)
+    {
+        currentVisitId = itemId;
+
+        mFragmentManager.popBackStack();
+
+        if (!ctrlBtnsSopralluogo.isAdded())
+        {
+            FragmentTransaction vFragmentTransaction = mFragmentManager.beginTransaction();
+            vFragmentTransaction.replace(R.id.headerFragContainer, ctrlBtnsSopralluogo);
+            vFragmentTransaction.commit();
+        }
+
+        mFragmentManager.executePendingTransactions();
+
+        if (!setDateTimeFragment.isAdded())
+        {
+            Bundle args = new Bundle();
+            args.putInt("selectedVisitId", itemId);
+            setDateTimeFragment.setArguments(args);
+
+            ctrlBtnsSopralluogo.setCheckedBtnId(R.id.btnSendReport);
+        }
+    }
+
+    @Override
     public void OnVisitListItemSelected(int itemId)
     {
         currentVisitId = itemId;
@@ -624,14 +669,14 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
         ctrlBtnsSopralluogo.setCheckedBtnId(R.id.btnSopralluogoInfo);
     }
 
-    @Override
+/*    @Override
     public void onCompilationHorisontalSwipeReturned(int btnId, boolean swipeDirection)
     {
         ctrlBtnsSopralluogo.selectNextButton(btnId, swipeDirection);
-    }
+    }*/
 
     @Override
-    public void onSendReportReturned(int id_rapporto_sopralluogo)
+    public void showDetailedReport(int id_rapporto_sopralluogo)
     {
         OnReportListItemSelected(id_rapporto_sopralluogo);
     }
@@ -652,7 +697,7 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
 
         if (!reportDetailedFragment.isAdded())
         {
-            notificationBarFragment.setView(R.string.ReportDetailed, View.GONE, View.GONE, View.GONE);
+            notificationBarFragment.setView(R.string.ReportDetailed, View.GONE, View.GONE, View.GONE, true);
 
             curSelBottomBtnId = ctrlBtnsBottom.getSelectedButtonId();
             ctrlBtnsBottom.unselectAllButtons();
@@ -681,7 +726,7 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
     {
         mFragmentManager.popBackStackImmediate();
 
-        notificationBarFragment.setView(R.string.ComingVisitsList, View.VISIBLE, View.VISIBLE, View.GONE);
+        notificationBarFragment.setView(R.string.ComingVisitsList, View.VISIBLE, View.VISIBLE, View.GONE, true);
 
         FragmentTransaction mFragmentTransaction = mFragmentManager.beginTransaction();
 
@@ -729,7 +774,7 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
                 mFragmentTransaction.add(llInnerFragContainer, fragListVisitsOther);
             }
 
-            notificationBarFragment.setView(R.string.MyVisitsList, View.VISIBLE, View.VISIBLE, View.GONE);
+            notificationBarFragment.setView(R.string.MyVisitsList, View.VISIBLE, View.VISIBLE, View.GONE, true);
         }
 
         if (mode == LIST_VISITS_MODE_FREE)
@@ -739,7 +784,7 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
                 mFragmentTransaction.add(llInnerFragContainer, fragListVisitsFree);
             }
 
-            notificationBarFragment.setView(R.string.FreeVisits, View.VISIBLE, View.VISIBLE, View.GONE);
+            notificationBarFragment.setView(R.string.FreeVisits, View.VISIBLE, View.VISIBLE, View.GONE, true);
         }
         mFragmentTransaction.addToBackStack(null);
         mFragmentTransaction.commit();
@@ -752,7 +797,7 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
     }
 
     @Override
-    public void onReportsSearchResultsReturned(String reportsSearchResultsJSON)
+    public void showReportsSearchResults(String reportsSearchResultsJSON)
     {
         currentVisitId = -1;
         mFragmentManager.popBackStackImmediate();
@@ -771,7 +816,9 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
         mFragmentTransaction.addToBackStack(fragReportsSearchResults.getTag());
         mFragmentTransaction.commit();
 
-        notificationBarFragment.setView(R.string.CompletedCompilations, View.GONE, View.GONE, View.VISIBLE);
+        notificationBarFragment.setView(R.string.CompletedCompilations, View.GONE, View.GONE, View.VISIBLE, false);
+
+        disableSoftKeyboard();
     }
 
     public Fragment assignFragmentModel(String productType)
@@ -985,6 +1032,18 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
                 GlobalConstants.reminderListIsObsolete = true;
                 refreshVisitsList();
             }
+        }
+    }
+
+    private void disableSoftKeyboard()
+    {
+        // Check if no view has focus:
+        View view = this.getCurrentFocus();
+
+        if (view != null)
+        {
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
     }
 }

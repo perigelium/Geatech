@@ -15,17 +15,22 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.TreeMap;
 
-import ru.alexangan.developer.geatech.Adapters.MyListVisitsAdapter;
+import io.realm.Realm;
+import io.realm.RealmResults;
+import ru.alexangan.developer.geatech.Adapters.ListVisitsAdapter;
 import ru.alexangan.developer.geatech.Interfaces.Communicator;
 import ru.alexangan.developer.geatech.Models.GeaSopralluogo;
+import ru.alexangan.developer.geatech.Models.ReportItem;
 import ru.alexangan.developer.geatech.Models.VisitItem;
 import ru.alexangan.developer.geatech.R;
 import ru.alexangan.developer.geatech.Utils.SwipeDetector;
 
+import static ru.alexangan.developer.geatech.Models.GlobalConstants.company_id;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.mSettings;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.selectedTech;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.visitItems;
@@ -36,7 +41,8 @@ public class FragListVisitsOverdue extends ListFragment
     SwipeDetector swipeDetector;
     boolean ownVisitsOnly;
     ArrayList<VisitItem> visitItemsFiltered;
-    MyListVisitsAdapter myListAdapter;
+    List<ReportItem> reportItems;
+    ListVisitsAdapter myListAdapter;
     ListView lv;
     Activity activity;
     //
@@ -77,11 +83,19 @@ public class FragListVisitsOverdue extends ListFragment
     {
         super.onViewCreated(view, savedInstanceState);
 
-        visitItemsFiltered = new ArrayList<>();
-
         TreeMap<Long, VisitItem> unsortedVisits = new TreeMap<>();
-
         visitItemsFiltered = new ArrayList<>();
+
+        Realm realm = Realm.getDefaultInstance();
+        visitItemsFiltered = new ArrayList<>();
+        realm.beginTransaction();
+        RealmResults<ReportItem> rr_reportItems = realm.where(ReportItem.class).equalTo("company_id", company_id)
+                .equalTo("tech_id", selectedTech.getId())
+                .findAll();
+        realm.commitTransaction();
+
+        reportItems = new ArrayList<>();
+        reportItems.addAll(rr_reportItems);
 
         Calendar calendarTodayFirstMin = Calendar.getInstance(Locale.ITALY);
 
@@ -157,7 +171,7 @@ public class FragListVisitsOverdue extends ListFragment
             }
         }
 
-        myListAdapter = new MyListVisitsAdapter(getActivity(), R.layout.list_visits_fragment_row, visitItemsFiltered, null);
+        myListAdapter = new ListVisitsAdapter(getActivity(), R.layout.list_visits_fragment_row, visitItemsFiltered, reportItems);
         setListAdapter(myListAdapter);
 
         lv = getListView();
@@ -205,6 +219,7 @@ public class FragListVisitsOverdue extends ListFragment
                 }*/
             }
         });
+        realm.close();
     }
 
 /*    private void showToastMessage(final String msg)

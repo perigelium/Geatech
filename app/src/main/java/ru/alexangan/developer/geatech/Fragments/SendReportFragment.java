@@ -403,30 +403,27 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
                         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ITALIAN);
                         String strDateTime = sdf.format(calendarNow.getTime());
 
-                        if (objectsSentSuccessfully == imagesArray.size())
-                        {
-                            Realm realm = Realm.getDefaultInstance();
-                            realm.beginTransaction();
-                            reportItem.getGea_rapporto_sopralluogo().setData_ora_invio_rapporto(strDateTime);
-                            realm.commitTransaction();
-                            realm.close();
+                        Realm realm = Realm.getDefaultInstance();
+                        realm.beginTransaction();
+                        reportItem.getGea_rapporto_sopralluogo().setData_ora_invio_rapporto(strDateTime);
+                        realm.commitTransaction();
+                        realm.close();
 
-                            Toast.makeText(activity, R.string.ReportSent, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(activity, R.string.ReportSent, Toast.LENGTH_SHORT).show();
 
-                            visitsListIsObsolete = true;
-                        } else
-                        {
-                            showToastMessage(getString(R.string.SendingReportFailed));
-                        }
+                        visitsListIsObsolete = true;
 
                         activity.runOnUiThread(new Runnable()
                         {
                             public void run()
                             {
                                 requestServerDialog.dismiss();
-                                mCommunicator.onSendReportReturned(id_rapporto_sopralluogo);
+                                mCommunicator.showDetailedReport(id_rapporto_sopralluogo);
                             }
                         });
+                    } else
+                    {
+                        showToastMessage(getString(R.string.SendingReportFailed));
                     }
 
                 }
@@ -452,7 +449,7 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
             });*/
 
 
-            //mCommunicator.onSendReportReturned();
+            //mCommunicator.showDetailedReport();
         } else
         {
             for (int i = 0; i < callSendImagesList.size(); i++)
@@ -520,7 +517,7 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
                                                     showToastMessage(getString(R.string.SendingReportFailed));
                                                 }
                                                 requestServerDialog.dismiss();
-                                                mCommunicator.onSendReportReturned(id_rapporto_sopralluogo);
+                                                mCommunicator.showDetailedReport(id_rapporto_sopralluogo);
                                             }
                                         });
                                     }

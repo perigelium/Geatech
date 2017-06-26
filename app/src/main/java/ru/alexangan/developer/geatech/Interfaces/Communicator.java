@@ -8,9 +8,9 @@ public interface Communicator
 {
     void onDateTimeSetReturned(int itemIndex);
 
-    void onCompilationHorisontalSwipeReturned(int itemIndex, boolean swipeDirection);
+    //void onCompilationHorisontalSwipeReturned(int itemIndex, boolean swipeDirection);
 
-    void onSendReportReturned(int id_rapporto_sopralluogo);
+    void showDetailedReport(int id_rapporto_sopralluogo);
 
     void onCtrlBtnsBottomClicked(int btnId);
 
@@ -28,5 +28,7 @@ public interface Communicator
 
     void onLogoutCommand();
 
-    void onReportsSearchResultsReturned(String reportsSearchResultsJSON);
+    void showReportsSearchResults(String reportsSearchResultsJSON);
+
+    void OnNotSentListItemSelected(int idVisit);
 }

@@ -214,7 +214,7 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
 
         tvClientName = (TextView) rootView.findViewById(R.id.tvClientName);
 
-        tvClientPhone = (TextView) rootView.findViewById(R.id.tvClientPhone);
+        tvClientPhone = (TextView) rootView.findViewById(R.id.tvClientPhones);
 
         tvTypeOfService = (TextView) rootView.findViewById(R.id.tvTypeOfService);
 
@@ -256,7 +256,8 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
         }
 
         tvClientName.setText(clientData.getName());
-        tvClientPhone.setText(clientData.getMobile());
+        String clientPhones = clientData.getMobile() + ", " + clientData.getPhone();
+        tvClientPhone.setText(clientPhones);
         tvClientAddress.setText(clientData.getAddress());
         tvTypeOfService.setText(productData.getProductType());
         tvProductModel.setText(productData.getProduct());

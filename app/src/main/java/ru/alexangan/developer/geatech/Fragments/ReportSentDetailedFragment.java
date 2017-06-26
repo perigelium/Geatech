@@ -14,26 +14,40 @@ import android.widget.GridView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.Writer;
 import java.util.ArrayList;
 import java.util.List;
 
 import io.realm.Realm;
+import io.realm.RealmList;
 import io.realm.RealmResults;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.Response;
+import okio.BufferedSink;
+import okio.Okio;
 import ru.alexangan.developer.geatech.Adapters.GridViewAdapter;
+import ru.alexangan.developer.geatech.Models.GeaImmagineRapporto;
 import ru.alexangan.developer.geatech.Models.GeaItemModelliRapporto;
 import ru.alexangan.developer.geatech.Models.GeaItemRapporto;
+import ru.alexangan.developer.geatech.Models.ImgCallAttrs;
 import ru.alexangan.developer.geatech.Models.ReportItem;
+import ru.alexangan.developer.geatech.Network.NetworkUtils;
 import ru.alexangan.developer.geatech.R;
 import ru.alexangan.developer.geatech.Utils.ImageUtils;
 import ru.alexangan.developer.geatech.Utils.ViewUtils;
 
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.company_id;
+import static ru.alexangan.developer.geatech.Models.GlobalConstants.mSettings;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.selectedTech;
 
 // Created by Alex Angan on 11/10/2016 .
 
-public class ReportSentDetailedFragment extends Fragment
+public class ReportSentDetailedFragment extends Fragment implements Callback
 {
     private int id_rapporto_sopralluogo;
     GridView gvPhotoGallery;
@@ -46,10 +60,17 @@ public class ReportSentDetailedFragment extends Fragment
     ArrayList<File> pathItems;
     private TextView tvTechName, tvdataOraSopralluogo, tvdataOraRaportoInviato;
     private TextView tvdataOraRaportoCompletato;
-    private TextView tvReportName, clientNameTextView;
-    private TextView clientPhoneTextView, clientAddressTextView;
+    private TextView tvReportName, tvClientName;
+    private TextView tvClientPhones, tvClientAddress;
     private TextView tvCoordNord, tvCoordEst, tvAltitude;
     private ListView listView;
+    List<Call> callDownloadImagesList;
+    List<ImgCallAttrs> imgCallAttrs;
+    ReportItem reportItemUnmanaged;
+    private int id_sopralluogo;
+    private int callsSent;
+    RealmList<GeaImmagineRapporto> rl_ImaginesRapportoSopralluogo;
+    List<String> imageNames;
 
     @Override
     public void onCreate(Bundle savedInstanceState)
@@ -62,6 +83,7 @@ public class ReportSentDetailedFragment extends Fragment
         }
 
         activity = getActivity();
+        callsSent = -1;
 
         loadingImagesDialog = new ProgressDialog(getActivity());
         loadingImagesDialog.setTitle("");
@@ -80,9 +102,9 @@ public class ReportSentDetailedFragment extends Fragment
         tvdataOraRaportoInviato = (TextView) rootView.findViewById(R.id.tvdataOraRaportoInviato);
         tvReportName = (TextView) rootView.findViewById(R.id.tvReportName);
 
-        clientNameTextView = (TextView) rootView.findViewById(R.id.tvClientName);
-        clientPhoneTextView = (TextView) rootView.findViewById(R.id.tvClientPhone);
-        clientAddressTextView = (TextView) rootView.findViewById(R.id.tvClientAddress);
+        tvClientName = (TextView) rootView.findViewById(R.id.tvClientName);
+        tvClientPhones = (TextView) rootView.findViewById(R.id.tvClientPhones);
+        tvClientAddress = (TextView) rootView.findViewById(R.id.tvClientAddress);
 
         tvCoordNord = (TextView) rootView.findViewById(R.id.etCoordNord);
         tvCoordEst = (TextView) rootView.findViewById(R.id.etCoordEst);
@@ -99,11 +121,11 @@ public class ReportSentDetailedFragment extends Fragment
     public void onViewCreated(View view, Bundle savedInstanceState)
     {
         super.onViewCreated(view, savedInstanceState);
+        Realm realm = Realm.getDefaultInstance();
 
         List<String> reportListStrValues = new ArrayList<>();
         tvTechName.setText(selectedTech.getFullNameTehnic());
 
-        Realm realm = Realm.getDefaultInstance();
         realm.beginTransaction();
         ReportItem reportItem = realm.where(ReportItem.class).equalTo("company_id", company_id)
                 .equalTo("tech_id", selectedTech.getId())
@@ -111,13 +133,17 @@ public class ReportSentDetailedFragment extends Fragment
                 .findFirst();
         realm.commitTransaction();
 
-        if (reportItem != null)
+        reportItemUnmanaged = realm.copyFromRealm(reportItem);
+
+        if (reportItemUnmanaged != null)
         {
-            photosFolderName = "photos" + reportItem.getId_sopralluogo();
+            id_sopralluogo = reportItemUnmanaged.getId_sopralluogo();
+            photosFolderName = "photos" + id_sopralluogo;
 
-            String product_type = reportItem.getClientData().getProduct_type();
+            String product_type = reportItemUnmanaged.getClientData().getProduct_type();
 
-            List<GeaItemRapporto> geaItemsRapporto = reportItem.getGea_items_rapporto_sopralluogo();
+            List<GeaItemRapporto> geaItemsRapporto = reportItemUnmanaged.getGea_items_rapporto_sopralluogo();
+            rl_ImaginesRapportoSopralluogo = reportItemUnmanaged.getGea_immagini_rapporto_sopralluogo();
 
             if (geaItemsRapporto.size() != 0)
             {
@@ -153,7 +179,9 @@ public class ReportSentDetailedFragment extends Fragment
                     {
                         if (geaItemModelli.get(i).getId_item_modello() == geaItemsRapporto.get(j).getId_item_modello())
                         {
-                            reportListStrValues.add(String.valueOf(geaItemModelli.get(i).getDescrizione_item()) + " : " + geaItemsRapporto.get(j).getValore());
+                            String valore = geaItemsRapporto.get(j).getValore();
+                            valore = valore.replace("||", "  ");
+                            reportListStrValues.add(String.valueOf(geaItemModelli.get(i).getDescrizione_item()) + " : " + valore);
                         }
                     }
                 }
@@ -163,13 +191,14 @@ public class ReportSentDetailedFragment extends Fragment
                 tvdataOraRaportoInviato.setText(reportItem.getGea_rapporto_sopralluogo().getData_ora_invio_rapporto());
             }
 
-            clientNameTextView.setText(reportItem.getClientData().getName());
-            clientPhoneTextView.setText(reportItem.getClientData().getMobile());
-            clientAddressTextView.setText(reportItem.getClientData().getAddress());
+            tvClientName.setText(reportItemUnmanaged.getClientData().getName());
+            String clientPhones = reportItemUnmanaged.getClientData().getMobile() + ", " + reportItem.getClientData().getPhone();
+            tvClientPhones.setText(clientPhones);
+            tvClientAddress.setText(reportItemUnmanaged.getClientData().getAddress());
 
-            String latitude = reportItem.getGea_rapporto_sopralluogo().getLatitudine();
-            String longitude = reportItem.getGea_rapporto_sopralluogo().getLongitudine();
-            String altitude = reportItem.getGea_rapporto_sopralluogo().getAltitudine();
+            String latitude = reportItemUnmanaged.getGea_rapporto_sopralluogo().getLatitudine();
+            String longitude = reportItemUnmanaged.getGea_rapporto_sopralluogo().getLongitudine();
+            String altitude = reportItemUnmanaged.getGea_rapporto_sopralluogo().getAltitudine();
 
             tvCoordNord.setText(String.valueOf(latitude));
             tvCoordEst.setText(String.valueOf(longitude));
@@ -185,11 +214,84 @@ public class ReportSentDetailedFragment extends Fragment
         imageThumbnails = new ArrayList<>();
         pathItems = new ArrayList<>();
 
-        LoadImagesTask loadImagesTask = new LoadImagesTask();
-        loadImagesTask.execute();
+        RedrawImagesTask redrawImagesTask = new RedrawImagesTask();
+        redrawImagesTask.execute();
     }
 
     private void getImagesArray()
+    {
+        callDownloadImagesList = new ArrayList<>();
+        imgCallAttrs = new ArrayList<>();
+        NetworkUtils networkUtils = new NetworkUtils();
+
+        String image_base_url = mSettings.getString("image_base_url", null);
+        callDownloadImagesList.clear();
+
+        if (image_base_url != null && id_rapporto_sopralluogo != 0)
+        {
+            for (int i = 0; i < rl_ImaginesRapportoSopralluogo.size(); i++)
+            {
+                String imageName = rl_ImaginesRapportoSopralluogo.get(i).getNome_file();
+
+                if (!imageNames.contains(imageName))
+                {
+                    String pathSuffix = Integer.toString(id_rapporto_sopralluogo) + "/" + imageName;
+
+                    callDownloadImagesList.add(networkUtils.downloadURL(this, image_base_url + pathSuffix));
+
+                    imgCallAttrs.add(new ImgCallAttrs(callDownloadImagesList.get(callDownloadImagesList.size() - 1), id_sopralluogo, imageName));
+                }
+
+            }
+            callsSent = callDownloadImagesList.size();
+        }
+    }
+
+    @Override
+    public void onFailure(Call call, IOException e)
+    {
+
+    }
+
+    @Override
+    public void onResponse(Call call, Response response) throws IOException
+    {
+        for (int i = 0; i < callDownloadImagesList.size(); i++)
+        {
+            if (call == imgCallAttrs.get(i).getCall())
+            {
+                int id_sopralluogo = imgCallAttrs.get(i).getId_sopralluogo();
+                String fileName = imgCallAttrs.get(i).getFileName();
+
+                String photosFolderName = "photos" + id_sopralluogo;
+
+                File photosDir = new File(activity.getFilesDir(), photosFolderName);
+
+                if (!photosDir.exists())
+                {
+                    photosDir.mkdir();
+                }
+
+                File file = new File(photosDir, fileName);
+                BufferedSink sink = Okio.buffer(Okio.sink(file));
+                sink.writeAll(response.body().source());
+                sink.close();
+                response.body().close();
+
+                pathItems.add(file);
+                callsSent--;
+                break;
+            }
+        }
+
+        if (callsSent == 0)
+        {
+            RedrawImagesTask redrawImagesTask = new RedrawImagesTask();
+            redrawImagesTask.execute();
+        }
+    }
+
+    private void fillImagesArray()
     {
         File appDirectory = new File(activity.getFilesDir(), photosFolderName);
 
@@ -197,6 +299,8 @@ public class ReportSentDetailedFragment extends Fragment
         {
             return;
         }
+
+        imageNames = new ArrayList<>();
 
         File[] filePaths = appDirectory.listFiles();
 
@@ -206,25 +310,8 @@ public class ReportSentDetailedFragment extends Fragment
 
             imageThumbnails.add(bm);
             pathItems.add(file);
+            imageNames.add(file.getName());
         }
-    }
-
-    @Override
-    public View getView()
-    {
-        return super.getView();
-    }
-
-    @Override
-    public void onHiddenChanged(boolean hidden)
-    {
-        super.onHiddenChanged(hidden);
-    }
-
-    @Override
-    public void onResume()
-    {
-        super.onResume();
     }
 
     class LoadImagesTask extends AsyncTask<Void, Void, Void>
@@ -264,6 +351,51 @@ public class ReportSentDetailedFragment extends Fragment
             gvPhotoGallery.setAdapter(gridAdapter);
 
             ViewUtils.setGridViewHeight(gvPhotoGallery);
+
+            //handler.removeCallbacks(runnable);
+        }
+    }
+
+    class RedrawImagesTask extends AsyncTask<Void, Void, Void>
+    {
+        @Override
+        protected Void doInBackground(Void... voids)
+        {
+            try
+            {
+                fillImagesArray(); // Long time operation
+            } catch (Exception e)
+            {
+                loadingImagesDialog.dismiss();
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPreExecute()
+        {
+            super.onPreExecute();
+
+            loadingImagesDialog.setMessage(getString(R.string.LoadingImagesInProgress));
+            loadingImagesDialog.show();
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid)
+        {
+            super.onPostExecute(aVoid);
+
+            loadingImagesDialog.dismiss();
+
+            GridViewAdapter gridAdapter = new GridViewAdapter(activity, R.layout.grid_item_layout, imageThumbnails);
+
+            gvPhotoGallery.setAdapter(gridAdapter);
+
+            ViewUtils.setGridViewHeight(gvPhotoGallery);
+
+            LoadImagesTask loadImagesTask = new LoadImagesTask();
+            loadImagesTask.execute();
 
             //handler.removeCallbacks(runnable);
         }

@@ -22,7 +22,7 @@ import java.util.TreeMap;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
-import ru.alexangan.developer.geatech.Adapters.MyListVisitsAdapter;
+import ru.alexangan.developer.geatech.Adapters.ListVisitsAdapter;
 import ru.alexangan.developer.geatech.Interfaces.Communicator;
 import ru.alexangan.developer.geatech.Models.GeaSopralluogo;
 import ru.alexangan.developer.geatech.Models.ReportItem;
@@ -42,7 +42,7 @@ public class FragListVisitsToday extends ListFragment
     boolean ownVisitsOnly;
     ArrayList<VisitItem> visitItemsFiltered;
     List<ReportItem> reportItems;
-    MyListVisitsAdapter myListAdapter;
+    ListVisitsAdapter myListAdapter;
     ListView lv;
     Activity activity;
     TextView tvListVisitsTodayDate;
@@ -84,6 +84,7 @@ public class FragListVisitsToday extends ListFragment
 
         Realm realm = Realm.getDefaultInstance();
         visitItemsFiltered = new ArrayList<>();
+
         realm.beginTransaction();
         RealmResults <ReportItem> rr_reportItems = realm.where(ReportItem.class).equalTo("company_id", company_id)
                 .equalTo("tech_id", selectedTech.getId())
@@ -162,7 +163,7 @@ public class FragListVisitsToday extends ListFragment
             }
         }
 
-        myListAdapter = new MyListVisitsAdapter(getActivity(), R.layout.list_visits_fragment_row, visitItemsFiltered, reportItems);
+        myListAdapter = new ListVisitsAdapter(getActivity(), R.layout.list_visits_fragment_row, visitItemsFiltered, reportItems);
         setListAdapter(myListAdapter);
 
         lv = getListView();

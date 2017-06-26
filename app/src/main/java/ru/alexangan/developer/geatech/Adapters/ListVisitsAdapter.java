@@ -30,7 +30,7 @@ import ru.alexangan.developer.geatech.R;
 
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.selectedTech;
 
-public class MyListVisitsAdapter extends BaseAdapter
+public class ListVisitsAdapter extends BaseAdapter
 {
     private Context mContext;
     private ArrayList<VisitItem> visitItems;
@@ -38,7 +38,7 @@ public class MyListVisitsAdapter extends BaseAdapter
     private int layout_id;
     //ViewHolder holder;
 
-    public MyListVisitsAdapter(Context context, int layout_id, ArrayList<VisitItem> visitItems, List<ReportItem> reportItems)
+    public ListVisitsAdapter(Context context, int layout_id, ArrayList<VisitItem> visitItems, List<ReportItem> reportItems)
     {
         //super(context, textViewResourceId, objects);
         mContext = context;
@@ -224,10 +224,11 @@ public class MyListVisitsAdapter extends BaseAdapter
 
                             boolean reportStartedNotCompleted =
                                     (generalInfoCompletionState > ReportStates.GENERAL_INFO_DATETIME_SET
+                                            || reportCompletionState > ReportStates.REPORT_NON_INITIATED || photosAddedNumber != 0)
                                             &&
                                             (! (generalInfoCompletionState == ReportStates.GENERAL_INFO_DATETIME_AND_COORDS_SET
                                                     && reportCompletionState == ReportStates.REPORT_COMPLETED
-                                                    && photosAddedNumber >= ReportStates.PHOTOS_MIN_ADDED)));
+                                                    && photosAddedNumber >= ReportStates.PHOTOS_MIN_ADDED));
 
                             boolean reportCompleteNotSent = generalInfoCompletionState == ReportStates.GENERAL_INFO_DATETIME_AND_COORDS_SET
                                     && reportCompletionState == ReportStates.REPORT_COMPLETED

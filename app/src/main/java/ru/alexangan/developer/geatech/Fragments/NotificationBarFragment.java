@@ -4,9 +4,12 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.ProgressDialog;
+import android.app.SearchManager;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v4.view.MenuItemCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,12 +40,14 @@ import okhttp3.Response;
 import ru.alexangan.developer.geatech.Adapters.CustomSpinnerAdapter;
 import ru.alexangan.developer.geatech.Interfaces.Communicator;
 import ru.alexangan.developer.geatech.Models.ClientData;
+import ru.alexangan.developer.geatech.Models.GlobalConstants;
 import ru.alexangan.developer.geatech.Models.ReportItem;
 import ru.alexangan.developer.geatech.Models.ReportsSearchResultItem;
 import ru.alexangan.developer.geatech.Models.SpinnerItemData;
 import ru.alexangan.developer.geatech.Network.NetworkUtils;
 import ru.alexangan.developer.geatech.R;
 
+import static ru.alexangan.developer.geatech.Models.GlobalConstants.LIST_VISITS_MODE_ALL;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.SEARCH_VISITS_URL_SUFFIX;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.company_id;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.mSettings;
@@ -111,8 +116,8 @@ public class NotificationBarFragment extends Fragment implements SearchView.OnQu
         searchViewReports = (SearchView) rootView.findViewById(R.id.searchViewReports);
 
         searchViewReports.setSubmitButtonEnabled(true);
+        searchViewReports.setIconifiedByDefault(true);
         searchViewReports.setOnQueryTextListener(this);
-        searchViewReports.setVisibility(View.VISIBLE);
 
         spVisitsFilter = (Spinner) rootView.findViewById(R.id.spVisitsFilter);
 
@@ -179,15 +184,23 @@ public class NotificationBarFragment extends Fragment implements SearchView.OnQu
     public void onResume()
     {
         super.onResume();
+
+        //searchViewReports.setQuery("", false);
     }
 
     public void setView
-            (int tvWindowTitleString, int ivLogoSmallVisibility, int ivVisitsListsFilterVisibility, int searchBarVisibility)
+            (int tvWindowTitleString, int ivLogoSmallVisibility,
+             int ivVisitsListsFilterVisibility, int searchBarVisibility, boolean iconifySearchView)
     {
         tvWindowTitle.setText(tvWindowTitleString);
         ivLogoSmall.setVisibility(ivLogoSmallVisibility);
         ivVisitsListsFilter.setVisibility(ivVisitsListsFilterVisibility);
         searchViewReports.setVisibility(searchBarVisibility);
+
+        if(searchViewReports.getVisibility() == View.VISIBLE && iconifySearchView)
+        {
+            searchViewReports.setIconified(true);
+        }
     }
 
     @Override
@@ -255,7 +268,7 @@ public class NotificationBarFragment extends Fragment implements SearchView.OnQu
                 {
                     jsonObject.put("arr_case", jsonArray);
 
-                    mCommunicator.onReportsSearchResultsReturned(jsonObject.toString());
+                    mCommunicator.showReportsSearchResults(jsonObject.toString());
 
                 } catch (JSONException e)
                 {
@@ -352,11 +365,13 @@ public class NotificationBarFragment extends Fragment implements SearchView.OnQu
                 }
             } else
             {
+                GlobalConstants.lastSearchResults = reportsSearchResultsJSON;
+
                 activity.runOnUiThread(new Runnable()
                 {
                     public void run()
                     {
-                        mCommunicator.onReportsSearchResultsReturned(reportsSearchResultsJSON);
+                        mCommunicator.showReportsSearchResults(reportsSearchResultsJSON);
                     }
                 });
             }

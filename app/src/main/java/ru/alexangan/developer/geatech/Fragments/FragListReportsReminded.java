@@ -19,7 +19,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.TreeMap;
 
-import ru.alexangan.developer.geatech.Adapters.MyListVisitsAdapter;
+import ru.alexangan.developer.geatech.Adapters.ListVisitsAdapter;
 import ru.alexangan.developer.geatech.Interfaces.Communicator;
 import ru.alexangan.developer.geatech.Models.GeaRapporto;
 import ru.alexangan.developer.geatech.Models.GeaSopralluogo;
@@ -124,7 +124,7 @@ public class FragListReportsReminded extends ListFragment
             }
         }
 
-        ListAdapter myListAdapter = new MyListVisitsAdapter(getActivity(), R.layout.list_visits_fragment_row, visitItemsFiltered, null);
+        ListAdapter myListAdapter = new ListVisitsAdapter(getActivity(), R.layout.list_visits_fragment_row, visitItemsFiltered, null);
 
         setListAdapter(myListAdapter);
 

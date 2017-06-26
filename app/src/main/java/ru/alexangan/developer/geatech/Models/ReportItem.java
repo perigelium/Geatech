@@ -70,7 +70,7 @@ public class ReportItem extends RealmObject
         this.gea_rapporto_sopralluogo = gea_rapporto_sopralluogo;
     }
 
-    public List<GeaImmagineRapporto> getGea_immagini_rapporto_sopralluogo()
+    public RealmList<GeaImmagineRapporto> getGea_immagini_rapporto_sopralluogo()
     {
         return gea_immagini_rapporto_sopralluogo;
     }
@@ -80,7 +80,7 @@ public class ReportItem extends RealmObject
         this.gea_immagini_rapporto_sopralluogo = gea_immagini_rapporto_sopralluogo;
     }
 
-    public List<GeaItemRapporto> getGea_items_rapporto_sopralluogo()
+    public RealmList<GeaItemRapporto> getGea_items_rapporto_sopralluogo()
     {
         return gea_items_rapporto_sopralluogo;
     }

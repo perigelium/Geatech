@@ -18,9 +18,8 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import io.realm.Realm;
-import ru.alexangan.developer.geatech.Adapters.MyListVisitsAdapter;
+import ru.alexangan.developer.geatech.Adapters.ListVisitsAdapter;
 import ru.alexangan.developer.geatech.Interfaces.Communicator;
-import ru.alexangan.developer.geatech.Models.GeaRapporto;
 import ru.alexangan.developer.geatech.Models.GeaSopralluogo;
 import ru.alexangan.developer.geatech.Models.ReportItem;
 import ru.alexangan.developer.geatech.Models.ReportStates;
@@ -38,7 +37,7 @@ public class FragListReportsNotSent extends ListFragment
     SwipeDetector swipeDetector;
     boolean timeNotSetItemsOnly;
     ArrayList<VisitItem> visitItemsFilteredNotSent;
-    MyListVisitsAdapter myListAdapterNotSent;
+    ListVisitsAdapter myListAdapterNotSent;
     ListView lv;
     Activity activity;
     
@@ -145,7 +144,7 @@ public class FragListReportsNotSent extends ListFragment
             }
         }
 
-        myListAdapterNotSent = new MyListVisitsAdapter(getActivity(), R.layout.list_visits_fragment_row, visitItemsFilteredNotSent, null);
+        myListAdapterNotSent = new ListVisitsAdapter(getActivity(), R.layout.list_visits_fragment_row, visitItemsFilteredNotSent, null);
         setListAdapter(myListAdapterNotSent);
 
         lv = getListView();
@@ -158,7 +157,7 @@ public class FragListReportsNotSent extends ListFragment
             {
                 int idVisit = visitItemsFilteredNotSent.get(position).getId();
 
-                mCommunicator.OnVisitListItemSelected(idVisit);
+                mCommunicator.OnNotSentListItemSelected(idVisit);
             }
         });
     }

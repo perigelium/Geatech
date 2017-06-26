@@ -19,7 +19,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.TreeMap;
 
-import ru.alexangan.developer.geatech.Adapters.MyListVisitsAdapter;
+import ru.alexangan.developer.geatech.Adapters.ListVisitsAdapter;
 import ru.alexangan.developer.geatech.Interfaces.Communicator;
 import ru.alexangan.developer.geatech.Models.GeaSopralluogo;
 import ru.alexangan.developer.geatech.Models.VisitItem;
@@ -36,7 +36,7 @@ public class FragListVisitsOther extends ListFragment
     SwipeDetector swipeDetector;
     boolean ownVisitsOnly;
     ArrayList<VisitItem> visitItemsFiltered;
-    MyListVisitsAdapter myListAdapter;
+    ListVisitsAdapter myListAdapter;
     ListView lv;
     Activity activity;
     //
@@ -154,7 +154,7 @@ public class FragListVisitsOther extends ListFragment
             }
         }
 
-        myListAdapter = new MyListVisitsAdapter(getActivity(), R.layout.list_visits_fragment_row, visitItemsFiltered, null);
+        myListAdapter = new ListVisitsAdapter(getActivity(), R.layout.list_visits_fragment_row, visitItemsFiltered, null);
         setListAdapter(myListAdapter);
 
         lv = getListView();
