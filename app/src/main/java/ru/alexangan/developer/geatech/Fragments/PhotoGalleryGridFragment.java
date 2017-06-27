@@ -63,7 +63,7 @@ public class PhotoGalleryGridFragment extends Fragment
 
     private final int PICK_GALLERY_IMAGE = 1;
     private final int PICK_CAMERA_IMAGE = 2;
-    int currentPicPos = 0;
+    int currentPicPos;
     File photosDir;
     int imgHolderWidth = 100;
     int imgHolderHeight = 75;
@@ -110,6 +110,8 @@ public class PhotoGalleryGridFragment extends Fragment
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
+
+        currentPicPos = 0;
 
         activity = getActivity();
         Realm realm = Realm.getDefaultInstance();
@@ -543,7 +545,6 @@ public class PhotoGalleryGridFragment extends Fragment
         {
 
             bm = ImageUtils.decodeSampledBitmapFromUri(fileSrc.getAbsolutePath(), imgHolderWidth, imgHolderHeight);
-
 
             return null;
         }

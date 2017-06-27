@@ -50,19 +50,22 @@ public class NotificationIntentService extends IntentService
         Intent resultIntent = new Intent(this, MainActivity.class);
         PendingIntent pIntent = PendingIntent.getActivity(this, 0, resultIntent, 0);
 
-        String delayHours = mSettings.getString("reminderDelayHours", "0");
+        String reminderDelayString = mSettings.getString("reminderDelayString", null);
 
-        Notification nBuilder = new Notification.Builder(this)
-                .setContentTitle("Non perdetevi! ")
-                .setTicker("GeaTech notifica!")
-                .setContentIntent(pIntent)
-                .setDefaults(Notification.DEFAULT_SOUND)
-                .setAutoCancel(true)
-                .setSmallIcon(R.drawable.gea_logo)
-                .setContentText(delayHours + " rimaste fino all'appuntamento...")
-                .build();
-        NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-        nBuilder.flags |= Notification.FLAG_AUTO_CANCEL;
-        notificationManager.notify(1, nBuilder);
+        if(reminderDelayString != null)
+        {
+            Notification nBuilder = new Notification.Builder(this)
+                    .setContentTitle("Non perdetevi! ")
+                    .setTicker("GeaTech notifica!")
+                    .setContentIntent(pIntent)
+                    .setDefaults(Notification.DEFAULT_SOUND)
+                    .setAutoCancel(true)
+                    .setSmallIcon(R.drawable.gea_logo)
+                    .setContentText(reminderDelayString + " rimaste fino all'appuntamento...")
+                    .build();
+            NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+            nBuilder.flags |= Notification.FLAG_AUTO_CANCEL;
+            notificationManager.notify(1, nBuilder);
+        }
     }
 }

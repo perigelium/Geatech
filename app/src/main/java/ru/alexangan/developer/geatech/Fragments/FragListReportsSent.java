@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -36,20 +37,13 @@ public class FragListReportsSent extends ListFragment
     ReportsListAdapter myListAdapterSent;
     ListView lv;
     Activity activity;
-    
-
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState)
-    {
-        super.onActivityCreated(savedInstanceState);
-
-        activity = getActivity();
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
+
+        activity = getActivity();
 
         mCommunicator = (Communicator) getActivity();
         swipeDetector = new SwipeDetector();
@@ -123,9 +117,14 @@ public class FragListReportsSent extends ListFragment
         myListAdapterSent = new ReportsListAdapter(getActivity(), R.layout.list_visits_fragment_row, reportItemsFilteredSent);
         setListAdapter(myListAdapterSent);
 
+        if(reportItemsFilteredSent.size() == 0)
+        {
+            showToastMessage("Per cercare l'archivio delli rapporti utilizzare il pulsante di ricerca");
+        }
+
         lv = getListView();
 
-        lv.setOnTouchListener(swipeDetector);
+        //lv.setOnTouchListener(swipeDetector);
 
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener()
         {
@@ -137,6 +136,17 @@ public class FragListReportsSent extends ListFragment
             }
         });
         realm.close();
+    }
+
+    private void showToastMessage(final String msg)
+    {
+        activity.runOnUiThread(new Runnable()
+        {
+            public void run()
+            {
+                Toast.makeText(activity, msg, Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
 /*    private void showToastMessage(final String msg)

@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ListFragment;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.LayoutInflater;
@@ -163,7 +164,6 @@ public class FragReportsSearchResults extends ListFragment implements Callback
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id)
                 {
                     int id_sopralluogo = reportsSearchResultItems.get(position).getId_sopralluogo();
-                    int id_rapporto_sopralluogo = 0;
 
                     if (id_sopralluogo == 0)
                     {
@@ -180,23 +180,22 @@ public class FragReportsSearchResults extends ListFragment implements Callback
 
                     if (reportItemOld != null)
                     {
-                        id_rapporto_sopralluogo = reportItemOld.getGea_rapporto_sopralluogo().getId_rapporto_sopralluogo();
+                        int id_rapporto_sopralluogo = reportItemOld.getGea_rapporto_sopralluogo().getId_rapporto_sopralluogo();
+                        mCommunicator.showDetailedReport(id_rapporto_sopralluogo);
                     }
-
-                    if (!NetworkUtils.isNetworkAvailable(activity))
+                    else
                     {
-                        if (reportItemOld != null)
+                        if (NetworkUtils.isNetworkAvailable(activity) && GlobalConstants.tokenStr != null)
                         {
-                            mSettings.edit().putBoolean("searchMode", true).commit();
-                            mCommunicator.showDetailedReport(id_rapporto_sopralluogo);
-                        }
-                    } else
-                    {
                             NetworkUtils networkUtils = new NetworkUtils();
 
                             callGetReport = networkUtils.getData
-                                    (FragReportsSearchResults.this, GET_VISITS_URL_SUFFIX, tokenStr, null, Integer.toString(id_sopralluogo), false);
+                               (FragReportsSearchResults.this, GET_VISITS_URL_SUFFIX, tokenStr, null, Integer.toString(id_sopralluogo), false);
 
+                        } else
+                        {
+                            alertDialog("Info", getString(R.string.OfflineModeShowLoginScreenQuestion));
+                        }
                     }
                     realm.close();
                 }
@@ -208,8 +207,6 @@ public class FragReportsSearchResults extends ListFragment implements Callback
     public void onResume()
     {
         super.onResume();
-
-
     }
 
     @Override
@@ -341,6 +338,35 @@ public class FragReportsSearchResults extends ListFragment implements Callback
                 Toast.makeText(activity, msg, Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private void alertDialog(String title, String message)
+    {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+
+        builder.setTitle(title)
+                .setMessage(message)
+                .setIcon(android.R.drawable.ic_dialog_info)
+                .setPositiveButton("Si",
+                        new DialogInterface.OnClickListener()
+                        {
+                            public void onClick(DialogInterface dialog, int id)
+                            {
+                                mCommunicator.onLogoutCommand();
+                            }
+                        })
+                .setNegativeButton("No",
+                        new DialogInterface.OnClickListener()
+                        {
+                            public void onClick(DialogInterface dialog, int id)
+                            {
+                                alert.dismiss();
+                            }
+                        });
+
+        alert = builder.create();
+
+        alert.show();
     }
 
 /*    private void showToastMessage(final String msg)

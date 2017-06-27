@@ -6,19 +6,21 @@ import android.app.ProgressDialog;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.GridView;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.io.Writer;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,9 +33,11 @@ import okhttp3.Response;
 import okio.BufferedSink;
 import okio.Okio;
 import ru.alexangan.developer.geatech.Adapters.GridViewAdapter;
+import ru.alexangan.developer.geatech.Interfaces.Communicator;
 import ru.alexangan.developer.geatech.Models.GeaImmagineRapporto;
 import ru.alexangan.developer.geatech.Models.GeaItemModelliRapporto;
 import ru.alexangan.developer.geatech.Models.GeaItemRapporto;
+import ru.alexangan.developer.geatech.Models.GlobalConstants;
 import ru.alexangan.developer.geatech.Models.ImgCallAttrs;
 import ru.alexangan.developer.geatech.Models.ReportItem;
 import ru.alexangan.developer.geatech.Network.NetworkUtils;
@@ -71,23 +75,44 @@ public class ReportSentDetailedFragment extends Fragment implements Callback
     private int callsSent;
     RealmList<GeaImmagineRapporto> rl_ImaginesRapportoSopralluogo;
     List<String> imageNames;
+    Handler mHandler;
+    int currentPicPos;
+    Bitmap bmpFullSize;
+    private ProgressDialog progressLoadingImages;
+    private Communicator mCommunicator;
+    LinearLayout llDetailedReport;
+    ImageView ivFullSize;
+
+    @Override
+    public void onResume()
+    {
+        super.onResume();
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
 
+        mCommunicator = (Communicator) getActivity();
+        activity = getActivity();
+
+        currentPicPos = 0;
+
         if (getArguments() != null)
         {
             id_rapporto_sopralluogo = getArguments().getInt("id_rapporto_sopralluogo");
         }
 
-        activity = getActivity();
         callsSent = -1;
 
-        loadingImagesDialog = new ProgressDialog(getActivity());
+/*        loadingImagesDialog = new ProgressDialog(getActivity());
         loadingImagesDialog.setTitle("");
         loadingImagesDialog.setIndeterminate(true);
+
+        progressLoadingImages = new ProgressDialog(getActivity());
+        progressLoadingImages.setTitle("");
+        progressLoadingImages.setIndeterminate(true);*/
     }
 
     @Override
@@ -95,7 +120,41 @@ public class ReportSentDetailedFragment extends Fragment implements Callback
     {
         View rootView = inflater.inflate(R.layout.report_sent_detailed_fragment, container, false);
 
+        llDetailedReport = (LinearLayout) rootView.findViewById(R.id.llReportDetailed);
+
         gvPhotoGallery = (GridView) rootView.findViewById(R.id.gvPhotoGallery);
+
+
+        gvPhotoGallery.setOnItemClickListener(new AdapterView.OnItemClickListener()
+        {
+            public void onItemClick(AdapterView<?> parent, View v, int position, long id)
+            {
+                currentPicPos = position;
+
+                { // show full-size image
+                    bmpFullSize = null;
+
+                    ShowFullSizedImageTask showFullSizedImageTask = new ShowFullSizedImageTask();
+                    showFullSizedImageTask.execute();
+                }
+            }
+        });
+
+        ivFullSize = (ImageView) rootView.findViewById(R.id.ivFullSize);
+
+        ivFullSize.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                ivFullSize.setVisibility(View.GONE);
+                llDetailedReport.setVisibility(View.VISIBLE);
+
+                gvPhotoGallery.getParent().requestChildFocus(gvPhotoGallery, gvPhotoGallery);
+
+                //mCommunicator.showHeaderAndFooter();
+            }
+        });
 
         tvdataOraSopralluogo = (TextView) rootView.findViewById(R.id.tvdataOraSopralluogo);
         tvdataOraRaportoCompletato = (TextView) rootView.findViewById(R.id.tvdataOraRaportoCompletato);
@@ -214,12 +273,52 @@ public class ReportSentDetailedFragment extends Fragment implements Callback
         imageThumbnails = new ArrayList<>();
         pathItems = new ArrayList<>();
 
-        RedrawImagesTask redrawImagesTask = new RedrawImagesTask();
-        redrawImagesTask.execute();
+        mHandler = new Handler(Looper.getMainLooper());
+
+
+
+        if(NetworkUtils.isNetworkAvailable(activity) && GlobalConstants.tokenStr != null)
+        {
+            mHandler.post(new Runnable() {
+                public void run() {
+                    LoadImagesTask loadImagesTask = new LoadImagesTask();
+                    loadImagesTask.execute();
+                }
+            });
+        }
+        else
+        {
+            mHandler.post(new Runnable() {
+                public void run() {
+                    RedrawImagesTask redrawImagesTask = new RedrawImagesTask();
+                    redrawImagesTask.execute();
+                }
+            });
+        }
     }
 
     private void getImagesArray()
     {
+        File appDirectory = new File(activity.getFilesDir(), photosFolderName);
+
+        if (!appDirectory.exists() && !appDirectory.mkdir())
+        {
+            return;
+        }
+
+        imageNames = new ArrayList<>();
+
+        File[] filePaths = appDirectory.listFiles();
+
+        for (File file : filePaths)
+        {
+            //Bitmap bm = ImageUtils.decodeSampledBitmapFromUri(file.getAbsolutePath(), imageHolderWidth, imageHolderHeight);
+
+            //imageThumbnails.add(bm);
+            //pathItems.add(file);
+            imageNames.add(file.getName());
+        }
+
         callDownloadImagesList = new ArrayList<>();
         imgCallAttrs = new ArrayList<>();
         NetworkUtils networkUtils = new NetworkUtils();
@@ -244,13 +343,33 @@ public class ReportSentDetailedFragment extends Fragment implements Callback
 
             }
             callsSent = callDownloadImagesList.size();
+
+            if(callsSent == 0)
+            {
+                mHandler.post(new Runnable() {
+                    public void run() {
+                        RedrawImagesTask redrawImagesTask = new RedrawImagesTask();
+                        redrawImagesTask.execute();
+                    }
+                });
+            }
         }
     }
 
     @Override
     public void onFailure(Call call, IOException e)
     {
+        callsSent--;
 
+        if (callsSent == 0)
+        {
+            mHandler.post(new Runnable() {
+                public void run() {
+                    RedrawImagesTask redrawImagesTask = new RedrawImagesTask();
+                    redrawImagesTask.execute();
+                }
+            });
+        }
     }
 
     @Override
@@ -278,7 +397,7 @@ public class ReportSentDetailedFragment extends Fragment implements Callback
                 sink.close();
                 response.body().close();
 
-                pathItems.add(file);
+                //pathItems.add(file);
                 callsSent--;
                 break;
             }
@@ -286,8 +405,12 @@ public class ReportSentDetailedFragment extends Fragment implements Callback
 
         if (callsSent == 0)
         {
-            RedrawImagesTask redrawImagesTask = new RedrawImagesTask();
-            redrawImagesTask.execute();
+            mHandler.post(new Runnable() {
+                public void run() {
+                    RedrawImagesTask redrawImagesTask = new RedrawImagesTask();
+                    redrawImagesTask.execute();
+                }
+            });
         }
     }
 
@@ -300,7 +423,7 @@ public class ReportSentDetailedFragment extends Fragment implements Callback
             return;
         }
 
-        imageNames = new ArrayList<>();
+        //imageNames = new ArrayList<>();
 
         File[] filePaths = appDirectory.listFiles();
 
@@ -310,7 +433,7 @@ public class ReportSentDetailedFragment extends Fragment implements Callback
 
             imageThumbnails.add(bm);
             pathItems.add(file);
-            imageNames.add(file.getName());
+            //imageNames.add(file.getName());
         }
     }
 
@@ -324,7 +447,7 @@ public class ReportSentDetailedFragment extends Fragment implements Callback
                 getImagesArray(); // Long time operation
             } catch (Exception e)
             {
-                loadingImagesDialog.dismiss();
+
             }
 
             return null;
@@ -334,9 +457,6 @@ public class ReportSentDetailedFragment extends Fragment implements Callback
         protected void onPreExecute()
         {
             super.onPreExecute();
-
-            loadingImagesDialog.setMessage(getString(R.string.LoadingImagesInProgress));
-            loadingImagesDialog.show();
         }
 
         @Override
@@ -344,13 +464,13 @@ public class ReportSentDetailedFragment extends Fragment implements Callback
         {
             super.onPostExecute(aVoid);
 
-            loadingImagesDialog.dismiss();
-
             GridViewAdapter gridAdapter = new GridViewAdapter(activity, R.layout.grid_item_layout, imageThumbnails);
 
             gvPhotoGallery.setAdapter(gridAdapter);
 
             ViewUtils.setGridViewHeight(gvPhotoGallery);
+
+            llDetailedReport.getParent().requestChildFocus(llDetailedReport, llDetailedReport);
 
             //handler.removeCallbacks(runnable);
         }
@@ -366,7 +486,7 @@ public class ReportSentDetailedFragment extends Fragment implements Callback
                 fillImagesArray(); // Long time operation
             } catch (Exception e)
             {
-                loadingImagesDialog.dismiss();
+                //loadingImagesDialog.dismiss();
             }
 
             return null;
@@ -377,8 +497,8 @@ public class ReportSentDetailedFragment extends Fragment implements Callback
         {
             super.onPreExecute();
 
-            loadingImagesDialog.setMessage(getString(R.string.LoadingImagesInProgress));
-            loadingImagesDialog.show();
+//            loadingImagesDialog.setMessage(getString(R.string.LoadingImagesInProgress));
+ //           loadingImagesDialog.show();
         }
 
         @Override
@@ -386,7 +506,7 @@ public class ReportSentDetailedFragment extends Fragment implements Callback
         {
             super.onPostExecute(aVoid);
 
-            loadingImagesDialog.dismiss();
+            //loadingImagesDialog.dismiss();
 
             GridViewAdapter gridAdapter = new GridViewAdapter(activity, R.layout.grid_item_layout, imageThumbnails);
 
@@ -394,10 +514,45 @@ public class ReportSentDetailedFragment extends Fragment implements Callback
 
             ViewUtils.setGridViewHeight(gvPhotoGallery);
 
-            LoadImagesTask loadImagesTask = new LoadImagesTask();
-            loadImagesTask.execute();
+            llDetailedReport.getParent().requestChildFocus(llDetailedReport, llDetailedReport);
 
             //handler.removeCallbacks(runnable);
+        }
+    }
+
+    class ShowFullSizedImageTask extends AsyncTask<Void, Void, Void>
+    {
+        @Override
+        protected void onPreExecute()
+        {
+            super.onPreExecute();
+
+            //progressLoadingImages.setMessage(getString(R.string.PreparingImageForDisplaying));
+            //progressLoadingImages.show();
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids)
+        {
+            bmpFullSize = ImageUtils.createProportionalBitmap(pathItems.get(currentPicPos).getAbsolutePath());
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid)
+        {
+            super.onPostExecute(aVoid);
+
+            //progressLoadingImages.dismiss();
+
+            if (bmpFullSize != null)
+            {
+                ivFullSize.setImageBitmap(bmpFullSize);
+            }
+            ivFullSize.setVisibility(View.VISIBLE);
+            llDetailedReport.setVisibility(View.GONE);
+
+            //mCommunicator.hideHeaderAndFooter();
         }
     }
 }

@@ -421,11 +421,7 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
                                 mCommunicator.showDetailedReport(id_rapporto_sopralluogo);
                             }
                         });
-                    } else
-                    {
-                        showToastMessage(getString(R.string.SendingReportFailed));
                     }
-
                 }
             } catch (JSONException e)
             {

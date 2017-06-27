@@ -860,15 +860,15 @@ showToastMessage("swipe detected");
     {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ITALIAN);
         long milliSecondsForNow = calendarNow.getTimeInMillis();
-        long reminderDelayHours = mSettings.getLong("reminderDelayHours", -1);
+        long reminderDelayMilliseconds = mSettings.getLong("reminderDelayMilliseconds", -1);
 
-        if (reminderDelayHours != -1)
+        if (reminderDelayMilliseconds != -1)
         {
             try
             {
                 Date date = sdf.parse(strDateTimeSet);
                 long timeVisit = date.getTime();
-                long timeToShowNotification = timeVisit - reminderDelayHours;
+                long timeToShowNotification = timeVisit - reminderDelayMilliseconds;
                 date.setTime(timeToShowNotification);
 
                 if (timeToShowNotification > milliSecondsForNow)

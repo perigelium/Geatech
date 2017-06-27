@@ -638,6 +638,8 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
     @Override
     public void OnVisitListItemSelected(int itemId)
     {
+        disableSoftKeyboard();
+
         currentVisitId = itemId;
 
         mFragmentManager.popBackStack();
@@ -684,6 +686,8 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
     @Override
     public void OnReportListItemSelected(int id_rapporto_sopralluogo)
     {
+        disableSoftKeyboard();
+
         mFragmentManager.popBackStackImmediate();
 
         if (!notificationBarFragment.isAdded())
