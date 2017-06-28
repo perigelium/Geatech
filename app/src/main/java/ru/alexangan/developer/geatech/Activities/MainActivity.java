@@ -551,12 +551,10 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
                     realm.beginTransaction();
 
                     int idSopralluogo = visitItem.getGeaSopralluogo().getId_sopralluogo();
-                    int id_rapporto_sopralluogo = visitItem.getGeaRapporto().getId_rapporto_sopralluogo();
 
                     ReportItem reportItem = realm.where(ReportItem.class).equalTo("company_id", company_id)
                             .equalTo("tech_id", selectedTech.getId())
-                            .equalTo("id_sopralluogo", idSopralluogo)
-                            .equalTo("id_rapporto_sopralluogo", id_rapporto_sopralluogo).findFirst();
+                            .equalTo("id_sopralluogo", idSopralluogo).findFirst();
 
                     realm.commitTransaction();
                     realm.close();
@@ -684,7 +682,7 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
     }
 
     @Override
-    public void OnReportListItemSelected(int id_rapporto_sopralluogo)
+    public void OnReportListItemSelected(int id_sopralluogo)
     {
         disableSoftKeyboard();
 
@@ -709,7 +707,7 @@ public class MainActivity extends Activity implements Communicator, Callback, Sc
             Bundle args =
                     reportDetailedFragment.getArguments() != null ? reportDetailedFragment.getArguments() : new Bundle();
 
-            args.putInt("id_rapporto_sopralluogo", id_rapporto_sopralluogo);
+            args.putInt("id_sopralluogo", id_sopralluogo);
             reportDetailedFragment.setArguments(args);
 
             setVisitsListContent(reportDetailedFragment);

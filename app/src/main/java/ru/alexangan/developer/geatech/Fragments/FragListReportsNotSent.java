@@ -90,14 +90,14 @@ public class FragListReportsNotSent extends ListFragment
         {
             GeaSopralluogo geaSopralluogo = visitItem.getGeaSopralluogo();
             int idSopralluogo = geaSopralluogo.getId_sopralluogo();
-            int id_rapporto_sopralluogo = visitItem.getGeaRapporto().getId_rapporto_sopralluogo();
             String data_ora_sopralluogo = geaSopralluogo.getData_ora_sopralluogo();
 
             Realm realm = Realm.getDefaultInstance();
             realm.beginTransaction();
-            ReportItem reportItem = realm.where(ReportItem.class).equalTo("company_id", company_id).equalTo("tech_id", selectedTech.getId())
-                    .equalTo("id_sopralluogo", idSopralluogo)
-                    .equalTo("id_rapporto_sopralluogo", id_rapporto_sopralluogo).findFirst();
+            ReportItem reportItem = realm.where(ReportItem.class)
+                    .equalTo("company_id", company_id)
+                    .equalTo("tech_id", selectedTech.getId())
+                    .equalTo("id_sopralluogo", idSopralluogo).findFirst();
             realm.commitTransaction();
 
             boolean reportCompleteNotSent;

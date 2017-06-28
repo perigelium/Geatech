@@ -180,8 +180,7 @@ public class FragReportsSearchResults extends ListFragment implements Callback
 
                     if (reportItemOld != null)
                     {
-                        int id_rapporto_sopralluogo = reportItemOld.getGea_rapporto_sopralluogo().getId_rapporto_sopralluogo();
-                        mCommunicator.showDetailedReport(id_rapporto_sopralluogo);
+                        mCommunicator.showDetailedReport(id_sopralluogo);
                     }
                     else
                     {
@@ -298,14 +297,14 @@ public class FragReportsSearchResults extends ListFragment implements Callback
                     ClientData clientData = visitItem.getClientData();
                     GeaRapporto geaRapporto = visitItem.getGeaRapporto();
                     int tech_id = geaSopralluogo.getId_tecnico();
-                    int idSopralluogo = geaSopralluogo.getId_sopralluogo();
+                    final int id_sopralluogo = geaSopralluogo.getId_sopralluogo();
                     final int id_rapporto_sopralluogo = geaRapporto.getId_rapporto_sopralluogo();
                     RealmList<GeaItemRapporto> rl_ItemsRapportoSopralluogo = visitItem.getGea_items_rapporto_sopralluogo();
                     RealmList<GeaImmagineRapporto> rl_ImaginesRapportoSopralluogo = visitItem.getGea_immagini_rapporto_sopralluogo();
 
                     realm.beginTransaction();
                     ReportItem reportItem = new ReportItem(company_id, tech_id,
-                            idSopralluogo, id_rapporto_sopralluogo,
+                            id_sopralluogo, id_rapporto_sopralluogo,
                             new ReportStates(ReportStates.GENERAL_INFO_DATETIME_AND_COORDS_SET),
                             geaSopralluogo, clientData, geaRapporto,
                             rl_ItemsRapportoSopralluogo,
@@ -321,7 +320,7 @@ public class FragReportsSearchResults extends ListFragment implements Callback
                     {
                         public void run()
                         {
-                            mCommunicator.showDetailedReport(id_rapporto_sopralluogo);
+                            mCommunicator.showDetailedReport(id_sopralluogo);
                         }
                     });
                 }

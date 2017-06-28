@@ -21,7 +21,6 @@ public class DatabaseUtils
         realm.beginTransaction();
         ReportItem reportItem = realm.where(ReportItem.class).equalTo("company_id", company_id).equalTo("tech_id", selectedTech.getId())
                 .equalTo("id_sopralluogo", id_sopralluogo)
-                .equalTo("id_rapporto_sopralluogo", id_rapporto_sopralluogo)
                 .findFirst();
         realm.commitTransaction();
 
@@ -49,7 +48,6 @@ public class DatabaseUtils
         realm.beginTransaction();
         ReportItem reportItem = realm.where(ReportItem.class).equalTo("company_id", company_id).equalTo("tech_id", selectedTech.getId())
                 .equalTo("id_sopralluogo", id_sopralluogo)
-                .equalTo("id_rapporto_sopralluogo", id_rapporto_sopralluogo)
                 .findFirst();
         realm.commitTransaction();
 

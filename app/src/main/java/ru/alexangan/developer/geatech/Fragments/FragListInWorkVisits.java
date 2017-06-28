@@ -121,8 +121,7 @@ public class FragListInWorkVisits extends ListFragment
                 int photosAddedNumber = reportItem.getReportStates().getPhotosAddedNumber();
 
                 boolean reportStartedNotCompleted =
-                        (generalInfoCompletionState > ReportStates.GENERAL_INFO_DATETIME_SET
-                                || reportCompletionState > ReportStates.REPORT_NON_INITIATED || photosAddedNumber != 0)
+                        (reportCompletionState > ReportStates.REPORT_NON_INITIATED || photosAddedNumber != 0)
                                 &&
                                 (! (generalInfoCompletionState == ReportStates.GENERAL_INFO_DATETIME_AND_COORDS_SET
                                         && reportCompletionState == ReportStates.REPORT_COMPLETED

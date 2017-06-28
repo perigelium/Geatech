@@ -300,7 +300,6 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
             realm.beginTransaction();
             reportItem = realm.where(ReportItem.class).equalTo("company_id", company_id).equalTo("tech_id", selectedTech.getId())
                     .equalTo("id_sopralluogo", idSopralluogo)
-                    .equalTo("id_rapporto_sopralluogo", id_rapporto_sopralluogo)
                     .findFirst();
             realm.commitTransaction();
 
@@ -822,7 +821,6 @@ showToastMessage("swipe detected");
         realm.beginTransaction();
         reportItem = realm.where(ReportItem.class).equalTo("company_id", company_id).equalTo("tech_id", selectedTech.getId())
                 .equalTo("id_sopralluogo", idSopralluogo)
-                .equalTo("id_rapporto_sopralluogo", id_rapporto_sopralluogo)
                 .findFirst();
         realm.commitTransaction();
         if (reportItem == null)

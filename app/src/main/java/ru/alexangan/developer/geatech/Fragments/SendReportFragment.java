@@ -135,14 +135,13 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
         VisitItem visitItem = visitItems.get(selectedVisitId);
         GeaSopralluogo geaSopralluogo = visitItem.getGeaSopralluogo();
         int idSopralluogo = geaSopralluogo.getId_sopralluogo();
-        id_rapporto_sopralluogo = visitItem.getGeaRapporto().getId_rapporto_sopralluogo();
 
         //Class modelClass = ModelsMapping.assignClassModel(productType);
 
         Realm realm = Realm.getDefaultInstance();
         realm.beginTransaction();
         reportItem = realm.where(ReportItem.class).equalTo("company_id", company_id).equalTo("tech_id", selectedTech.getId())
-                .equalTo("id_sopralluogo", idSopralluogo).equalTo("id_rapporto_sopralluogo", id_rapporto_sopralluogo).findFirst();
+                .equalTo("id_sopralluogo", idSopralluogo).findFirst();
         realm.commitTransaction();
         realm.close();
 
@@ -418,7 +417,7 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
                             public void run()
                             {
                                 requestServerDialog.dismiss();
-                                mCommunicator.showDetailedReport(id_rapporto_sopralluogo);
+                                mCommunicator.showDetailedReport(reportItem.getId_sopralluogo());
                             }
                         });
                     }
@@ -513,7 +512,7 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
                                                     showToastMessage(getString(R.string.SendingReportFailed));
                                                 }
                                                 requestServerDialog.dismiss();
-                                                mCommunicator.showDetailedReport(id_rapporto_sopralluogo);
+                                                mCommunicator.showDetailedReport(reportItem.getId_sopralluogo());
                                             }
                                         });
                                     }

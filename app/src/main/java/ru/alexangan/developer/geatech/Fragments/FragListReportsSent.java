@@ -131,8 +131,8 @@ public class FragListReportsSent extends ListFragment
             public void onItemClick(AdapterView<?> parent, View view, int position, long id)
             {
 
-                int id_rapporto_sopralluogo = reportItemsFilteredSent.get(position).getId_rapporto_sopralluogo();
-                mCommunicator.showDetailedReport(id_rapporto_sopralluogo);
+                int id_sopralluogo = reportItemsFilteredSent.get(position).getId_sopralluogo();
+                mCommunicator.showDetailedReport(id_sopralluogo);
             }
         });
         realm.close();

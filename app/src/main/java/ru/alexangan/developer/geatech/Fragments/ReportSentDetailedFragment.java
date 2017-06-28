@@ -101,7 +101,7 @@ public class ReportSentDetailedFragment extends Fragment implements Callback
 
         if (getArguments() != null)
         {
-            id_rapporto_sopralluogo = getArguments().getInt("id_rapporto_sopralluogo");
+            id_sopralluogo = getArguments().getInt("id_sopralluogo");
         }
 
         callsSent = -1;
@@ -188,7 +188,7 @@ public class ReportSentDetailedFragment extends Fragment implements Callback
         realm.beginTransaction();
         ReportItem reportItem = realm.where(ReportItem.class).equalTo("company_id", company_id)
                 .equalTo("tech_id", selectedTech.getId())
-                .equalTo("id_rapporto_sopralluogo", id_rapporto_sopralluogo)
+                .equalTo("id_sopralluogo", id_sopralluogo)
                 .findFirst();
         realm.commitTransaction();
 
@@ -197,6 +197,7 @@ public class ReportSentDetailedFragment extends Fragment implements Callback
         if (reportItemUnmanaged != null)
         {
             id_sopralluogo = reportItemUnmanaged.getId_sopralluogo();
+            id_rapporto_sopralluogo = reportItemUnmanaged.getId_rapporto_sopralluogo();
             photosFolderName = "photos" + id_sopralluogo;
 
             String product_type = reportItemUnmanaged.getClientData().getProduct_type();

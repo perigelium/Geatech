@@ -89,6 +89,7 @@ public class ViewUtils
         VisitItem visitItem = visitItems.get(selectedVisitId);
         ProductData productData = visitItem.getProductData();
         int id_product_type = productData.getIdProductType();
+        int id_sopralluogo = visitItem.getGeaSopralluogo().getId_sopralluogo();
 
         Realm realm = Realm.getDefaultInstance();
 
@@ -132,7 +133,7 @@ public class ViewUtils
 
         realm.beginTransaction();
         ReportItem reportItem = realm.where(ReportItem.class).equalTo("company_id", company_id).equalTo("tech_id", selectedTech.getId())
-                .equalTo("id_rapporto_sopralluogo", id_rapporto_sopralluogo).findFirst();
+                .equalTo("id_sopralluogo", id_sopralluogo).findFirst();
         realm.commitTransaction();
 
         l_geaItemRapporto = reportItem.getGea_items_rapporto_sopralluogo();

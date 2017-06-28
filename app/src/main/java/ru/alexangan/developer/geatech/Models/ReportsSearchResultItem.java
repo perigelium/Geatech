@@ -5,7 +5,6 @@ package ru.alexangan.developer.geatech.Models;
 public class ReportsSearchResultItem
 {
     private int id_sopralluogo;
-    private int id_rapporto_sopralluogo;
     private String name;
     private String address;
     private String phone;
@@ -16,11 +15,10 @@ public class ReportsSearchResultItem
 
     public ReportsSearchResultItem() {}
 
-    public ReportsSearchResultItem(int id_sopralluogo, int id_rapporto_sopralluogo, String name, String mobile, String phone,
+    public ReportsSearchResultItem(int id_sopralluogo, String name, String mobile, String phone,
                                    String address, String product_type, String data_ora_sopralluogo)
     {
         this.id_sopralluogo = id_sopralluogo;
-        this.id_rapporto_sopralluogo = id_rapporto_sopralluogo;
         this.name = name;
         this.mobile = mobile;
         this.phone = phone;
@@ -58,10 +56,5 @@ public class ReportsSearchResultItem
     public int getId_sopralluogo()
     {
         return id_sopralluogo;
-    }
-
-    public int getId_rapporto_sopralluogo()
-    {
-        return id_rapporto_sopralluogo;
     }
 }

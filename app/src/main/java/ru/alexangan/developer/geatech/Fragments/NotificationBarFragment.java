@@ -244,12 +244,11 @@ public class NotificationBarFragment extends Fragment implements SearchView.OnQu
                             || data_ora_sopralluogo.toLowerCase().contains(strQueryLower))
                     {
                         int id_sopralluogo = reportItem.getId_sopralluogo();
-                        int id_rapporto_sopralluogo = reportItem.getId_rapporto_sopralluogo();
                         String productType = clientData.getProduct_type();
 
 
                         ReportsSearchResultItem reportsSearchResultItem = new ReportsSearchResultItem
-                                (id_sopralluogo, id_rapporto_sopralluogo, clientName, clientMobile, clientPhone, clientAddress, productType, data_ora_sopralluogo);
+                                (id_sopralluogo, clientName, clientMobile, clientPhone, clientAddress, productType, data_ora_sopralluogo);
                         reportsSearchResultItems.add(reportsSearchResultItem);
                     }
                 }

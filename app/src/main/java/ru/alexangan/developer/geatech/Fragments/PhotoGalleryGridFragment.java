@@ -646,8 +646,8 @@ public class PhotoGalleryGridFragment extends Fragment
         {
             super.onPreExecute();
 
-            progressLoadingImages.setMessage(getString(R.string.PreparingImageForDisplaying));
-            progressLoadingImages.show();
+            //progressLoadingImages.setMessage(getString(R.string.PreparingImageForDisplaying));
+            //progressLoadingImages.show();
         }
 
         @Override
@@ -662,7 +662,7 @@ public class PhotoGalleryGridFragment extends Fragment
         {
             super.onPostExecute(aVoid);
 
-            progressLoadingImages.dismiss();
+            //progressLoadingImages.dismiss();
 
             if (bmpFullSize != null)
             {
