@@ -66,9 +66,9 @@ import ru.alexangan.developer.geatech.Models.SubproductItem;
 import ru.alexangan.developer.geatech.Models.VisitItem;
 import ru.alexangan.developer.geatech.Network.LocationRetriever;
 import ru.alexangan.developer.geatech.Network.NetworkUtils;
+import ru.alexangan.developer.geatech.R;
 import ru.alexangan.developer.geatech.Services.NotificationEventReceiver;
 import ru.alexangan.developer.geatech.ViewOverrides.CustomTimePickerDialog;
-import ru.alexangan.developer.geatech.R;
 
 import static android.support.v4.content.PermissionChecker.checkSelfPermission;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.SET_DATA_URL_SUFFIX;
@@ -179,25 +179,6 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
 
         tvdataOraSopralluogo = (TextView) rootView.findViewById(R.id.tvdataOraSopralluogo);
         tvListSottprodottiTitle = (TextView) rootView.findViewById(R.id.tvListSottprodottiTitle);
-        //svVisitInfoScrollView = (ScrollView) rootView.findViewById(R.id.svVisitInfoScrollView);
-/*        LinearLayout llSetDateTime = (LinearLayout) rootView.findViewById(R.id.llSetDateTime);
-        //llSetDateTime.setOnClickListener(this);
-
-        llSetDateTime.setOnTouchListener(new ActivitySwipeDetector(activity)
-        {
-            @Override
-            public void onLeftToRightSwipe()
-            {
-                saveVariablesToTheDatabase();
-                mCommunicator.onCompilationHorisontalSwipeReturned(R.id.btnSopralluogoInfo, false);
-            }
-
-            @Override
-            public void onRightToLeftSwipe()
-            {
-                mCommunicator.onCompilationHorisontalSwipeReturned(R.id.btnSopralluogoInfo, true);
-            }
-        });*/
 
         tvTechnicianName = (TextView) rootView.findViewById(R.id.tvTechnicianName);
 
@@ -206,11 +187,8 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
         btnGetCurrentCoords.setOnClickListener(this);
 
         etCoordNord = (EditText) rootView.findViewById(R.id.etCoordNord);
-        //etCoordNord.setOnTouchListener(this);
         etCoordEst = (EditText) rootView.findViewById(R.id.etCoordEst);
-        //etCoordEst.setOnTouchListener(this);
         etAltitude = (EditText) rootView.findViewById(R.id.etAltitude);
-        //etAltitude.setOnTouchListener(this);
 
         tvClientName = (TextView) rootView.findViewById(R.id.tvClientName);
 
@@ -281,8 +259,6 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
         mHour = calendar.get(Calendar.HOUR_OF_DAY);
         mMinute = calendar.get(Calendar.MINUTE);
 
-        //strDateTimeNow = sdf.format(calendarNow.getTime());
-
         ownReportMode = tech_id == GlobalConstants.selectedTech.getId();
 
         if (tech_id == 0)
@@ -313,8 +289,6 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
                 GeaSopralluogo gea_sopralluoghi = new GeaSopralluogo(idSopralluogo, selectedTech.getId(),
                         strDateTimeVisitSet, dataOraSopralluogo);
                 GeaRapporto gea_rapporto = new GeaRapporto(idSopralluogo, id_rapporto_sopralluogo);
-
-                //ClientData clientDataEx = realm.copyFromRealm(visitItem.getClientData());
 
                 realm.beginTransaction();
                 ReportItem reportItem = new ReportItem(company_id, selectedTech.getId(),
@@ -365,8 +339,6 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
             latitude = geaRapporto.getLatitudine();
             longitude = geaRapporto.getLongitudine();
             altitude = geaRapporto.getAltitudine();
-
-            //coordsUnchanged = latitude != 0 && longitude != 0;// && altitude != ReportStates.ALTITUDE_UNKNOWN;
 
             if (latitude == null)
             {
@@ -454,22 +426,6 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
             Calendar calendarNow = Calendar.getInstance();
             strDateTimeNow = sdf.format(calendarNow.getTime());
 
-/*            int millsDiff = calendar.compareTo(calendarNow);
-
-            if (millsDiff <= 0)
-            {
-                elapsedDays = 0;
-            } else
-            {
-                long milliSeconds = calendar.getTimeInMillis();
-                long milliSecondsNow = calendarNow.getTimeInMillis();
-                long periodMilliSeconds = (milliSeconds - milliSecondsNow);
-                elapsedDays = periodMilliSeconds / 1000 / 60 / 60 / 24;
-            }*/
-
-            //tvdataOraSopralluogo.setText(strDateTimeSet);
-            //tvTechnicianName.setVisibility(View.VISIBLE);
-
             if (!NetworkUtils.isNetworkAvailable(activity))
             {
                 showToastMessage(getString(R.string.CheckInternetConnection));
@@ -478,7 +434,6 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
 
             if (tokenStr == null)
             {
-                //showToastMessage("Modalità offline, si prega di logout e login di nuovo");
                 alertDialog("Info", getString(R.string.OfflineModeShowLoginScreenQuestion));
                 return;
             }
@@ -525,7 +480,6 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
                 }
             } else
             {
-                //disableInputAndShowProgressDialog();
                 requestServerDialog.show();
 
                 locationRetriever = new LocationRetriever(activity, this);
@@ -558,7 +512,7 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
                     startActivity(unrestrictedIntent);
                 } catch (ActivityNotFoundException innerEx)
                 {
-                    Toast.makeText(getActivity(), R.string.InstallMapApp, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), R.string.MapAppIsAbsent, Toast.LENGTH_SHORT).show();
                 }
             }
         }
@@ -587,22 +541,6 @@ public class SetDateTimeFragment extends Fragment implements View.OnClickListene
 
             openSetDateTimeDialog();
         }
-
-/*        if(v.getId() == R.id.llSetDateTime)
-        {
-            if (swipeDetector.swipeDetected())
-            {
-                if (swipeDetector.getAction() == SwipeDetector.Action.LR)
-                {
-showToastMessage("swipe detected");
-                }
-
-                if (swipeDetector.getAction() == SwipeDetector.Action.RL)
-                {
-                    showToastMessage("swipe detected");
-                }
-            }
-        }*/
     }
 
     private void openSetDateTimeDialog()
@@ -640,7 +578,7 @@ showToastMessage("swipe detected");
     {
         if (call == callGetPageWithAltitude)
         {
-            showToastMessage(String.valueOf(R.string.GetAltitudeFailedCheckIfOnline));
+            showToastMessage(String.valueOf(R.string.GetAltitudeFailed));
         }
 
         if (call == callSetDateTime)
@@ -713,30 +651,6 @@ showToastMessage("swipe detected");
                 });
 
                 alertDialog("Info", getString(R.string.OfflineModeShowLoginScreenQuestion));
-
-                //final String errorStr;
-
-/*                try
-                {
-                    errorStr = jsonObject.getString("error");
-
-                    if (errorStr.length() != 0)
-                    {
-                        showToastMessage(errorStr);
-                    }
-
-                } catch (JSONException e)
-                {
-                    getActivity().runOnUiThread(new Runnable()
-                    {
-                        public void run()
-                        {
-                            enableInput();
-                        }
-                    });
-                    e.printStackTrace();
-                    return;
-                }*/
             } else
             {
                 if (jsonObject.has("success"))
@@ -830,8 +744,6 @@ showToastMessage("swipe detected");
 
             GeaSopralluogo gea_sopralluoghi = new GeaSopralluogo(idSopralluogo, selectedTech.getId(),
                     strDateTimeNow, strDateTimeSet);
-
-            //ClientData clientDataEx = realm.copyFromRealm(visitItem.getClientData());
 
             GeaRapporto gea_rapporto = new GeaRapporto(idSopralluogo, id_rapporto_sopralluogo);
 
@@ -1017,12 +929,12 @@ showToastMessage("swipe detected");
                     callGetPageWithAltitude = networkUtils.downloadURL(this, elevationUrl);
                 } else
                 {
-                    showToastMessage(getString(R.string.GetAltitudeFailedCheckIfOnline));
+                    showToastMessage(getString(R.string.GetAltitudeFailed));
                 }
             }
         } else
         {
-            if (!latitude.equals("Sconosciuto") && !longitude.equals("Sconosciuto"))
+            if ( ! latitude.equals("Sconosciuto") && ! longitude.equals("Sconosciuto"))
             {
                 Float fLatitude = Float.valueOf(latitude);
                 Float fLongitude = Float.valueOf(longitude);
@@ -1041,15 +953,11 @@ showToastMessage("swipe detected");
                         startActivity(unrestrictedIntent);
                     } catch (ActivityNotFoundException innerEx)
                     {
-                        Toast.makeText(getActivity(), R.string.InstallMapApp, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), R.string.MapAppIsAbsent, Toast.LENGTH_SHORT).show();
                     }
                 }
             }
-
-            showToastMessage(getString(R.string.FailedToGetCoords));
         }
-
-        ////Log.d("new", "coords= " + String.valueOf(latitude) + " " + String.valueOf(longitude));
 
         enableInput();
     }

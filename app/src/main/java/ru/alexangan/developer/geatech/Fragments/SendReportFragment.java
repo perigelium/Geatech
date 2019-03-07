@@ -233,11 +233,6 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
     {
         Gson gson = new Gson();
 
-/*        Calendar calendarNow = Calendar.getInstance();
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
-        String strDateTime = sdf.format(calendarNow.getTime());
-        reportItem.setData_ora_invio_rapporto(strDateTime);*/
-
         Realm realm = Realm.getDefaultInstance();
         ReportItem reportItemUnmanaged = realm.copyFromRealm(reportItem);
         ReportItem reportItemExRealm = realm.copyFromRealm(reportItem);
@@ -254,11 +249,6 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
         for (int i = 0; i < reportItemExRealm.getGea_immagini_rapporto_sopralluogo().size(); i++)
         {
             imagesArray.add(reportItemExRealm.getGea_immagini_rapporto_sopralluogo().get(i));
-
-/*            File file = new File(reportItemUnmanaged.getGea_immagini_rapporto_sopralluogo().get(i).getFilePath());
-            long fileLength = file.length();
-
-            Log.d("DEBUG", String.valueOf(fileLength));*/
         }
         realm.commitTransaction();
         realm.close();
@@ -276,8 +266,6 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
         realm.commitTransaction();
 
         String str_ReportItem_json = gson.toJson(reportItemUnmanaged);
-
-        //Log.d("DEBUG", str_ReportItem_json);
 
         callSendReport = networkUtils.sendData(this, SEND_DATA_URL_SUFFIX, tokenStr, str_ReportItem_json);
     }
@@ -351,7 +339,6 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
                         } else
                         {
                             showToastMessage(errorStr);
-                            //showToastMessage("Error in sent data");
                         }
                     } catch (JSONException e)
                     {
@@ -434,17 +421,6 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
                 e.printStackTrace();
                 showToastMessage("JSON Error in report response");
             }
-
-/*            activity.runOnUiThread(new Runnable()
-            {
-                public void run()
-                {
-                    Toast.makeText(activity, R.string.ReportSent + ", server ritornato: " + reportSendResponse, Toast.LENGTH_SHORT).show(); //
-                }
-            });*/
-
-
-            //mCommunicator.showDetailedReport();
         } else
         {
             for (int i = 0; i < callSendImagesList.size(); i++)
@@ -472,8 +448,6 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
                                 {
                                     objectsSentSuccessfully++;
                                     requestServerDialog.setProgress(objectsSentSuccessfully * 100 / imagesArray.size());
-
-                                    //showToastMessage("immagine " + (i + 1) + " di " + callSendImagesList.size() + " inviato");
 
                                     if (i == callSendImagesList.size() - 1)
                                     {
@@ -560,9 +534,6 @@ public class SendReportFragment extends Fragment implements View.OnClickListener
                     }
 
                     break;
-
-                    //showToastMessage("Immagine " + i + " inviato"); //, server ritorna: " + reportSendResponse
-                    //Log.d("DEBUG", "image " + i + ", server returned:" + reportSendResponse);
                 }
             }
         }

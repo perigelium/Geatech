@@ -70,8 +70,6 @@ public class FragListInWorkVisits extends ListFragment
     {
         View rootView = inflater.inflate(R.layout.list_visits_no_title, container, false);
 
-        //tvListVisitsTodayDate = (TextView) rootView.findViewById(R.id.tvListVisitsTodayDate);
-
         return rootView;
     }
 
@@ -87,18 +85,6 @@ public class FragListInWorkVisits extends ListFragment
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ITALIAN);
 
-/*        Calendar calendarNow = Calendar.getInstance(Locale.ITALY);
-        String strMonth = calendarNow.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.ITALY);
-        //String dateString = " " + calendarNow.get(Calendar.DAY_OF_MONTH) + " " + strMonth;
-
-        //tvListVisitsTodayDate.setText(dateString);
-
-        calendarNow.set(Calendar.HOUR_OF_DAY, 23);
-        calendarNow.set(Calendar.MINUTE, 59);
-        calendarNow.set(Calendar.SECOND, 59);
-        long lastMilliSecondsOfToday = calendarNow.getTimeInMillis();*/
-
-        //for (VisitItem visitItem : visitItems)
         for (int i = 0; i < visitItems.size(); i++)
         {
             VisitItem visitItem = visitItems.get(i);
@@ -177,20 +163,4 @@ public class FragListInWorkVisits extends ListFragment
             }
         });
     }
-
-/*    private void showToastMessage(final String msg)
-    {
-        activity.runOnUiThread(new Runnable()
-        {
-            public void run()
-            {
-                Toast.makeText(activity, msg, Toast.LENGTH_SHORT).show();
-            }
-        });
-    }*/
 }
-
-/*            int optionId = randomInteger!=0 ? R.layout.list_visits_cell_datetime_set : R.layout.list_visits_cell_datetime_set;
-            View C = inflater.inflate(optionId, parent, false);
-            int index = parent.indexOfChild(C);
-            parent.addView(C, index);*/

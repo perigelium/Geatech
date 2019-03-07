@@ -36,11 +36,9 @@ public class ListVisitsAdapter extends BaseAdapter
     private ArrayList<VisitItem> visitItems;
     private List<ReportItem> reportItems;
     private int layout_id;
-    //ViewHolder holder;
 
     public ListVisitsAdapter(Context context, int layout_id, ArrayList<VisitItem> visitItems, List<ReportItem> reportItems)
     {
-        //super(context, textViewResourceId, objects);
         mContext = context;
         this.visitItems = visitItems;
         this.reportItems = reportItems;
@@ -72,34 +70,6 @@ public class ListVisitsAdapter extends BaseAdapter
         View row = inflater.inflate(layout_id, parent, false);
 
         boolean overdueVisit = false;
-
-/*        View row = convertView;
-
-        if (row == null)
-        {
-            LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            row = inflater.inflate(layout_id, parent, false);
-
-            holder = new ViewHolder();
-
-            calendarioIcon = (ImageView) row.findViewById(R.id.calendario);
-            vVisitDateView = row.findViewById(R.id.vVisitDateCell);
-            tvVisitDay = (TextView)row.findViewById(R.id.tvVisitDay);
-            tvVisitMonth = (TextView)row.findViewById(R.id.tvVisitMonth);
-            tvVisitTime = (TextView)row.findViewById(R.id.tvVisitTime);
-            ivPersonTimeSet = (ImageView) row.findViewById(R.id.ivPersonTimeSet);
-            ivPersonTimeUnset = (ImageView) row.findViewById(R.id.ivPersonTimeUnset);
-
-            clientNameTextView = (TextView) row.findViewById(R.id.tvClientName);
-            serviceTypeTextView = (TextView) row.findViewById(R.id.tvVisitTOS);
-            clientAddressTextView = (TextView) row.findViewById(R.id.tvClientAddress);
-
-            row.setTag(holder);
-        } else
-        {
-            row = convertView;
-
-            holder = (ViewHolder) row.getTag();*/
 
 
         ImageView ivReportStatus = (ImageView) row.findViewById(R.id.ivReportStatus);
@@ -261,10 +231,7 @@ public class ListVisitsAdapter extends BaseAdapter
 
             tvVisitDay.setVisibility(View.VISIBLE);
             tvVisitMonth.setVisibility(View.VISIBLE);
-/*            ivPersonTimeSet.setVisibility(View.VISIBLE);
-            ivPersonTimeUnset.setVisibility(View.GONE);*/
 
-            //tvVisitDay.setText(Integer.toString(calendar.get(Calendar.DAY_OF_MONTH)));
             tvVisitDay.setText(String.format(Locale.ITALIAN, "%d", calendar.get(Calendar.DAY_OF_MONTH)));
             tvVisitMonth.setText(ItalianMonths.numToString(calendar.get(Calendar.MONTH) + 1));
 
@@ -288,26 +255,8 @@ public class ListVisitsAdapter extends BaseAdapter
             tvVisitDay.setText("");
             tvVisitMonth.setText("");
             tvVisitTime.setText("");
-            //calendarioIcon.setVisibility(View.VISIBLE);
-/*            ivPersonTimeUnset.setVisibility(View.VISIBLE);
-            ivPersonTimeSet.setVisibility(View.GONE);*/
         }
 
         return row;
     }
-
-/*static class ViewHolder
-{
-    ImageView calendarioIcon;
-    View vVisitDateView;
-    TextView tvVisitDay;
-    TextView tvVisitMonth;
-    TextView tvVisitTime;
-    ImageView ivPersonTimeSet;
-    ImageView ivPersonTimeUnset;
-
-    TextView clientNameTextView;
-    TextView serviceTypeTextView;
-    TextView clientAddressTextView;
-}*/
 }

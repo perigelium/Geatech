@@ -5,7 +5,6 @@ import android.content.SharedPreferences;
 import java.util.List;
 
 import io.realm.RealmList;
-import io.realm.RealmResults;
 
 // Created by user on 13.02.2017.
 

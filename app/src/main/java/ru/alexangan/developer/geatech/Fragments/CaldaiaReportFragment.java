@@ -111,27 +111,6 @@ public class CaldaiaReportFragment extends Fragment
     {
         rootView = inflater.inflate(R.layout.caldaia_report, container, false);
 
-/*        ScrollView svCaldaiaReport = (ScrollView) rootView.findViewById(R.id.svCaldaiaReport);
-        LinearLayout llCaldaiaReport = (LinearLayout) rootView.findViewById(R.id.llCaldaiaReport);
-        //llSetDateTime.setOnClickListener(this);
-
-        svCaldaiaReport.setOnTouchListener(new ActivitySwipeDetector(getActivity())
-        {
-            @Override
-            public void onLeftToRightSwipe()
-            {
-                saveDataToTheDatabase();
-                mCommunicator.onCompilationHorisontalSwipeReturned(R.id.btnFillReport, false);
-            }
-
-            @Override
-            public void onRightToLeftSwipe()
-            {
-                saveDataToTheDatabase();
-                mCommunicator.onCompilationHorisontalSwipeReturned(R.id.btnFillReport, true);
-            }
-        });*/
-
         viewUtils = new ViewUtils(context, rootView, id_rapporto_sopralluogo, selectedVisitId);
 
         TextView tvReportTitle = (TextView) rootView.findViewById(R.id.tvReportTitle);
@@ -141,10 +120,6 @@ public class CaldaiaReportFragment extends Fragment
 
 
         idItem = viewUtils.createViewTwoRadiosAndEdit(idItem, R.id.two_radios_and_edit1);
-
-/*        idItem = viewUtils.createViewEdit(idItem, R.id.Edit1);
-        EditText et = viewUtils.getEditTexts().get(idItem-1);
-        et.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);*/
 
         idItem = viewUtils.createViewThreeRadiosAndEdit(idItem, R.id.three_radios_and_edit1);
 

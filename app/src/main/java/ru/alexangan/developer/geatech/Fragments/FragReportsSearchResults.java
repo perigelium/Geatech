@@ -21,13 +21,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.io.Writer;
 import java.lang.reflect.Type;
-
 import java.util.List;
 
 import io.realm.Realm;
@@ -43,7 +38,6 @@ import ru.alexangan.developer.geatech.Models.GeaItemRapporto;
 import ru.alexangan.developer.geatech.Models.GeaRapporto;
 import ru.alexangan.developer.geatech.Models.GeaSopralluogo;
 import ru.alexangan.developer.geatech.Models.GlobalConstants;
-import ru.alexangan.developer.geatech.Models.ImgCallAttrs;
 import ru.alexangan.developer.geatech.Models.ReportItem;
 import ru.alexangan.developer.geatech.Models.ReportStates;
 import ru.alexangan.developer.geatech.Models.ReportsSearchResultItem;
@@ -56,7 +50,6 @@ import ru.alexangan.developer.geatech.Utils.SwipeDetector;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.GET_VISITS_URL_SUFFIX;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.company_id;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.mSettings;
-import static ru.alexangan.developer.geatech.Models.GlobalConstants.selectedTech;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.tokenStr;
 
 public class FragReportsSearchResults extends ListFragment implements Callback
@@ -120,13 +113,6 @@ public class FragReportsSearchResults extends ListFragment implements Callback
                 e.printStackTrace();
             }
         }
-    }
-
-    @Override
-    public void onDestroy()
-    {
-        super.onDestroy();
-        //mSettings.edit().putString("reportSearchLastQueryString", null).apply();
     }
 
     @Override
@@ -367,20 +353,4 @@ public class FragReportsSearchResults extends ListFragment implements Callback
 
         alert.show();
     }
-
-/*    private void showToastMessage(final String msg)
-    {
-        activity.runOnUiThread(new Runnable()
-        {
-            public void run()
-            {
-                Toast.makeText(activity, msg, Toast.LENGTH_SHORT).show();
-            }
-        });
-    }*/
 }
-
-/*            int optionId = randomInteger!=0 ? R.layout.list_visits_cell_datetime_set : R.layout.list_visits_cell_datetime_set;
-            View C = inflater.inflate(optionId, parent, false);
-            int index = parent.indexOfChild(C);
-            parent.addView(C, index);*/

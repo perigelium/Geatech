@@ -1,7 +1,6 @@
 package ru.alexangan.developer.geatech.Models;
 
 import java.util.Calendar;
-import java.util.List;
 import java.util.Locale;
 
 import io.realm.RealmList;

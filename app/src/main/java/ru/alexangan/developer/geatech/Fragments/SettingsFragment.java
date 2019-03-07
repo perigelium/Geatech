@@ -156,44 +156,6 @@ public class SettingsFragment extends Fragment implements View.OnClickListener
 
         mSettings.edit().putLong("reminderDelayMilliseconds", remindTimeDelays[curReminderPos]).apply();
         mSettings.edit().putString("reminderDelayString", strRemindTimeDelays[curReminderPos]).apply();
-
-/*        milliSecondsForNow = calendarNow.getTimeInMillis();
-
-        for (VisitItem visitItem : visitItems)
-        //for (int i = 0; i < visitItems.size(); i++)
-        {
-            GeaSopralluogo geaSopralluogo = visitItem.getGeaSopralluogo();
-            String data_ora_sopralluogo = geaSopralluogo.getData_ora_sopralluogo();
-
-            if (data_ora_sopralluogo == null)
-            {
-                continue;
-            }
-
-            int id_tecnico = visitItem.getGeaSopralluogo().getId_tecnico();
-            boolean ownVisit = selectedTech.getId() == id_tecnico;
-
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ITALIAN);
-
-            if (ownVisit)
-            {
-                try
-                {
-                    Date date = sdf.parse(data_ora_sopralluogo);
-                    long timeVisit = date.getTime();
-                    long timeToShowNotification = timeVisit - remindTimeDelays[curReminderPos];
-
-                    if (timeToShowNotification > milliSecondsForNow)
-                    {
-                        NotificationEventReceiver.setupAlarm(activity.getApplicationContext(), timeToShowNotification);
-                    }
-
-                } catch (ParseException e)
-                {
-                    e.printStackTrace();
-                }
-            }
-        }*/
     }
 
     @Override
@@ -201,13 +163,9 @@ public class SettingsFragment extends Fragment implements View.OnClickListener
     {
         if(view.getId() == R.id.flTermsOfUse)
         {
-            //getActivity().getFragmentManager().beginTransaction().remove(this).commit();
-
             //show Terms Of Use
             llSettings.setVisibility(View.GONE);
             llTermsOfUse.setVisibility(View.VISIBLE);
-
-            //mSettings.edit().putBoolean("geaModelsIsObsolete", true).apply();
         }
 
         if(view.getId() == R.id.flLogout)

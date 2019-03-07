@@ -20,14 +20,6 @@ public class ClientData extends RealmObject
 
     public ClientData() {}
 
-/*    public ClientData(String name, String address, String phone, String mobile, String product)
-    {
-        this.name = name;
-        this.address = address;
-        this.phone = phone;
-        this.mobile = mobile;
-        this.product = product;
-    }*/
 
     public String getName() {
         return name;

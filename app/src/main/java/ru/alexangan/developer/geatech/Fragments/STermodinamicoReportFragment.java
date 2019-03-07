@@ -108,9 +108,6 @@ public class STermodinamicoReportFragment extends Fragment
 
         int idItem = viewUtils.getIdItemStart();
 
-/*        EditText et1 = viewUtils.getEditTexts().get(idItem-2);
-        et1.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);*/
-
         idItem = viewUtils.createViewThreeRadiosAndEdit(idItem, R.id.three_radios_and_edit1);
 
         idItem = viewUtils.createViewTwoRadios(idItem, R.id.two_radios1);

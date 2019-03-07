@@ -8,8 +8,6 @@ public interface Communicator
 {
     void onDateTimeSetReturned(int itemIndex);
 
-    //void onCompilationHorisontalSwipeReturned(int itemIndex, boolean swipeDirection);
-
     void showDetailedReport(int id_sopralluogo);
 
     void onCtrlBtnsBottomClicked(int btnId);

@@ -29,11 +29,9 @@ public class ReportsListAdapter extends BaseAdapter
     private Context mContext;
     private ArrayList<ReportItem> reportItems;
     private int layout_id;
-    //ViewHolder holder;
 
     public ReportsListAdapter(Context context, int layout_id, ArrayList<ReportItem> reportItems)
     {
-        //super(context, textViewResourceId, objects);
         mContext = context;
         this.reportItems = reportItems;
         this.layout_id = layout_id;
@@ -62,34 +60,6 @@ public class ReportsListAdapter extends BaseAdapter
     {
         LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View row = inflater.inflate(layout_id, parent, false);
-
-/*        View row = convertView;
-
-        if (row == null)
-        {
-            LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            row = inflater.inflate(layout_id, parent, false);
-
-            holder = new ViewHolder();
-
-            calendarioIcon = (ImageView) row.findViewById(R.id.calendario);
-            vVisitDateView = row.findViewById(R.id.vVisitDateCell);
-            tvVisitDay = (TextView)row.findViewById(R.id.tvVisitDay);
-            tvVisitMonth = (TextView)row.findViewById(R.id.tvVisitMonth);
-            tvVisitTime = (TextView)row.findViewById(R.id.tvVisitTime);
-            ivPersonTimeSet = (ImageView) row.findViewById(R.id.ivPersonTimeSet);
-            ivPersonTimeUnset = (ImageView) row.findViewById(R.id.ivPersonTimeUnset);
-
-            clientNameTextView = (TextView) row.findViewById(R.id.tvClientName);
-            serviceTypeTextView = (TextView) row.findViewById(R.id.tvVisitTOS);
-            clientAddressTextView = (TextView) row.findViewById(R.id.tvClientAddress);
-
-            row.setTag(holder);
-        } else
-        {
-            row = convertView;
-
-            holder = (ViewHolder) row.getTag();*/
 
 
         ImageView ivReportStatus = (ImageView) row.findViewById(R.id.ivReportStatus);
@@ -176,19 +146,4 @@ public class ReportsListAdapter extends BaseAdapter
         }
         return row;
     }
-
-/*static class ViewHolder
-{
-    ImageView calendarioIcon;
-    View vVisitDateView;
-    TextView tvVisitDay;
-    TextView tvVisitMonth;
-    TextView tvVisitTime;
-    ImageView ivPersonTimeSet;
-    ImageView ivPersonTimeUnset;
-
-    TextView clientNameTextView;
-    TextView serviceTypeTextView;
-    TextView clientAddressTextView;
-}*/
 }

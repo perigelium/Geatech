@@ -4,12 +4,9 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.ProgressDialog;
-import android.app.SearchManager;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v4.view.MenuItemCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,7 +44,6 @@ import ru.alexangan.developer.geatech.Models.SpinnerItemData;
 import ru.alexangan.developer.geatech.Network.NetworkUtils;
 import ru.alexangan.developer.geatech.R;
 
-import static ru.alexangan.developer.geatech.Models.GlobalConstants.LIST_VISITS_MODE_ALL;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.SEARCH_VISITS_URL_SUFFIX;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.company_id;
 import static ru.alexangan.developer.geatech.Models.GlobalConstants.mSettings;
@@ -184,8 +180,6 @@ public class NotificationBarFragment extends Fragment implements SearchView.OnQu
     public void onResume()
     {
         super.onResume();
-
-        //searchViewReports.setQuery("", false);
     }
 
     public void setView
@@ -225,7 +219,6 @@ public class NotificationBarFragment extends Fragment implements SearchView.OnQu
             List<ReportsSearchResultItem> reportsSearchResultItems = new ArrayList<>();
 
             for (ReportItem reportItem : reportItems)
-            //for (int i = 0; i < visitItems.size(); i++)
             {
                 boolean isReportSent;
                 isReportSent = reportItem.getGea_rapporto_sopralluogo().getData_ora_invio_rapporto() != null;
@@ -294,13 +287,6 @@ public class NotificationBarFragment extends Fragment implements SearchView.OnQu
     @Override
     public boolean onQueryTextChange(String newText)
     {
-/*        if (TextUtils.isEmpty(newText))
-        {
-            //mListView.clearTextFilter();
-        } else
-        {
-            //mListView.setFilterText(newText.toString());
-        }*/
         return false;
     }
 

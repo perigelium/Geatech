@@ -7,7 +7,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
-import io.realm.Realm;
 import ru.alexangan.developer.geatech.Fragments.LoginCompanyFragment;
 import ru.alexangan.developer.geatech.Fragments.LoginTechSelectionFragment;
 import ru.alexangan.developer.geatech.Interfaces.LoginCommunicator;
@@ -84,22 +83,6 @@ public class LoginActivity extends Activity implements LoginCommunicator
         mFragmentTransaction.replace(R.id.loginFragContainer, loginCompanyFragment);
         mFragmentTransaction.commit();
     }
-
-/*    @Override
-    public void onPasswordSentReturned()
-    {
-        FragmentTransaction mFragmentTransaction = mFragmentManager.beginTransaction();
-        mFragmentTransaction.replace(R.id.loginFragContainer, loginCompanyFragment);
-        mFragmentTransaction.commit();
-    }*/
-
-/*    @Override
-    public void onRecoverPasswordClicked()
-    {
-        FragmentTransaction mFragmentTransaction = mFragmentManager.beginTransaction();
-        mFragmentTransaction.replace(R.id.loginFragContainer, loginPasswordRecoverFragment);
-        mFragmentTransaction.commit();
-    }*/
 
     @Override
     public void onLoginFailed()

@@ -83,25 +83,6 @@ public class PhotoGalleryGridFragment extends Fragment
     private ImageView ivTrashCan;
     private Communicator mCommunicator;
 
-/*    private Handler handler;
-    private Runnable runnable;*/
-
-/*    interface MyCallbackInterface
-    {
-
-        void onDownloadFinished(String result);
-    }*/
-
-/*    @Override
-    public void onViewCreated(View view, Bundle savedInstanceState)
-    {
-        super.onViewCreated(view, savedInstanceState);
-
-        ivFullSize.setImageBitmap(bmpCameraAddButton);
-        ivFullSize.setVisibility(View.VISIBLE);
-        gvPhotoGallery.setVisibility(View.GONE);
-    }*/
-
     public PhotoGalleryGridFragment()
     {
     }
@@ -298,8 +279,6 @@ public class PhotoGalleryGridFragment extends Fragment
             }
         });
 
-        //Resources resources = getResources();
-
         alImgThumbs = new ArrayList<>();
         alPathItems = new ArrayList<>();
 
@@ -352,8 +331,6 @@ public class PhotoGalleryGridFragment extends Fragment
                 }
             }
         });
-
-        //File[] deletedFilePaths = activity.getExternalFilesDir(DIRECTORY_PICTURES).listFiles();
 
         return rootView;
     }
@@ -645,9 +622,6 @@ public class PhotoGalleryGridFragment extends Fragment
         protected void onPreExecute()
         {
             super.onPreExecute();
-
-            //progressLoadingImages.setMessage(getString(R.string.PreparingImageForDisplaying));
-            //progressLoadingImages.show();
         }
 
         @Override
@@ -661,8 +635,6 @@ public class PhotoGalleryGridFragment extends Fragment
         protected void onPostExecute(Void aVoid)
         {
             super.onPostExecute(aVoid);
-
-            //progressLoadingImages.dismiss();
 
             if (bmpFullSize != null)
             {

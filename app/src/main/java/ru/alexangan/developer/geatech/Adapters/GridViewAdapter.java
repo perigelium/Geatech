@@ -22,8 +22,6 @@ public class GridViewAdapter extends ArrayAdapter<Bitmap>
     private ArrayList<Bitmap> imagesArrayList;
     private Context galleryContext;
 
-    //Bitmap placeholder;
-
     public GridViewAdapter(Context context, int layoutResourceId, ArrayList<Bitmap> imagesArrayList)
     {
         super(context, layoutResourceId, imagesArrayList);
@@ -32,9 +30,6 @@ public class GridViewAdapter extends ArrayAdapter<Bitmap>
         this.imagesArrayList = imagesArrayList;
 
         galleryContext = context;
-
-        //Resources resources = galleryContext.getResources();
-        //placeholder = BitmapFactory.decodeResource(resources, R.drawable.ic_launcher);
     }
 
     @NonNull
@@ -68,13 +63,6 @@ public class GridViewAdapter extends ArrayAdapter<Bitmap>
 
         return row;
     }
-
-    // helper method to add a bitmap to the gallery when the user chooses one
-/*    public void addPic(int position, Bitmap newPic)
-    {
-        // set at currently selected index
-        imagesArrayList.set(position, newPic);
-    }*/
 
     private class ViewHolder
     {

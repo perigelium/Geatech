@@ -53,7 +53,7 @@ public class FragListVisitsFree extends ListFragment
         super.onCreate(savedInstanceState);
 
         mCommunicator = (Communicator) getActivity();
-        //realm = Realm.getDefaultInstance();
+
         swipeDetector = new SwipeDetector();
 
         timeNotSetItemsOnly = false;
@@ -70,7 +70,7 @@ public class FragListVisitsFree extends ListFragment
         View rootView = inflater.inflate(R.layout.list_visits_with_title, container, false);
 
         TextView tvTitleListVisits = (TextView) rootView.findViewById(R.id.tvTitleListVisits);
-        tvTitleListVisits.setText(R.string.NotTimeSetVisits);
+        tvTitleListVisits.setText(R.string.TimeNotSetVisits);
 
         visitItemsFiltered = new ArrayList<>();
 
@@ -93,7 +93,6 @@ public class FragListVisitsFree extends ListFragment
                     {
                         Date date = sdf.parse(data_ora_sopralluogo);
                         long time = date.getTime();
-                        //Log.d("DEBUG", String.valueOf(time));
 
                         while (unsortedVisits.get(time) != null)
                         {
@@ -119,33 +118,6 @@ public class FragListVisitsFree extends ListFragment
                 }
             }
         }
-
-/*        for (Map.Entry entry : unsortedVisits.entrySet()) // add own visits first
-        {
-                VisitItem visitItem = (VisitItem) entry.getValue();
-                int id_tecnico = visitItem.getGeaSopralluogo().getId_tecnico();
-                int id_sopralluogo = visitItem.getGeaSopralluogo().getId_sopralluogo();
-                boolean ownReport = selectedTech.getId() == id_tecnico;
-
-            if(ownReport)
-            {
-*//*                realm.beginTransaction();
-                ReportStates reportItem = realm.where(ReportItem.class)
-                        .equalTo("company_id", company_id).equalTo("tech_id", selectedTech.getId())
-                        .equalTo("id_sopralluogo", id_sopralluogo).findFirst();
-                realm.commitTransaction();*//*
-
-*//*                if (reportItem != null)
-                {
-                    realm.beginTransaction();
-                    if(reportItem.getId_sopralluogo() != 0)
-                    {*//*
-                        visitItemsFiltered.add(visitItem);
-*//*                    }
-                    realm.commitTransaction();
-                }*//*
-            }
-        }*/
 
         for (Map.Entry entry : unsortedVisits.entrySet()) // add free visits
         {
@@ -173,65 +145,16 @@ public class FragListVisitsFree extends ListFragment
 
         lv = getListView();
 
-        //ViewUtils.setListViewHeightBasedOnChildren(lv);
-
         lv.setOnTouchListener(swipeDetector);
 
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener()
         {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id)
             {
-                //int idSopralluogo = visitItemsFiltered.get(position).getGeaSopralluogo().getId_sopralluogo();
 
                 int idVisit = visitItemsFiltered.get(position).getId();
                 mCommunicator.OnVisitListItemSelected(idVisit);
-/*
-                int id_tecnico = visitItemsFiltered.get(position).getGeaSopralluogo().getId_tecnico();
-                int id_rapporto_sopralluogo = visitItemsFiltered.get(position).getGeaRapporto().getId_rapporto_sopralluogo();
-
-                realm.beginTransaction();
-                ReportItem reportItem = realm.where(ReportItem.class)
-                        .equalTo("company_id", company_id).equalTo("tech_id", selectedTech.getId())
-                        .equalTo("id_sopralluogo", idSopralluogo)
-                        .equalTo("id_rapporto_sopralluogo", id_rapporto_sopralluogo).findFirst();
-                realm.commitTransaction();
-
-                boolean ownVisit = selectedTech.getId() == id_tecnico;
-                boolean freeVisit = id_tecnico == 0;
-
-                //if (ownVisit || freeVisit) //
-                {
-                    if (swipeDetector.swipeDetected())
-                    {
-                        if (swipeDetector.getAction() == SwipeDetector.Action.LR)
-                        {
-                            mCommunicator.OnVisitListItemSwiped(idVisit, ownVisit && reportItem != null);
-                        } else if (swipeDetector.getAction() == SwipeDetector.Action.RL)
-                        {
-                            mCommunicator.OnVisitListItemSwiped(idVisit, false);
-                        }
-                    } else
-                    {
-
-                    }
-                }*/
             }
         });
     }
-
-/*    private void showToastMessage(final String msg)
-    {
-        activity.runOnUiThread(new Runnable()
-        {
-            public void run()
-            {
-                Toast.makeText(activity, msg, Toast.LENGTH_SHORT).show();
-            }
-        });
-    }*/
 }
-
-/*            int optionId = randomInteger!=0 ? R.layout.list_visits_cell_datetime_set : R.layout.list_visits_cell_datetime_set;
-            View C = inflater.inflate(optionId, parent, false);
-            int index = parent.indexOfChild(C);
-            parent.addView(C, index);*/

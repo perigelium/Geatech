@@ -30,11 +30,9 @@ public class ReportsSearchResultsListAdapter extends BaseAdapter
     private Context mContext;
     private List<ReportsSearchResultItem> lSearchResults;
     private int layout_id;
-    //ViewHolder holder;
 
     public ReportsSearchResultsListAdapter(Context context, int layout_id, List<ReportsSearchResultItem> lSearchResults)
     {
-        //super(context, textViewResourceId, objects);
         mContext = context;
         this.lSearchResults = lSearchResults;
         this.layout_id = layout_id;
@@ -63,22 +61,6 @@ public class ReportsSearchResultsListAdapter extends BaseAdapter
     {
         LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View row = inflater.inflate(layout_id, parent, false);
-
-/*        View row = convertView;
-
-        if (row == null)
-        {
-            LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            row = inflater.inflate(layout_id, parent, false);
-
-            holder = new ViewHolder();
-
-            row.setTag(holder);
-        } else
-        {
-            row = convertView;
-
-            holder = (ViewHolder) row.getTag();*/
 
         TextView tvVisitDay = (TextView) row.findViewById(R.id.tvVisitDay);
         TextView tvVisitMonth = (TextView) row.findViewById(R.id.tvVisitMonth);
@@ -188,19 +170,4 @@ public class ReportsSearchResultsListAdapter extends BaseAdapter
         ssText.setSpan(new ForegroundColorSpan(Color.parseColor("#ffffd100")), iStart, iEnd, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         return ssText;
     }
-
-/*static class ViewHolder
-{
-    ImageView calendarioIcon;
-    View vVisitDateView;
-    TextView tvVisitDay;
-    TextView tvVisitMonth;
-    TextView tvVisitTime;
-    ImageView ivPersonTimeSet;
-    ImageView ivPersonTimeUnset;
-
-    TextView clientNameTextView;
-    TextView serviceTypeTextView;
-    TextView clientAddressTextView;
-}*/
 }

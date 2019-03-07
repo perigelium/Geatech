@@ -54,8 +54,6 @@ public class FragListReportsSent extends ListFragment
     {
         View rootView = inflater.inflate(R.layout.list_reports_sent, container, false);
 
-        //tvListVisitsTodayDate = (TextView) rootView.findViewById(R.id.tvListVisitsTodayDate);
-
         return rootView;
     }
 
@@ -77,7 +75,6 @@ public class FragListReportsSent extends ListFragment
         realm.commitTransaction();
 
         for (ReportItem reportItem : reportItems)
-        //for (int i = 0; i < visitItems.size(); i++)
         {
             String data_ora_sopralluogo = reportItem.getGeaSopralluogo().getData_ora_sopralluogo();
 
@@ -119,12 +116,10 @@ public class FragListReportsSent extends ListFragment
 
         if(reportItemsFilteredSent.size() == 0)
         {
-            showToastMessage("Per cercare l'archivio delli rapporti utilizzare il pulsante di ricerca");
+            showToastMessage(getString(R.string.UseSearchButton));
         }
 
         lv = getListView();
-
-        //lv.setOnTouchListener(swipeDetector);
 
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener()
         {
@@ -148,20 +143,4 @@ public class FragListReportsSent extends ListFragment
             }
         });
     }
-
-/*    private void showToastMessage(final String msg)
-    {
-        activity.runOnUiThread(new Runnable()
-        {
-            public void run()
-            {
-                Toast.makeText(activity, msg, Toast.LENGTH_SHORT).show();
-            }
-        });
-    }*/
 }
-
-/*            int optionId = randomInteger!=0 ? R.layout.list_visits_cell_datetime_set : R.layout.list_visits_cell_datetime_set;
-            View C = inflater.inflate(optionId, parent, false);
-            int index = parent.indexOfChild(C);
-            parent.addView(C, index);*/

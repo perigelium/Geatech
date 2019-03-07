@@ -35,12 +35,6 @@ public class SubProductsListAdapter extends ArrayAdapter
     public View getView(int position, View convertView, @NonNull ViewGroup parent)
     {
 
-        // Get the data item for this position
-
-        //ru.alexangan.developer.geatech.Models.DateTimeSetListCellModel array = (ru.alexangan.developer.geatech.Models.DateTimeSetListCellModel)getItem(position);
-
-        // Check if an existing view is being reused, otherwise inflate the view
-
         if (convertView == null)
         {
 
@@ -48,16 +42,11 @@ public class SubProductsListAdapter extends ArrayAdapter
 
         }
 
-
-        // Lookup view for data population
-
         TextView tvProdottoDataSDT = (TextView) convertView.findViewById(R.id.tvProdottoDataSDT);
 
         TextView tvTipoDataSDT = (TextView) convertView.findViewById(R.id.tvTipoDataSDT);
 
         TextView tvN_PezzoDataSDT = (TextView) convertView.findViewById(R.id.tvN_PezzoDataSDT);
-
-        // Populate the data into the template view using the data object
 
         tvProdottoDataSDT.setText(subproductItems.get(position).getSubproduct());
 
@@ -66,8 +55,6 @@ public class SubProductsListAdapter extends ArrayAdapter
         Integer piecesNr = subproductItems.get(position).getPiecesNr();
 
         tvN_PezzoDataSDT.setText(String.valueOf(piecesNr));
-
-        // Return the completed view to render on screen
 
         return convertView;
 

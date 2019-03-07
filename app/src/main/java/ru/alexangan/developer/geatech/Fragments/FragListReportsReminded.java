@@ -54,8 +54,6 @@ public class FragListReportsReminded extends ListFragment
 
         mCommunicator = (Communicator) getActivity();
         swipeDetector = new SwipeDetector();
-
-        //realm = Realm.getDefaultInstance();
     }
 
     @Override
@@ -140,37 +138,8 @@ public class FragListReportsReminded extends ListFragment
 
                 mCommunicator.OnVisitListItemSelected(idVisit);
 
-/*                if (swipeDetector.swipeDetected())
-                {
-                    if (swipeDetector.getAction() == SwipeDetector.Action.LR)
-                    {
-                        mCommunicator.OnVisitListItemSwiped(idVisit, true);
-                    } else if (swipeDetector.getAction() == SwipeDetector.Action.RL)
-                    {
-                        mCommunicator.OnVisitListItemSwiped(idVisit, false);
-                    }
-                } else
-                {
-                    mCommunicator.OnVisitListItemSelected(idVisit, false);
-                }*/
-
             }
         });
     }
-
-/*    private void showToastMessage(final String msg)
-    {
-        activity.runOnUiThread(new Runnable()
-        {
-            public void run()
-            {
-                Toast.makeText(activity, msg, Toast.LENGTH_SHORT).show();
-            }
-        });
-    }*/
 }
 
-/*            int optionId = randomInteger!=0 ? R.layout.list_visits_cell_datetime_set : R.layout.list_visits_cell_datetime_set;
-            View C = inflater.inflate(optionId, parent, false);
-            int index = parent.indexOfChild(C);
-            parent.addView(C, index);*/

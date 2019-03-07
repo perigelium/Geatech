@@ -250,14 +250,10 @@ public class LoginCompanyFragment extends Fragment implements View.OnClickListen
             realm.beginTransaction();
             RealmResults<LoginCredentials> loginCredentialses = realm.where(LoginCredentials.class).findAll();
 
-            //loginCredentialses.deleteAllFromRealm();             ////   Remove
-
             realm.commitTransaction();
 
             credentialsesFound = false;
             strLogin = etLogin.getText().toString();
-
-//            if (!android.util.Patterns.EMAIL_ADDRESS.matcher(strLogin).matches())
 
             strPassword = etPassword.getText().toString();
 

@@ -207,9 +207,6 @@ public class LoginTechSelectionFragment extends Fragment implements View.OnClick
                 }
 
                 enableInput();
-
-/*                spTecnicianList.setBackgroundColor(Color.parseColor("#29B352"));
-                spTecnicianList.invalidate();*/
             }
 
             @Override
@@ -240,7 +237,6 @@ public class LoginTechSelectionFragment extends Fragment implements View.OnClick
                     techModelListOld.deleteAllFromRealm();
                     realm.commitTransaction();
 
-                    //saTecnicianList.add("");
                     for (TechnicianItem technicianItem : techModelList)
                     {
                         realm.beginTransaction();
@@ -597,8 +593,6 @@ public class LoginTechSelectionFragment extends Fragment implements View.OnClick
                         {
                             callVisits = networkUtils.getData(this, GET_VISITS_URL_SUFFIX, tokenStr, null, null, false);
 
-                            //mSettings.edit().putBoolean("geaModelsIsObsolete", false).apply();
-
                             return;
                         }
 
@@ -612,12 +606,10 @@ public class LoginTechSelectionFragment extends Fragment implements View.OnClick
 
                             if (Build.VERSION.SDK_INT >= 24)
                             {
-                                //str_gea_modelli = String.valueOf(Html.fromHtml(str_gea_modelli, Html.FROM_HTML_MODE_LEGACY));
                                 str_gea_sezioni_modelli = String.valueOf(Html.fromHtml(str_gea_sezioni_modelli, Html.FROM_HTML_MODE_LEGACY));
                                 str_gea_items_modelli = String.valueOf(Html.fromHtml(str_gea_items_modelli, Html.FROM_HTML_MODE_LEGACY));
                             } else
                             {
-                                //str_gea_modelli = String.valueOf(Html.fromHtml(str_gea_modelli));
                                 str_gea_sezioni_modelli = String.valueOf(Html.fromHtml(str_gea_sezioni_modelli));
                                 str_gea_items_modelli = String.valueOf(Html.fromHtml(str_gea_items_modelli));
                             }
@@ -740,10 +732,10 @@ public class LoginTechSelectionFragment extends Fragment implements View.OnClick
                     {
                         downloadingDialog.dismiss();
 
-                        //if (geaItemModelliSize != 0)
-                        {
+
+
                             loginCommunicator.onTechSelectedAndApplied();
-                        }
+
                     }
                 });
             } catch (Exception e)

@@ -772,7 +772,6 @@ public class ViewUtils
 
 
         final CheckBox chk1ChkboxAndEdit = (CheckBox) chkbox_and_edit.findViewById(R.id.chk1ChkboxAndEdit);
-        //chk1ChkboxAndEdit.setText(fields[0]);
 
         ArrayList<CheckBox> al_Chkboxes = new ArrayList<>();
         al_Chkboxes.add(chk1ChkboxAndEdit);
@@ -1757,8 +1756,6 @@ public class ViewUtils
             }
         }
 
-        //TextView tv1FourRadiosAndTwoEdits = (TextView) four_radios_and_two_edits.findViewById(R.id.tv1FourRadiosAndTwoEdits);
-
         final EditText et1FourRadiosAndTwoEdits = (EditText) four_radios_and_two_edits.findViewById(R.id.et1FourRadiosAndTwoEdits);
         EditTexts.put(idItem, et1FourRadiosAndTwoEdits);
 
@@ -1847,12 +1844,8 @@ public class ViewUtils
             }
         }
 
-        //TextView tv1FourRadiosAndEdit = (TextView) four_radios_and_edit.findViewById(R.id.tv1FourRadiosAndEdit);
-
         final EditText et1FourRadiosAndEdit = (EditText) four_radios_and_edit.findViewById(R.id.et1FourRadiosAndEdit);
 
-/*        ArrayList<EditText> al_Edits = new ArrayList<>();
-        al_Edits.add(et1FourRadiosAndEdit);*/
         EditTexts.put(idItem, et1FourRadiosAndEdit);
 
         rg1FourRadiosAndEdit.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener()
@@ -2025,11 +2018,6 @@ public class ViewUtils
         EditText et1Edit = (EditText) ll_edit.findViewById(R.id.et1Edit);
         et1Edit.setHint(itemModelli.get(idItem).getUnita_misura());
 
-/*        TextView tv1EditUnit = (TextView) ll_edit.findViewById(R.id.tv1EditUnit);
-        tv1EditUnit.setText(itemModelli.get(idItem).getUnita_misura());*/
-
-/*        ArrayList<EditText> al_Edits = new ArrayList<>();
-        al_Edits.add(et1Edit);*/
         EditTexts.put(idItem, et1Edit);
 
         return ++idItem;
@@ -2103,16 +2091,8 @@ public class ViewUtils
     {
         ArrayList<Integer> notSetItems = DatabaseUtils.getNotSetItems(id_sopralluogo, id_rapporto_sopralluogo);
 
-/*        for (Map.Entry entry : Switches.entrySet())
-        {
-            int key = (int) entry.getKey();
-            Pair <LinearLayout, LinearLayout> pairLL = LinearLayouts.get(key);
+//       for (Map.Entry entry : Switches.entrySet())
 
-            if(pairLL != null)
-            {
-                notSetItems.add((Integer) entry.getKey());
-            }
-        }*/
 
         for (int k = 0; k < headerNumber; k++) // for each section separately
         {

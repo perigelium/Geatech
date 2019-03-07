@@ -86,7 +86,6 @@ public class FragListReportsNotSent extends ListFragment
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ITALIAN);
 
         for (VisitItem visitItem : visitItems)
-        //for (int i = 0; i < visitItems.size(); i++)
         {
             GeaSopralluogo geaSopralluogo = visitItem.getGeaSopralluogo();
             int idSopralluogo = geaSopralluogo.getId_sopralluogo();
@@ -161,20 +160,5 @@ public class FragListReportsNotSent extends ListFragment
             }
         });
     }
-
-/*    private void showToastMessage(final String msg)
-    {
-        activity.runOnUiThread(new Runnable()
-        {
-            public void run()
-            {
-                Toast.makeText(activity, msg, Toast.LENGTH_SHORT).show();
-            }
-        });
-    }*/
 }
 
-/*            int optionId = randomInteger!=0 ? R.layout.list_visits_cell_datetime_set : R.layout.list_visits_cell_datetime_set;
-            View C = inflater.inflate(optionId, parent, false);
-            int index = parent.indexOfChild(C);
-            parent.addView(C, index);*/

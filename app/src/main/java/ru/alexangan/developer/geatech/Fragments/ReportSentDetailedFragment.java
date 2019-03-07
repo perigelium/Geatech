@@ -105,14 +105,6 @@ public class ReportSentDetailedFragment extends Fragment implements Callback
         }
 
         callsSent = -1;
-
-/*        loadingImagesDialog = new ProgressDialog(getActivity());
-        loadingImagesDialog.setTitle("");
-        loadingImagesDialog.setIndeterminate(true);
-
-        progressLoadingImages = new ProgressDialog(getActivity());
-        progressLoadingImages.setTitle("");
-        progressLoadingImages.setIndeterminate(true);*/
     }
 
     @Override
@@ -152,7 +144,6 @@ public class ReportSentDetailedFragment extends Fragment implements Callback
 
                 gvPhotoGallery.getParent().requestChildFocus(gvPhotoGallery, gvPhotoGallery);
 
-                //mCommunicator.showHeaderAndFooter();
             }
         });
 
@@ -313,10 +304,6 @@ public class ReportSentDetailedFragment extends Fragment implements Callback
 
         for (File file : filePaths)
         {
-            //Bitmap bm = ImageUtils.decodeSampledBitmapFromUri(file.getAbsolutePath(), imageHolderWidth, imageHolderHeight);
-
-            //imageThumbnails.add(bm);
-            //pathItems.add(file);
             imageNames.add(file.getName());
         }
 
@@ -398,7 +385,6 @@ public class ReportSentDetailedFragment extends Fragment implements Callback
                 sink.close();
                 response.body().close();
 
-                //pathItems.add(file);
                 callsSent--;
                 break;
             }
@@ -424,8 +410,6 @@ public class ReportSentDetailedFragment extends Fragment implements Callback
             return;
         }
 
-        //imageNames = new ArrayList<>();
-
         File[] filePaths = appDirectory.listFiles();
 
         for (File file : filePaths)
@@ -434,7 +418,6 @@ public class ReportSentDetailedFragment extends Fragment implements Callback
 
             imageThumbnails.add(bm);
             pathItems.add(file);
-            //imageNames.add(file.getName());
         }
     }
 
@@ -472,8 +455,6 @@ public class ReportSentDetailedFragment extends Fragment implements Callback
             ViewUtils.setGridViewHeight(gvPhotoGallery);
 
             llDetailedReport.getParent().requestChildFocus(llDetailedReport, llDetailedReport);
-
-            //handler.removeCallbacks(runnable);
         }
     }
 
@@ -487,7 +468,7 @@ public class ReportSentDetailedFragment extends Fragment implements Callback
                 fillImagesArray(); // Long time operation
             } catch (Exception e)
             {
-                //loadingImagesDialog.dismiss();
+                e.printStackTrace();
             }
 
             return null;
@@ -497,17 +478,12 @@ public class ReportSentDetailedFragment extends Fragment implements Callback
         protected void onPreExecute()
         {
             super.onPreExecute();
-
-//            loadingImagesDialog.setMessage(getString(R.string.LoadingImagesInProgress));
- //           loadingImagesDialog.show();
         }
 
         @Override
         protected void onPostExecute(Void aVoid)
         {
             super.onPostExecute(aVoid);
-
-            //loadingImagesDialog.dismiss();
 
             GridViewAdapter gridAdapter = new GridViewAdapter(activity, R.layout.grid_item_layout, imageThumbnails);
 
@@ -516,8 +492,6 @@ public class ReportSentDetailedFragment extends Fragment implements Callback
             ViewUtils.setGridViewHeight(gvPhotoGallery);
 
             llDetailedReport.getParent().requestChildFocus(llDetailedReport, llDetailedReport);
-
-            //handler.removeCallbacks(runnable);
         }
     }
 
@@ -527,9 +501,6 @@ public class ReportSentDetailedFragment extends Fragment implements Callback
         protected void onPreExecute()
         {
             super.onPreExecute();
-
-            //progressLoadingImages.setMessage(getString(R.string.PreparingImageForDisplaying));
-            //progressLoadingImages.show();
         }
 
         @Override
@@ -544,16 +515,12 @@ public class ReportSentDetailedFragment extends Fragment implements Callback
         {
             super.onPostExecute(aVoid);
 
-            //progressLoadingImages.dismiss();
-
             if (bmpFullSize != null)
             {
                 ivFullSize.setImageBitmap(bmpFullSize);
             }
             ivFullSize.setVisibility(View.VISIBLE);
             llDetailedReport.setVisibility(View.GONE);
-
-            //mCommunicator.hideHeaderAndFooter();
         }
     }
 }
